@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ROUTES } from "../../app/routes";
 import { currentSession } from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
+import { sessionStages } from "../../core/classroom/sessionStages";
 
 export default function ClassroomPage({ onNavigate }) {
   const session = currentSession;
@@ -23,6 +24,10 @@ export default function ClassroomPage({ onNavigate }) {
 
     setSubmittedResponse(responseText.trim());
   }
+
+  const currentStageIndex = sessionStages.findIndex(
+    (stage) => stage.id === session.currentStageId
+  );
 
   const feedbackStyle =
     evaluationStatus === "strong"
@@ -69,6 +74,38 @@ export default function ClassroomPage({ onNavigate }) {
             <div style={metaCardStyle}>
               <p style={metaLabelStyle}>Learner Level</p>
               <p style={metaValueStyle}>{session.learnerLevel}</p>
+            </div>
+          </div>
+
+          <div style={stageStripWrapStyle}>
+            <p style={stageStripLabelStyle}>Session Progression</p>
+
+            <div style={stageStripStyle}>
+              {sessionStages.map((stage, index) => {
+                const isCurrent = stage.id === session.currentStageId;
+                const isComplete =
+                  currentStageIndex >= 0 && index < currentStageIndex;
+
+                return (
+                  <div
+                    key={stage.id}
+                    style={{
+                      ...stageItemStyle,
+                      ...(isCurrent
+                        ? currentStageItemStyle
+                        : isComplete
+                        ? completedStageItemStyle
+                        : upcomingStageItemStyle),
+                    }}
+                  >
+                    <span style={stageBadgeStyle}>{index + 1}</span>
+                    <div>
+                      <p style={stageNameStyle}>{stage.label}</p>
+                      <p style={stageDescriptionStyle}>{stage.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -288,6 +325,74 @@ const metaValueStyle = {
   lineHeight: 1.45,
   color: "#ffffff",
   fontWeight: 800,
+};
+
+const stageStripWrapStyle = {
+  marginTop: "22px",
+};
+
+const stageStripLabelStyle = {
+  margin: 0,
+  fontSize: "0.78rem",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  color: "rgba(255,255,255,0.65)",
+  fontWeight: 700,
+};
+
+const stageStripStyle = {
+  display: "grid",
+  gap: "10px",
+  marginTop: "12px",
+};
+
+const stageItemStyle = {
+  display: "flex",
+  gap: "12px",
+  alignItems: "flex-start",
+  borderRadius: "18px",
+  padding: "14px 16px",
+  border: "1px solid rgba(255,255,255,0.08)",
+};
+
+const currentStageItemStyle = {
+  background: "rgba(255,255,255,0.16)",
+};
+
+const completedStageItemStyle = {
+  background: "rgba(134,239,172,0.16)",
+};
+
+const upcomingStageItemStyle = {
+  background: "rgba(255,255,255,0.06)",
+};
+
+const stageBadgeStyle = {
+  width: "28px",
+  height: "28px",
+  borderRadius: "999px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "rgba(255,255,255,0.16)",
+  color: "#ffffff",
+  fontSize: "0.82rem",
+  fontWeight: 800,
+  flexShrink: 0,
+};
+
+const stageNameStyle = {
+  margin: 0,
+  fontSize: "0.95rem",
+  fontWeight: 800,
+  color: "#ffffff",
+};
+
+const stageDescriptionStyle = {
+  margin: "6px 0 0",
+  fontSize: "0.9rem",
+  lineHeight: 1.55,
+  color: "rgba(255,255,255,0.76)",
 };
 
 const truthCardStyle = {

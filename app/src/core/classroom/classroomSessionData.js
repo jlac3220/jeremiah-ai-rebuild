@@ -4,6 +4,7 @@ export const currentSession = {
   standardId: "OG.1.18",
   standardTitle: "God is One",
   sessionType: "Resume Session",
+  currentStageId: "checkpoint",
   currentStage: "Scripture Review",
   learnerLevel: "Adult Endpoint Path",
   truthStatement: "There is one God.",
