@@ -1,45 +1,47 @@
-export function evaluateResponse(responseText) {
+import { masteryRules } from "./masteryRules";
+
+export function evaluateResponse(responseText, standardId = "OG.1.18") {
   const normalized = responseText.trim().toLowerCase();
+  const rule = masteryRules[standardId];
+
+  if (!rule) {
+    return {
+      status: "weak",
+      feedback: "No mastery rule was found for this standard.",
+    };
+  }
 
   if (!normalized) {
     return {
       status: "empty",
-      feedback:
-        "Enter a response before Jeremiah AI can evaluate your understanding.",
+      feedback: rule.feedback.empty,
     };
   }
 
-  const mentionsOneGod =
-    normalized.includes("one god") ||
-    normalized.includes("god is one") ||
-    normalized.includes("only one god");
+  const mentionsPositiveConfession = rule.positiveConfessionPhrases.some(
+    (phrase) => normalized.includes(phrase)
+  );
 
-  const mentionsRulesOutOthers =
-    normalized.includes("no other god") ||
-    normalized.includes("beside him there is no god") ||
-    normalized.includes("rules out other gods") ||
-    normalized.includes("there is no other god") ||
-    normalized.includes("not many gods");
+  const mentionsExclusion = rule.exclusionPhrases.some((phrase) =>
+    normalized.includes(phrase)
+  );
 
-  if (mentionsOneGod && mentionsRulesOutOthers) {
+  if (mentionsPositiveConfession && mentionsExclusion) {
     return {
       status: "strong",
-      feedback:
-        "Strong response. You identified both the positive confession and the exclusion these verses require.",
+      feedback: rule.feedback.strong,
     };
   }
 
-  if (mentionsOneGod) {
+  if (mentionsPositiveConfession) {
     return {
       status: "partial",
-      feedback:
-        "Good start. You identified the oneness claim, but you still need to state what these verses rule out.",
+      feedback: rule.feedback.partial,
     };
   }
 
   return {
     status: "weak",
-    feedback:
-      "This response is too weak. The verses require you to confess that God is one and that no other God exists beside Him.",
+    feedback: rule.feedback.weak,
   };
 }

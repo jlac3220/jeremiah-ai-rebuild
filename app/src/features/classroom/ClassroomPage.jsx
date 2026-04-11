@@ -11,7 +11,7 @@ export default function ClassroomPage({ onNavigate }) {
   const [evaluationStatus, setEvaluationStatus] = useState("");
 
   function handleSubmitResponse() {
-    const result = evaluateResponse(responseText);
+    const result = evaluateResponse(responseText, session.standardId);
 
     setEvaluationStatus(result.status);
     setFeedbackMessage(result.feedback);
