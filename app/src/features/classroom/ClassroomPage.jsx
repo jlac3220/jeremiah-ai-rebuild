@@ -1,15 +1,28 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ROUTES } from "../../app/routes";
 import { currentSession } from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
+import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
 
 export default function ClassroomPage({ onNavigate }) {
   const session = currentSession;
+
+  const [currentStageId, setCurrentStageId] = useState(session.currentStageId);
   const [responseText, setResponseText] = useState("");
   const [submittedResponse, setSubmittedResponse] = useState("");
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [evaluationStatus, setEvaluationStatus] = useState("");
+
+  const currentStage = useMemo(() => {
+    return (
+      sessionStages.find((stage) => stage.id === currentStageId) || {
+        id: currentStageId,
+        label: "Unknown",
+        description: "",
+      }
+    );
+  }, [currentStageId]);
 
   function handleSubmitResponse() {
     const result = evaluateResponse(responseText, session.standardId);
@@ -22,11 +35,15 @@ export default function ClassroomPage({ onNavigate }) {
       return;
     }
 
-    setSubmittedResponse(responseText.trim());
+    const trimmed = responseText.trim();
+    setSubmittedResponse(trimmed);
+
+    const nextStageId = advanceSessionStage(currentStageId, result.status);
+    setCurrentStageId(nextStageId);
   }
 
   const currentStageIndex = sessionStages.findIndex(
-    (stage) => stage.id === session.currentStageId
+    (stage) => stage.id === currentStageId
   );
 
   const feedbackStyle =
@@ -68,7 +85,7 @@ export default function ClassroomPage({ onNavigate }) {
 
             <div style={metaCardStyle}>
               <p style={metaLabelStyle}>Current Stage</p>
-              <p style={metaValueStyle}>{session.currentStage}</p>
+              <p style={metaValueStyle}>{currentStage.label}</p>
             </div>
 
             <div style={metaCardStyle}>
@@ -82,7 +99,7 @@ export default function ClassroomPage({ onNavigate }) {
 
             <div style={stageStripStyle}>
               {sessionStages.map((stage, index) => {
-                const isCurrent = stage.id === session.currentStageId;
+                const isCurrent = stage.id === currentStageId;
                 const isComplete =
                   currentStageIndex >= 0 && index < currentStageIndex;
 
