@@ -1,5 +1,9 @@
 import { ROUTES } from "../../app/routes";
 import { progressData } from "../../data/progressData";
+import {
+  CLASSROOM_ENTRY_INTENTS,
+  setClassroomEntryIntent,
+} from "../../core/classroom/classroomEntryIntent";
 
 export default function ProgressPage({ onNavigate }) {
   const data = progressData;
@@ -68,7 +72,10 @@ export default function ProgressPage({ onNavigate }) {
           <button
             type="button"
             style={continueButtonStyle}
-            onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+            onClick={() => {
+            setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.REVIEW);
+            onNavigate?.(ROUTES.CLASSROOM);
+          }}
           >
             {data.activeLearning.buttonLabel}
           </button>

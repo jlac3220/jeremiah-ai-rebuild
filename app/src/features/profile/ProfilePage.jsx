@@ -1,5 +1,9 @@
 import { ROUTES } from "../../app/routes";
 import { profileData } from "../../data/profileData";
+import {
+  CLASSROOM_ENTRY_INTENTS,
+  setClassroomEntryIntent,
+} from "../../core/classroom/classroomEntryIntent";
 
 export default function ProfilePage({ onNavigate }) {
   const data = profileData;
@@ -54,7 +58,10 @@ export default function ProfilePage({ onNavigate }) {
           <button
             type="button"
             style={primaryButtonStyle}
-            onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+            onClick={() => {
+            setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.ADAPTATION);
+            onNavigate?.(ROUTES.CLASSROOM);
+          }}
           >
             {data.continueCard.buttonLabel}
           </button>

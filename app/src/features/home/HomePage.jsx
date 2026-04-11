@@ -1,5 +1,9 @@
 import { ROUTES } from "../../app/routes";
 import { homeData } from "../../data/homeData";
+import {
+  CLASSROOM_ENTRY_INTENTS,
+  setClassroomEntryIntent,
+} from "../../core/classroom/classroomEntryIntent";
 
 export default function HomePage({ onNavigate }) {
   const data = homeData;
@@ -59,7 +63,10 @@ export default function HomePage({ onNavigate }) {
             <button
               type="button"
               style={primaryButtonStyle}
-              onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+              onClick={() => {
+              setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.RESUME);
+              onNavigate?.(ROUTES.CLASSROOM);
+            }}
             >
               {data.continueCard.buttonLabel}
             </button>

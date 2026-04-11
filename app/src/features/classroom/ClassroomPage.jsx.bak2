@@ -154,7 +154,7 @@ export default function ClassroomPage({ onNavigate }) {
               <h2 style={sessionTitleStyle}>{session.standardTitle}</h2>
             </div>
 
-            <div style={statusPillStyle}>{entryIntentDisplay.eyebrow}</div>
+            <div style={statusPillStyle}>{session.sessionType}</div>
           </div>
 
           <div style={metaGridStyle}>
