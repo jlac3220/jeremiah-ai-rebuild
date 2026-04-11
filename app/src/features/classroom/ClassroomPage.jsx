@@ -396,6 +396,40 @@ export default function ClassroomPage({ onNavigate }) {
             <div style={rightColumnStyle}>
               <div style={checkpointCardStyle}>
                 <p style={sectionEyebrowDarkStyle}>{currentStage.label}</p>
+                <div
+                  style={{
+                    marginTop: "14px",
+                    marginBottom: "14px",
+                    borderRadius: "18px",
+                    padding: "16px",
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.14)",
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: "0.76rem",
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.68)",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {entryIntentDisplay.lessonLabel}
+                  </p>
+                  <p
+                    style={{
+                      margin: "8px 0 0",
+                      fontSize: "0.96rem",
+                      lineHeight: 1.7,
+                      color: "rgba(255,255,255,0.92)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {entryIntentDisplay.lessonText}
+                  </p>
+                </div>
                 <h4 style={checkpointTitleStyle}>{currentStageContent.title}</h4>
                 <p style={checkpointTextStyle}>
                   {currentStageContent.description}
@@ -417,7 +451,7 @@ export default function ClassroomPage({ onNavigate }) {
                     id="learner-response"
                     value={responseText}
                     onChange={(event) => setResponseText(event.target.value)}
-                    placeholder="Type the learner response here..."
+                    placeholder={entryIntentDisplay.responseHint}
                     style={textareaStyle}
                   />
                 </div>

@@ -19,6 +19,11 @@ export const classroomEntryIntentContent = {
     actionLabel: "What Jeremiah AI will do",
     actionText:
       "Continue the guided lesson path, keep the learner anchored to the current verses, and move toward stronger doctrinal confession.",
+    lessonLabel: "Resume emphasis",
+    lessonText:
+      "This lesson block should feel like continuation. Stay on the current stage, answer the exact doctrinal prompt in front of you, and keep momentum without drifting into generic comments.",
+    responseHint:
+      "Continue the current stage with a clear text-based answer tied to the active doctrinal prompt.",
   },
   [CLASSROOM_ENTRY_INTENTS.REVIEW]: {
     eyebrow: "Review Path",
@@ -31,6 +36,11 @@ export const classroomEntryIntentContent = {
     actionLabel: "What Jeremiah AI will do",
     actionText:
       "Revisit the teaching flow, test the learner against the current truth, and press toward stronger precision where understanding is still incomplete.",
+    lessonLabel: "Review emphasis",
+    lessonText:
+      "This lesson block should feel corrective. Jeremiah AI should push the learner back into the exact truth that still needs to be stated more clearly and defended more precisely.",
+    responseHint:
+      "Answer by correcting weak understanding and grounding the response in the current doctrinal prompt.",
   },
   [CLASSROOM_ENTRY_INTENTS.ADAPTATION]: {
     eyebrow: "Learner Adaptation",
@@ -43,6 +53,11 @@ export const classroomEntryIntentContent = {
     actionLabel: "What Jeremiah AI will do",
     actionText:
       "Keep the doctrinal target fixed while shaping delivery around learner-level needs, helping the user grow without lowering the truth itself.",
+    lessonLabel: "Adaptation emphasis",
+    lessonText:
+      "This lesson block should feel learner-aware. The doctrine remains fixed, but the way Jeremiah AI frames the question and expects the answer should fit the current learner path.",
+    responseHint:
+      "Answer the prompt clearly at the current learner level without changing the doctrinal truth itself.",
   },
   [CLASSROOM_ENTRY_INTENTS.DIRECT]: {
     eyebrow: "Classroom Session",
@@ -55,6 +70,11 @@ export const classroomEntryIntentContent = {
     actionLabel: "What Jeremiah AI will do",
     actionText:
       "Teach through scripture, evaluate the response, and advance the learner only when the answer shows real doctrinal understanding.",
+    lessonLabel: "Lesson emphasis",
+    lessonText:
+      "This lesson block should stay tightly focused on the active stage so the learner is responding to the current doctrinal demand, not wandering into disconnected material.",
+    responseHint:
+      "Respond directly to the active stage prompt with a clear text-based doctrinal answer.",
   },
 };
 
