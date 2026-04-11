@@ -11,7 +11,10 @@ export default function AppShell() {
   return (
     <div style={shellStyle}>
       <main style={mainStyle}>
-        <AppRouter currentRoute={currentRoute} />
+        <AppRouter
+          currentRoute={currentRoute}
+          onNavigate={setCurrentRoute}
+        />
       </main>
 
       {showBottomNav && (

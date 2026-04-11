@@ -1,4 +1,6 @@
-export default function ProgressPage() {
+import { ROUTES } from "../../app/routes";
+
+export default function ProgressPage({ onNavigate }) {
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
@@ -58,7 +60,11 @@ export default function ProgressPage() {
             </div>
           </div>
 
-          <button type="button" style={continueButtonStyle}>
+          <button
+            type="button"
+            style={continueButtonStyle}
+            onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+          >
             Continue Current Session
           </button>
         </section>

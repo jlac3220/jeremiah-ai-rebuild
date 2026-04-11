@@ -1,4 +1,6 @@
-export default function HomePage() {
+import { ROUTES } from "../../app/routes";
+
+export default function HomePage({ onNavigate }) {
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
@@ -57,7 +59,11 @@ export default function HomePage() {
           </div>
 
           <div style={cardFooterStyle}>
-            <button type="button" style={primaryButtonStyle}>
+            <button
+              type="button"
+              style={primaryButtonStyle}
+              onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+            >
               Continue Classroom Session
             </button>
           </div>

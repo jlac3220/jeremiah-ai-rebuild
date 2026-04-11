@@ -1,4 +1,6 @@
-export default function ProfilePage() {
+import { ROUTES } from "../../app/routes";
+
+export default function ProfilePage({ onNavigate }) {
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
@@ -49,7 +51,11 @@ export default function ProfilePage() {
             One” and is in scripture review before the next guided checkpoint.
           </p>
 
-          <button type="button" style={primaryButtonStyle}>
+          <button
+            type="button"
+            style={primaryButtonStyle}
+            onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+          >
             Continue Current Session
           </button>
         </section>

@@ -12,7 +12,7 @@ function Placeholder({ title }) {
   );
 }
 
-export default function AppRouter({ currentRoute }) {
+export default function AppRouter({ currentRoute, onNavigate }) {
   switch (currentRoute) {
     case ROUTES.STARTUP:
       return <Placeholder title="Startup" />;
@@ -24,19 +24,19 @@ export default function AppRouter({ currentRoute }) {
       return <Placeholder title="Profile Select" />;
 
     case ROUTES.CLASSROOM:
-      return <ClassroomPage />;
+      return <ClassroomPage onNavigate={onNavigate} />;
 
     case ROUTES.PROGRESS:
-      return <ProgressPage />;
+      return <ProgressPage onNavigate={onNavigate} />;
 
     case ROUTES.PROFILE:
-      return <ProfilePage />;
+      return <ProfilePage onNavigate={onNavigate} />;
 
     case ROUTES.BIBLE_SUPPORT:
       return <Placeholder title="Bible Support" />;
 
     case ROUTES.HOME:
     default:
-      return <HomePage />;
+      return <HomePage onNavigate={onNavigate} />;
   }
 }
