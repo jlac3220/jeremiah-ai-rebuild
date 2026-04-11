@@ -1,4 +1,6 @@
-export default function ClassroomPage() {
+import { ROUTES } from "../../app/routes";
+
+export default function ClassroomPage({ onNavigate }) {
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
@@ -122,7 +124,11 @@ export default function ClassroomPage() {
                   <button type="button" style={primaryActionStyle}>
                     Submit Response
                   </button>
-                  <button type="button" style={secondaryActionStyle}>
+                  <button
+                    type="button"
+                    style={secondaryActionStyle}
+                    onClick={() => onNavigate?.(ROUTES.BIBLE_SUPPORT)}
+                  >
                     Review Verses Again
                   </button>
                 </div>
@@ -305,14 +311,6 @@ const columnCardStyle = {
   border: "1px solid #e2e8f0",
 };
 
-const columnTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.3rem",
-  lineHeight: 1.2,
-  color: "#0f172a",
-  fontWeight: 900,
-};
-
 const checkpointCardStyle = {
   background: "#fff7ed",
   border: "1px solid #fed7aa",
@@ -342,6 +340,14 @@ const sectionEyebrowDarkStyle = {
 const sectionTitleStyle = {
   margin: "10px 0 0",
   fontSize: "1.5rem",
+  lineHeight: 1.2,
+  color: "#0f172a",
+  fontWeight: 900,
+};
+
+const columnTitleStyle = {
+  margin: "10px 0 0",
+  fontSize: "1.3rem",
   lineHeight: 1.2,
   color: "#0f172a",
   fontWeight: 900,

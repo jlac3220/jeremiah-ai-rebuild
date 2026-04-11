@@ -3,6 +3,7 @@ import HomePage from "../features/home/HomePage";
 import ClassroomPage from "../features/classroom/ClassroomPage";
 import ProgressPage from "../features/progress/ProgressPage";
 import ProfilePage from "../features/profile/ProfilePage";
+import BibleSupportPage from "../features/bible-support/BibleSupportPage";
 
 function Placeholder({ title }) {
   return (
@@ -33,7 +34,7 @@ export default function AppRouter({ currentRoute, onNavigate }) {
       return <ProfilePage onNavigate={onNavigate} />;
 
     case ROUTES.BIBLE_SUPPORT:
-      return <Placeholder title="Bible Support" />;
+      return <BibleSupportPage onNavigate={onNavigate} />;
 
     case ROUTES.HOME:
     default:
