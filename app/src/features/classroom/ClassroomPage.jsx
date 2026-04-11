@@ -1,6 +1,9 @@
 import { ROUTES } from "../../app/routes";
+import { currentSession } from "../../core/classroom/classroomSessionData";
 
 export default function ClassroomPage({ onNavigate }) {
+  const session = currentSession;
+
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
@@ -17,38 +20,34 @@ export default function ClassroomPage({ onNavigate }) {
           <div style={sessionTopRowStyle}>
             <div>
               <p style={smallLabelStyle}>Current Standard</p>
-              <h2 style={sessionTitleStyle}>God is One</h2>
+              <h2 style={sessionTitleStyle}>{session.standardTitle}</h2>
             </div>
 
-            <div style={statusPillStyle}>Resume Session</div>
+            <div style={statusPillStyle}>{session.sessionType}</div>
           </div>
 
           <div style={metaGridStyle}>
             <div style={metaCardStyle}>
               <p style={metaLabelStyle}>Track</p>
-              <p style={metaValueStyle}>The One True God</p>
+              <p style={metaValueStyle}>{session.studyTitle}</p>
             </div>
 
             <div style={metaCardStyle}>
               <p style={metaLabelStyle}>Current Stage</p>
-              <p style={metaValueStyle}>Scripture Review</p>
+              <p style={metaValueStyle}>{session.currentStage}</p>
             </div>
 
             <div style={metaCardStyle}>
               <p style={metaLabelStyle}>Learner Level</p>
-              <p style={metaValueStyle}>Adult Endpoint Path</p>
+              <p style={metaValueStyle}>{session.learnerLevel}</p>
             </div>
           </div>
         </section>
 
         <section style={truthCardStyle}>
           <p style={sectionEyebrowStyle}>Truth Statement</p>
-          <h3 style={sectionTitleStyle}>There is one God.</h3>
-          <p style={sectionTextStyle}>
-            This session teaches the biblical truth that God is one, not many.
-            Jeremiah AI will guide the learner through the scriptures that prove
-            this, correct weak understanding, and move toward mastery.
-          </p>
+          <h3 style={sectionTitleStyle}>{session.truthStatement}</h3>
+          <p style={sectionTextStyle}>{session.truthExplanation}</p>
         </section>
 
         <section style={teachingSurfaceStyle}>
@@ -66,28 +65,13 @@ export default function ClassroomPage({ onNavigate }) {
                 <h4 style={columnTitleStyle}>Key verses in this session</h4>
 
                 <div style={verseListStyle}>
-                  <div style={verseCardStyle}>
-                    <p style={verseRefStyle}>Deuteronomy 6:4</p>
-                    <p style={verseTextStyle}>
-                      Hear, O Israel: The LORD our God is one LORD.
-                    </p>
-                    <p style={verseNoteStyle}>
-                      This verse states the oneness of God directly and serves
-                      as a foundational testimony.
-                    </p>
-                  </div>
-
-                  <div style={verseCardStyle}>
-                    <p style={verseRefStyle}>Isaiah 44:6</p>
-                    <p style={verseTextStyle}>
-                      I am the first, and I am the last; and beside me there is
-                      no God.
-                    </p>
-                    <p style={verseNoteStyle}>
-                      This verse rules out the existence of another divine being
-                      alongside God.
-                    </p>
-                  </div>
+                  {session.verses.map((verse) => (
+                    <div key={verse.reference} style={verseCardStyle}>
+                      <p style={verseRefStyle}>{verse.reference}</p>
+                      <p style={verseTextStyle}>{verse.text}</p>
+                      <p style={verseNoteStyle}>{verse.note}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -95,21 +79,15 @@ export default function ClassroomPage({ onNavigate }) {
             <div style={rightColumnStyle}>
               <div style={checkpointCardStyle}>
                 <p style={sectionEyebrowDarkStyle}>Guided Checkpoint</p>
-                <h4 style={checkpointTitleStyle}>
-                  What do these verses require you to confess?
-                </h4>
+                <h4 style={checkpointTitleStyle}>{session.checkpoint.title}</h4>
                 <p style={checkpointTextStyle}>
-                  Jeremiah AI is checking whether the learner understands what
-                  these passages prove, not just whether they can repeat the
-                  words.
+                  {session.checkpoint.description}
                 </p>
 
                 <div style={teacherPromptStyle}>
                   <p style={teacherPromptLabelStyle}>Jeremiah AI Prompt</p>
                   <p style={teacherPromptTextStyle}>
-                    These verses do not merely mention God. They make a
-                    doctrinal claim. What do they rule out, and what do they
-                    require you to confess instead?
+                    {session.checkpoint.prompt}
                   </p>
                 </div>
 

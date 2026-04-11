@@ -1,6 +1,9 @@
 import { ROUTES } from "../../app/routes";
+import { profileData } from "../../data/profileData";
 
 export default function ProfilePage({ onNavigate }) {
+  const data = profileData;
+
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
@@ -14,30 +17,30 @@ export default function ProfilePage({ onNavigate }) {
 
         <section style={identityCardStyle}>
           <div style={identityTopStyle}>
-            <div style={avatarStyle}>J</div>
+            <div style={avatarStyle}>{data.learner.initial}</div>
 
             <div>
               <p style={identityEyebrowStyle}>Active Learner</p>
-              <h2 style={identityNameStyle}>Jacob</h2>
+              <h2 style={identityNameStyle}>{data.learner.name}</h2>
               <p style={identityMetaStyle}>
-                Adult endpoint path • The One True God
+                {data.learner.levelLabel} • {data.learner.trackTitle}
               </p>
             </div>
           </div>
 
           <div style={snapshotGridStyle}>
             <div style={snapshotCardStyle}>
-              <p style={snapshotValueStyle}>12</p>
+              <p style={snapshotValueStyle}>{data.snapshot.mastered}</p>
               <p style={snapshotLabelStyle}>Mastered</p>
             </div>
 
             <div style={snapshotCardStyle}>
-              <p style={snapshotValueStyle}>3</p>
+              <p style={snapshotValueStyle}>{data.snapshot.inProgress}</p>
               <p style={snapshotLabelStyle}>In Progress</p>
             </div>
 
             <div style={snapshotCardStyle}>
-              <p style={snapshotValueStyle}>1</p>
+              <p style={snapshotValueStyle}>{data.snapshot.reviewNeeded}</p>
               <p style={snapshotLabelStyle}>Review Needed</p>
             </div>
           </div>
@@ -45,18 +48,15 @@ export default function ProfilePage({ onNavigate }) {
 
         <section style={continueCardStyle}>
           <p style={sectionEyebrowLightStyle}>Continue Learning</p>
-          <h3 style={continueTitleStyle}>Return to current classroom session</h3>
-          <p style={continueTextStyle}>
-            Your active profile is currently working through the standard “God is
-            One” and is in scripture review before the next guided checkpoint.
-          </p>
+          <h3 style={continueTitleStyle}>{data.continueCard.title}</h3>
+          <p style={continueTextStyle}>{data.continueCard.text}</p>
 
           <button
             type="button"
             style={primaryButtonStyle}
             onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
           >
-            Continue Current Session
+            {data.continueCard.buttonLabel}
           </button>
         </section>
 
@@ -69,13 +69,8 @@ export default function ProfilePage({ onNavigate }) {
           </div>
 
           <div style={adaptationCardStyle}>
-            <p style={adaptationTitleStyle}>Adult endpoint path</p>
-            <p style={adaptationTextStyle}>
-              This profile is using the adulthood target for doctrinal precision,
-              answer depth, and mastery expectations. Younger learner profiles
-              will move toward the same truth with simplified wording, smaller
-              explanation blocks, and lower response demands.
-            </p>
+            <p style={adaptationTitleStyle}>{data.adaptation.title}</p>
+            <p style={adaptationTextStyle}>{data.adaptation.text}</p>
           </div>
         </section>
 
@@ -88,17 +83,11 @@ export default function ProfilePage({ onNavigate }) {
           </div>
 
           <div style={actionsListStyle}>
-            <button type="button" style={secondaryActionStyle}>
-              Switch Profile
-            </button>
-
-            <button type="button" style={secondaryActionStyle}>
-              Account Settings
-            </button>
-
-            <button type="button" style={secondaryActionStyle}>
-              Sign Out
-            </button>
+            {data.actions.map((action) => (
+              <button key={action} type="button" style={secondaryActionStyle}>
+                {action}
+              </button>
+            ))}
           </div>
         </section>
       </div>

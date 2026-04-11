@@ -1,6 +1,10 @@
 import { ROUTES } from "../../app/routes";
+import { progressData } from "../../data/progressData";
 
 export default function ProgressPage({ onNavigate }) {
+  const data = progressData;
+  const progressWidth = `${data.activeLearning.progressPercent}%`;
+
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
@@ -20,22 +24,22 @@ export default function ProgressPage({ onNavigate }) {
               <h2 style={summaryTitleStyle}>Current standing</h2>
             </div>
 
-            <div style={activeTrackPillStyle}>The One True God</div>
+            <div style={activeTrackPillStyle}>{data.trackTitle}</div>
           </div>
 
           <div style={statsGridStyle}>
             <div style={statCardStyle}>
-              <p style={statValueStyle}>12</p>
+              <p style={statValueStyle}>{data.masterySummary.mastered}</p>
               <p style={statLabelStyle}>Mastered</p>
             </div>
 
             <div style={statCardStyle}>
-              <p style={statValueStyle}>3</p>
+              <p style={statValueStyle}>{data.masterySummary.inProgress}</p>
               <p style={statLabelStyle}>In Progress</p>
             </div>
 
             <div style={statCardStyle}>
-              <p style={statValueStyle}>1</p>
+              <p style={statValueStyle}>{data.masterySummary.reviewNeeded}</p>
               <p style={statLabelStyle}>Review Needed</p>
             </div>
           </div>
@@ -43,20 +47,21 @@ export default function ProgressPage({ onNavigate }) {
 
         <section style={activeLearningCardStyle}>
           <p style={sectionEyebrowLightStyle}>Active Learning</p>
-          <h3 style={activeLearningTitleStyle}>Current standard: God is One</h3>
-          <p style={activeLearningTextStyle}>
-            You are currently in scripture review and are approaching the next
-            guided checkpoint in Classroom.
-          </p>
+          <h3 style={activeLearningTitleStyle}>
+            Current standard: {data.activeLearning.standardTitle}
+          </h3>
+          <p style={activeLearningTextStyle}>{data.activeLearning.description}</p>
 
           <div style={progressWrapStyle}>
             <div style={progressHeaderStyle}>
               <span style={progressLabelStyle}>Standard progress</span>
-              <span style={progressValueStyle}>40%</span>
+              <span style={progressValueStyle}>
+                {data.activeLearning.progressPercent}%
+              </span>
             </div>
 
             <div style={progressTrackStyle}>
-              <div style={progressFillStyle} />
+              <div style={{ ...progressFillStyle, width: progressWidth }} />
             </div>
           </div>
 
@@ -65,7 +70,7 @@ export default function ProgressPage({ onNavigate }) {
             style={continueButtonStyle}
             onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
           >
-            Continue Current Session
+            {data.activeLearning.buttonLabel}
           </button>
         </section>
 
@@ -78,21 +83,15 @@ export default function ProgressPage({ onNavigate }) {
           </div>
 
           <div style={listStyle}>
-            <div style={listItemStyle}>
-              <div>
-                <p style={itemTitleStyle}>God is creator of all</p>
-                <p style={itemMetaStyle}>The One True God • Mastered</p>
+            {data.masteredStandards.map((item) => (
+              <div key={item.title} style={listItemStyle}>
+                <div>
+                  <p style={itemTitleStyle}>{item.title}</p>
+                  <p style={itemMetaStyle}>{item.meta}</p>
+                </div>
+                <div style={masteredChipStyle}>Mastered</div>
               </div>
-              <div style={masteredChipStyle}>Mastered</div>
-            </div>
-
-            <div style={listItemStyle}>
-              <div>
-                <p style={itemTitleStyle}>God alone is worthy of worship</p>
-                <p style={itemMetaStyle}>The One True God • Mastered</p>
-              </div>
-              <div style={masteredChipStyle}>Mastered</div>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -106,10 +105,8 @@ export default function ProgressPage({ onNavigate }) {
 
           <div style={reviewItemStyle}>
             <div>
-              <p style={itemTitleStyle}>Revisit the last checkpoint</p>
-              <p style={itemMetaStyle}>
-                Return to the guided scripture review before advancing.
-              </p>
+              <p style={itemTitleStyle}>{data.reviewNeeded.title}</p>
+              <p style={itemMetaStyle}>{data.reviewNeeded.meta}</p>
             </div>
             <div style={reviewChipStyle}>Review</div>
           </div>
@@ -298,7 +295,6 @@ const progressTrackStyle = {
 };
 
 const progressFillStyle = {
-  width: "40%",
   height: "100%",
   borderRadius: "999px",
   background: "#ffffff",

@@ -1,15 +1,17 @@
 import { ROUTES } from "../../app/routes";
+import { homeData } from "../../data/homeData";
 
 export default function HomePage({ onNavigate }) {
+  const data = homeData;
+  const progressWidth = `${data.continueCard.progressPercent}%`;
+
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
         <section style={heroStyle}>
           <p style={eyebrowStyle}>JEREMIAH AI</p>
-          <h1 style={titleStyle}>Welcome back</h1>
-          <p style={subtitleStyle}>
-            Continue your doctrinal learning with the next right step.
-          </p>
+          <h1 style={titleStyle}>{data.welcomeTitle}</h1>
+          <p style={subtitleStyle}>{data.welcomeSubtitle}</p>
         </section>
 
         <section style={primaryCardStyle}>
@@ -17,44 +19,39 @@ export default function HomePage({ onNavigate }) {
             <div>
               <div style={pillStyle}>Continue Learning</div>
               <p style={trackLabelStyle}>Current Track</p>
-              <h2 style={trackTitleStyle}>The One True God</h2>
+              <h2 style={trackTitleStyle}>{data.continueCard.trackTitle}</h2>
             </div>
 
             <div style={stageBoxStyle}>
               <span style={stageLabelStyle}>Session Type</span>
-              <span style={stageValueStyle}>Resume Session</span>
+              <span style={stageValueStyle}>{data.continueCard.sessionType}</span>
             </div>
           </div>
 
           <div style={cardBodyStyle}>
             <div style={mainInfoStyle}>
               <p style={sectionEyebrowStyle}>Current Standard</p>
-              <h3 style={standardTitleStyle}>God is One</h3>
-              <p style={descriptionStyle}>
-                Resume your active classroom session and continue building
-                understanding from scripture through guided teaching,
-                checkpoint review, and mastery.
-              </p>
+              <h3 style={standardTitleStyle}>{data.continueCard.standardTitle}</h3>
+              <p style={descriptionStyle}>{data.continueCard.description}</p>
             </div>
 
             <div style={nextStepCardStyle}>
               <p style={nextStepEyebrowStyle}>Next Step</p>
-              <p style={nextStepTitleStyle}>Return to guided scripture review</p>
-              <p style={nextStepTextStyle}>
-                You left off before the next checkpoint. Jeremiah AI will bring
-                you back into the exact session stage you were working on.
-              </p>
+              <p style={nextStepTitleStyle}>{data.continueCard.nextStepTitle}</p>
+              <p style={nextStepTextStyle}>{data.continueCard.nextStepText}</p>
             </div>
           </div>
 
           <div style={progressWrapStyle}>
             <div style={progressHeaderStyle}>
               <span style={progressLabelStyle}>Session progress</span>
-              <span style={progressValueStyle}>40%</span>
+              <span style={progressValueStyle}>
+                {data.continueCard.progressPercent}%
+              </span>
             </div>
 
             <div style={progressTrackStyle}>
-              <div style={progressFillStyle} />
+              <div style={{ ...progressFillStyle, width: progressWidth }} />
             </div>
           </div>
 
@@ -64,7 +61,7 @@ export default function HomePage({ onNavigate }) {
               style={primaryButtonStyle}
               onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
             >
-              Continue Classroom Session
+              {data.continueCard.buttonLabel}
             </button>
           </div>
         </section>
@@ -80,17 +77,17 @@ export default function HomePage({ onNavigate }) {
 
           <div style={statsGridStyle}>
             <div style={statCardStyle}>
-              <div style={statValueStyle}>12</div>
+              <div style={statValueStyle}>{data.progressSnapshot.mastered}</div>
               <div style={statLabelStyle}>Mastered</div>
             </div>
 
             <div style={statCardStyle}>
-              <div style={statValueStyle}>3</div>
+              <div style={statValueStyle}>{data.progressSnapshot.inProgress}</div>
               <div style={statLabelStyle}>In Progress</div>
             </div>
 
             <div style={statCardStyle}>
-              <div style={statValueStyle}>1</div>
+              <div style={statValueStyle}>{data.progressSnapshot.reviewNeeded}</div>
               <div style={statLabelStyle}>Review Needed</div>
             </div>
           </div>
@@ -101,12 +98,9 @@ export default function HomePage({ onNavigate }) {
             <span style={reviewPillStyle}>Review</span>
           </div>
 
-          <h3 style={reviewTitleStyle}>Reinforce a weak point</h3>
+          <h3 style={reviewTitleStyle}>{data.reviewCard.title}</h3>
 
-          <p style={reviewTextStyle}>
-            Review the last checkpoint from your current standard before moving
-            deeper into the session.
-          </p>
+          <p style={reviewTextStyle}>{data.reviewCard.text}</p>
         </section>
       </div>
     </div>
@@ -327,7 +321,6 @@ const progressTrackStyle = {
 };
 
 const progressFillStyle = {
-  width: "40%",
   height: "100%",
   borderRadius: "999px",
   background: "#ffffff",
