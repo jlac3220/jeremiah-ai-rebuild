@@ -30,7 +30,7 @@ export default function ClassroomPage({ onNavigate }) {
     stageContent[currentStageId] || stageContent.checkpoint;
 
   function handleSubmitResponse() {
-    const result = evaluateResponse(responseText, session.standardId, currentStageId);
+    const result = evaluateResponse(responseText, session.standardId);
 
     setEvaluationStatus(result.status);
     setFeedbackMessage(result.feedback);
