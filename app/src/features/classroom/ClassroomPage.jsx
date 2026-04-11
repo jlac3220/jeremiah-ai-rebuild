@@ -1,27 +1,37 @@
 import { useState } from "react";
 import { ROUTES } from "../../app/routes";
 import { currentSession } from "../../core/classroom/classroomSessionData";
+import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 
 export default function ClassroomPage({ onNavigate }) {
   const session = currentSession;
   const [responseText, setResponseText] = useState("");
   const [submittedResponse, setSubmittedResponse] = useState("");
   const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [evaluationStatus, setEvaluationStatus] = useState("");
 
   function handleSubmitResponse() {
-    const trimmed = responseText.trim();
+    const result = evaluateResponse(responseText);
 
-    if (!trimmed) {
+    setEvaluationStatus(result.status);
+    setFeedbackMessage(result.feedback);
+
+    if (result.status === "empty") {
       setSubmittedResponse("");
-      setFeedbackMessage("Enter a response before submitting.");
       return;
     }
 
-    setSubmittedResponse(trimmed);
-    setFeedbackMessage(
-      "Response captured. In the next step, Jeremiah AI will evaluate this answer and respond instructionally."
-    );
+    setSubmittedResponse(responseText.trim());
   }
+
+  const feedbackStyle =
+    evaluationStatus === "strong"
+      ? strongFeedbackCardStyle
+      : evaluationStatus === "partial"
+      ? partialFeedbackCardStyle
+      : evaluationStatus === "weak" || evaluationStatus === "empty"
+      ? weakFeedbackCardStyle
+      : feedbackCardStyle;
 
   return (
     <div style={pageStyle}>
@@ -142,8 +152,8 @@ export default function ClassroomPage({ onNavigate }) {
                 </div>
 
                 {feedbackMessage ? (
-                  <div style={feedbackCardStyle}>
-                    <p style={feedbackLabelStyle}>Session Feedback</p>
+                  <div style={feedbackStyle}>
+                    <p style={feedbackLabelStyle}>Jeremiah AI Evaluation</p>
                     <p style={feedbackTextStyle}>{feedbackMessage}</p>
 
                     {submittedResponse ? (
@@ -519,6 +529,24 @@ const feedbackCardStyle = {
   padding: "18px",
   background: "#ffffff",
   border: "1px solid #fed7aa",
+};
+
+const strongFeedbackCardStyle = {
+  ...feedbackCardStyle,
+  border: "1px solid #86efac",
+  background: "#f0fdf4",
+};
+
+const partialFeedbackCardStyle = {
+  ...feedbackCardStyle,
+  border: "1px solid #fdba74",
+  background: "#fff7ed",
+};
+
+const weakFeedbackCardStyle = {
+  ...feedbackCardStyle,
+  border: "1px solid #fca5a5",
+  background: "#fef2f2",
 };
 
 const feedbackLabelStyle = {
