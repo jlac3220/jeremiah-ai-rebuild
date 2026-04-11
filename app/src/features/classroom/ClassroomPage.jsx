@@ -447,6 +447,39 @@ export default function ClassroomPage({ onNavigate }) {
                     Learner Response
                   </label>
 
+                  <div
+                    style={{
+                      marginBottom: "14px",
+                      borderRadius: "18px",
+                      padding: "16px",
+                      background: "#f8fafc",
+                      border: "1px solid #e2e8f0",
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "0.78rem",
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "#64748b",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {entryIntentDisplay.responseActionLabel}
+                    </p>
+                    <p
+                      style={{
+                        margin: "8px 0 0",
+                        fontSize: "0.96rem",
+                        lineHeight: 1.7,
+                        color: "#0f172a",
+                      }}
+                    >
+                      {entryIntentDisplay.responseActionText}
+                    </p>
+                  </div>
+
                   <textarea
                     id="learner-response"
                     value={responseText}
@@ -462,7 +495,7 @@ export default function ClassroomPage({ onNavigate }) {
                     style={primaryActionStyle}
                     onClick={handleSubmitResponse}
                   >
-                    Submit Response
+                    {entryIntentDisplay.submitButtonLabel}
                   </button>
                   <button
                     type="button"

@@ -24,6 +24,10 @@ export const classroomEntryIntentContent = {
       "This lesson block should feel like continuation. Stay on the current stage, answer the exact doctrinal prompt in front of you, and keep momentum without drifting into generic comments.",
     responseHint:
       "Continue the current stage with a clear text-based answer tied to the active doctrinal prompt.",
+    responseActionLabel: "Continue this stage",
+    responseActionText:
+      "Do not restart the lesson in your answer. Continue the exact stage in front of you and respond to the live doctrinal demand as clearly as you can.",
+    submitButtonLabel: "Continue Stage",
   },
   [CLASSROOM_ENTRY_INTENTS.REVIEW]: {
     eyebrow: "Review Path",
@@ -41,6 +45,10 @@ export const classroomEntryIntentContent = {
       "This lesson block should feel corrective. Jeremiah AI should push the learner back into the exact truth that still needs to be stated more clearly and defended more precisely.",
     responseHint:
       "Answer by correcting weak understanding and grounding the response in the current doctrinal prompt.",
+    responseActionLabel: "Correct this understanding",
+    responseActionText:
+      "Use this response to repair weak understanding. State the doctrine more clearly, rule out the wrong idea, and tie the answer to what the current stage is proving.",
+    submitButtonLabel: "Submit Correction",
   },
   [CLASSROOM_ENTRY_INTENTS.ADAPTATION]: {
     eyebrow: "Learner Adaptation",
@@ -58,6 +66,10 @@ export const classroomEntryIntentContent = {
       "This lesson block should feel learner-aware. The doctrine remains fixed, but the way Jeremiah AI frames the question and expects the answer should fit the current learner path.",
     responseHint:
       "Answer the prompt clearly at the current learner level without changing the doctrinal truth itself.",
+    responseActionLabel: "Respond at the learner level",
+    responseActionText:
+      "Keep the doctrine fixed, but answer in a way that fits the current learner path. The goal is faithful truth with the right level of wording and clarity.",
+    submitButtonLabel: "Submit Learner-Level Response",
   },
   [CLASSROOM_ENTRY_INTENTS.DIRECT]: {
     eyebrow: "Classroom Session",
@@ -75,6 +87,10 @@ export const classroomEntryIntentContent = {
       "This lesson block should stay tightly focused on the active stage so the learner is responding to the current doctrinal demand, not wandering into disconnected material.",
     responseHint:
       "Respond directly to the active stage prompt with a clear text-based doctrinal answer.",
+    responseActionLabel: "Respond to this stage",
+    responseActionText:
+      "Answer the active stage directly. Jeremiah AI is looking for a real text-based response to the current doctrinal question, not a generic reflection.",
+    submitButtonLabel: "Submit Response",
   },
 };
 
