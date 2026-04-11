@@ -1,8 +1,27 @@
+import { useState } from "react";
 import { ROUTES } from "../../app/routes";
 import { currentSession } from "../../core/classroom/classroomSessionData";
 
 export default function ClassroomPage({ onNavigate }) {
   const session = currentSession;
+  const [responseText, setResponseText] = useState("");
+  const [submittedResponse, setSubmittedResponse] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+
+  function handleSubmitResponse() {
+    const trimmed = responseText.trim();
+
+    if (!trimmed) {
+      setSubmittedResponse("");
+      setFeedbackMessage("Enter a response before submitting.");
+      return;
+    }
+
+    setSubmittedResponse(trimmed);
+    setFeedbackMessage(
+      "Response captured. In the next step, Jeremiah AI will evaluate this answer and respond instructionally."
+    );
+  }
 
   return (
     <div style={pageStyle}>
@@ -92,14 +111,25 @@ export default function ClassroomPage({ onNavigate }) {
                 </div>
 
                 <div style={responseBoxStyle}>
-                  <p style={responseLabelStyle}>Learner Response Area</p>
-                  <p style={responseHintStyle}>
-                    Type or speak the learner response here in the real build.
-                  </p>
+                  <label htmlFor="learner-response" style={responseLabelStyle}>
+                    Learner Response
+                  </label>
+
+                  <textarea
+                    id="learner-response"
+                    value={responseText}
+                    onChange={(event) => setResponseText(event.target.value)}
+                    placeholder="Type the learner response here..."
+                    style={textareaStyle}
+                  />
                 </div>
 
                 <div style={actionsRowStyle}>
-                  <button type="button" style={primaryActionStyle}>
+                  <button
+                    type="button"
+                    style={primaryActionStyle}
+                    onClick={handleSubmitResponse}
+                  >
                     Submit Response
                   </button>
                   <button
@@ -110,6 +140,20 @@ export default function ClassroomPage({ onNavigate }) {
                     Review Verses Again
                   </button>
                 </div>
+
+                {feedbackMessage ? (
+                  <div style={feedbackCardStyle}>
+                    <p style={feedbackLabelStyle}>Session Feedback</p>
+                    <p style={feedbackTextStyle}>{feedbackMessage}</p>
+
+                    {submittedResponse ? (
+                      <>
+                        <p style={submittedLabelStyle}>Submitted Response</p>
+                        <p style={submittedTextStyle}>{submittedResponse}</p>
+                      </>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
@@ -414,31 +458,30 @@ const teacherPromptTextStyle = {
 
 const responseBoxStyle = {
   marginTop: "16px",
-  minHeight: "130px",
-  borderRadius: "20px",
-  background: "#ffffff",
-  border: "1px solid #fed7aa",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "20px",
-  boxSizing: "border-box",
 };
 
 const responseLabelStyle = {
+  display: "block",
   margin: 0,
-  fontSize: "1rem",
-  fontWeight: 700,
+  fontSize: "0.88rem",
+  fontWeight: 800,
   color: "#9a3412",
 };
 
-const responseHintStyle = {
-  margin: "8px 0 0",
-  fontSize: "0.92rem",
+const textareaStyle = {
+  width: "100%",
+  minHeight: "130px",
+  marginTop: "10px",
+  borderRadius: "20px",
+  background: "#ffffff",
+  border: "1px solid #fed7aa",
+  padding: "16px",
+  boxSizing: "border-box",
+  resize: "vertical",
+  outline: "none",
+  fontSize: "0.98rem",
   lineHeight: 1.6,
-  color: "#c2410c",
-  textAlign: "center",
+  color: "#7c2d12",
 };
 
 const actionsRowStyle = {
@@ -468,4 +511,44 @@ const secondaryActionStyle = {
   fontSize: "0.95rem",
   fontWeight: 800,
   cursor: "pointer",
+};
+
+const feedbackCardStyle = {
+  marginTop: "16px",
+  borderRadius: "20px",
+  padding: "18px",
+  background: "#ffffff",
+  border: "1px solid #fed7aa",
+};
+
+const feedbackLabelStyle = {
+  margin: 0,
+  fontSize: "0.78rem",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  color: "#9a3412",
+  fontWeight: 700,
+};
+
+const feedbackTextStyle = {
+  margin: "10px 0 0",
+  fontSize: "0.96rem",
+  lineHeight: 1.7,
+  color: "#7c2d12",
+};
+
+const submittedLabelStyle = {
+  margin: "14px 0 0",
+  fontSize: "0.78rem",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  color: "#c2410c",
+  fontWeight: 700,
+};
+
+const submittedTextStyle = {
+  margin: "10px 0 0",
+  fontSize: "0.98rem",
+  lineHeight: 1.7,
+  color: "#7c2d12",
 };
