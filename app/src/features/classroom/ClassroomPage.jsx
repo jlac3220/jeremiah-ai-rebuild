@@ -4,6 +4,7 @@ import { currentSession } from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
 import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
+import { stageContent } from "../../core/classroom/stageContent";
 
 export default function ClassroomPage({ onNavigate }) {
   const session = currentSession;
@@ -23,6 +24,9 @@ export default function ClassroomPage({ onNavigate }) {
       }
     );
   }, [currentStageId]);
+
+  const currentStageContent =
+    stageContent[currentStageId] || stageContent.checkpoint;
 
   function handleSubmitResponse() {
     const result = evaluateResponse(responseText, session.standardId);
@@ -111,8 +115,8 @@ export default function ClassroomPage({ onNavigate }) {
                       ...(isCurrent
                         ? currentStageItemStyle
                         : isComplete
-                        ? completedStageItemStyle
-                        : upcomingStageItemStyle),
+                          ? completedStageItemStyle
+                          : upcomingStageItemStyle),
                     }}
                   >
                     <span style={stageBadgeStyle}>{index + 1}</span>
@@ -137,7 +141,7 @@ export default function ClassroomPage({ onNavigate }) {
           <div style={surfaceHeaderStyle}>
             <div>
               <p style={surfaceEyebrowStyle}>Teaching Surface</p>
-              <h3 style={surfaceTitleStyle}>Scripture and guided checkpoint</h3>
+              <h3 style={surfaceTitleStyle}>{currentStageContent.title}</h3>
             </div>
           </div>
 
@@ -161,16 +165,16 @@ export default function ClassroomPage({ onNavigate }) {
 
             <div style={rightColumnStyle}>
               <div style={checkpointCardStyle}>
-                <p style={sectionEyebrowDarkStyle}>Guided Checkpoint</p>
-                <h4 style={checkpointTitleStyle}>{session.checkpoint.title}</h4>
+                <p style={sectionEyebrowDarkStyle}>{currentStage.label}</p>
+                <h4 style={checkpointTitleStyle}>{currentStageContent.title}</h4>
                 <p style={checkpointTextStyle}>
-                  {session.checkpoint.description}
+                  {currentStageContent.description}
                 </p>
 
                 <div style={teacherPromptStyle}>
                   <p style={teacherPromptLabelStyle}>Jeremiah AI Prompt</p>
                   <p style={teacherPromptTextStyle}>
-                    {session.checkpoint.prompt}
+                    {currentStageContent.prompt}
                   </p>
                 </div>
 
