@@ -111,29 +111,58 @@ export default function ClassroomPage({ onNavigate }) {
             marginBottom: "20px",
           }}
         >
-          <p
+          <div
             style={{
-              margin: 0,
-              fontSize: "0.8rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "#64748b",
-              fontWeight: 700,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              gap: "16px",
+              flexWrap: "wrap",
             }}
           >
-            {entryIntentDisplay.eyebrow}
-          </p>
-          <h2
-            style={{
-              margin: "10px 0 0",
-              fontSize: "1.4rem",
-              lineHeight: 1.2,
-              color: "#0f172a",
-              fontWeight: 900,
-            }}
-          >
-            {entryIntentDisplay.title}
-          </h2>
+            <div>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "0.8rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  color: "#64748b",
+                  fontWeight: 700,
+                }}
+              >
+                {entryIntentDisplay.eyebrow}
+              </p>
+              <h2
+                style={{
+                  margin: "10px 0 0",
+                  fontSize: "1.4rem",
+                  lineHeight: 1.2,
+                  color: "#0f172a",
+                  fontWeight: 900,
+                  maxWidth: "720px",
+                }}
+              >
+                {entryIntentDisplay.title}
+              </h2>
+            </div>
+
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "10px 14px",
+                borderRadius: "999px",
+                background: "#eef2ff",
+                color: "#3730a3",
+                fontSize: "0.88rem",
+                fontWeight: 800,
+              }}
+            >
+              Current Stage: {currentStage.label}
+            </div>
+          </div>
+
           <p
             style={{
               margin: "12px 0 0",
@@ -145,6 +174,124 @@ export default function ClassroomPage({ onNavigate }) {
           >
             {entryIntentDisplay.text}
           </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: "14px",
+              marginTop: "18px",
+            }}
+          >
+            <div
+              style={{
+                borderRadius: "18px",
+                padding: "16px",
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "#64748b",
+                  fontWeight: 700,
+                }}
+              >
+                {entryIntentDisplay.emphasisLabel}
+              </p>
+              <p
+                style={{
+                  margin: "8px 0 0",
+                  fontSize: "0.98rem",
+                  lineHeight: 1.7,
+                  color: "#0f172a",
+                  fontWeight: 600,
+                }}
+              >
+                {entryIntentDisplay.emphasisText}
+              </p>
+            </div>
+
+            <div
+              style={{
+                borderRadius: "18px",
+                padding: "16px",
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "#64748b",
+                  fontWeight: 700,
+                }}
+              >
+                {entryIntentDisplay.actionLabel}
+              </p>
+              <p
+                style={{
+                  margin: "8px 0 0",
+                  fontSize: "0.98rem",
+                  lineHeight: 1.7,
+                  color: "#0f172a",
+                  fontWeight: 600,
+                }}
+              >
+                {entryIntentDisplay.actionText}
+              </p>
+            </div>
+
+            <div
+              style={{
+                borderRadius: "18px",
+                padding: "16px",
+                background: "#0f172a",
+                color: "#ffffff",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.68)",
+                  fontWeight: 700,
+                }}
+              >
+                Active Standard
+              </p>
+              <p
+                style={{
+                  margin: "8px 0 0",
+                  fontSize: "1rem",
+                  lineHeight: 1.6,
+                  color: "#ffffff",
+                  fontWeight: 700,
+                }}
+              >
+                {session.standardId} — {session.standardTitle}
+              </p>
+              <p
+                style={{
+                  margin: "10px 0 0",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.7,
+                  color: "rgba(255,255,255,0.82)",
+                }}
+              >
+                {session.truthStatement}
+              </p>
+            </div>
+          </div>
         </section>
 
         <section style={sessionFrameStyle}>
