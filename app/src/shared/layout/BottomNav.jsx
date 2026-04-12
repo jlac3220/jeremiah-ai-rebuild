@@ -1,8 +1,10 @@
+import { ROUTES } from "../../app/routes";
+
 const NAV_ITEMS = [
-  { id: "home", label: "Home" },
-  { id: "classroom", label: "Classroom" },
-  { id: "progress", label: "Progress" },
-  { id: "profile", label: "Profile" },
+  { id: ROUTES.HOME, label: "Home" },
+  { id: ROUTES.CLASSROOM, label: "Classroom" },
+  { id: ROUTES.PROGRESS, label: "Progress" },
+  { id: ROUTES.PROFILE, label: "Profile" },
 ];
 
 export default function BottomNav({ currentRoute, onNavigate }) {
