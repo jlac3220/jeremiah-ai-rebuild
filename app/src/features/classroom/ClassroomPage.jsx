@@ -108,6 +108,14 @@ export default function ClassroomPage({ onNavigate }) {
   ]);
 
   useEffect(() => {
+    setResponseText("");
+    setSubmittedResponse("");
+    setFeedbackMessage("");
+    setEvaluationStatus("");
+    setTransitionMessage("");
+  }, [activeSessionPresetId, session.standardId, session.presetEntryStageId]);
+
+  useEffect(() => {
     setCurrentStageId(session.currentStageId);
     setSavedLiveStageForPreset(activeSessionPresetId, session.currentStageId);
   }, [activeSessionPresetId, session.currentStageId]);
