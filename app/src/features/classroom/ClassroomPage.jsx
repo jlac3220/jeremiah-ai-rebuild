@@ -98,6 +98,15 @@ export default function ClassroomPage({ onNavigate }) {
     clearClassroomEntryIntent();
   }, []);
 
+  useEffect(() => {
+    setResetConfirmationMessage("");
+  }, [
+    activeSessionPresetId,
+    session.standardId,
+    session.presetEntryStageId,
+    session.currentStageId,
+  ]);
+
   const entryIntentDisplay =
     classroomEntryIntentContent[entryIntent] ||
     classroomEntryIntentContent.direct;
@@ -126,7 +135,11 @@ export default function ClassroomPage({ onNavigate }) {
 
   function handleSubmitResponse() {
     setResetConfirmationMessage("");
-    const result = evaluateResponse(responseText, session.standardId, currentStageId);
+    const result = evaluateResponse(
+      responseText,
+      session.standardId,
+      currentStageId
+    );
 
     setEvaluationStatus(result.status);
     setFeedbackMessage(result.feedback);
@@ -868,7 +881,9 @@ export default function ClassroomPage({ onNavigate }) {
 
                 {feedbackMessage ? (
                   <div style={feedbackStyle}>
-                    <p style={feedbackLabelStyle}>{feedbackTone?.surfaceLabel || "Jeremiah AI Evaluation"}</p>
+                    <p style={feedbackLabelStyle}>
+                      {feedbackTone?.surfaceLabel || "Jeremiah AI Evaluation"}
+                    </p>
                     {feedbackTone ? (
                       <div
                         style={{
