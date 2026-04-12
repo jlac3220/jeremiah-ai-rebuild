@@ -107,6 +107,11 @@ export default function ClassroomPage({ onNavigate }) {
     session.currentStageId,
   ]);
 
+  useEffect(() => {
+    setCurrentStageId(session.currentStageId);
+    setSavedLiveStageForPreset(activeSessionPresetId, session.currentStageId);
+  }, [activeSessionPresetId, session.currentStageId]);
+
   const entryIntentDisplay =
     classroomEntryIntentContent[entryIntent] ||
     classroomEntryIntentContent.direct;
@@ -158,6 +163,7 @@ export default function ClassroomPage({ onNavigate }) {
     if (nextStageId !== currentStageId) {
       const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
       setCurrentStageId(nextStageId);
+      setSavedLiveStageForPreset(activeSessionPresetId, nextStageId);
       setResponseText("");
       setTransitionMessage(
         nextStage
