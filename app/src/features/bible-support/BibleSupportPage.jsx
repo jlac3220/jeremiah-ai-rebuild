@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import { ROUTES } from "../../app/routes";
 import { getCurrentSession } from "../../core/classroom/classroomSessionData";
 
+const SESSION_TYPE_LABELS = {
+  resume: "Resume Path",
+  review: "Review Path",
+  adaptation: "Learner Adaptation Path",
+  direct: "Direct Classroom Path",
+};
+
 export default function BibleSupportPage({ onNavigate }) {
   const session = getCurrentSession();
   const verses = session.verses || [];
@@ -77,7 +84,7 @@ export default function BibleSupportPage({ onNavigate }) {
 
             <div style={summaryCardStyle}>
               <p style={summaryLabelStyle}>Session Type</p>
-              <p style={summaryValueStyle}>{session.sessionType}</p>
+              <p style={summaryValueStyle}>{SESSION_TYPE_LABELS[session.sessionType] || session.sessionType}</p>
             </div>
           </div>
         </section>
