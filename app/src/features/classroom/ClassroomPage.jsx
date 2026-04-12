@@ -77,6 +77,7 @@ export default function ClassroomPage({ onNavigate }) {
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [evaluationStatus, setEvaluationStatus] = useState("");
   const [transitionMessage, setTransitionMessage] = useState("");
+  const [resetConfirmationMessage, setResetConfirmationMessage] = useState("");
 
   const currentStage = useMemo(() => {
     return (
@@ -115,12 +116,16 @@ export default function ClassroomPage({ onNavigate }) {
     setResponseText("");
     setFeedbackMessage("");
     setEvaluationStatus("");
+    setResetConfirmationMessage(
+      "Live stage restored to the preset entry stage."
+    );
     setTransitionMessage(
       "Jeremiah AI reset this preset back to its original entry stage."
     );
   };
 
   function handleSubmitResponse() {
+    setResetConfirmationMessage("");
     const result = evaluateResponse(responseText, session.standardId, currentStageId);
 
     setEvaluationStatus(result.status);
@@ -164,6 +169,9 @@ export default function ClassroomPage({ onNavigate }) {
     presetEntryStageIndex,
     currentStageIndex
   );
+
+  const canResetToPresetEntry =
+    currentStageId !== (session.presetEntryStageId || session.currentStageId);
 
   const feedbackStyle =
     evaluationStatus === "strong"
@@ -606,23 +614,43 @@ export default function ClassroomPage({ onNavigate }) {
               {sessionMovement.text}
             </p>
 
-            <button
-              type="button"
-              onClick={handleResetPresetStage}
-              style={{
-                marginTop: "14px",
-                border: "1px solid #cbd5e1",
-                background: "#ffffff",
-                color: "#0f172a",
-                padding: "10px 14px",
-                borderRadius: "12px",
-                fontSize: "0.9rem",
-                fontWeight: 800,
-                cursor: "pointer",
-              }}
-            >
-              Reset to Preset Entry
-            </button>
+            {resetConfirmationMessage && !canResetToPresetEntry ? (
+              <div
+                style={{
+                  marginTop: "14px",
+                  borderRadius: "14px",
+                  padding: "12px 14px",
+                  background: "#ecfdf5",
+                  border: "1px solid #a7f3d0",
+                  color: "#065f46",
+                  fontSize: "0.9rem",
+                  lineHeight: 1.6,
+                  fontWeight: 700,
+                }}
+              >
+                {resetConfirmationMessage}
+              </div>
+            ) : null}
+
+            {canResetToPresetEntry ? (
+              <button
+                type="button"
+                onClick={handleResetPresetStage}
+                style={{
+                  marginTop: "14px",
+                  border: "1px solid #cbd5e1",
+                  background: "#ffffff",
+                  color: "#0f172a",
+                  padding: "10px 14px",
+                  borderRadius: "12px",
+                  fontSize: "0.9rem",
+                  fontWeight: 800,
+                  cursor: "pointer",
+                }}
+              >
+                Reset to Preset Entry
+              </button>
+            ) : null}
           </div>
         </section>
 
