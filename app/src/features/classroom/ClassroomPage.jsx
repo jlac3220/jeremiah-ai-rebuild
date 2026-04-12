@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { ROUTES } from "../../app/routes";
-import { getCurrentSession } from "../../core/classroom/classroomSessionData";
+import {
+  getActiveClassroomSessionPreset,
+  getCurrentSession,
+} from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
 import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
@@ -11,8 +14,25 @@ import {
   getClassroomEntryIntent,
 } from "../../core/classroom/classroomEntryIntent";
 
+const SESSION_PRESET_LABELS = {
+  resume: "Resume Path",
+  review: "Review Path",
+  adaptation: "Learner Adaptation Path",
+  direct: "Direct Classroom Path",
+};
+
+function formatStageLabel(stageId = "") {
+  if (!stageId) return "Unknown Stage";
+
+  return stageId
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 export default function ClassroomPage({ onNavigate }) {
   const session = getCurrentSession();
+  const activeSessionPresetId = getActiveClassroomSessionPreset();
 
   const [currentStageId, setCurrentStageId] = useState(session.currentStageId);
   const [responseText, setResponseText] = useState("");
@@ -46,6 +66,9 @@ export default function ClassroomPage({ onNavigate }) {
 
   const feedbackTone =
     entryIntentDisplay.feedbackTone?.[evaluationStatus] || null;
+
+  const activeSessionPresetLabel =
+    SESSION_PRESET_LABELS[activeSessionPresetId] || "Direct Classroom Path";
 
   function handleSubmitResponse() {
     const result = evaluateResponse(responseText, session.standardId, currentStageId);
@@ -294,6 +317,191 @@ export default function ClassroomPage({ onNavigate }) {
                 {session.truthStatement}
               </p>
             </div>
+          </div>
+        </section>
+
+        <section
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "14px",
+            marginBottom: "20px",
+          }}
+        >
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: "20px",
+              padding: "18px",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontSize: "0.76rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#64748b",
+                fontWeight: 700,
+              }}
+            >
+              Active Session Path
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "1rem",
+                lineHeight: 1.5,
+                color: "#0f172a",
+                fontWeight: 800,
+              }}
+            >
+              {activeSessionPresetLabel}
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "0.92rem",
+                lineHeight: 1.6,
+                color: "#475569",
+              }}
+            >
+              Preset key: {activeSessionPresetId}
+            </p>
+          </div>
+
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: "20px",
+              padding: "18px",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontSize: "0.76rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#64748b",
+                fontWeight: 700,
+              }}
+            >
+              Preset Entry Stage
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "1rem",
+                lineHeight: 1.5,
+                color: "#0f172a",
+                fontWeight: 800,
+              }}
+            >
+              {formatStageLabel(session.currentStageId)}
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "0.92rem",
+                lineHeight: 1.6,
+                color: "#475569",
+              }}
+            >
+              This is the stage the selected session preset opened with.
+            </p>
+          </div>
+
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: "20px",
+              padding: "18px",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontSize: "0.76rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#64748b",
+                fontWeight: 700,
+              }}
+            >
+              Live Stage
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "1rem",
+                lineHeight: 1.5,
+                color: "#0f172a",
+                fontWeight: 800,
+              }}
+            >
+              {currentStage.label}
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "0.92rem",
+                lineHeight: 1.6,
+                color: "#475569",
+              }}
+            >
+              This is the stage currently being shown in the live Classroom flow.
+            </p>
+          </div>
+
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: "20px",
+              padding: "18px",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontSize: "0.76rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#64748b",
+                fontWeight: 700,
+              }}
+            >
+              Learner Path
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "1rem",
+                lineHeight: 1.5,
+                color: "#0f172a",
+                fontWeight: 800,
+              }}
+            >
+              {session.learnerLevel}
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "0.92rem",
+                lineHeight: 1.6,
+                color: "#475569",
+              }}
+            >
+              {session.standardId} - {session.standardTitle}
+            </p>
           </div>
         </section>
 
