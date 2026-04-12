@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { currentSession } from "../../core/classroom/classroomSessionData";
+import { getCurrentSession } from "../../core/classroom/classroomSessionData";
 
 export default function BibleSupportPage() {
-  const session = currentSession;
+  const session = getCurrentSession();
   const verses = session.verses || [];
   const [selectedReference, setSelectedReference] = useState(
     verses[0]?.reference || ""

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ROUTES } from "../../app/routes";
-import { currentSession } from "../../core/classroom/classroomSessionData";
+import { getCurrentSession } from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
 import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
@@ -12,7 +12,7 @@ import {
 } from "../../core/classroom/classroomEntryIntent";
 
 export default function ClassroomPage({ onNavigate }) {
-  const session = currentSession;
+  const session = getCurrentSession();
 
   const [currentStageId, setCurrentStageId] = useState(session.currentStageId);
   const [responseText, setResponseText] = useState("");
