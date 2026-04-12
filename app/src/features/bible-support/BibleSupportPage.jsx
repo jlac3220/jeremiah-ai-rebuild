@@ -1,12 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ROUTES } from "../../app/routes";
 import { getCurrentSession } from "../../core/classroom/classroomSessionData";
 
-export default function BibleSupportPage() {
+export default function BibleSupportPage({ onNavigate }) {
   const session = getCurrentSession();
   const verses = session.verses || [];
   const [selectedReference, setSelectedReference] = useState(
     verses[0]?.reference || ""
   );
+
+  useEffect(() => {
+    setSelectedReference((currentReference) => {
+      const hasCurrentReference = verses.some(
+        (verse) => verse.reference === currentReference
+      );
+
+      if (hasCurrentReference) {
+        return currentReference;
+      }
+
+      return verses[0]?.reference || "";
+    });
+  }, [session.standardId, session.sessionType, verses]);
 
   const selectedVerse =
     verses.find((verse) => verse.reference === selectedReference) ||
@@ -31,16 +46,23 @@ export default function BibleSupportPage() {
             <div>
               <p style={sectionEyebrowLightStyle}>Current Session Support</p>
               <h2 style={primaryTitleStyle}>
-                Key verses for “{session.standardTitle}”
+                Key verses for "{session.standardTitle}"
               </h2>
             </div>
 
-            <div style={trackPillStyle}>{session.studyTitle}</div>
+            <div style={primaryActionsStyle}>
+              <div style={trackPillStyle}>{session.studyTitle}</div>
+              <button
+                type="button"
+                style={returnButtonStyle}
+                onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+              >
+                Back to Classroom
+              </button>
+            </div>
           </div>
 
-          <p style={primaryTextStyle}>
-            {session.truthExplanation}
-          </p>
+          <p style={primaryTextStyle}>{session.truthExplanation}</p>
 
           <div style={summaryGridStyle}>
             <div style={summaryCardStyle}>
@@ -201,6 +223,13 @@ const primaryTopStyle = {
   flexWrap: "wrap",
 };
 
+const primaryActionsStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "12px",
+  flexWrap: "wrap",
+};
+
 const sectionEyebrowLightStyle = {
   margin: 0,
   fontSize: "0.8rem",
@@ -226,6 +255,17 @@ const trackPillStyle = {
   background: "rgba(255,255,255,0.14)",
   fontSize: "0.9rem",
   fontWeight: 800,
+};
+
+const returnButtonStyle = {
+  border: "1px solid rgba(255,255,255,0.24)",
+  background: "#ffffff",
+  color: "#0f172a",
+  padding: "10px 14px",
+  borderRadius: "999px",
+  fontSize: "0.9rem",
+  fontWeight: 800,
+  cursor: "pointer",
 };
 
 const primaryTextStyle = {
