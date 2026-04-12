@@ -138,6 +138,97 @@ export const classroomSessionPresets = {
   },
 };
 
+function toArray(value) {
+  if (Array.isArray(value)) return value;
+  if (!value) return [];
+  if (typeof value === "object") return Object.values(value);
+  return [];
+}
+
+function countLike(value) {
+  if (Array.isArray(value)) return value.length;
+  if (value && typeof value === "object") return Object.keys(value).length;
+  return 0;
+}
+
+function firstNonEmpty(values) {
+  return values.find((value) => typeof value === "string" && value.trim()) || "";
+}
+
+export function selectHomeSessionPreset(homeData = {}) {
+  const stageId = firstNonEmpty([
+    homeData?.continueCard?.currentStageId,
+    homeData?.continueCard?.stageId,
+    homeData?.continueCard?.stage,
+    homeData?.activeSession?.currentStageId,
+    homeData?.activeSession?.stageId,
+    homeData?.activeSession?.stage,
+  ])
+    .trim()
+    .toLowerCase();
+
+  if (["scripture", "checkpoint", "mastery"].includes(stageId)) {
+    return CLASSROOM_SESSION_PRESETS.RESUME;
+  }
+
+  if (["focus", "truth"].includes(stageId)) {
+    return CLASSROOM_SESSION_PRESETS.DIRECT;
+  }
+
+  return CLASSROOM_SESSION_PRESETS.RESUME;
+}
+
+export function selectProgressSessionPreset(progressData = {}) {
+  const reviewSignals = [
+    countLike(progressData?.reviewNeeded),
+    countLike(progressData?.reviewQueue),
+    countLike(progressData?.weakAreas),
+    countLike(progressData?.itemsNeedingReview),
+    countLike(progressData?.reviewItems),
+  ];
+
+  if (reviewSignals.some((count) => count > 0)) {
+    return CLASSROOM_SESSION_PRESETS.REVIEW;
+  }
+
+  const activeLearningSignals = [
+    progressData?.activeLearning,
+    progressData?.activePath,
+    progressData?.currentTrack,
+    progressData?.nextStep,
+    ...toArray(progressData?.masterySummary),
+  ];
+
+  if (activeLearningSignals.some(Boolean)) {
+    return CLASSROOM_SESSION_PRESETS.RESUME;
+  }
+
+  return CLASSROOM_SESSION_PRESETS.DIRECT;
+}
+
+export function selectProfileSessionPreset(profileData = {}) {
+  const learnerSignals = [
+    profileData?.learnerLevel,
+    profileData?.level,
+    profileData?.profileLevel,
+    profileData?.ageBand,
+    profileData?.learnerPath,
+  ];
+
+  const adaptationSignals = [
+    countLike(profileData?.adaptation),
+    countLike(profileData?.adaptationInfo),
+    countLike(profileData?.supportNeeds),
+    countLike(profileData?.learningProfile),
+  ];
+
+  if (firstNonEmpty(learnerSignals) || adaptationSignals.some((count) => count > 0)) {
+    return CLASSROOM_SESSION_PRESETS.ADAPTATION;
+  }
+
+  return CLASSROOM_SESSION_PRESETS.DIRECT;
+}
+
 export function setActiveClassroomSessionPreset(presetId) {
   if (typeof window === "undefined") return;
 

@@ -5,7 +5,7 @@ import {
   setClassroomEntryIntent,
 } from "../../core/classroom/classroomEntryIntent";
 import {
-  CLASSROOM_SESSION_PRESETS,
+  selectProgressSessionPreset,
   setActiveClassroomSessionPreset,
 } from "../../core/classroom/classroomSessionData";
 
@@ -78,7 +78,7 @@ export default function ProgressPage({ onNavigate }) {
             style={continueButtonStyle}
             onClick={() => {
             setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.REVIEW);
-            setActiveClassroomSessionPreset(CLASSROOM_SESSION_PRESETS.REVIEW);
+            setActiveClassroomSessionPreset(selectProgressSessionPreset(progressData));
             onNavigate?.(ROUTES.CLASSROOM);
           }}
           >

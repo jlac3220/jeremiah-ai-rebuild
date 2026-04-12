@@ -5,7 +5,7 @@ import {
   setClassroomEntryIntent,
 } from "../../core/classroom/classroomEntryIntent";
 import {
-  CLASSROOM_SESSION_PRESETS,
+  selectProfileSessionPreset,
   setActiveClassroomSessionPreset,
 } from "../../core/classroom/classroomSessionData";
 
@@ -64,7 +64,7 @@ export default function ProfilePage({ onNavigate }) {
             style={primaryButtonStyle}
             onClick={() => {
             setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.ADAPTATION);
-            setActiveClassroomSessionPreset(CLASSROOM_SESSION_PRESETS.ADAPTATION);
+            setActiveClassroomSessionPreset(selectProfileSessionPreset(profileData));
             onNavigate?.(ROUTES.CLASSROOM);
           }}
           >
