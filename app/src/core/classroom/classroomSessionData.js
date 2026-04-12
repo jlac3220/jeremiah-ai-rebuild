@@ -289,6 +289,7 @@ export function getCurrentSession() {
   return {
     ...preset,
     presetId,
+    sessionType: presetId,
     presetEntryStageId: preset.currentStageId,
     currentStageId: savedLiveStageId,
   };
@@ -297,6 +298,7 @@ export function getCurrentSession() {
 export const currentSession = {
   ...classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT],
   presetId: CLASSROOM_SESSION_PRESETS.DIRECT,
+  sessionType: CLASSROOM_SESSION_PRESETS.DIRECT,
   presetEntryStageId:
     classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT].currentStageId,
 };
