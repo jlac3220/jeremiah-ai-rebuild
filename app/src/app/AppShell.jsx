@@ -10,7 +10,7 @@ export default function AppShell() {
 
   return (
     <div style={shellStyle}>
-      <main style={mainStyle}>
+      <main style={{ ...mainStyle, paddingBottom: showBottomNav ? "88px" : "0px" }}>
         <AppRouter
           currentRoute={currentRoute}
           onNavigate={setCurrentRoute}
@@ -38,7 +38,6 @@ const shellStyle = {
 
 const mainStyle = {
   flex: 1,
-  paddingBottom: "88px",
 };
 
 const bottomNavWrapStyle = {
