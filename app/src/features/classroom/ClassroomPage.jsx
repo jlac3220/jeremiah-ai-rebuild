@@ -107,6 +107,19 @@ export default function ClassroomPage({ onNavigate }) {
   const activeSessionPresetLabel =
     SESSION_PRESET_LABELS[activeSessionPresetId] || "Direct Classroom Path";
 
+  const handleResetPresetStage = () => {
+    const resetStageId = session.presetEntryStageId || session.currentStageId;
+
+    setCurrentStageId(resetStageId);
+    setSavedLiveStageForPreset(activeSessionPresetId, resetStageId);
+    setResponseText("");
+    setFeedbackMessage("");
+    setEvaluationStatus("");
+    setTransitionMessage(
+      "Jeremiah AI reset this preset back to its original entry stage."
+    );
+  };
+
   function handleSubmitResponse() {
     const result = evaluateResponse(responseText, session.standardId, currentStageId);
 
@@ -592,6 +605,24 @@ export default function ClassroomPage({ onNavigate }) {
             >
               {sessionMovement.text}
             </p>
+
+            <button
+              type="button"
+              onClick={handleResetPresetStage}
+              style={{
+                marginTop: "14px",
+                border: "1px solid #cbd5e1",
+                background: "#ffffff",
+                color: "#0f172a",
+                padding: "10px 14px",
+                borderRadius: "12px",
+                fontSize: "0.9rem",
+                fontWeight: 800,
+                cursor: "pointer",
+              }}
+            >
+              Reset to Preset Entry
+            </button>
           </div>
         </section>
 
