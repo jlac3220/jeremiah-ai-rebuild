@@ -1,4 +1,5 @@
 const STORAGE_KEY = "jeremiah-ai-active-classroom-session";
+const LIVE_STAGE_KEY_PREFIX = "jeremiah-ai-live-stage";
 
 export const CLASSROOM_SESSION_PRESETS = {
   RESUME: "resume",
@@ -155,6 +156,10 @@ function firstNonEmpty(values) {
   return values.find((value) => typeof value === "string" && value.trim()) || "";
 }
 
+function getLiveStageStorageKey(presetId) {
+  return `${LIVE_STAGE_KEY_PREFIX}:${presetId}`;
+}
+
 export function selectHomeSessionPreset(homeData = {}) {
   const stageId = firstNonEmpty([
     homeData?.continueCard?.currentStageId,
@@ -256,13 +261,42 @@ export function clearActiveClassroomSessionPreset() {
   window.sessionStorage.removeItem(STORAGE_KEY);
 }
 
-export function getCurrentSession() {
-  const presetId = getActiveClassroomSessionPreset();
-  return (
-    classroomSessionPresets[presetId] ||
-    classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT]
-  );
+export function setSavedLiveStageForPreset(presetId, stageId) {
+  if (typeof window === "undefined" || !presetId || !stageId) return;
+  window.sessionStorage.setItem(getLiveStageStorageKey(presetId), stageId);
 }
 
-export const currentSession =
-  classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT];
+export function getSavedLiveStageForPreset(presetId) {
+  if (typeof window === "undefined" || !presetId) return "";
+
+  return window.sessionStorage.getItem(getLiveStageStorageKey(presetId)) || "";
+}
+
+export function clearSavedLiveStageForPreset(presetId) {
+  if (typeof window === "undefined" || !presetId) return;
+  window.sessionStorage.removeItem(getLiveStageStorageKey(presetId));
+}
+
+export function getCurrentSession() {
+  const presetId = getActiveClassroomSessionPreset();
+  const preset =
+    classroomSessionPresets[presetId] ||
+    classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT];
+
+  const savedLiveStageId =
+    getSavedLiveStageForPreset(presetId) || preset.currentStageId;
+
+  return {
+    ...preset,
+    presetId,
+    presetEntryStageId: preset.currentStageId,
+    currentStageId: savedLiveStageId,
+  };
+}
+
+export const currentSession = {
+  ...classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT],
+  presetId: CLASSROOM_SESSION_PRESETS.DIRECT,
+  presetEntryStageId:
+    classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT].currentStageId,
+};

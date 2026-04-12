@@ -3,6 +3,7 @@ import { ROUTES } from "../../app/routes";
 import {
   getActiveClassroomSessionPreset,
   getCurrentSession,
+  setSavedLiveStageForPreset,
 } from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
@@ -143,7 +144,7 @@ export default function ClassroomPage({ onNavigate }) {
   );
 
   const presetEntryStageIndex = sessionStages.findIndex(
-    (stage) => stage.id === session.currentStageId
+    (stage) => stage.id === (session.presetEntryStageId || session.currentStageId)
   );
 
   const sessionMovement = describeStageMovement(
@@ -447,7 +448,7 @@ export default function ClassroomPage({ onNavigate }) {
                 fontWeight: 800,
               }}
             >
-              {formatStageLabel(session.currentStageId)}
+              {formatStageLabel(session.presetEntryStageId || session.currentStageId)}
             </p>
             <p
               style={{
