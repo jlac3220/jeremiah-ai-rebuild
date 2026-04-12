@@ -30,6 +30,42 @@ function formatStageLabel(stageId = "") {
     .join(" ");
 }
 
+function describeStageMovement(entryIndex, liveIndex) {
+  if (entryIndex < 0 || liveIndex < 0) {
+    return {
+      label: "Stage relationship unavailable",
+      text:
+        "Jeremiah AI could not compare the preset entry stage to the live stage.",
+    };
+  }
+
+  const delta = liveIndex - entryIndex;
+
+  if (delta === 0) {
+    return {
+      label: "Still at preset entry stage",
+      text:
+        "The live session is still working at the same stage the selected preset opened with.",
+    };
+  }
+
+  if (delta > 0) {
+    return {
+      label: `Advanced ${delta} stage${delta === 1 ? "" : "s"} beyond preset entry`,
+      text:
+        "The learner has moved forward from the original preset entry stage as strong responses advanced the live session.",
+    };
+  }
+
+  const stepsBack = Math.abs(delta);
+
+  return {
+    label: `Moved ${stepsBack} stage${stepsBack === 1 ? "" : "s"} before preset entry`,
+    text:
+      "The live stage is earlier than the preset entry stage, which usually means the session state was reset or reopened differently.",
+  };
+}
+
 export default function ClassroomPage({ onNavigate }) {
   const session = getCurrentSession();
   const activeSessionPresetId = getActiveClassroomSessionPreset();
@@ -104,6 +140,15 @@ export default function ClassroomPage({ onNavigate }) {
 
   const currentStageIndex = sessionStages.findIndex(
     (stage) => stage.id === currentStageId
+  );
+
+  const presetEntryStageIndex = sessionStages.findIndex(
+    (stage) => stage.id === session.currentStageId
+  );
+
+  const sessionMovement = describeStageMovement(
+    presetEntryStageIndex,
+    currentStageIndex
   );
 
   const feedbackStyle =
@@ -412,7 +457,7 @@ export default function ClassroomPage({ onNavigate }) {
                 color: "#475569",
               }}
             >
-              This is the stage the selected session preset opened with.
+              This is the fixed stage the selected session preset opened with.
             </p>
           </div>
 
@@ -456,7 +501,7 @@ export default function ClassroomPage({ onNavigate }) {
                 color: "#475569",
               }}
             >
-              This is the stage currently being shown in the live Classroom flow.
+              This live stage updates as Jeremiah AI advances the learner through the session.
             </p>
           </div>
 
@@ -500,7 +545,51 @@ export default function ClassroomPage({ onNavigate }) {
                 color: "#475569",
               }}
             >
-              {session.standardId} - {session.standardTitle}
+              {session.standardId} — {session.standardTitle}
+            </p>
+          </div>
+
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: "20px",
+              padding: "18px",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontSize: "0.76rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#64748b",
+                fontWeight: 700,
+              }}
+            >
+              Session Movement
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "1rem",
+                lineHeight: 1.5,
+                color: "#0f172a",
+                fontWeight: 800,
+              }}
+            >
+              {sessionMovement.label}
+            </p>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: "0.92rem",
+                lineHeight: 1.6,
+                color: "#475569",
+              }}
+            >
+              {sessionMovement.text}
             </p>
           </div>
         </section>
