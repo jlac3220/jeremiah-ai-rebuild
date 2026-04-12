@@ -44,6 +44,9 @@ export default function ClassroomPage({ onNavigate }) {
     classroomEntryIntentContent[entryIntent] ||
     classroomEntryIntentContent.direct;
 
+  const feedbackTone =
+    entryIntentDisplay.feedbackTone?.[evaluationStatus] || null;
+
   function handleSubmitResponse() {
     const result = evaluateResponse(responseText, session.standardId, currentStageId);
 
@@ -508,7 +511,41 @@ export default function ClassroomPage({ onNavigate }) {
 
                 {feedbackMessage ? (
                   <div style={feedbackStyle}>
-                    <p style={feedbackLabelStyle}>Jeremiah AI Evaluation</p>
+                    <p style={feedbackLabelStyle}>{feedbackTone?.surfaceLabel || "Jeremiah AI Evaluation"}</p>
+                    {feedbackTone ? (
+                      <div
+                        style={{
+                          marginBottom: "14px",
+                          borderRadius: "16px",
+                          padding: "14px",
+                          background: "rgba(255,255,255,0.55)",
+                          border: "1px solid rgba(15, 23, 42, 0.08)",
+                        }}
+                      >
+                        <p
+                          style={{
+                            margin: 0,
+                            fontSize: "0.76rem",
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            color: "#334155",
+                            fontWeight: 700,
+                          }}
+                        >
+                          {feedbackTone.label}
+                        </p>
+                        <p
+                          style={{
+                            margin: "8px 0 0",
+                            fontSize: "0.95rem",
+                            lineHeight: 1.7,
+                            color: "#0f172a",
+                          }}
+                        >
+                          {feedbackTone.text}
+                        </p>
+                      </div>
+                    ) : null}
                     <p style={feedbackTextStyle}>{feedbackMessage}</p>
 
                     {submittedResponse ? (

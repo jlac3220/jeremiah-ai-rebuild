@@ -28,6 +28,32 @@ export const classroomEntryIntentContent = {
     responseActionText:
       "Do not restart the lesson in your answer. Continue the exact stage in front of you and respond to the live doctrinal demand as clearly as you can.",
     submitButtonLabel: "Continue Stage",
+    feedbackTone: {
+      empty: {
+        surfaceLabel: "Jeremiah AI Evaluation",
+        label: "Resume requires a real response",
+        text:
+          "You came back to continue the live stage. Put a real text response in the box so the session can keep moving.",
+      },
+      weak: {
+        surfaceLabel: "Resume Evaluation",
+        label: "Continuation needs a clearer answer",
+        text:
+          "Do not drift away from the live stage. Re-enter the lesson by answering the exact doctrinal demand more clearly.",
+      },
+      partial: {
+        surfaceLabel: "Resume Evaluation",
+        label: "Momentum is returning",
+        text:
+          "You are re-entering the lesson, but the answer still needs more clarity before Jeremiah AI should move you forward.",
+      },
+      strong: {
+        surfaceLabel: "Resume Evaluation",
+        label: "The session can move again",
+        text:
+          "This response shows the lesson momentum is back. Jeremiah AI can keep advancing the live doctrinal path.",
+      },
+    },
   },
   [CLASSROOM_ENTRY_INTENTS.REVIEW]: {
     eyebrow: "Review Path",
@@ -49,6 +75,32 @@ export const classroomEntryIntentContent = {
     responseActionText:
       "Use this response to repair weak understanding. State the doctrine more clearly, rule out the wrong idea, and tie the answer to what the current stage is proving.",
     submitButtonLabel: "Submit Correction",
+    feedbackTone: {
+      empty: {
+        surfaceLabel: "Review Evaluation",
+        label: "Review cannot happen without a response",
+        text:
+          "This path exists to repair weak understanding. Give Jeremiah AI something to correct and evaluate.",
+      },
+      weak: {
+        surfaceLabel: "Review Evaluation",
+        label: "The weak area is still exposed",
+        text:
+          "The response still leaves the doctrinal weakness in place. Tighten the claim, rule out the wrong idea, and answer the stage more directly.",
+      },
+      partial: {
+        surfaceLabel: "Review Evaluation",
+        label: "Correction has started but is not complete",
+        text:
+          "The learner is moving in the right direction, but the weak area still needs a firmer doctrinal statement before review is complete.",
+      },
+      strong: {
+        surfaceLabel: "Review Evaluation",
+        label: "The weak area is being repaired",
+        text:
+          "This response shows clearer correction. Jeremiah AI can treat this review pass as real progress toward stable mastery.",
+      },
+    },
   },
   [CLASSROOM_ENTRY_INTENTS.ADAPTATION]: {
     eyebrow: "Learner Adaptation",
@@ -70,6 +122,32 @@ export const classroomEntryIntentContent = {
     responseActionText:
       "Keep the doctrine fixed, but answer in a way that fits the current learner path. The goal is faithful truth with the right level of wording and clarity.",
     submitButtonLabel: "Submit Learner-Level Response",
+    feedbackTone: {
+      empty: {
+        surfaceLabel: "Learner-Level Evaluation",
+        label: "Adaptation still needs an answer",
+        text:
+          "Jeremiah AI can adapt the delivery, but the learner still has to answer. Give a real response at the current learner level.",
+      },
+      weak: {
+        surfaceLabel: "Learner-Level Evaluation",
+        label: "The truth still needs clearer expression",
+        text:
+          "The wording may be learner-aware, but the doctrinal target is still not clear enough. Keep the truth fixed and express it more plainly.",
+      },
+      partial: {
+        surfaceLabel: "Learner-Level Evaluation",
+        label: "The learner path is helping, but more clarity is needed",
+        text:
+          "This shows developing understanding at the current learner level, but Jeremiah AI still needs a more complete doctrinal response.",
+      },
+      strong: {
+        surfaceLabel: "Learner-Level Evaluation",
+        label: "The learner-level answer is holding the truth well",
+        text:
+          "This response keeps the doctrine intact while matching the learner path well enough for Jeremiah AI to treat it as strong progress.",
+      },
+    },
   },
   [CLASSROOM_ENTRY_INTENTS.DIRECT]: {
     eyebrow: "Classroom Session",
@@ -91,6 +169,32 @@ export const classroomEntryIntentContent = {
     responseActionText:
       "Answer the active stage directly. Jeremiah AI is looking for a real text-based response to the current doctrinal question, not a generic reflection.",
     submitButtonLabel: "Submit Response",
+    feedbackTone: {
+      empty: {
+        surfaceLabel: "Jeremiah AI Evaluation",
+        label: "The stage still needs a response",
+        text:
+          "The learner has to answer the active stage before Jeremiah AI can evaluate understanding or move the session forward.",
+      },
+      weak: {
+        surfaceLabel: "Jeremiah AI Evaluation",
+        label: "The stage is not satisfied yet",
+        text:
+          "The answer does not yet meet the doctrinal demand of the current stage. Respond more directly to what is being asked.",
+      },
+      partial: {
+        surfaceLabel: "Jeremiah AI Evaluation",
+        label: "The stage is partway satisfied",
+        text:
+          "The response shows some understanding, but Jeremiah AI still needs a clearer doctrinal statement before advancing the session.",
+      },
+      strong: {
+        surfaceLabel: "Jeremiah AI Evaluation",
+        label: "The stage has been answered well",
+        text:
+          "The response meets the current doctrinal demand strongly enough for Jeremiah AI to treat it as real learning progress.",
+      },
+    },
   },
 };
 
