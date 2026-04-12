@@ -174,6 +174,9 @@ export default function ClassroomPage({ onNavigate }) {
       setCurrentStageId(nextStageId);
       setSavedLiveStageForPreset(activeSessionPresetId, nextStageId);
       setResponseText("");
+      setSubmittedResponse("");
+      setFeedbackMessage("");
+      setEvaluationStatus("");
       setTransitionMessage(
         nextStage
           ? `Session advanced to ${nextStage.label}. Jeremiah AI is now using the next teaching surface.`
