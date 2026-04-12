@@ -103,8 +103,7 @@ export default function ClassroomPage({ onNavigate }) {
   }, [
     activeSessionPresetId,
     session.standardId,
-    session.presetEntryStageId,
-    session.currentStageId,
+    session.presetEntryStageId
   ]);
 
   useEffect(() => {
