@@ -136,6 +136,7 @@ export default function ClassroomPage({ onNavigate }) {
     setCurrentStageId(resetStageId);
     setSavedLiveStageForPreset(activeSessionPresetId, resetStageId);
     setResponseText("");
+    setSubmittedResponse("");
     setFeedbackMessage("");
     setEvaluationStatus("");
     setResetConfirmationMessage(
