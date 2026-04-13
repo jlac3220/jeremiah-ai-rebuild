@@ -1,3 +1,9 @@
+import {
+  DEFAULT_CLASSROOM_STANDARD_ID,
+  classroomContentRegistry,
+  getClassroomContentByStandardId,
+} from "./content/classroomContentRegistry";
+
 const STORAGE_KEY = "jeremiah-ai-active-classroom-session";
 const LIVE_STAGE_KEY_PREFIX = "jeremiah-ai-live-stage";
 
@@ -8,136 +14,66 @@ export const CLASSROOM_SESSION_PRESETS = {
   DIRECT: "direct",
 };
 
-const commonSession = {
-  studyId: "OG",
-  studyTitle: "The One True God",
-  standardId: "OG.1.18",
-  standardTitle: "God is One",
-  truthStatement: "There is one God.",
-};
+function getFallbackClassroomContent() {
+  return (
+    getClassroomContentByStandardId(DEFAULT_CLASSROOM_STANDARD_ID) ||
+    Object.values(classroomContentRegistry)[0] || {
+      studyId: "",
+      studyTitle: "",
+      domainId: "",
+      standardId: DEFAULT_CLASSROOM_STANDARD_ID,
+      standardTitle: "",
+      truthStatement: "",
+      presets: {},
+    }
+  );
+}
 
-const directVerses = [
-  {
-    reference: "Deuteronomy 6:4",
-    text: "Hear, O Israel: The LORD our God is one LORD.",
-    note: "This verse states the oneness of God directly and serves as a foundational testimony.",
-  },
-  {
-    reference: "Isaiah 44:6",
-    text: "I am the first, and I am the last; and beside me there is no God.",
-    note: "This verse rules out the existence of another divine being alongside God.",
-  },
-];
+function getSessionBase(content) {
+  return {
+    studyId: content.studyId,
+    studyTitle: content.studyTitle,
+    domainId: content.domainId || "",
+    standardId: content.standardId,
+    standardTitle: content.standardTitle,
+    truthStatement: content.truthStatement,
+  };
+}
 
-const resumeVerses = [
-  {
-    reference: "Deuteronomy 6:4",
-    text: "Hear, O Israel: The LORD our God is one LORD.",
-    note: "This verse pulls the learner back into the active scripture stage by restating the core confession clearly.",
-  },
-  {
-    reference: "Isaiah 44:6",
-    text: "I am the first, and I am the last; and beside me there is no God.",
-    note: "This verse keeps the resumed lesson from drifting by forcing the learner to face what the doctrine excludes.",
-  },
-];
+function buildPresetSession(content, presetId) {
+  return {
+    ...getSessionBase(content),
+    ...(content.presets?.[presetId] || {}),
+  };
+}
 
-const reviewVerses = [
-  {
-    reference: "Deuteronomy 6:4",
-    text: "Hear, O Israel: The LORD our God is one LORD.",
-    note: "Review uses this verse to restate the positive doctrinal confession with precision.",
-  },
-  {
-    reference: "Isaiah 44:6",
-    text: "I am the first, and I am the last; and beside me there is no God.",
-    note: "Review uses this verse to expose and correct any idea of another divine being.",
-  },
-  {
-    reference: "Isaiah 45:5",
-    text: "I am the LORD, and there is none else, there is no God beside me.",
-    note: "This verse intensifies correction by repeating the exclusion in unmistakable language.",
-  },
-];
+export function getClassroomSessionPresets(
+  standardId = DEFAULT_CLASSROOM_STANDARD_ID
+) {
+  const content =
+    getClassroomContentByStandardId(standardId) || getFallbackClassroomContent();
 
-const adaptationVerses = [
-  {
-    reference: "Deuteronomy 6:4",
-    text: "Hear, O Israel: The LORD our God is one LORD.",
-    note: "This verse keeps the truth simple and direct so the learner can hold the main claim clearly.",
-  },
-  {
-    reference: "Isaiah 44:6",
-    text: "I am the first, and I am the last; and beside me there is no God.",
-    note: "This verse helps the learner understand that the Bible does not leave room for another God beside Him.",
-  },
-];
+  return {
+    [CLASSROOM_SESSION_PRESETS.DIRECT]: buildPresetSession(
+      content,
+      CLASSROOM_SESSION_PRESETS.DIRECT
+    ),
+    [CLASSROOM_SESSION_PRESETS.RESUME]: buildPresetSession(
+      content,
+      CLASSROOM_SESSION_PRESETS.RESUME
+    ),
+    [CLASSROOM_SESSION_PRESETS.REVIEW]: buildPresetSession(
+      content,
+      CLASSROOM_SESSION_PRESETS.REVIEW
+    ),
+    [CLASSROOM_SESSION_PRESETS.ADAPTATION]: buildPresetSession(
+      content,
+      CLASSROOM_SESSION_PRESETS.ADAPTATION
+    ),
+  };
+}
 
-export const classroomSessionPresets = {
-  [CLASSROOM_SESSION_PRESETS.DIRECT]: {
-    ...commonSession,
-    currentStageId: "focus",
-    learnerLevel: "Adult Endpoint Path",
-    truthExplanation:
-      "This is the direct Classroom session. Jeremiah AI starts at the beginning of the guided lesson path and teaches the oneness of God through a structured doctrinal flow.",
-    verses: directVerses,
-    checkpoint: {
-      title: "What do these verses require you to confess?",
-      description:
-        "Jeremiah AI is checking whether the learner understands what these passages prove, not just whether they can repeat the words.",
-      prompt:
-        "These verses do not merely mention God. They make a doctrinal claim. What do they rule out, and what do they require you to confess instead?",
-    },
-  },
-
-  [CLASSROOM_SESSION_PRESETS.RESUME]: {
-    ...commonSession,
-    currentStageId: "scripture",
-    learnerLevel: "Adult Endpoint Path",
-    truthExplanation:
-      "This preset resumes an in-progress Classroom path. Jeremiah AI re-enters the learner at the current scripture-grounding stage instead of restarting the lesson from the beginning.",
-    verses: resumeVerses,
-    checkpoint: {
-      title: "How do these verses anchor the confession already in progress?",
-      description:
-        "Jeremiah AI is treating this as a resumed lesson. The learner must reconnect the live doctrinal claim to the supporting passages.",
-      prompt:
-        "Return to the verses and show how they anchor the confession already being taught. What do they say, and what do they leave no room for?",
-    },
-  },
-
-  [CLASSROOM_SESSION_PRESETS.REVIEW]: {
-    ...commonSession,
-    currentStageId: "checkpoint",
-    learnerLevel: "Correction Path",
-    truthExplanation:
-      "This preset opens a correction-oriented review path. Jeremiah AI revisits the same doctrinal truth, but enters where weak understanding must be tested and repaired directly.",
-    verses: reviewVerses,
-    checkpoint: {
-      title: "Correct the weak understanding directly",
-      description:
-        "Jeremiah AI is not looking for vague agreement here. This review path exists to repair the exact doctrinal weakness still showing in the learner response.",
-      prompt:
-        "Use these passages to correct the weak idea directly. What must be confessed, and what false idea do these verses shut down completely?",
-    },
-  },
-
-  [CLASSROOM_SESSION_PRESETS.ADAPTATION]: {
-    ...commonSession,
-    currentStageId: "truth",
-    learnerLevel: "Profile-Adaptive Path",
-    truthExplanation:
-      "This preset opens a learner-level path. Jeremiah AI keeps the doctrine fixed but begins at a truth-framing stage that fits profile-based delivery rather than a one-size-fits-all entry.",
-    verses: adaptationVerses,
-    checkpoint: {
-      title: "State the truth clearly at the learner level",
-      description:
-        "Jeremiah AI is checking whether the learner can state the same doctrine clearly without changing the truth itself.",
-      prompt:
-        "In learner-level wording, state what these verses teach about God and explain what they do not allow you to believe instead.",
-    },
-  },
-};
+export const classroomSessionPresets = getClassroomSessionPresets();
 
 function toArray(value) {
   if (Array.isArray(value)) return value;
@@ -237,8 +173,10 @@ export function selectProfileSessionPreset(profileData = {}) {
 export function setActiveClassroomSessionPreset(presetId) {
   if (typeof window === "undefined") return;
 
+  const availablePresets = getClassroomSessionPresets();
+
   const safePreset =
-    classroomSessionPresets[presetId] != null
+    availablePresets[presetId] != null
       ? presetId
       : CLASSROOM_SESSION_PRESETS.DIRECT;
 
@@ -278,10 +216,11 @@ export function clearSavedLiveStageForPreset(presetId) {
 }
 
 export function getCurrentSession() {
+  const content = getFallbackClassroomContent();
+  const presets = getClassroomSessionPresets(content.standardId);
   const presetId = getActiveClassroomSessionPreset();
   const preset =
-    classroomSessionPresets[presetId] ||
-    classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT];
+    presets[presetId] || presets[CLASSROOM_SESSION_PRESETS.DIRECT];
 
   const savedLiveStageId =
     getSavedLiveStageForPreset(presetId) || preset.currentStageId;
@@ -296,9 +235,9 @@ export function getCurrentSession() {
 }
 
 export const currentSession = {
-  ...classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT],
+  ...getClassroomSessionPresets()[CLASSROOM_SESSION_PRESETS.DIRECT],
   presetId: CLASSROOM_SESSION_PRESETS.DIRECT,
   sessionType: CLASSROOM_SESSION_PRESETS.DIRECT,
   presetEntryStageId:
-    classroomSessionPresets[CLASSROOM_SESSION_PRESETS.DIRECT].currentStageId,
+    getClassroomSessionPresets()[CLASSROOM_SESSION_PRESETS.DIRECT].currentStageId,
 };
