@@ -36,7 +36,7 @@ function buildSystemPrompt({ standard, stageLabel, stageDescription, ageBand }) 
 
 STANDARD: ${standard.code} — ${standard.title}
 DOCTRINAL STATEMENT: ${standard.statement}
-KEY VOCABULARY: ${(standard.vocabulary || []).join(", ")}
+${standard.scope ? `SCOPE & CLARIFICATIONS: ${standard.scope}\n` : ""}KEY VOCABULARY: ${(standard.vocabulary || []).join(", ")}
 ANCHOR SCRIPTURES:
 ${scriptureBlock}
 EVIDENCE-OF-LEARNING LEVELS (what graduated mastery of this standard looks like):

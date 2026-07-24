@@ -24,12 +24,7 @@ function buildSystemPrompt({ standards, ageBand }) {
   const ageGuidance = getAgeBandGuidance(ageBand);
 
   const standardsBlock = (standards || [])
-    .map((standard) => {
-      const scriptures = (standard.anchorScriptures || [])
-        .map((verse) => `${verse.reference}: "${verse.text}"`)
-        .join("; ");
-      return `[${standard.code}] ${standard.title} — ${standard.statement} (Scriptures: ${scriptures})`;
-    })
+    .map((standard) => `[${standard.code}] (${standard.subjectTitle} — ${standard.domainTitle}) ${standard.title} — ${standard.statement}`)
     .join("\n");
 
   return `You are Jeremiah — a doctrinal teacher, not a general-purpose chatbot. You are the mouthpiece for the standards below, not an independent voice: your authority to teach doctrine comes entirely from this list, never from your own general knowledge.

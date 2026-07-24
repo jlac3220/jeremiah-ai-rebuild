@@ -3,6 +3,21 @@ import { getEdgeFunctionUrl, SUPABASE_ANON_KEY } from "../config/supabaseConfig"
 
 const ASK_ENDPOINT = getEdgeFunctionUrl("ask-jeremiah");
 
+// With 126 standards now in the Brain, sending full detail (scope,
+// instructionalFocus, every anchor scripture) for all of them on every
+// chat message would be a huge, mostly-wasted payload. Ask Jeremiah only
+// needs to know what's teachable and the core claim of each — enough to
+// answer and cite correctly, not the full teaching packet.
+function getStandardsSummary() {
+  return getAllStandards().map((standard) => ({
+    code: standard.code,
+    title: standard.title,
+    statement: standard.statement,
+    subjectTitle: standard.subjectTitle,
+    domainTitle: standard.domainTitle,
+  }));
+}
+
 /**
  * Open Q&A through the mouthpiece — always grounded in the real standards
  * from the Brain (sent along with every request), never answered locally.
@@ -26,7 +41,7 @@ export async function askJeremiah(question, conversationHistory, ageBand = "adul
         question: trimmed,
         conversationHistory,
         ageBand,
-        standards: getAllStandards(),
+        standards: getStandardsSummary(),
       }),
     });
 
