@@ -3,6 +3,7 @@ export const ROUTES = {
   LOGIN: "login",
   PROFILE_SELECT: "profileSelect",
   HOME: "home",
+  MAP: "map",
   CLASSROOM: "classroom",
   PROGRESS: "progress",
   PROFILE: "profile",
@@ -11,6 +12,7 @@ export const ROUTES = {
 
 export const MAIN_NAV_ROUTES = [
   ROUTES.HOME,
+  ROUTES.MAP,
   ROUTES.CLASSROOM,
   ROUTES.PROGRESS,
   ROUTES.PROFILE,

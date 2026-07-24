@@ -4,10 +4,6 @@ import {
   CLASSROOM_ENTRY_INTENTS,
   setClassroomEntryIntent,
 } from "../../core/classroom/classroomEntryIntent";
-import {
-  selectHomeSessionPreset,
-  setActiveClassroomSessionPreset,
-} from "../../core/classroom/classroomSessionData";
 
 export default function HomePage({ onNavigate }) {
   const data = homeData;
@@ -69,7 +65,6 @@ export default function HomePage({ onNavigate }) {
               style={primaryButtonStyle}
               onClick={() => {
               setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.RESUME);
-              setActiveClassroomSessionPreset(selectHomeSessionPreset(homeData));
               onNavigate?.(ROUTES.CLASSROOM);
             }}
             >

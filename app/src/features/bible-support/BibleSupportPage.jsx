@@ -1,34 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ROUTES } from "../../app/routes";
 import { getCurrentSession } from "../../core/classroom/classroomSessionData";
-
-const SESSION_TYPE_LABELS = {
-  resume: "Resume Path",
-  review: "Review Path",
-  adaptation: "Learner Adaptation Path",
-  direct: "Direct Classroom Path",
-};
 
 export default function BibleSupportPage({ onNavigate }) {
   const session = getCurrentSession();
   const verses = session.verses || [];
-  const [selectedReference, setSelectedReference] = useState(
-    verses[0]?.reference || ""
-  );
+  const [manualReference, setManualReference] = useState(null);
 
-  useEffect(() => {
-    setSelectedReference((currentReference) => {
-      const hasCurrentReference = verses.some(
-        (verse) => verse.reference === currentReference
-      );
-
-      if (hasCurrentReference) {
-        return currentReference;
-      }
-
-      return verses[0]?.reference || "";
-    });
-  }, [session.standardId, session.sessionType, verses]);
+  const selectedReference =
+    manualReference && verses.some((verse) => verse.reference === manualReference)
+      ? manualReference
+      : verses[0]?.reference || "";
 
   const selectedVerse =
     verses.find((verse) => verse.reference === selectedReference) ||
@@ -83,8 +65,8 @@ export default function BibleSupportPage({ onNavigate }) {
             </div>
 
             <div style={summaryCardStyle}>
-              <p style={summaryLabelStyle}>Session Type</p>
-              <p style={summaryValueStyle}>{SESSION_TYPE_LABELS[session.sessionType] || session.sessionType}</p>
+              <p style={summaryLabelStyle}>Domain</p>
+              <p style={summaryValueStyle}>{session.domainTitle}</p>
             </div>
           </div>
         </section>
@@ -120,7 +102,7 @@ export default function BibleSupportPage({ onNavigate }) {
                           ? { ...openButtonStyle, ...openButtonActiveStyle }
                           : openButtonStyle
                       }
-                      onClick={() => setSelectedReference(verse.reference)}
+                      onClick={() => setManualReference(verse.reference)}
                     >
                       {isSelected ? "Reading" : "Open Passage"}
                     </button>

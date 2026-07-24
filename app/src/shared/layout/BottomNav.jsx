@@ -2,6 +2,7 @@ import { ROUTES } from "../../app/routes";
 
 const NAV_ITEMS = [
   { id: ROUTES.HOME, label: "Home" },
+  { id: ROUTES.MAP, label: "Map" },
   { id: ROUTES.CLASSROOM, label: "Classroom" },
   { id: ROUTES.PROGRESS, label: "Progress" },
   { id: ROUTES.PROFILE, label: "Profile" },
@@ -47,7 +48,7 @@ const railStyle = {
   maxWidth: "980px",
   margin: "0 auto",
   display: "grid",
-  gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
   gap: "8px",
   padding: "10px 12px calc(10px + env(safe-area-inset-bottom))",
   boxSizing: "border-box",

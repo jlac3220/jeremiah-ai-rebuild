@@ -1,5 +1,6 @@
 import { ROUTES } from "./routes";
 import HomePage from "../features/home/HomePage";
+import DoctrineMapPage from "../features/map/DoctrineMapPage";
 import ClassroomPage from "../features/classroom/ClassroomPage";
 import ProgressPage from "../features/progress/ProgressPage";
 import ProfilePage from "../features/profile/ProfilePage";
@@ -23,6 +24,9 @@ export default function AppRouter({ currentRoute, onNavigate }) {
 
     case ROUTES.PROFILE_SELECT:
       return <Placeholder title="Profile Select" />;
+
+    case ROUTES.MAP:
+      return <DoctrineMapPage onNavigate={onNavigate} />;
 
     case ROUTES.CLASSROOM:
       return <ClassroomPage onNavigate={onNavigate} />;

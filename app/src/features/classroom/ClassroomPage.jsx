@@ -1,25 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { ROUTES } from "../../app/routes";
 import {
-  getActiveClassroomSessionPreset,
   getCurrentSession,
-  setSavedLiveStageForPreset,
+  setSavedLiveStageForStandard,
+  getActiveLearnerAgeBand,
 } from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
 import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
-import { stageContent } from "../../core/classroom/stageContent";
+import { stageContent, buildStagePrompt } from "../../core/classroom/stageContent";
+import { raiseStandardProgressLevel } from "../../core/standards/standardsProgress";
 import {
   classroomEntryIntentContent,
   clearClassroomEntryIntent,
   getClassroomEntryIntent,
 } from "../../core/classroom/classroomEntryIntent";
 
-const SESSION_PRESET_LABELS = {
-  resume: "Resume Path",
-  review: "Review Path",
-  adaptation: "Learner Adaptation Path",
-  direct: "Direct Classroom Path",
+const AGE_BAND_LABELS = {
+  child: "Child Path",
+  teen: "Teen Path",
+  adult: "Adult Path",
+  senior: "Senior Path",
 };
 
 function formatStageLabel(stageId = "") {
@@ -69,7 +70,7 @@ function describeStageMovement(entryIndex, liveIndex) {
 
 export default function ClassroomPage({ onNavigate }) {
   const session = getCurrentSession();
-  const activeSessionPresetId = getActiveClassroomSessionPreset();
+  const ageBand = getActiveLearnerAgeBand();
 
   const [currentStageId, setCurrentStageId] = useState(session.currentStageId);
   const [responseText, setResponseText] = useState("");
@@ -78,6 +79,7 @@ export default function ClassroomPage({ onNavigate }) {
   const [evaluationStatus, setEvaluationStatus] = useState("");
   const [transitionMessage, setTransitionMessage] = useState("");
   const [resetConfirmationMessage, setResetConfirmationMessage] = useState("");
+  const [isGrading, setIsGrading] = useState(false);
 
   const currentStage = useMemo(() => {
     return (
@@ -92,6 +94,16 @@ export default function ClassroomPage({ onNavigate }) {
   const currentStageContent =
     stageContent[currentStageId] || stageContent.checkpoint;
 
+  const stagePrompt = useMemo(
+    () =>
+      buildStagePrompt(currentStageId, {
+        title: session.standardTitle,
+        statement: session.truthStatement,
+        anchorScriptures: session.verses,
+      }),
+    [currentStageId, session.standardTitle, session.truthStatement, session.verses]
+  );
+
   const [entryIntent] = useState(() => getClassroomEntryIntent());
 
   useEffect(() => {
@@ -100,11 +112,7 @@ export default function ClassroomPage({ onNavigate }) {
 
   useEffect(() => {
     setResetConfirmationMessage("");
-  }, [
-    activeSessionPresetId,
-    session.standardId,
-    session.presetEntryStageId
-  ]);
+  }, [session.standardId, session.presetEntryStageId]);
 
   useEffect(() => {
     setResponseText("");
@@ -112,12 +120,12 @@ export default function ClassroomPage({ onNavigate }) {
     setFeedbackMessage("");
     setEvaluationStatus("");
     setTransitionMessage("");
-  }, [activeSessionPresetId, session.standardId, session.presetEntryStageId]);
+  }, [session.standardId, session.presetEntryStageId]);
 
   useEffect(() => {
     setCurrentStageId(session.currentStageId);
-    setSavedLiveStageForPreset(activeSessionPresetId, session.currentStageId);
-  }, [activeSessionPresetId, session.currentStageId]);
+    setSavedLiveStageForStandard(session.standardId, session.currentStageId);
+  }, [session.standardId, session.currentStageId]);
 
   const entryIntentDisplay =
     classroomEntryIntentContent[entryIntent] ||
@@ -126,38 +134,46 @@ export default function ClassroomPage({ onNavigate }) {
   const feedbackTone =
     entryIntentDisplay.feedbackTone?.[evaluationStatus] || null;
 
-  const activeSessionPresetLabel =
-    SESSION_PRESET_LABELS[activeSessionPresetId] || "Direct Classroom Path";
+  const activeSessionPresetLabel = AGE_BAND_LABELS[ageBand] || "Adult Path";
 
   const handleResetPresetStage = () => {
     const resetStageId = session.presetEntryStageId || session.currentStageId;
 
     setCurrentStageId(resetStageId);
-    setSavedLiveStageForPreset(activeSessionPresetId, resetStageId);
+    setSavedLiveStageForStandard(session.standardId, resetStageId);
     setResponseText("");
     setSubmittedResponse("");
     setFeedbackMessage("");
     setEvaluationStatus("");
     setResetConfirmationMessage(
-      "Live stage restored to the preset entry stage."
+      "Live stage restored to this standard's entry stage."
     );
     setTransitionMessage(
-      "Jeremiah AI reset this preset back to its original entry stage."
+      "Jeremiah AI reset this session back to its original entry stage."
     );
   };
 
-  function handleSubmitResponse() {
+  async function handleSubmitResponse() {
+    if (isGrading) return;
     setResetConfirmationMessage("");
-    const result = evaluateResponse(
-      responseText,
-      session.standardId,
-      currentStageId
-    );
+    setIsGrading(true);
+
+    let result;
+    try {
+      result = await evaluateResponse(
+        responseText,
+        session.standardId,
+        currentStageId,
+        ageBand
+      );
+    } finally {
+      setIsGrading(false);
+    }
 
     setEvaluationStatus(result.status);
     setFeedbackMessage(result.feedback);
 
-    if (result.status === "empty") {
+    if (result.status === "empty" || result.gradingUnavailable) {
       setSubmittedResponse("");
       setTransitionMessage("");
       return;
@@ -166,12 +182,24 @@ export default function ClassroomPage({ onNavigate }) {
     const trimmed = responseText.trim();
     setSubmittedResponse(trimmed);
 
+    if (currentStageId === "mastery" && result.status === "strong") {
+      raiseStandardProgressLevel(session.standardId, 4);
+      setTransitionMessage(
+        `${session.standardTitle} is now mastered. Jeremiah AI will move you toward the next standard.`
+      );
+      return;
+    }
+
     const nextStageId = advanceSessionStage(currentStageId, result.status);
 
     if (nextStageId !== currentStageId) {
       const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
+      const nextStageIndex = sessionStages.findIndex((stage) => stage.id === nextStageId);
+      if (nextStageIndex > 0) {
+        raiseStandardProgressLevel(session.standardId, nextStageIndex);
+      }
       setCurrentStageId(nextStageId);
-      setSavedLiveStageForPreset(activeSessionPresetId, nextStageId);
+      setSavedLiveStageForStandard(session.standardId, nextStageId);
       setResponseText("");
       setSubmittedResponse("");
       setFeedbackMessage("");
@@ -444,7 +472,7 @@ export default function ClassroomPage({ onNavigate }) {
                 fontWeight: 700,
               }}
             >
-              Active Session Path
+              Learner Path
             </p>
             <p
               style={{
@@ -465,7 +493,7 @@ export default function ClassroomPage({ onNavigate }) {
                 color: "#475569",
               }}
             >
-              Preset key: {activeSessionPresetId}
+              Active standard: {session.standardId}
             </p>
           </div>
 
@@ -488,7 +516,7 @@ export default function ClassroomPage({ onNavigate }) {
                 fontWeight: 700,
               }}
             >
-              Preset Entry Stage
+              Entry Stage
             </p>
             <p
               style={{
@@ -509,7 +537,7 @@ export default function ClassroomPage({ onNavigate }) {
                 color: "#475569",
               }}
             >
-              This is the fixed stage the selected session preset opened with.
+              This is the stage this standard's session opened with.
             </p>
           </div>
 
@@ -576,7 +604,7 @@ export default function ClassroomPage({ onNavigate }) {
                 fontWeight: 700,
               }}
             >
-              Learner Path
+              Domain
             </p>
             <p
               style={{
@@ -587,7 +615,7 @@ export default function ClassroomPage({ onNavigate }) {
                 fontWeight: 800,
               }}
             >
-              {session.learnerLevel}
+              {session.domainTitle}
             </p>
             <p
               style={{
@@ -678,7 +706,7 @@ export default function ClassroomPage({ onNavigate }) {
                   cursor: "pointer",
                 }}
               >
-                Reset to Preset Entry
+                Reset to Entry Stage
               </button>
             ) : null}
           </div>
@@ -707,7 +735,7 @@ export default function ClassroomPage({ onNavigate }) {
 
             <div style={metaCardStyle}>
               <p style={metaLabelStyle}>Learner Level</p>
-              <p style={metaValueStyle}>{session.learnerLevel}</p>
+              <p style={metaValueStyle}>{activeSessionPresetLabel}</p>
             </div>
           </div>
 
@@ -828,7 +856,7 @@ export default function ClassroomPage({ onNavigate }) {
                 <div style={teacherPromptStyle}>
                   <p style={teacherPromptLabelStyle}>Jeremiah AI Prompt</p>
                   <p style={teacherPromptTextStyle}>
-                    {currentStageContent.prompt}
+                    {stagePrompt}
                   </p>
                 </div>
 
@@ -879,13 +907,21 @@ export default function ClassroomPage({ onNavigate }) {
                   />
                 </div>
 
+                {isGrading ? (
+                  <p style={gradingIndicatorStyle}>Jeremiah is thinking…</p>
+                ) : null}
+
                 <div style={actionsRowStyle}>
                   <button
                     type="button"
-                    style={primaryActionStyle}
+                    style={{
+                      ...primaryActionStyle,
+                      ...(isGrading ? disabledActionStyle : null),
+                    }}
                     onClick={handleSubmitResponse}
+                    disabled={isGrading}
                   >
-                    {entryIntentDisplay.submitButtonLabel}
+                    {isGrading ? "Grading…" : entryIntentDisplay.submitButtonLabel}
                   </button>
                   <button
                     type="button"
@@ -1372,6 +1408,18 @@ const actionsRowStyle = {
   display: "flex",
   gap: "12px",
   flexWrap: "wrap",
+};
+
+const gradingIndicatorStyle = {
+  margin: "16px 0 0",
+  fontSize: "0.92rem",
+  fontWeight: 700,
+  color: "#9a3412",
+};
+
+const disabledActionStyle = {
+  opacity: 0.6,
+  cursor: "not-allowed",
 };
 
 const primaryActionStyle = {

@@ -4,6 +4,10 @@ export const profileData = {
     name: "Jacob",
     levelLabel: "Adult endpoint path",
     trackTitle: "The One True God",
+    // child | teen | adult | senior — shapes the mouthpiece's tone/vocabulary
+    // in grade-response, never the doctrine itself. Real login/profile data
+    // should set this once auth exists; this is the stand-in for now.
+    ageBand: "adult",
   },
   snapshot: {
     mastered: 12,
