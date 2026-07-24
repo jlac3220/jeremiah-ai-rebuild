@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import { colors, radius } from "../theme";
+import { fadeInUp } from "../motion";
 
 const baseStyle = {
   borderRadius: radius.lg,
@@ -29,10 +31,19 @@ const variants = {
   },
 };
 
-export default function Card({ variant = "light", style, children, ...rest }) {
+/** animate: false to skip the entrance motion (e.g. inside a list already staggering). */
+export default function Card({ variant = "light", style, animate = true, children, ...rest }) {
+  const motionProps = animate
+    ? { initial: fadeInUp.initial, animate: fadeInUp.animate, transition: fadeInUp.transition }
+    : {};
+
   return (
-    <div style={{ ...baseStyle, ...variants[variant], ...style }} {...rest}>
+    <motion.div
+      style={{ ...baseStyle, ...variants[variant], ...style }}
+      {...motionProps}
+      {...rest}
+    >
       {children}
-    </div>
+    </motion.div>
   );
 }

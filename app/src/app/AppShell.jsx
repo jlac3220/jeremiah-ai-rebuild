@@ -1,31 +1,20 @@
-import { useState } from "react";
-import AppRouter from "./AppRouter";
-import { MAIN_NAV_ROUTES, ROUTES } from "./routes";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./router";
 import BottomNav from "../shared/layout/BottomNav";
 
 export default function AppShell() {
-  const [currentRoute, setCurrentRoute] = useState(ROUTES.HOME);
-
-  const showBottomNav = MAIN_NAV_ROUTES.includes(currentRoute);
-
   return (
-    <div style={shellStyle}>
-      <main style={{ ...mainStyle, paddingBottom: showBottomNav ? "88px" : "0px" }}>
-        <AppRouter
-          currentRoute={currentRoute}
-          onNavigate={setCurrentRoute}
-        />
-      </main>
+    <BrowserRouter>
+      <div style={shellStyle}>
+        <main style={mainStyle}>
+          <AppRoutes />
+        </main>
 
-      {showBottomNav && (
         <div style={bottomNavWrapStyle}>
-          <BottomNav
-            currentRoute={currentRoute}
-            onNavigate={setCurrentRoute}
-          />
+          <BottomNav />
         </div>
-      )}
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
@@ -38,6 +27,7 @@ const shellStyle = {
 
 const mainStyle = {
   flex: 1,
+  paddingBottom: "88px",
 };
 
 const bottomNavWrapStyle = {

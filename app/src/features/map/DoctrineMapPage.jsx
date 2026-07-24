@@ -1,19 +1,15 @@
 import { useMemo } from "react";
-import { ROUTES } from "../../app/routes";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   getSubjects,
   isSubjectUnlocked,
   isSubjectMastered,
 } from "../../core/standards/standardsRegistry";
 import { getStandardProgress } from "../../core/standards/standardsProgress";
-import {
-  setActiveStandardCode,
-} from "../../core/classroom/classroomSessionData";
-import {
-  CLASSROOM_ENTRY_INTENTS,
-  setClassroomEntryIntent,
-} from "../../core/classroom/classroomEntryIntent";
+import { classroomPath } from "../../app/routes";
 import { colors, ignite, radius } from "../../shared/theme";
+import { staggerContainer, staggerItem, nodeHover, igniteGlow } from "../../shared/motion";
 
 function nodeStateFor(level) {
   if (level >= 4) return "mastered";
@@ -25,11 +21,10 @@ const NODE_STYLES = {
   mastered: {
     background: `linear-gradient(135deg, ${ignite.ember} 0%, ${ignite.blaze} 100%)`,
     color: "#ffffff",
-    boxShadow: ignite.glow,
     border: "1px solid rgba(255,255,255,0.4)",
   },
   inProgress: {
-    background: `linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)`,
+    background: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
     color: colors.checkpointTextDark,
     boxShadow: "0 0 16px rgba(255, 208, 0, 0.35)",
     border: `1px solid ${ignite.spark}`,
@@ -47,20 +42,20 @@ const NODE_LABELS = {
   unstarted: "Not Started",
 };
 
-export default function DoctrineMapPage({ onNavigate }) {
+export default function DoctrineMapPage() {
+  const navigate = useNavigate();
   const progress = useMemo(() => getStandardProgress(), []);
   const subjects = getSubjects();
-
-  function enterStandard(code) {
-    setActiveStandardCode(code);
-    setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.DIRECT);
-    onNavigate?.(ROUTES.CLASSROOM);
-  }
 
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
-        <section style={heroStyle}>
+        <motion.section
+          style={heroStyle}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <p style={eyebrowStyle}>JEREMIAH AI DOCTRINE MAP</p>
           <h1 style={titleStyle}>The mind, laid open</h1>
           <p style={subtitleStyle}>
@@ -69,7 +64,7 @@ export default function DoctrineMapPage({ onNavigate }) {
             fully ignited ones are mastered. Choose any standard to enter a
             live session with Jeremiah on that exact doctrine.
           </p>
-        </section>
+        </motion.section>
 
         {subjects.map((subject) => {
           const unlocked = isSubjectUnlocked(subject.code, progress);
@@ -109,7 +104,12 @@ export default function DoctrineMapPage({ onNavigate }) {
                     {domain.domainCode} — {domain.domainTitle}
                   </p>
 
-                  <div style={nodeGridStyle}>
+                  <motion.div
+                    style={nodeGridStyle}
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                  >
                     {domain.standards.map((standard) => {
                       const level = progress[standard.code] || 0;
                       const state = nodeStateFor(level);
@@ -117,11 +117,14 @@ export default function DoctrineMapPage({ onNavigate }) {
                       const interactive = unlocked;
 
                       return (
-                        <button
+                        <motion.button
                           key={standard.code}
                           type="button"
                           disabled={!interactive}
-                          onClick={() => enterStandard(standard.code)}
+                          onClick={() => navigate(classroomPath(standard.code))}
+                          variants={staggerItem}
+                          {...(interactive ? nodeHover : {})}
+                          {...(state === "mastered" ? igniteGlow : {})}
                           style={{
                             ...nodeButtonStyle,
                             ...nodeStyle,
@@ -133,10 +136,10 @@ export default function DoctrineMapPage({ onNavigate }) {
                           <span style={nodeStateStyle}>
                             {interactive ? NODE_LABELS[state] : "Locked"}
                           </span>
-                        </button>
+                        </motion.button>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 </div>
               ))}
             </section>

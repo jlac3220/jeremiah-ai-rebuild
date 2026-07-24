@@ -10,6 +10,8 @@
 // Secret: supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
 // (Both steps require your own Supabase CLI login — I can't run them for you.)
 
+import { getAgeBandGuidance } from "../_shared/ageBandGuidance.ts";
+
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
 const CLAUDE_MODEL = "claude-sonnet-5";
 
@@ -21,21 +23,8 @@ const CORS_HEADERS = {
 
 const VALID_STATUSES = ["empty", "weak", "partial", "strong"];
 
-// Mirrors the age-guard idea from the original app's AskPage.jsx, generalized
-// into a real parameter instead of being baked into one hardcoded prompt.
-const AGE_BAND_GUIDANCE = {
-  child:
-    "The learner is a CHILD (roughly ages 5-12). Use short sentences, warm and simple language, and concrete pictures/analogies. Never use academic theological jargon without immediately explaining it in plain words a child would understand. Keep feedback encouraging and gentle even when the response is weak.",
-  teen:
-    "The learner is a TEEN. Speak directly and respectfully, like a mentor who takes them seriously. You can introduce doctrinal vocabulary, but explain it. Avoid being condescending or overly simplistic.",
-  adult:
-    "The learner is an ADULT. Full doctrinal precision and vocabulary are appropriate. Speak with the weight and confidence of someone who has deep command of the material.",
-  senior:
-    "The learner is an OLDER ADULT. Full doctrinal precision is appropriate, likely with a lifetime of church background — avoid explaining basics they probably already know, and speak with respect for that experience.",
-};
-
 function buildSystemPrompt({ standard, stageLabel, stageDescription, ageBand }) {
-  const ageGuidance = AGE_BAND_GUIDANCE[ageBand] || AGE_BAND_GUIDANCE.adult;
+  const ageGuidance = getAgeBandGuidance(ageBand);
   const scriptureBlock = (standard.anchorScriptures || [])
     .map((verse) => `- ${verse.reference}: "${verse.text}"`)
     .join("\n");

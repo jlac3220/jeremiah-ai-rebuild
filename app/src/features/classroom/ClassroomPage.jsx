@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { ROUTES } from "../../app/routes";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { getStandardByCode } from "../../core/standards/standardsRegistry";
+import { raiseStandardProgressLevel, getStandardProgressLevel } from "../../core/standards/standardsProgress";
 import {
-  getCurrentSession,
+  getSavedLiveStageForStandard,
   setSavedLiveStageForStandard,
   getActiveLearnerAgeBand,
 } from "../../core/classroom/classroomSessionData";
@@ -9,163 +12,84 @@ import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
 import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
 import { stageContent, buildStagePrompt } from "../../core/classroom/stageContent";
-import { raiseStandardProgressLevel } from "../../core/standards/standardsProgress";
-import {
-  classroomEntryIntentContent,
-  clearClassroomEntryIntent,
-  getClassroomEntryIntent,
-} from "../../core/classroom/classroomEntryIntent";
+import { ROUTES, bibleSupportPath } from "../../app/routes";
+import Card from "../../shared/ui/Card";
+import Pill from "../../shared/ui/Pill";
+import PrimaryButton from "../../shared/ui/PrimaryButton";
+import SecondaryButton from "../../shared/ui/SecondaryButton";
+import { colors } from "../../shared/theme";
+import { stageTransition, thinkingPulse } from "../../shared/motion";
 
-const AGE_BAND_LABELS = {
-  child: "Child Path",
-  teen: "Teen Path",
-  adult: "Adult Path",
-  senior: "Senior Path",
-};
+const AGE_BAND_LABELS = { child: "Child Path", teen: "Teen Path", adult: "Adult Path", senior: "Senior Path" };
 
-function formatStageLabel(stageId = "") {
-  if (!stageId) return "Unknown Stage";
-
-  return stageId
-    .split("_")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
-function describeStageMovement(entryIndex, liveIndex) {
-  if (entryIndex < 0 || liveIndex < 0) {
-    return {
-      label: "Stage relationship unavailable",
-      text:
-        "Jeremiah AI could not compare the preset entry stage to the live stage.",
-    };
-  }
-
-  const delta = liveIndex - entryIndex;
-
-  if (delta === 0) {
-    return {
-      label: "Still at preset entry stage",
-      text:
-        "The live session is still working at the same stage the selected preset opened with.",
-    };
-  }
-
-  if (delta > 0) {
-    return {
-      label: `Advanced ${delta} stage${delta === 1 ? "" : "s"} beyond preset entry`,
-      text:
-        "The learner has moved forward from the original preset entry stage as strong responses advanced the live session.",
-    };
-  }
-
-  const stepsBack = Math.abs(delta);
-
-  return {
-    label: `Moved ${stepsBack} stage${stepsBack === 1 ? "" : "s"} before preset entry`,
-    text:
-      "The live stage is earlier than the preset entry stage, which usually means the session state was reset or reopened differently.",
-  };
-}
-
-export default function ClassroomPage({ onNavigate }) {
-  const session = getCurrentSession();
+export default function ClassroomPage() {
+  const { standardCode } = useParams();
+  const navigate = useNavigate();
+  const standard = getStandardByCode(standardCode);
   const ageBand = getActiveLearnerAgeBand();
 
-  const [currentStageId, setCurrentStageId] = useState(session.currentStageId);
+  const [currentStageId, setCurrentStageId] = useState(
+    () => getSavedLiveStageForStandard(standardCode) || "focus"
+  );
   const [responseText, setResponseText] = useState("");
   const [submittedResponse, setSubmittedResponse] = useState("");
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [evaluationStatus, setEvaluationStatus] = useState("");
   const [transitionMessage, setTransitionMessage] = useState("");
-  const [resetConfirmationMessage, setResetConfirmationMessage] = useState("");
   const [isGrading, setIsGrading] = useState(false);
-
-  const currentStage = useMemo(() => {
-    return (
-      sessionStages.find((stage) => stage.id === currentStageId) || {
-        id: currentStageId,
-        label: "Unknown",
-        description: "",
-      }
-    );
-  }, [currentStageId]);
-
-  const currentStageContent =
-    stageContent[currentStageId] || stageContent.checkpoint;
-
-  const stagePrompt = useMemo(
-    () =>
-      buildStagePrompt(currentStageId, {
-        title: session.standardTitle,
-        statement: session.truthStatement,
-        anchorScriptures: session.verses,
-      }),
-    [currentStageId, session.standardTitle, session.truthStatement, session.verses]
-  );
-
-  const [entryIntent] = useState(() => getClassroomEntryIntent());
+  const [justMastered, setJustMastered] = useState(false);
 
   useEffect(() => {
-    clearClassroomEntryIntent();
-  }, []);
-
-  useEffect(() => {
-    setResetConfirmationMessage("");
-  }, [session.standardId, session.presetEntryStageId]);
-
-  useEffect(() => {
+    setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
     setResponseText("");
     setSubmittedResponse("");
     setFeedbackMessage("");
     setEvaluationStatus("");
     setTransitionMessage("");
-  }, [session.standardId, session.presetEntryStageId]);
+    setJustMastered(false);
+  }, [standardCode]);
 
-  useEffect(() => {
-    setCurrentStageId(session.currentStageId);
-    setSavedLiveStageForStandard(session.standardId, session.currentStageId);
-  }, [session.standardId, session.currentStageId]);
+  const currentStage = useMemo(
+    () => sessionStages.find((stage) => stage.id === currentStageId) || sessionStages[0],
+    [currentStageId]
+  );
+  const currentStageIndex = sessionStages.findIndex((stage) => stage.id === currentStageId);
+  const currentStageContent = stageContent[currentStageId] || stageContent.focus;
 
-  const entryIntentDisplay =
-    classroomEntryIntentContent[entryIntent] ||
-    classroomEntryIntentContent.direct;
+  const stagePrompt = useMemo(
+    () => (standard ? buildStagePrompt(currentStageId, standard) : ""),
+    [currentStageId, standard]
+  );
 
-  const feedbackTone =
-    entryIntentDisplay.feedbackTone?.[evaluationStatus] || null;
-
-  const activeSessionPresetLabel = AGE_BAND_LABELS[ageBand] || "Adult Path";
-
-  const handleResetPresetStage = () => {
-    const resetStageId = session.presetEntryStageId || session.currentStageId;
-
-    setCurrentStageId(resetStageId);
-    setSavedLiveStageForStandard(session.standardId, resetStageId);
-    setResponseText("");
-    setSubmittedResponse("");
-    setFeedbackMessage("");
-    setEvaluationStatus("");
-    setResetConfirmationMessage(
-      "Live stage restored to this standard's entry stage."
+  if (!standard) {
+    return (
+      <div style={pageStyle}>
+        <div style={contentStyle}>
+          <Card>
+            <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 900, color: colors.text }}>
+              Standard not found
+            </h1>
+            <p style={{ marginTop: "12px", color: colors.textMuted }}>
+              "{standardCode}" isn't a real standard. Head back to the map to pick one.
+            </p>
+            <div style={{ marginTop: "18px" }}>
+              <Link to={ROUTES.MAP}>
+                <SecondaryButton>Back to Map</SecondaryButton>
+              </Link>
+            </div>
+          </Card>
+        </div>
+      </div>
     );
-    setTransitionMessage(
-      "Jeremiah AI reset this session back to its original entry stage."
-    );
-  };
+  }
 
   async function handleSubmitResponse() {
     if (isGrading) return;
-    setResetConfirmationMessage("");
     setIsGrading(true);
 
     let result;
     try {
-      result = await evaluateResponse(
-        responseText,
-        session.standardId,
-        currentStageId,
-        ageBand
-      );
+      result = await evaluateResponse(responseText, standard.code, currentStageId, ageBand);
     } finally {
       setIsGrading(false);
     }
@@ -179,874 +103,219 @@ export default function ClassroomPage({ onNavigate }) {
       return;
     }
 
-    const trimmed = responseText.trim();
-    setSubmittedResponse(trimmed);
+    setSubmittedResponse(responseText.trim());
 
     if (currentStageId === "mastery" && result.status === "strong") {
-      raiseStandardProgressLevel(session.standardId, 4);
-      setTransitionMessage(
-        `${session.standardTitle} is now mastered. Jeremiah AI will move you toward the next standard.`
-      );
+      raiseStandardProgressLevel(standard.code, 4);
+      setJustMastered(true);
+      setTransitionMessage(`${standard.title} is now mastered.`);
       return;
     }
 
     const nextStageId = advanceSessionStage(currentStageId, result.status);
-
     if (nextStageId !== currentStageId) {
-      const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
-      const nextStageIndex = sessionStages.findIndex((stage) => stage.id === nextStageId);
-      if (nextStageIndex > 0) {
-        raiseStandardProgressLevel(session.standardId, nextStageIndex);
-      }
+      const nextIndex = sessionStages.findIndex((stage) => stage.id === nextStageId);
+      if (nextIndex > 0) raiseStandardProgressLevel(standard.code, nextIndex);
       setCurrentStageId(nextStageId);
-      setSavedLiveStageForStandard(session.standardId, nextStageId);
+      setSavedLiveStageForStandard(standard.code, nextStageId);
       setResponseText("");
       setSubmittedResponse("");
       setFeedbackMessage("");
       setEvaluationStatus("");
-      setTransitionMessage(
-        nextStage
-          ? `Session advanced to ${nextStage.label}. Jeremiah AI is now using the next teaching surface.`
-          : ""
-      );
-      return;
+      const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
+      setTransitionMessage(nextStage ? `Advanced to ${nextStage.label}.` : "");
+    } else {
+      setTransitionMessage("");
     }
-
-    setTransitionMessage("");
   }
 
-  const currentStageIndex = sessionStages.findIndex(
-    (stage) => stage.id === currentStageId
-  );
-
-  const presetEntryStageIndex = sessionStages.findIndex(
-    (stage) => stage.id === (session.presetEntryStageId || session.currentStageId)
-  );
-
-  const sessionMovement = describeStageMovement(
-    presetEntryStageIndex,
-    currentStageIndex
-  );
-
-  const canResetToPresetEntry =
-    currentStageId !== (session.presetEntryStageId || session.currentStageId);
-
-  const feedbackStyle =
+  const feedbackTone =
     evaluationStatus === "strong"
-      ? strongFeedbackCardStyle
+      ? { bg: colors.strongBg, border: colors.strongBorder }
       : evaluationStatus === "partial"
-        ? partialFeedbackCardStyle
-        : evaluationStatus === "weak" || evaluationStatus === "empty"
-          ? weakFeedbackCardStyle
-          : feedbackCardStyle;
+        ? { bg: colors.partialBg, border: colors.partialBorder }
+        : evaluationStatus
+          ? { bg: colors.weakBg, border: colors.weakBorder }
+          : null;
+
+  const progressLevel = getStandardProgressLevel(standard.code);
 
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
-        <section style={heroStyle}>
-          <p style={eyebrowStyle}>JEREMIAH AI CLASSROOM</p>
-          <h1 style={titleStyle}>Current Standard Session</h1>
-          <p style={subtitleStyle}>
-            A guided doctrinal session built around scripture, understanding,
-            correction, and mastery.
-          </p>
-        </section>
+        <div style={breadcrumbRowStyle}>
+          <Link to={ROUTES.MAP} style={breadcrumbLinkStyle}>
+            ← Doctrine Map
+          </Link>
+          <Pill tone="info">{standard.subjectTitle}</Pill>
+        </div>
 
-        <section
-          style={{
-            background: "#ffffff",
-            borderRadius: "24px",
-            padding: "22px",
-            boxShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
-            border: "1px solid #e2e8f0",
-            marginBottom: "20px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: "16px",
-              flexWrap: "wrap",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "0.8rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  color: "#64748b",
-                  fontWeight: 700,
-                }}
-              >
-                {entryIntentDisplay.eyebrow}
-              </p>
-              <h2
-                style={{
-                  margin: "10px 0 0",
-                  fontSize: "1.4rem",
-                  lineHeight: 1.2,
-                  color: "#0f172a",
-                  fontWeight: 900,
-                  maxWidth: "720px",
-                }}
-              >
-                {entryIntentDisplay.title}
-              </h2>
-            </div>
+        <Card variant="dark" style={{ marginBottom: "20px" }}>
+          <p style={smallLabelStyle}>{standard.code} — {standard.domainTitle}</p>
+          <h1 style={titleStyle}>{standard.title}</h1>
+          <p style={truthTextStyle}>{standard.statement}</p>
 
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "10px 14px",
-                borderRadius: "999px",
-                background: "#eef2ff",
-                color: "#3730a3",
-                fontSize: "0.88rem",
-                fontWeight: 800,
-              }}
-            >
-              Current Stage: {currentStage.label}
-            </div>
+          <div style={stageStripStyle}>
+            {sessionStages.map((stage, index) => {
+              const isCurrent = stage.id === currentStageId;
+              const isComplete = currentStageIndex >= 0 && index < currentStageIndex;
+              return (
+                <div
+                  key={stage.id}
+                  style={{
+                    ...stageChipStyle,
+                    ...(isCurrent
+                      ? { background: "rgba(255,255,255,0.2)" }
+                      : isComplete
+                        ? { background: "rgba(134,239,172,0.2)" }
+                        : { background: "rgba(255,255,255,0.06)" }),
+                  }}
+                >
+                  <span style={stageChipBadgeStyle}>{index + 1}</span>
+                  <span style={stageChipLabelStyle}>{stage.label}</span>
+                </div>
+              );
+            })}
           </div>
+        </Card>
 
-          <p
-            style={{
-              margin: "12px 0 0",
-              fontSize: "1rem",
-              lineHeight: 1.75,
-              color: "#475569",
-              maxWidth: "760px",
-            }}
-          >
-            {entryIntentDisplay.text}
-          </p>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "14px",
-              marginTop: "18px",
-            }}
-          >
-            <div
-              style={{
-                borderRadius: "18px",
-                padding: "16px",
-                background: "#f8fafc",
-                border: "1px solid #e2e8f0",
-              }}
-            >
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "0.78rem",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "#64748b",
-                  fontWeight: 700,
-                }}
-              >
-                {entryIntentDisplay.emphasisLabel}
-              </p>
-              <p
-                style={{
-                  margin: "8px 0 0",
-                  fontSize: "0.98rem",
-                  lineHeight: 1.7,
-                  color: "#0f172a",
-                  fontWeight: 600,
-                }}
-              >
-                {entryIntentDisplay.emphasisText}
-              </p>
-            </div>
-
-            <div
-              style={{
-                borderRadius: "18px",
-                padding: "16px",
-                background: "#f8fafc",
-                border: "1px solid #e2e8f0",
-              }}
-            >
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "0.78rem",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "#64748b",
-                  fontWeight: 700,
-                }}
-              >
-                {entryIntentDisplay.actionLabel}
-              </p>
-              <p
-                style={{
-                  margin: "8px 0 0",
-                  fontSize: "0.98rem",
-                  lineHeight: 1.7,
-                  color: "#0f172a",
-                  fontWeight: 600,
-                }}
-              >
-                {entryIntentDisplay.actionText}
-              </p>
-            </div>
-
-            <div
-              style={{
-                borderRadius: "18px",
-                padding: "16px",
-                background: "#0f172a",
-                color: "#ffffff",
-              }}
-            >
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "0.78rem",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.68)",
-                  fontWeight: 700,
-                }}
-              >
-                Active Standard
-              </p>
-              <p
-                style={{
-                  margin: "8px 0 0",
-                  fontSize: "1rem",
-                  lineHeight: 1.6,
-                  color: "#ffffff",
-                  fontWeight: 700,
-                }}
-              >
-                {session.standardId} — {session.standardTitle}
-              </p>
-              <p
-                style={{
-                  margin: "10px 0 0",
-                  fontSize: "0.95rem",
-                  lineHeight: 1.7,
-                  color: "rgba(255,255,255,0.82)",
-                }}
-              >
-                {session.truthStatement}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "14px",
-            marginBottom: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "#ffffff",
-              borderRadius: "20px",
-              padding: "18px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.76rem",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "#64748b",
-                fontWeight: 700,
-              }}
-            >
-              Learner Path
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "1rem",
-                lineHeight: 1.5,
-                color: "#0f172a",
-                fontWeight: 800,
-              }}
-            >
-              {activeSessionPresetLabel}
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "0.92rem",
-                lineHeight: 1.6,
-                color: "#475569",
-              }}
-            >
-              Active standard: {session.standardId}
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#ffffff",
-              borderRadius: "20px",
-              padding: "18px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.76rem",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "#64748b",
-                fontWeight: 700,
-              }}
-            >
-              Entry Stage
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "1rem",
-                lineHeight: 1.5,
-                color: "#0f172a",
-                fontWeight: 800,
-              }}
-            >
-              {formatStageLabel(session.presetEntryStageId || session.currentStageId)}
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "0.92rem",
-                lineHeight: 1.6,
-                color: "#475569",
-              }}
-            >
-              This is the stage this standard's session opened with.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#ffffff",
-              borderRadius: "20px",
-              padding: "18px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.76rem",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "#64748b",
-                fontWeight: 700,
-              }}
-            >
-              Live Stage
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "1rem",
-                lineHeight: 1.5,
-                color: "#0f172a",
-                fontWeight: 800,
-              }}
-            >
-              {currentStage.label}
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "0.92rem",
-                lineHeight: 1.6,
-                color: "#475569",
-              }}
-            >
-              This live stage updates as Jeremiah AI advances the learner through the session.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#ffffff",
-              borderRadius: "20px",
-              padding: "18px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.76rem",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "#64748b",
-                fontWeight: 700,
-              }}
-            >
-              Domain
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "1rem",
-                lineHeight: 1.5,
-                color: "#0f172a",
-                fontWeight: 800,
-              }}
-            >
-              {session.domainTitle}
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "0.92rem",
-                lineHeight: 1.6,
-                color: "#475569",
-              }}
-            >
-              {session.standardId} — {session.standardTitle}
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#ffffff",
-              borderRadius: "20px",
-              padding: "18px",
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.76rem",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "#64748b",
-                fontWeight: 700,
-              }}
-            >
-              Session Movement
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "1rem",
-                lineHeight: 1.5,
-                color: "#0f172a",
-                fontWeight: 800,
-              }}
-            >
-              {sessionMovement.label}
-            </p>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "0.92rem",
-                lineHeight: 1.6,
-                color: "#475569",
-              }}
-            >
-              {sessionMovement.text}
-            </p>
-
-            {resetConfirmationMessage && !canResetToPresetEntry ? (
-              <div
-                style={{
-                  marginTop: "14px",
-                  borderRadius: "14px",
-                  padding: "12px 14px",
-                  background: "#ecfdf5",
-                  border: "1px solid #a7f3d0",
-                  color: "#065f46",
-                  fontSize: "0.9rem",
-                  lineHeight: 1.6,
-                  fontWeight: 700,
-                }}
-              >
-                {resetConfirmationMessage}
-              </div>
-            ) : null}
-
-            {canResetToPresetEntry ? (
-              <button
-                type="button"
-                onClick={handleResetPresetStage}
-                style={{
-                  marginTop: "14px",
-                  border: "1px solid #cbd5e1",
-                  background: "#ffffff",
-                  color: "#0f172a",
-                  padding: "10px 14px",
-                  borderRadius: "12px",
-                  fontSize: "0.9rem",
-                  fontWeight: 800,
-                  cursor: "pointer",
-                }}
-              >
-                Reset to Entry Stage
-              </button>
-            ) : null}
-          </div>
-        </section>
-
-        <section style={sessionFrameStyle}>
-          <div style={sessionTopRowStyle}>
-            <div>
-              <p style={smallLabelStyle}>Current Standard</p>
-              <h2 style={sessionTitleStyle}>{session.standardTitle}</h2>
-            </div>
-
-            <div style={statusPillStyle}>{entryIntentDisplay.eyebrow}</div>
-          </div>
-
-          <div style={metaGridStyle}>
-            <div style={metaCardStyle}>
-              <p style={metaLabelStyle}>Track</p>
-              <p style={metaValueStyle}>{session.studyTitle}</p>
-            </div>
-
-            <div style={metaCardStyle}>
-              <p style={metaLabelStyle}>Current Stage</p>
-              <p style={metaValueStyle}>{currentStage.label}</p>
-            </div>
-
-            <div style={metaCardStyle}>
-              <p style={metaLabelStyle}>Learner Level</p>
-              <p style={metaValueStyle}>{activeSessionPresetLabel}</p>
-            </div>
-          </div>
-
-          <div style={stageStripWrapStyle}>
-            <p style={stageStripLabelStyle}>Session Progression</p>
-
-            <div style={stageStripStyle}>
-              {sessionStages.map((stage, index) => {
-                const isCurrent = stage.id === currentStageId;
-                const isComplete =
-                  currentStageIndex >= 0 && index < currentStageIndex;
-
-                return (
-                  <div
-                    key={stage.id}
-                    style={{
-                      ...stageItemStyle,
-                      ...(isCurrent
-                        ? currentStageItemStyle
-                        : isComplete
-                          ? completedStageItemStyle
-                          : upcomingStageItemStyle),
-                    }}
-                  >
-                    <span style={stageBadgeStyle}>{index + 1}</span>
-                    <div>
-                      <p style={stageNameStyle}>{stage.label}</p>
-                      <p style={stageDescriptionStyle}>{stage.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section style={truthCardStyle}>
-          <p style={sectionEyebrowStyle}>Truth Statement</p>
-          <h3 style={sectionTitleStyle}>{session.truthStatement}</h3>
-          <p style={sectionTextStyle}>{session.truthExplanation}</p>
-        </section>
-
-        <section style={teachingSurfaceStyle}>
-          <div style={surfaceHeaderStyle}>
-            <div>
-              <p style={surfaceEyebrowStyle}>Teaching Surface</p>
-              <h3 style={surfaceTitleStyle}>{currentStageContent.title}</h3>
-            </div>
-          </div>
-
-          {transitionMessage ? (
-            <div style={transitionCardStyle}>
-              <p style={transitionLabelStyle}>Stage Transition</p>
-              <p style={transitionTextStyle}>{transitionMessage}</p>
-            </div>
-          ) : null}
-
-          <div style={surfaceGridStyle}>
-            <div style={leftColumnStyle}>
-              <div style={columnCardStyle}>
+        <AnimatePresence mode="wait">
+          {justMastered ? (
+            <motion.div key="mastered" {...stageTransition}>
+              <Card style={{ textAlign: "center", marginBottom: "20px" }}>
+                <p style={{ fontSize: "2.4rem", margin: 0 }}>🔥</p>
+                <h2 style={{ margin: "12px 0 0", fontSize: "1.6rem", fontWeight: 900, color: colors.text }}>
+                  {standard.title} — Mastered
+                </h2>
+                <p style={{ margin: "12px 0 0", color: colors.textMuted, lineHeight: 1.7 }}>
+                  You've shown recognition, explanation, application, and defense of this
+                  standard. It's now lit on the Doctrine Map.
+                </p>
+                <div style={{ marginTop: "20px", display: "flex", gap: "12px", justifyContent: "center" }}>
+                  <Link to={ROUTES.MAP}>
+                    <PrimaryButton>Back to Map</PrimaryButton>
+                  </Link>
+                  <Link to={ROUTES.ASK}>
+                    <SecondaryButton>Ask Jeremiah About This</SecondaryButton>
+                  </Link>
+                </div>
+              </Card>
+            </motion.div>
+          ) : (
+            <motion.div key={currentStageId} {...stageTransition}>
+              <Card style={{ marginBottom: "20px" }}>
                 <p style={sectionEyebrowStyle}>Scripture Evidence</p>
-                <h4 style={columnTitleStyle}>Key verses in this session</h4>
-
                 <div style={verseListStyle}>
-                  {session.verses.map((verse) => (
+                  {standard.anchorScriptures.map((verse) => (
                     <div key={verse.reference} style={verseCardStyle}>
                       <p style={verseRefStyle}>{verse.reference}</p>
                       <p style={verseTextStyle}>{verse.text}</p>
-                      <p style={verseNoteStyle}>{verse.note}</p>
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
+                <div style={{ marginTop: "12px" }}>
+                  <Link to={bibleSupportPath(standard.code)} style={breadcrumbLinkStyle}>
+                    Open in Bible Support →
+                  </Link>
+                </div>
+              </Card>
 
-            <div style={rightColumnStyle}>
-              <div style={checkpointCardStyle}>
+              <Card variant="checkpoint">
                 <p style={sectionEyebrowDarkStyle}>{currentStage.label}</p>
-                <div
-                  style={{
-                    marginTop: "14px",
-                    marginBottom: "14px",
-                    borderRadius: "18px",
-                    padding: "16px",
-                    background: "rgba(255,255,255,0.08)",
-                    border: "1px solid rgba(255,255,255,0.14)",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "0.76rem",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.68)",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {entryIntentDisplay.lessonLabel}
-                  </p>
-                  <p
-                    style={{
-                      margin: "8px 0 0",
-                      fontSize: "0.96rem",
-                      lineHeight: 1.7,
-                      color: "rgba(255,255,255,0.92)",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {entryIntentDisplay.lessonText}
-                  </p>
-                </div>
-                <h4 style={checkpointTitleStyle}>{currentStageContent.title}</h4>
-                <p style={checkpointTextStyle}>
-                  {currentStageContent.description}
-                </p>
+                <h3 style={stageTitleStyle}>{currentStageContent.title}</h3>
+                <p style={stageDescriptionStyle}>{currentStageContent.description}</p>
 
-                <div style={teacherPromptStyle}>
-                  <p style={teacherPromptLabelStyle}>Jeremiah AI Prompt</p>
-                  <p style={teacherPromptTextStyle}>
-                    {stagePrompt}
-                  </p>
+                <div style={promptBoxStyle}>
+                  <p style={promptLabelStyle}>Jeremiah AI Prompt</p>
+                  <p style={promptTextStyle}>{stagePrompt}</p>
                 </div>
 
-                <div style={responseBoxStyle}>
-                  <label htmlFor="learner-response" style={responseLabelStyle}>
-                    Learner Response
-                  </label>
+                <textarea
+                  value={responseText}
+                  onChange={(event) => setResponseText(event.target.value)}
+                  placeholder="Respond in your own words..."
+                  style={textareaStyle}
+                />
 
-                  <div
-                    style={{
-                      marginBottom: "14px",
-                      borderRadius: "18px",
-                      padding: "16px",
-                      background: "#f8fafc",
-                      border: "1px solid #e2e8f0",
-                    }}
-                  >
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: "0.78rem",
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        color: "#64748b",
-                        fontWeight: 700,
-                      }}
-                    >
-                      {entryIntentDisplay.responseActionLabel}
-                    </p>
-                    <p
-                      style={{
-                        margin: "8px 0 0",
-                        fontSize: "0.96rem",
-                        lineHeight: 1.7,
-                        color: "#0f172a",
-                      }}
-                    >
-                      {entryIntentDisplay.responseActionText}
-                    </p>
-                  </div>
-
-                  <textarea
-                    id="learner-response"
-                    value={responseText}
-                    onChange={(event) => setResponseText(event.target.value)}
-                    placeholder={entryIntentDisplay.responseHint}
-                    style={textareaStyle}
-                  />
-                </div>
+                {transitionMessage ? <p style={transitionTextStyle}>{transitionMessage}</p> : null}
 
                 {isGrading ? (
-                  <p style={gradingIndicatorStyle}>Jeremiah is thinking…</p>
+                  <motion.p style={gradingTextStyle} {...thinkingPulse}>
+                    Jeremiah is thinking…
+                  </motion.p>
                 ) : null}
 
                 <div style={actionsRowStyle}>
-                  <button
-                    type="button"
-                    style={{
-                      ...primaryActionStyle,
-                      ...(isGrading ? disabledActionStyle : null),
-                    }}
+                  <PrimaryButton
                     onClick={handleSubmitResponse}
                     disabled={isGrading}
+                    style={{ background: "#9a3412", color: "#ffffff" }}
                   >
-                    {isGrading ? "Grading…" : entryIntentDisplay.submitButtonLabel}
-                  </button>
-                  <button
-                    type="button"
-                    style={secondaryActionStyle}
-                    onClick={() => onNavigate?.(ROUTES.BIBLE_SUPPORT)}
-                  >
-                    Review Verses Again
-                  </button>
+                    {isGrading ? "Grading…" : "Submit Response"}
+                  </PrimaryButton>
+                  <Link to={bibleSupportPath(standard.code)}>
+                    <SecondaryButton>Review Verses Again</SecondaryButton>
+                  </Link>
                 </div>
 
                 {feedbackMessage ? (
-                  <div style={feedbackStyle}>
-                    <p style={feedbackLabelStyle}>
-                      {feedbackTone?.surfaceLabel || "Jeremiah AI Evaluation"}
-                    </p>
-                    {feedbackTone ? (
-                      <div
-                        style={{
-                          marginBottom: "14px",
-                          borderRadius: "16px",
-                          padding: "14px",
-                          background: "rgba(255,255,255,0.55)",
-                          border: "1px solid rgba(15, 23, 42, 0.08)",
-                        }}
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: "0.76rem",
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                            color: "#334155",
-                            fontWeight: 700,
-                          }}
-                        >
-                          {feedbackTone.label}
-                        </p>
-                        <p
-                          style={{
-                            margin: "8px 0 0",
-                            fontSize: "0.95rem",
-                            lineHeight: 1.7,
-                            color: "#0f172a",
-                          }}
-                        >
-                          {feedbackTone.text}
-                        </p>
-                      </div>
-                    ) : null}
+                  <div
+                    style={{
+                      marginTop: "16px",
+                      borderRadius: "18px",
+                      padding: "16px",
+                      background: feedbackTone?.bg || "#ffffff",
+                      border: `1px solid ${feedbackTone?.border || colors.checkpointBorder}`,
+                    }}
+                  >
+                    <p style={feedbackLabelStyle}>Jeremiah AI Evaluation</p>
                     <p style={feedbackTextStyle}>{feedbackMessage}</p>
-
                     {submittedResponse ? (
                       <>
-                        <p style={submittedLabelStyle}>Submitted Response</p>
+                        <p style={submittedLabelStyle}>Your Response</p>
                         <p style={submittedTextStyle}>{submittedResponse}</p>
                       </>
                     ) : null}
                   </div>
                 ) : null}
-              </div>
-            </div>
-          </div>
-        </section>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div style={footerRowStyle}>
+          <Pill tone={progressLevel >= 4 ? "mastered" : "neutral"}>
+            {AGE_BAND_LABELS[ageBand] || "Adult Path"} · Progress {progressLevel}/4
+          </Pill>
+          <SecondaryButton onClick={() => navigate(ROUTES.MAP)}>Exit to Map</SecondaryButton>
+        </div>
       </div>
     </div>
   );
 }
 
-const pageStyle = {
-  minHeight: "100%",
-  background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
-};
+const pageStyle = { minHeight: "100%", background: colors.pageGradient };
 
 const contentStyle = {
   width: "100%",
-  maxWidth: "1040px",
+  maxWidth: "760px",
   margin: "0 auto",
   padding: "32px 20px 120px",
   boxSizing: "border-box",
 };
 
-const heroStyle = {
-  marginBottom: "24px",
-};
-
-const eyebrowStyle = {
-  margin: 0,
-  fontSize: "0.82rem",
-  fontWeight: 800,
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  color: "#475569",
-};
-
-const titleStyle = {
-  margin: "8px 0 0",
-  fontSize: "clamp(2.3rem, 5vw, 3.8rem)",
-  lineHeight: 1.02,
-  fontWeight: 900,
-  color: "#0f172a",
-};
-
-const subtitleStyle = {
-  margin: "14px 0 0",
-  maxWidth: "760px",
-  fontSize: "1.05rem",
-  lineHeight: 1.7,
-  color: "#475569",
-};
-
-const sessionFrameStyle = {
-  background: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
-  color: "#ffffff",
-  borderRadius: "30px",
-  padding: "28px",
-  boxShadow: "0 28px 70px rgba(15, 23, 42, 0.18)",
-  marginBottom: "20px",
-};
-
-const sessionTopRowStyle = {
+const breadcrumbRowStyle = {
   display: "flex",
   justifyContent: "space-between",
-  alignItems: "flex-start",
-  gap: "16px",
-  flexWrap: "wrap",
+  alignItems: "center",
+  marginBottom: "18px",
+};
+
+const breadcrumbLinkStyle = {
+  color: colors.infoText,
+  fontWeight: 700,
+  fontSize: "0.92rem",
+  textDecoration: "none",
 };
 
 const smallLabelStyle = {
@@ -1058,206 +327,54 @@ const smallLabelStyle = {
   fontWeight: 700,
 };
 
-const sessionTitleStyle = {
+const titleStyle = {
   margin: "10px 0 0",
-  fontSize: "2.25rem",
-  lineHeight: 1.05,
+  fontSize: "1.9rem",
+  lineHeight: 1.1,
   fontWeight: 900,
   color: "#ffffff",
 };
 
-const statusPillStyle = {
-  display: "inline-flex",
-  alignItems: "center",
-  padding: "10px 14px",
-  borderRadius: "999px",
-  background: "rgba(255,255,255,0.14)",
-  fontSize: "0.88rem",
-  fontWeight: 800,
-};
-
-const metaGridStyle = {
-  marginTop: "22px",
-  display: "grid",
-  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-  gap: "14px",
-};
-
-const metaCardStyle = {
-  background: "rgba(255,255,255,0.08)",
-  border: "1px solid rgba(255,255,255,0.08)",
-  borderRadius: "22px",
-  padding: "18px",
-};
-
-const metaLabelStyle = {
-  margin: 0,
-  fontSize: "0.78rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "rgba(255,255,255,0.65)",
-  fontWeight: 700,
-};
-
-const metaValueStyle = {
-  margin: "10px 0 0",
+const truthTextStyle = {
+  margin: "12px 0 0",
   fontSize: "1rem",
-  lineHeight: 1.45,
-  color: "#ffffff",
-  fontWeight: 800,
-};
-
-const stageStripWrapStyle = {
-  marginTop: "22px",
-};
-
-const stageStripLabelStyle = {
-  margin: 0,
-  fontSize: "0.78rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "rgba(255,255,255,0.65)",
-  fontWeight: 700,
+  lineHeight: 1.7,
+  color: "rgba(255,255,255,0.86)",
 };
 
 const stageStripStyle = {
-  display: "grid",
-  gap: "10px",
-  marginTop: "12px",
+  display: "flex",
+  gap: "8px",
+  marginTop: "20px",
+  flexWrap: "wrap",
 };
 
-const stageItemStyle = {
+const stageChipStyle = {
   display: "flex",
-  gap: "12px",
-  alignItems: "flex-start",
-  borderRadius: "18px",
-  padding: "14px 16px",
+  alignItems: "center",
+  gap: "8px",
+  borderRadius: "999px",
+  padding: "8px 14px",
   border: "1px solid rgba(255,255,255,0.08)",
 };
 
-const currentStageItemStyle = {
-  background: "rgba(255,255,255,0.16)",
-};
-
-const completedStageItemStyle = {
-  background: "rgba(134,239,172,0.16)",
-};
-
-const upcomingStageItemStyle = {
-  background: "rgba(255,255,255,0.06)",
-};
-
-const stageBadgeStyle = {
-  width: "28px",
-  height: "28px",
+const stageChipBadgeStyle = {
+  width: "20px",
+  height: "20px",
   borderRadius: "999px",
+  background: "rgba(255,255,255,0.18)",
+  color: "#ffffff",
+  fontSize: "0.72rem",
+  fontWeight: 800,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  background: "rgba(255,255,255,0.16)",
-  color: "#ffffff",
-  fontSize: "0.82rem",
-  fontWeight: 800,
-  flexShrink: 0,
 };
 
-const stageNameStyle = {
-  margin: 0,
-  fontSize: "0.95rem",
-  fontWeight: 800,
-  color: "#ffffff",
-};
-
-const stageDescriptionStyle = {
-  margin: "6px 0 0",
-  fontSize: "0.9rem",
-  lineHeight: 1.55,
-  color: "rgba(255,255,255,0.76)",
-};
-
-const truthCardStyle = {
-  background: "#ffffff",
-  borderRadius: "26px",
-  padding: "26px",
-  boxShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
-  marginBottom: "20px",
-};
-
-const teachingSurfaceStyle = {
-  background: "#ffffff",
-  borderRadius: "28px",
-  padding: "26px",
-  boxShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
-};
-
-const surfaceHeaderStyle = {
-  marginBottom: "18px",
-};
-
-const surfaceEyebrowStyle = {
-  margin: 0,
-  fontSize: "0.8rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "#64748b",
+const stageChipLabelStyle = {
+  fontSize: "0.85rem",
   fontWeight: 700,
-};
-
-const surfaceTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.5rem",
-  lineHeight: 1.2,
-  color: "#0f172a",
-  fontWeight: 900,
-};
-
-const transitionCardStyle = {
-  marginBottom: "18px",
-  borderRadius: "20px",
-  padding: "18px",
-  background: "#eff6ff",
-  border: "1px solid #bfdbfe",
-};
-
-const transitionLabelStyle = {
-  margin: 0,
-  fontSize: "0.78rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "#1d4ed8",
-  fontWeight: 700,
-};
-
-const transitionTextStyle = {
-  margin: "10px 0 0",
-  fontSize: "0.96rem",
-  lineHeight: 1.7,
-  color: "#1e3a8a",
-};
-
-const surfaceGridStyle = {
-  display: "grid",
-  gridTemplateColumns: "1.1fr 0.9fr",
-  gap: "18px",
-  alignItems: "start",
-};
-
-const leftColumnStyle = {};
-const rightColumnStyle = {};
-
-const columnCardStyle = {
-  borderRadius: "24px",
-  padding: "22px",
-  background: "#f8fafc",
-  border: "1px solid #e2e8f0",
-};
-
-const checkpointCardStyle = {
-  background: "#fff7ed",
-  border: "1px solid #fed7aa",
-  borderRadius: "24px",
-  padding: "22px",
-  boxShadow: "0 10px 24px rgba(249, 115, 22, 0.08)",
+  color: "#ffffff",
 };
 
 const sectionEyebrowStyle = {
@@ -1265,7 +382,7 @@ const sectionEyebrowStyle = {
   fontSize: "0.8rem",
   textTransform: "uppercase",
   letterSpacing: "0.08em",
-  color: "#64748b",
+  color: colors.textFaint,
   fontWeight: 700,
 };
 
@@ -1274,133 +391,86 @@ const sectionEyebrowDarkStyle = {
   fontSize: "0.8rem",
   textTransform: "uppercase",
   letterSpacing: "0.08em",
-  color: "#9a3412",
+  color: colors.checkpointTextMid,
   fontWeight: 700,
 };
 
-const sectionTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.5rem",
-  lineHeight: 1.2,
-  color: "#0f172a",
-  fontWeight: 900,
-};
-
-const columnTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.3rem",
-  lineHeight: 1.2,
-  color: "#0f172a",
-  fontWeight: 900,
-};
-
-const checkpointTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.35rem",
-  lineHeight: 1.25,
-  color: "#7c2d12",
-  fontWeight: 900,
-};
-
-const sectionTextStyle = {
-  margin: "12px 0 0",
-  fontSize: "1rem",
-  lineHeight: 1.75,
-  color: "#475569",
-};
-
-const checkpointTextStyle = {
-  margin: "12px 0 0",
-  fontSize: "1rem",
-  lineHeight: 1.75,
-  color: "#9a3412",
-};
-
-const verseListStyle = {
-  display: "grid",
-  gap: "14px",
-  marginTop: "18px",
-};
+const verseListStyle = { display: "grid", gap: "12px", marginTop: "14px" };
 
 const verseCardStyle = {
-  borderRadius: "20px",
-  padding: "20px",
-  background: "#ffffff",
-  border: "1px solid #e2e8f0",
+  borderRadius: "16px",
+  padding: "16px",
+  background: "#f8fafc",
+  border: `1px solid ${colors.cardBorder}`,
 };
 
-const verseRefStyle = {
-  margin: 0,
-  fontSize: "0.95rem",
-  fontWeight: 800,
-  color: "#0f172a",
-};
+const verseRefStyle = { margin: 0, fontWeight: 800, color: colors.text };
+const verseTextStyle = { margin: "8px 0 0", lineHeight: 1.65, color: "#1e293b" };
 
-const verseTextStyle = {
+const stageTitleStyle = {
   margin: "10px 0 0",
-  fontSize: "1.02rem",
+  fontSize: "1.35rem",
+  fontWeight: 900,
+  color: colors.checkpointTextDark,
+};
+
+const stageDescriptionStyle = {
+  margin: "10px 0 0",
   lineHeight: 1.7,
-  color: "#1e293b",
+  color: colors.checkpointTextMid,
 };
 
-const verseNoteStyle = {
-  margin: "12px 0 0",
-  fontSize: "0.96rem",
-  lineHeight: 1.65,
-  color: "#64748b",
-};
-
-const teacherPromptStyle = {
-  marginTop: "18px",
-  borderRadius: "20px",
-  padding: "18px",
+const promptBoxStyle = {
+  marginTop: "16px",
+  borderRadius: "16px",
+  padding: "16px",
   background: "#ffffff",
-  border: "1px solid #fed7aa",
+  border: `1px solid ${colors.checkpointBorder}`,
 };
 
-const teacherPromptLabelStyle = {
+const promptLabelStyle = {
   margin: 0,
-  fontSize: "0.78rem",
+  fontSize: "0.76rem",
   textTransform: "uppercase",
   letterSpacing: "0.08em",
-  color: "#9a3412",
+  color: colors.checkpointTextMid,
   fontWeight: 700,
 };
 
-const teacherPromptTextStyle = {
-  margin: "10px 0 0",
-  fontSize: "1rem",
+const promptTextStyle = {
+  margin: "8px 0 0",
   lineHeight: 1.7,
-  color: "#7c2d12",
+  color: colors.checkpointTextDark,
   fontWeight: 600,
-};
-
-const responseBoxStyle = {
-  marginTop: "16px",
-};
-
-const responseLabelStyle = {
-  display: "block",
-  margin: 0,
-  fontSize: "0.88rem",
-  fontWeight: 800,
-  color: "#9a3412",
 };
 
 const textareaStyle = {
   width: "100%",
-  minHeight: "130px",
-  marginTop: "10px",
-  borderRadius: "20px",
-  background: "#ffffff",
-  border: "1px solid #fed7aa",
-  padding: "16px",
+  minHeight: "120px",
+  marginTop: "16px",
+  borderRadius: "16px",
+  border: `1px solid ${colors.checkpointBorder}`,
+  padding: "14px",
   boxSizing: "border-box",
   resize: "vertical",
   outline: "none",
   fontSize: "0.98rem",
   lineHeight: 1.6,
-  color: "#7c2d12",
+  fontFamily: "inherit",
+};
+
+const transitionTextStyle = {
+  marginTop: "12px",
+  fontSize: "0.9rem",
+  fontWeight: 700,
+  color: colors.infoText,
+};
+
+const gradingTextStyle = {
+  marginTop: "12px",
+  fontSize: "0.9rem",
+  fontWeight: 700,
+  color: colors.checkpointTextMid,
 };
 
 const actionsRowStyle = {
@@ -1410,94 +480,24 @@ const actionsRowStyle = {
   flexWrap: "wrap",
 };
 
-const gradingIndicatorStyle = {
-  margin: "16px 0 0",
-  fontSize: "0.92rem",
-  fontWeight: 700,
-  color: "#9a3412",
-};
-
-const disabledActionStyle = {
-  opacity: 0.6,
-  cursor: "not-allowed",
-};
-
-const primaryActionStyle = {
-  border: "none",
-  background: "#9a3412",
-  color: "#ffffff",
-  padding: "13px 16px",
-  borderRadius: "16px",
-  fontSize: "0.95rem",
-  fontWeight: 800,
-  cursor: "pointer",
-};
-
-const secondaryActionStyle = {
-  border: "1px solid #fdba74",
-  background: "#fff7ed",
-  color: "#9a3412",
-  padding: "13px 16px",
-  borderRadius: "16px",
-  fontSize: "0.95rem",
-  fontWeight: 800,
-  cursor: "pointer",
-};
-
-const feedbackCardStyle = {
-  marginTop: "16px",
-  borderRadius: "20px",
-  padding: "18px",
-  background: "#ffffff",
-  border: "1px solid #fed7aa",
-};
-
-const strongFeedbackCardStyle = {
-  ...feedbackCardStyle,
-  border: "1px solid #86efac",
-  background: "#f0fdf4",
-};
-
-const partialFeedbackCardStyle = {
-  ...feedbackCardStyle,
-  border: "1px solid #fdba74",
-  background: "#fff7ed",
-};
-
-const weakFeedbackCardStyle = {
-  ...feedbackCardStyle,
-  border: "1px solid #fca5a5",
-  background: "#fef2f2",
-};
-
 const feedbackLabelStyle = {
   margin: 0,
-  fontSize: "0.78rem",
+  fontSize: "0.76rem",
   textTransform: "uppercase",
   letterSpacing: "0.08em",
-  color: "#9a3412",
+  color: colors.checkpointTextMid,
   fontWeight: 700,
 };
 
-const feedbackTextStyle = {
-  margin: "10px 0 0",
-  fontSize: "0.96rem",
-  lineHeight: 1.7,
-  color: "#7c2d12",
-};
+const feedbackTextStyle = { margin: "10px 0 0", lineHeight: 1.7, color: colors.text };
+const submittedLabelStyle = { margin: "14px 0 0", fontSize: "0.76rem", textTransform: "uppercase", color: colors.textFaint, fontWeight: 700 };
+const submittedTextStyle = { margin: "8px 0 0", lineHeight: 1.6, color: colors.textMuted };
 
-const submittedLabelStyle = {
-  margin: "14px 0 0",
-  fontSize: "0.78rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "#c2410c",
-  fontWeight: 700,
-};
-
-const submittedTextStyle = {
-  margin: "10px 0 0",
-  fontSize: "0.98rem",
-  lineHeight: 1.7,
-  color: "#7c2d12",
+const footerRowStyle = {
+  marginTop: "24px",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  flexWrap: "wrap",
+  gap: "12px",
 };

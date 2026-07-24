@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 const baseStyle = {
   border: "none",
   background: "#ffffff",
@@ -11,9 +13,11 @@ const baseStyle = {
 
 export default function PrimaryButton({ style, disabled, children, ...rest }) {
   return (
-    <button
+    <motion.button
       type="button"
       disabled={disabled}
+      whileHover={disabled ? undefined : { scale: 1.02 }}
+      whileTap={disabled ? undefined : { scale: 0.97 }}
       style={{
         ...baseStyle,
         ...(disabled ? { opacity: 0.6, cursor: "not-allowed" } : null),
@@ -22,6 +26,6 @@ export default function PrimaryButton({ style, disabled, children, ...rest }) {
       {...rest}
     >
       {children}
-    </button>
+    </motion.button>
   );
 }

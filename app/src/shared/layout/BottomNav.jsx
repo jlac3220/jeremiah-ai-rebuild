@@ -1,35 +1,23 @@
-import { ROUTES } from "../../app/routes";
+import { NavLink } from "react-router-dom";
+import { MAIN_NAV_ITEMS } from "../../app/routes";
 
-const NAV_ITEMS = [
-  { id: ROUTES.HOME, label: "Home" },
-  { id: ROUTES.MAP, label: "Map" },
-  { id: ROUTES.CLASSROOM, label: "Classroom" },
-  { id: ROUTES.PROGRESS, label: "Progress" },
-  { id: ROUTES.PROFILE, label: "Profile" },
-];
-
-export default function BottomNav({ currentRoute, onNavigate }) {
+export default function BottomNav() {
   return (
     <nav aria-label="Main navigation" style={navStyle}>
       <div style={railStyle}>
-        {NAV_ITEMS.map((item) => {
-          const isActive = currentRoute === item.id;
-
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => onNavigate(item.id)}
-              aria-current={isActive ? "page" : undefined}
-              style={{
-                ...itemStyle,
-                ...(isActive ? activeItemStyle : inactiveItemStyle),
-              }}
-            >
-              <span style={labelStyle}>{item.label}</span>
-            </button>
-          );
-        })}
+        {MAIN_NAV_ITEMS.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            end={item.path === "/"}
+            style={({ isActive }) => ({
+              ...itemStyle,
+              ...(isActive ? activeItemStyle : inactiveItemStyle),
+            })}
+          >
+            <span style={labelStyle}>{item.label}</span>
+          </NavLink>
+        ))}
       </div>
     </nav>
   );
@@ -64,6 +52,9 @@ const itemStyle = {
   cursor: "pointer",
   transition: "all 180ms ease",
   whiteSpace: "nowrap",
+  textAlign: "center",
+  textDecoration: "none",
+  display: "block",
 };
 
 const activeItemStyle = {

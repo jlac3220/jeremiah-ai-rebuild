@@ -1,136 +1,119 @@
-import { ROUTES } from "../../app/routes";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { homeData } from "../../data/homeData";
 import {
-  CLASSROOM_ENTRY_INTENTS,
-  setClassroomEntryIntent,
-} from "../../core/classroom/classroomEntryIntent";
+  getAllStandards,
+  getNextUnmasteredStandard,
+} from "../../core/standards/standardsRegistry";
+import { getStandardProgress } from "../../core/standards/standardsProgress";
+import { ROUTES, classroomPath } from "../../app/routes";
+import Card from "../../shared/ui/Card";
+import StatGrid from "../../shared/ui/StatGrid";
+import ProgressBar from "../../shared/ui/ProgressBar";
+import PrimaryButton from "../../shared/ui/PrimaryButton";
+import SecondaryButton from "../../shared/ui/SecondaryButton";
+import { colors } from "../../shared/theme";
+import { fadeInUp } from "../../shared/motion";
 
-export default function HomePage({ onNavigate }) {
-  const data = homeData;
-  const progressWidth = `${data.continueCard.progressPercent}%`;
+export default function HomePage() {
+  const progress = useMemo(() => getStandardProgress(), []);
+  const allStandards = useMemo(() => getAllStandards(), []);
+  const nextStandard = useMemo(() => getNextUnmasteredStandard(progress), [progress]);
+
+  const mastered = allStandards.filter((s) => (progress[s.code] || 0) >= 4).length;
+  const inProgress = allStandards.filter((s) => {
+    const level = progress[s.code] || 0;
+    return level > 0 && level < 4;
+  }).length;
+  const notStarted = allStandards.length - mastered - inProgress;
+  const overallPercent = Math.round((mastered / allStandards.length) * 100);
 
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
-        <section style={heroStyle}>
+        <motion.section style={heroStyle} {...fadeInUp}>
           <p style={eyebrowStyle}>JEREMIAH AI</p>
-          <h1 style={titleStyle}>{data.welcomeTitle}</h1>
-          <p style={subtitleStyle}>{data.welcomeSubtitle}</p>
-        </section>
+          <h1 style={titleStyle}>{homeData.welcomeTitle}</h1>
+          <p style={subtitleStyle}>{homeData.welcomeSubtitle}</p>
+        </motion.section>
 
-        <section style={primaryCardStyle}>
-          <div style={cardHeaderStyle}>
-            <div>
-              <div style={pillStyle}>Continue Learning</div>
-              <p style={trackLabelStyle}>Current Track</p>
-              <h2 style={trackTitleStyle}>{data.continueCard.trackTitle}</h2>
-            </div>
+        <Card variant="dark" style={{ marginBottom: "20px" }}>
+          <p style={pillStyle}>Continue Learning</p>
+          {nextStandard ? (
+            <>
+              <p style={trackLabelStyle}>{nextStandard.subjectTitle}</p>
+              <h2 style={standardTitleStyle}>{nextStandard.title}</h2>
+              <p style={descriptionStyle}>{nextStandard.statement}</p>
+              <div style={{ marginTop: "20px" }}>
+                <ProgressBar percent={((progress[nextStandard.code] || 0) / 4) * 100} tone="light" />
+              </div>
+              <div style={cardFooterStyle}>
+                <Link to={classroomPath(nextStandard.code)}>
+                  <PrimaryButton>Continue Classroom Session</PrimaryButton>
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 style={standardTitleStyle}>Every standard is mastered</h2>
+              <p style={descriptionStyle}>
+                You've mastered everything currently in the Brain. Check the Map for what's next.
+              </p>
+              <div style={cardFooterStyle}>
+                <Link to={ROUTES.MAP}>
+                  <PrimaryButton>Open Doctrine Map</PrimaryButton>
+                </Link>
+              </div>
+            </>
+          )}
+        </Card>
 
-            <div style={stageBoxStyle}>
-              <span style={stageLabelStyle}>Session Type</span>
-              <span style={stageValueStyle}>{data.continueCard.sessionType}</span>
-            </div>
+        <Card style={{ marginBottom: "20px" }}>
+          <h3 style={sectionTitleStyle}>Progress Snapshot</h3>
+          <p style={sectionTextStyle}>
+            {overallPercent}% of the full doctrine map is mastered.
+          </p>
+          <div style={{ marginTop: "16px" }}>
+            <StatGrid
+              stats={[
+                { value: mastered, label: "Mastered" },
+                { value: inProgress, label: "In Progress" },
+                { value: notStarted, label: "Not Started" },
+              ]}
+            />
           </div>
+        </Card>
 
-          <div style={cardBodyStyle}>
-            <div style={mainInfoStyle}>
-              <p style={sectionEyebrowStyle}>Current Standard</p>
-              <h3 style={standardTitleStyle}>{data.continueCard.standardTitle}</h3>
-              <p style={descriptionStyle}>{data.continueCard.description}</p>
-            </div>
-
-            <div style={nextStepCardStyle}>
-              <p style={nextStepEyebrowStyle}>Next Step</p>
-              <p style={nextStepTitleStyle}>{data.continueCard.nextStepTitle}</p>
-              <p style={nextStepTextStyle}>{data.continueCard.nextStepText}</p>
-            </div>
+        <Card variant="checkpoint">
+          <p style={reviewPillStyle}>Ask Jeremiah</p>
+          <h3 style={reviewTitleStyle}>Have a doctrinal question right now?</h3>
+          <p style={reviewTextStyle}>
+            Ask Jeremiah directly — every answer is grounded in the real standards, not a
+            generic chatbot guess.
+          </p>
+          <div style={{ marginTop: "16px" }}>
+            <Link to={ROUTES.ASK}>
+              <SecondaryButton>Open Ask Jeremiah</SecondaryButton>
+            </Link>
           </div>
-
-          <div style={progressWrapStyle}>
-            <div style={progressHeaderStyle}>
-              <span style={progressLabelStyle}>Session progress</span>
-              <span style={progressValueStyle}>
-                {data.continueCard.progressPercent}%
-              </span>
-            </div>
-
-            <div style={progressTrackStyle}>
-              <div style={{ ...progressFillStyle, width: progressWidth }} />
-            </div>
-          </div>
-
-          <div style={cardFooterStyle}>
-            <button
-              type="button"
-              style={primaryButtonStyle}
-              onClick={() => {
-              setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.RESUME);
-              onNavigate?.(ROUTES.CLASSROOM);
-            }}
-            >
-              {data.continueCard.buttonLabel}
-            </button>
-          </div>
-        </section>
-
-        <section style={snapshotSectionStyle}>
-          <div style={sectionHeaderStyle}>
-            <h3 style={sectionTitleStyle}>Progress Snapshot</h3>
-            <p style={sectionTextStyle}>
-              A quick view of what is mastered, in progress, and waiting for
-              review.
-            </p>
-          </div>
-
-          <div style={statsGridStyle}>
-            <div style={statCardStyle}>
-              <div style={statValueStyle}>{data.progressSnapshot.mastered}</div>
-              <div style={statLabelStyle}>Mastered</div>
-            </div>
-
-            <div style={statCardStyle}>
-              <div style={statValueStyle}>{data.progressSnapshot.inProgress}</div>
-              <div style={statLabelStyle}>In Progress</div>
-            </div>
-
-            <div style={statCardStyle}>
-              <div style={statValueStyle}>{data.progressSnapshot.reviewNeeded}</div>
-              <div style={statLabelStyle}>Review Needed</div>
-            </div>
-          </div>
-        </section>
-
-        <section style={reviewCardStyle}>
-          <div style={reviewTopStyle}>
-            <span style={reviewPillStyle}>Review</span>
-          </div>
-
-          <h3 style={reviewTitleStyle}>{data.reviewCard.title}</h3>
-
-          <p style={reviewTextStyle}>{data.reviewCard.text}</p>
-        </section>
+        </Card>
       </div>
     </div>
   );
 }
 
-const pageStyle = {
-  minHeight: "100%",
-  background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
-};
+const pageStyle = { minHeight: "100%", background: colors.pageGradient };
 
 const contentStyle = {
   width: "100%",
-  maxWidth: "980px",
+  maxWidth: "760px",
   margin: "0 auto",
   padding: "32px 20px 120px",
   boxSizing: "border-box",
 };
 
-const heroStyle = {
-  marginBottom: "24px",
-  textAlign: "center",
-};
+const heroStyle = { marginBottom: "24px", textAlign: "center" };
 
 const eyebrowStyle = {
   margin: 0,
@@ -138,51 +121,34 @@ const eyebrowStyle = {
   fontWeight: 800,
   letterSpacing: "0.08em",
   textTransform: "uppercase",
-  color: "#475569",
+  color: colors.textMuted,
 };
 
 const titleStyle = {
   margin: "10px 0 0",
-  fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+  fontSize: "clamp(2.5rem, 6vw, 4rem)",
   lineHeight: 0.98,
   fontWeight: 900,
-  color: "#0f172a",
+  color: colors.text,
 };
 
 const subtitleStyle = {
   margin: "16px auto 0",
-  maxWidth: "700px",
-  fontSize: "1.08rem",
+  maxWidth: "560px",
+  fontSize: "1.05rem",
   lineHeight: 1.65,
-  color: "#475569",
-};
-
-const primaryCardStyle = {
-  background: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
-  color: "#ffffff",
-  borderRadius: "32px",
-  padding: "28px",
-  boxShadow: "0 30px 70px rgba(15, 23, 42, 0.18)",
-  marginBottom: "20px",
-};
-
-const cardHeaderStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  gap: "18px",
-  flexWrap: "wrap",
+  color: colors.textMuted,
 };
 
 const pillStyle = {
   display: "inline-flex",
-  alignItems: "center",
   padding: "9px 14px",
   borderRadius: "999px",
   background: "rgba(255,255,255,0.14)",
   fontSize: "0.82rem",
   fontWeight: 800,
   color: "#ffffff",
+  margin: 0,
 };
 
 const trackLabelStyle = {
@@ -194,248 +160,36 @@ const trackLabelStyle = {
   fontWeight: 700,
 };
 
-const trackTitleStyle = {
-  margin: "8px 0 0",
-  fontSize: "1.4rem",
-  lineHeight: 1.2,
-  fontWeight: 800,
-  color: "#ffffff",
-};
-
-const stageBoxStyle = {
-  minWidth: "180px",
-  padding: "14px 16px",
-  borderRadius: "20px",
-  background: "rgba(255,255,255,0.08)",
-  border: "1px solid rgba(255,255,255,0.08)",
-};
-
-const stageLabelStyle = {
-  display: "block",
-  fontSize: "0.76rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "rgba(255,255,255,0.6)",
-  fontWeight: 700,
-};
-
-const stageValueStyle = {
-  display: "block",
-  marginTop: "8px",
-  fontSize: "1rem",
-  fontWeight: 800,
-  color: "#ffffff",
-};
-
-const cardBodyStyle = {
-  display: "grid",
-  gridTemplateColumns: "1.5fr 1fr",
-  gap: "18px",
-  marginTop: "24px",
-};
-
-const mainInfoStyle = {
-  padding: "22px",
-  borderRadius: "24px",
-  background: "rgba(255,255,255,0.04)",
-  border: "1px solid rgba(255,255,255,0.08)",
-};
-
-const sectionEyebrowStyle = {
-  margin: 0,
-  fontSize: "0.8rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "rgba(255,255,255,0.62)",
-  fontWeight: 700,
-};
-
 const standardTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "2.15rem",
-  lineHeight: 1.05,
+  margin: "8px 0 0",
+  fontSize: "1.9rem",
+  lineHeight: 1.1,
   fontWeight: 900,
   color: "#ffffff",
 };
 
 const descriptionStyle = {
   margin: "14px 0 0",
-  fontSize: "1.02rem",
-  lineHeight: 1.75,
-  color: "rgba(255,255,255,0.84)",
-  maxWidth: "620px",
-};
-
-const nextStepCardStyle = {
-  padding: "22px",
-  borderRadius: "24px",
-  background: "rgba(255,255,255,0.08)",
-  border: "1px solid rgba(255,255,255,0.08)",
-};
-
-const nextStepEyebrowStyle = {
-  margin: 0,
-  fontSize: "0.8rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "rgba(255,255,255,0.62)",
-  fontWeight: 700,
-};
-
-const nextStepTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.1rem",
-  lineHeight: 1.35,
-  fontWeight: 800,
-  color: "#ffffff",
-};
-
-const nextStepTextStyle = {
-  margin: "12px 0 0",
-  fontSize: "0.96rem",
-  lineHeight: 1.7,
-  color: "rgba(255,255,255,0.8)",
-};
-
-const progressWrapStyle = {
-  marginTop: "22px",
-};
-
-const progressHeaderStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: "10px",
-};
-
-const progressLabelStyle = {
-  fontSize: "0.94rem",
-  color: "rgba(255,255,255,0.78)",
-};
-
-const progressValueStyle = {
-  fontSize: "0.94rem",
-  fontWeight: 800,
-  color: "#ffffff",
-};
-
-const progressTrackStyle = {
-  width: "100%",
-  height: "12px",
-  borderRadius: "999px",
-  background: "rgba(255,255,255,0.14)",
-  overflow: "hidden",
-};
-
-const progressFillStyle = {
-  height: "100%",
-  borderRadius: "999px",
-  background: "#ffffff",
-};
-
-const cardFooterStyle = {
-  marginTop: "22px",
-  display: "flex",
-  justifyContent: "flex-start",
-};
-
-const primaryButtonStyle = {
-  border: "none",
-  background: "#ffffff",
-  color: "#0f172a",
-  padding: "15px 20px",
-  borderRadius: "18px",
   fontSize: "1rem",
-  fontWeight: 800,
-  cursor: "pointer",
-  boxShadow: "0 10px 24px rgba(255,255,255,0.12)",
+  lineHeight: 1.7,
+  color: "rgba(255,255,255,0.84)",
 };
 
-const snapshotSectionStyle = {
-  background: "#ffffff",
-  borderRadius: "26px",
-  padding: "24px",
-  boxShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
-  marginBottom: "20px",
-};
+const cardFooterStyle = { marginTop: "20px" };
 
-const sectionHeaderStyle = {
-  marginBottom: "18px",
-};
-
-const sectionTitleStyle = {
-  margin: 0,
-  fontSize: "1.18rem",
-  fontWeight: 800,
-  color: "#0f172a",
-};
-
-const sectionTextStyle = {
-  margin: "8px 0 0",
-  fontSize: "0.96rem",
-  lineHeight: 1.65,
-  color: "#64748b",
-};
-
-const statsGridStyle = {
-  display: "grid",
-  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-  gap: "14px",
-};
-
-const statCardStyle = {
-  background: "#f8fafc",
-  borderRadius: "20px",
-  padding: "18px",
-  border: "1px solid #e2e8f0",
-};
-
-const statValueStyle = {
-  fontSize: "1.85rem",
-  fontWeight: 900,
-  color: "#0f172a",
-};
-
-const statLabelStyle = {
-  marginTop: "6px",
-  fontSize: "0.92rem",
-  color: "#64748b",
-  fontWeight: 700,
-};
-
-const reviewCardStyle = {
-  background: "#fff7ed",
-  border: "1px solid #fed7aa",
-  borderRadius: "24px",
-  padding: "22px",
-  boxShadow: "0 10px 24px rgba(249, 115, 22, 0.08)",
-};
-
-const reviewTopStyle = {
-  marginBottom: "10px",
-};
+const sectionTitleStyle = { margin: 0, fontSize: "1.18rem", fontWeight: 800, color: colors.text };
+const sectionTextStyle = { margin: "8px 0 0", fontSize: "0.96rem", color: colors.textFaint };
 
 const reviewPillStyle = {
   display: "inline-flex",
-  alignItems: "center",
   padding: "7px 12px",
   borderRadius: "999px",
   background: "#ffedd5",
-  color: "#9a3412",
+  color: colors.checkpointTextMid,
   fontSize: "0.8rem",
   fontWeight: 700,
-};
-
-const reviewTitleStyle = {
   margin: 0,
-  fontSize: "1.15rem",
-  fontWeight: 800,
-  color: "#7c2d12",
 };
 
-const reviewTextStyle = {
-  margin: "10px 0 0",
-  fontSize: "0.98rem",
-  lineHeight: 1.65,
-  color: "#9a3412",
-};
+const reviewTitleStyle = { margin: "12px 0 0", fontSize: "1.15rem", fontWeight: 800, color: colors.checkpointTextDark };
+const reviewTextStyle = { margin: "10px 0 0", fontSize: "0.98rem", lineHeight: 1.65, color: colors.checkpointTextMid };

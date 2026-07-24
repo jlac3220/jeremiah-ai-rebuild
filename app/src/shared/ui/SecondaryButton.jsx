@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 const baseStyle = {
   border: "1px solid #cbd5e1",
   background: "#ffffff",
@@ -11,8 +13,14 @@ const baseStyle = {
 
 export default function SecondaryButton({ style, children, ...rest }) {
   return (
-    <button type="button" style={{ ...baseStyle, ...style }} {...rest}>
+    <motion.button
+      type="button"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
+      style={{ ...baseStyle, ...style }}
+      {...rest}
+    >
       {children}
-    </button>
+    </motion.button>
   );
 }
