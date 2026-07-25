@@ -79,6 +79,21 @@ export function LockIcon({ size = 16 }) {
   );
 }
 
+export function BoltIcon({ size = 20, style }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style}>
+      <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="url(#boltGradient)" />
+      <defs>
+        <linearGradient id="boltGradient" x1="4" y1="2" x2="19" y2="22" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFD000" />
+          <stop offset="0.6" stopColor="#FF8A00" />
+          <stop offset="1" stopColor="#D1001F" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 export function ChevronIcon({ size = 16, style }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" style={style} {...strokeProps}>

@@ -8,6 +8,7 @@ export const ROUTES = {
   PROGRESS: "/progress",
   PROFILE: "/profile",
   BIBLE_SUPPORT: "/classroom/:standardCode/bible-support",
+  RAPID_FIRE: "/rapid-fire",
 };
 
 export function classroomPath(standardCode) {

@@ -140,7 +140,7 @@ export default function HomePage() {
           </Card>
         ) : null}
 
-        <Card variant="checkpoint">
+        <Card variant="checkpoint" style={{ marginBottom: "20px" }}>
           <p style={reviewPillStyle}>Ask Jeremiah</p>
           <h3 style={reviewTitleStyle}>Have a doctrinal question right now?</h3>
           <p style={reviewTextStyle}>
@@ -150,6 +150,19 @@ export default function HomePage() {
           <div style={{ marginTop: "16px" }}>
             <Link to={ROUTES.ASK}>
               <SecondaryButton>Open Ask Jeremiah</SecondaryButton>
+            </Link>
+          </div>
+        </Card>
+
+        <Card>
+          <p style={reviewPillStyle}>Jeremiah AI · Quick Drill</p>
+          <h3 style={reviewTitleStyle}>A few minutes to spare?</h3>
+          <p style={reviewTextStyle}>
+            Rapid Fire pulls from what you've actually studied — same classroom, faster pace.
+          </p>
+          <div style={{ marginTop: "16px" }}>
+            <Link to={ROUTES.RAPID_FIRE}>
+              <SecondaryButton>Quiz Me</SecondaryButton>
             </Link>
           </div>
         </Card>

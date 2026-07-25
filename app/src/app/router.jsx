@@ -8,6 +8,7 @@ import AskJeremiahPage from "../features/ask/AskJeremiahPage";
 import ProgressPage from "../features/progress/ProgressPage";
 import ProfilePage from "../features/profile/ProfilePage";
 import BibleSupportPage from "../features/bible-support/BibleSupportPage";
+import RapidFirePage from "../features/rapid-fire/RapidFirePage";
 
 export default function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ export default function AppRoutes() {
       <Route path={ROUTES.ASK} element={<AskJeremiahPage />} />
       <Route path={ROUTES.PROGRESS} element={<ProgressPage />} />
       <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+      <Route path={ROUTES.RAPID_FIRE} element={<RapidFirePage />} />
       <Route path="*" element={<HomePage />} />
     </Routes>
   );

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { FlameMark } from "../ui/icons";
+import { gradients } from "../theme";
 
 export default function AppHeader() {
   return (
@@ -8,7 +9,10 @@ export default function AppHeader() {
         <span style={flameWrapStyle}>
           <FlameMark size={22} />
         </span>
-        <span style={wordmarkStyle}>Jeremiah AI</span>
+        <span style={wordmarkStyle}>
+          <span style={wordmarkFlameStyle}>Jeremiah</span>
+          <span style={wordmarkAccentStyle}> AI</span>
+        </span>
       </Link>
     </header>
   );
@@ -53,10 +57,22 @@ const flameWrapStyle = {
   background: "radial-gradient(circle, rgba(255,138,0,0.18) 0%, transparent 70%)",
 };
 
+// Two-tone wordmark matching the original brand mark: the name in flame
+// gradient, the accent portion in a cool blue — same split the logo used.
 const wordmarkStyle = {
   fontFamily: '"Manrope", system-ui, sans-serif',
   fontWeight: 800,
   fontSize: "1.05rem",
-  color: "#f3f1f6",
   letterSpacing: "-0.01em",
+};
+
+const wordmarkFlameStyle = {
+  background: gradients.flame,
+  WebkitBackgroundClip: "text",
+  backgroundClip: "text",
+  color: "transparent",
+};
+
+const wordmarkAccentStyle = {
+  color: "#5b8cff",
 };
