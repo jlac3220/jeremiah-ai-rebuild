@@ -73,6 +73,12 @@ export default function ClassroomPage() {
   // just on the one-time Introduction screen — a learner shouldn't have to
   // remember a definition from a screen they've already clicked past.
   const [showVocabReference, setShowVocabReference] = useState(false);
+  // This is study, not a locked-book test — scripture stays available on
+  // demand at any point, not only after a graded attempt. The automatic
+  // reveal on submit (hasAttempted) still happens too; this just adds a
+  // manual way to look before answering.
+  const [showScriptureReference, setShowScriptureReference] = useState(false);
+  const [showTeachingNote, setShowTeachingNote] = useState(false);
 
   useEffect(() => {
     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
@@ -85,6 +91,8 @@ export default function ClassroomPage() {
     setJustMastered(false);
     setHasAttempted(false);
     setShowVocabReference(false);
+    setShowScriptureReference(false);
+    setShowTeachingNote(false);
   }, [standardCode]);
 
   const currentStage = useMemo(
@@ -175,6 +183,9 @@ export default function ClassroomPage() {
       setFeedbackMessage("");
       setEvaluationStatus("");
       setHasAttempted(false);
+      setShowVocabReference(false);
+      setShowScriptureReference(false);
+      setShowTeachingNote(false);
       const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
       setTransitionMessage(nextStage ? `Advanced to ${nextStage.label}.` : "");
     } else {
@@ -333,10 +344,10 @@ export default function ClassroomPage() {
                   <p style={promptTextStyle}>{stagePrompt}</p>
                 </div>
 
-                {!hasAttempted ? (
+                {!hasAttempted && !showScriptureReference ? (
                   <p style={retrievalHintStyle}>
-                    Answer from memory first — the verses will appear once you submit, so you
-                    can check and correct yourself.
+                    Try answering from memory first — or open Scripture below any time you want
+                    to study it before answering. This is practice, not a locked-book test.
                   </p>
                 ) : null}
 
@@ -363,15 +374,31 @@ export default function ClassroomPage() {
                   >
                     {isGrading ? "Grading…" : "Submit Response"}
                   </PrimaryButton>
-                  <Link to={bibleSupportPath(standard.code)}>
-                    <SecondaryButton>Review Verses Again</SecondaryButton>
-                  </Link>
+                  <SecondaryButton onClick={() => setShowScriptureReference((current) => !current)}>
+                    {hasAttempted || showScriptureReference ? "Hide Scripture" : "Study Scripture"}
+                  </SecondaryButton>
                   {standard.vocabulary?.length ? (
                     <SecondaryButton onClick={() => setShowVocabReference((current) => !current)}>
                       {showVocabReference ? "Hide Vocabulary" : "Vocabulary"}
                     </SecondaryButton>
                   ) : null}
+                  {standard.instructionalFocus ? (
+                    <SecondaryButton onClick={() => setShowTeachingNote((current) => !current)}>
+                      {showTeachingNote ? "Hide Teaching Note" : "Teaching Note"}
+                    </SecondaryButton>
+                  ) : null}
                 </div>
+
+                {showTeachingNote && standard.instructionalFocus ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={vocabReferenceBoxStyle}
+                  >
+                    <p style={promptLabelStyle}>How Jeremiah Approaches This Lesson</p>
+                    <p style={teachingNoteTextStyle}>{standard.instructionalFocus}</p>
+                  </motion.div>
+                ) : null}
 
                 {showVocabReference ? (
                   <motion.div
@@ -406,10 +433,12 @@ export default function ClassroomPage() {
                 ) : null}
               </Card>
 
-              {hasAttempted ? (
+              {hasAttempted || showScriptureReference ? (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                   <Card style={{ marginBottom: "20px" }}>
-                    <p style={sectionEyebrowStyle}>Scripture Evidence — Check Yourself</p>
+                    <p style={sectionEyebrowStyle}>
+                      {hasAttempted ? "Scripture Evidence — Check Yourself" : "Scripture — Study Reference"}
+                    </p>
                     <div style={verseListStyle}>
                       {standard.anchorScriptures.map((verse) => (
                         <div
@@ -623,6 +652,14 @@ const introStatementStyle = {
   lineHeight: 1.75,
   fontSize: "1.05rem",
   color: colors.textMuted,
+};
+
+const teachingNoteTextStyle = {
+  margin: "8px 0 0",
+  lineHeight: 1.7,
+  fontSize: "0.94rem",
+  color: colors.textMuted,
+  fontStyle: "italic",
 };
 
 const vocabReferenceBoxStyle = {
