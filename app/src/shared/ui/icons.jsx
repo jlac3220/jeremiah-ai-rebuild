@@ -1,12 +1,18 @@
 // A small hand-built icon set — no icon library dependency, just the
 // specific marks this app needs, including the Jeremiah AI flame identity.
 
+// Layered outer flame + inner "truth" tongue, matching the richer mark from
+// the original Ignite app's logo instead of a flat single-gradient teardrop.
 export function FlameMark({ size = 28, style }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style}>
       <path
         d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-.4-2-1-3 1.5.8 3 2.6 3 5.5A6.5 6.5 0 0 1 13.5 18 6.5 6.5 0 0 1 7 11.5c0-3.2 1.6-5 3-6.5.6-.7 1.6-1.8 2-3z"
         fill="url(#flameGradient)"
+      />
+      <path
+        d="M13 9.3c0 0-2.6 3.2-2.6 5.35 0 1.75 1.15 3.05 2.6 3.05s2.6-1.3 2.6-3.05c0-2.15-2.6-5.35-2.6-5.35z"
+        fill="#003DA5"
       />
       <defs>
         <linearGradient id="flameGradient" x1="7" y1="2" x2="17" y2="18" gradientUnits="userSpaceOnUse">
