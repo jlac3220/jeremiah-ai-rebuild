@@ -5,12 +5,15 @@ import { homeData } from "../../data/homeData";
 import {
   getAllStandards,
   getNextUnmasteredStandard,
+  getStandardByCode,
 } from "../../core/standards/standardsRegistry";
-import { getStandardProgress } from "../../core/standards/standardsProgress";
-import { ROUTES, classroomPath } from "../../app/routes";
+import { getStandardProgress, getDueForReview } from "../../core/standards/standardsProgress";
+import { getStreak, hasEngagedToday } from "../../core/streak/streak";
+import { ROUTES, classroomPath, defendPath } from "../../app/routes";
 import Card from "../../shared/ui/Card";
 import StatGrid from "../../shared/ui/StatGrid";
 import ProgressBar from "../../shared/ui/ProgressBar";
+import Pill from "../../shared/ui/Pill";
 import PrimaryButton from "../../shared/ui/PrimaryButton";
 import SecondaryButton from "../../shared/ui/SecondaryButton";
 import { colors } from "../../shared/theme";
@@ -20,6 +23,12 @@ export default function HomePage() {
   const progress = useMemo(() => getStandardProgress(), []);
   const allStandards = useMemo(() => getAllStandards(), []);
   const nextStandard = useMemo(() => getNextUnmasteredStandard(progress), [progress]);
+  const streak = useMemo(() => getStreak(), []);
+  const engagedToday = useMemo(() => hasEngagedToday(), []);
+  const dueForReview = useMemo(
+    () => getDueForReview(progress).map((code) => getStandardByCode(code)).filter(Boolean),
+    [progress]
+  );
 
   const mastered = allStandards.filter((s) => (progress[s.code] || 0) >= 4).length;
   const inProgress = allStandards.filter((s) => {
@@ -28,6 +37,7 @@ export default function HomePage() {
   }).length;
   const notStarted = allStandards.length - mastered - inProgress;
   const overallPercent = Math.round((mastered / allStandards.length) * 100);
+  const nextStandardLevel = nextStandard ? progress[nextStandard.code] || 0 : 0;
 
   return (
     <div style={pageStyle}>
@@ -36,6 +46,13 @@ export default function HomePage() {
           <p style={eyebrowStyle}>JEREMIAH AI</p>
           <h1 style={titleStyle}>{homeData.welcomeTitle}</h1>
           <p style={subtitleStyle}>{homeData.welcomeSubtitle}</p>
+          {streak.count > 0 ? (
+            <div style={streakRowStyle}>
+              <Pill tone={engagedToday ? "mastered" : "review"}>
+                🔥 {streak.count}-day streak{!engagedToday ? " — keep it alive today" : ""}
+              </Pill>
+            </div>
+          ) : null}
         </motion.section>
 
         <Card variant="dark" style={{ marginBottom: "20px" }}>
@@ -46,7 +63,11 @@ export default function HomePage() {
               <h2 style={standardTitleStyle}>{nextStandard.title}</h2>
               <p style={descriptionStyle}>{nextStandard.statement}</p>
               <div style={{ marginTop: "20px" }}>
-                <ProgressBar percent={((progress[nextStandard.code] || 0) / 4) * 100} tone="light" />
+                <div style={evidenceRowStyle}>
+                  <span>Evidence of learning</span>
+                  <span>{nextStandardLevel} of 4</span>
+                </div>
+                <ProgressBar percent={(nextStandardLevel / 4) * 100} tone="light" />
               </div>
               <div style={cardFooterStyle}>
                 <Link to={classroomPath(nextStandard.code)}>
@@ -84,6 +105,29 @@ export default function HomePage() {
             />
           </div>
         </Card>
+
+        {dueForReview.length > 0 ? (
+          <Card style={{ marginBottom: "20px" }}>
+            <h3 style={sectionTitleStyle}>Review Queue</h3>
+            <p style={sectionTextStyle}>
+              {dueForReview.length} standard{dueForReview.length === 1 ? "" : "s"} due for spaced
+              review — Jeremiah will argue the other side to see if it still holds.
+            </p>
+            <div style={{ marginTop: "14px", display: "grid", gap: "10px" }}>
+              {dueForReview.map((standard) => (
+                <Link key={standard.code} to={defendPath(standard.code)} style={reviewLinkStyle}>
+                  <div style={reviewItemStyle}>
+                    <div>
+                      <p style={itemTitleStyle}>{standard.title}</p>
+                      <p style={itemMetaStyle}>{standard.code}</p>
+                    </div>
+                    <Pill tone="review">Defend</Pill>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </Card>
+        ) : null}
 
         <Card variant="checkpoint">
           <p style={reviewPillStyle}>Ask Jeremiah</p>
@@ -176,6 +220,32 @@ const descriptionStyle = {
 };
 
 const cardFooterStyle = { marginTop: "20px" };
+
+const streakRowStyle = { marginTop: "16px", display: "flex", justifyContent: "center" };
+
+const evidenceRowStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  fontSize: "0.85rem",
+  color: "rgba(255,255,255,0.75)",
+  marginBottom: "6px",
+};
+
+const reviewLinkStyle = { textDecoration: "none" };
+
+const reviewItemStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "16px",
+  padding: "14px",
+  borderRadius: "14px",
+  background: "#f8fafc",
+  border: `1px solid ${colors.cardBorder}`,
+};
+
+const itemTitleStyle = { margin: 0, fontSize: "0.98rem", fontWeight: 800, color: colors.text };
+const itemMetaStyle = { margin: "4px 0 0", fontSize: "0.86rem", color: colors.textFaint };
 
 const sectionTitleStyle = { margin: 0, fontSize: "1.18rem", fontWeight: 800, color: colors.text };
 const sectionTextStyle = { margin: "8px 0 0", fontSize: "0.96rem", color: colors.textFaint };

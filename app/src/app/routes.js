@@ -3,6 +3,7 @@ export const ROUTES = {
   HOME: "/",
   MAP: "/map",
   CLASSROOM: "/classroom/:standardCode",
+  DEFEND: "/defend/:standardCode",
   ASK: "/ask",
   PROGRESS: "/progress",
   PROFILE: "/profile",
@@ -11,6 +12,10 @@ export const ROUTES = {
 
 export function classroomPath(standardCode) {
   return `/classroom/${standardCode}`;
+}
+
+export function defendPath(standardCode) {
+  return `/defend/${standardCode}`;
 }
 
 export function bibleSupportPath(standardCode) {

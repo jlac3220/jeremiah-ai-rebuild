@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { getStandardByCode } from "../../core/standards/standardsRegistry";
-import { raiseStandardProgressLevel, getStandardProgressLevel } from "../../core/standards/standardsProgress";
+import { raiseStandardProgressLevel, getStandardProgressLevel, scheduleNextReview } from "../../core/standards/standardsProgress";
+import { recordEngagement } from "../../core/streak/streak";
 import {
   getSavedLiveStageForStandard,
   setSavedLiveStageForStandard,
@@ -38,6 +39,10 @@ export default function ClassroomPage() {
   const [transitionMessage, setTransitionMessage] = useState("");
   const [isGrading, setIsGrading] = useState(false);
   const [justMastered, setJustMastered] = useState(false);
+  // Retrieval-first: verses stay hidden until the learner has attempted an
+  // answer from memory for the current stage. Research on active recall is
+  // clear that attempt-then-check beats read-then-answer for retention.
+  const [hasAttempted, setHasAttempted] = useState(false);
 
   useEffect(() => {
     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
@@ -47,6 +52,7 @@ export default function ClassroomPage() {
     setEvaluationStatus("");
     setTransitionMessage("");
     setJustMastered(false);
+    setHasAttempted(false);
   }, [standardCode]);
 
   const currentStage = useMemo(
@@ -97,16 +103,28 @@ export default function ClassroomPage() {
     setEvaluationStatus(result.status);
     setFeedbackMessage(result.feedback);
 
-    if (result.status === "empty" || result.gradingUnavailable) {
+    if (result.status === "empty") {
       setSubmittedResponse("");
       setTransitionMessage("");
       return;
     }
 
+    // Reveal the verses on any real attempt, even if grading itself failed —
+    // retrieval-first is about the learner trying before seeing the answer,
+    // not about whether the mouthpiece happened to be reachable.
+    setHasAttempted(true);
     setSubmittedResponse(responseText.trim());
+
+    if (result.gradingUnavailable) {
+      setTransitionMessage("");
+      return;
+    }
+
+    recordEngagement();
 
     if (currentStageId === "mastery" && result.status === "strong") {
       raiseStandardProgressLevel(standard.code, 4);
+      scheduleNextReview(standard.code, true);
       setJustMastered(true);
       setTransitionMessage(`${standard.title} is now mastered.`);
       return;
@@ -122,6 +140,7 @@ export default function ClassroomPage() {
       setSubmittedResponse("");
       setFeedbackMessage("");
       setEvaluationStatus("");
+      setHasAttempted(false);
       const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
       setTransitionMessage(nextStage ? `Advanced to ${nextStage.label}.` : "");
     } else {
@@ -203,24 +222,7 @@ export default function ClassroomPage() {
             </motion.div>
           ) : (
             <motion.div key={currentStageId} {...stageTransition}>
-              <Card style={{ marginBottom: "20px" }}>
-                <p style={sectionEyebrowStyle}>Scripture Evidence</p>
-                <div style={verseListStyle}>
-                  {standard.anchorScriptures.map((verse) => (
-                    <div key={verse.reference} style={verseCardStyle}>
-                      <p style={verseRefStyle}>{verse.reference}</p>
-                      <p style={verseTextStyle}>{verse.text}</p>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ marginTop: "12px" }}>
-                  <Link to={bibleSupportPath(standard.code)} style={breadcrumbLinkStyle}>
-                    Open in Bible Support →
-                  </Link>
-                </div>
-              </Card>
-
-              <Card variant="checkpoint">
+              <Card variant="checkpoint" style={{ marginBottom: "20px" }}>
                 <p style={sectionEyebrowDarkStyle}>{currentStage.label}</p>
                 <h3 style={stageTitleStyle}>{currentStageContent.title}</h3>
                 <p style={stageDescriptionStyle}>{currentStageContent.description}</p>
@@ -229,6 +231,13 @@ export default function ClassroomPage() {
                   <p style={promptLabelStyle}>Jeremiah AI Prompt</p>
                   <p style={promptTextStyle}>{stagePrompt}</p>
                 </div>
+
+                {!hasAttempted ? (
+                  <p style={retrievalHintStyle}>
+                    Answer from memory first — the verses will appear once you submit, so you
+                    can check and correct yourself.
+                  </p>
+                ) : null}
 
                 <textarea
                   value={responseText}
@@ -279,6 +288,27 @@ export default function ClassroomPage() {
                   </div>
                 ) : null}
               </Card>
+
+              {hasAttempted ? (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  <Card style={{ marginBottom: "20px" }}>
+                    <p style={sectionEyebrowStyle}>Scripture Evidence — Check Yourself</p>
+                    <div style={verseListStyle}>
+                      {standard.anchorScriptures.map((verse) => (
+                        <div key={verse.reference} style={verseCardStyle}>
+                          <p style={verseRefStyle}>{verse.reference}</p>
+                          <p style={verseTextStyle}>{verse.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: "12px" }}>
+                      <Link to={bibleSupportPath(standard.code)} style={breadcrumbLinkStyle}>
+                        Open in Bible Support →
+                      </Link>
+                    </div>
+                  </Card>
+                </motion.div>
+              ) : null}
             </motion.div>
           )}
         </AnimatePresence>
@@ -435,6 +465,13 @@ const promptLabelStyle = {
   letterSpacing: "0.08em",
   color: colors.checkpointTextMid,
   fontWeight: 700,
+};
+
+const retrievalHintStyle = {
+  margin: "14px 0 0",
+  fontSize: "0.88rem",
+  fontStyle: "italic",
+  color: colors.checkpointTextMid,
 };
 
 const promptTextStyle = {
