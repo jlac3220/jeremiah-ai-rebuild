@@ -120,6 +120,10 @@ export default function ClassroomPage() {
   // transitions within the same standard so a side conversation isn't lost
   // just because the learner advanced a stage.
   const [showAskPanel, setShowAskPanel] = useState(false);
+  // Distinguishes "the mouthpiece is genuinely unreachable" from a real
+  // weak grade — only true lets the learner preview further stages without
+  // faking a verdict or touching real progress/mastery data.
+  const [gradingWasUnavailable, setGradingWasUnavailable] = useState(false);
 
   useEffect(() => {
     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
@@ -140,6 +144,7 @@ export default function ClassroomPage() {
     setShowScriptureReference(false);
     setShowTeachingNote(false);
     setShowAskPanel(false);
+    setGradingWasUnavailable(false);
   }, [standardCode]);
 
   const currentStage = useMemo(
@@ -279,10 +284,12 @@ export default function ClassroomPage() {
     setSubmittedResponse(responseText.trim());
 
     if (result.gradingUnavailable) {
+      setGradingWasUnavailable(true);
       setTransitionMessage("");
       return;
     }
 
+    setGradingWasUnavailable(false);
     recordEngagement();
 
     if (currentStageId === "mastery" && result.status === "strong") {
@@ -342,14 +349,46 @@ export default function ClassroomPage() {
     setPressureOutcome(outcome);
   }
 
+  // Only reachable when the mouthpiece itself is unreachable (not on a real
+  // weak/partial grade) — moves the view forward WITHOUT recording any
+  // mastery, review schedule, or engagement, so it can never substitute for
+  // a real grade. Exists purely so the session's later stages are visible
+  // when grading genuinely can't run right now.
+  function handlePreviewAdvance() {
+    setGradingWasUnavailable(false);
+    setResponseText("");
+    setSubmittedResponse("");
+    setFeedbackMessage("");
+    setEvaluationStatus("");
+    setHasAttempted(false);
+    setShowVocabReference(false);
+    setShowScriptureReference(false);
+    setShowTeachingNote(false);
+
+    if (currentStageId === "mastery") {
+      setTransitionMessage("");
+      setSessionPhase("recall");
+      return;
+    }
+
+    const currentIndex = sessionStages.findIndex((stage) => stage.id === currentStageId);
+    const nextStage = sessionStages[currentIndex + 1];
+    if (nextStage) {
+      setCurrentStageId(nextStage.id);
+      setTransitionMessage(`Previewing ${nextStage.label} — not recorded as real progress.`);
+    }
+  }
+
   const feedbackTone =
     evaluationStatus === "strong"
       ? { bg: colors.strongBg, border: colors.strongBorder }
       : evaluationStatus === "partial"
         ? { bg: colors.partialBg, border: colors.partialBorder }
-        : evaluationStatus
-          ? { bg: colors.weakBg, border: colors.weakBorder }
-          : null;
+        : evaluationStatus === "empty"
+          ? { bg: "#f8fafc", border: colors.checkpointBorder }
+          : evaluationStatus
+            ? { bg: colors.weakBg, border: colors.weakBorder }
+            : null;
 
   const progressLevel = getStandardProgressLevel(standard.code);
   const showIntro = progressLevel === 0 && !introAcknowledged;
@@ -717,7 +756,7 @@ export default function ClassroomPage() {
                   </motion.p>
                 ) : null}
 
-                <div style={actionsRowStyle}>
+                <div style={submitRowStyle}>
                   <PrimaryButton
                     onClick={handleSubmitResponse}
                     disabled={isGrading}
@@ -725,22 +764,40 @@ export default function ClassroomPage() {
                   >
                     {isGrading ? "Grading…" : "Submit Response"}
                   </PrimaryButton>
-                  <SecondaryButton onClick={() => setShowScriptureReference((current) => !current)}>
-                    {hasAttempted || showScriptureReference ? "Hide Scripture" : "Study Scripture"}
-                  </SecondaryButton>
-                  {standard.vocabulary?.length ? (
-                    <SecondaryButton onClick={() => setShowVocabReference((current) => !current)}>
-                      {showVocabReference ? "Hide Vocabulary" : "Vocabulary"}
+                </div>
+
+                <div style={toolsWrapStyle}>
+                  <p style={toolsLabelStyle}>Need a hand while you think?</p>
+                  <div style={toolsRowStyle}>
+                    <SecondaryButton
+                      onClick={() => setShowScriptureReference((current) => !current)}
+                      style={toolButtonStyle}
+                    >
+                      {hasAttempted || showScriptureReference ? "Hide Scripture" : "Study Scripture"}
                     </SecondaryButton>
-                  ) : null}
-                  {standard.instructionalFocus ? (
-                    <SecondaryButton onClick={() => setShowTeachingNote((current) => !current)}>
-                      {showTeachingNote ? "Hide Teaching Note" : "Teaching Note"}
+                    {standard.vocabulary?.length ? (
+                      <SecondaryButton
+                        onClick={() => setShowVocabReference((current) => !current)}
+                        style={toolButtonStyle}
+                      >
+                        {showVocabReference ? "Hide Vocabulary" : "Vocabulary"}
+                      </SecondaryButton>
+                    ) : null}
+                    {standard.instructionalFocus ? (
+                      <SecondaryButton
+                        onClick={() => setShowTeachingNote((current) => !current)}
+                        style={toolButtonStyle}
+                      >
+                        {showTeachingNote ? "Hide Teaching Note" : "Teaching Note"}
+                      </SecondaryButton>
+                    ) : null}
+                    <SecondaryButton
+                      onClick={() => setShowAskPanel((current) => !current)}
+                      style={toolButtonStyle}
+                    >
+                      {showAskPanel ? "Hide Ask Jeremiah" : "Ask Jeremiah"}
                     </SecondaryButton>
-                  ) : null}
-                  <SecondaryButton onClick={() => setShowAskPanel((current) => !current)}>
-                    {showAskPanel ? "Hide Ask Jeremiah" : "Ask Jeremiah"}
-                  </SecondaryButton>
+                  </div>
                 </div>
 
                 {showAskPanel ? (
@@ -786,6 +843,13 @@ export default function ClassroomPage() {
                         <p style={submittedLabelStyle}>Your Response</p>
                         <p style={submittedTextStyle}>{submittedResponse}</p>
                       </>
+                    ) : null}
+                    {gradingWasUnavailable ? (
+                      <div style={{ marginTop: "14px" }}>
+                        <SecondaryButton onClick={handlePreviewAdvance} style={toolButtonStyle}>
+                          Preview Next Stage (Not Recorded)
+                        </SecondaryButton>
+                      </div>
                     ) : null}
                   </div>
                 ) : null}
@@ -1146,6 +1210,37 @@ const actionsRowStyle = {
   display: "flex",
   gap: "12px",
   flexWrap: "wrap",
+};
+
+const submitRowStyle = {
+  marginTop: "16px",
+};
+
+const toolsWrapStyle = {
+  marginTop: "18px",
+  paddingTop: "16px",
+  borderTop: `1px solid ${colors.checkpointBorder}`,
+};
+
+const toolsLabelStyle = {
+  margin: "0 0 10px",
+  fontSize: "0.76rem",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  color: colors.checkpointTextMid,
+  fontWeight: 700,
+};
+
+const toolsRowStyle = {
+  display: "flex",
+  gap: "8px",
+  flexWrap: "wrap",
+};
+
+const toolButtonStyle = {
+  padding: "9px 14px",
+  fontSize: "0.85rem",
+  borderRadius: "999px",
 };
 
 const feedbackLabelStyle = {
