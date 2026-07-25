@@ -8,7 +8,7 @@ import {
 } from "../../core/classroom/classroomSessionData";
 import Card from "../../shared/ui/Card";
 import StatGrid from "../../shared/ui/StatGrid";
-import { colors, radius } from "../../shared/theme";
+import { colors, radius, fonts } from "../../shared/theme";
 
 const AGE_BAND_OPTIONS = [
   { value: "child", label: "Child (5-12)", description: "Short sentences, warm, concrete." },
@@ -110,18 +110,21 @@ const heroStyle = { marginBottom: "24px" };
 
 const eyebrowStyle = {
   margin: 0,
-  fontSize: "0.82rem",
-  fontWeight: 800,
-  letterSpacing: "0.08em",
+  fontFamily: fonts.mono,
+  fontSize: "0.76rem",
+  fontWeight: 500,
+  letterSpacing: "0.16em",
   textTransform: "uppercase",
   color: colors.textMuted,
 };
 
 const titleStyle = {
-  margin: "8px 0 0",
-  fontSize: "clamp(2.3rem, 5vw, 3.8rem)",
-  lineHeight: 1.02,
-  fontWeight: 900,
+  margin: "14px 0 0",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 90, "wght" 420, "SOFT" 12, "WONK" 1',
+  fontSize: "clamp(2.2rem, 5vw, 3.4rem)",
+  lineHeight: 1.05,
   color: colors.text,
 };
 

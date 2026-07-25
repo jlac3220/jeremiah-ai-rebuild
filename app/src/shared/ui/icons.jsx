@@ -72,3 +72,11 @@ export function LockIcon({ size = 16 }) {
     </svg>
   );
 }
+
+export function ChevronIcon({ size = 16, style }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" style={style} {...strokeProps}>
+      <path d="M8 5l8 7-8 7" />
+    </svg>
+  );
+}

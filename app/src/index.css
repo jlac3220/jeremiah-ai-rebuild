@@ -42,3 +42,38 @@ textarea,
 input {
   font-family: inherit;
 }
+
+/* Mobile ships a bottom tab bar; desktop gets a persistent left sidebar
+   instead, so the wide space beside a narrow centered column isn't just
+   dead margin. See AppShell.jsx / DesktopSidebar.jsx. */
+.jai-bottom-nav {
+  display: block;
+}
+
+.jai-sidebar-nav {
+  display: none;
+}
+
+.jai-body-row {
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .jai-bottom-nav {
+    display: none;
+  }
+
+  .jai-sidebar-nav {
+    display: flex;
+  }
+
+  .jai-body-row {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .jai-main-area {
+    flex: 1;
+    min-width: 0;
+  }
+}

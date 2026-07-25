@@ -4,7 +4,7 @@ import { getActiveLearnerAgeBand } from "../../core/classroom/classroomSessionDa
 import ChatMessage from "./components/ChatMessage";
 import ChatInput from "./components/ChatInput";
 import ThinkingIndicator from "./components/ThinkingIndicator";
-import { colors } from "../../shared/theme";
+import { colors, fonts } from "../../shared/theme";
 
 const WELCOME_MESSAGE = {
   role: "assistant",
@@ -82,18 +82,21 @@ const heroStyle = { marginBottom: "20px" };
 
 const eyebrowStyle = {
   margin: 0,
-  fontSize: "0.82rem",
-  fontWeight: 800,
-  letterSpacing: "0.08em",
+  fontFamily: fonts.mono,
+  fontSize: "0.76rem",
+  fontWeight: 500,
+  letterSpacing: "0.16em",
   textTransform: "uppercase",
   color: colors.textMuted,
 };
 
 const titleStyle = {
-  margin: "8px 0 0",
+  margin: "12px 0 0",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 60, "wght" 420, "SOFT" 12, "WONK" 1',
   fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
-  lineHeight: 1.08,
-  fontWeight: 900,
+  lineHeight: 1.1,
   color: colors.text,
 };
 
@@ -115,7 +118,6 @@ const messagesScrollStyle = {
   overflowY: "auto",
   padding: "22px",
   minHeight: "320px",
-  maxHeight: "520px",
 };
 
 const inputWrapStyle = {

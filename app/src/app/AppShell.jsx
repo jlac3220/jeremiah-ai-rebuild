@@ -2,17 +2,21 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./router";
 import AppHeader from "../shared/layout/AppHeader";
 import BottomNav from "../shared/layout/BottomNav";
+import DesktopSidebar from "../shared/layout/DesktopSidebar";
 
 export default function AppShell() {
   return (
     <BrowserRouter>
       <div style={shellStyle}>
         <AppHeader />
-        <main style={mainStyle}>
-          <AppRoutes />
-        </main>
+        <div className="jai-body-row">
+          <DesktopSidebar />
+          <main className="jai-main-area" style={mainStyle}>
+            <AppRoutes />
+          </main>
+        </div>
 
-        <div style={bottomNavWrapStyle}>
+        <div className="jai-bottom-nav" style={bottomNavWrapStyle}>
           <BottomNav />
         </div>
       </div>
@@ -28,7 +32,6 @@ const shellStyle = {
 };
 
 const mainStyle = {
-  flex: 1,
   paddingBottom: "88px",
 };
 

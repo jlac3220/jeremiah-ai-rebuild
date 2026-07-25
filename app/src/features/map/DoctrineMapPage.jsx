@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   getSubjects,
   isSubjectUnlocked,
@@ -12,7 +12,7 @@ import { classroomPath } from "../../app/routes";
 import { colors, ignite, radius, fonts, gradients, getSubjectAccent } from "../../shared/theme";
 import { nodeHover, igniteGlow, currentPulse } from "../../shared/motion";
 import RingProgress from "../../shared/ui/RingProgress";
-import { LockIcon, FlameMark } from "../../shared/ui/icons";
+import { LockIcon, FlameMark, ChevronIcon } from "../../shared/ui/icons";
 
 // A short winding trail per domain (Khan/Duolingo-style path) instead of a
 // flat grid of rectangles — nodes alternate horizontal offset along a
@@ -26,21 +26,37 @@ function nodeStateFor(level, isNext) {
   return "unstarted";
 }
 
-// The Path of Fire gradient runs light-to-dark top to bottom. Rather than
-// track literal scroll position, each domain's text picks a zone by how far
-// through the subject it sits — standards are learned in order, so this
-// tracks the actual lit/unlit boundary closely enough to stay legible.
-function zoneFor(domainIndex, domainCount) {
-  const fraction = domainIndex / Math.max(domainCount - 1, 1);
-  if (fraction < 0.32) return "light";
-  if (fraction < 0.58) return "mid";
+// Domains hold themselves collapsed until reached — a subject can have 15+
+// domains and 70+ standards, so rendering every node open at once (a) made
+// the night-to-dawn gradient invisible (stretched over tens of thousands of
+// pixels, essentially flat in any normal view) and (b) was heavy enough to
+// noticeably jank scrolling. Each domain now runs its OWN short light-to-dark
+// journey when expanded, which keeps the gradient meaningful and the page light.
+function domainStats(domain, progress) {
+  let mastered = 0;
+  let inProgress = 0;
+  domain.standards.forEach((s) => {
+    const level = progress[s.code] || 0;
+    if (level >= 4) mastered += 1;
+    else if (level >= 1) inProgress += 1;
+  });
+  return { mastered, inProgress, total: domain.standards.length };
+}
+
+// Within one expanded domain (a handful of nodes), pick a light/mid/dark
+// text zone by position — short enough now that the gradient is always
+// visible in a single view.
+function nodeZoneFor(index, count) {
+  const fraction = index / Math.max(count - 1, 1);
+  if (fraction < 0.34) return "light";
+  if (fraction < 0.62) return "mid";
   return "dark";
 }
 
 const ZONE_TEXT = {
-  light: { domain: colors.textMuted, code: colors.textFaint, title: colors.text, shadow: "none" },
-  mid: { domain: "#f3e9ec", code: "rgba(243,241,246,0.7)", title: "#f8f4f6", shadow: "0 1px 5px rgba(0,0,0,0.3)" },
-  dark: { domain: colors.gold, code: colors.mistOnDark, title: "#f3f1f6", shadow: "0 1px 6px rgba(0,0,0,0.45)" },
+  light: { code: colors.textFaint, title: colors.text, shadow: "none" },
+  mid: { code: "rgba(243,241,246,0.7)", title: "#f8f4f6", shadow: "0 1px 5px rgba(0,0,0,0.3)" },
+  dark: { code: colors.mistOnDark, title: "#f3f1f6", shadow: "0 1px 6px rgba(0,0,0,0.45)" },
 };
 
 export default function DoctrineMapPage() {
@@ -48,6 +64,29 @@ export default function DoctrineMapPage() {
   const progress = useMemo(() => getStandardProgress(), []);
   const subjects = getSubjects();
   const nextStandard = useMemo(() => getNextUnmasteredStandard(progress), [progress]);
+
+  // Open by default: any domain with progress in it, or the one holding the
+  // very next standard — everything else starts collapsed.
+  const [openDomains, setOpenDomains] = useState(() => {
+    const initial = new Set();
+    subjects.forEach((subject) => {
+      subject.domains.forEach((domain) => {
+        const hasProgress = domain.standards.some((s) => (progress[s.code] || 0) > 0);
+        const hasNext = domain.standards.some((s) => nextStandard?.code === s.code);
+        if (hasProgress || hasNext) initial.add(domain.domainCode);
+      });
+    });
+    return initial;
+  });
+
+  function toggleDomain(domainCode) {
+    setOpenDomains((current) => {
+      const next = new Set(current);
+      if (next.has(domainCode)) next.delete(domainCode);
+      else next.add(domainCode);
+      return next;
+    });
+  }
 
   return (
     <div style={pageStyle}>
@@ -100,82 +139,120 @@ export default function DoctrineMapPage() {
                 </p>
               ) : null}
 
-              <div style={pathWrapStyle}>
-                {subject.domains.map((domain, domainIndex) => {
-                  const zone = zoneFor(domainIndex, subject.domains.length);
-                  const zoneText = ZONE_TEXT[zone];
+              <div style={domainListStyle}>
+                {subject.domains.map((domain) => {
+                  const isOpen = openDomains.has(domain.domainCode);
+                  const stats = domainStats(domain, progress);
+                  const hasNext = domain.standards.some((s) => nextStandard?.code === s.code);
 
                   return (
                     <div key={domain.domainCode} style={domainBlockStyle}>
-                      <p style={{ ...domainTitleStyle, color: zoneText.domain, textShadow: zoneText.shadow }}>
-                        {domain.domainCode} — {domain.domainTitle}
-                      </p>
+                      <button
+                        type="button"
+                        onClick={() => toggleDomain(domain.domainCode)}
+                        style={domainSummaryButtonStyle}
+                        aria-expanded={isOpen}
+                      >
+                        <span style={domainSummaryTextWrapStyle}>
+                          <span style={domainCodeLabelStyle}>{domain.domainCode}</span>
+                          <span style={domainTitleLabelStyle}>{domain.domainTitle}</span>
+                        </span>
+                        <span style={domainSummaryRightStyle}>
+                          {hasNext ? <span style={{ ...nextPillStyle, color: colors.gold }}>Next up</span> : null}
+                          <span style={domainCountStyle}>
+                            {stats.mastered}/{stats.total} mastered
+                          </span>
+                          <ChevronIcon
+                            size={16}
+                            style={{
+                              color: colors.textFaint,
+                              transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                              transition: "transform 180ms ease",
+                            }}
+                          />
+                        </span>
+                      </button>
 
-                      <div style={trailWrapStyle}>
-                        <div style={trailSpineStyle} aria-hidden="true" />
-                        <div style={trailNodesStyle}>
-                          {domain.standards.map((standard, i) => {
-                            const level = progress[standard.code] || 0;
-                            const isNext = unlocked && nextStandard?.code === standard.code;
-                            const state = nodeStateFor(level, isNext);
-                            const interactive = unlocked;
-                            const offset = ZIGZAG_OFFSETS[i % ZIGZAG_OFFSETS.length];
-                            const ringFill =
-                              state === "mastered"
-                                ? ignite.blaze
-                                : state === "current"
-                                  ? colors.gold
-                                  : state === "inProgress"
-                                    ? accent.base
-                                    : colors.textFaint;
+                      <AnimatePresence initial={false}>
+                        {isOpen ? (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.28, ease: "easeOut" }}
+                            style={{ overflow: "hidden" }}
+                          >
+                            <div style={pathWrapStyle}>
+                              <div style={trailWrapStyle}>
+                                <div style={trailSpineStyle} aria-hidden="true" />
+                                <div style={trailNodesStyle}>
+                                  {domain.standards.map((standard, i) => {
+                                    const level = progress[standard.code] || 0;
+                                    const isNext = unlocked && nextStandard?.code === standard.code;
+                                    const state = nodeStateFor(level, isNext);
+                                    const interactive = unlocked;
+                                    const offset = ZIGZAG_OFFSETS[i % ZIGZAG_OFFSETS.length];
+                                    const zoneText = ZONE_TEXT[nodeZoneFor(i, domain.standards.length)];
+                                    const ringFill =
+                                      state === "mastered"
+                                        ? ignite.blaze
+                                        : state === "current"
+                                          ? colors.gold
+                                          : state === "inProgress"
+                                            ? accent.base
+                                            : colors.textFaint;
 
-                            return (
-                              <div
-                                key={standard.code}
-                                style={{ ...trailNodeRowStyle, transform: `translateX(${offset}px)` }}
-                              >
-                                <motion.button
-                                  type="button"
-                                  disabled={!interactive}
-                                  onClick={() => navigate(classroomPath(standard.code))}
-                                  {...(interactive ? nodeHover : {})}
-                                  {...(state === "mastered" ? igniteGlow : {})}
-                                  {...(state === "current" ? currentPulse : {})}
-                                  style={{
-                                    ...nodeCircleButtonStyle,
-                                    ...(state === "current" ? { border: `2px solid ${colors.gold}` } : null),
-                                    ...(interactive ? null : { cursor: "not-allowed", opacity: 0.65 }),
-                                  }}
-                                >
-                                  <RingProgress
-                                    percent={(level / 4) * 100}
-                                    size={64}
-                                    strokeWidth={5}
-                                    trackColor="#e2e8f0"
-                                    fillColor={ringFill}
-                                  >
-                                    {!interactive ? (
-                                      <LockIcon size={20} />
-                                    ) : state === "mastered" ? (
-                                      <FlameMark size={24} />
-                                    ) : (
-                                      <span style={{ fontFamily: fonts.mono, fontSize: "1.1rem", fontWeight: 600 }}>
-                                        {i + 1}
-                                      </span>
-                                    )}
-                                  </RingProgress>
-                                </motion.button>
-                                <div style={trailLabelStyle}>
-                                  <p style={{ ...trailCodeStyle, color: zoneText.code }}>{standard.code}</p>
-                                  <p style={{ ...trailTitleTextStyle, color: zoneText.title, textShadow: zoneText.shadow }}>
-                                    {standard.title}
-                                  </p>
+                                    return (
+                                      <div
+                                        key={standard.code}
+                                        style={{ ...trailNodeRowStyle, transform: `translateX(${offset}px)` }}
+                                      >
+                                        <motion.button
+                                          type="button"
+                                          disabled={!interactive}
+                                          onClick={() => navigate(classroomPath(standard.code))}
+                                          {...(interactive ? nodeHover : {})}
+                                          {...(state === "mastered" ? igniteGlow : {})}
+                                          {...(state === "current" ? currentPulse : {})}
+                                          style={{
+                                            ...nodeCircleButtonStyle,
+                                            ...(state === "current" ? { border: `2px solid ${colors.gold}` } : null),
+                                            ...(interactive ? null : { cursor: "not-allowed", opacity: 0.65 }),
+                                          }}
+                                        >
+                                          <RingProgress
+                                            percent={(level / 4) * 100}
+                                            size={64}
+                                            strokeWidth={5}
+                                            trackColor="#e2e8f0"
+                                            fillColor={ringFill}
+                                          >
+                                            {!interactive ? (
+                                              <LockIcon size={20} />
+                                            ) : state === "mastered" ? (
+                                              <FlameMark size={24} />
+                                            ) : (
+                                              <span style={{ fontFamily: fonts.mono, fontSize: "1.1rem", fontWeight: 600 }}>
+                                                {i + 1}
+                                              </span>
+                                            )}
+                                          </RingProgress>
+                                        </motion.button>
+                                        <div style={trailLabelStyle}>
+                                          <p style={{ ...trailCodeStyle, color: zoneText.code }}>{standard.code}</p>
+                                          <p style={{ ...trailTitleTextStyle, color: zoneText.title, textShadow: zoneText.shadow }}>
+                                            {standard.title}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               </div>
-                            );
-                          })}
-                        </div>
-                      </div>
+                            </div>
+                          </motion.div>
+                        ) : null}
+                      </AnimatePresence>
                     </div>
                   );
                 })}
@@ -298,20 +375,75 @@ const lockedTextStyle = {
 
 const pathWrapStyle = {
   background: gradients.pathOfFire,
-  padding: "18px 26px 40px",
+  borderRadius: radius.md,
+  padding: "20px 10px 32px",
+  marginTop: "2px",
+};
+
+const domainListStyle = {
+  background: "#f3f1f6",
+  padding: "6px 26px 26px",
 };
 
 const domainBlockStyle = {
-  marginTop: "24px",
+  borderTop: "1px solid rgba(28, 20, 32, 0.08)",
 };
 
-const domainTitleStyle = {
-  margin: "0 0 16px",
+const domainSummaryButtonStyle = {
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "14px",
+  padding: "16px 4px",
+  border: "none",
+  background: "transparent",
+  cursor: "pointer",
+  textAlign: "left",
+};
+
+const domainSummaryTextWrapStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "3px",
+  minWidth: 0,
+};
+
+const domainCodeLabelStyle = {
   fontFamily: fonts.mono,
-  fontSize: "0.72rem",
+  fontSize: "0.7rem",
   fontWeight: 500,
   letterSpacing: "0.1em",
   textTransform: "uppercase",
+  color: colors.textFaint,
+};
+
+const domainTitleLabelStyle = {
+  fontSize: "0.98rem",
+  fontWeight: 800,
+  color: colors.text,
+};
+
+const domainSummaryRightStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "12px",
+  flexShrink: 0,
+};
+
+const nextPillStyle = {
+  fontFamily: fonts.mono,
+  fontSize: "0.68rem",
+  fontWeight: 600,
+  letterSpacing: "0.06em",
+  textTransform: "uppercase",
+};
+
+const domainCountStyle = {
+  fontFamily: fonts.mono,
+  fontSize: "0.76rem",
+  color: colors.textFaint,
+  whiteSpace: "nowrap",
 };
 
 const trailWrapStyle = {

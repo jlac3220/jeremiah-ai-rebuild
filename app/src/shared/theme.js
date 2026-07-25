@@ -25,7 +25,15 @@ export function getSubjectAccent(subjectCode) {
 }
 
 export const gradients = {
-  page: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
+  // A quiet version of the same atmosphere the hero and Map use — soft
+  // amber and indigo glows over a pale ground, instead of a flat two-stop
+  // gradient. This is what shows in the wide margins either side of the
+  // centered content column on a desktop-width screen, so that space reads
+  // as designed rather than empty.
+  page:
+    "radial-gradient(ellipse 65% 45% at 8% 0%, rgba(255, 138, 0, 0.08) 0%, transparent 55%)," +
+    "radial-gradient(ellipse 60% 50% at 100% 30%, rgba(0, 61, 165, 0.06) 0%, transparent 55%)," +
+    "linear-gradient(180deg, #f8fafc 0%, #eef1fb 100%)",
 
   // A dark hero card with real atmosphere: base navy gradient plus two soft
   // radial glows (amber lower-left, red upper-right) layered on top —
