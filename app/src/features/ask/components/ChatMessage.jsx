@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { colors } from "../../../shared/theme";
 import { chatMessageIn } from "../../../shared/motion";
+import { FlameMark } from "../../../shared/ui/icons";
 
 export default function ChatMessage({ role, content }) {
   const isUser = role === "user";
@@ -10,13 +11,21 @@ export default function ChatMessage({ role, content }) {
       {...chatMessageIn}
       style={{
         display: "flex",
+        flexDirection: isUser ? "row-reverse" : "row",
+        alignItems: "flex-end",
+        gap: "8px",
         justifyContent: isUser ? "flex-end" : "flex-start",
         marginBottom: "12px",
       }}
     >
+      {!isUser ? (
+        <div style={avatarStyle}>
+          <FlameMark size={18} />
+        </div>
+      ) : null}
       <div
         style={{
-          maxWidth: "80%",
+          maxWidth: "78%",
           borderRadius: "18px",
           padding: "14px 16px",
           lineHeight: 1.6,
@@ -31,3 +40,14 @@ export default function ChatMessage({ role, content }) {
     </motion.div>
   );
 }
+
+const avatarStyle = {
+  width: "28px",
+  height: "28px",
+  borderRadius: "999px",
+  background: "#0f172a",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+};

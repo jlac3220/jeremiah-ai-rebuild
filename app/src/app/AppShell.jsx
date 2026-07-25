@@ -1,11 +1,13 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./router";
+import AppHeader from "../shared/layout/AppHeader";
 import BottomNav from "../shared/layout/BottomNav";
 
 export default function AppShell() {
   return (
     <BrowserRouter>
       <div style={shellStyle}>
+        <AppHeader />
         <main style={mainStyle}>
           <AppRoutes />
         </main>

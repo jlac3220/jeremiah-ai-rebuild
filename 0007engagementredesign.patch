@@ -1,0 +1,939 @@
+From 4aaf036f27cd0d69eea042cb9d76eb02b8100016 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 25 Jul 2026 13:27:46 +0000
+Subject: [PATCH] Engagement redesign: retrieval-first learning, spaced review,
+ Defend the Faith
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Research (active recall/spaced repetition literature, Duolingo's own
+documented mechanics) pointed to three concrete gaps in the previous
+Classroom loop:
+
+1. Retrieval was backwards — verses showed before the learner answered, so
+   responding was really just re-reading. ClassroomPage now hides scripture
+   evidence until after the first attempt for each stage (attempt from
+   memory, then reveal + correct), matching how retrieval practice actually
+   strengthens memory versus read-then-answer.
+
+2. No spaced repetition existed. standardsProgress.js adds a real SM-2-lite
+   schedule (scheduleNextReview/getDueForReview, 1/3/7/21/60-day intervals
+   that grow on success and reset short on failure) as a separate store
+   from the existing level map, so nothing that already reads plain levels
+   (Map lock logic, isSubjectMastered) had to change.
+
+3. No engagement loop existed. New Edge Function defend-the-faith turns
+   spaced review into something worth returning for: every standard's own
+   Defense-level evidence-of-learning already names a real opposing
+   objection (e.g. the trinitarian claim about echad/Genesis 2:24) —
+   Jeremiah now argues that exact position and the learner has to hold the
+   doctrine in a live multi-turn exchange, not a flashcard. Outcome drives
+   the review schedule directly. New streak module (core/streak/streak.js)
+   only increments on a genuine graded action (a real Classroom grading
+   result or a completed Defend round), deliberately avoiding Duolingo's
+   documented failure mode of streak-protecting speed-runs that skip real
+   learning. Home now surfaces a Review Queue (standards due today) and a
+   loss-aversion-framed streak pill.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_015EaC2QTCCcKGCYRwcnbYsY
+---
+ app/src/app/router.jsx                        |   2 +
+ app/src/app/routes.js                         |   5 +
+ app/src/core/defend/defendTheFaith.js         |  40 ++++
+ app/src/core/standards/standardsProgress.js   |  56 +++++
+ app/src/core/streak/streak.js                 |  50 +++++
+ app/src/features/classroom/ClassroomPage.jsx  |  77 +++++--
+ .../features/defend/DefendTheFaithPage.jsx    | 204 ++++++++++++++++++
+ app/src/features/home/HomePage.jsx            |  76 ++++++-
+ .../functions/defend-the-faith/index.ts       | 169 +++++++++++++++
+ 9 files changed, 656 insertions(+), 23 deletions(-)
+ create mode 100644 app/src/core/defend/defendTheFaith.js
+ create mode 100644 app/src/core/streak/streak.js
+ create mode 100644 app/src/features/defend/DefendTheFaithPage.jsx
+ create mode 100644 app/supabase/functions/defend-the-faith/index.ts
+
+diff --git a/app/src/app/router.jsx b/app/src/app/router.jsx
+index 6dcc3a9..69375cd 100644
+--- a/app/src/app/router.jsx
++++ b/app/src/app/router.jsx
+@@ -3,6 +3,7 @@ import { ROUTES } from "./routes";
+ import HomePage from "../features/home/HomePage";
+ import DoctrineMapPage from "../features/map/DoctrineMapPage";
+ import ClassroomPage from "../features/classroom/ClassroomPage";
++import DefendTheFaithPage from "../features/defend/DefendTheFaithPage";
+ import AskJeremiahPage from "../features/ask/AskJeremiahPage";
+ import ProgressPage from "../features/progress/ProgressPage";
+ import ProfilePage from "../features/profile/ProfilePage";
+@@ -14,6 +15,7 @@ export default function AppRoutes() {
+       <Route path={ROUTES.HOME} element={<HomePage />} />
+       <Route path={ROUTES.MAP} element={<DoctrineMapPage />} />
+       <Route path={ROUTES.CLASSROOM} element={<ClassroomPage />} />
++      <Route path={ROUTES.DEFEND} element={<DefendTheFaithPage />} />
+       <Route path={ROUTES.BIBLE_SUPPORT} element={<BibleSupportPage />} />
+       <Route path={ROUTES.ASK} element={<AskJeremiahPage />} />
+       <Route path={ROUTES.PROGRESS} element={<ProgressPage />} />
+diff --git a/app/src/app/routes.js b/app/src/app/routes.js
+index 90ae0af..e7e13b1 100644
+--- a/app/src/app/routes.js
++++ b/app/src/app/routes.js
+@@ -3,6 +3,7 @@ export const ROUTES = {
+   HOME: "/",
+   MAP: "/map",
+   CLASSROOM: "/classroom/:standardCode",
++  DEFEND: "/defend/:standardCode",
+   ASK: "/ask",
+   PROGRESS: "/progress",
+   PROFILE: "/profile",
+@@ -13,6 +14,10 @@ export function classroomPath(standardCode) {
+   return `/classroom/${standardCode}`;
+ }
+ 
++export function defendPath(standardCode) {
++  return `/defend/${standardCode}`;
++}
++
+ export function bibleSupportPath(standardCode) {
+   return `/classroom/${standardCode}/bible-support`;
+ }
+diff --git a/app/src/core/defend/defendTheFaith.js b/app/src/core/defend/defendTheFaith.js
+new file mode 100644
+index 0000000..be1194d
+--- /dev/null
++++ b/app/src/core/defend/defendTheFaith.js
+@@ -0,0 +1,40 @@
++import { getEdgeFunctionUrl, SUPABASE_ANON_KEY } from "../config/supabaseConfig";
++
++const DEFEND_ENDPOINT = getEdgeFunctionUrl("defend-the-faith");
++
++/**
++ * One exchange in a Defend the Faith round. Pass learnerReply=null to get
++ * Jeremiah's opening objection. Never fabricates a verdict locally — an
++ * unreachable function returns unavailable:true instead of faking a result.
++ */
++export async function defendTheFaithExchange(standard, conversationHistory, learnerReply, ageBand = "adult") {
++  try {
++    const response = await fetch(DEFEND_ENDPOINT, {
++      method: "POST",
++      headers: {
++        "Content-Type": "application/json",
++        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
++        apikey: SUPABASE_ANON_KEY,
++      },
++      body: JSON.stringify({ standard, conversationHistory, learnerReply, ageBand }),
++    });
++
++    if (!response.ok) {
++      throw new Error(`Defend request failed with ${response.status}`);
++    }
++
++    const result = await response.json();
++    if (typeof result?.reply !== "string") {
++      throw new Error("Defend response was missing a reply");
++    }
++
++    return { ...result, unavailable: false };
++  } catch {
++    return {
++      reply: "Jeremiah can't continue this round right now (connection issue). Try again shortly.",
++      verdict: null,
++      roundComplete: true,
++      unavailable: true,
++    };
++  }
++}
+diff --git a/app/src/core/standards/standardsProgress.js b/app/src/core/standards/standardsProgress.js
+index bacee1c..179d8cc 100644
+--- a/app/src/core/standards/standardsProgress.js
++++ b/app/src/core/standards/standardsProgress.js
+@@ -36,3 +36,59 @@ export function getStandardProgressLevel(standardCode) {
+ export function isStandardMastered(standardCode) {
+   return getStandardProgressLevel(standardCode) >= 4;
+ }
++
++// Spaced-repetition review scheduling — kept as a separate store from the
++// plain level map above so existing level-based consumers (Map lock logic,
++// isSubjectMastered, etc.) are untouched. SM-2-lite: success grows the
++// interval, failure resets it short. See "Defend the Faith" — reviewing a
++// mastered standard means Jeremiah re-argues its Defense-level objection.
++const REVIEW_STORAGE_KEY = "jeremiah-ai-review-schedule";
++const SPACED_INTERVALS_DAYS = [1, 3, 7, 21, 60];
++const DAY_MS = 24 * 60 * 60 * 1000;
++
++function getReviewSchedule() {
++  if (typeof window === "undefined") return {};
++  try {
++    return JSON.parse(window.localStorage.getItem(REVIEW_STORAGE_KEY) || "{}");
++  } catch {
++    return {};
++  }
++}
++
++function saveReviewSchedule(schedule) {
++  if (typeof window === "undefined") return;
++  window.localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify(schedule));
++}
++
++/** Call once a standard first reaches mastery, and again after every Defend the Faith round. */
++export function scheduleNextReview(standardCode, wasSuccessful) {
++  if (typeof window === "undefined" || !standardCode) return;
++  const schedule = getReviewSchedule();
++  const current = schedule[standardCode] || { reviewCount: 0, nextReviewAt: 0 };
++
++  const reviewCount = wasSuccessful ? current.reviewCount + 1 : 0;
++  const intervalDays = wasSuccessful
++    ? SPACED_INTERVALS_DAYS[Math.min(reviewCount - 1, SPACED_INTERVALS_DAYS.length - 1)]
++    : 1;
++
++  schedule[standardCode] = {
++    reviewCount,
++    nextReviewAt: Date.now() + intervalDays * DAY_MS,
++  };
++  saveReviewSchedule(schedule);
++}
++
++export function getReviewInfo(standardCode) {
++  return getReviewSchedule()[standardCode] || null;
++}
++
++/** Mastered standards (level >= 4) whose review is due — or never scheduled yet. */
++export function getDueForReview(progress) {
++  const schedule = getReviewSchedule();
++  const now = Date.now();
++  return Object.keys(progress || {}).filter((code) => {
++    if ((progress[code] || 0) < 4) return false;
++    const entry = schedule[code];
++    return !entry || entry.nextReviewAt <= now;
++  });
++}
+diff --git a/app/src/core/streak/streak.js b/app/src/core/streak/streak.js
+new file mode 100644
+index 0000000..b76eae0
+--- /dev/null
++++ b/app/src/core/streak/streak.js
+@@ -0,0 +1,50 @@
++// Daily engagement streak — loss-aversion + habit-loop mechanic.
++//
++// Deliberately only increments on a genuine graded action (a Classroom
++// grading result, or a completed Defend the Faith round) — never on merely
++// opening the app or visiting a page. Duolingo's own documented failure
++// mode is users speed-running trivial actions purely to protect the streak
++// instead of actually learning; gating on real engagement avoids that.
++const STORAGE_KEY = "jeremiah-ai-streak";
++
++function todayKey() {
++  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD, local-ish via ISO
++}
++
++function daysBetween(a, b) {
++  const msPerDay = 24 * 60 * 60 * 1000;
++  return Math.round((new Date(b) - new Date(a)) / msPerDay);
++}
++
++export function getStreak() {
++  if (typeof window === "undefined") return { count: 0, lastActiveDate: null };
++  try {
++    return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "null") || { count: 0, lastActiveDate: null };
++  } catch {
++    return { count: 0, lastActiveDate: null };
++  }
++}
++
++function saveStreak(streak) {
++  if (typeof window === "undefined") return;
++  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(streak));
++}
++
++/** Call only after a real graded interaction completes. */
++export function recordEngagement() {
++  if (typeof window === "undefined") return;
++  const streak = getStreak();
++  const today = todayKey();
++
++  if (streak.lastActiveDate === today) return; // already counted today
++
++  const gap = streak.lastActiveDate ? daysBetween(streak.lastActiveDate, today) : null;
++  const nextCount = gap === 1 ? streak.count + 1 : 1;
++
++  saveStreak({ count: nextCount, lastActiveDate: today });
++}
++
++/** Whether today's engagement has already been recorded (streak is safe today). */
++export function hasEngagedToday() {
++  return getStreak().lastActiveDate === todayKey();
++}
+diff --git a/app/src/features/classroom/ClassroomPage.jsx b/app/src/features/classroom/ClassroomPage.jsx
+index 1d7f25b..defabcb 100644
+--- a/app/src/features/classroom/ClassroomPage.jsx
++++ b/app/src/features/classroom/ClassroomPage.jsx
+@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
+ import { useParams, useNavigate, Link } from "react-router-dom";
+ import { AnimatePresence, motion } from "framer-motion";
+ import { getStandardByCode } from "../../core/standards/standardsRegistry";
+-import { raiseStandardProgressLevel, getStandardProgressLevel } from "../../core/standards/standardsProgress";
++import { raiseStandardProgressLevel, getStandardProgressLevel, scheduleNextReview } from "../../core/standards/standardsProgress";
++import { recordEngagement } from "../../core/streak/streak";
+ import {
+   getSavedLiveStageForStandard,
+   setSavedLiveStageForStandard,
+@@ -39,6 +40,10 @@ export default function ClassroomPage() {
+   const [transitionMessage, setTransitionMessage] = useState("");
+   const [isGrading, setIsGrading] = useState(false);
+   const [justMastered, setJustMastered] = useState(false);
++  // Retrieval-first: verses stay hidden until the learner has attempted an
++  // answer from memory for the current stage. Research on active recall is
++  // clear that attempt-then-check beats read-then-answer for retention.
++  const [hasAttempted, setHasAttempted] = useState(false);
+ 
+   useEffect(() => {
+     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
+@@ -48,6 +53,7 @@ export default function ClassroomPage() {
+     setEvaluationStatus("");
+     setTransitionMessage("");
+     setJustMastered(false);
++    setHasAttempted(false);
+   }, [standardCode]);
+ 
+   const currentStage = useMemo(
+@@ -100,16 +106,28 @@ export default function ClassroomPage() {
+     setEvaluationStatus(result.status);
+     setFeedbackMessage(result.feedback);
+ 
+-    if (result.status === "empty" || result.gradingUnavailable) {
++    if (result.status === "empty") {
+       setSubmittedResponse("");
+       setTransitionMessage("");
+       return;
+     }
+ 
++    // Reveal the verses on any real attempt, even if grading itself failed —
++    // retrieval-first is about the learner trying before seeing the answer,
++    // not about whether the mouthpiece happened to be reachable.
++    setHasAttempted(true);
+     setSubmittedResponse(responseText.trim());
+ 
++    if (result.gradingUnavailable) {
++      setTransitionMessage("");
++      return;
++    }
++
++    recordEngagement();
++
+     if (currentStageId === "mastery" && result.status === "strong") {
+       raiseStandardProgressLevel(standard.code, 4);
++      scheduleNextReview(standard.code, true);
+       setJustMastered(true);
+       setTransitionMessage(`${standard.title} is now mastered.`);
+       return;
+@@ -125,6 +143,7 @@ export default function ClassroomPage() {
+       setSubmittedResponse("");
+       setFeedbackMessage("");
+       setEvaluationStatus("");
++      setHasAttempted(false);
+       const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
+       setTransitionMessage(nextStage ? `Advanced to ${nextStage.label}.` : "");
+     } else {
+@@ -221,24 +240,7 @@ export default function ClassroomPage() {
+             </motion.div>
+           ) : (
+             <motion.div key={currentStageId} {...stageTransition}>
+-              <Card style={{ marginBottom: "20px" }}>
+-                <p style={sectionEyebrowStyle}>Scripture Evidence</p>
+-                <div style={verseListStyle}>
+-                  {standard.anchorScriptures.map((verse) => (
+-                    <div key={verse.reference} style={verseCardStyle}>
+-                      <p style={verseRefStyle}>{verse.reference}</p>
+-                      <p style={verseTextStyle}>{verse.text}</p>
+-                    </div>
+-                  ))}
+-                </div>
+-                <div style={{ marginTop: "12px" }}>
+-                  <Link to={bibleSupportPath(standard.code)} style={breadcrumbLinkStyle}>
+-                    Open in Bible Support →
+-                  </Link>
+-                </div>
+-              </Card>
+-
+-              <Card variant="checkpoint">
++              <Card variant="checkpoint" style={{ marginBottom: "20px" }}>
+                 <p style={sectionEyebrowDarkStyle}>{currentStage.label}</p>
+                 <h3 style={stageTitleStyle}>{currentStageContent.title}</h3>
+                 <p style={stageDescriptionStyle}>{currentStageContent.description}</p>
+@@ -248,6 +250,13 @@ export default function ClassroomPage() {
+                   <p style={promptTextStyle}>{stagePrompt}</p>
+                 </div>
+ 
++                {!hasAttempted ? (
++                  <p style={retrievalHintStyle}>
++                    Answer from memory first — the verses will appear once you submit, so you
++                    can check and correct yourself.
++                  </p>
++                ) : null}
++
+                 <textarea
+                   value={responseText}
+                   onChange={(event) => setResponseText(event.target.value)}
+@@ -297,6 +306,27 @@ export default function ClassroomPage() {
+                   </div>
+                 ) : null}
+               </Card>
++
++              {hasAttempted ? (
++                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
++                  <Card style={{ marginBottom: "20px" }}>
++                    <p style={sectionEyebrowStyle}>Scripture Evidence — Check Yourself</p>
++                    <div style={verseListStyle}>
++                      {standard.anchorScriptures.map((verse) => (
++                        <div key={verse.reference} style={verseCardStyle}>
++                          <p style={verseRefStyle}>{verse.reference}</p>
++                          <p style={verseTextStyle}>{verse.text}</p>
++                        </div>
++                      ))}
++                    </div>
++                    <div style={{ marginTop: "12px" }}>
++                      <Link to={bibleSupportPath(standard.code)} style={breadcrumbLinkStyle}>
++                        Open in Bible Support →
++                      </Link>
++                    </div>
++                  </Card>
++                </motion.div>
++              ) : null}
+             </motion.div>
+           )}
+         </AnimatePresence>
+@@ -455,6 +485,13 @@ const promptLabelStyle = {
+   fontWeight: 700,
+ };
+ 
++const retrievalHintStyle = {
++  margin: "14px 0 0",
++  fontSize: "0.88rem",
++  fontStyle: "italic",
++  color: colors.checkpointTextMid,
++};
++
+ const promptTextStyle = {
+   margin: "8px 0 0",
+   lineHeight: 1.7,
+diff --git a/app/src/features/defend/DefendTheFaithPage.jsx b/app/src/features/defend/DefendTheFaithPage.jsx
+new file mode 100644
+index 0000000..0b26308
+--- /dev/null
++++ b/app/src/features/defend/DefendTheFaithPage.jsx
+@@ -0,0 +1,204 @@
++import { useEffect, useRef, useState } from "react";
++import { useParams, Link } from "react-router-dom";
++import { getStandardByCode } from "../../core/standards/standardsRegistry";
++import { scheduleNextReview } from "../../core/standards/standardsProgress";
++import { getActiveLearnerAgeBand } from "../../core/classroom/classroomSessionData";
++import { recordEngagement } from "../../core/streak/streak";
++import { defendTheFaithExchange } from "../../core/defend/defendTheFaith";
++import ChatMessage from "../ask/components/ChatMessage";
++import ChatInput from "../ask/components/ChatInput";
++import ThinkingIndicator from "../ask/components/ThinkingIndicator";
++import Card from "../../shared/ui/Card";
++import Pill from "../../shared/ui/Pill";
++import PrimaryButton from "../../shared/ui/PrimaryButton";
++import SecondaryButton from "../../shared/ui/SecondaryButton";
++import { colors } from "../../shared/theme";
++import { ROUTES, classroomPath } from "../../app/routes";
++
++const VERDICT_TONE = { held: "mastered", wavered: "review", conceded: "weak" };
++const VERDICT_LABEL = { held: "Held the line", wavered: "Wavered", conceded: "Conceded ground" };
++
++export default function DefendTheFaithPage() {
++  const { standardCode } = useParams();
++  const standard = getStandardByCode(standardCode);
++  const ageBand = getActiveLearnerAgeBand();
++
++  const [messages, setMessages] = useState([]);
++  const [verdicts, setVerdicts] = useState([]);
++  const [isThinking, setIsThinking] = useState(false);
++  const [roundComplete, setRoundComplete] = useState(false);
++  const [finalOutcome, setFinalOutcome] = useState(null);
++  const scrollRef = useRef(null);
++  const startedRef = useRef(false);
++
++  useEffect(() => {
++    if (!standard || startedRef.current) return;
++    startedRef.current = true;
++    setIsThinking(true);
++    defendTheFaithExchange(standard, [], null, ageBand).then((result) => {
++      setIsThinking(false);
++      setMessages([{ role: "assistant", content: result.reply }]);
++      if (result.roundComplete) {
++        setRoundComplete(true);
++      }
++    });
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++  }, [standard]);
++
++  useEffect(() => {
++    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
++  }, [messages, isThinking]);
++
++  if (!standard) {
++    return (
++      <div style={pageStyle}>
++        <div style={contentStyle}>
++          <Card>
++            <p>Standard not found.</p>
++            <Link to={ROUTES.MAP}>
++              <SecondaryButton>Back to Map</SecondaryButton>
++            </Link>
++          </Card>
++        </div>
++      </div>
++    );
++  }
++
++  async function handleReply(text) {
++    const nextMessages = [...messages, { role: "user", content: text }];
++    setMessages(nextMessages);
++    setIsThinking(true);
++
++    const result = await defendTheFaithExchange(standard, messages, text, ageBand);
++    setIsThinking(false);
++    setMessages((current) => [...current, { role: "assistant", content: result.reply }]);
++    if (result.verdict) setVerdicts((current) => [...current, result.verdict]);
++
++    if (result.roundComplete) {
++      setRoundComplete(true);
++      const success = result.verdict === "held";
++      scheduleNextReview(standard.code, success);
++      if (!result.unavailable) recordEngagement();
++      setFinalOutcome(success ? "success" : "retry");
++    }
++  }
++
++  return (
++    <div style={pageStyle}>
++      <div style={contentStyle}>
++        <section style={heroStyle}>
++          <p style={eyebrowStyle}>DEFEND THE FAITH — SPACED REVIEW</p>
++          <h1 style={titleStyle}>{standard.title}</h1>
++          <p style={subtitleStyle}>
++            Jeremiah is now arguing the opposing side to test whether you can still hold this
++            standard. Answer with real scriptural reasoning, not just agreement.
++          </p>
++        </section>
++
++        <div style={chatFrameStyle}>
++          <div ref={scrollRef} style={messagesScrollStyle}>
++            {messages.map((message, index) => (
++              <div key={index}>
++                <ChatMessage role={message.role} content={message.content} />
++                {message.role === "user" && verdicts[Math.floor(index / 2)] ? (
++                  <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "12px" }}>
++                    <Pill tone={VERDICT_TONE[verdicts[Math.floor(index / 2)]] || "neutral"}>
++                      {VERDICT_LABEL[verdicts[Math.floor(index / 2)]]}
++                    </Pill>
++                  </div>
++                ) : null}
++              </div>
++            ))}
++            {isThinking ? <ThinkingIndicator /> : null}
++          </div>
++
++          {!roundComplete ? (
++            <div style={inputWrapStyle}>
++              <ChatInput onSend={handleReply} disabled={isThinking} />
++            </div>
++          ) : (
++            <div style={inputWrapStyle}>
++              <Card variant={finalOutcome === "success" ? "light" : "subtle"} style={{ textAlign: "center" }}>
++                <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: 900, color: colors.text }}>
++                  {finalOutcome === "success" ? "You held the line." : "This one needs more work."}
++                </h3>
++                <p style={{ margin: "10px 0 0", color: colors.textMuted }}>
++                  {finalOutcome === "success"
++                    ? "Review scheduled further out — you've shown you can still defend this."
++                    : "Review scheduled sooner. Revisit the standard in Classroom before trying again."}
++                </p>
++                <div style={{ marginTop: "16px", display: "flex", gap: "12px", justifyContent: "center" }}>
++                  <Link to={ROUTES.MAP}>
++                    <PrimaryButton>Back to Map</PrimaryButton>
++                  </Link>
++                  <Link to={classroomPath(standard.code)}>
++                    <SecondaryButton>Revisit in Classroom</SecondaryButton>
++                  </Link>
++                </div>
++              </Card>
++            </div>
++          )}
++        </div>
++      </div>
++    </div>
++  );
++}
++
++const pageStyle = { minHeight: "100%", background: colors.pageGradient };
++
++const contentStyle = {
++  width: "100%",
++  maxWidth: "760px",
++  margin: "0 auto",
++  padding: "32px 20px 120px",
++  boxSizing: "border-box",
++  display: "flex",
++  flexDirection: "column",
++  minHeight: "calc(100vh - 88px)",
++};
++
++const heroStyle = { marginBottom: "20px" };
++
++const eyebrowStyle = {
++  margin: 0,
++  fontSize: "0.82rem",
++  fontWeight: 800,
++  letterSpacing: "0.08em",
++  textTransform: "uppercase",
++  color: colors.reviewText,
++};
++
++const titleStyle = {
++  margin: "8px 0 0",
++  fontSize: "clamp(1.8rem, 4vw, 2.4rem)",
++  lineHeight: 1.08,
++  fontWeight: 900,
++  color: colors.text,
++};
++
++const subtitleStyle = { margin: "12px 0 0", fontSize: "1rem", lineHeight: 1.6, color: colors.textMuted };
++
++const chatFrameStyle = {
++  flex: 1,
++  display: "flex",
++  flexDirection: "column",
++  background: colors.cardBg,
++  border: `1px solid ${colors.cardBorder}`,
++  boxShadow: colors.cardShadow,
++  borderRadius: "26px",
++  overflow: "hidden",
++};
++
++const messagesScrollStyle = {
++  flex: 1,
++  overflowY: "auto",
++  padding: "22px",
++  minHeight: "320px",
++  maxHeight: "520px",
++};
++
++const inputWrapStyle = {
++  borderTop: `1px solid ${colors.cardBorder}`,
++  padding: "16px 22px",
++  background: "#f8fafc",
++};
+diff --git a/app/src/features/home/HomePage.jsx b/app/src/features/home/HomePage.jsx
+index 02cce57..a31b394 100644
+--- a/app/src/features/home/HomePage.jsx
++++ b/app/src/features/home/HomePage.jsx
+@@ -5,12 +5,15 @@ import { homeData } from "../../data/homeData";
+ import {
+   getAllStandards,
+   getNextUnmasteredStandard,
++  getStandardByCode,
+ } from "../../core/standards/standardsRegistry";
+-import { getStandardProgress } from "../../core/standards/standardsProgress";
+-import { ROUTES, classroomPath } from "../../app/routes";
++import { getStandardProgress, getDueForReview } from "../../core/standards/standardsProgress";
++import { getStreak, hasEngagedToday } from "../../core/streak/streak";
++import { ROUTES, classroomPath, defendPath } from "../../app/routes";
+ import Card from "../../shared/ui/Card";
+ import StatGrid from "../../shared/ui/StatGrid";
+ import ProgressBar from "../../shared/ui/ProgressBar";
++import Pill from "../../shared/ui/Pill";
+ import PrimaryButton from "../../shared/ui/PrimaryButton";
+ import SecondaryButton from "../../shared/ui/SecondaryButton";
+ import { colors } from "../../shared/theme";
+@@ -20,6 +23,12 @@ export default function HomePage() {
+   const progress = useMemo(() => getStandardProgress(), []);
+   const allStandards = useMemo(() => getAllStandards(), []);
+   const nextStandard = useMemo(() => getNextUnmasteredStandard(progress), [progress]);
++  const streak = useMemo(() => getStreak(), []);
++  const engagedToday = useMemo(() => hasEngagedToday(), []);
++  const dueForReview = useMemo(
++    () => getDueForReview(progress).map((code) => getStandardByCode(code)).filter(Boolean),
++    [progress]
++  );
+ 
+   const mastered = allStandards.filter((s) => (progress[s.code] || 0) >= 4).length;
+   const inProgress = allStandards.filter((s) => {
+@@ -28,6 +37,7 @@ export default function HomePage() {
+   }).length;
+   const notStarted = allStandards.length - mastered - inProgress;
+   const overallPercent = Math.round((mastered / allStandards.length) * 100);
++  const nextStandardLevel = nextStandard ? progress[nextStandard.code] || 0 : 0;
+ 
+   return (
+     <div style={pageStyle}>
+@@ -36,6 +46,13 @@ export default function HomePage() {
+           <p style={eyebrowStyle}>JEREMIAH AI</p>
+           <h1 style={titleStyle}>{homeData.welcomeTitle}</h1>
+           <p style={subtitleStyle}>{homeData.welcomeSubtitle}</p>
++          {streak.count > 0 ? (
++            <div style={streakRowStyle}>
++              <Pill tone={engagedToday ? "mastered" : "review"}>
++                🔥 {streak.count}-day streak{!engagedToday ? " — keep it alive today" : ""}
++              </Pill>
++            </div>
++          ) : null}
+         </motion.section>
+ 
+         <Card variant="dark" style={{ marginBottom: "20px" }}>
+@@ -46,7 +63,11 @@ export default function HomePage() {
+               <h2 style={standardTitleStyle}>{nextStandard.title}</h2>
+               <p style={descriptionStyle}>{nextStandard.statement}</p>
+               <div style={{ marginTop: "20px" }}>
+-                <ProgressBar percent={((progress[nextStandard.code] || 0) / 4) * 100} tone="light" />
++                <div style={evidenceRowStyle}>
++                  <span>Evidence of learning</span>
++                  <span>{nextStandardLevel} of 4</span>
++                </div>
++                <ProgressBar percent={(nextStandardLevel / 4) * 100} tone="light" />
+               </div>
+               <div style={cardFooterStyle}>
+                 <Link to={classroomPath(nextStandard.code)}>
+@@ -85,6 +106,29 @@ export default function HomePage() {
+           </div>
+         </Card>
+ 
++        {dueForReview.length > 0 ? (
++          <Card style={{ marginBottom: "20px" }}>
++            <h3 style={sectionTitleStyle}>Review Queue</h3>
++            <p style={sectionTextStyle}>
++              {dueForReview.length} standard{dueForReview.length === 1 ? "" : "s"} due for spaced
++              review — Jeremiah will argue the other side to see if it still holds.
++            </p>
++            <div style={{ marginTop: "14px", display: "grid", gap: "10px" }}>
++              {dueForReview.map((standard) => (
++                <Link key={standard.code} to={defendPath(standard.code)} style={reviewLinkStyle}>
++                  <div style={reviewItemStyle}>
++                    <div>
++                      <p style={itemTitleStyle}>{standard.title}</p>
++                      <p style={itemMetaStyle}>{standard.code}</p>
++                    </div>
++                    <Pill tone="review">Defend</Pill>
++                  </div>
++                </Link>
++              ))}
++            </div>
++          </Card>
++        ) : null}
++
+         <Card variant="checkpoint">
+           <p style={reviewPillStyle}>Ask Jeremiah</p>
+           <h3 style={reviewTitleStyle}>Have a doctrinal question right now?</h3>
+@@ -177,6 +221,32 @@ const descriptionStyle = {
+ 
+ const cardFooterStyle = { marginTop: "20px" };
+ 
++const streakRowStyle = { marginTop: "16px", display: "flex", justifyContent: "center" };
++
++const evidenceRowStyle = {
++  display: "flex",
++  justifyContent: "space-between",
++  fontSize: "0.85rem",
++  color: "rgba(255,255,255,0.75)",
++  marginBottom: "6px",
++};
++
++const reviewLinkStyle = { textDecoration: "none" };
++
++const reviewItemStyle = {
++  display: "flex",
++  justifyContent: "space-between",
++  alignItems: "center",
++  gap: "16px",
++  padding: "14px",
++  borderRadius: "14px",
++  background: "#f8fafc",
++  border: `1px solid ${colors.cardBorder}`,
++};
++
++const itemTitleStyle = { margin: 0, fontSize: "0.98rem", fontWeight: 800, color: colors.text };
++const itemMetaStyle = { margin: "4px 0 0", fontSize: "0.86rem", color: colors.textFaint };
++
+ const sectionTitleStyle = { margin: 0, fontSize: "1.18rem", fontWeight: 800, color: colors.text };
+ const sectionTextStyle = { margin: "8px 0 0", fontSize: "0.96rem", color: colors.textFaint };
+ 
+diff --git a/app/supabase/functions/defend-the-faith/index.ts b/app/supabase/functions/defend-the-faith/index.ts
+new file mode 100644
+index 0000000..208c106
+--- /dev/null
++++ b/app/supabase/functions/defend-the-faith/index.ts
+@@ -0,0 +1,169 @@
++// defend-the-faith — The Mouthpiece's spaced-repetition review mode.
++//
++// Every standard's evidenceOfLearning already includes a real Defense-level
++// objection (e.g. "Responds to the trinitarian claim that echad permits
++// compound unity..."). Instead of a flashcard review, Jeremiah plays that
++// exact opposing position and presses the learner to hold the doctrine —
++// a live debate grounded entirely in the standard's own content, never
++// invented. Round outcome drives the spaced-repetition schedule client-side
++// (app/src/core/standards/standardsProgress.js: scheduleNextReview).
++//
++// Deploy: supabase functions deploy defend-the-faith
++// Uses the same ANTHROPIC_API_KEY secret as the other functions.
++
++import { getAgeBandGuidance } from "../_shared/ageBandGuidance.ts";
++
++const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
++const CLAUDE_MODEL = "claude-sonnet-5";
++
++const CORS_HEADERS = {
++  "Access-Control-Allow-Origin": "*",
++  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
++  "Access-Control-Allow-Methods": "POST, OPTIONS",
++};
++
++const VALID_VERDICTS = ["held", "wavered", "conceded"];
++
++function buildSystemPrompt({ standard, ageBand }) {
++  const ageGuidance = getAgeBandGuidance(ageBand);
++  const defenseLevel = (standard.evidenceOfLearning || []).find((l) => l.level === "Defense");
++  const scriptureBlock = (standard.anchorScriptures || [])
++    .map((verse) => `- ${verse.reference}: "${verse.text}"`)
++    .join("\n");
++
++  return `You are Jeremiah, but in THIS mode you are role-playing the opposing position, not teaching as yourself. This is a spaced-repetition review: the learner already mastered this standard once, and you are testing whether they can still defend it under real pressure.
++
++STANDARD BEING DEFENDED: ${standard.code} — ${standard.title}
++DOCTRINAL STATEMENT: ${standard.statement}
++THE SPECIFIC OBJECTION YOU MUST RAISE (this is the standard's own Defense-level expectation — do not invent a different objection):
++${defenseLevel ? defenseLevel.expectation : "Press the learner on the strongest counter-argument to this standard."}
++SCRIPTURES THE LEARNER SHOULD BE ABLE TO USE:
++${scriptureBlock}
++
++${ageGuidance}
++
++Rules:
++- Stay in character as the opposing voice (e.g. a Trinitarian apologist, a sinner's-prayer-only advocate — whichever position the objection above implies). Be genuinely persuasive and press back on weak answers, the way a real interlocutor would — do not be a pushover, but do not be needlessly hostile either.
++- Never concede a point the learner hasn't actually earned with real scriptural reasoning.
++- After 2-4 exchanges, bring the round to a close: either the learner has held the line with real doctrinal substance, or they haven't.
++- Respond with STRICT JSON only, no markdown fences, no commentary outside the JSON:
++{"reply": "<your in-character response — the objection, a follow-up press, or your closing concession/summary>", "verdict": "held" | "wavered" | "conceded" | null, "roundComplete": true | false}
++- "verdict" judges the learner's MOST RECENT reply specifically: "held" (solid, scriptural, on-point), "wavered" (partial, vague, or missing key ground), "conceded" (learner agreed with your objection or gave up ground they shouldn't have). Use null only on your opening objection, before the learner has replied.
++- Set "roundComplete": true only when you are delivering your final in-character response for this round.`;
++}
++
++function extractJson(text) {
++  try {
++    return JSON.parse(text);
++  } catch {
++    const match = text.match(/\{[\s\S]*\}/);
++    if (match) {
++      try {
++        return JSON.parse(match[0]);
++      } catch {
++        return null;
++      }
++    }
++    return null;
++  }
++}
++
++Deno.serve(async (req) => {
++  if (req.method === "OPTIONS") {
++    return new Response(null, { headers: CORS_HEADERS });
++  }
++
++  if (req.method !== "POST") {
++    return new Response(JSON.stringify({ error: "Method not allowed" }), {
++      status: 405,
++      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
++    });
++  }
++
++  if (!ANTHROPIC_API_KEY) {
++    return new Response(
++      JSON.stringify({ error: "ANTHROPIC_API_KEY secret is not configured on this function." }),
++      { status: 500, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  let body;
++  try {
++    body = await req.json();
++  } catch {
++    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
++      status: 400,
++      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
++    });
++  }
++
++  const { standard, conversationHistory, learnerReply, ageBand } = body || {};
++
++  if (!standard || !standard.code || !standard.statement) {
++    return new Response(
++      JSON.stringify({ error: "Missing or incomplete `standard` in request body" }),
++      { status: 400, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  const systemPrompt = buildSystemPrompt({ standard, ageBand });
++
++  const messages = [
++    ...(Array.isArray(conversationHistory) ? conversationHistory : []).map((msg) => ({
++      role: msg.role === "assistant" ? "assistant" : "user",
++      content: String(msg.content || ""),
++    })),
++  ];
++  if (learnerReply && learnerReply.trim()) {
++    messages.push({ role: "user", content: learnerReply.trim() });
++  } else if (messages.length === 0) {
++    // Opening move: nothing from the learner yet, prompt Jeremiah to raise the objection.
++    messages.push({ role: "user", content: "(Begin the challenge.)" });
++  }
++
++  let anthropicResponse;
++  try {
++    anthropicResponse = await fetch("https://api.anthropic.com/v1/messages", {
++      method: "POST",
++      headers: {
++        "Content-Type": "application/json",
++        "x-api-key": ANTHROPIC_API_KEY,
++        "anthropic-version": "2023-06-01",
++      },
++      body: JSON.stringify({
++        model: CLAUDE_MODEL,
++        max_tokens: 500,
++        system: systemPrompt,
++        messages,
++      }),
++    });
++  } catch (err) {
++    return new Response(
++      JSON.stringify({ error: "Failed to reach the debate model", detail: String(err) }),
++      { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  if (!anthropicResponse.ok) {
++    const detail = await anthropicResponse.text();
++    return new Response(
++      JSON.stringify({ error: `Debate model returned ${anthropicResponse.status}`, detail }),
++      { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  const data = await anthropicResponse.json();
++  const textBlock = (data.content || []).find((block) => block.type === "text");
++  const parsed = textBlock ? extractJson(textBlock.text) : null;
++
++  if (!parsed || typeof parsed.reply !== "string" || (parsed.verdict !== null && !VALID_VERDICTS.includes(parsed.verdict))) {
++    return new Response(
++      JSON.stringify({ error: "Debate model returned an unparseable response" }),
++      { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  return new Response(JSON.stringify(parsed), {
++    headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
++  });
++});
+-- 
+2.43.0
+

@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
 import { colors } from "../../../shared/theme";
+import { FlameMark } from "../../../shared/ui/icons";
 
 export default function ThinkingIndicator() {
   return (
-    <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: "12px" }}>
+    <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", justifyContent: "flex-start", marginBottom: "12px" }}>
+      <div style={avatarStyle}>
+        <FlameMark size={18} />
+      </div>
       <div
         style={{
           borderRadius: "18px",
@@ -33,3 +37,14 @@ export default function ThinkingIndicator() {
     </div>
   );
 }
+
+const avatarStyle = {
+  width: "28px",
+  height: "28px",
+  borderRadius: "999px",
+  background: "#0f172a",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+};

@@ -1,0 +1,740 @@
+diff --git a/app/index.html b/app/index.html
+index 4a9f024..e7386b4 100644
+--- a/app/index.html
++++ b/app/index.html
+@@ -4,7 +4,13 @@
+     <meta charset="UTF-8" />
+     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-    <title>app</title>
++    <link rel="preconnect" href="https://fonts.googleapis.com" />
++    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++    <link
++      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
++      rel="stylesheet"
++    />
++    <title>Jeremiah AI</title>
+   </head>
+   <body>
+     <div id="root"></div>
+diff --git a/app/public/favicon.svg b/app/public/favicon.svg
+index 6893eb1..164f2a9 100644
+--- a/app/public/favicon.svg
++++ b/app/public/favicon.svg
+@@ -1 +1,13 @@
+-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="46" fill="none" viewBox="0 0 48 46"><path fill="#863bff" d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" style="fill:#863bff;fill:color(display-p3 .5252 .23 1);fill-opacity:1"/><mask id="a" width="48" height="46" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M25.842 44.938c-.664.844-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.183c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.498 0-3.579-1.842-3.579H1.133c-.92 0-1.456-1.04-.92-1.787L9.91.473c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.578 1.842 3.578h11.377c.943 0 1.473 1.088.89 1.832L25.843 44.94z" style="fill:#000;fill-opacity:1"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#ede6ff" rx="5.508" ry="14.704" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -4.47 31.516)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#ede6ff" rx="10.399" ry="29.851" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -39.328 7.883)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#7e14ff" rx="5.508" ry="30.487" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -25.913 -14.639)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -32.644 -3.334)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -34.34 30.47)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#ede6ff" rx="14.072" ry="22.078" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="rotate(93.35 24.506 48.493)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx=".387" cy="8.972" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(39.51 .387 8.972)"/></g><g filter="url(#k)"><ellipse cx="47.523" cy="-6.092" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 47.523 -6.092)"/></g><g filter="url(#l)"><ellipse cx="41.412" cy="6.333" fill="#47bfff" rx="5.971" ry="9.665" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 41.412 6.333)"/></g><g filter="url(#m)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#n)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#o)"><ellipse cx="35.651" cy="29.907" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 35.651 29.907)"/></g><g filter="url(#p)"><ellipse cx="38.418" cy="32.4" fill="#47bfff" rx="5.971" ry="15.297" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 38.418 32.4)"/></g></g><defs><filter id="b" width="60.045" height="41.654" x="-19.77" y="16.149" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-54.613" y="-7.533" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-49.64" y="2.03" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-45.045" y="20.029" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-43.513" y="21.178" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="15.756" y="-17.901" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-27.636" y="-22.853" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="20.116" y="-38.415" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="24.641" y="-11.323" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="8.244" y="-2.416" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="18.713" y="10.588" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter></defs></svg>
+\ No newline at end of file
++<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
++  <path
++    d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-.4-2-1-3 1.5.8 3 2.6 3 5.5A6.5 6.5 0 0 1 13.5 18 6.5 6.5 0 0 1 7 11.5c0-3.2 1.6-5 3-6.5.6-.7 1.6-1.8 2-3z"
++    fill="url(#g)"
++  />
++  <defs>
++    <linearGradient id="g" x1="7" y1="2" x2="17" y2="18" gradientUnits="userSpaceOnUse">
++      <stop stop-color="#FFD000" />
++      <stop offset="0.55" stop-color="#FF8A00" />
++      <stop offset="1" stop-color="#D1001F" />
++    </linearGradient>
++  </defs>
++</svg>
+diff --git a/app/src/app/AppShell.jsx b/app/src/app/AppShell.jsx
+index 404292b..60eb74c 100644
+--- a/app/src/app/AppShell.jsx
++++ b/app/src/app/AppShell.jsx
+@@ -1,11 +1,13 @@
+ import { BrowserRouter } from "react-router-dom";
+ import AppRoutes from "./router";
++import AppHeader from "../shared/layout/AppHeader";
+ import BottomNav from "../shared/layout/BottomNav";
+ 
+ export default function AppShell() {
+   return (
+     <BrowserRouter>
+       <div style={shellStyle}>
++        <AppHeader />
+         <main style={mainStyle}>
+           <AppRoutes />
+         </main>
+diff --git a/app/src/features/ask/components/ChatMessage.jsx b/app/src/features/ask/components/ChatMessage.jsx
+index a3e8475..619f817 100644
+--- a/app/src/features/ask/components/ChatMessage.jsx
++++ b/app/src/features/ask/components/ChatMessage.jsx
+@@ -1,6 +1,7 @@
+ import { motion } from "framer-motion";
+ import { colors } from "../../../shared/theme";
+ import { chatMessageIn } from "../../../shared/motion";
++import { FlameMark } from "../../../shared/ui/icons";
+ 
+ export default function ChatMessage({ role, content }) {
+   const isUser = role === "user";
+@@ -10,13 +11,21 @@ export default function ChatMessage({ role, content }) {
+       {...chatMessageIn}
+       style={{
+         display: "flex",
++        flexDirection: isUser ? "row-reverse" : "row",
++        alignItems: "flex-end",
++        gap: "8px",
+         justifyContent: isUser ? "flex-end" : "flex-start",
+         marginBottom: "12px",
+       }}
+     >
++      {!isUser ? (
++        <div style={avatarStyle}>
++          <FlameMark size={18} />
++        </div>
++      ) : null}
+       <div
+         style={{
+-          maxWidth: "80%",
++          maxWidth: "78%",
+           borderRadius: "18px",
+           padding: "14px 16px",
+           lineHeight: 1.6,
+@@ -31,3 +40,14 @@ export default function ChatMessage({ role, content }) {
+     </motion.div>
+   );
+ }
++
++const avatarStyle = {
++  width: "28px",
++  height: "28px",
++  borderRadius: "999px",
++  background: "#0f172a",
++  display: "flex",
++  alignItems: "center",
++  justifyContent: "center",
++  flexShrink: 0,
++};
+diff --git a/app/src/features/ask/components/ThinkingIndicator.jsx b/app/src/features/ask/components/ThinkingIndicator.jsx
+index 2bf6d47..436ced3 100644
+--- a/app/src/features/ask/components/ThinkingIndicator.jsx
++++ b/app/src/features/ask/components/ThinkingIndicator.jsx
+@@ -1,9 +1,13 @@
+ import { motion } from "framer-motion";
+ import { colors } from "../../../shared/theme";
++import { FlameMark } from "../../../shared/ui/icons";
+ 
+ export default function ThinkingIndicator() {
+   return (
+-    <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: "12px" }}>
++    <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", justifyContent: "flex-start", marginBottom: "12px" }}>
++      <div style={avatarStyle}>
++        <FlameMark size={18} />
++      </div>
+       <div
+         style={{
+           borderRadius: "18px",
+@@ -33,3 +37,14 @@ export default function ThinkingIndicator() {
+     </div>
+   );
+ }
++
++const avatarStyle = {
++  width: "28px",
++  height: "28px",
++  borderRadius: "999px",
++  background: "#0f172a",
++  display: "flex",
++  alignItems: "center",
++  justifyContent: "center",
++  flexShrink: 0,
++};
+diff --git a/app/src/features/classroom/ClassroomPage.jsx b/app/src/features/classroom/ClassroomPage.jsx
+index d1511c8..defabcb 100644
+--- a/app/src/features/classroom/ClassroomPage.jsx
++++ b/app/src/features/classroom/ClassroomPage.jsx
+@@ -18,8 +18,9 @@ import Card from "../../shared/ui/Card";
+ import Pill from "../../shared/ui/Pill";
+ import PrimaryButton from "../../shared/ui/PrimaryButton";
+ import SecondaryButton from "../../shared/ui/SecondaryButton";
+-import { colors } from "../../shared/theme";
+-import { stageTransition, thinkingPulse } from "../../shared/motion";
++import { FlameMark } from "../../shared/ui/icons";
++import { colors, gradients, shadows, getSubjectAccent } from "../../shared/theme";
++import { stageTransition, thinkingPulse, igniteGlow } from "../../shared/motion";
+ 
+ const AGE_BAND_LABELS = { child: "Child Path", teen: "Teen Path", adult: "Adult Path", senior: "Senior Path" };
+ 
+@@ -67,6 +68,8 @@ export default function ClassroomPage() {
+     [currentStageId, standard]
+   );
+ 
++  const accent = standard ? getSubjectAccent(standard.subjectCode) : getSubjectAccent("OG");
++
+   if (!standard) {
+     return (
+       <div style={pageStyle}>
+@@ -166,10 +169,10 @@ export default function ClassroomPage() {
+           <Link to={ROUTES.MAP} style={breadcrumbLinkStyle}>
+             ← Doctrine Map
+           </Link>
+-          <Pill tone="info">{standard.subjectTitle}</Pill>
++          <Pill style={{ background: accent.soft, color: accent.text }}>{standard.subjectTitle}</Pill>
+         </div>
+ 
+-        <Card variant="dark" style={{ marginBottom: "20px" }}>
++        <Card variant="dark" style={{ marginBottom: "20px", borderTop: `4px solid ${accent.base}` }}>
+           <p style={smallLabelStyle}>{standard.code} — {standard.domainTitle}</p>
+           <h1 style={titleStyle}>{standard.title}</h1>
+           <p style={truthTextStyle}>{standard.statement}</p>
+@@ -202,8 +205,23 @@ export default function ClassroomPage() {
+           {justMastered ? (
+             <motion.div key="mastered" {...stageTransition}>
+               <Card style={{ textAlign: "center", marginBottom: "20px" }}>
+-                <p style={{ fontSize: "2.4rem", margin: 0 }}>🔥</p>
+-                <h2 style={{ margin: "12px 0 0", fontSize: "1.6rem", fontWeight: 900, color: colors.text }}>
++                <motion.div
++                  {...igniteGlow}
++                  style={{
++                    width: "80px",
++                    height: "80px",
++                    margin: "0 auto",
++                    borderRadius: "999px",
++                    background: gradients.flame,
++                    boxShadow: shadows.flame,
++                    display: "flex",
++                    alignItems: "center",
++                    justifyContent: "center",
++                  }}
++                >
++                  <FlameMark size={38} />
++                </motion.div>
++                <h2 style={{ margin: "18px 0 0", fontSize: "1.6rem", fontWeight: 900, color: colors.text }}>
+                   {standard.title} — Mastered
+                 </h2>
+                 <p style={{ margin: "12px 0 0", color: colors.textMuted, lineHeight: 1.7 }}>
+@@ -258,7 +276,7 @@ export default function ClassroomPage() {
+                   <PrimaryButton
+                     onClick={handleSubmitResponse}
+                     disabled={isGrading}
+-                    style={{ background: "#9a3412", color: "#ffffff" }}
++                    style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                   >
+                     {isGrading ? "Grading…" : "Submit Response"}
+                   </PrimaryButton>
+diff --git a/app/src/features/map/DoctrineMapPage.jsx b/app/src/features/map/DoctrineMapPage.jsx
+index 8e156db..362248b 100644
+--- a/app/src/features/map/DoctrineMapPage.jsx
++++ b/app/src/features/map/DoctrineMapPage.jsx
+@@ -8,7 +8,7 @@ import {
+ } from "../../core/standards/standardsRegistry";
+ import { getStandardProgress } from "../../core/standards/standardsProgress";
+ import { classroomPath } from "../../app/routes";
+-import { colors, ignite, radius } from "../../shared/theme";
++import { colors, ignite, radius, getSubjectAccent } from "../../shared/theme";
+ import { staggerContainer, staggerItem, nodeHover, igniteGlow } from "../../shared/motion";
+ 
+ function nodeStateFor(level) {
+@@ -17,24 +17,28 @@ function nodeStateFor(level) {
+   return "unstarted";
+ }
+ 
+-const NODE_STYLES = {
+-  mastered: {
+-    background: `linear-gradient(135deg, ${ignite.ember} 0%, ${ignite.blaze} 100%)`,
+-    color: "#ffffff",
+-    border: "1px solid rgba(255,255,255,0.4)",
+-  },
+-  inProgress: {
+-    background: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
+-    color: colors.checkpointTextDark,
+-    boxShadow: "0 0 16px rgba(255, 208, 0, 0.35)",
+-    border: `1px solid ${ignite.spark}`,
+-  },
+-  unstarted: {
++function nodeStyleFor(state, accent) {
++  if (state === "mastered") {
++    return {
++      background: `linear-gradient(135deg, ${ignite.ember} 0%, ${ignite.blaze} 100%)`,
++      color: "#ffffff",
++      border: "1px solid rgba(255,255,255,0.4)",
++    };
++  }
++  if (state === "inProgress") {
++    return {
++      background: accent.soft,
++      color: accent.text,
++      boxShadow: `0 0 16px ${accent.base}33`,
++      border: `1px solid ${accent.base}66`,
++    };
++  }
++  return {
+     background: "#f8fafc",
+     color: colors.textFaint,
+     border: `1px solid ${colors.cardBorder}`,
+-  },
+-};
++  };
++}
+ 
+ const NODE_LABELS = {
+   mastered: "Mastered",
+@@ -69,12 +73,16 @@ export default function DoctrineMapPage() {
+         {subjects.map((subject) => {
+           const unlocked = isSubjectUnlocked(subject.code, progress);
+           const mastered = isSubjectMastered(subject.code, progress);
++          const accent = getSubjectAccent(subject.code);
+ 
+           return (
+-            <section key={subject.code} style={subjectSectionStyle}>
++            <section
++              key={subject.code}
++              style={{ ...subjectSectionStyle, borderTop: `4px solid ${accent.base}` }}
++            >
+               <div style={subjectHeaderStyle}>
+                 <div>
+-                  <p style={subjectEyebrowStyle}>Subject {subject.code}</p>
++                  <p style={{ ...subjectEyebrowStyle, color: accent.base }}>Subject {subject.code}</p>
+                   <h2 style={subjectTitleStyle}>{subject.title}</h2>
+                 </div>
+                 <div
+@@ -83,7 +91,7 @@ export default function DoctrineMapPage() {
+                     ...(mastered
+                       ? { background: colors.masteredBg, color: colors.masteredText }
+                       : unlocked
+-                        ? { background: colors.infoBg, color: colors.infoText }
++                        ? { background: accent.soft, color: accent.text }
+                         : { background: ignite.lockedBg, color: ignite.lockedText }),
+                   }}
+                 >
+@@ -113,7 +121,7 @@ export default function DoctrineMapPage() {
+                     {domain.standards.map((standard) => {
+                       const level = progress[standard.code] || 0;
+                       const state = nodeStateFor(level);
+-                      const nodeStyle = NODE_STYLES[state];
++                      const nodeStyle = nodeStyleFor(state, accent);
+                       const interactive = unlocked;
+ 
+                       return (
+@@ -152,7 +160,10 @@ export default function DoctrineMapPage() {
+ 
+ const pageStyle = {
+   minHeight: "100%",
+-  background: "linear-gradient(180deg, #0b1228 0%, #16233b 45%, #f8fafc 45%)",
++  background:
++    "radial-gradient(ellipse 70% 50% at 10% 0%, rgba(255, 138, 0, 0.18) 0%, transparent 55%)," +
++    "radial-gradient(ellipse 60% 40% at 95% 15%, rgba(220, 38, 38, 0.14) 0%, transparent 55%)," +
++    "linear-gradient(180deg, #0b1228 0%, #16233b 45%, #f8fafc 45%)",
+ };
+ 
+ const contentStyle = {
+diff --git a/app/src/index.css b/app/src/index.css
+index 2c84af0..8f22506 100644
+--- a/app/src/index.css
++++ b/app/src/index.css
+@@ -1,111 +1,44 @@
+ :root {
+-  --text: #6b6375;
+-  --text-h: #08060d;
+-  --bg: #fff;
+-  --border: #e5e4e7;
+-  --code-bg: #f4f3ec;
+-  --accent: #aa3bff;
+-  --accent-bg: rgba(170, 59, 255, 0.1);
+-  --accent-border: rgba(170, 59, 255, 0.5);
+-  --social-bg: rgba(244, 243, 236, 0.5);
+-  --shadow:
+-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
++  --font-display: "Manrope", system-ui, "Segoe UI", Roboto, sans-serif;
++  --font-body: "Manrope", system-ui, "Segoe UI", Roboto, sans-serif;
+ 
+-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+-  --mono: ui-monospace, Consolas, monospace;
+-
+-  font: 18px/145% var(--sans);
+-  letter-spacing: 0.18px;
+-  color-scheme: light dark;
+-  color: var(--text);
+-  background: var(--bg);
++  color-scheme: light;
+   font-synthesis: none;
+   text-rendering: optimizeLegibility;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+-
+-  @media (max-width: 1024px) {
+-    font-size: 16px;
+-  }
+ }
+ 
+-@media (prefers-color-scheme: dark) {
+-  :root {
+-    --text: #9ca3af;
+-    --text-h: #f3f4f6;
+-    --bg: #16171d;
+-    --border: #2e303a;
+-    --code-bg: #1f2028;
+-    --accent: #c084fc;
+-    --accent-bg: rgba(192, 132, 252, 0.15);
+-    --accent-border: rgba(192, 132, 252, 0.5);
+-    --social-bg: rgba(47, 48, 58, 0.5);
+-    --shadow:
+-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+-  }
+-
+-  #social .button-icon {
+-    filter: invert(1) brightness(2);
+-  }
++* {
++  box-sizing: border-box;
+ }
+ 
++html,
+ body {
+   margin: 0;
++  padding: 0;
++  font-family: var(--font-body);
+ }
+ 
+ #root {
+-  width: 1126px;
+-  max-width: 100%;
+-  margin: 0 auto;
+-  text-align: center;
+-  border-inline: 1px solid var(--border);
++  width: 100%;
+   min-height: 100svh;
+   display: flex;
+   flex-direction: column;
+-  box-sizing: border-box;
+ }
+ 
+ h1,
+-h2 {
+-  font-family: var(--heading);
+-  font-weight: 500;
+-  color: var(--text-h);
+-}
+-
+-h1 {
+-  font-size: 56px;
+-  letter-spacing: -1.68px;
+-  margin: 32px 0;
+-  @media (max-width: 1024px) {
+-    font-size: 36px;
+-    margin: 20px 0;
+-  }
+-}
+-h2 {
+-  font-size: 24px;
+-  line-height: 118%;
+-  letter-spacing: -0.24px;
+-  margin: 0 0 8px;
+-  @media (max-width: 1024px) {
+-    font-size: 20px;
+-  }
+-}
+-p {
+-  margin: 0;
++h2,
++h3,
++h4 {
++  font-family: var(--font-display);
+ }
+ 
+-code,
+-.counter {
+-  font-family: var(--mono);
+-  display: inline-flex;
+-  border-radius: 4px;
+-  color: var(--text-h);
++button {
++  font-family: inherit;
+ }
+ 
+-code {
+-  font-size: 15px;
+-  line-height: 135%;
+-  padding: 4px 8px;
+-  background: var(--code-bg);
++textarea,
++input {
++  font-family: inherit;
+ }
+diff --git a/app/src/shared/layout/AppHeader.jsx b/app/src/shared/layout/AppHeader.jsx
+new file mode 100644
+index 0000000..9373994
+--- /dev/null
++++ b/app/src/shared/layout/AppHeader.jsx
+@@ -0,0 +1,53 @@
++import { Link } from "react-router-dom";
++import { FlameMark } from "../ui/icons";
++
++export default function AppHeader() {
++  return (
++    <header style={headerStyle}>
++      <Link to="/" style={brandStyle}>
++        <span style={flameWrapStyle}>
++          <FlameMark size={22} />
++        </span>
++        <span style={wordmarkStyle}>Jeremiah AI</span>
++      </Link>
++    </header>
++  );
++}
++
++const headerStyle = {
++  width: "100%",
++  background: "rgba(255,255,255,0.92)",
++  backdropFilter: "blur(10px)",
++  borderBottom: "1px solid #e2e8f0",
++  position: "sticky",
++  top: 0,
++  zIndex: 10,
++};
++
++const brandStyle = {
++  display: "flex",
++  alignItems: "center",
++  gap: "10px",
++  maxWidth: "980px",
++  margin: "0 auto",
++  padding: "12px 20px",
++  textDecoration: "none",
++};
++
++const flameWrapStyle = {
++  width: "34px",
++  height: "34px",
++  borderRadius: "999px",
++  display: "flex",
++  alignItems: "center",
++  justifyContent: "center",
++  background: "radial-gradient(circle, rgba(255,138,0,0.18) 0%, transparent 70%)",
++};
++
++const wordmarkStyle = {
++  fontFamily: '"Manrope", system-ui, sans-serif',
++  fontWeight: 800,
++  fontSize: "1.05rem",
++  color: "#0f172a",
++  letterSpacing: "-0.01em",
++};
+diff --git a/app/src/shared/layout/BottomNav.jsx b/app/src/shared/layout/BottomNav.jsx
+index 780fd54..cd97a8d 100644
+--- a/app/src/shared/layout/BottomNav.jsx
++++ b/app/src/shared/layout/BottomNav.jsx
+@@ -1,23 +1,36 @@
+ import { NavLink } from "react-router-dom";
+ import { MAIN_NAV_ITEMS } from "../../app/routes";
++import { HomeIcon, MapIcon, ChatIcon, ChartIcon, UserIcon } from "../ui/icons";
++
++const ICONS = {
++  [MAIN_NAV_ITEMS[0].path]: HomeIcon,
++  [MAIN_NAV_ITEMS[1].path]: MapIcon,
++  [MAIN_NAV_ITEMS[2].path]: ChatIcon,
++  [MAIN_NAV_ITEMS[3].path]: ChartIcon,
++  [MAIN_NAV_ITEMS[4].path]: UserIcon,
++};
+ 
+ export default function BottomNav() {
+   return (
+     <nav aria-label="Main navigation" style={navStyle}>
+       <div style={railStyle}>
+-        {MAIN_NAV_ITEMS.map((item) => (
+-          <NavLink
+-            key={item.path}
+-            to={item.path}
+-            end={item.path === "/"}
+-            style={({ isActive }) => ({
+-              ...itemStyle,
+-              ...(isActive ? activeItemStyle : inactiveItemStyle),
+-            })}
+-          >
+-            <span style={labelStyle}>{item.label}</span>
+-          </NavLink>
+-        ))}
++        {MAIN_NAV_ITEMS.map((item) => {
++          const Icon = ICONS[item.path];
++          return (
++            <NavLink
++              key={item.path}
++              to={item.path}
++              end={item.path === "/"}
++              style={({ isActive }) => ({
++                ...itemStyle,
++                ...(isActive ? activeItemStyle : inactiveItemStyle),
++              })}
++            >
++              <Icon size={19} />
++              <span style={labelStyle}>{item.label}</span>
++            </NavLink>
++          );
++        })}
+       </div>
+     </nav>
+   );
+@@ -45,16 +58,19 @@ const railStyle = {
+ const itemStyle = {
+   minWidth: 0,
+   border: "none",
+-  padding: "12px 8px",
++  padding: "10px 8px",
+   borderRadius: "16px",
+-  fontSize: "0.9rem",
+-  fontWeight: 800,
++  fontSize: "0.82rem",
++  fontWeight: 700,
+   cursor: "pointer",
+   transition: "all 180ms ease",
+   whiteSpace: "nowrap",
+   textAlign: "center",
+   textDecoration: "none",
+-  display: "block",
++  display: "flex",
++  flexDirection: "column",
++  alignItems: "center",
++  gap: "4px",
+ };
+ 
+ const activeItemStyle = {
+diff --git a/app/src/shared/theme.js b/app/src/shared/theme.js
+index c47a72d..ed073d4 100644
+--- a/app/src/shared/theme.js
++++ b/app/src/shared/theme.js
+@@ -1,9 +1,44 @@
+-// Design tokens. Pulled out of the inline style objects that were
+-// copy-pasted near-verbatim across HomePage/ProgressPage/ProfilePage/
+-// ClassroomPage — one home for the palette instead of five.
++// Design tokens. The original app (reference/current-app/src/theme.js) had
++// real atmosphere: layered radial glows behind hero cards, a proper 4-stop
++// flame gradient, and colored shadows tinted to match each accent instead
++// of one flat gray shadow everywhere. This restores that vocabulary instead
++// of the flat single-gradient version this rebuild started with.
++export const fonts = {
++  display: '"Manrope", system-ui, sans-serif',
++  body: '"Manrope", system-ui, sans-serif',
++};
++
++// Real per-subject identity — standardsRegistry.js already assigns these
++// (OG blue, NB red) but nothing in the UI used them before now.
++export const subjectAccent = {
++  OG: { base: "#003DA5", soft: "#eff4ff", text: "#00287a", shadow: "0 10px 28px rgba(0, 61, 165, 0.35)" },
++  NB: { base: "#dc2626", soft: "#fef2f2", text: "#991b1b", shadow: "0 10px 28px rgba(220, 38, 38, 0.32)" },
++};
++
++export function getSubjectAccent(subjectCode) {
++  return subjectAccent[subjectCode] || subjectAccent.OG;
++}
++
++export const gradients = {
++  page: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
++
++  // A dark hero card with real atmosphere: base navy gradient plus two soft
++  // radial glows (amber lower-left, red upper-right) layered on top —
++  // that's what makes it read as "lit from within" instead of flat navy.
++  heroDark:
++    "radial-gradient(ellipse 70% 60% at 15% 85%, rgba(255, 138, 0, 0.22) 0%, transparent 60%)," +
++    "radial-gradient(ellipse 60% 50% at 90% 10%, rgba(220, 38, 38, 0.16) 0%, transparent 55%)," +
++    "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
++
++  // The real flame — four stops, not two. Used for the mastery moment,
++  // primary CTA accents, and anywhere the "ignite" identity needs to be felt.
++  flame: "linear-gradient(145deg, #FFD700 0%, #FFB400 30%, #FF6A00 65%, #E02121 100%)",
++  flameSoft: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
++};
++
+ export const colors = {
+-  pageGradient: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
+-  primaryGradient: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
++  pageGradient: gradients.page,
++  primaryGradient: gradients.heroDark,
+ 
+   cardBg: "#ffffff",
+   cardBorder: "#e2e8f0",
+@@ -51,6 +86,14 @@ export const ignite = {
+   lockedText: "#94a3b8",
+ };
+ 
++export const shadows = {
++  sm: "0 1px 2px rgba(0, 0, 0, 0.05)",
++  md: "0 4px 20px rgba(0, 0, 0, 0.06)",
++  lg: "0 8px 30px rgba(0, 0, 0, 0.08)",
++  xl: "0 18px 45px rgba(15, 23, 42, 0.14)",
++  flame: "0 10px 28px rgba(249, 115, 22, 0.35)",
++};
++
+ export const radius = {
+   sm: "14px",
+   md: "20px",
+diff --git a/app/src/shared/ui/icons.jsx b/app/src/shared/ui/icons.jsx
+new file mode 100644
+index 0000000..aa2a9eb
+--- /dev/null
++++ b/app/src/shared/ui/icons.jsx
+@@ -0,0 +1,74 @@
++// A small hand-built icon set — no icon library dependency, just the
++// specific marks this app needs, including the Jeremiah AI flame identity.
++
++export function FlameMark({ size = 28, style }) {
++  return (
++    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style}>
++      <path
++        d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-.4-2-1-3 1.5.8 3 2.6 3 5.5A6.5 6.5 0 0 1 13.5 18 6.5 6.5 0 0 1 7 11.5c0-3.2 1.6-5 3-6.5.6-.7 1.6-1.8 2-3z"
++        fill="url(#flameGradient)"
++      />
++      <defs>
++        <linearGradient id="flameGradient" x1="7" y1="2" x2="17" y2="18" gradientUnits="userSpaceOnUse">
++          <stop stopColor="#FFD000" />
++          <stop offset="0.55" stopColor="#FF8A00" />
++          <stop offset="1" stopColor="#D1001F" />
++        </linearGradient>
++      </defs>
++    </svg>
++  );
++}
++
++const strokeProps = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" };
++
++export function HomeIcon({ size = 20 }) {
++  return (
++    <svg width={size} height={size} viewBox="0 0 24 24" {...strokeProps}>
++      <path d="M3 11.5 12 4l9 7.5" />
++      <path d="M5.5 10v9a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1v-9" />
++    </svg>
++  );
++}
++
++export function MapIcon({ size = 20 }) {
++  return (
++    <svg width={size} height={size} viewBox="0 0 24 24" {...strokeProps}>
++      <path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" />
++      <path d="M9 4v14M15 6v14" />
++    </svg>
++  );
++}
++
++export function ChatIcon({ size = 20 }) {
++  return (
++    <svg width={size} height={size} viewBox="0 0 24 24" {...strokeProps}>
++      <path d="M4 5h16v11H8l-4 4V5Z" />
++    </svg>
++  );
++}
++
++export function ChartIcon({ size = 20 }) {
++  return (
++    <svg width={size} height={size} viewBox="0 0 24 24" {...strokeProps}>
++      <path d="M4 20V10M12 20V4M20 20v-7" />
++    </svg>
++  );
++}
++
++export function UserIcon({ size = 20 }) {
++  return (
++    <svg width={size} height={size} viewBox="0 0 24 24" {...strokeProps}>
++      <circle cx="12" cy="8" r="3.5" />
++      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" />
++    </svg>
++  );
++}
++
++export function LockIcon({ size = 16 }) {
++  return (
++    <svg width={size} height={size} viewBox="0 0 24 24" {...strokeProps}>
++      <rect x="5" y="11" width="14" height="9" rx="2" />
++      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
++    </svg>
++  );
++}

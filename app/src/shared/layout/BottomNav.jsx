@@ -1,23 +1,36 @@
 import { NavLink } from "react-router-dom";
 import { MAIN_NAV_ITEMS } from "../../app/routes";
+import { HomeIcon, MapIcon, ChatIcon, ChartIcon, UserIcon } from "../ui/icons";
+
+const ICONS = {
+  [MAIN_NAV_ITEMS[0].path]: HomeIcon,
+  [MAIN_NAV_ITEMS[1].path]: MapIcon,
+  [MAIN_NAV_ITEMS[2].path]: ChatIcon,
+  [MAIN_NAV_ITEMS[3].path]: ChartIcon,
+  [MAIN_NAV_ITEMS[4].path]: UserIcon,
+};
 
 export default function BottomNav() {
   return (
     <nav aria-label="Main navigation" style={navStyle}>
       <div style={railStyle}>
-        {MAIN_NAV_ITEMS.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.path === "/"}
-            style={({ isActive }) => ({
-              ...itemStyle,
-              ...(isActive ? activeItemStyle : inactiveItemStyle),
-            })}
-          >
-            <span style={labelStyle}>{item.label}</span>
-          </NavLink>
-        ))}
+        {MAIN_NAV_ITEMS.map((item) => {
+          const Icon = ICONS[item.path];
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.path === "/"}
+              style={({ isActive }) => ({
+                ...itemStyle,
+                ...(isActive ? activeItemStyle : inactiveItemStyle),
+              })}
+            >
+              <Icon size={19} />
+              <span style={labelStyle}>{item.label}</span>
+            </NavLink>
+          );
+        })}
       </div>
     </nav>
   );
@@ -45,16 +58,19 @@ const railStyle = {
 const itemStyle = {
   minWidth: 0,
   border: "none",
-  padding: "12px 8px",
+  padding: "10px 8px",
   borderRadius: "16px",
-  fontSize: "0.9rem",
-  fontWeight: 800,
+  fontSize: "0.82rem",
+  fontWeight: 700,
   cursor: "pointer",
   transition: "all 180ms ease",
   whiteSpace: "nowrap",
   textAlign: "center",
   textDecoration: "none",
-  display: "block",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "4px",
 };
 
 const activeItemStyle = {

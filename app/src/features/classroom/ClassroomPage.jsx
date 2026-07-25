@@ -18,8 +18,9 @@ import Card from "../../shared/ui/Card";
 import Pill from "../../shared/ui/Pill";
 import PrimaryButton from "../../shared/ui/PrimaryButton";
 import SecondaryButton from "../../shared/ui/SecondaryButton";
-import { colors } from "../../shared/theme";
-import { stageTransition, thinkingPulse } from "../../shared/motion";
+import { FlameMark } from "../../shared/ui/icons";
+import { colors, gradients, shadows, getSubjectAccent } from "../../shared/theme";
+import { stageTransition, thinkingPulse, igniteGlow } from "../../shared/motion";
 
 const AGE_BAND_LABELS = { child: "Child Path", teen: "Teen Path", adult: "Adult Path", senior: "Senior Path" };
 
@@ -66,6 +67,8 @@ export default function ClassroomPage() {
     () => (standard ? buildStagePrompt(currentStageId, standard) : ""),
     [currentStageId, standard]
   );
+
+  const accent = standard ? getSubjectAccent(standard.subjectCode) : getSubjectAccent("OG");
 
   if (!standard) {
     return (
@@ -166,10 +169,10 @@ export default function ClassroomPage() {
           <Link to={ROUTES.MAP} style={breadcrumbLinkStyle}>
             ← Doctrine Map
           </Link>
-          <Pill tone="info">{standard.subjectTitle}</Pill>
+          <Pill style={{ background: accent.soft, color: accent.text }}>{standard.subjectTitle}</Pill>
         </div>
 
-        <Card variant="dark" style={{ marginBottom: "20px" }}>
+        <Card variant="dark" style={{ marginBottom: "20px", borderTop: `4px solid ${accent.base}` }}>
           <p style={smallLabelStyle}>{standard.code} — {standard.domainTitle}</p>
           <h1 style={titleStyle}>{standard.title}</h1>
           <p style={truthTextStyle}>{standard.statement}</p>
@@ -202,8 +205,23 @@ export default function ClassroomPage() {
           {justMastered ? (
             <motion.div key="mastered" {...stageTransition}>
               <Card style={{ textAlign: "center", marginBottom: "20px" }}>
-                <p style={{ fontSize: "2.4rem", margin: 0 }}>🔥</p>
-                <h2 style={{ margin: "12px 0 0", fontSize: "1.6rem", fontWeight: 900, color: colors.text }}>
+                <motion.div
+                  {...igniteGlow}
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    margin: "0 auto",
+                    borderRadius: "999px",
+                    background: gradients.flame,
+                    boxShadow: shadows.flame,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FlameMark size={38} />
+                </motion.div>
+                <h2 style={{ margin: "18px 0 0", fontSize: "1.6rem", fontWeight: 900, color: colors.text }}>
                   {standard.title} — Mastered
                 </h2>
                 <p style={{ margin: "12px 0 0", color: colors.textMuted, lineHeight: 1.7 }}>
@@ -258,7 +276,7 @@ export default function ClassroomPage() {
                   <PrimaryButton
                     onClick={handleSubmitResponse}
                     disabled={isGrading}
-                    style={{ background: "#9a3412", color: "#ffffff" }}
+                    style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
                   >
                     {isGrading ? "Grading…" : "Submit Response"}
                   </PrimaryButton>

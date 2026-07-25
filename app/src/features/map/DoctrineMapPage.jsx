@@ -8,7 +8,7 @@ import {
 } from "../../core/standards/standardsRegistry";
 import { getStandardProgress } from "../../core/standards/standardsProgress";
 import { classroomPath } from "../../app/routes";
-import { colors, ignite, radius } from "../../shared/theme";
+import { colors, ignite, radius, getSubjectAccent } from "../../shared/theme";
 import { staggerContainer, staggerItem, nodeHover, igniteGlow } from "../../shared/motion";
 
 function nodeStateFor(level) {
@@ -17,24 +17,28 @@ function nodeStateFor(level) {
   return "unstarted";
 }
 
-const NODE_STYLES = {
-  mastered: {
-    background: `linear-gradient(135deg, ${ignite.ember} 0%, ${ignite.blaze} 100%)`,
-    color: "#ffffff",
-    border: "1px solid rgba(255,255,255,0.4)",
-  },
-  inProgress: {
-    background: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
-    color: colors.checkpointTextDark,
-    boxShadow: "0 0 16px rgba(255, 208, 0, 0.35)",
-    border: `1px solid ${ignite.spark}`,
-  },
-  unstarted: {
+function nodeStyleFor(state, accent) {
+  if (state === "mastered") {
+    return {
+      background: `linear-gradient(135deg, ${ignite.ember} 0%, ${ignite.blaze} 100%)`,
+      color: "#ffffff",
+      border: "1px solid rgba(255,255,255,0.4)",
+    };
+  }
+  if (state === "inProgress") {
+    return {
+      background: accent.soft,
+      color: accent.text,
+      boxShadow: `0 0 16px ${accent.base}33`,
+      border: `1px solid ${accent.base}66`,
+    };
+  }
+  return {
     background: "#f8fafc",
     color: colors.textFaint,
     border: `1px solid ${colors.cardBorder}`,
-  },
-};
+  };
+}
 
 const NODE_LABELS = {
   mastered: "Mastered",
@@ -69,12 +73,16 @@ export default function DoctrineMapPage() {
         {subjects.map((subject) => {
           const unlocked = isSubjectUnlocked(subject.code, progress);
           const mastered = isSubjectMastered(subject.code, progress);
+          const accent = getSubjectAccent(subject.code);
 
           return (
-            <section key={subject.code} style={subjectSectionStyle}>
+            <section
+              key={subject.code}
+              style={{ ...subjectSectionStyle, borderTop: `4px solid ${accent.base}` }}
+            >
               <div style={subjectHeaderStyle}>
                 <div>
-                  <p style={subjectEyebrowStyle}>Subject {subject.code}</p>
+                  <p style={{ ...subjectEyebrowStyle, color: accent.base }}>Subject {subject.code}</p>
                   <h2 style={subjectTitleStyle}>{subject.title}</h2>
                 </div>
                 <div
@@ -83,7 +91,7 @@ export default function DoctrineMapPage() {
                     ...(mastered
                       ? { background: colors.masteredBg, color: colors.masteredText }
                       : unlocked
-                        ? { background: colors.infoBg, color: colors.infoText }
+                        ? { background: accent.soft, color: accent.text }
                         : { background: ignite.lockedBg, color: ignite.lockedText }),
                   }}
                 >
@@ -113,7 +121,7 @@ export default function DoctrineMapPage() {
                     {domain.standards.map((standard) => {
                       const level = progress[standard.code] || 0;
                       const state = nodeStateFor(level);
-                      const nodeStyle = NODE_STYLES[state];
+                      const nodeStyle = nodeStyleFor(state, accent);
                       const interactive = unlocked;
 
                       return (
@@ -152,7 +160,10 @@ export default function DoctrineMapPage() {
 
 const pageStyle = {
   minHeight: "100%",
-  background: "linear-gradient(180deg, #0b1228 0%, #16233b 45%, #f8fafc 45%)",
+  background:
+    "radial-gradient(ellipse 70% 50% at 10% 0%, rgba(255, 138, 0, 0.18) 0%, transparent 55%)," +
+    "radial-gradient(ellipse 60% 40% at 95% 15%, rgba(220, 38, 38, 0.14) 0%, transparent 55%)," +
+    "linear-gradient(180deg, #0b1228 0%, #16233b 45%, #f8fafc 45%)",
 };
 
 const contentStyle = {

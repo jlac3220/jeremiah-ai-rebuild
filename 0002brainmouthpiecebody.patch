@@ -1,0 +1,3111 @@
+From 14b77d06ddda52eda0c2c22447d67759cd02e5d5 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 24 Jul 2026 17:58:04 +0000
+Subject: [PATCH] Build the brain, mouthpiece, and body: generalized standards
+ engine, LLM grading, Doctrine Map
+
+The rebuild previously had one hardcoded standard (OG.1.1.18) with keyword-
+matching evaluation and canned feedback strings baked into per-standard JS
+files. Replaces that with a real, general architecture:
+
+Brain: app/src/core/standards/standardsRegistry.js holds all doctrinal
+standards as data (7 real standards ported from the original app's dead
+curriculum.js), with a subject/domain/standard schema any new standard can
+be appended to without touching code.
+
+Mouthpiece: app/supabase/functions/grade-response is a Supabase Edge
+Function that grades a learner's response against the actual active
+standard using Claude, judging understanding rather than exact phrases,
+with age-band-aware tone (child/teen/adult/senior). The client
+(evaluateResponse.js) now calls this instead of local keyword matching, and
+falls back to an honest "can't grade right now" message rather than
+fabricating a verdict if the function is unreachable.
+
+Body: a new Doctrine Map page (app/src/features/map) replaces the single
+fixed session with real navigation across all standards, visualized as
+lit/dim/mastered nodes with subject-level locking (NB locked until OG is
+mastered, matching the original curriculum.js's intent). ClassroomPage now
+reads whichever standard is active instead of always resolving to one
+hardcoded lesson. Added a shared UI/theme layer (app/src/shared) to stop
+re-copying inline styles into every new page.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_015EaC2QTCCcKGCYRwcnbYsY
+---
+ app/package-lock.json                         |  75 +-
+ app/src/app/AppRouter.jsx                     |   4 +
+ app/src/app/routes.js                         |   2 +
+ .../core/classroom/classroomSessionData.js    | 276 ++------
+ app/src/core/classroom/content/OG_1_1_18.js   | 128 ----
+ .../content/classroomContentRegistry.js       |  11 -
+ app/src/core/classroom/evaluateResponse.js    | 278 ++------
+ app/src/core/classroom/masteryRules.js        |  26 -
+ app/src/core/classroom/stageContent.js        |  38 +-
+ app/src/core/config/supabaseConfig.js         |  11 +
+ app/src/core/standards/standardsProgress.js   |  38 ++
+ app/src/core/standards/standardsRegistry.js   | 645 ++++++++++++++++++
+ app/src/data/profileData.js                   |   4 +
+ .../bible-support/BibleSupportPage.jsx        |  36 +-
+ app/src/features/classroom/ClassroomPage.jsx  | 130 ++--
+ app/src/features/home/HomePage.jsx            |   5 -
+ app/src/features/map/DoctrineMapPage.jsx      | 289 ++++++++
+ app/src/features/profile/ProfilePage.jsx      |   5 -
+ app/src/features/progress/ProgressPage.jsx    |   5 -
+ app/src/shared/layout/BottomNav.jsx           |   3 +-
+ app/src/shared/theme.js                       |  68 ++
+ app/src/shared/ui/Card.jsx                    |  38 ++
+ app/src/shared/ui/Pill.jsx                    |  23 +
+ app/src/shared/ui/PrimaryButton.jsx           |  27 +
+ app/src/shared/ui/ProgressBar.jsx             |  30 +
+ app/src/shared/ui/SecondaryButton.jsx         |  18 +
+ app/src/shared/ui/StatGrid.jsx                |  42 ++
+ .../functions/grade-response/index.ts         | 181 +++++
+ 28 files changed, 1725 insertions(+), 711 deletions(-)
+ delete mode 100644 app/src/core/classroom/content/OG_1_1_18.js
+ delete mode 100644 app/src/core/classroom/content/classroomContentRegistry.js
+ delete mode 100644 app/src/core/classroom/masteryRules.js
+ create mode 100644 app/src/core/config/supabaseConfig.js
+ create mode 100644 app/src/core/standards/standardsProgress.js
+ create mode 100644 app/src/core/standards/standardsRegistry.js
+ create mode 100644 app/src/features/map/DoctrineMapPage.jsx
+ create mode 100644 app/src/shared/theme.js
+ create mode 100644 app/src/shared/ui/Card.jsx
+ create mode 100644 app/src/shared/ui/Pill.jsx
+ create mode 100644 app/src/shared/ui/PrimaryButton.jsx
+ create mode 100644 app/src/shared/ui/ProgressBar.jsx
+ create mode 100644 app/src/shared/ui/SecondaryButton.jsx
+ create mode 100644 app/src/shared/ui/StatGrid.jsx
+ create mode 100644 app/supabase/functions/grade-response/index.ts
+
+diff --git a/app/package-lock.json b/app/package-lock.json
+index ac08c55..a365624 100644
+--- a/app/package-lock.json
++++ b/app/package-lock.json
+@@ -54,7 +54,6 @@
+       "integrity": "sha512-CGOfOJqWjg2qW/Mb6zNsDm+u5vFQ8DxXfbM09z69p5Z6+mE1ikP2jUXw+j42Pf1XTYED2Rni5f95npYeuwMDQA==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/code-frame": "^7.29.0",
+         "@babel/generator": "^7.29.0",
+@@ -264,13 +263,39 @@
+         "node": ">=6.9.0"
+       }
+     },
++    "node_modules/@emnapi/core": {
++      "version": "1.11.2",
++      "resolved": "https://registry.npmjs.org/@emnapi/core/-/core-1.11.2.tgz",
++      "integrity": "sha512-TC8MkTuZUtcTSiFeuC0ksCh9QIJ5+F21MvZ4Wn4ORfYaFJ/0dsiudv5tVkejgwZlwQ39jL9WWDe2lz8x0WglOA==",
++      "dev": true,
++      "license": "MIT",
++      "optional": true,
++      "peer": true,
++      "dependencies": {
++        "@emnapi/wasi-threads": "1.2.2",
++        "tslib": "^2.4.0"
++      }
++    },
++    "node_modules/@emnapi/runtime": {
++      "version": "1.11.2",
++      "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.11.2.tgz",
++      "integrity": "sha512-kyOl3X0DuTiT1h2ft8r2fYO8JYtU9a9Xis/zBSiGArNaagCOWx90N1k2wxp18czFDH+OgcWGb5ZP/XMt3dcyPA==",
++      "dev": true,
++      "license": "MIT",
++      "optional": true,
++      "peer": true,
++      "dependencies": {
++        "tslib": "^2.4.0"
++      }
++    },
+     "node_modules/@emnapi/wasi-threads": {
+-      "version": "1.2.1",
+-      "resolved": "https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-1.2.1.tgz",
+-      "integrity": "sha512-uTII7OYF+/Mes/MrcIOYp5yOtSMLBWSIoLPpcgwipoiKbli6k322tcoFsxoIIxPDqW01SQGAgko4EzZi2BNv2w==",
++      "version": "1.2.2",
++      "resolved": "https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-1.2.2.tgz",
++      "integrity": "sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA==",
+       "dev": true,
+       "license": "MIT",
+       "optional": true,
++      "peer": true,
+       "dependencies": {
+         "tslib": "^2.4.0"
+       }
+@@ -786,6 +811,40 @@
+         "node": ">=14.0.0"
+       }
+     },
++    "node_modules/@rolldown/binding-wasm32-wasi/node_modules/@emnapi/core": {
++      "version": "1.9.2",
++      "resolved": "https://registry.npmjs.org/@emnapi/core/-/core-1.9.2.tgz",
++      "integrity": "sha512-UC+ZhH3XtczQYfOlu3lNEkdW/p4dsJ1r/bP7H8+rhao3TTTMO1ATq/4DdIi23XuGoFY+Cz0JmCbdVl0hz9jZcA==",
++      "dev": true,
++      "license": "MIT",
++      "optional": true,
++      "dependencies": {
++        "@emnapi/wasi-threads": "1.2.1",
++        "tslib": "^2.4.0"
++      }
++    },
++    "node_modules/@rolldown/binding-wasm32-wasi/node_modules/@emnapi/runtime": {
++      "version": "1.9.2",
++      "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.9.2.tgz",
++      "integrity": "sha512-3U4+MIWHImeyu1wnmVygh5WlgfYDtyf0k8AbLhMFxOipihf6nrWC4syIm/SwEeec0mNSafiiNnMJwbza/Is6Lw==",
++      "dev": true,
++      "license": "MIT",
++      "optional": true,
++      "dependencies": {
++        "tslib": "^2.4.0"
++      }
++    },
++    "node_modules/@rolldown/binding-wasm32-wasi/node_modules/@emnapi/wasi-threads": {
++      "version": "1.2.1",
++      "resolved": "https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-1.2.1.tgz",
++      "integrity": "sha512-uTII7OYF+/Mes/MrcIOYp5yOtSMLBWSIoLPpcgwipoiKbli6k322tcoFsxoIIxPDqW01SQGAgko4EzZi2BNv2w==",
++      "dev": true,
++      "license": "MIT",
++      "optional": true,
++      "dependencies": {
++        "tslib": "^2.4.0"
++      }
++    },
+     "node_modules/@rolldown/binding-win32-arm64-msvc": {
+       "version": "1.0.0-rc.15",
+       "resolved": "https://registry.npmjs.org/@rolldown/binding-win32-arm64-msvc/-/binding-win32-arm64-msvc-1.0.0-rc.15.tgz",
+@@ -858,7 +917,6 @@
+       "integrity": "sha512-ilcTH/UniCkMdtexkoCN0bI7pMcJDvmQFPvuPvmEaYA/NSfFTAgdUSLAoVjaRJm7+6PvcM+q1zYOwS4wTYMF9w==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "csstype": "^3.2.2"
+       }
+@@ -905,7 +963,6 @@
+       "integrity": "sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "bin": {
+         "acorn": "bin/acorn"
+       },
+@@ -1014,7 +1071,6 @@
+         }
+       ],
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "baseline-browser-mapping": "^2.10.12",
+         "caniuse-lite": "^1.0.30001782",
+@@ -1204,7 +1260,6 @@
+       "integrity": "sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@eslint-community/eslint-utils": "^4.8.0",
+         "@eslint-community/regexpp": "^4.12.1",
+@@ -2152,7 +2207,6 @@
+       "integrity": "sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=12"
+       },
+@@ -2214,7 +2268,6 @@
+       "resolved": "https://registry.npmjs.org/react/-/react-19.2.5.tgz",
+       "integrity": "sha512-llUJLzz1zTUBrskt2pwZgLq59AemifIftw4aB7JxOqf1HY2FDaGDxgwpAPVzHU1kdWabH7FauP4i1oEeer2WCA==",
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=0.10.0"
+       }
+@@ -2442,7 +2495,6 @@
+       "integrity": "sha512-dbU7/iLVa8KZALJyLOBOQ88nOXtNG8vxKuOT4I2mD+Ya70KPceF4IAmDsmU0h1Qsn5bPrvsY9HJstCRh3hG6Uw==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "lightningcss": "^1.32.0",
+         "picomatch": "^4.0.4",
+@@ -2567,7 +2619,6 @@
+       "integrity": "sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "funding": {
+         "url": "https://github.com/sponsors/colinhacks"
+       }
+diff --git a/app/src/app/AppRouter.jsx b/app/src/app/AppRouter.jsx
+index d4507ec..a3c6454 100644
+--- a/app/src/app/AppRouter.jsx
++++ b/app/src/app/AppRouter.jsx
+@@ -1,5 +1,6 @@
+ import { ROUTES } from "./routes";
+ import HomePage from "../features/home/HomePage";
++import DoctrineMapPage from "../features/map/DoctrineMapPage";
+ import ClassroomPage from "../features/classroom/ClassroomPage";
+ import ProgressPage from "../features/progress/ProgressPage";
+ import ProfilePage from "../features/profile/ProfilePage";
+@@ -24,6 +25,9 @@ export default function AppRouter({ currentRoute, onNavigate }) {
+     case ROUTES.PROFILE_SELECT:
+       return <Placeholder title="Profile Select" />;
+ 
++    case ROUTES.MAP:
++      return <DoctrineMapPage onNavigate={onNavigate} />;
++
+     case ROUTES.CLASSROOM:
+       return <ClassroomPage onNavigate={onNavigate} />;
+ 
+diff --git a/app/src/app/routes.js b/app/src/app/routes.js
+index f9043fb..70ad11c 100644
+--- a/app/src/app/routes.js
++++ b/app/src/app/routes.js
+@@ -3,6 +3,7 @@ export const ROUTES = {
+   LOGIN: "login",
+   PROFILE_SELECT: "profileSelect",
+   HOME: "home",
++  MAP: "map",
+   CLASSROOM: "classroom",
+   PROGRESS: "progress",
+   PROFILE: "profile",
+@@ -11,6 +12,7 @@ export const ROUTES = {
+ 
+ export const MAIN_NAV_ROUTES = [
+   ROUTES.HOME,
++  ROUTES.MAP,
+   ROUTES.CLASSROOM,
+   ROUTES.PROGRESS,
+   ROUTES.PROFILE,
+diff --git a/app/src/core/classroom/classroomSessionData.js b/app/src/core/classroom/classroomSessionData.js
+index 2398243..17a85eb 100644
+--- a/app/src/core/classroom/classroomSessionData.js
++++ b/app/src/core/classroom/classroomSessionData.js
+@@ -1,243 +1,89 @@
+ import {
+-  DEFAULT_CLASSROOM_STANDARD_ID,
+-  classroomContentRegistry,
+-  getClassroomContentByStandardId,
+-} from "./content/classroomContentRegistry";
++  getStandardByCode,
++  getNextUnmasteredStandard,
++  DEFAULT_STANDARD_CODE,
++} from "../standards/standardsRegistry";
++import { getStandardProgress } from "../standards/standardsProgress";
++import { profileData } from "../../data/profileData";
+ 
+-const STORAGE_KEY = "jeremiah-ai-active-classroom-session";
+-const LIVE_STAGE_KEY_PREFIX = "jeremiah-ai-live-stage";
+-
+-export const CLASSROOM_SESSION_PRESETS = {
+-  RESUME: "resume",
+-  REVIEW: "review",
+-  ADAPTATION: "adaptation",
+-  DIRECT: "direct",
+-};
+-
+-function getFallbackClassroomContent() {
+-  return (
+-    getClassroomContentByStandardId(DEFAULT_CLASSROOM_STANDARD_ID) ||
+-    Object.values(classroomContentRegistry)[0] || {
+-      studyId: "",
+-      studyTitle: "",
+-      domainId: "",
+-      standardId: DEFAULT_CLASSROOM_STANDARD_ID,
+-      standardTitle: "",
+-      truthStatement: "",
+-      presets: {},
+-    }
+-  );
+-}
+-
+-function getSessionBase(content) {
+-  return {
+-    studyId: content.studyId,
+-    studyTitle: content.studyTitle,
+-    domainId: content.domainId || "",
+-    standardId: content.standardId,
+-    standardTitle: content.standardTitle,
+-    truthStatement: content.truthStatement,
+-  };
+-}
+-
+-function buildPresetSession(content, presetId) {
+-  return {
+-    ...getSessionBase(content),
+-    ...(content.presets?.[presetId] || {}),
+-  };
+-}
+-
+-export function getClassroomSessionPresets(
+-  standardId = DEFAULT_CLASSROOM_STANDARD_ID
+-) {
+-  const content =
+-    getClassroomContentByStandardId(standardId) || getFallbackClassroomContent();
+-
+-  return {
+-    [CLASSROOM_SESSION_PRESETS.DIRECT]: buildPresetSession(
+-      content,
+-      CLASSROOM_SESSION_PRESETS.DIRECT
+-    ),
+-    [CLASSROOM_SESSION_PRESETS.RESUME]: buildPresetSession(
+-      content,
+-      CLASSROOM_SESSION_PRESETS.RESUME
+-    ),
+-    [CLASSROOM_SESSION_PRESETS.REVIEW]: buildPresetSession(
+-      content,
+-      CLASSROOM_SESSION_PRESETS.REVIEW
+-    ),
+-    [CLASSROOM_SESSION_PRESETS.ADAPTATION]: buildPresetSession(
+-      content,
+-      CLASSROOM_SESSION_PRESETS.ADAPTATION
+-    ),
+-  };
+-}
+-
+-export const classroomSessionPresets = getClassroomSessionPresets();
+-
+-function toArray(value) {
+-  if (Array.isArray(value)) return value;
+-  if (!value) return [];
+-  if (typeof value === "object") return Object.values(value);
+-  return [];
+-}
+-
+-function countLike(value) {
+-  if (Array.isArray(value)) return value.length;
+-  if (value && typeof value === "object") return Object.keys(value).length;
+-  return 0;
+-}
+-
+-function firstNonEmpty(values) {
+-  return values.find((value) => typeof value === "string" && value.trim()) || "";
+-}
+-
+-function getLiveStageStorageKey(presetId) {
+-  return `${LIVE_STAGE_KEY_PREFIX}:${presetId}`;
++/** Stand-in for real auth/login — see profileData.learner.ageBand. */
++export function getActiveLearnerAgeBand() {
++  return profileData?.learner?.ageBand || "adult";
+ }
+ 
+-export function selectHomeSessionPreset(homeData = {}) {
+-  const stageId = firstNonEmpty([
+-    homeData?.continueCard?.currentStageId,
+-    homeData?.continueCard?.stageId,
+-    homeData?.continueCard?.stage,
+-    homeData?.activeSession?.currentStageId,
+-    homeData?.activeSession?.stageId,
+-    homeData?.activeSession?.stage,
+-  ])
+-    .trim()
+-    .toLowerCase();
+-
+-  if (["scripture", "checkpoint", "mastery"].includes(stageId)) {
+-    return CLASSROOM_SESSION_PRESETS.RESUME;
+-  }
+-
+-  if (["focus", "truth"].includes(stageId)) {
+-    return CLASSROOM_SESSION_PRESETS.DIRECT;
+-  }
+-
+-  return CLASSROOM_SESSION_PRESETS.RESUME;
+-}
+-
+-export function selectProgressSessionPreset(progressData = {}) {
+-  const reviewSignals = [
+-    countLike(progressData?.reviewNeeded),
+-    countLike(progressData?.reviewQueue),
+-    countLike(progressData?.weakAreas),
+-    countLike(progressData?.itemsNeedingReview),
+-    countLike(progressData?.reviewItems),
+-  ];
+-
+-  if (reviewSignals.some((count) => count > 0)) {
+-    return CLASSROOM_SESSION_PRESETS.REVIEW;
+-  }
+-
+-  const activeLearningSignals = [
+-    progressData?.activeLearning,
+-    progressData?.activePath,
+-    progressData?.currentTrack,
+-    progressData?.nextStep,
+-    ...toArray(progressData?.masterySummary),
+-  ];
+-
+-  if (activeLearningSignals.some(Boolean)) {
+-    return CLASSROOM_SESSION_PRESETS.RESUME;
+-  }
++const ACTIVE_STANDARD_KEY = "jeremiah-ai-active-standard";
++const LIVE_STAGE_KEY_PREFIX = "jeremiah-ai-live-stage";
+ 
+-  return CLASSROOM_SESSION_PRESETS.DIRECT;
++function getLiveStageStorageKey(standardCode) {
++  return `${LIVE_STAGE_KEY_PREFIX}:${standardCode}`;
+ }
+ 
+-export function selectProfileSessionPreset(profileData = {}) {
+-  const learnerSignals = [
+-    profileData?.learnerLevel,
+-    profileData?.level,
+-    profileData?.profileLevel,
+-    profileData?.ageBand,
+-    profileData?.learnerPath,
+-  ];
+-
+-  const adaptationSignals = [
+-    countLike(profileData?.adaptation),
+-    countLike(profileData?.adaptationInfo),
+-    countLike(profileData?.supportNeeds),
+-    countLike(profileData?.learningProfile),
+-  ];
+-
+-  if (firstNonEmpty(learnerSignals) || adaptationSignals.some((count) => count > 0)) {
+-    return CLASSROOM_SESSION_PRESETS.ADAPTATION;
+-  }
+-
+-  return CLASSROOM_SESSION_PRESETS.DIRECT;
++/** Sets which standard the learner is actively working (e.g. from the Doctrine Map). */
++export function setActiveStandardCode(standardCode) {
++  if (typeof window === "undefined" || !standardCode) return;
++  window.sessionStorage.setItem(ACTIVE_STANDARD_KEY, standardCode);
+ }
+ 
+-export function setActiveClassroomSessionPreset(presetId) {
+-  if (typeof window === "undefined") return;
+-
+-  const availablePresets = getClassroomSessionPresets();
++/** The active standard, defaulting to the learner's next-unmastered standard. */
++export function getActiveStandardCode() {
++  if (typeof window === "undefined") return DEFAULT_STANDARD_CODE;
+ 
+-  const safePreset =
+-    availablePresets[presetId] != null
+-      ? presetId
+-      : CLASSROOM_SESSION_PRESETS.DIRECT;
++  const stored = window.sessionStorage.getItem(ACTIVE_STANDARD_KEY);
++  if (stored && getStandardByCode(stored)) return stored;
+ 
+-  window.sessionStorage.setItem(STORAGE_KEY, safePreset);
++  const next = getNextUnmasteredStandard(getStandardProgress());
++  return next?.code || DEFAULT_STANDARD_CODE;
+ }
+ 
+-export function getActiveClassroomSessionPreset() {
+-  if (typeof window === "undefined") {
+-    return CLASSROOM_SESSION_PRESETS.DIRECT;
+-  }
+-
+-  return (
+-    window.sessionStorage.getItem(STORAGE_KEY) ||
+-    CLASSROOM_SESSION_PRESETS.DIRECT
+-  );
+-}
+-
+-export function clearActiveClassroomSessionPreset() {
++export function clearActiveStandardCode() {
+   if (typeof window === "undefined") return;
+-  window.sessionStorage.removeItem(STORAGE_KEY);
++  window.sessionStorage.removeItem(ACTIVE_STANDARD_KEY);
+ }
+ 
+-export function setSavedLiveStageForPreset(presetId, stageId) {
+-  if (typeof window === "undefined" || !presetId || !stageId) return;
+-  window.sessionStorage.setItem(getLiveStageStorageKey(presetId), stageId);
++export function setSavedLiveStageForStandard(standardCode, stageId) {
++  if (typeof window === "undefined" || !standardCode || !stageId) return;
++  window.sessionStorage.setItem(getLiveStageStorageKey(standardCode), stageId);
+ }
+ 
+-export function getSavedLiveStageForPreset(presetId) {
+-  if (typeof window === "undefined" || !presetId) return "";
+-
+-  return window.sessionStorage.getItem(getLiveStageStorageKey(presetId)) || "";
++export function getSavedLiveStageForStandard(standardCode) {
++  if (typeof window === "undefined" || !standardCode) return "";
++  return window.sessionStorage.getItem(getLiveStageStorageKey(standardCode)) || "";
+ }
+ 
+-export function clearSavedLiveStageForPreset(presetId) {
+-  if (typeof window === "undefined" || !presetId) return;
+-  window.sessionStorage.removeItem(getLiveStageStorageKey(presetId));
++export function clearSavedLiveStageForStandard(standardCode) {
++  if (typeof window === "undefined" || !standardCode) return;
++  window.sessionStorage.removeItem(getLiveStageStorageKey(standardCode));
+ }
+ 
++/**
++ * The live classroom session — always built from the active standard (the
++ * Brain), never from hand-authored per-standard preset content. Any of the
++ * standards in standardsRegistry.js works through this the same way.
++ */
+ export function getCurrentSession() {
+-  const content = getFallbackClassroomContent();
+-  const presets = getClassroomSessionPresets(content.standardId);
+-  const presetId = getActiveClassroomSessionPreset();
+-  const preset =
+-    presets[presetId] || presets[CLASSROOM_SESSION_PRESETS.DIRECT];
++  const standardCode = getActiveStandardCode();
++  const standard = getStandardByCode(standardCode) || getStandardByCode(DEFAULT_STANDARD_CODE);
+ 
+-  const savedLiveStageId =
+-    getSavedLiveStageForPreset(presetId) || preset.currentStageId;
++  const entryStageId = "focus";
++  const liveStageId = getSavedLiveStageForStandard(standard.code) || entryStageId;
+ 
+   return {
+-    ...preset,
+-    presetId,
+-    sessionType: presetId,
+-    presetEntryStageId: preset.currentStageId,
+-    currentStageId: savedLiveStageId,
++    standardId: standard.code,
++    standardTitle: standard.title,
++    studyId: standard.subjectCode,
++    studyTitle: standard.subjectTitle,
++    domainId: standard.domainCode,
++    domainTitle: standard.domainTitle,
++    truthStatement: standard.statement,
++    truthExplanation: standard.statement,
++    verses: (standard.anchorScriptures || []).map((verse) => ({
++      ...verse,
++      note: `Anchor scripture for ${standard.code} — ${standard.title}.`,
++    })),
++    vocabulary: standard.vocabulary || [],
++    evidenceOfLearning: standard.evidenceOfLearning || [],
++    presetEntryStageId: entryStageId,
++    currentStageId: liveStageId,
++    sessionType: standardCode,
+   };
+ }
+-
+-export const currentSession = {
+-  ...getClassroomSessionPresets()[CLASSROOM_SESSION_PRESETS.DIRECT],
+-  presetId: CLASSROOM_SESSION_PRESETS.DIRECT,
+-  sessionType: CLASSROOM_SESSION_PRESETS.DIRECT,
+-  presetEntryStageId:
+-    getClassroomSessionPresets()[CLASSROOM_SESSION_PRESETS.DIRECT].currentStageId,
+-};
+diff --git a/app/src/core/classroom/content/OG_1_1_18.js b/app/src/core/classroom/content/OG_1_1_18.js
+deleted file mode 100644
+index 0bbc9e0..0000000
+--- a/app/src/core/classroom/content/OG_1_1_18.js
++++ /dev/null
+@@ -1,128 +0,0 @@
+-const directVerses = [
+-  {
+-    reference: "Deuteronomy 6:4",
+-    text: "Hear, O Israel: The LORD our God is one LORD.",
+-    note: "This verse establishes the irreducible confession of biblical monotheism and anchors the entire lesson.",
+-  },
+-  {
+-    reference: "Isaiah 44:6",
+-    text: "I am the first, and I am the last; and beside me there is no God.",
+-    note: "This verse rules out the existence of another divine being alongside the LORD.",
+-  },
+-];
+-
+-const resumeVerses = [
+-  {
+-    reference: "Deuteronomy 6:4",
+-    text: "Hear, O Israel: The LORD our God is one LORD.",
+-    note: "This verse pulls the learner back into the active scripture stage by restating the core confession clearly.",
+-  },
+-  {
+-    reference: "Isaiah 44:6",
+-    text: "I am the first, and I am the last; and beside me there is no God.",
+-    note: "This verse keeps the resumed lesson from drifting by forcing the learner to face what the doctrine excludes.",
+-  },
+-];
+-
+-const reviewVerses = [
+-  {
+-    reference: "Deuteronomy 6:4",
+-    text: "Hear, O Israel: The LORD our God is one LORD.",
+-    note: "Review uses this verse to restate the positive doctrinal confession with precision.",
+-  },
+-  {
+-    reference: "Isaiah 44:6",
+-    text: "I am the first, and I am the last; and beside me there is no God.",
+-    note: "Review uses this verse to expose and correct any idea of another divine being.",
+-  },
+-  {
+-    reference: "Isaiah 45:5",
+-    text: "I am the LORD, and there is none else, there is no God beside me.",
+-    note: "This verse intensifies correction by repeating the exclusion in unmistakable language.",
+-  },
+-];
+-
+-const adaptationVerses = [
+-  {
+-    reference: "Deuteronomy 6:4",
+-    text: "Hear, O Israel: The LORD our God is one LORD.",
+-    note: "This verse keeps the truth simple and direct so the learner can hold the main claim clearly.",
+-  },
+-  {
+-    reference: "Mark 12:29",
+-    text: "The first of all the commandments is, Hear, O Israel; The Lord our God is one Lord.",
+-    note: "This verse shows that Jesus reaffirmed the Shema rather than replacing it.",
+-  },
+-];
+-
+-export const OG_1_1_18_CLASSROOM_CONTENT = {
+-  studyId: "OG",
+-  studyTitle: "The One True God",
+-  domainId: "OG.1",
+-  standardId: "OG.1.1.18",
+-  standardTitle: "The Shema as Doctrinal Foundation",
+-  truthStatement: "The LORD our God is one LORD.",
+-  presets: {
+-    direct: {
+-      currentStageId: "focus",
+-      learnerLevel: "Adult Endpoint Path",
+-      truthExplanation:
+-        "This direct Classroom session begins at the doctrinal foundation of biblical monotheism. Jeremiah AI introduces the learner to the Shema as the controlling confession for understanding every later revelation about God.",
+-      verses: directVerses,
+-      checkpoint: {
+-        title: "What does the Shema require you to confess?",
+-        description:
+-          "Jeremiah AI is checking whether the learner understands that Deuteronomy 6:4 is not a slogan only, but the doctrinal foundation of biblical monotheism.",
+-        prompt:
+-          "What does Deuteronomy 6:4 require you to confess about God, and what does Isaiah 44:6 rule out completely?",
+-      },
+-    },
+-
+-    resume: {
+-      currentStageId: "scripture",
+-      learnerLevel: "Adult Endpoint Path",
+-      truthExplanation:
+-        "This preset resumes an in-progress Classroom path. Jeremiah AI re-enters the learner at the scripture-grounding stage so the monotheistic confession is re-anchored in the text itself.",
+-      verses: resumeVerses,
+-      checkpoint: {
+-        title: "How do these verses hold the doctrine together?",
+-        description:
+-          "Jeremiah AI is treating this as a resumed lesson. The learner must reconnect the doctrinal claim to the supporting passages.",
+-        prompt:
+-          "Return to the verses and show how they establish the oneness of God and leave no room for another divine person beside Him.",
+-      },
+-    },
+-
+-    review: {
+-      currentStageId: "checkpoint",
+-      learnerLevel: "Correction Path",
+-      truthExplanation:
+-        "This preset opens a correction-oriented review path. Jeremiah AI revisits the same doctrinal truth, but enters where weak understanding must be tested and repaired directly.",
+-      verses: reviewVerses,
+-      checkpoint: {
+-        title: "Correct the weak understanding directly",
+-        description:
+-          "Jeremiah AI is not looking for vague agreement here. This review path exists to repair the exact doctrinal weakness still showing in the learner response.",
+-        prompt:
+-          "Use these passages to correct the idea that God exists as multiple divine persons. What must be confessed instead?",
+-      },
+-    },
+-
+-    adaptation: {
+-      currentStageId: "truth",
+-      learnerLevel: "Profile-Adaptive Path",
+-      truthExplanation:
+-        "This preset opens a learner-level path. Jeremiah AI keeps the doctrine fixed but begins at a truth-framing stage that fits profile-based delivery rather than a one-size-fits-all entry.",
+-      verses: adaptationVerses,
+-      checkpoint: {
+-        title: "State the truth clearly at the learner level",
+-        description:
+-          "Jeremiah AI is checking whether the learner can state the same doctrine clearly without changing the truth itself.",
+-        prompt:
+-          "In learner-level wording, state what these verses teach about God and explain what they do not allow you to believe instead.",
+-      },
+-    },
+-  },
+-};
+-
+-export default OG_1_1_18_CLASSROOM_CONTENT;
+diff --git a/app/src/core/classroom/content/classroomContentRegistry.js b/app/src/core/classroom/content/classroomContentRegistry.js
+deleted file mode 100644
+index 0634c34..0000000
+--- a/app/src/core/classroom/content/classroomContentRegistry.js
++++ /dev/null
+@@ -1,11 +0,0 @@
+-import OG_1_1_18_CLASSROOM_CONTENT from "./OG_1_1_18";
+-
+-export const classroomContentRegistry = {
+-  [OG_1_1_18_CLASSROOM_CONTENT.standardId]: OG_1_1_18_CLASSROOM_CONTENT,
+-};
+-
+-export function getClassroomContentByStandardId(standardId) {
+-  return classroomContentRegistry[standardId] || null;
+-}
+-
+-export const DEFAULT_CLASSROOM_STANDARD_ID = "OG.1.1.18";
+diff --git a/app/src/core/classroom/evaluateResponse.js b/app/src/core/classroom/evaluateResponse.js
+index 1730878..79ca8df 100644
+--- a/app/src/core/classroom/evaluateResponse.js
++++ b/app/src/core/classroom/evaluateResponse.js
+@@ -1,243 +1,73 @@
+-import { masteryRules } from "./masteryRules";
++import { getStandardByCode } from "../standards/standardsRegistry";
++import { sessionStages } from "./sessionStages";
++import { getEdgeFunctionUrl, SUPABASE_ANON_KEY } from "../config/supabaseConfig";
+ 
+-function normalizeResponse(responseText = "") {
+-  return responseText.trim().toLowerCase();
+-}
+-
+-function includesAny(text, phrases = []) {
+-  return phrases.some((phrase) => text.includes(phrase));
+-}
+-
+-function wordCount(text) {
+-  return text.split(/\s+/).filter(Boolean).length;
+-}
+-
+-function evaluateOgOneByStage(normalized, rule, stageId) {
+-  const mentionsPositiveConfession = includesAny(
+-    normalized,
+-    rule.positiveConfessionPhrases
+-  );
+-
+-  const mentionsExclusion = includesAny(normalized, rule.exclusionPhrases);
+-
+-  const mentionsGodLanguage = includesAny(normalized, [
+-    "god",
+-    "lord",
+-    "one",
+-    "only",
+-  ]);
+-
+-  const mentionsScriptureEvidence = includesAny(normalized, [
+-    "deuteronomy 6:4",
+-    "deut 6:4",
+-    "hear o israel",
+-    "the lord our god is one lord",
+-    "isaiah 45:5",
+-    "i am the lord",
+-    "there is none else",
+-    "there is no god beside me",
+-    "beside me there is no god",
+-  ]);
+-
+-  switch (stageId) {
+-    case "focus":
+-      if (mentionsPositiveConfession) {
+-        return {
+-          status: "strong",
+-          feedback:
+-            "Strong focus response. You identified the target truth: God is one.",
+-        };
+-      }
+-
+-      if (mentionsGodLanguage) {
+-        return {
+-          status: "partial",
+-          feedback:
+-            "You are near the target, but this stage needs the central claim stated clearly: God is one.",
+-        };
+-      }
+-
+-      return {
+-        status: "weak",
+-        feedback:
+-          "This stage is about identifying the main doctrinal target. State clearly that God is one.",
+-      };
+-
+-    case "truth":
+-      if (mentionsPositiveConfession && wordCount(normalized) >= 4) {
+-        return {
+-          status: "strong",
+-          feedback:
+-            "Strong truth response. You stated the doctrine directly rather than speaking in vague terms.",
+-        };
+-      }
+-
+-      if (mentionsGodLanguage) {
+-        return {
+-          status: "partial",
+-          feedback:
+-            "Good start, but this stage requires a direct doctrinal statement. Say plainly that there is only one God.",
+-        };
+-      }
+-
+-      return {
+-        status: "weak",
+-        feedback:
+-          "This response does not yet state the doctrinal truth clearly. Say directly that God is one.",
+-      };
+-
+-    case "scripture":
+-      if (
+-        mentionsScriptureEvidence &&
+-        (mentionsPositiveConfession || mentionsExclusion)
+-      ) {
+-        return {
+-          status: "strong",
+-          feedback:
+-            "Strong scripture response. You grounded the doctrinal claim in the wording of the passages.",
+-        };
+-      }
+-
+-      if (mentionsScriptureEvidence || mentionsPositiveConfession) {
+-        return {
+-          status: "partial",
+-          feedback:
+-            "You are partway there. This stage needs the doctrinal claim tied to the actual wording of the verses.",
+-        };
+-      }
+-
+-      return {
+-        status: "weak",
+-        feedback:
+-          "This stage requires scriptural grounding. Use the wording of the passages to show that God is one and no other God exists beside Him.",
+-      };
+-
+-    case "checkpoint":
+-      if (mentionsPositiveConfession && mentionsExclusion) {
+-        return {
+-          status: "strong",
+-          feedback: rule.feedback.strong,
+-        };
+-      }
+-
+-      if (mentionsPositiveConfession || mentionsExclusion) {
+-        return {
+-          status: "partial",
+-          feedback: rule.feedback.partial,
+-        };
+-      }
++const GRADE_ENDPOINT = getEdgeFunctionUrl("grade-response");
+ 
+-      return {
+-        status: "weak",
+-        feedback: rule.feedback.weak,
+-      };
+-
+-    case "mastery":
+-      if (
+-        mentionsPositiveConfession &&
+-        mentionsExclusion &&
+-        wordCount(normalized) >= 8
+-      ) {
+-        return {
+-          status: "strong",
+-          feedback:
+-            "Strong mastery response. You gave a clear doctrinal confession and stated what the verses exclude.",
+-        };
+-      }
+-
+-      if (mentionsPositiveConfession && mentionsExclusion) {
+-        return {
+-          status: "partial",
+-          feedback:
+-            "This is close to mastery, but the confession still needs a little more precision and completeness.",
+-        };
+-      }
+-
+-      if (mentionsPositiveConfession || mentionsExclusion) {
+-        return {
+-          status: "partial",
+-          feedback:
+-            "This response shows some understanding, but mastery requires both the positive confession and the exclusion.",
+-        };
+-      }
+-
+-      return {
+-        status: "weak",
+-        feedback:
+-          "This does not yet show mastery. State clearly that God is one and that no other God exists beside Him.",
+-      };
+-
+-    default:
+-      if (mentionsPositiveConfession && mentionsExclusion) {
+-        return {
+-          status: "strong",
+-          feedback: rule.feedback.strong,
+-        };
+-      }
+-
+-      if (mentionsPositiveConfession) {
+-        return {
+-          status: "partial",
+-          feedback: rule.feedback.partial,
+-        };
+-      }
+-
+-      return {
+-        status: "weak",
+-        feedback: rule.feedback.weak,
+-      };
+-  }
++function getStage(stageId) {
++  return sessionStages.find((stage) => stage.id === stageId) || null;
+ }
+ 
+-export function evaluateResponse(
+-  responseText,
+-  standardId = "OG.1.18",
+-  stageId = "checkpoint"
+-) {
+-  const normalized = normalizeResponse(responseText);
+-  const rule = masteryRules[standardId];
+-
+-  if (!rule) {
+-    return {
+-      status: "weak",
+-      feedback: "No mastery rule was found for this standard.",
+-    };
+-  }
++/**
++ * The only place a learner response gets graded. Always asks the mouthpiece
++ * (the grade-response Edge Function) to judge against the real standard from
++ * the Brain (standardsRegistry.js) — never guesses locally. If the
++ * mouthpiece can't be reached, this returns an honest "can't grade right
++ * now" result instead of fabricating a verdict.
++ */
++export async function evaluateResponse(responseText, standardCode, stageId, ageBand = "adult") {
++  const normalized = (responseText || "").trim();
+ 
+   if (!normalized) {
+     return {
+       status: "empty",
+-      feedback: rule.feedback.empty,
++      feedback: "Enter a response before Jeremiah can evaluate your understanding.",
+     };
+   }
+ 
+-  if (standardId === "OG.1.18") {
+-    return evaluateOgOneByStage(normalized, rule, stageId);
+-  }
+-
+-  const mentionsPositiveConfession = includesAny(
+-    normalized,
+-    rule.positiveConfessionPhrases
+-  );
+-
+-  const mentionsExclusion = includesAny(normalized, rule.exclusionPhrases);
+-
+-  if (mentionsPositiveConfession && mentionsExclusion) {
++  const standard = getStandardByCode(standardCode);
++  if (!standard) {
+     return {
+-      status: "strong",
+-      feedback: rule.feedback.strong,
++      status: "weak",
++      feedback: `No standard was found for "${standardCode}". This response could not be graded.`,
+     };
+   }
+ 
+-  if (mentionsPositiveConfession) {
++  const stage = getStage(stageId);
++
++  try {
++    const response = await fetch(GRADE_ENDPOINT, {
++      method: "POST",
++      headers: {
++        "Content-Type": "application/json",
++        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
++        apikey: SUPABASE_ANON_KEY,
++      },
++      body: JSON.stringify({
++        standard,
++        stageLabel: stage?.label || stageId,
++        stageDescription: stage?.description || "",
++        learnerResponse: normalized,
++        ageBand,
++      }),
++    });
++
++    if (!response.ok) {
++      throw new Error(`Grading request failed with ${response.status}`);
++    }
++
++    const result = await response.json();
++    if (!result?.status || !result?.feedback) {
++      throw new Error("Grading response was missing status/feedback");
++    }
++
++    return result;
++  } catch {
+     return {
+-      status: "partial",
+-      feedback: rule.feedback.partial,
++      status: "weak",
++      feedback:
++        "Jeremiah can't grade this response right now (connection issue). Check your connection and submit again — this is not a judgment on your answer.",
++      gradingUnavailable: true,
+     };
+   }
+-
+-  return {
+-    status: "weak",
+-    feedback: rule.feedback.weak,
+-  };
+ }
+diff --git a/app/src/core/classroom/masteryRules.js b/app/src/core/classroom/masteryRules.js
+deleted file mode 100644
+index 53db0d0..0000000
+--- a/app/src/core/classroom/masteryRules.js
++++ /dev/null
+@@ -1,26 +0,0 @@
+-export const masteryRules = {
+-  "OG.1.18": {
+-    positiveConfessionPhrases: [
+-      "one god",
+-      "god is one",
+-      "only one god",
+-    ],
+-    exclusionPhrases: [
+-      "no other god",
+-      "there is no other god",
+-      "beside him there is no god",
+-      "rules out other gods",
+-      "not many gods",
+-    ],
+-    feedback: {
+-      empty:
+-        "Enter a response before Jeremiah AI can evaluate your understanding.",
+-      strong:
+-        "Strong response. You identified both the positive confession and the exclusion these verses require.",
+-      partial:
+-        "Good start. You identified the oneness claim, but you still need to state what these verses rule out.",
+-      weak:
+-        "This response is too weak. The verses require you to confess that God is one and that no other God exists beside Him.",
+-    },
+-  },
+-};
+\ No newline at end of file
+diff --git a/app/src/core/classroom/stageContent.js b/app/src/core/classroom/stageContent.js
+index 17075d4..70d6839 100644
+--- a/app/src/core/classroom/stageContent.js
++++ b/app/src/core/classroom/stageContent.js
+@@ -1,37 +1,53 @@
++// title/description are genuinely generic across every standard. The prompt
++// text used to be hardcoded to one doctrine (monotheism) here — that's what
++// made adding a second standard require new code. buildStagePrompt() below
++// generates the prompt from whichever standard is actually active instead.
+ export const stageContent = {
+   focus: {
+     title: "Session focus",
+     description:
+       "Orient the learner to the doctrinal target before deeper instruction begins.",
+-    prompt:
+-      "In this session, you are focusing on what the scriptures require you to confess about the identity and number of God.",
+   },
+   truth: {
+     title: "Truth emphasis",
+     description:
+       "State the doctrinal truth clearly before asking the learner to reason from scripture.",
+-    prompt:
+-      "The truth being taught here is not merely that God exists, but that God is one and that no other God exists beside Him.",
+   },
+   scripture: {
+     title: "Scripture grounding",
+     description:
+       "Anchor the learner in the passages that prove the doctrinal claim.",
+-    prompt:
+-      "Read the verses carefully and identify the wording that proves the oneness of God and excludes the existence of another divine being.",
+   },
+   checkpoint: {
+     title: "Guided checkpoint",
+     description:
+       "Require the learner to respond to the doctrinal claim made by the passages.",
+-    prompt:
+-      "These verses do not merely mention God. They make a doctrinal claim. What do they rule out, and what do they require you to confess instead?",
+   },
+   mastery: {
+     title: "Mastery confirmation",
+     description:
+       "Confirm whether the learner can now express the truth with sufficient clarity and precision.",
+-    prompt:
+-      "State clearly what these verses require you to confess about God, and explain what they rule out.",
+   },
+-};
+\ No newline at end of file
++};
++
++/** Builds the "Jeremiah AI Prompt" text for the active stage from the active standard. */
++export function buildStagePrompt(stageId, standard) {
++  if (!standard) return "";
++
++  const firstVerse = standard.anchorScriptures?.[0]?.reference || "the anchor scripture";
++
++  switch (stageId) {
++    case "focus":
++      return `In this session, you are focusing on what the scriptures require you to confess about: ${standard.title}.`;
++    case "truth":
++      return `The truth being taught here is: ${standard.statement}`;
++    case "scripture":
++      return `Read the verses carefully, starting with ${firstVerse}, and identify the wording that establishes: ${standard.statement}`;
++    case "checkpoint":
++      return `These verses make a doctrinal claim, not just a mention. What do they establish, and what do they rule out, regarding "${standard.title}"?`;
++    case "mastery":
++      return `State clearly, in your own words, what these verses require you to confess: ${standard.statement}. Reference specific wording from the anchor scriptures.`;
++    default:
++      return standard.statement;
++  }
++}
+diff --git a/app/src/core/config/supabaseConfig.js b/app/src/core/config/supabaseConfig.js
+new file mode 100644
+index 0000000..c0ddaf0
+--- /dev/null
++++ b/app/src/core/config/supabaseConfig.js
+@@ -0,0 +1,11 @@
++// Same Supabase project the original app used. The anon/"publishable" key is
++// safe to ship client-side by design (Supabase's publishable-key model) —
++// it is not a secret. The actual grading secret (ANTHROPIC_API_KEY) lives
++// only server-side, as a Supabase Edge Function secret — see
++// app/supabase/functions/grade-response/index.ts.
++export const SUPABASE_URL = "https://jogycozrhylfzpwcoeed.supabase.co";
++export const SUPABASE_ANON_KEY = "sb_publishable_aGrwoKPUYvRetC4XF2mwMg_KGiGz3qe";
++
++export function getEdgeFunctionUrl(functionName) {
++  return `${SUPABASE_URL}/functions/v1/${functionName}`;
++}
+diff --git a/app/src/core/standards/standardsProgress.js b/app/src/core/standards/standardsProgress.js
+new file mode 100644
+index 0000000..bacee1c
+--- /dev/null
++++ b/app/src/core/standards/standardsProgress.js
+@@ -0,0 +1,38 @@
++// Tracks mastery per standard as 0-4, matching the evidenceOfLearning level
++// order in standardsRegistry.js (1=Recognition, 2=Explanation, 3=Application,
++// 4=Defense). Persisted in localStorage so it survives across visits, unlike
++// the session-scoped live-stage/entry-intent state.
++const STORAGE_KEY = "jeremiah-ai-standard-progress";
++
++export function getStandardProgress() {
++  if (typeof window === "undefined") return {};
++  try {
++    return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "{}");
++  } catch {
++    return {};
++  }
++}
++
++function saveStandardProgress(progress) {
++  if (typeof window === "undefined") return;
++  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
++}
++
++/** Only ever raises a standard's level — never regresses it. */
++export function raiseStandardProgressLevel(standardCode, level) {
++  if (typeof window === "undefined" || !standardCode) return;
++  const progress = getStandardProgress();
++  const current = progress[standardCode] || 0;
++  if (level > current) {
++    progress[standardCode] = Math.min(level, 4);
++    saveStandardProgress(progress);
++  }
++}
++
++export function getStandardProgressLevel(standardCode) {
++  return getStandardProgress()[standardCode] || 0;
++}
++
++export function isStandardMastered(standardCode) {
++  return getStandardProgressLevel(standardCode) >= 4;
++}
+diff --git a/app/src/core/standards/standardsRegistry.js b/app/src/core/standards/standardsRegistry.js
+new file mode 100644
+index 0000000..ed0e5a5
+--- /dev/null
++++ b/app/src/core/standards/standardsRegistry.js
+@@ -0,0 +1,645 @@
++/**
++ * standardsRegistry.js — The Brain
++ *
++ * The single source of doctrinal truth. Every standard here is the only
++ * place "correct" gets decided — the classroom UI and the grading mouthpiece
++ * both read from this, never the other way around.
++ *
++ * Schema (ported from the original app's curriculum.js, which had the right
++ * shape but was never wired to anything):
++ *   subject:  { code, title, color, domains: [domain] }
++ *   domain:   { domainCode, domainTitle, anchorScripture, purpose, standards: [standard] }
++ *   standard: { code, title, statement, vocabulary, anchorScriptures, evidenceOfLearning }
++ *
++ * evidenceOfLearning is four graduated levels, in order:
++ *   1. Recognition — recall and identify
++ *   2. Explanation — explain meaning, contrast views
++ *   3. Application — apply to real life, connect to other scriptures
++ *   4. Defense     — defend against opposing positions using Scripture
++ *
++ * To add a standard: append a standard object to the right domain below
++ * (or a new domain/subject). Nothing else needs to change — the classroom,
++ * the map, and the grading mouthpiece all generalize off this shape.
++ */
++
++export const standardsRegistry = {
++  OG: {
++    code: "OG",
++    title: "The One True God",
++    color: "#003DA5",
++    domains: [
++      {
++        domainCode: "OG.1",
++        domainTitle: "Absolute Divine Identity and Scriptural Monotheism",
++        anchorScripture: {
++          reference: "Deuteronomy 6:4",
++          text: "Hear, O Israel: The LORD our God is one LORD.",
++        },
++        purpose:
++          "Establish the singular, exclusive identity of God as the foundation of all biblical understanding.",
++        standards: [
++          {
++            code: "OG.1.1",
++            title: "The Shema as Foundation",
++            statement:
++              "Recite and explain Deuteronomy 6:4 as the core confession of biblical monotheism.",
++            vocabulary: ["Shema", "Echad", "Monotheism", "YHWH"],
++            anchorScriptures: [
++              {
++                reference: "Deuteronomy 6:4",
++                text: "Hear, O Israel: The LORD our God is one LORD.",
++              },
++              {
++                reference: "Mark 12:29",
++                text: "The first of all the commandments is, Hear, O Israel; The Lord our God is one Lord.",
++              },
++              {
++                reference: "Isaiah 43:10",
++                text: "Ye are my witnesses, saith the LORD, and my servant whom I have chosen: that ye may know and believe me, and understand that I am he: before me there was no God formed, neither shall there be after me.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "Recites Deuteronomy 6:4 and states its basic meaning as the foundational confession of Israel's faith.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains the Hebrew word 'echad' (one) and why it points to an absolute, singular unity rather than a compound unity.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Demonstrates how Jesus and the apostles upheld and reaffirmed the Shema in the New Testament, showing continuity of monotheism.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends the absolute oneness of God against trinitarian claims using the Shema and supporting scriptures.",
++              },
++            ],
++          },
++          {
++            code: "OG.1.2",
++            title: "Divine Names and Titles",
++            statement:
++              "Identify and explain the significance of the primary biblical names and titles of God: YHWH, Elohim, and the I AM.",
++            vocabulary: [
++              "YHWH",
++              "Elohim",
++              "Adonai",
++              "El Shaddai",
++              "Tetragrammaton",
++              "I AM",
++            ],
++            anchorScriptures: [
++              {
++                reference: "Exodus 3:14",
++                text: "And God said unto Moses, I AM THAT I AM: and he said, Thus shalt thou say unto the children of Israel, I AM hath sent me unto you.",
++              },
++              {
++                reference: "Isaiah 43:11",
++                text: "I, even I, am the LORD; and beside me there is no saviour.",
++              },
++              {
++                reference: "John 8:58",
++                text: "Jesus said unto them, Verily, verily, I say unto you, Before Abraham was, I am.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "Lists the primary names and titles of God in Scripture (YHWH, Elohim, El Shaddai, I AM) and their basic meanings.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains how YHWH (I AM) reveals God's self-existence, eternity, and absolute sovereignty.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Connects Jesus's 'I AM' statements in the Gospel of John to the YHWH revelation in Exodus, showing fulfillment.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Uses the biblical names and titles of God to argue for strict monotheism and to refute the notion of three distinct persons.",
++              },
++            ],
++          },
++          {
++            code: "OG.1.3",
++            title: "The Invisibility and Spirit Nature of God",
++            statement:
++              "Explain that God is Spirit and invisible in His divine nature, and reconcile this with the incarnation.",
++            vocabulary: ["Spirit", "Incarnation", "Omnipresent", "Transcendent"],
++            anchorScriptures: [
++              {
++                reference: "John 4:24",
++                text: "God is a Spirit: and they that worship him must worship him in spirit and in truth.",
++              },
++              {
++                reference: "Colossians 2:9",
++                text: "For in him dwelleth all the fulness of the Godhead bodily.",
++              },
++              {
++                reference: "1 Timothy 1:17",
++                text: "Now unto the King eternal, immortal, invisible, the only wise God, be honour and glory for ever and ever. Amen.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "States that God is Spirit and invisible (John 4:24; 1 Tim. 1:17) and identifies key scriptures that affirm this.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains how the incarnation (Jesus as the body of God) reconciles the invisible God becoming visible in the flesh.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Demonstrates from Colossians 2:9 and John 14:9 that seeing Jesus is seeing the fullness of the Godhead.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends the Apostolic view of the Godhead against the objection that Jesus and the Father must be separate persons because one is visible and one is not.",
++              },
++            ],
++          },
++        ],
++      },
++      {
++        domainCode: "OG.2",
++        domainTitle: "The Absolute Deity of Jesus Christ",
++        anchorScripture: {
++          reference: "Colossians 2:9",
++          text: "For in him dwelleth all the fulness of the Godhead bodily.",
++        },
++        purpose:
++          "Establish that Jesus Christ is not a second person of the Trinity but the fullness of the Godhead incarnate.",
++        standards: [
++          {
++            code: "OG.2.1",
++            title: "Fullness of the Godhead in Jesus",
++            statement:
++              "Demonstrate from Scripture that Jesus Christ embodies the full, complete Godhead — not one-third of a Trinity.",
++            vocabulary: ["Godhead", "Deity", "Incarnation", "Fullness", "Emmanuel"],
++            anchorScriptures: [
++              {
++                reference: "Colossians 2:9",
++                text: "For in him dwelleth all the fulness of the Godhead bodily.",
++              },
++              {
++                reference: "John 14:9",
++                text: "He that hath seen me hath seen the Father; and how sayest thou then, Shew us the Father?",
++              },
++              {
++                reference: "Isaiah 9:6",
++                text: "For unto us a child is born, unto us a son is given: and the government shall be upon his shoulder: and his name shall be called Wonderful, Counsellor, The mighty God, The everlasting Father, The Prince of Peace.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "Identifies Colossians 2:9 and states that all the fullness of the Godhead dwells bodily in Jesus.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains what 'fullness of the Godhead bodily' means and why it rules out Jesus being only one-third of God.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Uses Isaiah 9:6, John 14:9, and Colossians 2:9 together to show that Jesus is the complete embodiment of the Godhead.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends the Apostolic Oneness position against trinitarian theology using these scriptures and theological reasoning.",
++              },
++            ],
++          },
++          {
++            code: "OG.2.2",
++            title: "Jesus as LORD and Savior",
++            statement:
++              "Explain why 'Jesus' is the saving name of God, fulfilling the Old Testament revelation of YHWH as Savior.",
++            vocabulary: ["Savior", "Salvation", "YHWH", "Yeshua", "Redemption"],
++            anchorScriptures: [
++              {
++                reference: "Acts 4:12",
++                text: "Neither is there salvation in any other: for there is none other name under heaven given among men, whereby we must be saved.",
++              },
++              {
++                reference: "Isaiah 43:11",
++                text: "I, even I, am the LORD; and beside me there is no saviour.",
++              },
++              {
++                reference: "Matthew 1:21",
++                text: "And she shall bring forth a son, and thou shalt call his name JESUS: for he shall save his people from their sins.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "Recites Acts 4:12 and states that Jesus is the only name given for salvation.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains how the name 'Jesus' (Yeshua = YHWH saves) connects the New Testament Savior to the Old Testament YHWH.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Uses Isaiah 43:11 and Acts 4:12 together to show the continuity of salvation through one God/one name.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends the uniqueness and sufficiency of the name of Jesus for salvation against pluralistic or multi-name salvation views.",
++              },
++            ],
++          },
++        ],
++      },
++      {
++        domainCode: "OG.3",
++        domainTitle:
++          "The Father, Son, and Holy Spirit — One God in Three Manifestations",
++        anchorScripture: {
++          reference: "Matthew 28:19",
++          text: "Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.",
++        },
++        purpose:
++          "Clarify the biblical meaning of Father, Son, and Holy Spirit as three roles/manifestations of one God, not three distinct persons.",
++        standards: [
++          {
++            code: "OG.3.1",
++            title: "The Great Commission and Baptismal Formula",
++            statement:
++              "Explain why Matthew 28:19 ('in the name') is fulfilled by baptism in Jesus's name, not by three titles.",
++            vocabulary: [
++              "Baptism",
++              "Name",
++              "Title",
++              "Manifestation",
++              "Role",
++              "Person",
++            ],
++            anchorScriptures: [
++              {
++                reference: "Matthew 28:19",
++                text: "Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.",
++              },
++              {
++                reference: "Acts 2:38",
++                text: "Then Peter said unto them, Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins.",
++              },
++              {
++                reference: "Acts 8:16",
++                text: "For as yet he was fallen upon none of them: only they were baptized in the name of the Lord Jesus.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "States Matthew 28:19 and identifies that Father, Son, and Holy Ghost are titles, not individual names.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains that 'the name' (singular) in Matthew 28:19 points to one name that encompasses all three titles — fulfilled in Jesus.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Demonstrates from Acts 2:38, 8:16, and 10:48 that the early church consistently baptized in Jesus's name as the fulfillment of Matthew 28:19.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends Jesus-name baptism against trinitarianism using the pattern of the book of Acts and the singular 'name' of Matthew 28:19.",
++              },
++            ],
++          },
++        ],
++      },
++    ],
++  },
++
++  NB: {
++    code: "NB",
++    title: "The New Birth",
++    color: "#dc2626",
++    // Locked in the UI until every OG standard is mastered — see isSubjectUnlocked().
++    requiresSubjectMastered: "OG",
++    domains: [
++      {
++        domainCode: "NB.1",
++        domainTitle: "The Apostolic Plan of Salvation",
++        anchorScripture: {
++          reference: "Acts 2:38",
++          text: "Then Peter said unto them, Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins, and ye shall receive the gift of the Holy Ghost.",
++        },
++        purpose:
++          "Establish the apostolic plan of salvation — repentance, water baptism in Jesus's name, and Holy Ghost baptism — as the biblical New Birth.",
++        standards: [
++          {
++            code: "NB.1.1",
++            title: "Acts 2:38 as the Gospel Pattern",
++            statement:
++              "Explain Acts 2:38 as the foundational response to the gospel: repentance, baptism in Jesus's name, and receiving the Holy Ghost.",
++            vocabulary: [
++              "Repentance",
++              "Baptism",
++              "Holy Ghost",
++              "Remission",
++              "New Birth",
++              "Salvation",
++            ],
++            anchorScriptures: [
++              {
++                reference: "Acts 2:38",
++                text: "Then Peter said unto them, Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins, and ye shall receive the gift of the Holy Ghost.",
++              },
++              {
++                reference: "John 3:5",
++                text: "Jesus answered, Verily, verily, I say unto thee, Except a man be born of water and of the Spirit, he cannot enter into the kingdom of God.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "Recites Acts 2:38 and identifies its three elements: repent, be baptized in Jesus's name, receive the Holy Ghost.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains why each element of Acts 2:38 is necessary for the New Birth and what each one accomplishes.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Connects Acts 2:38 to John 3:5 ('born of water and Spirit') and shows how they describe the same New Birth experience.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends Acts 2:38 as the complete gospel pattern against sinner's-prayer-only or faith-alone salvation doctrines.",
++              },
++            ],
++          },
++          {
++            code: "NB.1.2",
++            title: "True Repentance",
++            statement:
++              "Define biblical repentance as a genuine change of mind and direction, leading to transformed living, not merely sorrow.",
++            vocabulary: [
++              "Repentance",
++              "Metanoia",
++              "Contrition",
++              "Transformation",
++              "Godly sorrow",
++            ],
++            anchorScriptures: [
++              {
++                reference: "Acts 3:19",
++                text: "Repent ye therefore, and be converted, that your sins may be blotted out, when the times of refreshing shall come from the presence of the Lord.",
++              },
++              {
++                reference: "2 Corinthians 7:10",
++                text: "For godly sorrow worketh repentance to salvation not to be repented of: but the sorrow of the world worketh death.",
++              },
++              {
++                reference: "Luke 13:3",
++                text: "I tell you, Nay: but, except ye repent, ye shall all likewise perish.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "Defines repentance using Acts 3:19 and states that it involves turning from sin and turning toward God.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains the difference between godly sorrow (leads to repentance) and worldly sorrow (leads to death) using 2 Corinthians 7:10.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Applies the concept of repentance to real-world decisions: what does genuine repentance look like in daily life?",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends the necessity of repentance as an active prerequisite for salvation against 'easy believism' or cheap grace.",
++              },
++            ],
++          },
++        ],
++      },
++      {
++        domainCode: "NB.2",
++        domainTitle: "Water Baptism in Jesus's Name",
++        anchorScripture: {
++          reference: "Romans 6:4",
++          text: "Therefore we are buried with him by baptism into death: that like as Christ was raised up from the dead by the glory of the Father, even so we also should walk in newness of life.",
++        },
++        purpose:
++          "Establish immersion baptism in the name of Jesus Christ as the biblical mode and formula for remission of sins.",
++        standards: [
++          {
++            code: "NB.2.1",
++            title: "Baptism as Burial and Resurrection",
++            statement:
++              "Explain the symbolism and necessity of water baptism as a burial of the old life and resurrection to new life in Christ.",
++            vocabulary: [
++              "Baptism",
++              "Immersion",
++              "Burial",
++              "Resurrection",
++              "Remission",
++              "New life",
++            ],
++            anchorScriptures: [
++              {
++                reference: "Romans 6:4",
++                text: "Therefore we are buried with him by baptism into death: that like as Christ was raised up from the dead by the glory of the Father, even so we also should walk in newness of life.",
++              },
++              {
++                reference: "Acts 2:38",
++                text: "Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins.",
++              },
++              {
++                reference: "Colossians 2:12",
++                text: "Buried with him in baptism, wherein also ye are risen with him through the faith of the operation of God, who hath raised him from the dead.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "States from Romans 6:4 that baptism represents burial of the old self and resurrection to new life.",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains why full immersion is the biblical mode of baptism — as it pictures death, burial, and resurrection.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Connects the symbolism of baptism to the death, burial, and resurrection of Jesus as described in 1 Corinthians 15:1-4.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends immersion in Jesus's name as the only scripturally valid baptism against sprinkling or titles-only formulas.",
++              },
++            ],
++          },
++        ],
++      },
++      {
++        domainCode: "NB.3",
++        domainTitle: "The Baptism of the Holy Ghost",
++        anchorScripture: {
++          reference: "Acts 2:4",
++          text: "And they were all filled with the Holy Ghost, and began to speak with other tongues, as the Spirit gave them utterance.",
++        },
++        purpose:
++          "Establish the indwelling Holy Ghost — evidenced initially by speaking in other tongues — as the third essential element of the New Birth.",
++        standards: [
++          {
++            code: "NB.3.1",
++            title: "The Holy Ghost as the Spirit of God",
++            statement:
++              "Identify the Holy Ghost as the Spirit of God dwelling in believers, not a separate divine person.",
++            vocabulary: [
++              "Holy Ghost",
++              "Holy Spirit",
++              "Indwelling",
++              "Comforter",
++              "Paraclete",
++            ],
++            anchorScriptures: [
++              {
++                reference: "Acts 2:4",
++                text: "And they were all filled with the Holy Ghost, and began to speak with other tongues, as the Spirit gave them utterance.",
++              },
++              {
++                reference: "Romans 8:11",
++                text: "But if the Spirit of him that raised up Jesus from the dead dwell in you, he that raised up Christ from the dead shall also quicken your mortal bodies by his Spirit that dwelleth in you.",
++              },
++              {
++                reference: "1 Corinthians 12:13",
++                text: "For by one Spirit are we all baptized into one body, whether we be Jews or Gentiles, whether we be bond or free; and have been all made to drink into one Spirit.",
++              },
++            ],
++            evidenceOfLearning: [
++              {
++                level: "Recognition",
++                expectation:
++                  "States that the Holy Ghost is the Spirit of God dwelling in believers and names the initial evidence (speaking in tongues).",
++              },
++              {
++                level: "Explanation",
++                expectation:
++                  "Explains the role of the Holy Ghost as teacher, comforter, guide, and the seal of salvation.",
++              },
++              {
++                level: "Application",
++                expectation:
++                  "Shows from Acts 2, 8, 10, and 19 that the consistent pattern of Holy Ghost reception in the New Testament includes tongues as evidence.",
++              },
++              {
++                level: "Defense",
++                expectation:
++                  "Defends speaking in tongues as the biblical initial evidence of the Holy Ghost against those who deny its necessity.",
++              },
++            ],
++          },
++        ],
++      },
++    ],
++  },
++};
++
++/** Flattens the registry to one array, each standard enriched with its domain/subject context. */
++export function getAllStandards() {
++  const all = [];
++  Object.values(standardsRegistry).forEach((subject) => {
++    (subject.domains || []).forEach((domain) => {
++      (domain.standards || []).forEach((standard) => {
++        all.push({
++          ...standard,
++          domainCode: domain.domainCode,
++          domainTitle: domain.domainTitle,
++          domainAnchorScripture: domain.anchorScripture,
++          subjectCode: subject.code,
++          subjectTitle: subject.title,
++          subjectColor: subject.color,
++        });
++      });
++    });
++  });
++  return all;
++}
++
++export function getStandardByCode(code) {
++  return getAllStandards().find((standard) => standard.code === code) || null;
++}
++
++export function getDomainsForSubject(subjectCode) {
++  return standardsRegistry[subjectCode]?.domains || [];
++}
++
++export function getSubjects() {
++  return Object.values(standardsRegistry);
++}
++
++/** progress: { [standardCode]: 0|1|2|3|4 } — see evidenceOfLearning level order. */
++export function isSubjectMastered(subjectCode, progress = {}) {
++  const subject = standardsRegistry[subjectCode];
++  if (!subject) return false;
++  return (subject.domains || []).every((domain) =>
++    (domain.standards || []).every((standard) => (progress[standard.code] || 0) >= 4)
++  );
++}
++
++export function isSubjectUnlocked(subjectCode, progress = {}) {
++  const subject = standardsRegistry[subjectCode];
++  if (!subject) return false;
++  if (!subject.requiresSubjectMastered) return true;
++  return isSubjectMastered(subject.requiresSubjectMastered, progress);
++}
++
++/** Returns the first unmastered standard, OG-then-NB order, respecting subject locks. */
++export function getNextUnmasteredStandard(progress = {}) {
++  const all = getAllStandards();
++  return (
++    all.find(
++      (standard) =>
++        (progress[standard.code] || 0) < 4 &&
++        isSubjectUnlocked(standard.subjectCode, progress)
++    ) || null
++  );
++}
++
++export const DEFAULT_STANDARD_CODE = "OG.1.1";
+diff --git a/app/src/data/profileData.js b/app/src/data/profileData.js
+index 5a5da90..e59f469 100644
+--- a/app/src/data/profileData.js
++++ b/app/src/data/profileData.js
+@@ -4,6 +4,10 @@ export const profileData = {
+     name: "Jacob",
+     levelLabel: "Adult endpoint path",
+     trackTitle: "The One True God",
++    // child | teen | adult | senior — shapes the mouthpiece's tone/vocabulary
++    // in grade-response, never the doctrine itself. Real login/profile data
++    // should set this once auth exists; this is the stand-in for now.
++    ageBand: "adult",
+   },
+   snapshot: {
+     mastered: 12,
+diff --git a/app/src/features/bible-support/BibleSupportPage.jsx b/app/src/features/bible-support/BibleSupportPage.jsx
+index 7bb5084..3b90da9 100644
+--- a/app/src/features/bible-support/BibleSupportPage.jsx
++++ b/app/src/features/bible-support/BibleSupportPage.jsx
+@@ -1,34 +1,16 @@
+-import { useEffect, useState } from "react";
++import { useState } from "react";
+ import { ROUTES } from "../../app/routes";
+ import { getCurrentSession } from "../../core/classroom/classroomSessionData";
+ 
+-const SESSION_TYPE_LABELS = {
+-  resume: "Resume Path",
+-  review: "Review Path",
+-  adaptation: "Learner Adaptation Path",
+-  direct: "Direct Classroom Path",
+-};
+-
+ export default function BibleSupportPage({ onNavigate }) {
+   const session = getCurrentSession();
+   const verses = session.verses || [];
+-  const [selectedReference, setSelectedReference] = useState(
+-    verses[0]?.reference || ""
+-  );
+-
+-  useEffect(() => {
+-    setSelectedReference((currentReference) => {
+-      const hasCurrentReference = verses.some(
+-        (verse) => verse.reference === currentReference
+-      );
+-
+-      if (hasCurrentReference) {
+-        return currentReference;
+-      }
++  const [manualReference, setManualReference] = useState(null);
+ 
+-      return verses[0]?.reference || "";
+-    });
+-  }, [session.standardId, session.sessionType, verses]);
++  const selectedReference =
++    manualReference && verses.some((verse) => verse.reference === manualReference)
++      ? manualReference
++      : verses[0]?.reference || "";
+ 
+   const selectedVerse =
+     verses.find((verse) => verse.reference === selectedReference) ||
+@@ -83,8 +65,8 @@ export default function BibleSupportPage({ onNavigate }) {
+             </div>
+ 
+             <div style={summaryCardStyle}>
+-              <p style={summaryLabelStyle}>Session Type</p>
+-              <p style={summaryValueStyle}>{SESSION_TYPE_LABELS[session.sessionType] || session.sessionType}</p>
++              <p style={summaryLabelStyle}>Domain</p>
++              <p style={summaryValueStyle}>{session.domainTitle}</p>
+             </div>
+           </div>
+         </section>
+@@ -120,7 +102,7 @@ export default function BibleSupportPage({ onNavigate }) {
+                           ? { ...openButtonStyle, ...openButtonActiveStyle }
+                           : openButtonStyle
+                       }
+-                      onClick={() => setSelectedReference(verse.reference)}
++                      onClick={() => setManualReference(verse.reference)}
+                     >
+                       {isSelected ? "Reading" : "Open Passage"}
+                     </button>
+diff --git a/app/src/features/classroom/ClassroomPage.jsx b/app/src/features/classroom/ClassroomPage.jsx
+index 3a34bc7..d2a8204 100644
+--- a/app/src/features/classroom/ClassroomPage.jsx
++++ b/app/src/features/classroom/ClassroomPage.jsx
+@@ -1,25 +1,26 @@
+ import { useEffect, useMemo, useState } from "react";
+ import { ROUTES } from "../../app/routes";
+ import {
+-  getActiveClassroomSessionPreset,
+   getCurrentSession,
+-  setSavedLiveStageForPreset,
++  setSavedLiveStageForStandard,
++  getActiveLearnerAgeBand,
+ } from "../../core/classroom/classroomSessionData";
+ import { evaluateResponse } from "../../core/classroom/evaluateResponse";
+ import { sessionStages } from "../../core/classroom/sessionStages";
+ import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
+-import { stageContent } from "../../core/classroom/stageContent";
++import { stageContent, buildStagePrompt } from "../../core/classroom/stageContent";
++import { raiseStandardProgressLevel } from "../../core/standards/standardsProgress";
+ import {
+   classroomEntryIntentContent,
+   clearClassroomEntryIntent,
+   getClassroomEntryIntent,
+ } from "../../core/classroom/classroomEntryIntent";
+ 
+-const SESSION_PRESET_LABELS = {
+-  resume: "Resume Path",
+-  review: "Review Path",
+-  adaptation: "Learner Adaptation Path",
+-  direct: "Direct Classroom Path",
++const AGE_BAND_LABELS = {
++  child: "Child Path",
++  teen: "Teen Path",
++  adult: "Adult Path",
++  senior: "Senior Path",
+ };
+ 
+ function formatStageLabel(stageId = "") {
+@@ -69,7 +70,7 @@ function describeStageMovement(entryIndex, liveIndex) {
+ 
+ export default function ClassroomPage({ onNavigate }) {
+   const session = getCurrentSession();
+-  const activeSessionPresetId = getActiveClassroomSessionPreset();
++  const ageBand = getActiveLearnerAgeBand();
+ 
+   const [currentStageId, setCurrentStageId] = useState(session.currentStageId);
+   const [responseText, setResponseText] = useState("");
+@@ -78,6 +79,7 @@ export default function ClassroomPage({ onNavigate }) {
+   const [evaluationStatus, setEvaluationStatus] = useState("");
+   const [transitionMessage, setTransitionMessage] = useState("");
+   const [resetConfirmationMessage, setResetConfirmationMessage] = useState("");
++  const [isGrading, setIsGrading] = useState(false);
+ 
+   const currentStage = useMemo(() => {
+     return (
+@@ -92,6 +94,16 @@ export default function ClassroomPage({ onNavigate }) {
+   const currentStageContent =
+     stageContent[currentStageId] || stageContent.checkpoint;
+ 
++  const stagePrompt = useMemo(
++    () =>
++      buildStagePrompt(currentStageId, {
++        title: session.standardTitle,
++        statement: session.truthStatement,
++        anchorScriptures: session.verses,
++      }),
++    [currentStageId, session.standardTitle, session.truthStatement, session.verses]
++  );
++
+   const [entryIntent] = useState(() => getClassroomEntryIntent());
+ 
+   useEffect(() => {
+@@ -100,11 +112,7 @@ export default function ClassroomPage({ onNavigate }) {
+ 
+   useEffect(() => {
+     setResetConfirmationMessage("");
+-  }, [
+-    activeSessionPresetId,
+-    session.standardId,
+-    session.presetEntryStageId
+-  ]);
++  }, [session.standardId, session.presetEntryStageId]);
+ 
+   useEffect(() => {
+     setResponseText("");
+@@ -112,12 +120,12 @@ export default function ClassroomPage({ onNavigate }) {
+     setFeedbackMessage("");
+     setEvaluationStatus("");
+     setTransitionMessage("");
+-  }, [activeSessionPresetId, session.standardId, session.presetEntryStageId]);
++  }, [session.standardId, session.presetEntryStageId]);
+ 
+   useEffect(() => {
+     setCurrentStageId(session.currentStageId);
+-    setSavedLiveStageForPreset(activeSessionPresetId, session.currentStageId);
+-  }, [activeSessionPresetId, session.currentStageId]);
++    setSavedLiveStageForStandard(session.standardId, session.currentStageId);
++  }, [session.standardId, session.currentStageId]);
+ 
+   const entryIntentDisplay =
+     classroomEntryIntentContent[entryIntent] ||
+@@ -126,38 +134,46 @@ export default function ClassroomPage({ onNavigate }) {
+   const feedbackTone =
+     entryIntentDisplay.feedbackTone?.[evaluationStatus] || null;
+ 
+-  const activeSessionPresetLabel =
+-    SESSION_PRESET_LABELS[activeSessionPresetId] || "Direct Classroom Path";
++  const activeSessionPresetLabel = AGE_BAND_LABELS[ageBand] || "Adult Path";
+ 
+   const handleResetPresetStage = () => {
+     const resetStageId = session.presetEntryStageId || session.currentStageId;
+ 
+     setCurrentStageId(resetStageId);
+-    setSavedLiveStageForPreset(activeSessionPresetId, resetStageId);
++    setSavedLiveStageForStandard(session.standardId, resetStageId);
+     setResponseText("");
+     setSubmittedResponse("");
+     setFeedbackMessage("");
+     setEvaluationStatus("");
+     setResetConfirmationMessage(
+-      "Live stage restored to the preset entry stage."
++      "Live stage restored to this standard's entry stage."
+     );
+     setTransitionMessage(
+-      "Jeremiah AI reset this preset back to its original entry stage."
++      "Jeremiah AI reset this session back to its original entry stage."
+     );
+   };
+ 
+-  function handleSubmitResponse() {
++  async function handleSubmitResponse() {
++    if (isGrading) return;
+     setResetConfirmationMessage("");
+-    const result = evaluateResponse(
+-      responseText,
+-      session.standardId,
+-      currentStageId
+-    );
++    setIsGrading(true);
++
++    let result;
++    try {
++      result = await evaluateResponse(
++        responseText,
++        session.standardId,
++        currentStageId,
++        ageBand
++      );
++    } finally {
++      setIsGrading(false);
++    }
+ 
+     setEvaluationStatus(result.status);
+     setFeedbackMessage(result.feedback);
+ 
+-    if (result.status === "empty") {
++    if (result.status === "empty" || result.gradingUnavailable) {
+       setSubmittedResponse("");
+       setTransitionMessage("");
+       return;
+@@ -166,12 +182,24 @@ export default function ClassroomPage({ onNavigate }) {
+     const trimmed = responseText.trim();
+     setSubmittedResponse(trimmed);
+ 
++    if (currentStageId === "mastery" && result.status === "strong") {
++      raiseStandardProgressLevel(session.standardId, 4);
++      setTransitionMessage(
++        `${session.standardTitle} is now mastered. Jeremiah AI will move you toward the next standard.`
++      );
++      return;
++    }
++
+     const nextStageId = advanceSessionStage(currentStageId, result.status);
+ 
+     if (nextStageId !== currentStageId) {
+       const nextStage = sessionStages.find((stage) => stage.id === nextStageId);
++      const nextStageIndex = sessionStages.findIndex((stage) => stage.id === nextStageId);
++      if (nextStageIndex > 0) {
++        raiseStandardProgressLevel(session.standardId, nextStageIndex);
++      }
+       setCurrentStageId(nextStageId);
+-      setSavedLiveStageForPreset(activeSessionPresetId, nextStageId);
++      setSavedLiveStageForStandard(session.standardId, nextStageId);
+       setResponseText("");
+       setSubmittedResponse("");
+       setFeedbackMessage("");
+@@ -444,7 +472,7 @@ export default function ClassroomPage({ onNavigate }) {
+                 fontWeight: 700,
+               }}
+             >
+-              Active Session Path
++              Learner Path
+             </p>
+             <p
+               style={{
+@@ -465,7 +493,7 @@ export default function ClassroomPage({ onNavigate }) {
+                 color: "#475569",
+               }}
+             >
+-              Preset key: {activeSessionPresetId}
++              Active standard: {session.standardId}
+             </p>
+           </div>
+ 
+@@ -488,7 +516,7 @@ export default function ClassroomPage({ onNavigate }) {
+                 fontWeight: 700,
+               }}
+             >
+-              Preset Entry Stage
++              Entry Stage
+             </p>
+             <p
+               style={{
+@@ -509,7 +537,7 @@ export default function ClassroomPage({ onNavigate }) {
+                 color: "#475569",
+               }}
+             >
+-              This is the fixed stage the selected session preset opened with.
++              This is the stage this standard's session opened with.
+             </p>
+           </div>
+ 
+@@ -576,7 +604,7 @@ export default function ClassroomPage({ onNavigate }) {
+                 fontWeight: 700,
+               }}
+             >
+-              Learner Path
++              Domain
+             </p>
+             <p
+               style={{
+@@ -587,7 +615,7 @@ export default function ClassroomPage({ onNavigate }) {
+                 fontWeight: 800,
+               }}
+             >
+-              {session.learnerLevel}
++              {session.domainTitle}
+             </p>
+             <p
+               style={{
+@@ -678,7 +706,7 @@ export default function ClassroomPage({ onNavigate }) {
+                   cursor: "pointer",
+                 }}
+               >
+-                Reset to Preset Entry
++                Reset to Entry Stage
+               </button>
+             ) : null}
+           </div>
+@@ -707,7 +735,7 @@ export default function ClassroomPage({ onNavigate }) {
+ 
+             <div style={metaCardStyle}>
+               <p style={metaLabelStyle}>Learner Level</p>
+-              <p style={metaValueStyle}>{session.learnerLevel}</p>
++              <p style={metaValueStyle}>{activeSessionPresetLabel}</p>
+             </div>
+           </div>
+ 
+@@ -828,7 +856,7 @@ export default function ClassroomPage({ onNavigate }) {
+                 <div style={teacherPromptStyle}>
+                   <p style={teacherPromptLabelStyle}>Jeremiah AI Prompt</p>
+                   <p style={teacherPromptTextStyle}>
+-                    {currentStageContent.prompt}
++                    {stagePrompt}
+                   </p>
+                 </div>
+ 
+@@ -879,13 +907,21 @@ export default function ClassroomPage({ onNavigate }) {
+                   />
+                 </div>
+ 
++                {isGrading ? (
++                  <p style={gradingIndicatorStyle}>Jeremiah is thinking…</p>
++                ) : null}
++
+                 <div style={actionsRowStyle}>
+                   <button
+                     type="button"
+-                    style={primaryActionStyle}
++                    style={{
++                      ...primaryActionStyle,
++                      ...(isGrading ? disabledActionStyle : null),
++                    }}
+                     onClick={handleSubmitResponse}
++                    disabled={isGrading}
+                   >
+-                    {entryIntentDisplay.submitButtonLabel}
++                    {isGrading ? "Grading…" : entryIntentDisplay.submitButtonLabel}
+                   </button>
+                   <button
+                     type="button"
+@@ -1374,6 +1410,18 @@ const actionsRowStyle = {
+   flexWrap: "wrap",
+ };
+ 
++const gradingIndicatorStyle = {
++  margin: "16px 0 0",
++  fontSize: "0.92rem",
++  fontWeight: 700,
++  color: "#9a3412",
++};
++
++const disabledActionStyle = {
++  opacity: 0.6,
++  cursor: "not-allowed",
++};
++
+ const primaryActionStyle = {
+   border: "none",
+   background: "#9a3412",
+diff --git a/app/src/features/home/HomePage.jsx b/app/src/features/home/HomePage.jsx
+index 94f9fae..c78cbb3 100644
+--- a/app/src/features/home/HomePage.jsx
++++ b/app/src/features/home/HomePage.jsx
+@@ -4,10 +4,6 @@ import {
+   CLASSROOM_ENTRY_INTENTS,
+   setClassroomEntryIntent,
+ } from "../../core/classroom/classroomEntryIntent";
+-import {
+-  selectHomeSessionPreset,
+-  setActiveClassroomSessionPreset,
+-} from "../../core/classroom/classroomSessionData";
+ 
+ export default function HomePage({ onNavigate }) {
+   const data = homeData;
+@@ -69,7 +65,6 @@ export default function HomePage({ onNavigate }) {
+               style={primaryButtonStyle}
+               onClick={() => {
+               setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.RESUME);
+-              setActiveClassroomSessionPreset(selectHomeSessionPreset(homeData));
+               onNavigate?.(ROUTES.CLASSROOM);
+             }}
+             >
+diff --git a/app/src/features/map/DoctrineMapPage.jsx b/app/src/features/map/DoctrineMapPage.jsx
+new file mode 100644
+index 0000000..6c04abf
+--- /dev/null
++++ b/app/src/features/map/DoctrineMapPage.jsx
+@@ -0,0 +1,289 @@
++import { useMemo } from "react";
++import { ROUTES } from "../../app/routes";
++import {
++  getSubjects,
++  isSubjectUnlocked,
++  isSubjectMastered,
++} from "../../core/standards/standardsRegistry";
++import { getStandardProgress } from "../../core/standards/standardsProgress";
++import {
++  setActiveStandardCode,
++} from "../../core/classroom/classroomSessionData";
++import {
++  CLASSROOM_ENTRY_INTENTS,
++  setClassroomEntryIntent,
++} from "../../core/classroom/classroomEntryIntent";
++import { colors, ignite, radius } from "../../shared/theme";
++
++function nodeStateFor(level) {
++  if (level >= 4) return "mastered";
++  if (level >= 1) return "inProgress";
++  return "unstarted";
++}
++
++const NODE_STYLES = {
++  mastered: {
++    background: `linear-gradient(135deg, ${ignite.ember} 0%, ${ignite.blaze} 100%)`,
++    color: "#ffffff",
++    boxShadow: ignite.glow,
++    border: "1px solid rgba(255,255,255,0.4)",
++  },
++  inProgress: {
++    background: `linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)`,
++    color: colors.checkpointTextDark,
++    boxShadow: "0 0 16px rgba(255, 208, 0, 0.35)",
++    border: `1px solid ${ignite.spark}`,
++  },
++  unstarted: {
++    background: "#f8fafc",
++    color: colors.textFaint,
++    border: `1px solid ${colors.cardBorder}`,
++  },
++};
++
++const NODE_LABELS = {
++  mastered: "Mastered",
++  inProgress: "In Progress",
++  unstarted: "Not Started",
++};
++
++export default function DoctrineMapPage({ onNavigate }) {
++  const progress = useMemo(() => getStandardProgress(), []);
++  const subjects = getSubjects();
++
++  function enterStandard(code) {
++    setActiveStandardCode(code);
++    setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.DIRECT);
++    onNavigate?.(ROUTES.CLASSROOM);
++  }
++
++  return (
++    <div style={pageStyle}>
++      <div style={contentStyle}>
++        <section style={heroStyle}>
++          <p style={eyebrowStyle}>JEREMIAH AI DOCTRINE MAP</p>
++          <h1 style={titleStyle}>The mind, laid open</h1>
++          <p style={subtitleStyle}>
++            Every standard below is a point of understanding. Unlit nodes
++            haven't been engaged yet, glowing amber ones are in progress, and
++            fully ignited ones are mastered. Choose any standard to enter a
++            live session with Jeremiah on that exact doctrine.
++          </p>
++        </section>
++
++        {subjects.map((subject) => {
++          const unlocked = isSubjectUnlocked(subject.code, progress);
++          const mastered = isSubjectMastered(subject.code, progress);
++
++          return (
++            <section key={subject.code} style={subjectSectionStyle}>
++              <div style={subjectHeaderStyle}>
++                <div>
++                  <p style={subjectEyebrowStyle}>Subject {subject.code}</p>
++                  <h2 style={subjectTitleStyle}>{subject.title}</h2>
++                </div>
++                <div
++                  style={{
++                    ...lockPillStyle,
++                    ...(mastered
++                      ? { background: colors.masteredBg, color: colors.masteredText }
++                      : unlocked
++                        ? { background: colors.infoBg, color: colors.infoText }
++                        : { background: ignite.lockedBg, color: ignite.lockedText }),
++                  }}
++                >
++                  {mastered ? "Mastered" : unlocked ? "Unlocked" : "Locked"}
++                </div>
++              </div>
++
++              {!unlocked ? (
++                <p style={lockedTextStyle}>
++                  This subject unlocks once every standard in the previous
++                  subject is mastered.
++                </p>
++              ) : null}
++
++              {subject.domains.map((domain) => (
++                <div key={domain.domainCode} style={domainBlockStyle}>
++                  <p style={domainTitleStyle}>
++                    {domain.domainCode} — {domain.domainTitle}
++                  </p>
++
++                  <div style={nodeGridStyle}>
++                    {domain.standards.map((standard) => {
++                      const level = progress[standard.code] || 0;
++                      const state = nodeStateFor(level);
++                      const nodeStyle = NODE_STYLES[state];
++                      const interactive = unlocked;
++
++                      return (
++                        <button
++                          key={standard.code}
++                          type="button"
++                          disabled={!interactive}
++                          onClick={() => enterStandard(standard.code)}
++                          style={{
++                            ...nodeButtonStyle,
++                            ...nodeStyle,
++                            ...(interactive ? null : { cursor: "not-allowed", opacity: 0.7 }),
++                          }}
++                        >
++                          <span style={nodeCodeStyle}>{standard.code}</span>
++                          <span style={nodeTitleStyle}>{standard.title}</span>
++                          <span style={nodeStateStyle}>
++                            {interactive ? NODE_LABELS[state] : "Locked"}
++                          </span>
++                        </button>
++                      );
++                    })}
++                  </div>
++                </div>
++              ))}
++            </section>
++          );
++        })}
++      </div>
++    </div>
++  );
++}
++
++const pageStyle = {
++  minHeight: "100%",
++  background: "linear-gradient(180deg, #0b1228 0%, #16233b 45%, #f8fafc 45%)",
++};
++
++const contentStyle = {
++  width: "100%",
++  maxWidth: "1040px",
++  margin: "0 auto",
++  padding: "32px 20px 120px",
++  boxSizing: "border-box",
++};
++
++const heroStyle = {
++  marginBottom: "28px",
++};
++
++const eyebrowStyle = {
++  margin: 0,
++  fontSize: "0.82rem",
++  fontWeight: 800,
++  letterSpacing: "0.08em",
++  textTransform: "uppercase",
++  color: "rgba(255,255,255,0.7)",
++};
++
++const titleStyle = {
++  margin: "10px 0 0",
++  fontSize: "clamp(2.5rem, 6vw, 4rem)",
++  lineHeight: 1.02,
++  fontWeight: 900,
++  color: "#ffffff",
++};
++
++const subtitleStyle = {
++  margin: "16px 0 0",
++  maxWidth: "720px",
++  fontSize: "1.05rem",
++  lineHeight: 1.7,
++  color: "rgba(255,255,255,0.82)",
++};
++
++const subjectSectionStyle = {
++  background: colors.cardBg,
++  border: `1px solid ${colors.cardBorder}`,
++  boxShadow: colors.cardShadow,
++  borderRadius: radius.lg,
++  padding: "26px",
++  marginBottom: "22px",
++};
++
++const subjectHeaderStyle = {
++  display: "flex",
++  justifyContent: "space-between",
++  alignItems: "flex-start",
++  gap: "16px",
++  flexWrap: "wrap",
++  marginBottom: "8px",
++};
++
++const subjectEyebrowStyle = {
++  margin: 0,
++  fontSize: "0.8rem",
++  textTransform: "uppercase",
++  letterSpacing: "0.08em",
++  color: colors.textFaint,
++  fontWeight: 700,
++};
++
++const subjectTitleStyle = {
++  margin: "8px 0 0",
++  fontSize: "1.65rem",
++  lineHeight: 1.15,
++  color: colors.text,
++  fontWeight: 900,
++};
++
++const lockPillStyle = {
++  display: "inline-flex",
++  alignItems: "center",
++  padding: "10px 14px",
++  borderRadius: radius.pill,
++  fontSize: "0.85rem",
++  fontWeight: 800,
++};
++
++const lockedTextStyle = {
++  margin: "6px 0 18px",
++  fontSize: "0.95rem",
++  lineHeight: 1.6,
++  color: colors.textFaint,
++};
++
++const domainBlockStyle = {
++  marginTop: "20px",
++};
++
++const domainTitleStyle = {
++  margin: "0 0 12px",
++  fontSize: "0.98rem",
++  fontWeight: 800,
++  color: colors.textMuted,
++};
++
++const nodeGridStyle = {
++  display: "grid",
++  gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
++  gap: "12px",
++};
++
++const nodeButtonStyle = {
++  textAlign: "left",
++  borderRadius: radius.md,
++  padding: "16px",
++  display: "flex",
++  flexDirection: "column",
++  gap: "8px",
++  cursor: "pointer",
++  fontFamily: "inherit",
++};
++
++const nodeCodeStyle = {
++  fontSize: "0.78rem",
++  fontWeight: 800,
++  letterSpacing: "0.06em",
++  textTransform: "uppercase",
++  opacity: 0.85,
++};
++
++const nodeTitleStyle = {
++  fontSize: "1.02rem",
++  fontWeight: 800,
++  lineHeight: 1.3,
++};
++
++const nodeStateStyle = {
++  fontSize: "0.82rem",
++  fontWeight: 700,
++  opacity: 0.85,
++};
+diff --git a/app/src/features/profile/ProfilePage.jsx b/app/src/features/profile/ProfilePage.jsx
+index a01c2e5..f4e9562 100644
+--- a/app/src/features/profile/ProfilePage.jsx
++++ b/app/src/features/profile/ProfilePage.jsx
+@@ -4,10 +4,6 @@ import {
+   CLASSROOM_ENTRY_INTENTS,
+   setClassroomEntryIntent,
+ } from "../../core/classroom/classroomEntryIntent";
+-import {
+-  selectProfileSessionPreset,
+-  setActiveClassroomSessionPreset,
+-} from "../../core/classroom/classroomSessionData";
+ 
+ export default function ProfilePage({ onNavigate }) {
+   const data = profileData;
+@@ -64,7 +60,6 @@ export default function ProfilePage({ onNavigate }) {
+             style={primaryButtonStyle}
+             onClick={() => {
+             setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.ADAPTATION);
+-            setActiveClassroomSessionPreset(selectProfileSessionPreset(profileData));
+             onNavigate?.(ROUTES.CLASSROOM);
+           }}
+           >
+diff --git a/app/src/features/progress/ProgressPage.jsx b/app/src/features/progress/ProgressPage.jsx
+index a939e05..ca34560 100644
+--- a/app/src/features/progress/ProgressPage.jsx
++++ b/app/src/features/progress/ProgressPage.jsx
+@@ -4,10 +4,6 @@ import {
+   CLASSROOM_ENTRY_INTENTS,
+   setClassroomEntryIntent,
+ } from "../../core/classroom/classroomEntryIntent";
+-import {
+-  selectProgressSessionPreset,
+-  setActiveClassroomSessionPreset,
+-} from "../../core/classroom/classroomSessionData";
+ 
+ export default function ProgressPage({ onNavigate }) {
+   const data = progressData;
+@@ -78,7 +74,6 @@ export default function ProgressPage({ onNavigate }) {
+             style={continueButtonStyle}
+             onClick={() => {
+             setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.REVIEW);
+-            setActiveClassroomSessionPreset(selectProgressSessionPreset(progressData));
+             onNavigate?.(ROUTES.CLASSROOM);
+           }}
+           >
+diff --git a/app/src/shared/layout/BottomNav.jsx b/app/src/shared/layout/BottomNav.jsx
+index 0c31ba5..1f7babe 100644
+--- a/app/src/shared/layout/BottomNav.jsx
++++ b/app/src/shared/layout/BottomNav.jsx
+@@ -2,6 +2,7 @@ import { ROUTES } from "../../app/routes";
+ 
+ const NAV_ITEMS = [
+   { id: ROUTES.HOME, label: "Home" },
++  { id: ROUTES.MAP, label: "Map" },
+   { id: ROUTES.CLASSROOM, label: "Classroom" },
+   { id: ROUTES.PROGRESS, label: "Progress" },
+   { id: ROUTES.PROFILE, label: "Profile" },
+@@ -47,7 +48,7 @@ const railStyle = {
+   maxWidth: "980px",
+   margin: "0 auto",
+   display: "grid",
+-  gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
++  gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+   gap: "8px",
+   padding: "10px 12px calc(10px + env(safe-area-inset-bottom))",
+   boxSizing: "border-box",
+diff --git a/app/src/shared/theme.js b/app/src/shared/theme.js
+new file mode 100644
+index 0000000..c47a72d
+--- /dev/null
++++ b/app/src/shared/theme.js
+@@ -0,0 +1,68 @@
++// Design tokens. Pulled out of the inline style objects that were
++// copy-pasted near-verbatim across HomePage/ProgressPage/ProfilePage/
++// ClassroomPage — one home for the palette instead of five.
++export const colors = {
++  pageGradient: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
++  primaryGradient: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
++
++  cardBg: "#ffffff",
++  cardBorder: "#e2e8f0",
++  cardShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
++
++  text: "#0f172a",
++  textMuted: "#475569",
++  textFaint: "#64748b",
++
++  checkpointBg: "#fff7ed",
++  checkpointBorder: "#fed7aa",
++  checkpointTextDark: "#7c2d12",
++  checkpointTextMid: "#9a3412",
++
++  masteredBg: "#ecfdf5",
++  masteredText: "#047857",
++
++  reviewBg: "#ffedd5",
++  reviewText: "#9a3412",
++
++  infoBg: "#eff6ff",
++  infoText: "#1d4ed8",
++
++  strongBg: "#f0fdf4",
++  strongBorder: "#86efac",
++  partialBg: "#fff7ed",
++  partialBorder: "#fdba74",
++  weakBg: "#fef2f2",
++  weakBorder: "#fca5a5",
++};
++
++// The "ignite" identity for the Doctrine Map: mastery is visualized as
++// light, not a percentage bar. Same warm progression FireLevelMeter used in
++// the original app, repurposed as a lit/dim state per standard instead of a
++// single account-wide points meter.
++export const ignite = {
++  unlit: "#cbd5e1",
++  dim: "#94a3b8",
++  spark: "#FFD000",
++  ember: "#FF8A00",
++  blaze: "#FF4D00",
++  inferno: "#D1001F",
++  glow: "0 0 24px rgba(255, 138, 0, 0.55)",
++  lockedBg: "#f1f5f9",
++  lockedText: "#94a3b8",
++};
++
++export const radius = {
++  sm: "14px",
++  md: "20px",
++  lg: "26px",
++  xl: "32px",
++  pill: "999px",
++};
++
++export const spacing = {
++  xs: "8px",
++  sm: "14px",
++  md: "20px",
++  lg: "26px",
++  xl: "32px",
++};
+diff --git a/app/src/shared/ui/Card.jsx b/app/src/shared/ui/Card.jsx
+new file mode 100644
+index 0000000..eb58fbf
+--- /dev/null
++++ b/app/src/shared/ui/Card.jsx
+@@ -0,0 +1,38 @@
++import { colors, radius } from "../theme";
++
++const baseStyle = {
++  borderRadius: radius.lg,
++  padding: "24px",
++  boxSizing: "border-box",
++};
++
++const variants = {
++  light: {
++    background: colors.cardBg,
++    border: `1px solid ${colors.cardBorder}`,
++    boxShadow: colors.cardShadow,
++    color: colors.text,
++  },
++  dark: {
++    background: colors.primaryGradient,
++    color: "#ffffff",
++    boxShadow: "0 28px 70px rgba(15, 23, 42, 0.18)",
++  },
++  checkpoint: {
++    background: colors.checkpointBg,
++    border: `1px solid ${colors.checkpointBorder}`,
++    boxShadow: "0 10px 24px rgba(249, 115, 22, 0.08)",
++  },
++  subtle: {
++    background: "#f8fafc",
++    border: `1px solid ${colors.cardBorder}`,
++  },
++};
++
++export default function Card({ variant = "light", style, children, ...rest }) {
++  return (
++    <div style={{ ...baseStyle, ...variants[variant], ...style }} {...rest}>
++      {children}
++    </div>
++  );
++}
+diff --git a/app/src/shared/ui/Pill.jsx b/app/src/shared/ui/Pill.jsx
+new file mode 100644
+index 0000000..f3098d2
+--- /dev/null
++++ b/app/src/shared/ui/Pill.jsx
+@@ -0,0 +1,23 @@
++import { colors } from "../theme";
++
++const baseStyle = {
++  display: "inline-flex",
++  alignItems: "center",
++  padding: "9px 14px",
++  borderRadius: "999px",
++  fontSize: "0.85rem",
++  fontWeight: 800,
++};
++
++const tones = {
++  neutral: { background: "#eef2ff", color: "#3730a3" },
++  onDark: { background: "rgba(255,255,255,0.14)", color: "#ffffff" },
++  mastered: { background: colors.masteredBg, color: colors.masteredText },
++  review: { background: colors.reviewBg, color: colors.reviewText },
++  info: { background: colors.infoBg, color: colors.infoText },
++  locked: { background: "#f1f5f9", color: "#94a3b8" },
++};
++
++export default function Pill({ tone = "neutral", children, style }) {
++  return <span style={{ ...baseStyle, ...tones[tone], ...style }}>{children}</span>;
++}
+diff --git a/app/src/shared/ui/PrimaryButton.jsx b/app/src/shared/ui/PrimaryButton.jsx
+new file mode 100644
+index 0000000..54c5218
+--- /dev/null
++++ b/app/src/shared/ui/PrimaryButton.jsx
+@@ -0,0 +1,27 @@
++const baseStyle = {
++  border: "none",
++  background: "#ffffff",
++  color: "#0f172a",
++  padding: "14px 18px",
++  borderRadius: "16px",
++  fontSize: "0.98rem",
++  fontWeight: 800,
++  cursor: "pointer",
++};
++
++export default function PrimaryButton({ style, disabled, children, ...rest }) {
++  return (
++    <button
++      type="button"
++      disabled={disabled}
++      style={{
++        ...baseStyle,
++        ...(disabled ? { opacity: 0.6, cursor: "not-allowed" } : null),
++        ...style,
++      }}
++      {...rest}
++    >
++      {children}
++    </button>
++  );
++}
+diff --git a/app/src/shared/ui/ProgressBar.jsx b/app/src/shared/ui/ProgressBar.jsx
+new file mode 100644
+index 0000000..987ec0a
+--- /dev/null
++++ b/app/src/shared/ui/ProgressBar.jsx
+@@ -0,0 +1,30 @@
++const trackStyleBase = {
++  width: "100%",
++  height: "12px",
++  borderRadius: "999px",
++  overflow: "hidden",
++};
++
++const fillStyleBase = {
++  height: "100%",
++  borderRadius: "999px",
++};
++
++/** tone: "light" (for dark cards, white fill) | "dark" (for light cards, navy fill) */
++export default function ProgressBar({ percent = 0, tone = "light" }) {
++  const clamped = Math.max(0, Math.min(100, percent));
++  const track =
++    tone === "light"
++      ? { ...trackStyleBase, background: "rgba(255,255,255,0.14)" }
++      : { ...trackStyleBase, background: "#e2e8f0" };
++  const fill =
++    tone === "light"
++      ? { ...fillStyleBase, width: `${clamped}%`, background: "#ffffff" }
++      : { ...fillStyleBase, width: `${clamped}%`, background: "#0f172a" };
++
++  return (
++    <div style={track}>
++      <div style={fill} />
++    </div>
++  );
++}
+diff --git a/app/src/shared/ui/SecondaryButton.jsx b/app/src/shared/ui/SecondaryButton.jsx
+new file mode 100644
+index 0000000..9f06390
+--- /dev/null
++++ b/app/src/shared/ui/SecondaryButton.jsx
+@@ -0,0 +1,18 @@
++const baseStyle = {
++  border: "1px solid #cbd5e1",
++  background: "#ffffff",
++  color: "#0f172a",
++  padding: "13px 16px",
++  borderRadius: "16px",
++  fontSize: "0.95rem",
++  fontWeight: 800,
++  cursor: "pointer",
++};
++
++export default function SecondaryButton({ style, children, ...rest }) {
++  return (
++    <button type="button" style={{ ...baseStyle, ...style }} {...rest}>
++      {children}
++    </button>
++  );
++}
+diff --git a/app/src/shared/ui/StatGrid.jsx b/app/src/shared/ui/StatGrid.jsx
+new file mode 100644
+index 0000000..a2316af
+--- /dev/null
++++ b/app/src/shared/ui/StatGrid.jsx
+@@ -0,0 +1,42 @@
++import { colors, radius } from "../theme";
++
++const gridStyle = {
++  display: "grid",
++  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
++  gap: "14px",
++};
++
++const statCardStyle = {
++  background: "#f8fafc",
++  borderRadius: radius.md,
++  padding: "18px",
++  border: `1px solid ${colors.cardBorder}`,
++};
++
++const valueStyle = {
++  margin: 0,
++  fontSize: "1.85rem",
++  fontWeight: 900,
++  color: colors.text,
++};
++
++const labelStyle = {
++  margin: "8px 0 0",
++  fontSize: "0.92rem",
++  color: colors.textFaint,
++  fontWeight: 700,
++};
++
++/** stats: [{ value, label }] */
++export default function StatGrid({ stats = [], style }) {
++  return (
++    <div style={{ ...gridStyle, ...style }}>
++      {stats.map((stat) => (
++        <div key={stat.label} style={statCardStyle}>
++          <p style={valueStyle}>{stat.value}</p>
++          <p style={labelStyle}>{stat.label}</p>
++        </div>
++      ))}
++    </div>
++  );
++}
+diff --git a/app/supabase/functions/grade-response/index.ts b/app/supabase/functions/grade-response/index.ts
+new file mode 100644
+index 0000000..ea9a014
+--- /dev/null
++++ b/app/supabase/functions/grade-response/index.ts
+@@ -0,0 +1,181 @@
++// grade-response — The Mouthpiece
++//
++// This is the ONLY place a learner response gets graded or answered in
++// Jeremiah's voice. It never decides doctrine on its own: every judgment is
++// made against the exact standard object the client sends (sourced from
++// app/src/core/standards/standardsRegistry.js, the Brain), never from the
++// model's own general knowledge of the topic.
++//
++// Deploy: supabase functions deploy grade-response
++// Secret: supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
++// (Both steps require your own Supabase CLI login — I can't run them for you.)
++
++const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
++const CLAUDE_MODEL = "claude-sonnet-5";
++
++const CORS_HEADERS = {
++  "Access-Control-Allow-Origin": "*",
++  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
++  "Access-Control-Allow-Methods": "POST, OPTIONS",
++};
++
++const VALID_STATUSES = ["empty", "weak", "partial", "strong"];
++
++// Mirrors the age-guard idea from the original app's AskPage.jsx, generalized
++// into a real parameter instead of being baked into one hardcoded prompt.
++const AGE_BAND_GUIDANCE = {
++  child:
++    "The learner is a CHILD (roughly ages 5-12). Use short sentences, warm and simple language, and concrete pictures/analogies. Never use academic theological jargon without immediately explaining it in plain words a child would understand. Keep feedback encouraging and gentle even when the response is weak.",
++  teen:
++    "The learner is a TEEN. Speak directly and respectfully, like a mentor who takes them seriously. You can introduce doctrinal vocabulary, but explain it. Avoid being condescending or overly simplistic.",
++  adult:
++    "The learner is an ADULT. Full doctrinal precision and vocabulary are appropriate. Speak with the weight and confidence of someone who has deep command of the material.",
++  senior:
++    "The learner is an OLDER ADULT. Full doctrinal precision is appropriate, likely with a lifetime of church background — avoid explaining basics they probably already know, and speak with respect for that experience.",
++};
++
++function buildSystemPrompt({ standard, stageLabel, stageDescription, ageBand }) {
++  const ageGuidance = AGE_BAND_GUIDANCE[ageBand] || AGE_BAND_GUIDANCE.adult;
++  const scriptureBlock = (standard.anchorScriptures || [])
++    .map((verse) => `- ${verse.reference}: "${verse.text}"`)
++    .join("\n");
++  const evidenceBlock = (standard.evidenceOfLearning || [])
++    .map((level) => `- ${level.level}: ${level.expectation}`)
++    .join("\n");
++
++  return `You are Jeremiah — the mouthpiece for a doctrinal teaching standard, not an independent voice. You never introduce doctrine, argument, or claims of your own. Every judgment you make must come strictly from the standard below.
++
++STANDARD: ${standard.code} — ${standard.title}
++DOCTRINAL STATEMENT: ${standard.statement}
++KEY VOCABULARY: ${(standard.vocabulary || []).join(", ")}
++ANCHOR SCRIPTURES:
++${scriptureBlock}
++EVIDENCE-OF-LEARNING LEVELS (what graduated mastery of this standard looks like):
++${evidenceBlock}
++
++CURRENT STAGE: ${stageLabel}${stageDescription ? " — " + stageDescription : ""}
++
++${ageGuidance}
++
++Grade the learner's response against this standard and stage only. Respond with STRICT JSON and nothing else, no markdown fences, no commentary outside the JSON:
++{"status": "empty" | "weak" | "partial" | "strong", "feedback": "..."}
++
++Rules for status:
++- "empty": no real response was given.
++- "weak": response doesn't yet engage the doctrinal claim for this stage.
++- "partial": response shows some real understanding but is incomplete for this stage's expectation.
++- "strong": response meets this stage's expectation clearly, in the learner's own words (exact phrase-matching is NOT required — judge understanding, not memorized wording).
++
++"feedback" must read like a real teacher reacting to what THIS learner actually wrote — reference specifics from their response when possible. Never use a generic canned phrase. Keep it to 1-3 sentences.`;
++}
++
++function extractJson(text) {
++  try {
++    return JSON.parse(text);
++  } catch {
++    const match = text.match(/\{[\s\S]*\}/);
++    if (match) {
++      try {
++        return JSON.parse(match[0]);
++      } catch {
++        return null;
++      }
++    }
++    return null;
++  }
++}
++
++Deno.serve(async (req) => {
++  if (req.method === "OPTIONS") {
++    return new Response(null, { headers: CORS_HEADERS });
++  }
++
++  if (req.method !== "POST") {
++    return new Response(JSON.stringify({ error: "Method not allowed" }), {
++      status: 405,
++      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
++    });
++  }
++
++  if (!ANTHROPIC_API_KEY) {
++    return new Response(
++      JSON.stringify({ error: "ANTHROPIC_API_KEY secret is not configured on this function." }),
++      { status: 500, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  let body;
++  try {
++    body = await req.json();
++  } catch {
++    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
++      status: 400,
++      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
++    });
++  }
++
++  const { standard, stageLabel, stageDescription, learnerResponse, ageBand } = body || {};
++
++  if (!standard || !standard.code || !standard.statement) {
++    return new Response(
++      JSON.stringify({ error: "Missing or incomplete `standard` in request body" }),
++      { status: 400, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  const normalizedResponse = (learnerResponse || "").trim();
++  if (!normalizedResponse) {
++    return new Response(
++      JSON.stringify({ status: "empty", feedback: "Enter a response before Jeremiah can evaluate your understanding." }),
++      { headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  const systemPrompt = buildSystemPrompt({ standard, stageLabel, stageDescription, ageBand });
++
++  let anthropicResponse;
++  try {
++    anthropicResponse = await fetch("https://api.anthropic.com/v1/messages", {
++      method: "POST",
++      headers: {
++        "Content-Type": "application/json",
++        "x-api-key": ANTHROPIC_API_KEY,
++        "anthropic-version": "2023-06-01",
++      },
++      body: JSON.stringify({
++        model: CLAUDE_MODEL,
++        max_tokens: 400,
++        system: systemPrompt,
++        messages: [{ role: "user", content: normalizedResponse }],
++      }),
++    });
++  } catch (err) {
++    return new Response(
++      JSON.stringify({ error: "Failed to reach the grading model", detail: String(err) }),
++      { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  if (!anthropicResponse.ok) {
++    const detail = await anthropicResponse.text();
++    return new Response(
++      JSON.stringify({ error: `Grading model returned ${anthropicResponse.status}`, detail }),
++      { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  const data = await anthropicResponse.json();
++  const textBlock = (data.content || []).find((block) => block.type === "text");
++  const parsed = textBlock ? extractJson(textBlock.text) : null;
++
++  if (!parsed || !VALID_STATUSES.includes(parsed.status) || typeof parsed.feedback !== "string") {
++    return new Response(
++      JSON.stringify({ error: "Grading model returned an unparseable response" }),
++      { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
++    );
++  }
++
++  return new Response(JSON.stringify(parsed), {
++    headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
++  });
++});
+-- 
+2.43.0
+
