@@ -43,6 +43,60 @@ function domainStats(domain, progress) {
   return { mastered, inProgress, total: domain.standards.length };
 }
 
+function subjectStats(subject, progress) {
+  let mastered = 0;
+  let total = 0;
+  subject.domains.forEach((domain) => {
+    domain.standards.forEach((s) => {
+      total += 1;
+      if ((progress[s.code] || 0) >= 4) mastered += 1;
+    });
+  });
+  return { mastered, total };
+}
+
+// Same reasoning as domains, one level up: a subject can eventually hold
+// dozens of domains, so the default view only expands the ONE subject
+// that's actually active right now — everything locked or fully mastered
+// collapses to a single summary row. This keeps page weight proportional
+// to what's relevant, not total content, no matter how much gets added.
+function computeDefaultOpenSubjects(subjects, progress) {
+  const initial = new Set();
+  const active = subjects.find(
+    (subject) => isSubjectUnlocked(subject.code, progress) && !isSubjectMastered(subject.code, progress)
+  );
+  if (active) {
+    initial.add(active.code);
+  } else if (subjects.length > 0) {
+    initial.add(subjects[subjects.length - 1].code);
+  }
+  return initial;
+}
+
+function computeDefaultOpenDomains(subjects, progress, nextStandard) {
+  const initial = new Set();
+  subjects.forEach((subject) => {
+    subject.domains.forEach((domain) => {
+      const hasProgress = domain.standards.some((s) => (progress[s.code] || 0) > 0);
+      const hasNext = domain.standards.some((s) => nextStandard?.code === s.code);
+      if (hasProgress || hasNext) initial.add(domain.domainCode);
+    });
+  });
+  return initial;
+}
+
+function standardMatchesQuery(standard, query) {
+  return standard.title.toLowerCase().includes(query) || standard.code.toLowerCase().includes(query);
+}
+
+function domainMatchesQuery(domain, query) {
+  return (
+    domain.domainTitle.toLowerCase().includes(query) ||
+    domain.domainCode.toLowerCase().includes(query) ||
+    domain.standards.some((standard) => standardMatchesQuery(standard, query))
+  );
+}
+
 // Within one expanded domain (a handful of nodes), pick a light/mid/dark
 // text zone by position — short enough now that the gradient is always
 // visible in a single view.
@@ -65,19 +119,22 @@ export default function DoctrineMapPage() {
   const subjects = getSubjects();
   const nextStandard = useMemo(() => getNextUnmasteredStandard(progress), [progress]);
 
+  const [openSubjects, setOpenSubjects] = useState(() => computeDefaultOpenSubjects(subjects, progress));
   // Open by default: any domain with progress in it, or the one holding the
   // very next standard — everything else starts collapsed.
-  const [openDomains, setOpenDomains] = useState(() => {
-    const initial = new Set();
-    subjects.forEach((subject) => {
-      subject.domains.forEach((domain) => {
-        const hasProgress = domain.standards.some((s) => (progress[s.code] || 0) > 0);
-        const hasNext = domain.standards.some((s) => nextStandard?.code === s.code);
-        if (hasProgress || hasNext) initial.add(domain.domainCode);
-      });
+  const [openDomains, setOpenDomains] = useState(() => computeDefaultOpenDomains(subjects, progress, nextStandard));
+  const [searchQuery, setSearchQuery] = useState("");
+  const trimmedQuery = searchQuery.trim().toLowerCase();
+  const isSearching = trimmedQuery.length > 0;
+
+  function toggleSubject(subjectCode) {
+    setOpenSubjects((current) => {
+      const next = new Set(current);
+      if (next.has(subjectCode)) next.delete(subjectCode);
+      else next.add(subjectCode);
+      return next;
     });
-    return initial;
-  });
+  }
 
   function toggleDomain(domainCode) {
     setOpenDomains((current) => {
@@ -86,6 +143,16 @@ export default function DoctrineMapPage() {
       else next.add(domainCode);
       return next;
     });
+  }
+
+  function expandAll() {
+    setOpenSubjects(new Set(subjects.map((subject) => subject.code)));
+    setOpenDomains(new Set(subjects.flatMap((subject) => subject.domains.map((domain) => domain.domainCode))));
+  }
+
+  function collapseToCurrent() {
+    setOpenSubjects(computeDefaultOpenSubjects(subjects, progress));
+    setOpenDomains(computeDefaultOpenDomains(subjects, progress, nextStandard));
   }
 
   return (
@@ -107,156 +174,209 @@ export default function DoctrineMapPage() {
           </p>
         </motion.section>
 
+        <div style={toolbarRowStyle}>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Search a standard or domain…"
+            style={searchInputStyle}
+          />
+          <div style={toolbarButtonsStyle}>
+            <button type="button" onClick={expandAll} style={toolbarButtonStyle}>
+              Expand All
+            </button>
+            <button type="button" onClick={collapseToCurrent} style={toolbarButtonStyle}>
+              Collapse to Current
+            </button>
+          </div>
+        </div>
+
         {subjects.map((subject) => {
           const unlocked = isSubjectUnlocked(subject.code, progress);
           const mastered = isSubjectMastered(subject.code, progress);
           const accent = getSubjectAccent(subject.code);
+          const stats = subjectStats(subject, progress);
+
+          const subjectHasMatch = isSearching && subject.domains.some((domain) => domainMatchesQuery(domain, trimmedQuery));
+          if (isSearching && !subjectHasMatch) return null;
+          const subjectOpen = isSearching ? true : openSubjects.has(subject.code);
 
           return (
             <section key={subject.code} style={subjectSectionStyle}>
-              <div style={subjectHeaderStyle}>
+              <button
+                type="button"
+                onClick={() => toggleSubject(subject.code)}
+                style={subjectHeaderButtonStyle}
+                aria-expanded={subjectOpen}
+              >
                 <div>
                   <p style={{ ...subjectEyebrowStyle, color: accent.base }}>Subject {subject.code}</p>
                   <h2 style={subjectTitleStyle}>{subject.title}</h2>
                 </div>
-                <div
-                  style={{
-                    ...lockPillStyle,
-                    ...(mastered
-                      ? { background: colors.masteredBg, color: colors.masteredText }
-                      : unlocked
-                        ? { background: accent.soft, color: accent.text }
-                        : { background: ignite.lockedBg, color: ignite.lockedText }),
-                  }}
-                >
-                  {mastered ? "Mastered" : unlocked ? "Unlocked" : "Locked"}
+                <div style={subjectHeaderRightStyle}>
+                  <span style={subjectCountStyle}>{stats.mastered}/{stats.total} mastered</span>
+                  <div
+                    style={{
+                      ...lockPillStyle,
+                      ...(mastered
+                        ? { background: colors.masteredBg, color: colors.masteredText }
+                        : unlocked
+                          ? { background: accent.soft, color: accent.text }
+                          : { background: ignite.lockedBg, color: ignite.lockedText }),
+                    }}
+                  >
+                    {mastered ? "Mastered" : unlocked ? "Unlocked" : "Locked"}
+                  </div>
+                  <ChevronIcon
+                    size={18}
+                    style={{
+                      color: colors.textFaint,
+                      transform: subjectOpen ? "rotate(90deg)" : "rotate(0deg)",
+                      transition: "transform 180ms ease",
+                    }}
+                  />
                 </div>
-              </div>
+              </button>
 
-              {!unlocked ? (
-                <p style={lockedTextStyle}>
-                  This subject unlocks once every standard in the previous subject is mastered.
-                </p>
-              ) : null}
+              <AnimatePresence initial={false}>
+                {subjectOpen ? (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.28, ease: "easeOut" }}
+                    style={{ overflow: "hidden" }}
+                  >
+                    {!unlocked ? (
+                      <p style={lockedTextStyle}>
+                        This subject unlocks once every standard in the previous subject is mastered.
+                      </p>
+                    ) : null}
 
-              <div style={domainListStyle}>
-                {subject.domains.map((domain) => {
-                  const isOpen = openDomains.has(domain.domainCode);
-                  const stats = domainStats(domain, progress);
-                  const hasNext = domain.standards.some((s) => nextStandard?.code === s.code);
+                    <div style={domainListStyle}>
+                      {subject.domains.map((domain) => {
+                        const domainMatch = isSearching && domainMatchesQuery(domain, trimmedQuery);
+                        if (isSearching && !domainMatch) return null;
+                        const isOpen = isSearching ? true : openDomains.has(domain.domainCode);
+                        const dStats = domainStats(domain, progress);
+                        const hasNext = domain.standards.some((s) => nextStandard?.code === s.code);
 
-                  return (
-                    <div key={domain.domainCode} style={domainBlockStyle}>
-                      <button
-                        type="button"
-                        onClick={() => toggleDomain(domain.domainCode)}
-                        style={domainSummaryButtonStyle}
-                        aria-expanded={isOpen}
-                      >
-                        <span style={domainSummaryTextWrapStyle}>
-                          <span style={domainCodeLabelStyle}>{domain.domainCode}</span>
-                          <span style={domainTitleLabelStyle}>{domain.domainTitle}</span>
-                        </span>
-                        <span style={domainSummaryRightStyle}>
-                          {hasNext ? <span style={{ ...nextPillStyle, color: colors.gold }}>Next up</span> : null}
-                          <span style={domainCountStyle}>
-                            {stats.mastered}/{stats.total} mastered
-                          </span>
-                          <ChevronIcon
-                            size={16}
-                            style={{
-                              color: colors.textFaint,
-                              transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                              transition: "transform 180ms ease",
-                            }}
-                          />
-                        </span>
-                      </button>
+                        return (
+                          <div key={domain.domainCode} style={domainBlockStyle}>
+                            <button
+                              type="button"
+                              onClick={() => toggleDomain(domain.domainCode)}
+                              style={domainSummaryButtonStyle}
+                              aria-expanded={isOpen}
+                            >
+                              <span style={domainSummaryTextWrapStyle}>
+                                <span style={domainCodeLabelStyle}>{domain.domainCode}</span>
+                                <span style={domainTitleLabelStyle}>{domain.domainTitle}</span>
+                              </span>
+                              <span style={domainSummaryRightStyle}>
+                                {hasNext ? <span style={{ ...nextPillStyle, color: colors.gold }}>Next up</span> : null}
+                                <span style={domainCountStyle}>
+                                  {dStats.mastered}/{dStats.total} mastered
+                                </span>
+                                <ChevronIcon
+                                  size={16}
+                                  style={{
+                                    color: colors.textFaint,
+                                    transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                                    transition: "transform 180ms ease",
+                                  }}
+                                />
+                              </span>
+                            </button>
 
-                      <AnimatePresence initial={false}>
-                        {isOpen ? (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.28, ease: "easeOut" }}
-                            style={{ overflow: "hidden" }}
-                          >
-                            <div style={pathWrapStyle}>
-                              <div style={trailWrapStyle}>
-                                <div style={trailSpineStyle} aria-hidden="true" />
-                                <div style={trailNodesStyle}>
-                                  {domain.standards.map((standard, i) => {
-                                    const level = progress[standard.code] || 0;
-                                    const isNext = unlocked && nextStandard?.code === standard.code;
-                                    const state = nodeStateFor(level, isNext);
-                                    const interactive = unlocked;
-                                    const offset = ZIGZAG_OFFSETS[i % ZIGZAG_OFFSETS.length];
-                                    const zoneText = ZONE_TEXT[nodeZoneFor(i, domain.standards.length)];
-                                    const ringFill =
-                                      state === "mastered"
-                                        ? ignite.blaze
-                                        : state === "current"
-                                          ? colors.gold
-                                          : state === "inProgress"
-                                            ? accent.base
-                                            : colors.textFaint;
+                            <AnimatePresence initial={false}>
+                              {isOpen ? (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.28, ease: "easeOut" }}
+                                  style={{ overflow: "hidden" }}
+                                >
+                                  <div style={pathWrapStyle}>
+                                    <div style={trailWrapStyle}>
+                                      <div style={trailSpineStyle} aria-hidden="true" />
+                                      <div style={trailNodesStyle}>
+                                        {domain.standards.map((standard, i) => {
+                                          const level = progress[standard.code] || 0;
+                                          const isNext = unlocked && nextStandard?.code === standard.code;
+                                          const state = nodeStateFor(level, isNext);
+                                          const interactive = unlocked;
+                                          const offset = ZIGZAG_OFFSETS[i % ZIGZAG_OFFSETS.length];
+                                          const zoneText = ZONE_TEXT[nodeZoneFor(i, domain.standards.length)];
+                                          const ringFill =
+                                            state === "mastered"
+                                              ? ignite.blaze
+                                              : state === "current"
+                                                ? colors.gold
+                                                : state === "inProgress"
+                                                  ? accent.base
+                                                  : colors.textFaint;
 
-                                    return (
-                                      <div
-                                        key={standard.code}
-                                        style={{ ...trailNodeRowStyle, transform: `translateX(${offset}px)` }}
-                                      >
-                                        <motion.button
-                                          type="button"
-                                          disabled={!interactive}
-                                          onClick={() => navigate(classroomPath(standard.code))}
-                                          {...(interactive ? nodeHover : {})}
-                                          {...(state === "mastered" ? igniteGlow : {})}
-                                          {...(state === "current" ? currentPulse : {})}
-                                          style={{
-                                            ...nodeCircleButtonStyle,
-                                            ...(state === "current" ? { border: `2px solid ${colors.gold}` } : null),
-                                            ...(interactive ? null : { cursor: "not-allowed", opacity: 0.65 }),
-                                          }}
-                                        >
-                                          <RingProgress
-                                            percent={(level / 4) * 100}
-                                            size={64}
-                                            strokeWidth={5}
-                                            trackColor="#e2e8f0"
-                                            fillColor={ringFill}
-                                          >
-                                            {!interactive ? (
-                                              <LockIcon size={20} />
-                                            ) : state === "mastered" ? (
-                                              <FlameMark size={24} />
-                                            ) : (
-                                              <span style={{ fontFamily: fonts.mono, fontSize: "1.1rem", fontWeight: 600 }}>
-                                                {i + 1}
-                                              </span>
-                                            )}
-                                          </RingProgress>
-                                        </motion.button>
-                                        <div style={trailLabelStyle}>
-                                          <p style={{ ...trailCodeStyle, color: zoneText.code }}>{standard.code}</p>
-                                          <p style={{ ...trailTitleTextStyle, color: zoneText.title, textShadow: zoneText.shadow }}>
-                                            {standard.title}
-                                          </p>
-                                        </div>
+                                          return (
+                                            <div
+                                              key={standard.code}
+                                              style={{ ...trailNodeRowStyle, transform: `translateX(${offset}px)` }}
+                                            >
+                                              <motion.button
+                                                type="button"
+                                                disabled={!interactive}
+                                                onClick={() => navigate(classroomPath(standard.code))}
+                                                {...(interactive ? nodeHover : {})}
+                                                {...(state === "mastered" ? igniteGlow : {})}
+                                                {...(state === "current" ? currentPulse : {})}
+                                                style={{
+                                                  ...nodeCircleButtonStyle,
+                                                  ...(state === "current" ? { border: `2px solid ${colors.gold}` } : null),
+                                                  ...(interactive ? null : { cursor: "not-allowed", opacity: 0.65 }),
+                                                }}
+                                              >
+                                                <RingProgress
+                                                  percent={(level / 4) * 100}
+                                                  size={64}
+                                                  strokeWidth={5}
+                                                  trackColor="#e2e8f0"
+                                                  fillColor={ringFill}
+                                                >
+                                                  {!interactive ? (
+                                                    <LockIcon size={20} />
+                                                  ) : state === "mastered" ? (
+                                                    <FlameMark size={24} />
+                                                  ) : (
+                                                    <span style={{ fontFamily: fonts.mono, fontSize: "1.1rem", fontWeight: 600 }}>
+                                                      {i + 1}
+                                                    </span>
+                                                  )}
+                                                </RingProgress>
+                                              </motion.button>
+                                              <div style={trailLabelStyle}>
+                                                <p style={{ ...trailCodeStyle, color: zoneText.code }}>{standard.code}</p>
+                                                <p style={{ ...trailTitleTextStyle, color: zoneText.title, textShadow: zoneText.shadow }}>
+                                                  {standard.title}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
                                       </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ) : null}
-                      </AnimatePresence>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ) : null}
+                            </AnimatePresence>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
             </section>
           );
         })}
@@ -328,14 +448,69 @@ const subjectSectionStyle = {
   marginBottom: "22px",
 };
 
-const subjectHeaderStyle = {
+const subjectHeaderButtonStyle = {
+  width: "100%",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "flex-start",
   gap: "16px",
   flexWrap: "wrap",
-  padding: "26px 26px 8px",
+  padding: "26px 26px",
   background: "#f3f1f6",
+  border: "none",
+  cursor: "pointer",
+  textAlign: "left",
+};
+
+const subjectHeaderRightStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "12px",
+  flexShrink: 0,
+};
+
+const subjectCountStyle = {
+  fontFamily: fonts.mono,
+  fontSize: "0.8rem",
+  color: colors.textFaint,
+  whiteSpace: "nowrap",
+};
+
+const toolbarRowStyle = {
+  display: "flex",
+  gap: "12px",
+  alignItems: "center",
+  flexWrap: "wrap",
+  marginBottom: "20px",
+};
+
+const searchInputStyle = {
+  flex: "1 1 240px",
+  padding: "12px 16px",
+  borderRadius: radius.pill,
+  border: "1px solid rgba(255,255,255,0.18)",
+  background: "rgba(255,255,255,0.08)",
+  color: "#ffffff",
+  fontSize: "0.94rem",
+  outline: "none",
+};
+
+const toolbarButtonsStyle = {
+  display: "flex",
+  gap: "8px",
+  flexShrink: 0,
+};
+
+const toolbarButtonStyle = {
+  padding: "10px 14px",
+  borderRadius: radius.pill,
+  border: "1px solid rgba(255,255,255,0.22)",
+  background: "rgba(255,255,255,0.06)",
+  color: "rgba(255,255,255,0.85)",
+  fontSize: "0.82rem",
+  fontWeight: 700,
+  cursor: "pointer",
+  whiteSpace: "nowrap",
 };
 
 const subjectEyebrowStyle = {
