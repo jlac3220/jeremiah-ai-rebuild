@@ -5,6 +5,7 @@ import {
   getSubjects,
   isSubjectUnlocked,
   isSubjectMastered,
+  isStandardUnlocked,
   getNextUnmasteredStandard,
 } from "../../core/standards/standardsRegistry";
 import { getStandardProgress } from "../../core/standards/standardsProgress";
@@ -307,7 +308,11 @@ export default function DoctrineMapPage() {
                                           const level = progress[standard.code] || 0;
                                           const isNext = unlocked && nextStandard?.code === standard.code;
                                           const state = nodeStateFor(level, isNext);
-                                          const interactive = unlocked;
+                                          // Teacher-led: a node is only clickable once every standard
+                                          // before it is mastered AND no earlier mastery has slipped
+                                          // into a due review — not just because the subject is
+                                          // unlocked. Sequential building, not free browsing.
+                                          const interactive = isStandardUnlocked(standard.code, progress);
                                           const offset = ZIGZAG_OFFSETS[i % ZIGZAG_OFFSETS.length];
                                           const zoneText = ZONE_TEXT[nodeZoneFor(i, domain.standards.length)];
                                           const ringFill =

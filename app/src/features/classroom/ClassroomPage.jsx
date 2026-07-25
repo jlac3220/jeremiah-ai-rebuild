@@ -5,6 +5,7 @@ import {
   getStandardByCode,
   getNextUnmasteredStandard,
   getPreviousStandard,
+  getUnlockBlockReason,
 } from "../../core/standards/standardsRegistry";
 import { getVocabularyDefinition } from "../../core/standards/vocabularyGlossary";
 import {
@@ -27,7 +28,8 @@ import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
 import { stageContent, buildStagePrompt } from "../../core/classroom/stageContent";
 import { buildStandardDrillRound } from "../../core/drill/drillEngine";
 import DefendExchangePanel from "../defend/components/DefendExchangePanel";
-import { ROUTES, bibleSupportPath, classroomPath } from "../../app/routes";
+import InlineAskPanel from "./components/InlineAskPanel";
+import { ROUTES, bibleSupportPath, classroomPath, defendPath } from "../../app/routes";
 import Card from "../../shared/ui/Card";
 import Pill from "../../shared/ui/Pill";
 import PrimaryButton from "../../shared/ui/PrimaryButton";
@@ -113,6 +115,11 @@ export default function ClassroomPage() {
   // manual way to look before answering.
   const [showScriptureReference, setShowScriptureReference] = useState(false);
   const [showTeachingNote, setShowTeachingNote] = useState(false);
+  // Students should be able to ask questions during instruction, not just
+  // in a disconnected chat elsewhere — this stays open across stage
+  // transitions within the same standard so a side conversation isn't lost
+  // just because the learner advanced a stage.
+  const [showAskPanel, setShowAskPanel] = useState(false);
 
   useEffect(() => {
     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
@@ -132,6 +139,7 @@ export default function ClassroomPage() {
     setShowVocabReference(false);
     setShowScriptureReference(false);
     setShowTeachingNote(false);
+    setShowAskPanel(false);
   }, [standardCode]);
 
   const currentStage = useMemo(
@@ -180,6 +188,62 @@ export default function ClassroomPage() {
             <div style={{ marginTop: "18px" }}>
               <Link to={ROUTES.MAP}>
                 <SecondaryButton>Back to Map</SecondaryButton>
+              </Link>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  const blockReason = getUnlockBlockReason(standard.code, getStandardProgress());
+  if (blockReason) {
+    return (
+      <div style={pageStyle}>
+        <div style={contentStyle}>
+          <Card>
+            <p style={sectionEyebrowStyle}>Not Yet</p>
+            <h1 style={{ margin: "10px 0 0", fontSize: "1.5rem", fontWeight: 900, color: colors.text }}>
+              {standard.title} isn't ready for you yet.
+            </h1>
+            {blockReason.type === "sequence" ? (
+              <>
+                <p style={{ marginTop: "12px", lineHeight: 1.7, color: colors.textMuted }}>
+                  We build this sequentially — {blockReason.standard.title} comes first. Jeremiah
+                  doesn't skip ahead, even when you're eager to.
+                </p>
+                <div style={{ marginTop: "18px" }}>
+                  <Link to={classroomPath(blockReason.standard.code)}>
+                    <PrimaryButton
+                      style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                    >
+                      Go to {blockReason.standard.title}
+                    </PrimaryButton>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <p style={{ marginTop: "12px", lineHeight: 1.7, color: colors.textMuted }}>
+                  Before new material, let's confirm you still hold what's already mastered —
+                  {" "}
+                  {blockReason.codes.length} standard{blockReason.codes.length === 1 ? "" : "s"}{" "}
+                  came due for review. Consistent mastery means it stays held, not just passed once.
+                </p>
+                <div style={{ marginTop: "18px" }}>
+                  <Link to={defendPath(blockReason.codes[0])}>
+                    <PrimaryButton
+                      style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                    >
+                      Defend What's Due
+                    </PrimaryButton>
+                  </Link>
+                </div>
+              </>
+            )}
+            <div style={{ marginTop: "12px" }}>
+              <Link to={ROUTES.MAP} style={breadcrumbLinkStyle}>
+                ← Back to Map
               </Link>
             </div>
           </Card>
@@ -674,7 +738,14 @@ export default function ClassroomPage() {
                       {showTeachingNote ? "Hide Teaching Note" : "Teaching Note"}
                     </SecondaryButton>
                   ) : null}
+                  <SecondaryButton onClick={() => setShowAskPanel((current) => !current)}>
+                    {showAskPanel ? "Hide Ask Jeremiah" : "Ask Jeremiah"}
+                  </SecondaryButton>
                 </div>
+
+                {showAskPanel ? (
+                  <InlineAskPanel standard={standard} ageBand={ageBand} />
+                ) : null}
 
                 {showTeachingNote && standard.instructionalFocus ? (
                   <motion.div

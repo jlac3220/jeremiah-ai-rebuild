@@ -41,6 +41,11 @@ export default function HomePage() {
   const notStarted = allStandards.length - mastered - inProgress;
   const overallPercent = Math.round((mastered / allStandards.length) * 100);
   const nextStandardLevel = nextStandard ? progress[nextStandard.code] || 0 : 0;
+  // Teacher-led: don't offer to start something new while a review has
+  // slipped — consistent mastery means confirming you still hold it before
+  // moving on, not just once. A standard already in progress is exempt;
+  // this only guards what starts NEXT.
+  const blockedByReview = nextStandardLevel === 0 && dueForReview.length > 0;
 
   return (
     <div style={pageStyle}>
@@ -69,36 +74,63 @@ export default function HomePage() {
         </motion.section>
 
         <Card variant="dark" style={{ marginBottom: "20px" }}>
-          <p style={pillStyle}>Continue Learning</p>
-          {nextStandard ? (
+          {blockedByReview ? (
             <>
-              <p style={trackLabelStyle}>{nextStandard.subjectTitle}</p>
-              <h2 style={standardTitleStyle}>{nextStandard.title}</h2>
-              <p style={descriptionStyle}>{nextStandard.statement}</p>
-              <div style={{ marginTop: "20px" }}>
-                <div style={evidenceRowStyle}>
-                  <span>Evidence of learning</span>
-                  <span>{nextStandardLevel} of 4</span>
-                </div>
-                <ProgressBar percent={(nextStandardLevel / 4) * 100} tone="light" />
-              </div>
-              <div style={cardFooterStyle}>
-                <Link to={classroomPath(nextStandard.code)}>
-                  <PrimaryButton>Continue Classroom Session</PrimaryButton>
-                </Link>
+              <p style={pillStyle}>Before New Material</p>
+              <h2 style={standardTitleStyle}>Let's confirm what's already yours.</h2>
+              <p style={descriptionStyle}>
+                {dueForReview.length} standard{dueForReview.length === 1 ? "" : "s"} came due for
+                review. Consistent mastery means holding it, not just having passed it once —
+                {nextStandard ? ` ${nextStandard.title} waits until these are clear.` : ""}
+              </p>
+              <div style={{ marginTop: "16px", display: "grid", gap: "10px" }}>
+                {dueForReview.map((s) => (
+                  <Link key={s.code} to={defendPath(s.code)} style={reviewLinkStyle}>
+                    <div style={reviewItemStyle}>
+                      <div>
+                        <p style={itemTitleStyle}>{s.title}</p>
+                        <p style={itemMetaStyle}>{s.code}</p>
+                      </div>
+                      <Pill tone="review">Defend</Pill>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </>
           ) : (
             <>
-              <h2 style={standardTitleStyle}>Every standard is mastered</h2>
-              <p style={descriptionStyle}>
-                You've mastered everything currently in the Brain. Check the Map for what's next.
-              </p>
-              <div style={cardFooterStyle}>
-                <Link to={ROUTES.MAP}>
-                  <PrimaryButton>Open Doctrine Map</PrimaryButton>
-                </Link>
-              </div>
+              <p style={pillStyle}>Continue Learning</p>
+              {nextStandard ? (
+                <>
+                  <p style={trackLabelStyle}>{nextStandard.subjectTitle}</p>
+                  <h2 style={standardTitleStyle}>{nextStandard.title}</h2>
+                  <p style={descriptionStyle}>{nextStandard.statement}</p>
+                  <div style={{ marginTop: "20px" }}>
+                    <div style={evidenceRowStyle}>
+                      <span>Evidence of learning</span>
+                      <span>{nextStandardLevel} of 4</span>
+                    </div>
+                    <ProgressBar percent={(nextStandardLevel / 4) * 100} tone="light" />
+                  </div>
+                  <div style={cardFooterStyle}>
+                    <Link to={classroomPath(nextStandard.code)}>
+                      <PrimaryButton>Continue Classroom Session</PrimaryButton>
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h2 style={standardTitleStyle}>Every standard is mastered</h2>
+                  <p style={descriptionStyle}>
+                    You've mastered everything currently in the Brain. Check the Map for what's next.
+                  </p>
+                  <div style={cardFooterStyle}>
+                    <Link to={ROUTES.MAP}>
+                      <PrimaryButton>Open Doctrine Map</PrimaryButton>
+                    </Link>
+                  </div>
+                </>
+              )}
             </>
           )}
         </Card>
@@ -119,7 +151,7 @@ export default function HomePage() {
           </div>
         </Card>
 
-        {dueForReview.length > 0 ? (
+        {dueForReview.length > 0 && !blockedByReview ? (
           <Card style={{ marginBottom: "20px" }}>
             <h3 style={sectionTitleStyle}>Review Queue</h3>
             <p style={sectionTextStyle}>

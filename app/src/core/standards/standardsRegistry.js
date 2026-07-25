@@ -31,6 +31,8 @@
  * the map, and the grading/ask mouthpiece all generalize off this shape.
  */
 
+import { getDueForReview } from "./standardsProgress";
+
 export const standardsRegistry = {
   "OG": {
     "code": "OG",
@@ -9605,6 +9607,54 @@ export function getNextUnmasteredStandard(progress = {}) {
         isSubjectUnlocked(standard.subjectCode, progress)
     ) || null
   );
+}
+
+// Sequential, teacher-led progression: a standard is only startable once
+// EVERY standard before it (in the Brain's own flat order, across the whole
+// subject — not just the current domain) is mastered, AND no previously
+// mastered standard currently has a review due. That second condition is
+// what makes mastery mean "still holds," not "held once" — a learner
+// can't move on to new material while an earlier one has slipped, the same
+// way you wouldn't move to calculus with unresolved gaps in arithmetic.
+// A standard the learner has already started is always still reachable —
+// this gate is about what unlocks NEXT, not about locking someone out of
+// something they're mid-way through.
+export function isStandardUnlocked(standardCode, progress = {}) {
+  const standard = getStandardByCode(standardCode);
+  if (!standard) return false;
+  if (!isSubjectUnlocked(standard.subjectCode, progress)) return false;
+
+  const alreadyStarted = (progress[standardCode] || 0) > 0;
+  if (alreadyStarted) return true;
+
+  const all = getAllStandards();
+  const index = all.findIndex((s) => s.code === standardCode);
+  const allPriorMastered = all.slice(0, index).every((s) => (progress[s.code] || 0) >= 4);
+  if (!allPriorMastered) return false;
+
+  return getDueForReview(progress).length === 0;
+}
+
+/**
+ * Why a not-yet-started standard is locked, for surfacing a real reason to
+ * the learner instead of a bare "locked": either an earlier standard still
+ * needs mastering, or a review has come due and needs to be held again
+ * before new material opens up. Returns null if the standard is unlocked.
+ */
+export function getUnlockBlockReason(standardCode, progress = {}) {
+  const standard = getStandardByCode(standardCode);
+  if (!standard) return null;
+  if ((progress[standardCode] || 0) > 0) return null;
+
+  const all = getAllStandards();
+  const index = all.findIndex((s) => s.code === standardCode);
+  const priorUnmastered = all.slice(0, index).find((s) => (progress[s.code] || 0) < 4);
+  if (priorUnmastered) return { type: "sequence", standard: priorUnmastered };
+
+  const dueReviews = getDueForReview(progress);
+  if (dueReviews.length > 0) return { type: "review", codes: dueReviews };
+
+  return null;
 }
 
 // The standard immediately before this one in the Brain's own sequence —
