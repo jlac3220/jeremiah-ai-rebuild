@@ -1,9 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { getStandardByCode } from "../../core/standards/standardsRegistry";
+import {
+  getStandardByCode,
+  getNextUnmasteredStandard,
+  getPreviousStandard,
+} from "../../core/standards/standardsRegistry";
 import { getVocabularyDefinition } from "../../core/standards/vocabularyGlossary";
-import { raiseStandardProgressLevel, getStandardProgressLevel, scheduleNextReview } from "../../core/standards/standardsProgress";
+import {
+  raiseStandardProgressLevel,
+  getStandardProgressLevel,
+  getStandardProgress,
+  scheduleNextReview,
+} from "../../core/standards/standardsProgress";
 import { recordEngagement } from "../../core/streak/streak";
 import {
   getSavedLiveStageForStandard,
@@ -16,14 +25,18 @@ import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
 import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
 import { stageContent, buildStagePrompt } from "../../core/classroom/stageContent";
-import { ROUTES, bibleSupportPath } from "../../app/routes";
+import { buildStandardRecallRound } from "../../core/classroom/standardRecallEngine";
+import DefendExchangePanel from "../defend/components/DefendExchangePanel";
+import { ROUTES, bibleSupportPath, classroomPath } from "../../app/routes";
 import Card from "../../shared/ui/Card";
 import Pill from "../../shared/ui/Pill";
 import PrimaryButton from "../../shared/ui/PrimaryButton";
 import SecondaryButton from "../../shared/ui/SecondaryButton";
-import { FlameMark } from "../../shared/ui/icons";
+import { FlameMark, BoltIcon } from "../../shared/ui/icons";
 import { colors, gradients, shadows, fonts, getSubjectAccent } from "../../shared/theme";
 import { stageTransition, thinkingPulse, igniteGlow } from "../../shared/motion";
+
+const RECALL_ADVANCE_DELAY_MS = 1000;
 
 const AGE_BAND_LABELS = { child: "Child Path", teen: "Teen Path", adult: "Adult Path", senior: "Senior Path" };
 
@@ -58,13 +71,28 @@ export default function ClassroomPage() {
   const [introAcknowledged, setIntroAcknowledged] = useState(
     () => getIntroSeenForStandard(standardCode)
   );
+  // Cognitive load theory: novices learn better from a worked example before
+  // independent practice than from problem-solving cold. This gates one
+  // "watch Jeremiah work through it" card between the Introduction and the
+  // first graded attempt, only on a learner's first-ever pass at a standard.
+  const [modelAcknowledged, setModelAcknowledged] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [submittedResponse, setSubmittedResponse] = useState("");
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [evaluationStatus, setEvaluationStatus] = useState("");
   const [transitionMessage, setTransitionMessage] = useState("");
   const [isGrading, setIsGrading] = useState(false);
-  const [justMastered, setJustMastered] = useState(false);
+  // Once the 5-stage grading track is mastered, the session keeps going in
+  // this same component rather than dead-ending: a quick Recall check on
+  // just this standard's own verses, then a Pressure round (Defend the
+  // Faith) on just this standard, then the Complete screen. Nothing here
+  // navigates away — that page-hopping was the actual source of the
+  // "detached" feeling, not the content itself.
+  const [sessionPhase, setSessionPhase] = useState("stages"); // stages | recall | pressure | complete
+  const [recallIndex, setRecallIndex] = useState(0);
+  const [recallScore, setRecallScore] = useState(0);
+  const [recallSelected, setRecallSelected] = useState(null);
+  const [pressureOutcome, setPressureOutcome] = useState(null);
   // Retrieval-first: verses stay hidden until the learner has attempted an
   // answer from memory for the current stage. Research on active recall is
   // clear that attempt-then-check beats read-then-answer for retention.
@@ -83,12 +111,17 @@ export default function ClassroomPage() {
   useEffect(() => {
     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
     setIntroAcknowledged(getIntroSeenForStandard(standardCode));
+    setModelAcknowledged(false);
     setResponseText("");
     setSubmittedResponse("");
     setFeedbackMessage("");
     setEvaluationStatus("");
     setTransitionMessage("");
-    setJustMastered(false);
+    setSessionPhase("stages");
+    setRecallIndex(0);
+    setRecallScore(0);
+    setRecallSelected(null);
+    setPressureOutcome(null);
     setHasAttempted(false);
     setShowVocabReference(false);
     setShowScriptureReference(false);
@@ -106,6 +139,24 @@ export default function ClassroomPage() {
     () => (standard ? buildStagePrompt(currentStageId, standard) : ""),
     [currentStageId, standard]
   );
+
+  // Deliberately memoized on the standard alone, not sessionPhase — the
+  // Complete screen's recap ("Recall 4/6") needs this same round's length
+  // after sessionPhase has already moved past "recall".
+  const recallRound = useMemo(
+    () => (standard ? buildStandardRecallRound(standard) : []),
+    [standard]
+  );
+  const recallQuestion = recallRound[recallIndex];
+
+  // A standard with no anchor scriptures (shouldn't happen in practice) has
+  // nothing to recall — skip straight to the Pressure round rather than
+  // stalling the session on an empty quiz.
+  useEffect(() => {
+    if (sessionPhase === "recall" && recallRound.length === 0) {
+      setSessionPhase("pressure");
+    }
+  }, [sessionPhase, recallRound.length]);
 
   const accent = standard ? getSubjectAccent(standard.subjectCode) : getSubjectAccent("OG");
 
@@ -166,9 +217,12 @@ export default function ClassroomPage() {
 
     if (currentStageId === "mastery" && result.status === "strong") {
       raiseStandardProgressLevel(standard.code, 4);
+      // Initial schedule so a review exists even if the learner exits before
+      // finishing Recall/Pressure below — the Pressure round reschedules
+      // with the real outcome once it completes.
       scheduleNextReview(standard.code, true);
-      setJustMastered(true);
       setTransitionMessage(`${standard.title} is now mastered.`);
+      setSessionPhase("recall");
       return;
     }
 
@@ -198,6 +252,26 @@ export default function ClassroomPage() {
     setIntroAcknowledged(true);
   }
 
+  function handleRecallChoose(choice) {
+    if (recallSelected) return;
+    const isCorrect = choice === recallQuestion.correctReference;
+    setRecallSelected(choice);
+    if (isCorrect) setRecallScore((current) => current + 1);
+
+    setTimeout(() => {
+      if (recallIndex + 1 >= recallRound.length) {
+        setSessionPhase("pressure");
+      } else {
+        setRecallIndex((current) => current + 1);
+        setRecallSelected(null);
+      }
+    }, RECALL_ADVANCE_DELAY_MS);
+  }
+
+  function handlePressureComplete(outcome) {
+    setPressureOutcome(outcome);
+  }
+
   const feedbackTone =
     evaluationStatus === "strong"
       ? { bg: colors.strongBg, border: colors.strongBorder }
@@ -209,6 +283,11 @@ export default function ClassroomPage() {
 
   const progressLevel = getStandardProgressLevel(standard.code);
   const showIntro = progressLevel === 0 && !introAcknowledged;
+  const showModel = progressLevel === 0 && introAcknowledged && !modelAcknowledged;
+  const previousStandard = showIntro ? getPreviousStandard(standard.code) : null;
+  const previousMastered = previousStandard && getStandardProgressLevel(previousStandard.code) >= 4;
+  const nextStandard =
+    sessionPhase === "complete" ? getNextUnmasteredStandard(getStandardProgress()) : null;
 
   return (
     <div style={pageStyle}>
@@ -250,8 +329,8 @@ export default function ClassroomPage() {
         </Card>
 
         <AnimatePresence mode="wait">
-          {justMastered ? (
-            <motion.div key="mastered" {...stageTransition}>
+          {sessionPhase === "complete" ? (
+            <motion.div key="complete" {...stageTransition}>
               <Card style={{ textAlign: "center", marginBottom: "20px" }}>
                 <motion.div
                   {...igniteGlow}
@@ -276,15 +355,149 @@ export default function ClassroomPage() {
                   You've shown recognition, explanation, application, and defense of this
                   standard. It's now lit on the Doctrine Map.
                 </p>
-                <div style={{ marginTop: "20px", display: "flex", gap: "12px", justifyContent: "center" }}>
-                  <Link to={ROUTES.MAP}>
-                    <PrimaryButton>Back to Map</PrimaryButton>
-                  </Link>
+                <div style={sessionRecapRowStyle}>
+                  {recallRound.length > 0 ? (
+                    <Pill tone="neutral">Recall {recallScore}/{recallRound.length}</Pill>
+                  ) : null}
+                  {pressureOutcome ? (
+                    <Pill tone={pressureOutcome.unavailable ? "neutral" : pressureOutcome.success ? "mastered" : "review"}>
+                      {pressureOutcome.unavailable
+                        ? "Pressure round unavailable"
+                        : pressureOutcome.success
+                          ? "Held the line under pressure"
+                          : "Wavered under pressure"}
+                    </Pill>
+                  ) : null}
+                </div>
+                <div style={{ marginTop: "20px", display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+                  {nextStandard ? (
+                    <Link to={classroomPath(nextStandard.code)}>
+                      <PrimaryButton
+                        style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                      >
+                        Next Standard
+                      </PrimaryButton>
+                    </Link>
+                  ) : (
+                    <Link to={ROUTES.MAP}>
+                      <PrimaryButton
+                        style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                      >
+                        Back to Map
+                      </PrimaryButton>
+                    </Link>
+                  )}
                   <Link to={ROUTES.ASK}>
                     <SecondaryButton>Ask Jeremiah About This</SecondaryButton>
                   </Link>
                 </div>
               </Card>
+            </motion.div>
+          ) : sessionPhase === "pressure" ? (
+            <motion.div key="pressure" {...stageTransition}>
+              <Card variant="dark" style={{ marginBottom: "16px", borderTop: `4px solid ${accent.base}` }}>
+                <p style={sectionEyebrowStyle}>Pressure Test</p>
+                <h3 style={{ ...introTitleStyle, color: "#ffffff" }}>
+                  Defend what you just learned
+                </h3>
+                <p style={{ margin: "10px 0 0", lineHeight: 1.7, color: "rgba(255,255,255,0.82)" }}>
+                  Jeremiah is going to argue the other side of {standard.title} right now, while
+                  it's fresh. Hold the line using Scripture.
+                </p>
+              </Card>
+
+              <DefendExchangePanel standard={standard} ageBand={ageBand} onRoundComplete={handlePressureComplete} />
+
+              {pressureOutcome ? (
+                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} style={{ marginTop: "16px" }}>
+                  <Card style={{ textAlign: "center" }}>
+                    <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 900, color: colors.text }}>
+                      {pressureOutcome.unavailable
+                        ? "Couldn't reach Jeremiah just now."
+                        : pressureOutcome.success
+                          ? "You held the line."
+                          : "This one needs more work."}
+                    </h3>
+                    <p style={{ margin: "10px 0 0", color: colors.textMuted }}>
+                      {pressureOutcome.unavailable
+                        ? "Connection issue — review is rescheduled soon so you can try again."
+                        : pressureOutcome.success
+                          ? "Review scheduled further out — you've shown you can still defend this."
+                          : "Review scheduled sooner so you get another pass at it."}
+                    </p>
+                    <div style={{ marginTop: "16px" }}>
+                      <PrimaryButton
+                        onClick={() => setSessionPhase("complete")}
+                        style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                      >
+                        Continue
+                      </PrimaryButton>
+                    </div>
+                  </Card>
+                </motion.div>
+              ) : null}
+            </motion.div>
+          ) : sessionPhase === "recall" ? (
+            <motion.div key="recall" {...stageTransition}>
+              <Card variant="dark" style={{ marginBottom: "16px", borderTop: `4px solid ${accent.base}` }}>
+                <p style={sectionEyebrowStyle}>Quick Recall</p>
+                <h3 style={{ ...introTitleStyle, color: "#ffffff" }}>
+                  Before we move on — where's this from?
+                </h3>
+                <p style={{ margin: "10px 0 0", lineHeight: 1.7, color: "rgba(255,255,255,0.82)" }}>
+                  A fast check on the verses from {standard.title} you just studied.
+                </p>
+              </Card>
+
+              {recallQuestion ? (
+                <>
+                  <div style={recallProgressRowStyle}>
+                    <p style={recallProgressTextStyle}>
+                      Question {recallIndex + 1} of {recallRound.length}
+                    </p>
+                    <p style={recallScoreTextStyle}>Score {recallScore}</p>
+                  </div>
+
+                  <Card
+                    style={{
+                      marginBottom: "16px",
+                      background: `radial-gradient(ellipse 70% 60% at 8% 0%, ${accent.soft} 0%, transparent 60%), #fffdfa`,
+                    }}
+                  >
+                    <div style={recallQuestionLabelRowStyle}>
+                      <BoltIcon size={18} />
+                      <p style={recallQuestionLabelStyle}>Which reference is this verse from?</p>
+                    </div>
+                    <p style={recallQuestionTextStyle}>&ldquo;{recallQuestion.text}&rdquo;</p>
+                  </Card>
+
+                  <div style={recallChoiceGridStyle}>
+                    {recallQuestion.choices.map((choice) => {
+                      const isSelected = recallSelected === choice;
+                      const isCorrectChoice = choice === recallQuestion.correctReference;
+                      const showState = recallSelected !== null;
+                      return (
+                        <motion.button
+                          key={choice}
+                          type="button"
+                          onClick={() => handleRecallChoose(choice)}
+                          disabled={recallSelected !== null}
+                          whileHover={recallSelected === null ? { scale: 1.02 } : undefined}
+                          whileTap={recallSelected === null ? { scale: 0.98 } : undefined}
+                          style={{
+                            ...recallChoiceButtonStyle,
+                            ...(showState && isCorrectChoice ? recallChoiceCorrectStyle : null),
+                            ...(showState && isSelected && !isCorrectChoice ? recallChoiceWrongStyle : null),
+                            ...(showState && !isSelected && !isCorrectChoice ? { opacity: 0.55 } : null),
+                          }}
+                        >
+                          {choice}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : null}
             </motion.div>
           ) : showIntro ? (
             <motion.div key="intro" {...stageTransition}>
@@ -292,6 +505,17 @@ export default function ClassroomPage() {
                 <p style={sectionEyebrowStyle}>Before You Begin</p>
                 <h3 style={introTitleStyle}>{standard.title}</h3>
                 <p style={introStatementStyle}>{standard.statement}</p>
+
+                {previousMastered ? (
+                  <div style={buildingOnBoxStyle}>
+                    <p style={promptLabelStyle}>Building On What You Know</p>
+                    <p style={buildingOnTextStyle}>
+                      Last time, you mastered <strong>{previousStandard.title}</strong> —{" "}
+                      {previousStandard.statement}
+                    </p>
+                    <p style={buildingOnTextStyle}>{standard.title} builds directly on that.</p>
+                  </div>
+                ) : null}
 
                 {standard.vocabulary?.length ? (
                   <div style={{ marginTop: "20px" }}>
@@ -328,6 +552,59 @@ export default function ClassroomPage() {
                     style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
                   >
                     Begin Session
+                  </PrimaryButton>
+                </div>
+              </Card>
+            </motion.div>
+          ) : showModel ? (
+            <motion.div key="model" {...stageTransition}>
+              <Card variant="dark" style={{ marginBottom: "20px", borderTop: `4px solid ${accent.base}` }}>
+                <p style={sectionEyebrowStyle}>Watch First</p>
+                <h3 style={{ ...introTitleStyle, color: "#ffffff" }}>
+                  Here&rsquo;s how I&rsquo;d think through this.
+                </h3>
+                <p style={{ margin: "12px 0 0", lineHeight: 1.75, color: "rgba(255,255,255,0.86)" }}>
+                  Before you try it yourself, watch how I&rsquo;d work through {standard.title}. I&rsquo;m
+                  not going to argue this from outside Scripture — I&rsquo;m going to let the text carry
+                  the weight.
+                </p>
+
+                {standard.anchorScriptures?.[0] ? (
+                  <div
+                    style={{
+                      ...verseCardStyle,
+                      marginTop: "18px",
+                      background: `radial-gradient(ellipse 70% 60% at 8% 0%, ${accent.soft} 0%, transparent 60%), #fffdfa`,
+                    }}
+                  >
+                    <span style={verseQuoteMarkStyle}>&ldquo;</span>
+                    <p style={verseTagStyle}>
+                      <span style={{ ...verseTagDotStyle, background: accent.base }} />
+                      {standard.anchorScriptures[0].reference}
+                    </p>
+                    <p style={verseTextStyle}>{standard.anchorScriptures[0].text}</p>
+                  </div>
+                ) : null}
+
+                <p style={{ margin: "16px 0 0", lineHeight: 1.75, color: "rgba(255,255,255,0.86)" }}>
+                  That&rsquo;s the anchor. {standard.statement}
+                </p>
+
+                {standard.instructionalFocus ? (
+                  <div style={modelApproachBoxStyle}>
+                    <p style={{ ...promptLabelStyle, color: "rgba(255,255,255,0.6)" }}>My Approach to This</p>
+                    <p style={{ ...teachingNoteTextStyle, color: "rgba(255,255,255,0.86)" }}>
+                      {standard.instructionalFocus}
+                    </p>
+                  </div>
+                ) : null}
+
+                <div style={actionsRowStyle}>
+                  <PrimaryButton
+                    onClick={() => setModelAcknowledged(true)}
+                    style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                  >
+                    Your Turn
                   </PrimaryButton>
                 </div>
               </Card>
@@ -662,6 +939,29 @@ const teachingNoteTextStyle = {
   fontStyle: "italic",
 };
 
+const buildingOnBoxStyle = {
+  marginTop: "18px",
+  borderRadius: "16px",
+  padding: "16px",
+  background: "#fff7ed",
+  border: "1px solid #fed7aa",
+};
+
+const buildingOnTextStyle = {
+  margin: "8px 0 0",
+  lineHeight: 1.65,
+  fontSize: "0.94rem",
+  color: "#7c2d12",
+};
+
+const modelApproachBoxStyle = {
+  marginTop: "16px",
+  borderRadius: "16px",
+  padding: "16px",
+  background: "rgba(255,255,255,0.08)",
+  border: "1px solid rgba(255,255,255,0.14)",
+};
+
 const vocabReferenceBoxStyle = {
   marginTop: "16px",
   borderRadius: "16px",
@@ -787,4 +1087,91 @@ const footerRowStyle = {
   alignItems: "center",
   flexWrap: "wrap",
   gap: "12px",
+};
+
+const sessionRecapRowStyle = {
+  marginTop: "16px",
+  display: "flex",
+  gap: "10px",
+  justifyContent: "center",
+  flexWrap: "wrap",
+};
+
+const recallProgressRowStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: "10px",
+};
+
+const recallProgressTextStyle = {
+  margin: 0,
+  fontFamily: fonts.mono,
+  fontSize: "0.8rem",
+  letterSpacing: "0.04em",
+  color: colors.textFaint,
+};
+
+const recallScoreTextStyle = {
+  margin: 0,
+  fontFamily: fonts.mono,
+  fontSize: "0.8rem",
+  fontWeight: 700,
+  color: colors.text,
+};
+
+const recallQuestionLabelRowStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+};
+
+const recallQuestionLabelStyle = {
+  margin: 0,
+  fontFamily: fonts.mono,
+  fontSize: "0.72rem",
+  fontWeight: 500,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  color: colors.textFaint,
+};
+
+const recallQuestionTextStyle = {
+  margin: "14px 0 0",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 40, "wght" 440',
+  fontSize: "1.2rem",
+  lineHeight: 1.6,
+  color: "#1e1420",
+};
+
+const recallChoiceGridStyle = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  gap: "12px",
+};
+
+const recallChoiceButtonStyle = {
+  padding: "16px",
+  borderRadius: "16px",
+  border: `1px solid ${colors.cardBorder}`,
+  background: "#ffffff",
+  color: colors.text,
+  fontSize: "0.98rem",
+  fontWeight: 700,
+  cursor: "pointer",
+  textAlign: "left",
+};
+
+const recallChoiceCorrectStyle = {
+  background: colors.strongBg,
+  border: `1px solid ${colors.strongBorder}`,
+  color: "#166534",
+};
+
+const recallChoiceWrongStyle = {
+  background: colors.weakBg,
+  border: `1px solid ${colors.weakBorder}`,
+  color: "#991b1b",
 };

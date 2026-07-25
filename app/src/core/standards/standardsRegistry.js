@@ -9607,4 +9607,15 @@ export function getNextUnmasteredStandard(progress = {}) {
   );
 }
 
+// The standard immediately before this one in the Brain's own sequence —
+// used for the Classroom's "daily review" connector (Rosenshine's Principle
+// of Instruction #1: begin by reviewing what was just learned). Deliberately
+// simple: getAllStandards() already returns standards in the intended
+// learning order, so "previous" just means one position back.
+export function getPreviousStandard(standardCode) {
+  const all = getAllStandards();
+  const index = all.findIndex((standard) => standard.code === standardCode);
+  return index > 0 ? all[index - 1] : null;
+}
+
 export const DEFAULT_STANDARD_CODE = "OG.1.1.18";
