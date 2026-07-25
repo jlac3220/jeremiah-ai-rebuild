@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { buildRapidFireRound } from "../../core/rapidFire/rapidFireEngine";
+import { buildDrillRound } from "../../core/drill/drillEngine";
 import { getStandardProgress } from "../../core/standards/standardsProgress";
 import { recordEngagement } from "../../core/streak/streak";
 import { ROUTES, classroomPath } from "../../app/routes";
@@ -14,6 +14,12 @@ import { stageTransition } from "../../shared/motion";
 
 const ROUND_SIZE = 10;
 const ADVANCE_DELAY_MS = 1100;
+
+const TYPE_BADGE = {
+  reference: "Scripture",
+  vocabulary: "Vocabulary",
+  truth: "Truth",
+};
 
 function resultTier(score, total) {
   const percent = score / total;
@@ -39,7 +45,7 @@ export default function RapidFirePage() {
 
   function handleStart() {
     const progress = getStandardProgress();
-    const nextRound = buildRapidFireRound(progress, ROUND_SIZE);
+    const nextRound = buildDrillRound(progress, ROUND_SIZE);
     if (nextRound.length === 0) return;
     setRound(nextRound);
     setQuestionIndex(0);
@@ -51,7 +57,7 @@ export default function RapidFirePage() {
 
   function handleChoose(choice) {
     if (selected) return;
-    const isCorrect = choice === currentQuestion.correctReference;
+    const isCorrect = choice === currentQuestion.correctLabel;
     setSelected(choice);
     if (isCorrect) {
       setScore((current) => current + 1);
@@ -89,8 +95,8 @@ export default function RapidFirePage() {
             Let's <em style={titleEmStyle}>drill</em> this.
           </h1>
           <p style={subtitleStyle}>
-            I'll show you a verse — you tell me where it's from. Same classroom, same
-            standards, just a faster pace. No grading pressure, just reps.
+            Scripture, vocabulary, the truths themselves — I'll mix it up. Same classroom,
+            same standards, just a faster pace. No grading pressure, just reps.
           </p>
         </section>
 
@@ -101,10 +107,10 @@ export default function RapidFirePage() {
                 <div style={boltWrapStyle}>
                   <BoltIcon size={34} />
                 </div>
-                <h2 style={startTitleStyle}>{ROUND_SIZE} verses. How many can you place?</h2>
+                <h2 style={startTitleStyle}>{ROUND_SIZE} questions. How many can you get?</h2>
                 <p style={startTextStyle}>
-                  Pulled from what you've actually studied so far — the more you master on
-                  the Map, the more I'll draw from.
+                  Pulled from what you've actually studied so far — scripture, vocabulary, and
+                  the standards themselves. The more you master on the Map, the more I'll draw from.
                 </p>
                 <div style={{ marginTop: "22px" }}>
                   <PrimaryButton
@@ -131,14 +137,19 @@ export default function RapidFirePage() {
                   background: `radial-gradient(ellipse 70% 60% at 8% 0%, ${accent.soft} 0%, transparent 60%), #fffdfa`,
                 }}
               >
-                <p style={verseQuestionLabelStyle}>Which reference is this verse from?</p>
+                <div style={verseQuestionLabelRowStyle}>
+                  <span style={{ ...typeBadgeStyle, background: accent.soft, color: accent.text }}>
+                    {TYPE_BADGE[currentQuestion.type] || "Scripture"}
+                  </span>
+                  <p style={verseQuestionLabelStyle}>{currentQuestion.prompt}</p>
+                </div>
                 <p style={verseQuestionTextStyle}>&ldquo;{currentQuestion.text}&rdquo;</p>
               </Card>
 
               <div style={choiceGridStyle}>
                 {currentQuestion.choices.map((choice) => {
                   const isSelected = selected === choice;
-                  const isCorrectChoice = choice === currentQuestion.correctReference;
+                  const isCorrectChoice = choice === currentQuestion.correctLabel;
                   const showState = selected !== null;
                   return (
                     <motion.button
@@ -303,6 +314,23 @@ const scoreTextStyle = {
   fontSize: "0.8rem",
   fontWeight: 700,
   color: colors.text,
+};
+
+const verseQuestionLabelRowStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  flexWrap: "wrap",
+};
+
+const typeBadgeStyle = {
+  display: "inline-flex",
+  padding: "3px 9px",
+  borderRadius: "999px",
+  fontSize: "0.68rem",
+  fontWeight: 800,
+  letterSpacing: "0.04em",
+  textTransform: "uppercase",
 };
 
 const verseQuestionLabelStyle = {

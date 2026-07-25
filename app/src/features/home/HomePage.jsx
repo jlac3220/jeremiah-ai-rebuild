@@ -8,6 +8,7 @@ import {
   getStandardByCode,
 } from "../../core/standards/standardsRegistry";
 import { getStandardProgress, getDueForReview } from "../../core/standards/standardsProgress";
+import { getDrillPoolStats } from "../../core/drill/drillEngine";
 import { getStreak, hasEngagedToday } from "../../core/streak/streak";
 import { ROUTES, classroomPath, defendPath } from "../../app/routes";
 import Card from "../../shared/ui/Card";
@@ -30,6 +31,7 @@ export default function HomePage() {
     () => getDueForReview(progress).map((code) => getStandardByCode(code)).filter(Boolean),
     [progress]
   );
+  const drillStats = useMemo(() => getDrillPoolStats(progress), [progress]);
 
   const mastered = allStandards.filter((s) => (progress[s.code] || 0) >= 4).length;
   const inProgress = allStandards.filter((s) => {
@@ -154,18 +156,24 @@ export default function HomePage() {
           </div>
         </Card>
 
-        <Card>
-          <p style={reviewPillStyle}>Jeremiah AI · Quick Drill</p>
-          <h3 style={reviewTitleStyle}>A few minutes to spare?</h3>
-          <p style={reviewTextStyle}>
-            Rapid Fire pulls from what you've actually studied — same classroom, faster pace.
-          </p>
-          <div style={{ marginTop: "16px" }}>
-            <Link to={ROUTES.RAPID_FIRE}>
-              <SecondaryButton>Quiz Me</SecondaryButton>
-            </Link>
-          </div>
-        </Card>
+        {drillStats.total > 0 ? (
+          <Card>
+            <p style={reviewPillStyle}>Jeremiah AI · Quick Drill</p>
+            <h3 style={reviewTitleStyle}>
+              {drillStats.referenceCount} verses, {drillStats.vocabularyCount} terms,{" "}
+              {drillStats.truthCount} truths ready to drill
+            </h3>
+            <p style={reviewTextStyle}>
+              Mixed together, pulled from what you've actually studied — same classroom, faster
+              pace.
+            </p>
+            <div style={{ marginTop: "16px" }}>
+              <Link to={ROUTES.RAPID_FIRE}>
+                <SecondaryButton>Quiz Me</SecondaryButton>
+              </Link>
+            </div>
+          </Card>
+        ) : null}
       </div>
     </div>
   );

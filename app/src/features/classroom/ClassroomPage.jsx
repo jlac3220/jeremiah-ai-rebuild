@@ -25,7 +25,7 @@ import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
 import { advanceSessionStage } from "../../core/classroom/advanceSessionStage";
 import { stageContent, buildStagePrompt } from "../../core/classroom/stageContent";
-import { buildStandardRecallRound } from "../../core/classroom/standardRecallEngine";
+import { buildStandardDrillRound } from "../../core/drill/drillEngine";
 import DefendExchangePanel from "../defend/components/DefendExchangePanel";
 import { ROUTES, bibleSupportPath, classroomPath } from "../../app/routes";
 import Card from "../../shared/ui/Card";
@@ -37,6 +37,12 @@ import { colors, gradients, shadows, fonts, getSubjectAccent } from "../../share
 import { stageTransition, thinkingPulse, igniteGlow } from "../../shared/motion";
 
 const RECALL_ADVANCE_DELAY_MS = 1000;
+
+const RECALL_TYPE_BADGE = {
+  reference: "Scripture",
+  vocabulary: "Vocabulary",
+  truth: "Truth",
+};
 
 const AGE_BAND_LABELS = { child: "Child Path", teen: "Teen Path", adult: "Adult Path", senior: "Senior Path" };
 
@@ -144,7 +150,7 @@ export default function ClassroomPage() {
   // Complete screen's recap ("Recall 4/6") needs this same round's length
   // after sessionPhase has already moved past "recall".
   const recallRound = useMemo(
-    () => (standard ? buildStandardRecallRound(standard) : []),
+    () => (standard ? buildStandardDrillRound(standard) : []),
     [standard]
   );
   const recallQuestion = recallRound[recallIndex];
@@ -254,7 +260,7 @@ export default function ClassroomPage() {
 
   function handleRecallChoose(choice) {
     if (recallSelected) return;
-    const isCorrect = choice === recallQuestion.correctReference;
+    const isCorrect = choice === recallQuestion.correctLabel;
     setRecallSelected(choice);
     if (isCorrect) setRecallScore((current) => current + 1);
 
@@ -442,10 +448,11 @@ export default function ClassroomPage() {
               <Card variant="dark" style={{ marginBottom: "16px", borderTop: `4px solid ${accent.base}` }}>
                 <p style={sectionEyebrowStyle}>Quick Recall</p>
                 <h3 style={{ ...introTitleStyle, color: "#ffffff" }}>
-                  Before we move on — where's this from?
+                  Before we move on — a fast check.
                 </h3>
                 <p style={{ margin: "10px 0 0", lineHeight: 1.7, color: "rgba(255,255,255,0.82)" }}>
-                  A fast check on the verses from {standard.title} you just studied.
+                  Scripture, vocabulary, and the truth itself — everything from {standard.title}{" "}
+                  you just studied.
                 </p>
               </Card>
 
@@ -466,7 +473,10 @@ export default function ClassroomPage() {
                   >
                     <div style={recallQuestionLabelRowStyle}>
                       <BoltIcon size={18} />
-                      <p style={recallQuestionLabelStyle}>Which reference is this verse from?</p>
+                      <p style={recallQuestionLabelStyle}>{recallQuestion.prompt}</p>
+                      <span style={{ ...recallTypeBadgeStyle, background: accent.soft, color: accent.text }}>
+                        {RECALL_TYPE_BADGE[recallQuestion.type] || "Scripture"}
+                      </span>
                     </div>
                     <p style={recallQuestionTextStyle}>&ldquo;{recallQuestion.text}&rdquo;</p>
                   </Card>
@@ -474,7 +484,7 @@ export default function ClassroomPage() {
                   <div style={recallChoiceGridStyle}>
                     {recallQuestion.choices.map((choice) => {
                       const isSelected = recallSelected === choice;
-                      const isCorrectChoice = choice === recallQuestion.correctReference;
+                      const isCorrectChoice = choice === recallQuestion.correctLabel;
                       const showState = recallSelected !== null;
                       return (
                         <motion.button
@@ -1124,6 +1134,18 @@ const recallQuestionLabelRowStyle = {
   display: "flex",
   alignItems: "center",
   gap: "8px",
+  flexWrap: "wrap",
+};
+
+const recallTypeBadgeStyle = {
+  display: "inline-flex",
+  padding: "3px 9px",
+  borderRadius: "999px",
+  fontSize: "0.66rem",
+  fontWeight: 800,
+  letterSpacing: "0.04em",
+  textTransform: "uppercase",
+  marginLeft: "auto",
 };
 
 const recallQuestionLabelStyle = {
