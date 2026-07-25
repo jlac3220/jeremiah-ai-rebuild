@@ -1,32 +1,34 @@
-// title/description are genuinely generic across every standard. The prompt
-// text used to be hardcoded to one doctrine (monotheism) here — that's what
-// made adding a second standard require new code. buildStagePrompt() below
-// generates the prompt from whichever standard is actually active instead.
+// title/description are genuinely generic across every standard — the
+// specific content comes from buildStagePrompt() below, which reads
+// whichever standard is actually active. Each stage's prompt is a real,
+// answerable question using a Bloom's-aligned verb for that stage's level
+// (recall, explain, ground, apply, defend) — never just the standard's own
+// statement pasted back as if it were the question.
 export const stageContent = {
   focus: {
     title: "Session focus",
     description:
-      "Orient the learner to the doctrinal target before deeper instruction begins.",
+      "Recall the core claim before deeper instruction begins — identify it, don't explain it yet.",
   },
   truth: {
     title: "Truth emphasis",
     description:
-      "State the doctrinal truth clearly before asking the learner to reason from scripture.",
+      "Explain what this truth means and what it rules out — in your own words, not a repeated phrase.",
   },
   scripture: {
     title: "Scripture grounding",
     description:
-      "Anchor the learner in the passages that prove the doctrinal claim.",
+      "Point to the specific wording in the text that grounds this claim — don't just assert it.",
   },
   checkpoint: {
     title: "Guided checkpoint",
     description:
-      "Require the learner to respond to the doctrinal claim made by the passages.",
+      "Apply the claim: state precisely what it establishes and what it rules out.",
   },
   mastery: {
     title: "Mastery confirmation",
     description:
-      "Confirm whether the learner can now express the truth with sufficient clarity and precision.",
+      "Defend this standard against a real denial, using the text itself — the final, hardest stage.",
   },
 };
 
@@ -38,15 +40,15 @@ export function buildStagePrompt(stageId, standard) {
 
   switch (stageId) {
     case "focus":
-      return `In this session, you are focusing on what the scriptures require you to confess about: ${standard.title}.`;
+      return `From memory, identify the core claim of "${standard.title}." What exactly is being confessed here — in a sentence or two, no more?`;
     case "truth":
-      return `The truth being taught here is: ${standard.statement}`;
+      return `Explain, in your own words, what this truth means — and just as importantly, what it rules out. What view would be incompatible with it?`;
     case "scripture":
-      return `Read the verses carefully, starting with ${firstVerse}, and identify the wording that establishes: ${standard.statement}`;
+      return `Look at ${firstVerse} and the other anchor scriptures. Which specific word or phrase does the heaviest lifting for this claim — and why that one?`;
     case "checkpoint":
-      return `These verses make a doctrinal claim, not just a mention. What do they establish, and what do they rule out, regarding "${standard.title}"?`;
+      return `These verses make a doctrinal claim, not just a mention. Precisely, what do they establish about "${standard.title}" — and what do they rule out?`;
     case "mastery":
-      return `State clearly, in your own words, what these verses require you to confess: ${standard.statement}. Reference specific wording from the anchor scriptures.`;
+      return `A thoughtful skeptic denies this. Using specific wording from the anchor scriptures — not just your own reasoning — defend "${standard.title}" against that denial. What in the text makes it untenable?`;
     default:
       return standard.statement;
   }

@@ -306,7 +306,11 @@ export default function ClassroomPage() {
     const nextStageId = advanceSessionStage(currentStageId, result.status);
     if (nextStageId !== currentStageId) {
       const nextIndex = sessionStages.findIndex((stage) => stage.id === nextStageId);
-      if (nextIndex > 0) raiseStandardProgressLevel(standard.code, nextIndex);
+      // Level 4 (full mastery) is granted ONLY by actually passing the
+      // Mastery stage itself, in the branch above — entering Mastery after
+      // Checkpoint is 3 stages cleared, not 4. Without this cap, a learner
+      // would show as "Mastered" before ever attempting the final stage.
+      if (nextIndex > 0) raiseStandardProgressLevel(standard.code, Math.min(nextIndex, 3));
       setCurrentStageId(nextStageId);
       setSavedLiveStageForStandard(standard.code, nextStageId);
       setResponseText("");
