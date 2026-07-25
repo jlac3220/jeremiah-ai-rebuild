@@ -8,6 +8,8 @@ import {
   getSavedLiveStageForStandard,
   setSavedLiveStageForStandard,
   getActiveLearnerAgeBand,
+  getIntroSeenForStandard,
+  setIntroSeenForStandard,
 } from "../../core/classroom/classroomSessionData";
 import { evaluateResponse } from "../../core/classroom/evaluateResponse";
 import { sessionStages } from "../../core/classroom/sessionStages";
@@ -33,6 +35,12 @@ export default function ClassroomPage() {
   const [currentStageId, setCurrentStageId] = useState(
     () => getSavedLiveStageForStandard(standardCode) || "focus"
   );
+  // A learner's first-ever encounter with a standard gets a real lesson
+  // before anything is graded — retrieval-first (verses hidden until you
+  // attempt an answer) is right for review, not for material never taught.
+  const [introAcknowledged, setIntroAcknowledged] = useState(
+    () => getIntroSeenForStandard(standardCode)
+  );
   const [responseText, setResponseText] = useState("");
   const [submittedResponse, setSubmittedResponse] = useState("");
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -47,6 +55,7 @@ export default function ClassroomPage() {
 
   useEffect(() => {
     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
+    setIntroAcknowledged(getIntroSeenForStandard(standardCode));
     setResponseText("");
     setSubmittedResponse("");
     setFeedbackMessage("");
@@ -151,6 +160,11 @@ export default function ClassroomPage() {
     }
   }
 
+  function handleBeginSession() {
+    setIntroSeenForStandard(standard.code);
+    setIntroAcknowledged(true);
+  }
+
   const feedbackTone =
     evaluationStatus === "strong"
       ? { bg: colors.strongBg, border: colors.strongBorder }
@@ -161,6 +175,7 @@ export default function ClassroomPage() {
           : null;
 
   const progressLevel = getStandardProgressLevel(standard.code);
+  const showIntro = progressLevel === 0 && !introAcknowledged;
 
   return (
     <div style={pageStyle}>
@@ -235,6 +250,58 @@ export default function ClassroomPage() {
                   <Link to={ROUTES.ASK}>
                     <SecondaryButton>Ask Jeremiah About This</SecondaryButton>
                   </Link>
+                </div>
+              </Card>
+            </motion.div>
+          ) : showIntro ? (
+            <motion.div key="intro" {...stageTransition}>
+              <Card style={{ marginBottom: "20px" }}>
+                <p style={sectionEyebrowStyle}>Before You Begin</p>
+                <h3 style={introTitleStyle}>{standard.title}</h3>
+                <p style={introStatementStyle}>{standard.statement}</p>
+
+                {standard.vocabulary?.length ? (
+                  <div style={{ marginTop: "20px" }}>
+                    <p style={promptLabelStyle}>Key Vocabulary</p>
+                    <div style={vocabRowStyle}>
+                      {standard.vocabulary.map((term) => (
+                        <span key={term} style={{ ...vocabPillStyle, borderColor: accent.base, color: accent.text }}>
+                          {term}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                <div style={{ marginTop: "22px" }}>
+                  <p style={promptLabelStyle}>Anchor Scriptures</p>
+                  <div style={verseListStyle}>
+                    {standard.anchorScriptures.map((verse) => (
+                      <div
+                        key={verse.reference}
+                        style={{
+                          ...verseCardStyle,
+                          background: `radial-gradient(ellipse 70% 60% at 8% 0%, ${accent.soft} 0%, transparent 60%), #fffdfa`,
+                        }}
+                      >
+                        <span style={verseQuoteMarkStyle}>&ldquo;</span>
+                        <p style={verseTagStyle}>
+                          <span style={{ ...verseTagDotStyle, background: accent.base }} />
+                          {verse.reference}
+                        </p>
+                        <p style={verseTextStyle}>{verse.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={actionsRowStyle}>
+                  <PrimaryButton
+                    onClick={handleBeginSession}
+                    style={{ background: gradients.flame, color: "#ffffff", boxShadow: shadows.flame, border: "none" }}
+                  >
+                    Begin Session
+                  </PrimaryButton>
                 </div>
               </Card>
             </motion.div>
@@ -507,6 +574,40 @@ const stageTitleStyle = {
   fontSize: "1.35rem",
   fontWeight: 900,
   color: colors.checkpointTextDark,
+};
+
+const introTitleStyle = {
+  margin: "10px 0 0",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 60, "wght" 460, "WONK" 1',
+  fontSize: "1.6rem",
+  lineHeight: 1.15,
+  color: colors.text,
+};
+
+const introStatementStyle = {
+  margin: "14px 0 0",
+  lineHeight: 1.75,
+  fontSize: "1.05rem",
+  color: colors.textMuted,
+};
+
+const vocabRowStyle = {
+  marginTop: "10px",
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "8px",
+};
+
+const vocabPillStyle = {
+  display: "inline-flex",
+  padding: "7px 14px",
+  borderRadius: "999px",
+  border: "1px solid",
+  fontSize: "0.84rem",
+  fontWeight: 700,
+  background: "#ffffff",
 };
 
 const stageDescriptionStyle = {

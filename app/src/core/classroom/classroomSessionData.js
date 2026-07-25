@@ -21,6 +21,26 @@ export function clearSavedLiveStageForStandard(standardCode) {
   window.sessionStorage.removeItem(getLiveStageStorageKey(standardCode));
 }
 
+const INTRO_SEEN_KEY_PREFIX = "jeremiah-ai-intro-seen";
+
+function getIntroSeenStorageKey(standardCode) {
+  return `${INTRO_SEEN_KEY_PREFIX}:${standardCode}`;
+}
+
+// Tracks whether the learner has clicked past the Introduction stage for a
+// standard in this browser session — separate from progress level so a
+// first attempt that scores "weak" and hasn't advanced yet doesn't re-show
+// the lesson on every retry.
+export function getIntroSeenForStandard(standardCode) {
+  if (typeof window === "undefined" || !standardCode) return false;
+  return window.sessionStorage.getItem(getIntroSeenStorageKey(standardCode)) === "true";
+}
+
+export function setIntroSeenForStandard(standardCode) {
+  if (typeof window === "undefined" || !standardCode) return;
+  window.sessionStorage.setItem(getIntroSeenStorageKey(standardCode), "true");
+}
+
 // Stand-in for real auth/login. Persisted in localStorage so a choice on
 // the Profile page survives reloads, even though there's no real account
 // system yet — falls back to profileData's mock default otherwise.
