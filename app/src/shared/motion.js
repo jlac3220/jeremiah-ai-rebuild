@@ -43,6 +43,20 @@ export const nodeHover = {
   whileTap: { scale: 0.98 },
 };
 
+// The "you are here" marker on the Doctrine Map — a slow gold breathing
+// pulse on the single next-unmastered standard, distinct from the one-shot
+// ignite moment.
+export const currentPulse = {
+  animate: {
+    boxShadow: [
+      "0 0 0px rgba(255,210,63,0)",
+      "0 0 22px rgba(255,210,63,0.55)",
+      "0 0 0px rgba(255,210,63,0)",
+    ],
+    transition: { duration: 2.4, repeat: Infinity, ease: "easeInOut" },
+  },
+};
+
 // Classroom stage advance — the whole teaching surface shifts, not just text.
 export const stageTransition = {
   initial: { opacity: 0, x: 24 },

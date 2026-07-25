@@ -4,8 +4,13 @@
 // of one flat gray shadow everywhere. This restores that vocabulary instead
 // of the flat single-gradient version this rebuild started with.
 export const fonts = {
-  display: '"Manrope", system-ui, sans-serif',
+  // Fraunces carries the voice of the app — the editorial, slightly wonky
+  // italic used for headlines and illuminated verse text. Manrope stays the
+  // clean workhorse for UI chrome and body copy. JetBrains Mono marks
+  // anything that's data: standard codes, references, timestamps.
+  display: '"Fraunces", Georgia, serif',
   body: '"Manrope", system-ui, sans-serif',
+  mono: '"JetBrains Mono", ui-monospace, "SFMono-Regular", monospace',
 };
 
 // Real per-subject identity — standardsRegistry.js already assigns these
@@ -34,6 +39,12 @@ export const gradients = {
   // primary CTA accents, and anywhere the "ignite" identity needs to be felt.
   flame: "linear-gradient(145deg, #FFD700 0%, #FFB400 30%, #FF6A00 65%, #E02121 100%)",
   flameSoft: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
+
+  // "The Path of Fire" — mastery visualized as light dawning. A section
+  // that opens in daylight (standards already mastered) and descends into
+  // night (what's still locked ahead), used on the Doctrine Map.
+  pathOfFire:
+    "linear-gradient(180deg, #f3f1f6 0%, #f3f1f6 8%, #a99aa8 24%, #5b4756 46%, #241a22 68%, #0f0b10 100%)",
 };
 
 export const colors = {
@@ -68,6 +79,14 @@ export const colors = {
   partialBorder: "#fdba74",
   weakBg: "#fef2f2",
   weakBorder: "#fca5a5",
+
+  // Night/dusk — the dark end of the Path of Fire vocabulary, used for nav,
+  // hero grounds, and the hearth/streak widget.
+  night: "#0f0b10",
+  dusk: "#241a22",
+  mistOnDark: "rgba(243, 241, 246, 0.7)",
+  hairlineOnDark: "rgba(243, 241, 246, 0.14)",
+  gold: "#ffd23f",
 };
 
 // The "ignite" identity for the Doctrine Map: mastery is visualized as

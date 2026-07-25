@@ -19,7 +19,7 @@ import Pill from "../../shared/ui/Pill";
 import PrimaryButton from "../../shared/ui/PrimaryButton";
 import SecondaryButton from "../../shared/ui/SecondaryButton";
 import { FlameMark } from "../../shared/ui/icons";
-import { colors, gradients, shadows, getSubjectAccent } from "../../shared/theme";
+import { colors, gradients, shadows, fonts, getSubjectAccent } from "../../shared/theme";
 import { stageTransition, thinkingPulse, igniteGlow } from "../../shared/motion";
 
 const AGE_BAND_LABELS = { child: "Child Path", teen: "Teen Path", adult: "Adult Path", senior: "Senior Path" };
@@ -317,12 +317,14 @@ export default function ClassroomPage() {
                           key={verse.reference}
                           style={{
                             ...verseCardStyle,
-                            background: `linear-gradient(135deg, ${accent.soft} 0%, #ffffff 70%)`,
-                            borderLeft: `4px solid ${accent.base}`,
+                            background: `radial-gradient(ellipse 70% 60% at 8% 0%, ${accent.soft} 0%, transparent 60%), #fffdfa`,
                           }}
                         >
-                          <span style={{ ...verseQuoteMarkStyle, color: accent.base }}>"</span>
-                          <p style={{ ...verseRefStyle, color: accent.text }}>{verse.reference}</p>
+                          <span style={verseQuoteMarkStyle}>&ldquo;</span>
+                          <p style={verseTagStyle}>
+                            <span style={{ ...verseTagDotStyle, background: accent.base }} />
+                            {verse.reference}
+                          </p>
                           <p style={verseTextStyle}>{verse.text}</p>
                         </div>
                       ))}
@@ -455,31 +457,49 @@ const verseListStyle = { display: "grid", gap: "12px", marginTop: "14px" };
 
 const verseCardStyle = {
   position: "relative",
-  borderRadius: "16px",
-  padding: "20px 18px 18px",
-  border: `1px solid ${colors.cardBorder}`,
+  borderRadius: "4px",
+  padding: "20px 20px 18px",
+  border: "1px solid rgba(255, 178, 46, 0.4)",
   overflow: "hidden",
 };
 
 const verseQuoteMarkStyle = {
   position: "absolute",
-  top: "-6px",
-  right: "14px",
-  fontSize: "3.2rem",
-  fontFamily: "Georgia, serif",
-  fontWeight: 900,
-  opacity: 0.22,
+  top: "-4px",
+  right: "16px",
+  fontSize: "2.6rem",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontWeight: 700,
+  color: "#ffb22e",
+  opacity: 0.3,
   lineHeight: 1,
   pointerEvents: "none",
 };
 
-const verseRefStyle = { margin: 0, fontWeight: 800, letterSpacing: "0.02em" };
+const verseTagStyle = {
+  margin: 0,
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  fontFamily: fonts.mono,
+  fontSize: "0.72rem",
+  fontWeight: 500,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  color: colors.textMuted,
+};
+
+const verseTagDotStyle = { width: "7px", height: "7px", borderRadius: "999px", flexShrink: 0 };
+
 const verseTextStyle = {
-  margin: "10px 0 0",
-  lineHeight: 1.75,
-  color: "#1e293b",
-  fontFamily: "Georgia, 'Times New Roman', serif",
-  fontSize: "1.05rem",
+  margin: "12px 0 0",
+  lineHeight: 1.7,
+  color: "#1e1420",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 30, "wght" 440',
+  fontSize: "1.1rem",
 };
 
 const stageTitleStyle = {

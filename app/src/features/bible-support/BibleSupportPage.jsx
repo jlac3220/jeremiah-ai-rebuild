@@ -4,7 +4,7 @@ import { getStandardByCode } from "../../core/standards/standardsRegistry";
 import { classroomPath } from "../../app/routes";
 import Card from "../../shared/ui/Card";
 import SecondaryButton from "../../shared/ui/SecondaryButton";
-import { colors, getSubjectAccent } from "../../shared/theme";
+import { colors, fonts, gradients, getSubjectAccent } from "../../shared/theme";
 
 export default function BibleSupportPage() {
   const { standardCode } = useParams();
@@ -92,13 +92,20 @@ export default function BibleSupportPage() {
             <div
               style={{
                 ...readerCardStyle,
-                background: `linear-gradient(135deg, ${accent.soft} 0%, #ffffff 70%)`,
-                borderLeft: `4px solid ${accent.base}`,
+                background: `radial-gradient(ellipse 65% 55% at 10% 0%, ${accent.soft} 0%, transparent 60%), #fffdfa`,
               }}
             >
-              <span style={{ ...readerQuoteMarkStyle, color: accent.base }}>&ldquo;</span>
-              <h4 style={{ ...readerRefStyle, color: accent.text }}>{selectedVerse.reference}</h4>
-              <p style={readerTextStyle}>{selectedVerse.text}</p>
+              <span style={cornerTopLeftStyle} aria-hidden="true" />
+              <span style={cornerBottomRightStyle} aria-hidden="true" />
+              <p style={readerTagStyle}>
+                <span style={{ ...readerTagDotStyle, background: accent.base }} />
+                {standard.code} — {standard.title}
+              </p>
+              <p style={readerTextStyle}>
+                <span style={dropCapStyle}>{selectedVerse.text.charAt(0)}</span>
+                {selectedVerse.text.slice(1)}
+              </p>
+              <p style={readerRefStyle}>{selectedVerse.reference.toUpperCase()}</p>
             </div>
           ) : (
             <p style={{ color: colors.textFaint }}>No passages available.</p>
@@ -180,28 +187,80 @@ const openButtonStyle = {
 
 const readerCardStyle = {
   position: "relative",
-  borderRadius: "18px",
-  padding: "24px 22px 22px",
+  borderRadius: "4px",
+  padding: "32px 30px 28px",
+  border: "1px solid rgba(255, 178, 46, 0.4)",
   overflow: "hidden",
 };
 
-const readerQuoteMarkStyle = {
+const cornerBracketBase = {
   position: "absolute",
-  top: "-10px",
-  right: "18px",
-  fontSize: "4.2rem",
-  fontFamily: "Georgia, serif",
-  fontWeight: 900,
-  opacity: 0.22,
-  lineHeight: 1,
+  width: "20px",
+  height: "20px",
+  borderColor: "#ffb22e",
   pointerEvents: "none",
 };
 
-const readerRefStyle = { margin: 0, fontSize: "1.2rem", fontWeight: 900, letterSpacing: "0.02em" };
+const cornerTopLeftStyle = {
+  ...cornerBracketBase,
+  top: "10px",
+  left: "10px",
+  borderTop: "1px solid #ffb22e",
+  borderLeft: "1px solid #ffb22e",
+};
+
+const cornerBottomRightStyle = {
+  ...cornerBracketBase,
+  bottom: "10px",
+  right: "10px",
+  borderBottom: "1px solid #ffb22e",
+  borderRight: "1px solid #ffb22e",
+};
+
+const readerTagStyle = {
+  margin: "0 0 22px",
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  fontFamily: fonts.mono,
+  fontSize: "0.72rem",
+  fontWeight: 500,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  color: colors.textMuted,
+};
+
+const readerTagDotStyle = { width: "7px", height: "7px", borderRadius: "999px", flexShrink: 0 };
+
+const dropCapStyle = {
+  float: "left",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontSize: "4.6rem",
+  lineHeight: 0.72,
+  fontVariationSettings: '"opsz" 144, "wght" 480, "WONK" 1',
+  padding: "6px 8px 0 0",
+  background: gradients.flame,
+  WebkitBackgroundClip: "text",
+  backgroundClip: "text",
+  color: "transparent",
+};
+
 const readerTextStyle = {
-  margin: "14px 0 0",
-  fontSize: "1.15rem",
-  lineHeight: 1.85,
-  color: "#1e293b",
-  fontFamily: "Georgia, 'Times New Roman', serif",
+  margin: 0,
+  fontSize: "1.2rem",
+  lineHeight: 1.65,
+  color: "#1e1420",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 30, "wght" 440',
+};
+
+const readerRefStyle = {
+  clear: "both",
+  margin: "20px 0 0",
+  fontFamily: fonts.mono,
+  fontSize: "0.78rem",
+  letterSpacing: "0.06em",
+  color: colors.textFaint,
 };

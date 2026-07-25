@@ -16,8 +16,9 @@ import ProgressBar from "../../shared/ui/ProgressBar";
 import Pill from "../../shared/ui/Pill";
 import PrimaryButton from "../../shared/ui/PrimaryButton";
 import SecondaryButton from "../../shared/ui/SecondaryButton";
-import { colors } from "../../shared/theme";
+import { colors, fonts } from "../../shared/theme";
 import { fadeInUp } from "../../shared/motion";
+import { FlameMark } from "../../shared/ui/icons";
 
 export default function HomePage() {
   const progress = useMemo(() => getStandardProgress(), []);
@@ -47,10 +48,20 @@ export default function HomePage() {
           <h1 style={titleStyle}>{homeData.welcomeTitle}</h1>
           <p style={subtitleStyle}>{homeData.welcomeSubtitle}</p>
           {streak.count > 0 ? (
-            <div style={streakRowStyle}>
-              <Pill tone={engagedToday ? "mastered" : "review"}>
-                🔥 {streak.count}-day streak{!engagedToday ? " — keep it alive today" : ""}
-              </Pill>
+            <div style={hearthRowStyle}>
+              <motion.div
+                style={hearthGlowStyle}
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <FlameMark size={22} />
+              </motion.div>
+              <div>
+                <p style={hearthCountStyle}>{streak.count}-day streak</p>
+                <p style={hearthCaptionStyle}>
+                  {engagedToday ? "Lit for today — come back tomorrow." : "Engage today to keep it lit."}
+                </p>
+              </div>
             </div>
           ) : null}
         </motion.section>
@@ -161,18 +172,21 @@ const heroStyle = { marginBottom: "24px", textAlign: "center" };
 
 const eyebrowStyle = {
   margin: 0,
-  fontSize: "0.82rem",
-  fontWeight: 800,
-  letterSpacing: "0.08em",
+  fontFamily: fonts.mono,
+  fontSize: "0.76rem",
+  fontWeight: 500,
+  letterSpacing: "0.16em",
   textTransform: "uppercase",
   color: colors.textMuted,
 };
 
 const titleStyle = {
-  margin: "10px 0 0",
-  fontSize: "clamp(2.5rem, 6vw, 4rem)",
-  lineHeight: 0.98,
-  fontWeight: 900,
+  margin: "14px 0 0",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 90, "wght" 420, "SOFT" 12, "WONK" 1',
+  fontSize: "clamp(2.4rem, 5.6vw, 3.6rem)",
+  lineHeight: 1.05,
   color: colors.text,
 };
 
@@ -221,7 +235,41 @@ const descriptionStyle = {
 
 const cardFooterStyle = { marginTop: "20px" };
 
-const streakRowStyle = { marginTop: "16px", display: "flex", justifyContent: "center" };
+const hearthRowStyle = {
+  marginTop: "22px",
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "14px",
+  padding: "12px 18px 12px 12px",
+  borderRadius: "999px",
+  background: "linear-gradient(160deg, #0f0b10, #241a22)",
+  boxShadow: "0 12px 28px rgba(15, 11, 16, 0.28)",
+};
+
+const hearthGlowStyle = {
+  width: "40px",
+  height: "40px",
+  borderRadius: "999px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "radial-gradient(circle, rgba(255,138,0,0.35) 0%, transparent 72%)",
+};
+
+const hearthCountStyle = {
+  margin: 0,
+  fontSize: "0.92rem",
+  fontWeight: 800,
+  color: "#f3f1f6",
+  textAlign: "left",
+};
+
+const hearthCaptionStyle = {
+  margin: "2px 0 0",
+  fontSize: "0.78rem",
+  color: "rgba(243,241,246,0.7)",
+  textAlign: "left",
+};
 
 const evidenceRowStyle = {
   display: "flex",

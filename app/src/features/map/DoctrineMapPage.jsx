@@ -5,29 +5,49 @@ import {
   getSubjects,
   isSubjectUnlocked,
   isSubjectMastered,
+  getNextUnmasteredStandard,
 } from "../../core/standards/standardsRegistry";
 import { getStandardProgress } from "../../core/standards/standardsProgress";
 import { classroomPath } from "../../app/routes";
-import { colors, ignite, radius, getSubjectAccent } from "../../shared/theme";
-import { nodeHover, igniteGlow } from "../../shared/motion";
+import { colors, ignite, radius, fonts, gradients, getSubjectAccent } from "../../shared/theme";
+import { nodeHover, igniteGlow, currentPulse } from "../../shared/motion";
 import RingProgress from "../../shared/ui/RingProgress";
-import { LockIcon } from "../../shared/ui/icons";
+import { LockIcon, FlameMark } from "../../shared/ui/icons";
 
 // A short winding trail per domain (Khan/Duolingo-style path) instead of a
 // flat grid of rectangles — nodes alternate horizontal offset along a
 // vertical spine, with mastery shown as a filled ring around each node.
 const ZIGZAG_OFFSETS = [0, 42, 0, -42];
 
-function nodeStateFor(level) {
+function nodeStateFor(level, isNext) {
   if (level >= 4) return "mastered";
+  if (isNext) return "current";
   if (level >= 1) return "inProgress";
   return "unstarted";
 }
+
+// The Path of Fire gradient runs light-to-dark top to bottom. Rather than
+// track literal scroll position, each domain's text picks a zone by how far
+// through the subject it sits — standards are learned in order, so this
+// tracks the actual lit/unlit boundary closely enough to stay legible.
+function zoneFor(domainIndex, domainCount) {
+  const fraction = domainIndex / Math.max(domainCount - 1, 1);
+  if (fraction < 0.32) return "light";
+  if (fraction < 0.58) return "mid";
+  return "dark";
+}
+
+const ZONE_TEXT = {
+  light: { domain: colors.textMuted, code: colors.textFaint, title: colors.text, shadow: "none" },
+  mid: { domain: "#f3e9ec", code: "rgba(243,241,246,0.7)", title: "#f8f4f6", shadow: "0 1px 5px rgba(0,0,0,0.3)" },
+  dark: { domain: colors.gold, code: colors.mistOnDark, title: "#f3f1f6", shadow: "0 1px 6px rgba(0,0,0,0.45)" },
+};
 
 export default function DoctrineMapPage() {
   const navigate = useNavigate();
   const progress = useMemo(() => getStandardProgress(), []);
   const subjects = getSubjects();
+  const nextStandard = useMemo(() => getNextUnmasteredStandard(progress), [progress]);
 
   return (
     <div style={pageStyle}>
@@ -38,11 +58,13 @@ export default function DoctrineMapPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <p style={eyebrowStyle}>JEREMIAH AI DOCTRINE MAP</p>
-          <h1 style={titleStyle}>The mind, laid open</h1>
+          <p style={eyebrowStyle}>THE PATH OF FIRE</p>
+          <h1 style={titleStyle}>
+            Light dawns <em style={titleEmStyle}>one standard</em> at a time.
+          </h1>
           <p style={subtitleStyle}>
-            Follow the path through each domain. A filled ring means mastered, a partial ring
-            means in progress. Choose any node to enter a live session on that exact doctrine.
+            Every doctrine you've mastered sits lit behind you. What's ahead stays dark until
+            you reach it — no percentage bar, just distance walked.
           </p>
         </motion.section>
 
@@ -52,10 +74,7 @@ export default function DoctrineMapPage() {
           const accent = getSubjectAccent(subject.code);
 
           return (
-            <section
-              key={subject.code}
-              style={{ ...subjectSectionStyle, borderTop: `4px solid ${accent.base}` }}
-            >
+            <section key={subject.code} style={subjectSectionStyle}>
               <div style={subjectHeaderStyle}>
                 <div>
                   <p style={{ ...subjectEyebrowStyle, color: accent.base }}>Subject {subject.code}</p>
@@ -81,60 +100,86 @@ export default function DoctrineMapPage() {
                 </p>
               ) : null}
 
-              {subject.domains.map((domain) => (
-                <div key={domain.domainCode} style={domainBlockStyle}>
-                  <p style={domainTitleStyle}>
-                    {domain.domainCode} — {domain.domainTitle}
-                  </p>
+              <div style={pathWrapStyle}>
+                {subject.domains.map((domain, domainIndex) => {
+                  const zone = zoneFor(domainIndex, subject.domains.length);
+                  const zoneText = ZONE_TEXT[zone];
 
-                  <div style={trailWrapStyle}>
-                    <div style={trailSpineStyle} aria-hidden="true" />
-                    <div style={trailNodesStyle}>
-                      {domain.standards.map((standard, i) => {
-                        const level = progress[standard.code] || 0;
-                        const state = nodeStateFor(level);
-                        const interactive = unlocked;
-                        const offset = ZIGZAG_OFFSETS[i % ZIGZAG_OFFSETS.length];
-                        const ringFill =
-                          state === "mastered" ? ignite.blaze : state === "inProgress" ? accent.base : colors.textFaint;
+                  return (
+                    <div key={domain.domainCode} style={domainBlockStyle}>
+                      <p style={{ ...domainTitleStyle, color: zoneText.domain, textShadow: zoneText.shadow }}>
+                        {domain.domainCode} — {domain.domainTitle}
+                      </p>
 
-                        return (
-                          <div
-                            key={standard.code}
-                            style={{ ...trailNodeRowStyle, transform: `translateX(${offset}px)` }}
-                          >
-                            <motion.button
-                              type="button"
-                              disabled={!interactive}
-                              onClick={() => navigate(classroomPath(standard.code))}
-                              {...(interactive ? nodeHover : {})}
-                              {...(state === "mastered" ? igniteGlow : {})}
-                              style={{
-                                ...nodeCircleButtonStyle,
-                                ...(interactive ? null : { cursor: "not-allowed", opacity: 0.65 }),
-                              }}
-                            >
-                              <RingProgress percent={(level / 4) * 100} size={64} strokeWidth={5} trackColor="#e2e8f0" fillColor={ringFill}>
-                                {interactive ? (
-                                  <span style={{ fontSize: "1.3rem" }}>
-                                    {state === "mastered" ? "🔥" : i + 1}
-                                  </span>
-                                ) : (
-                                  <LockIcon size={20} />
-                                )}
-                              </RingProgress>
-                            </motion.button>
-                            <div style={trailLabelStyle}>
-                              <p style={trailCodeStyle}>{standard.code}</p>
-                              <p style={trailTitleTextStyle}>{standard.title}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
+                      <div style={trailWrapStyle}>
+                        <div style={trailSpineStyle} aria-hidden="true" />
+                        <div style={trailNodesStyle}>
+                          {domain.standards.map((standard, i) => {
+                            const level = progress[standard.code] || 0;
+                            const isNext = unlocked && nextStandard?.code === standard.code;
+                            const state = nodeStateFor(level, isNext);
+                            const interactive = unlocked;
+                            const offset = ZIGZAG_OFFSETS[i % ZIGZAG_OFFSETS.length];
+                            const ringFill =
+                              state === "mastered"
+                                ? ignite.blaze
+                                : state === "current"
+                                  ? colors.gold
+                                  : state === "inProgress"
+                                    ? accent.base
+                                    : colors.textFaint;
+
+                            return (
+                              <div
+                                key={standard.code}
+                                style={{ ...trailNodeRowStyle, transform: `translateX(${offset}px)` }}
+                              >
+                                <motion.button
+                                  type="button"
+                                  disabled={!interactive}
+                                  onClick={() => navigate(classroomPath(standard.code))}
+                                  {...(interactive ? nodeHover : {})}
+                                  {...(state === "mastered" ? igniteGlow : {})}
+                                  {...(state === "current" ? currentPulse : {})}
+                                  style={{
+                                    ...nodeCircleButtonStyle,
+                                    ...(state === "current" ? { border: `2px solid ${colors.gold}` } : null),
+                                    ...(interactive ? null : { cursor: "not-allowed", opacity: 0.65 }),
+                                  }}
+                                >
+                                  <RingProgress
+                                    percent={(level / 4) * 100}
+                                    size={64}
+                                    strokeWidth={5}
+                                    trackColor="#e2e8f0"
+                                    fillColor={ringFill}
+                                  >
+                                    {!interactive ? (
+                                      <LockIcon size={20} />
+                                    ) : state === "mastered" ? (
+                                      <FlameMark size={24} />
+                                    ) : (
+                                      <span style={{ fontFamily: fonts.mono, fontSize: "1.1rem", fontWeight: 600 }}>
+                                        {i + 1}
+                                      </span>
+                                    )}
+                                  </RingProgress>
+                                </motion.button>
+                                <div style={trailLabelStyle}>
+                                  <p style={{ ...trailCodeStyle, color: zoneText.code }}>{standard.code}</p>
+                                  <p style={{ ...trailTitleTextStyle, color: zoneText.title, textShadow: zoneText.shadow }}>
+                                    {standard.title}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                })}
+              </div>
             </section>
           );
         })}
@@ -165,23 +210,34 @@ const heroStyle = {
 
 const eyebrowStyle = {
   margin: 0,
-  fontSize: "0.82rem",
-  fontWeight: 800,
-  letterSpacing: "0.08em",
+  fontFamily: fonts.mono,
+  fontSize: "0.76rem",
+  fontWeight: 500,
+  letterSpacing: "0.16em",
   textTransform: "uppercase",
-  color: "rgba(255,255,255,0.7)",
+  color: colors.gold,
 };
 
 const titleStyle = {
-  margin: "10px 0 0",
-  fontSize: "clamp(2.5rem, 6vw, 4rem)",
-  lineHeight: 1.02,
-  fontWeight: 900,
+  margin: "14px 0 0",
+  fontFamily: fonts.display,
+  fontStyle: "italic",
+  fontVariationSettings: '"opsz" 90, "wght" 400, "SOFT" 15, "WONK" 1',
+  fontSize: "clamp(2.4rem, 5.6vw, 3.8rem)",
+  lineHeight: 1.06,
   color: "#ffffff",
 };
 
+const titleEmStyle = {
+  fontStyle: "italic",
+  background: gradients.flame,
+  WebkitBackgroundClip: "text",
+  backgroundClip: "text",
+  color: "transparent",
+};
+
 const subtitleStyle = {
-  margin: "16px 0 0",
+  margin: "18px 0 0",
   maxWidth: "720px",
   fontSize: "1.05rem",
   lineHeight: 1.7,
@@ -189,11 +245,9 @@ const subtitleStyle = {
 };
 
 const subjectSectionStyle = {
-  background: colors.cardBg,
-  border: `1px solid ${colors.cardBorder}`,
-  boxShadow: colors.cardShadow,
   borderRadius: radius.lg,
-  padding: "26px",
+  overflow: "hidden",
+  boxShadow: colors.cardShadow,
   marginBottom: "22px",
 };
 
@@ -203,7 +257,8 @@ const subjectHeaderStyle = {
   alignItems: "flex-start",
   gap: "16px",
   flexWrap: "wrap",
-  marginBottom: "8px",
+  padding: "26px 26px 8px",
+  background: "#f3f1f6",
 };
 
 const subjectEyebrowStyle = {
@@ -233,10 +288,17 @@ const lockPillStyle = {
 };
 
 const lockedTextStyle = {
-  margin: "6px 0 18px",
+  margin: 0,
+  padding: "6px 26px 22px",
   fontSize: "0.95rem",
   lineHeight: 1.6,
   color: colors.textFaint,
+  background: "#f3f1f6",
+};
+
+const pathWrapStyle = {
+  background: gradients.pathOfFire,
+  padding: "18px 26px 40px",
 };
 
 const domainBlockStyle = {
@@ -245,9 +307,11 @@ const domainBlockStyle = {
 
 const domainTitleStyle = {
   margin: "0 0 16px",
-  fontSize: "0.98rem",
-  fontWeight: 800,
-  color: colors.textMuted,
+  fontFamily: fonts.mono,
+  fontSize: "0.72rem",
+  fontWeight: 500,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
 };
 
 const trailWrapStyle = {
@@ -260,9 +324,9 @@ const trailSpineStyle = {
   left: "50%",
   top: "32px",
   bottom: "32px",
-  width: "3px",
+  width: "2px",
   transform: "translateX(-50%)",
-  background: "repeating-linear-gradient(to bottom, #e2e8f0 0, #e2e8f0 6px, transparent 6px, transparent 12px)",
+  background: "repeating-linear-gradient(to bottom, rgba(255,210,63,0.55) 0, rgba(255,210,63,0.55) 5px, transparent 5px, transparent 13px)",
   zIndex: 0,
 };
 
