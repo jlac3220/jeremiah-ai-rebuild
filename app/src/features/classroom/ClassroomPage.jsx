@@ -313,8 +313,16 @@ export default function ClassroomPage() {
                     <p style={sectionEyebrowStyle}>Scripture Evidence — Check Yourself</p>
                     <div style={verseListStyle}>
                       {standard.anchorScriptures.map((verse) => (
-                        <div key={verse.reference} style={verseCardStyle}>
-                          <p style={verseRefStyle}>{verse.reference}</p>
+                        <div
+                          key={verse.reference}
+                          style={{
+                            ...verseCardStyle,
+                            background: `linear-gradient(135deg, ${accent.soft} 0%, #ffffff 70%)`,
+                            borderLeft: `4px solid ${accent.base}`,
+                          }}
+                        >
+                          <span style={{ ...verseQuoteMarkStyle, color: accent.base }}>"</span>
+                          <p style={{ ...verseRefStyle, color: accent.text }}>{verse.reference}</p>
                           <p style={verseTextStyle}>{verse.text}</p>
                         </div>
                       ))}
@@ -446,14 +454,33 @@ const sectionEyebrowDarkStyle = {
 const verseListStyle = { display: "grid", gap: "12px", marginTop: "14px" };
 
 const verseCardStyle = {
+  position: "relative",
   borderRadius: "16px",
-  padding: "16px",
-  background: "#f8fafc",
+  padding: "20px 18px 18px",
   border: `1px solid ${colors.cardBorder}`,
+  overflow: "hidden",
 };
 
-const verseRefStyle = { margin: 0, fontWeight: 800, color: colors.text };
-const verseTextStyle = { margin: "8px 0 0", lineHeight: 1.65, color: "#1e293b" };
+const verseQuoteMarkStyle = {
+  position: "absolute",
+  top: "-6px",
+  right: "14px",
+  fontSize: "3.2rem",
+  fontFamily: "Georgia, serif",
+  fontWeight: 900,
+  opacity: 0.22,
+  lineHeight: 1,
+  pointerEvents: "none",
+};
+
+const verseRefStyle = { margin: 0, fontWeight: 800, letterSpacing: "0.02em" };
+const verseTextStyle = {
+  margin: "10px 0 0",
+  lineHeight: 1.75,
+  color: "#1e293b",
+  fontFamily: "Georgia, 'Times New Roman', serif",
+  fontSize: "1.05rem",
+};
 
 const stageTitleStyle = {
   margin: "10px 0 0",

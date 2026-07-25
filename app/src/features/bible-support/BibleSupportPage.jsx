@@ -4,13 +4,14 @@ import { getStandardByCode } from "../../core/standards/standardsRegistry";
 import { classroomPath } from "../../app/routes";
 import Card from "../../shared/ui/Card";
 import SecondaryButton from "../../shared/ui/SecondaryButton";
-import { colors } from "../../shared/theme";
+import { colors, getSubjectAccent } from "../../shared/theme";
 
 export default function BibleSupportPage() {
   const { standardCode } = useParams();
   const standard = getStandardByCode(standardCode);
   const verses = standard?.anchorScriptures || [];
   const [manualReference, setManualReference] = useState(null);
+  const accent = standard ? getSubjectAccent(standard.subjectCode) : getSubjectAccent();
 
   if (!standard) {
     return (
@@ -58,14 +59,23 @@ export default function BibleSupportPage() {
             {verses.map((verse) => {
               const isSelected = verse.reference === selectedReference;
               return (
-                <div key={verse.reference} style={verseRowStyle}>
-                  <p style={verseRefStyle}>{verse.reference}</p>
+                <div
+                  key={verse.reference}
+                  style={{
+                    ...verseRowStyle,
+                    borderLeft: `4px solid ${isSelected ? accent.base : "transparent"}`,
+                    background: isSelected ? accent.soft : "#f8fafc",
+                  }}
+                >
+                  <p style={{ ...verseRefStyle, color: isSelected ? accent.text : colors.text }}>
+                    {verse.reference}
+                  </p>
                   <button
                     type="button"
                     onClick={() => setManualReference(verse.reference)}
                     style={{
                       ...openButtonStyle,
-                      ...(isSelected ? openButtonActiveStyle : null),
+                      ...(isSelected ? { border: `1px solid ${accent.base}`, background: accent.base, color: "#ffffff" } : null),
                     }}
                   >
                     {isSelected ? "Reading" : "Open"}
@@ -79,10 +89,17 @@ export default function BibleSupportPage() {
         <Card>
           <h3 style={listTitleStyle}>Passage Reader</h3>
           {selectedVerse ? (
-            <>
-              <h4 style={readerRefStyle}>{selectedVerse.reference}</h4>
+            <div
+              style={{
+                ...readerCardStyle,
+                background: `linear-gradient(135deg, ${accent.soft} 0%, #ffffff 70%)`,
+                borderLeft: `4px solid ${accent.base}`,
+              }}
+            >
+              <span style={{ ...readerQuoteMarkStyle, color: accent.base }}>&ldquo;</span>
+              <h4 style={{ ...readerRefStyle, color: accent.text }}>{selectedVerse.reference}</h4>
               <p style={readerTextStyle}>{selectedVerse.text}</p>
-            </>
+            </div>
           ) : (
             <p style={{ color: colors.textFaint }}>No passages available.</p>
           )}
@@ -161,7 +178,30 @@ const openButtonStyle = {
   cursor: "pointer",
 };
 
-const openButtonActiveStyle = { border: "1px solid #1d4ed8", background: "#1d4ed8", color: "#ffffff" };
+const readerCardStyle = {
+  position: "relative",
+  borderRadius: "18px",
+  padding: "24px 22px 22px",
+  overflow: "hidden",
+};
 
-const readerRefStyle = { margin: 0, fontSize: "1.2rem", fontWeight: 900, color: colors.text };
-const readerTextStyle = { margin: "14px 0 0", fontSize: "1.1rem", lineHeight: 1.85, color: colors.text };
+const readerQuoteMarkStyle = {
+  position: "absolute",
+  top: "-10px",
+  right: "18px",
+  fontSize: "4.2rem",
+  fontFamily: "Georgia, serif",
+  fontWeight: 900,
+  opacity: 0.22,
+  lineHeight: 1,
+  pointerEvents: "none",
+};
+
+const readerRefStyle = { margin: 0, fontSize: "1.2rem", fontWeight: 900, letterSpacing: "0.02em" };
+const readerTextStyle = {
+  margin: "14px 0 0",
+  fontSize: "1.15rem",
+  lineHeight: 1.85,
+  color: "#1e293b",
+  fontFamily: "Georgia, 'Times New Roman', serif",
+};
