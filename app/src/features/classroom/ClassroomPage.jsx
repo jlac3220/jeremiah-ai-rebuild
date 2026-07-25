@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { getStandardByCode } from "../../core/standards/standardsRegistry";
+import { getVocabularyDefinition } from "../../core/standards/vocabularyGlossary";
 import { raiseStandardProgressLevel, getStandardProgressLevel, scheduleNextReview } from "../../core/standards/standardsProgress";
 import { recordEngagement } from "../../core/streak/streak";
 import {
@@ -25,6 +26,22 @@ import { colors, gradients, shadows, fonts, getSubjectAccent } from "../../share
 import { stageTransition, thinkingPulse, igniteGlow } from "../../shared/motion";
 
 const AGE_BAND_LABELS = { child: "Child Path", teen: "Teen Path", adult: "Adult Path", senior: "Senior Path" };
+
+function VocabularyList({ terms, accent }) {
+  return (
+    <div style={vocabListStyle}>
+      {terms.map((term) => {
+        const definition = getVocabularyDefinition(term);
+        return (
+          <div key={term} style={{ ...vocabEntryStyle, borderLeftColor: accent.base }}>
+            <p style={{ ...vocabTermStyle, color: accent.text }}>{term}</p>
+            {definition ? <p style={vocabDefinitionStyle}>{definition}</p> : null}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function ClassroomPage() {
   const { standardCode } = useParams();
@@ -52,6 +69,10 @@ export default function ClassroomPage() {
   // answer from memory for the current stage. Research on active recall is
   // clear that attempt-then-check beats read-then-answer for retention.
   const [hasAttempted, setHasAttempted] = useState(false);
+  // Vocabulary needs to stay reachable during the graded stages too, not
+  // just on the one-time Introduction screen — a learner shouldn't have to
+  // remember a definition from a screen they've already clicked past.
+  const [showVocabReference, setShowVocabReference] = useState(false);
 
   useEffect(() => {
     setCurrentStageId(getSavedLiveStageForStandard(standardCode) || "focus");
@@ -63,6 +84,7 @@ export default function ClassroomPage() {
     setTransitionMessage("");
     setJustMastered(false);
     setHasAttempted(false);
+    setShowVocabReference(false);
   }, [standardCode]);
 
   const currentStage = useMemo(
@@ -263,13 +285,7 @@ export default function ClassroomPage() {
                 {standard.vocabulary?.length ? (
                   <div style={{ marginTop: "20px" }}>
                     <p style={promptLabelStyle}>Key Vocabulary</p>
-                    <div style={vocabRowStyle}>
-                      {standard.vocabulary.map((term) => (
-                        <span key={term} style={{ ...vocabPillStyle, borderColor: accent.base, color: accent.text }}>
-                          {term}
-                        </span>
-                      ))}
-                    </div>
+                    <VocabularyList terms={standard.vocabulary} accent={accent} />
                   </div>
                 ) : null}
 
@@ -350,7 +366,23 @@ export default function ClassroomPage() {
                   <Link to={bibleSupportPath(standard.code)}>
                     <SecondaryButton>Review Verses Again</SecondaryButton>
                   </Link>
+                  {standard.vocabulary?.length ? (
+                    <SecondaryButton onClick={() => setShowVocabReference((current) => !current)}>
+                      {showVocabReference ? "Hide Vocabulary" : "Vocabulary"}
+                    </SecondaryButton>
+                  ) : null}
                 </div>
+
+                {showVocabReference ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={vocabReferenceBoxStyle}
+                  >
+                    <p style={promptLabelStyle}>Key Vocabulary</p>
+                    <VocabularyList terms={standard.vocabulary} accent={accent} />
+                  </motion.div>
+                ) : null}
 
                 {feedbackMessage ? (
                   <div
@@ -593,21 +625,36 @@ const introStatementStyle = {
   color: colors.textMuted,
 };
 
-const vocabRowStyle = {
-  marginTop: "10px",
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "8px",
+const vocabReferenceBoxStyle = {
+  marginTop: "16px",
+  borderRadius: "16px",
+  padding: "16px",
+  background: "#ffffff",
+  border: `1px solid ${colors.checkpointBorder}`,
 };
 
-const vocabPillStyle = {
-  display: "inline-flex",
-  padding: "7px 14px",
-  borderRadius: "999px",
-  border: "1px solid",
-  fontSize: "0.84rem",
-  fontWeight: 700,
-  background: "#ffffff",
+const vocabListStyle = {
+  marginTop: "10px",
+  display: "grid",
+  gap: "12px",
+};
+
+const vocabEntryStyle = {
+  borderLeft: "3px solid #e2e8f0",
+  paddingLeft: "12px",
+};
+
+const vocabTermStyle = {
+  margin: 0,
+  fontWeight: 800,
+  fontSize: "0.95rem",
+};
+
+const vocabDefinitionStyle = {
+  margin: "4px 0 0",
+  fontSize: "0.9rem",
+  lineHeight: 1.55,
+  color: colors.textMuted,
 };
 
 const stageDescriptionStyle = {
