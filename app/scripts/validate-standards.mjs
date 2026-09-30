@@ -1,4 +1,4 @@
-import content from "../src/core/classroom/content/OG_1_1_18.js";
+import { classroomContentRegistry } from "../src/core/classroom/content/classroomContentRegistry.js";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -137,4 +137,6 @@ function validateStandard(standard) {
   return `${standard.standardId}: ${moves.length} instructional moves validated`;
 }
 
-console.log(validateStandard(content));
+for (const standard of Object.values(classroomContentRegistry)) {
+  console.log(validateStandard(standard));
+}
