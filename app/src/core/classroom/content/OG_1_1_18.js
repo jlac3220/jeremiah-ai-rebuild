@@ -115,18 +115,103 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             title: "Shema / Listen",
             duration: "3:26",
             url: "https://bibleproject.com/videos/shema-listen/",
+            hook: "Hear why the first word of the confession is an invitation to listen.",
+            quote: "“shema,” meaning “listen.”",
+            attribution: "BibleProject, Shema Word Study",
             purpose:
-              "Optional context for the opening word of the Shema. This resource is an encounter aid, not the doctrinal authority for the standard.",
+              "Optional language and literary context. The standard remains the doctrinal authority.",
           },
           {
-            id: "bibleproject-shema-article",
-            type: "article",
-            provider: "BibleProject",
-            title: "What is the Shema?",
-            duration: "8 min read",
-            url: "https://bibleproject.com/articles/what-is-the-shema/",
+            id: "tigay-shema",
+            type: "book_excerpt",
+            provider: "JPS / My Jewish Learning",
+            title: "Deuteronomy 6:4 — The Shema",
+            duration: "Scholar excerpt",
+            url: "https://www.myjewishlearning.com/article/deuteronomy-64-the-shema/",
+            hook:
+              "See how a Jewish biblical scholar describes the Shema's language, liturgical use, and history.",
+            quote: "“accepting the authority of the kingship of God”",
+            attribution: "Jeffrey H. Tigay, JPS Torah Commentary discussion",
             purpose:
-              "Optional historical and literary context for learners who prefer reading.",
+              "Historical and interpretive context; useful for showing that the verse has a long reception history.",
+          },
+          {
+            id: "mishnah-berakhot",
+            type: "primary_source",
+            provider: "Sefaria",
+            title: "Mishnah Berakhot 1:1",
+            duration: "Primary source",
+            url: "https://www.sefaria.org/Mishnah_Berakhot.1.1?lang=en",
+            hook:
+              "The first tractate of the Mishnah opens by discussing when the Shema is recited.",
+            quote: "“From what time does one recite Shema in the evening?”",
+            attribution: "Mishnah Berakhot 1:1",
+            purpose:
+              "Shows the Shema as lived practice rather than merely an isolated verse.",
+          },
+          {
+            id: "jewish-encyclopedia-shema",
+            type: "historical_reference",
+            provider: "Jewish Encyclopedia",
+            title: "Shema",
+            duration: "Historical reference",
+            url: "https://www.jewishencyclopedia.com/articles/13548-shema",
+            hook:
+              "A turn-of-the-20th-century reference work summarizes how the Shema functioned in Jewish faith and liturgy.",
+            quote: "“the confession of belief in the One God”",
+            attribution: "Kaufmann Kohler and Judah David Eisenstein",
+            purpose:
+              "A historical reference voice that helps the learner see the confession's enduring significance.",
+          },
+          {
+            id: "my-jewish-learning-shema",
+            type: "audio_article",
+            provider: "My Jewish Learning",
+            title: "The Shema",
+            duration: "Read + pronunciation audio",
+            url: "https://www.myjewishlearning.com/article/the-shema/",
+            hook:
+              "Hear pronunciation and see how the confession is practiced in daily Jewish prayer.",
+            quote: "“centerpiece of the daily morning and evening prayer services”",
+            attribution: "My Jewish Learning",
+            purpose:
+              "Audio, lived-practice, and cultural context for learners who enter through listening.",
+          },
+          {
+            id: "cambridge-shema-scholarship",
+            type: "academic",
+            provider: "University of Cambridge",
+            title: "The Date of the Shema (Deut 6:4–5)",
+            duration: "Peer-reviewed research",
+            url: "https://www.repository.cam.ac.uk/items/fb672a8d-f307-4e0a-bc93-b85ed871f211",
+            hook:
+              "A glimpse into how modern biblical scholars debate the composition and reception history of the Shema.",
+            attribution: "Nathan MacDonald, Journal of Biblical Literature",
+            purpose:
+              "Advanced enrichment. It demonstrates that Jeremiah can surface real scholarship without making scholarship the curriculum.",
+          },
+        ],
+        sourceMoments: [
+          {
+            id: "lived-twice-daily",
+            label: "A lived confession",
+            text:
+              "The Shema became part of morning and evening Jewish prayer. This is not merely a sentence people analyzed; generations repeatedly spoke it.",
+            sourceId: "mishnah-berakhot",
+          },
+          {
+            id: "late-second-temple",
+            label: "History matters",
+            text:
+              "Jeffrey Tigay notes that the practice of reciting the Shema is known from late Second Temple times.",
+            sourceId: "tigay-shema",
+          },
+          {
+            id: "one-god-reference",
+            label: "A historian's shorthand",
+            text:
+              "The Jewish Encyclopedia describes the opening verse as a confession of belief in the One God.",
+            sourceId: "jewish-encyclopedia-shema",
           },
         ],
         noticePrompt:
