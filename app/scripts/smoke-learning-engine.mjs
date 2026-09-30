@@ -1,5 +1,6 @@
 import content from "../src/core/classroom/content/OG_1_1_18.js";
 import {
+  advanceEncounterMove,
   advanceLearningState,
   advanceUnscoredMove,
   createLearningState,
@@ -14,20 +15,40 @@ function assert(condition, message) {
 
 let state = createLearningState(content, "direct");
 
+let move = getInstructionalMove(content, state.currentMoveId);
+assert(move.id === "arrival", "direct path should begin with the encounter");
+state = advanceEncounterMove(state, move, {
+  entryMode: "read",
+  primaryWords: ["one", "LORD"],
+  bridgeWords: ["none", "else"],
+  viewedSourceIds: ["nash-papyrus"],
+});
+assert(
+  state.currentMoveId === "hear_the_shema",
+  "encounter should lead into required Shema instruction"
+);
+assert(
+  state.encounterData?.primaryWords?.includes("LORD"),
+  "encounter memory should preserve words the learner noticed"
+);
+assert(
+  state.encounterData?.viewedSourceIds?.includes("nash-papyrus"),
+  "encounter memory should preserve sources the learner explored"
+);
+
 for (const expectedMoveId of [
-  "arrival",
   "hear_the_shema",
   "oneness_first",
   "isaiah_exclusion",
   "mark12_bridge",
   "synthesis",
 ]) {
-  const move = getInstructionalMove(content, state.currentMoveId);
+  move = getInstructionalMove(content, state.currentMoveId);
   assert(move.id === expectedMoveId, `expected ${expectedMoveId}, got ${move.id}`);
   state = advanceUnscoredMove(state, move);
 }
 
-let move = getInstructionalMove(content, state.currentMoveId);
+move = getInstructionalMove(content, state.currentMoveId);
 assert(move.id === "pressure_test", "teaching sequence should lead to one pressure test");
 
 let decision = await teachWithJeremiah({
