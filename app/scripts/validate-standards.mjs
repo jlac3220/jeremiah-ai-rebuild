@@ -11,6 +11,52 @@ function validateStandard(standard) {
   assert(standard.brain?.requiredScripture?.length, `${standard.standardId}: requiredScripture is required`);
   assert(standard.instructionalMoves?.length, `${standard.standardId}: instructionalMoves are required`);
 
+  const encounterSources = (standard.instructionalMoves || [])
+    .filter((move) => move.type === "encounter")
+    .flatMap((move) => move.encounter?.curatedSources || []);
+
+  const sourceIds = encounterSources.map((source) => source.id);
+  assert(
+    new Set(sourceIds).size === sourceIds.length,
+    `${standard.standardId}: curated source IDs must be unique`
+  );
+
+  for (const source of encounterSources) {
+    assert(source.id, `${standard.standardId}: curated source id is required`);
+    assert(source.provider, `${standard.standardId}: source ${source.id} requires provider`);
+    assert(source.title, `${standard.standardId}: source ${source.id} requires title`);
+    assert(
+      /^https:\/\//.test(source.url || ""),
+      `${standard.standardId}: source ${source.id} requires an https URL`
+    );
+    assert(
+      source.purpose,
+      `${standard.standardId}: source ${source.id} requires a classroom purpose`
+    );
+
+    if (source.type === "video") {
+      assert(
+        /^https:\/\//.test(source.embedUrl || ""),
+        `${standard.standardId}: video source ${source.id} requires an https embedUrl`
+      );
+    }
+
+    if (source.type === "image") {
+      assert(
+        /^https:\/\//.test(source.imageUrl || ""),
+        `${standard.standardId}: image source ${source.id} requires an https imageUrl`
+      );
+      assert(
+        source.attribution,
+        `${standard.standardId}: image source ${source.id} requires attribution`
+      );
+      assert(
+        source.license,
+        `${standard.standardId}: image source ${source.id} requires license metadata`
+      );
+    }
+  }
+
   const moves = standard.instructionalMoves;
   const ids = moves.map((move) => move.id);
   assert(new Set(ids).size === ids.length, `${standard.standardId}: move IDs must be unique`);
