@@ -32,6 +32,25 @@ function validateStandard(standard) {
     `${standard.standardId}: curated source IDs must be unique`
   );
 
+  const encounterMoves = (standard.instructionalMoves || []).filter(
+    (move) => move.type === "encounter"
+  );
+
+  for (const move of encounterMoves) {
+    assert(
+      !(move.evidenceIds || []).length,
+      `${standard.standardId}: encounter ${move.id} cannot award mastery evidence`
+    );
+    assert(
+      !(move.expectedChoiceIds || []).length,
+      `${standard.standardId}: encounter ${move.id} cannot become an assessment gate`
+    );
+    assert(
+      !move.strategyRoutes,
+      `${standard.standardId}: encounter ${move.id} cannot control remediation or doctrinal routing`
+    );
+  }
+
   for (const source of encounterSources) {
     assert(source.id, `${standard.standardId}: curated source id is required`);
     assert(source.provider, `${standard.standardId}: source ${source.id} requires provider`);
