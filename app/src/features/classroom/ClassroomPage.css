@@ -1724,3 +1724,218 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* in-app source viewer */
+
+.jc-media-source-line button,
+.jc-inline-source {
+  border: 0;
+  padding: 0;
+  color: #7a96a3;
+  background: transparent;
+  font-size: .63rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,.12);
+  text-underline-offset: 3px;
+}
+
+.jc-inline-source {
+  display: inline-block;
+  margin-top: 9px;
+}
+
+.jc-source-item {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.jc-source-viewer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  justify-items: end;
+  background: rgba(3, 8, 12, .72);
+  backdrop-filter: blur(8px);
+  animation: jcSourceBackdropIn .18s ease both;
+}
+
+.jc-source-viewer {
+  width: min(520px, 100%);
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  padding: 30px 28px 34px;
+  border-left: 1px solid rgba(255,255,255,.07);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(99,169,192,.07), transparent 30%),
+    linear-gradient(180deg, #0b171f, #0a141b);
+  box-shadow: -30px 0 80px rgba(0,0,0,.28);
+  animation: jcSourceViewerIn .26s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.jc-source-viewer-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 50%;
+  color: #8497a1;
+  background: rgba(255,255,255,.02);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.jc-source-viewer-meta {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding-right: 44px;
+}
+
+.jc-source-viewer-meta span {
+  color: #e19057;
+  font-size: .6rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.jc-source-viewer-meta small {
+  color: #566d78;
+  font-size: .6rem;
+}
+
+.jc-source-viewer h3 {
+  margin: 10px 44px 0 0;
+  color: #f1eee7;
+  font: 710 1.55rem/1.15 var(--font-display);
+  letter-spacing: -.03em;
+}
+
+.jc-source-viewer-image {
+  margin-top: 21px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  background: #081117;
+}
+
+.jc-source-viewer-image img {
+  width: 100%;
+  max-height: 430px;
+  display: block;
+  object-fit: contain;
+}
+
+.jc-source-viewer-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-top: 21px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #050a0e;
+}
+
+.jc-source-viewer-video iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+.jc-source-viewer blockquote {
+  margin: 23px 0 0;
+  padding-left: 16px;
+  border-left: 2px solid rgba(226,143,84,.38);
+  color: #eee9df;
+  font: 560 1.08rem/1.58 Georgia, "Times New Roman", serif;
+}
+
+.jc-source-viewer > p {
+  margin: 18px 0 0;
+  color: #9cabb3;
+  font-size: .84rem;
+  line-height: 1.62;
+}
+
+.jc-source-viewer-why {
+  margin-top: 21px;
+  padding: 14px 15px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.055);
+  background: rgba(255,255,255,.018);
+}
+
+.jc-source-viewer-why span {
+  color: #6e8590;
+  font-size: .59rem;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .11em;
+}
+
+.jc-source-viewer-why p {
+  margin: 7px 0 0;
+  color: #99a9b1;
+  font-size: .74rem;
+  line-height: 1.52;
+}
+
+.jc-source-viewer-foot {
+  display: grid;
+  gap: 4px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,.055);
+  color: #566d78;
+  font-size: .6rem;
+  line-height: 1.35;
+}
+
+.jc-source-original {
+  display: inline-block;
+  margin-top: 17px;
+  color: #6d8793;
+  font-size: .62rem;
+  text-decoration: none;
+}
+
+@keyframes jcSourceBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes jcSourceViewerIn {
+  from { opacity: 0; transform: translateX(22px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 760px) {
+  .jc-source-viewer-backdrop {
+    align-items: end;
+    justify-items: stretch;
+  }
+
+  .jc-source-viewer {
+    width: 100%;
+    height: min(88vh, 820px);
+    padding: 24px 19px 28px;
+    border-left: 0;
+    border-top: 1px solid rgba(255,255,255,.07);
+    border-radius: 22px 22px 0 0;
+    animation-name: jcSourceViewerUp;
+  }
+
+  @keyframes jcSourceViewerUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to { opacity: 1; transform: none; }
+  }
+}
