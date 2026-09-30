@@ -25,7 +25,13 @@ const PATH_LABELS = {
   adaptation: "Adaptive",
 };
 
-const UNSCORED_TYPES = new Set(["launch", "teach", "scripture_teach", "synthesis"]);
+const UNSCORED_TYPES = new Set([
+  "launch",
+  "teach",
+  "scripture_teach",
+  "synthesis",
+  "guided_reflection",
+]);
 
 function stageLabel(stageId) {
   const labels = {
@@ -113,6 +119,77 @@ function TeachingContent({ move }) {
   );
 }
 
+function GuidedReflection({
+  move,
+  value,
+  onChange,
+  revealed,
+  onReveal,
+  onContinue,
+}) {
+  const ready = value.trim().length >= 8;
+
+  return (
+    <div className="jc-reflection">
+      <div className="jc-reflection-prompt">
+        <span>Think before Jeremiah explains it</span>
+        <h2>{move.prompt}</h2>
+      </div>
+
+      {!revealed && (
+        <>
+          <textarea
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            placeholder={move.placeholder || "Write what you notice..."}
+            rows={5}
+          />
+          <div className="jc-reflection-note">
+            This is not graded. The point is to notice before being told.
+          </div>
+          <button
+            type="button"
+            className="jc-secondary-action"
+            onClick={onReveal}
+            disabled={!ready}
+          >
+            {move.revealLabel || "Compare your thought"}
+            <span>→</span>
+          </button>
+        </>
+      )}
+
+      {revealed && (
+        <div className="jc-reflection-reveal">
+          <div className="jc-reflection-your-thought">
+            <span>Your observation</span>
+            <p>{value}</p>
+          </div>
+
+          <div className="jc-reflection-teaching">
+            <span>Now notice this</span>
+            {(move.revealTeaching || []).map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+
+          {move.revealInsight && (
+            <div className="jc-reflection-insight">
+              <span>{move.revealInsight.label}</span>
+              <p>{move.revealInsight.text}</p>
+            </div>
+          )}
+
+          <button type="button" className="jc-primary" onClick={onContinue}>
+            {move.ctaLabel || "Continue"}
+            <span>→</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ChoiceGrid({ choices = [], selectedChoiceId, onSelect, disabled }) {
   return (
     <div className="jc-choice-grid">
@@ -136,17 +213,21 @@ function ChoiceGrid({ choices = [], selectedChoiceId, onSelect, disabled }) {
   );
 }
 
-function MasteryGuide({ content, move }) {
-  if (move.type !== "mastery_response") return null;
+function MasteryNudge({ content, visible, onToggle }) {
+  const scripture = content.brain?.requiredScripture || [];
 
   return (
-    <div className="jc-mastery-guide">
-      <span>Jeremiah is listening for</span>
-      <div>
-        {(content.brain?.evidenceOfUnderstanding || []).map((item) => (
-          <p key={item}>{item}</p>
-        ))}
-      </div>
+    <div className="jc-mastery-nudge">
+      <button type="button" onClick={onToggle}>
+        {visible ? "Hide Scripture nudge" : "Need a Scripture nudge?"}
+      </button>
+
+      {visible && (
+        <div>
+          <span>Try one of these references—without reopening the whole lesson.</span>
+          <p>{scripture.map((verse) => verse.reference).join(" · ")}</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -166,6 +247,9 @@ export default function ClassroomPage({ onNavigate }) {
   const [isThinking, setIsThinking] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showResetPrompt, setShowResetPrompt] = useState(false);
+  const [reflectionText, setReflectionText] = useState("");
+  const [reflectionRevealed, setReflectionRevealed] = useState(false);
+  const [masteryNudgeVisible, setMasteryNudgeVisible] = useState(false);
   const abortRef = useRef(null);
 
   const currentMove =
@@ -208,6 +292,9 @@ export default function ClassroomPage({ onNavigate }) {
     setTeacherDecision(null);
     setPendingState(null);
     setErrorMessage("");
+    setReflectionText("");
+    setReflectionRevealed(false);
+    setMasteryNudgeVisible(false);
   }
 
   function handleContinue() {
@@ -359,7 +446,24 @@ export default function ClassroomPage({ onNavigate }) {
 
           <TeachingContent move={currentMove} />
 
-          <MasteryGuide content={content} move={currentMove} />
+          {currentMove.type === "guided_reflection" && (
+            <GuidedReflection
+              move={currentMove}
+              value={reflectionText}
+              onChange={setReflectionText}
+              revealed={reflectionRevealed}
+              onReveal={() => setReflectionRevealed(true)}
+              onContinue={handleContinue}
+            />
+          )}
+
+          {currentMove.type === "mastery_response" && !teacherDecision && (
+            <MasteryNudge
+              content={content}
+              visible={masteryNudgeVisible}
+              onToggle={() => setMasteryNudgeVisible((value) => !value)}
+            />
+          )}
 
           {currentMove.prompt && !isUnscored && currentMove.type !== "complete" && (
             <div className="jc-question">
@@ -444,7 +548,9 @@ export default function ClassroomPage({ onNavigate }) {
             </div>
           )}
 
-          {isUnscored && !teacherDecision && (
+          {isUnscored &&
+            currentMove.type !== "guided_reflection" &&
+            !teacherDecision && (
             <button type="button" className="jc-primary" onClick={handleContinue}>
               {currentMove.ctaLabel || "Continue"}
               <span>→</span>
