@@ -2001,3 +2001,217 @@
   font-size: .8rem;
   line-height: 1.58;
 }
+
+
+/* seamless encounter-to-teaching handoff */
+
+.jc-handoff-page {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(239,133,72,.10), transparent 30%),
+    radial-gradient(circle at 82% 10%, rgba(91,166,194,.08), transparent 34%),
+    linear-gradient(180deg, #071019 0%, #09151d 52%, #0b171d 100%);
+}
+
+.jc-handoff-shell {
+  position: relative;
+  z-index: 2;
+  width: min(900px, calc(100% - 38px));
+  min-height: 100vh;
+  margin: 0 auto;
+  display: grid;
+  align-items: center;
+  padding: 72px 0;
+}
+
+.jc-handoff-scene {
+  width: 100%;
+  animation: jcEncounterIn .42s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.jc-handoff-opening {
+  max-width: 690px;
+  margin: 13px 0 0;
+  color: #81949f;
+  font-size: .9rem;
+  line-height: 1.62;
+}
+
+.jc-handoff-memory {
+  margin-top: 24px;
+}
+
+.jc-handoff-memory > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #5d7480;
+  font-size: .58rem;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+}
+
+.jc-handoff-memory > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.jc-handoff-memory strong {
+  border: 1px solid rgba(239,146,84,.13);
+  border-radius: 999px;
+  padding: 6px 9px;
+  color: #ecc3a5;
+  background: rgba(239,146,84,.045);
+  font-size: .67rem;
+  font-weight: 680;
+}
+
+.jc-handoff-scripture {
+  margin-top: 25px;
+  padding: 24px 0 28px;
+  border-top: 1px solid rgba(255,255,255,.055);
+  border-bottom: 1px solid rgba(255,255,255,.055);
+}
+
+.jc-handoff-scripture > span {
+  color: #67a9c0;
+  font-size: .64rem;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+}
+
+.jc-handoff-scripture > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .18em .27em;
+  margin-top: 13px;
+}
+
+.jc-handoff-scripture em {
+  padding: .03em .06em .06em;
+  border-radius: 7px;
+  color: #f0ece4;
+  background: transparent;
+  font: 560 clamp(1.85rem, 4.6vw, 3.45rem)/1.2 Georgia, "Times New Roman", serif;
+  font-style: normal;
+}
+
+.jc-handoff-scripture em.is-marked {
+  color: #ffdbbd;
+  background: rgba(239,137,76,.085);
+  box-shadow: inset 0 -2px rgba(239,137,76,.34);
+}
+
+.jc-handoff-teacher {
+  margin-top: 27px;
+  padding: 22px 0 0;
+}
+
+.jc-handoff-teacher-head {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.jc-handoff-teacher-head > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(145deg, #e67f49, #b95939);
+  box-shadow: 0 10px 28px rgba(217,112,62,.16);
+  font: 800 .76rem/1 var(--font-display);
+}
+
+.jc-handoff-teacher-head small {
+  display: block;
+  color: #687f8a;
+  font-size: .58rem;
+  font-weight: 810;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.jc-handoff-teacher-head strong {
+  display: block;
+  margin-top: 4px;
+  color: #eef2f1;
+  font: 710 1.15rem/1.2 var(--font-display);
+  letter-spacing: -.02em;
+}
+
+.jc-handoff-bridge {
+  max-width: 700px;
+  margin: 18px 0 0;
+  color: #8fa2ac;
+  font-size: .82rem;
+  line-height: 1.6;
+}
+
+.jc-handoff-teaching {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.jc-handoff-teaching p {
+  max-width: 720px;
+  margin: 0;
+  color: #c0cacf;
+  font-size: 1rem;
+  line-height: 1.76;
+}
+
+.jc-handoff-teaching p:first-child {
+  color: #d8e0e3;
+}
+
+.jc-handoff-focus {
+  margin-top: 23px;
+  padding: 16px 17px;
+  border-left: 2px solid rgba(238,141,82,.42);
+  background: linear-gradient(90deg, rgba(238,141,82,.05), transparent 74%);
+}
+
+.jc-handoff-focus > span {
+  display: block;
+  color: #697f8a;
+  font-size: .58rem;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.jc-handoff-focus > strong {
+  display: block;
+  margin-top: 7px;
+  color: #f7d8bf;
+  font: 670 1.1rem/1.25 var(--font-display);
+}
+
+.jc-handoff-focus p {
+  max-width: 690px;
+  margin: 8px 0 0;
+  color: #82959f;
+  font-size: .75rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .jc-handoff-shell {
+    width: 100%;
+    padding: 66px 18px 36px;
+  }
+
+  .jc-handoff-scripture em {
+    font-size: clamp(1.55rem, 8vw, 2.55rem);
+  }
+
+  .jc-handoff-teaching p {
+    font-size: .96rem;
+  }
+}
