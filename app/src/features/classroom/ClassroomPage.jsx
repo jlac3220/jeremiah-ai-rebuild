@@ -25,6 +25,64 @@ const PATH_LABELS = {
   adaptation: "Adaptive Path",
 };
 
+const MOVE_META = {
+  launch: {
+    verb: "Arrive",
+    cue: "Set your attention before the lesson begins.",
+    promptLabel: "Begin here",
+  },
+  scripture_observation: {
+    verb: "Observe",
+    cue: "Slow down. Notice what the text actually says before explaining it.",
+    promptLabel: "Notice",
+  },
+  choice: {
+    verb: "Name it",
+    cue: "Turn what you observed into a clear statement.",
+    promptLabel: "Make the claim",
+  },
+  contrast: {
+    verb: "Distinguish",
+    cue: "Put the ideas under pressure and separate what the text says from what it does not.",
+    promptLabel: "Look again",
+  },
+  compare: {
+    verb: "Connect",
+    cue: "Let one passage sharpen the meaning of another.",
+    promptLabel: "Connect the passages",
+  },
+  fill: {
+    verb: "Rebuild",
+    cue: "Use the scriptural frame to reconstruct the idea accurately.",
+    promptLabel: "Complete the idea",
+  },
+  scenario: {
+    verb: "Pressure test",
+    cue: "Apply the foundation when a competing idea pushes against it.",
+    promptLabel: "What holds?",
+  },
+  free_response: {
+    verb: "Teach back",
+    cue: "Explain the truth in your own words. Jeremiah is listening for meaning.",
+    promptLabel: "Teach it back",
+  },
+  guided_build: {
+    verb: "Build together",
+    cue: "Use a stronger frame, then return to your own explanation.",
+    promptLabel: "Choose the frame",
+  },
+  mastery_response: {
+    verb: "Demonstrate",
+    cue: "Bring the whole standard together without leaning on a canned answer.",
+    promptLabel: "Mastery evidence",
+  },
+  complete: {
+    verb: "Complete",
+    cue: "This standard is established for now. Retrieval will make it durable.",
+    promptLabel: "Standard complete",
+  },
+};
+
 function stageLabel(stageId) {
   const labels = {
     focus: "Focus",
@@ -53,6 +111,14 @@ function moveIcon(type) {
   return icons[type] || "•";
 }
 
+function moveMeta(type) {
+  return MOVE_META[type] || {
+    verb: "Learn",
+    cue: "Stay with the idea until it is clear.",
+    promptLabel: "Jeremiah asks",
+  };
+}
+
 function getResponsePayload(move, selectedChoiceId, responseText) {
   if (["free_response", "mastery_response"].includes(move.type)) {
     return { text: responseText.trim() };
@@ -68,44 +134,90 @@ function responseIsReady(move, selectedChoiceId, responseText) {
   return Boolean(selectedChoiceId);
 }
 
-function ScriptureStack({ scripture = [] }) {
+function ScriptureStack({ scripture = [], moveType }) {
   if (!scripture.length) return null;
 
+  const comparison = scripture.length > 1;
+
   return (
-    <div className="jc-scripture-stack" aria-label="Scripture for this learning move">
-      {scripture.map((verse, index) => (
-        <article
-          className="jc-scripture-card"
-          key={verse.id || verse.reference}
-          style={{ "--verse-delay": `${index * 90}ms` }}
-        >
-          <div className="jc-scripture-reference">{verse.reference}</div>
-          <blockquote>“{verse.text}”</blockquote>
-        </article>
-      ))}
+    <div
+      className={"jc-scripture-stack " + (comparison ? "is-comparison" : "is-single")}
+      aria-label="Scripture for this learning move"
+      data-move={moveType}
+    >
+      <div className="jc-scripture-field-label">
+        <span>Scripture field</span>
+        {comparison && <small>{scripture.length} passages in view</small>}
+      </div>
+
+      <div className="jc-scripture-grid">
+        {scripture.map((verse, index) => (
+          <article
+            className="jc-scripture-card"
+            key={verse.id || verse.reference}
+            style={{ "--verse-delay": index * 90 + "ms" }}
+          >
+            <div className="jc-scripture-reference">{verse.reference}</div>
+            <blockquote>“{verse.text}”</blockquote>
+          </article>
+        ))}
+      </div>
     </div>
   );
 }
 
-function ChoiceGrid({ choices = [], selectedChoiceId, onSelect, disabled }) {
+function ChoiceGrid({
+  choices = [],
+  selectedChoiceId,
+  onSelect,
+  disabled,
+  moveType,
+}) {
   return (
-    <div className="jc-choice-grid">
+    <div className={"jc-choice-grid choice-mode-" + moveType}>
       {choices.map((choice, index) => {
         const selected = selectedChoiceId === choice.id;
         return (
           <button
             type="button"
             key={choice.id}
-            className={`jc-choice ${selected ? "is-selected" : ""}`}
+            className={"jc-choice " + (selected ? "is-selected" : "")}
             onClick={() => onSelect(choice.id)}
             disabled={disabled}
-            style={{ "--choice-delay": `${index * 65}ms` }}
+            style={{ "--choice-delay": index * 65 + "ms" }}
           >
             <span className="jc-choice-index">{String(index + 1).padStart(2, "0")}</span>
-            <span>{choice.label}</span>
+            <span className="jc-choice-copy">{choice.label}</span>
+            <span className="jc-choice-select" aria-hidden="true">
+              {selected ? "✓" : ""}
+            </span>
           </button>
         );
       })}
+    </div>
+  );
+}
+
+function ExperienceSignal({ currentMove, learningState, content, isThinking }) {
+  const meta = moveMeta(currentMove.type);
+  const totalEvidence = content.brain?.requiredKnowledge?.length || 0;
+  const earned = learningState.evidenceIds?.length || 0;
+
+  return (
+    <div className="jc-experience-signal">
+      <div className="jc-signal-mode">
+        <span className="jc-signal-icon">{moveIcon(currentMove.type)}</span>
+        <div>
+          <strong>{isThinking ? "Jeremiah is thinking" : meta.verb}</strong>
+          <p>{isThinking ? "Reading the learner, standard, and current evidence." : meta.cue}</p>
+        </div>
+      </div>
+
+      <div className="jc-evidence-pips" aria-label={earned + " of " + totalEvidence + " core truths established"}>
+        {Array.from({ length: Math.max(totalEvidence, 1) }).map((_, index) => (
+          <span key={index} className={index < earned ? "is-earned" : ""} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -123,16 +235,18 @@ function LearningRail({ content, state, currentMove }) {
       </div>
 
       <div className="jc-rail-progress" aria-hidden="true">
-        <span style={{ width: `${getStandardProgress(content, state)}%` }} />
+        <span style={{ width: getStandardProgress(content, state) + "%" }} />
       </div>
 
       <div className="jc-rail-map">
         {stageOrder.map((stage, index) => (
           <div
             key={stage}
-            className={`jc-rail-stage ${index < currentIndex ? "is-done" : ""} ${
-              stage === currentMove.stageId ? "is-current" : ""
-            }`}
+            className={
+              "jc-rail-stage " +
+              (index < currentIndex ? "is-done " : "") +
+              (stage === currentMove.stageId ? "is-current" : "")
+            }
           >
             <span className="jc-rail-dot" />
             <span>{stageLabel(stage)}</span>
@@ -141,18 +255,62 @@ function LearningRail({ content, state, currentMove }) {
       </div>
 
       <div className="jc-rail-truths">
-        <div className="jc-rail-kicker">This standard must establish</div>
-        {knowledge.map((item) => (
-          <div className="jc-rail-truth" key={item.id}>
-            <span className={state.evidenceIds?.includes(item.id) ? "is-lit" : ""} />
-            <div>
-              <strong>{item.title}</strong>
-              <p>{item.truth}</p>
+        <div className="jc-rail-kicker">Knowledge taking shape</div>
+        {knowledge.map((item) => {
+          const established = state.evidenceIds?.includes(item.id);
+          return (
+            <div className={"jc-rail-truth " + (established ? "is-established" : "")} key={item.id}>
+              <span className={established ? "is-lit" : ""} />
+              <div>
+                <strong>{item.title}</strong>
+                <p>{established ? item.truth : "Not established yet"}</p>
+              </div>
             </div>
+          );
+        })}
+      </div>
+    </aside>
+  );
+}
+
+function MasteryLens({ content, moveType }) {
+  if (moveType !== "mastery_response") return null;
+
+  const evidence = content.brain?.evidenceOfUnderstanding || [];
+  if (!evidence.length) return null;
+
+  return (
+    <div className="jc-mastery-lens">
+      <div className="jc-mastery-lens-head">
+        <span>Mastery lens</span>
+        <small>Jeremiah is looking for evidence, not exact wording.</small>
+      </div>
+      <div className="jc-mastery-lens-grid">
+        {evidence.map((item, index) => (
+          <div key={item} className="jc-mastery-lens-item">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{item}</p>
           </div>
         ))}
       </div>
-    </aside>
+    </div>
+  );
+}
+
+function ResponseCoach({ moveType }) {
+  if (!["free_response", "mastery_response"].includes(moveType)) return null;
+
+  const prompts =
+    moveType === "mastery_response"
+      ? ["State the confession", "Ground it in Scripture", "Show what Scripture excludes"]
+      : ["Say it in your words", "Use the text", "Make the connection clear"];
+
+  return (
+    <div className="jc-response-coach" aria-label="Response guidance">
+      {prompts.map((prompt) => (
+        <span key={prompt}>{prompt}</span>
+      ))}
+    </div>
   );
 }
 
@@ -171,6 +329,7 @@ export default function ClassroomPage({ onNavigate }) {
   const [isThinking, setIsThinking] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [resetConfirmation, setResetConfirmation] = useState("");
+  const [showResetPrompt, setShowResetPrompt] = useState(false);
   const [transitionKey, setTransitionKey] = useState(0);
   const abortRef = useRef(null);
 
@@ -180,7 +339,9 @@ export default function ClassroomPage({ onNavigate }) {
 
   const progress = getStandardProgress(content, learningState);
   const ready = responseIsReady(currentMove, selectedChoiceId, responseText);
-  const presetEntryMoveId = content.presets?.[presetId]?.currentMoveId || content.instructionalMoves[0]?.id;
+  const meta = moveMeta(currentMove.type);
+  const presetEntryMoveId =
+    content.presets?.[presetId]?.currentMoveId || content.instructionalMoves[0]?.id;
   const canReset =
     learningState.currentMoveId !== presetEntryMoveId ||
     (learningState.completedMoveIds?.length || 0) > 0;
@@ -206,6 +367,7 @@ export default function ClassroomPage({ onNavigate }) {
     setPendingState(null);
     setErrorMessage("");
     setResetConfirmation("");
+    setShowResetPrompt(false);
     setTransitionKey((value) => value + 1);
   }
 
@@ -273,7 +435,8 @@ export default function ClassroomPage({ onNavigate }) {
     setTeacherDecision(null);
     setPendingState(null);
     setErrorMessage("");
-    setResetConfirmation("Session restored to this path's entry point.");
+    setShowResetPrompt(false);
+    setResetConfirmation("Path reset. Jeremiah returned you to the beginning of this route.");
     setTransitionKey((value) => value + 1);
   }
 
@@ -288,11 +451,20 @@ export default function ClassroomPage({ onNavigate }) {
     );
   }
 
+  const pageStateClass =
+    "jc-page stage-" +
+    currentMove.stageId +
+    " move-" +
+    currentMove.type +
+    (isThinking ? " is-thinking" : "") +
+    (teacherDecision ? " has-feedback feedback-" + teacherDecision.verdict : "");
+
   return (
-    <div className="jc-page">
+    <div className={pageStateClass}>
       <div className="jc-atmosphere" aria-hidden="true">
         <span className="jc-glow jc-glow-fire" />
         <span className="jc-glow jc-glow-water" />
+        <span className="jc-light-column" />
         <span className="jc-grain" />
       </div>
 
@@ -318,13 +490,26 @@ export default function ClassroomPage({ onNavigate }) {
         </div>
 
         {canReset ? (
-          <button type="button" className="jc-reset" onClick={handleReset}>
+          <button type="button" className="jc-reset" onClick={() => setShowResetPrompt(true)}>
             Reset path
           </button>
         ) : (
           <span />
         )}
       </header>
+
+      {showResetPrompt && (
+        <div className="jc-reset-prompt" role="dialog" aria-label="Reset learning path">
+          <div>
+            <strong>Restart this path?</strong>
+            <span>Your saved progress for this route will be cleared.</span>
+          </div>
+          <div className="jc-reset-actions">
+            <button type="button" onClick={() => setShowResetPrompt(false)}>Keep learning</button>
+            <button type="button" className="is-danger" onClick={handleReset}>Reset</button>
+          </div>
+        </div>
+      )}
 
       {resetConfirmation && (
         <div className="jc-reset-confirmation" role="status">
@@ -334,19 +519,28 @@ export default function ClassroomPage({ onNavigate }) {
 
       <div className="jc-mobile-progress">
         <span>{stageLabel(currentMove.stageId)}</span>
-        <div><i style={{ width: `${progress}%` }} /></div>
+        <div><i style={{ width: progress + "%" }} /></div>
         <strong>{progress}%</strong>
       </div>
 
       <main className="jc-layout">
         <LearningRail content={content} state={learningState} currentMove={currentMove} />
 
-        <section className="jc-classroom" key={`${currentMove.id}-${transitionKey}`}>
+        <section className="jc-classroom" key={currentMove.id + "-" + transitionKey}>
           <div className="jc-presence" aria-hidden="true">
             <span className="jc-presence-core" />
             <span className="jc-presence-ring ring-one" />
             <span className="jc-presence-ring ring-two" />
+            <span className="jc-presence-spark spark-one" />
+            <span className="jc-presence-spark spark-two" />
           </div>
+
+          <ExperienceSignal
+            currentMove={currentMove}
+            learningState={learningState}
+            content={content}
+            isThinking={isThinking}
+          />
 
           <div className="jc-move-head">
             <div>
@@ -362,17 +556,22 @@ export default function ClassroomPage({ onNavigate }) {
           {currentMove.teacherLine && (
             <div className="jc-teacher-line">
               <span className="jc-teacher-avatar">J</span>
-              <p>{currentMove.teacherLine}</p>
+              <div>
+                <small>Jeremiah</small>
+                <p>{currentMove.teacherLine}</p>
+              </div>
             </div>
           )}
 
           {currentMove.body && <p className="jc-body-copy">{currentMove.body}</p>}
 
-          <ScriptureStack scripture={currentMove.scripture} />
+          <ScriptureStack scripture={currentMove.scripture} moveType={currentMove.type} />
+
+          <MasteryLens content={content} moveType={currentMove.type} />
 
           {currentMove.prompt && currentMove.type !== "complete" && (
             <div className="jc-prompt-block">
-              <div className="jc-prompt-label">Jeremiah asks</div>
+              <div className="jc-prompt-label">{meta.promptLabel}</div>
               <h2>{currentMove.prompt}</h2>
             </div>
           )}
@@ -383,12 +582,14 @@ export default function ClassroomPage({ onNavigate }) {
               selectedChoiceId={selectedChoiceId}
               onSelect={setSelectedChoiceId}
               disabled={isThinking}
+              moveType={currentMove.type}
             />
           )}
 
           {["free_response", "mastery_response"].includes(currentMove.type) &&
             !teacherDecision && (
               <div className="jc-response-wrap">
+                <ResponseCoach moveType={currentMove.type} />
                 <textarea
                   value={responseText}
                   onChange={(event) => setResponseText(event.target.value)}
@@ -397,8 +598,12 @@ export default function ClassroomPage({ onNavigate }) {
                   rows={6}
                 />
                 <div className="jc-response-meter">
-                  <span>{responseText.trim() ? `${responseText.trim().split(/\s+/).length} words` : "Your words matter here"}</span>
-                  <span>Jeremiah reads meaning, not keywords</span>
+                  <span>
+                    {responseText.trim()
+                      ? responseText.trim().split(/\s+/).length + " words"
+                      : "Start in your own words"}
+                  </span>
+                  <span>Meaning over matching</span>
                 </div>
               </div>
             )}
@@ -412,16 +617,18 @@ export default function ClassroomPage({ onNavigate }) {
 
           {isThinking && (
             <div className="jc-thinking" aria-live="polite">
-              <span className="jc-thinking-orb" />
+              <span className="jc-thinking-orb">
+                <i />
+              </span>
               <div>
                 <strong>Jeremiah is reading your response</strong>
-                <span>Checking it against this standard—not a generic answer key.</span>
+                <span>Checking it against this standard, your evidence, and the next legal teaching move.</span>
               </div>
             </div>
           )}
 
           {teacherDecision && (
-            <div className={`jc-feedback verdict-${teacherDecision.verdict}`}>
+            <div className={"jc-feedback verdict-" + teacherDecision.verdict}>
               <div className="jc-feedback-top">
                 <div className="jc-teacher-avatar">J</div>
                 <div>
@@ -436,10 +643,10 @@ export default function ClassroomPage({ onNavigate }) {
                 </div>
                 <div className="jc-verdict">
                   {teacherDecision.verdict === "strong"
-                    ? "Ready"
+                    ? "Established"
                     : teacherDecision.verdict === "partial"
                       ? "Developing"
-                      : "Stay here"}
+                      : "Rebuild"}
                 </div>
               </div>
               <p>{teacherDecision.teacherMessage}</p>
@@ -448,8 +655,8 @@ export default function ClassroomPage({ onNavigate }) {
               )}
               <button type="button" className="jc-primary" onClick={handleTeacherContinue}>
                 {teacherDecision.verdict === "strong"
-                  ? "Keep moving"
-                  : "Try it another way"}
+                  ? "Move forward"
+                  : "Teach it another way"}
                 <span>→</span>
               </button>
             </div>
@@ -469,15 +676,20 @@ export default function ClassroomPage({ onNavigate }) {
               onClick={handleSubmit}
               disabled={!ready || isThinking}
             >
-              {isThinking ? "Reading..." : "Respond"}
+              {isThinking ? "Jeremiah is thinking…" : currentMove.type === "mastery_response" ? "Submit mastery evidence" : "Continue with Jeremiah"}
               <span>→</span>
             </button>
           )}
 
           {currentMove.type === "complete" && (
             <div className="jc-complete-actions">
-              <div className="jc-complete-mark">✓</div>
-              <p>{currentMove.teacherLine}</p>
+              <div className="jc-complete-mark">
+                <span>✓</span>
+              </div>
+              <div>
+                <strong>Standard established</strong>
+                <p>{currentMove.teacherLine}</p>
+              </div>
               <button type="button" className="jc-primary" onClick={() => onNavigate(ROUTES.HOME)}>
                 {currentMove.ctaLabel || "Return home"}
                 <span>→</span>
@@ -506,6 +718,17 @@ export default function ClassroomPage({ onNavigate }) {
           <div className="jc-memory-line">
             <span>{learningState.misconceptions?.length || 0}</span>
             <p>misconceptions being watched</p>
+          </div>
+
+          <div className="jc-context-divider" />
+
+          <div className="jc-context-kicker">RIGHT NOW</div>
+          <div className="jc-now-card">
+            <span>{moveIcon(currentMove.type)}</span>
+            <div>
+              <strong>{meta.verb}</strong>
+              <p>{meta.cue}</p>
+            </div>
           </div>
         </aside>
       </main>
