@@ -6,6 +6,7 @@ import {
   setSavedLiveStageForPreset,
 } from "../../core/classroom/classroomSessionData";
 import {
+  advanceEncounterMove,
   advanceLearningState,
   advanceUnscoredMove,
   clearLearningState,
@@ -126,6 +127,8 @@ function EncounterExperience({ move, onComplete, onExit }) {
   const [bridgeMarks, setBridgeMarks] = useState([]);
   const [showSourceShelf, setShowSourceShelf] = useState(false);
   const [selectedSource, setSelectedSource] = useState(null);
+  const [entryMode, setEntryMode] = useState("");
+  const [viewedSourceIds, setViewedSourceIds] = useState([]);
   const sources = encounter.curatedSources || [];
   const sourceMoments = encounter.sourceMoments || [];
   const mediaMoments = encounter.mediaMoments || [];
@@ -141,6 +144,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
   }, []);
 
   function beginListening() {
+    setEntryMode("listen");
     setPhase("notice");
 
     if (
@@ -158,6 +162,24 @@ function EncounterExperience({ move, onComplete, onExit }) {
     utterance.rate = 0.82;
     utterance.pitch = 0.96;
     window.speechSynthesis.speak(utterance);
+  }
+
+  function openSource(source) {
+    if (!source) return;
+    setSelectedSource(source);
+    setViewedSourceIds((ids) =>
+      ids.includes(source.id) ? ids : [...ids, source.id]
+    );
+  }
+
+  function finishEncounter() {
+    onComplete({
+      entryMode: entryMode || "read",
+      primaryWords: primaryMarks.map((index) => primaryWords[index]).filter(Boolean),
+      bridgeWords: bridgeMarks.map((index) => bridgeWords[index]).filter(Boolean),
+      viewedSourceIds,
+      sourceShelfOpened: showSourceShelf,
+    });
   }
 
   function toggleMark(setter, marks, index) {
@@ -217,14 +239,29 @@ function EncounterExperience({ move, onComplete, onExit }) {
                 <small>Hear the confession before anything is explained.</small>
               </button>
 
-              <button type="button" onClick={() => setPhase("notice")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setEntryMode("read");
+                  setPhase("notice");
+                }}
+              >
                 <span className="jc-entry-icon">Aa</span>
                 <strong>{encounter.readLabel || "Read it myself"}</strong>
                 <small>Enter through the words and notice what pulls your attention.</small>
               </button>
 
               {videoSource && (
-                <button type="button" onClick={() => setPhase("mediaIntro")}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEntryMode("watch");
+                    setViewedSourceIds((ids) =>
+                      ids.includes(videoSource.id) ? ids : [...ids, videoSource.id]
+                    );
+                    setPhase("mediaIntro");
+                  }}
+                >
                   <span className="jc-entry-icon">▶</span>
                   <strong>Watch a short introduction</strong>
                   <small>{videoSource.provider} · {videoSource.duration}</small>
@@ -256,7 +293,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
             <div className="jc-media-source-line">
               <span>{videoSource.provider}</span>
               <span>{videoSource.duration}</span>
-              <button type="button" onClick={() => setSelectedSource(videoSource)}>
+              <button type="button" onClick={() => openSource(videoSource)}>
                 About this source
               </button>
             </div>
@@ -366,7 +403,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
                       <button
                         type="button"
                         className="jc-inline-source"
-                        onClick={() => setSelectedSource(source)}
+                        onClick={() => openSource(source)}
                       >
                         {source.attribution}
                       </button>
@@ -409,7 +446,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
                       <button
                         type="button"
                         className="jc-inline-source"
-                        onClick={() => setSelectedSource(source)}
+                        onClick={() => openSource(source)}
                       >
                         Explore source
                       </button>
@@ -438,7 +475,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
                         type="button"
                         key={source.id}
                         className="jc-source-item"
-                        onClick={() => setSelectedSource(source)}
+                        onClick={() => openSource(source)}
                       >
                         <div>
                           <span>{String(source.type || "source").replaceAll("_", " ")}</span>
@@ -470,7 +507,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
             <p>
               Everything Jeremiah teaches next should help you accomplish that—not just answer a string of questions.
             </p>
-            <button type="button" className="jc-encounter-next" onClick={onComplete}>
+            <button type="button" className="jc-encounter-next" onClick={finishEncounter}>
               {move.ctaLabel || "Enter the lesson"} <span>→</span>
             </button>
           </section>
@@ -655,6 +692,28 @@ function ChoiceGrid({ choices = [], selectedChoiceId, onSelect, disabled }) {
   );
 }
 
+function EncounterThread({ encounterData }) {
+  if (!encounterData) return null;
+
+  const noticed = [
+    ...(encounterData.primaryWords || []),
+    ...(encounterData.bridgeWords || []),
+  ].slice(0, 6);
+
+  if (!noticed.length) return null;
+
+  return (
+    <div className="jc-encounter-thread">
+      <span>From your entrance</span>
+      <p>
+        You noticed{" "}
+        <strong>{noticed.join(" · ")}</strong>
+        . Jeremiah will keep that thread in view.
+      </p>
+    </div>
+  );
+}
+
 function MasteryNudge({ content, visible, onToggle }) {
   const scripture = content.brain?.requiredScripture || [];
 
@@ -746,6 +805,13 @@ export default function ClassroomPage({ onNavigate }) {
     clearInteraction();
   }
 
+  function handleEncounterComplete(encounterData) {
+    if (!learningState || !currentMove) return;
+    const next = advanceEncounterMove(learningState, currentMove, encounterData);
+    setLearningState(next);
+    clearInteraction();
+  }
+
   async function handleSubmit() {
     if (!currentMove || !learningState || !ready || isThinking || teacherDecision) {
       return;
@@ -775,6 +841,7 @@ export default function ClassroomPage({ onNavigate }) {
             evidenceIds: learningState.evidenceIds,
             misconceptions: learningState.misconceptions,
             attemptsByMove: learningState.attemptsByMove,
+            encounterData: learningState.encounterData,
           },
         },
         controller.signal
@@ -820,7 +887,7 @@ export default function ClassroomPage({ onNavigate }) {
     return (
       <EncounterExperience
         move={currentMove}
-        onComplete={handleContinue}
+        onComplete={handleEncounterComplete}
         onExit={() => onNavigate(ROUTES.HOME)}
       />
     );
@@ -893,6 +960,12 @@ export default function ClassroomPage({ onNavigate }) {
           )}
 
           {currentMove.body && <p className="jc-body-copy">{currentMove.body}</p>}
+
+          {["hear_the_shema", "oneness_first", "isaiah_exclusion", "teach_it_back"].includes(
+            currentMove.id
+          ) && (
+            <EncounterThread encounterData={learningState.encounterData} />
+          )}
 
           <ScriptureStack scripture={currentMove.scripture} />
 
