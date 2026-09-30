@@ -1,5 +1,5 @@
 export const masteryRules = {
-  "OG.1.18": {
+  "OG.1.1.18": {
     positiveConfessionPhrases: [
       "one god",
       "god is one",

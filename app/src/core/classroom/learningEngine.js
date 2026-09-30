@@ -1,0 +1,164 @@
+const STORAGE_PREFIX = "jeremiah-learning-state";
+
+function keyFor(standardId, presetId) {
+  return `${STORAGE_PREFIX}:${standardId}:${presetId}`;
+}
+
+export function getInstructionalMove(content, moveId) {
+  return content?.instructionalMoves?.find((move) => move.id === moveId) || null;
+}
+
+export function getInitialMoveId(content, presetId = "direct") {
+  return (
+    content?.presets?.[presetId]?.currentMoveId ||
+    content?.instructionalMoves?.[0]?.id ||
+    ""
+  );
+}
+
+export function createLearningState(content, presetId = "direct") {
+  return {
+    standardId: content.standardId,
+    presetId,
+    currentMoveId: getInitialMoveId(content, presetId),
+    completedMoveIds: [],
+    attemptsByMove: {},
+    evidenceIds: [],
+    misconceptions: [],
+    teacherHistory: [],
+    lastUpdatedAt: Date.now(),
+  };
+}
+
+export function loadLearningState(content, presetId = "direct") {
+  if (typeof window === "undefined") return createLearningState(content, presetId);
+
+  const storageKey = keyFor(content.standardId, presetId);
+  const raw = window.localStorage.getItem(storageKey);
+
+  if (!raw) return createLearningState(content, presetId);
+
+  try {
+    const parsed = JSON.parse(raw);
+    const moveExists = getInstructionalMove(content, parsed.currentMoveId);
+
+    if (!moveExists) return createLearningState(content, presetId);
+
+    return {
+      ...createLearningState(content, presetId),
+      ...parsed,
+      standardId: content.standardId,
+      presetId,
+    };
+  } catch {
+    return createLearningState(content, presetId);
+  }
+}
+
+export function saveLearningState(state) {
+  if (typeof window === "undefined" || !state?.standardId || !state?.presetId) {
+    return;
+  }
+
+  window.localStorage.setItem(
+    keyFor(state.standardId, state.presetId),
+    JSON.stringify({ ...state, lastUpdatedAt: Date.now() })
+  );
+}
+
+export function clearLearningState(content, presetId = "direct") {
+  if (typeof window === "undefined") return;
+  window.localStorage.removeItem(keyFor(content.standardId, presetId));
+}
+
+function unique(values = []) {
+  return [...new Set(values.filter(Boolean))];
+}
+
+export function recordAttempt(state, move, teacherDecision) {
+  const attemptCount = (state.attemptsByMove?.[move.id] || 0) + 1;
+  const completed = teacherDecision.verdict === "strong";
+
+  return {
+    ...state,
+    attemptsByMove: {
+      ...state.attemptsByMove,
+      [move.id]: attemptCount,
+    },
+    completedMoveIds: completed
+      ? unique([
+          ...(state.completedMoveIds || []),
+          move.id,
+          ...(move.satisfiesMoveIds || []),
+        ])
+      : state.completedMoveIds || [],
+    evidenceIds: completed
+      ? unique([...(state.evidenceIds || []), ...(move.evidenceIds || [])])
+      : state.evidenceIds || [],
+    misconceptions: unique([
+      ...(state.misconceptions || []),
+      ...(teacherDecision.misconceptionIds || []),
+    ]),
+    teacherHistory: [
+      ...(state.teacherHistory || []),
+      {
+        moveId: move.id,
+        verdict: teacherDecision.verdict,
+        strategy: teacherDecision.strategy,
+        at: Date.now(),
+      },
+    ].slice(-20),
+    lastUpdatedAt: Date.now(),
+  };
+}
+
+export function resolveNextMoveId(move, verdict, strategy = "") {
+  if (!move?.next) return move?.id || "";
+
+  if (verdict === "continue") {
+    return move.next.continue || move.id;
+  }
+
+  if (verdict !== "strong" && strategy && move.strategyRoutes?.[strategy]) {
+    return move.strategyRoutes[strategy];
+  }
+
+  return move.next[verdict] || move.id;
+}
+
+export function advanceLearningState(state, move, teacherDecision) {
+  const recorded = recordAttempt(state, move, teacherDecision);
+  const nextMoveId = resolveNextMoveId(
+    move,
+    teacherDecision.verdict,
+    teacherDecision.strategy
+  );
+
+  return {
+    ...recorded,
+    currentMoveId: nextMoveId,
+    lastUpdatedAt: Date.now(),
+  };
+}
+
+export function advanceUnscoredMove(state, move) {
+  const nextMoveId = resolveNextMoveId(move, "continue");
+  return {
+    ...state,
+    currentMoveId: nextMoveId,
+    completedMoveIds: unique([...(state.completedMoveIds || []), move.id]),
+    lastUpdatedAt: Date.now(),
+  };
+}
+
+export function getStandardProgress(content, state) {
+  const mainMoves = (content.instructionalMoves || []).filter(
+    (move) => !["complete"].includes(move.type) && !move.id.includes("reframe") && !move.id.includes("contrast") && move.id !== "guided_build"
+  );
+  const required = Math.max(mainMoves.length, 1);
+  const completed = mainMoves.filter((move) =>
+    state.completedMoveIds?.includes(move.id)
+  ).length;
+
+  return Math.min(100, Math.round((completed / required) * 100));
+}

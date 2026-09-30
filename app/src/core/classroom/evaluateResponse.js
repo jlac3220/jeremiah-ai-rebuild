@@ -191,7 +191,7 @@ function evaluateOgOneByStage(normalized, rule, stageId) {
 
 export function evaluateResponse(
   responseText,
-  standardId = "OG.1.18",
+  standardId = "OG.1.1.18",
   stageId = "checkpoint"
 ) {
   const normalized = normalizeResponse(responseText);
@@ -211,7 +211,7 @@ export function evaluateResponse(
     };
   }
 
-  if (standardId === "OG.1.18") {
+  if (standardId === "OG.1.1.18") {
     return evaluateOgOneByStage(normalized, rule, stageId);
   }
 

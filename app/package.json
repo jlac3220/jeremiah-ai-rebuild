@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server.mjs",
+    "serve": "node server.mjs",
+    "test:brain": "node scripts/validate-standards.mjs && node scripts/smoke-learning-engine.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

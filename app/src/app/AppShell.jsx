@@ -6,10 +6,11 @@ import BottomNav from "../shared/layout/BottomNav";
 export default function AppShell() {
   const [currentRoute, setCurrentRoute] = useState(ROUTES.HOME);
 
-  const showBottomNav = MAIN_NAV_ROUTES.includes(currentRoute);
+  const showBottomNav =
+    MAIN_NAV_ROUTES.includes(currentRoute) && currentRoute !== ROUTES.CLASSROOM;
 
   return (
-    <div style={shellStyle}>
+    <div style={{ ...shellStyle, background: currentRoute === ROUTES.CLASSROOM ? "#081421" : "#f8fafc" }}>
       <main style={{ ...mainStyle, paddingBottom: showBottomNav ? "88px" : "0px" }}>
         <AppRouter
           currentRoute={currentRoute}
