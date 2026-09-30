@@ -4,6 +4,7 @@ import {
   advanceUnscoredMove,
   createLearningState,
   getInstructionalMove,
+  getStandardProgress,
 } from "../src/core/classroom/learningEngine.js";
 import { teachWithJeremiah } from "../server/teacherCore.mjs";
 
@@ -12,42 +13,76 @@ function assert(condition, message) {
 }
 
 let state = createLearningState(content, "direct");
-let move = getInstructionalMove(content, state.currentMoveId);
-state = advanceUnscoredMove(state, move);
-assert(state.currentMoveId === "hear_the_shema", "launch should enter the Shema move");
 
-move = getInstructionalMove(content, state.currentMoveId);
+for (const expectedMoveId of [
+  "arrival",
+  "hear_the_shema",
+  "oneness_first",
+  "isaiah_exclusion",
+  "mark12_bridge",
+  "synthesis",
+]) {
+  const move = getInstructionalMove(content, state.currentMoveId);
+  assert(move.id === expectedMoveId, `expected ${expectedMoveId}, got ${move.id}`);
+  state = advanceUnscoredMove(state, move);
+}
+
+let move = getInstructionalMove(content, state.currentMoveId);
+assert(move.id === "pressure_test", "teaching sequence should lead to one pressure test");
+
 let decision = await teachWithJeremiah({
   standardId: content.standardId,
   moveId: move.id,
-  learnerResponse: { choiceIds: ["hear"] },
+  learnerResponse: { choiceIds: ["definitions-free"] },
   learnerState: state,
 });
-assert(decision.verdict === "weak", "wrong observation should not pass");
+assert(decision.verdict === "weak", "wrong pressure-test answer should not pass");
+
 state = advanceLearningState(state, move, decision);
-assert(state.currentMoveId === "shema_contrast", "wrong observation should branch to contrast");
+assert(
+  state.currentMoveId === "repair_foundation",
+  "wrong pressure-test answer should route into reteaching"
+);
+
+move = getInstructionalMove(content, state.currentMoveId);
+state = advanceUnscoredMove(state, move);
+assert(
+  state.currentMoveId === "pressure_test",
+  "reteaching should return the learner to the pressure test"
+);
 
 move = getInstructionalMove(content, state.currentMoveId);
 decision = await teachWithJeremiah({
   standardId: content.standardId,
   moveId: move.id,
-  learnerResponse: { choiceIds: ["one-being"] },
+  learnerResponse: { choiceIds: ["control-later"] },
   learnerState: state,
 });
-assert(decision.verdict === "strong", "correct remediation should pass");
+assert(decision.verdict === "strong", "correct pressure-test answer should pass");
+
 state = advanceLearningState(state, move, decision);
-assert(state.completedMoveIds.includes("hear_the_shema"), "remediation should satisfy the original learning target");
-assert(state.currentMoveId === "say_it_plainly", "remediation should rejoin main path");
+assert(
+  state.currentMoveId === "teach_it_back",
+  "successful pressure test should move to teach-back"
+);
 
 const teachBack = getInstructionalMove(content, "teach_it_back");
 decision = await teachWithJeremiah({
   standardId: content.standardId,
   moveId: teachBack.id,
   learnerResponse: {
-    text: "God is one, and Isaiah says there is no other God beside Him. The Shema gives the confession one LORD.",
+    text: "God is one. Deuteronomy says the LORD our God is one LORD, and Isaiah says there is no God beside Him.",
   },
   learnerState: state,
 });
-assert(["strong", "partial"].includes(decision.verdict), "teach-back should receive a meaningful verdict");
+assert(
+  ["strong", "partial"].includes(decision.verdict),
+  "teach-back should receive a meaningful verdict"
+);
+
+assert(
+  getStandardProgress(content, state) > 0,
+  "required teaching moves should count toward lesson progress"
+);
 
 console.log("Jeremiah learning engine smoke test passed.");
