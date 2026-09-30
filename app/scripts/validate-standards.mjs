@@ -15,6 +15,17 @@ function validateStandard(standard) {
     .filter((move) => move.type === "encounter")
     .flatMap((move) => move.encounter?.curatedSources || []);
 
+  const encountersWithSources = (standard.instructionalMoves || []).filter(
+    (move) => move.type === "encounter" && (move.encounter?.curatedSources || []).length
+  );
+
+  for (const move of encountersWithSources) {
+    assert(
+      /^\d{4}-\d{2}-\d{2}$/.test(move.encounter?.sourcesVerifiedAt || ""),
+      `${standard.standardId}: encounter ${move.id} requires sourcesVerifiedAt (YYYY-MM-DD)`
+    );
+  }
+
   const sourceIds = encounterSources.map((source) => source.id);
   assert(
     new Set(sourceIds).size === sourceIds.length,
