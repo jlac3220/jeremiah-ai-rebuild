@@ -126,6 +126,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
   const [bridgeMarks, setBridgeMarks] = useState([]);
   const sources = encounter.curatedSources || [];
   const sourceMoments = encounter.sourceMoments || [];
+  const mediaMoments = encounter.mediaMoments || [];
   const primaryWords = String(encounter.primaryVerse?.text || "").split(/\s+/);
   const bridgeWords = String(encounter.bridgeVerse?.text || "").split(/\s+/);
 
@@ -183,6 +184,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
   }
 
   const videoSource = sources.find((source) => source.type === "video");
+  const artifactMoments = mediaMoments.filter((moment) => {
+    const source = sources.find((item) => item.id === moment.sourceId);
+    return source?.type === "image";
+  });
 
   return (
     <div className="jc-encounter-page">
@@ -216,22 +221,50 @@ function EncounterExperience({ move, onComplete, onExit }) {
               </button>
 
               {videoSource && (
-                <a
-                  href={videoSource.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => setPhase("notice")}
-                >
+                <button type="button" onClick={() => setPhase("mediaIntro")}>
                   <span className="jc-entry-icon">▶</span>
                   <strong>Watch a short introduction</strong>
                   <small>{videoSource.provider} · {videoSource.duration}</small>
-                </a>
+                </button>
               )}
             </div>
 
             <div className="jc-encounter-whisper">
               No score. No correct answer yet. Just encounter the idea.
             </div>
+          </section>
+        )}
+
+        {phase === "mediaIntro" && videoSource && (
+          <section className="jc-encounter-scene is-media">
+            <div className="jc-encounter-step">00 · WATCH</div>
+            <h2>{videoSource.title}</h2>
+            <p className="jc-encounter-subcopy">{videoSource.hook}</p>
+
+            <div className="jc-video-frame">
+              <iframe
+                src={videoSource.embedUrl}
+                title={videoSource.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+
+            <div className="jc-media-source-line">
+              <span>{videoSource.provider}</span>
+              <span>{videoSource.duration}</span>
+              <a href={videoSource.url} target="_blank" rel="noreferrer">
+                Open source ↗
+              </a>
+            </div>
+
+            <button
+              type="button"
+              className="jc-encounter-next"
+              onClick={() => setPhase("notice")}
+            >
+              Now read the words yourself <span>→</span>
+            </button>
           </section>
         )}
 
@@ -292,17 +325,63 @@ function EncounterExperience({ move, onComplete, onExit }) {
             <button
               type="button"
               className="jc-encounter-next"
-              onClick={() => setPhase("voices")}
+              onClick={() => setPhase("artifacts")}
               disabled={!bridgeMarks.length}
             >
-              Hear a few voices around the text <span>→</span>
+              See the text in the real world <span>→</span>
+            </button>
+          </section>
+        )}
+
+        {phase === "artifacts" && (
+          <section className="jc-encounter-scene is-artifacts">
+            <div className="jc-encounter-step">03 · THE WORDS HAVE A PHYSICAL HISTORY</div>
+            <h2>Before this was a lesson screen, it was ink, parchment, memory, and practice.</h2>
+            <p className="jc-encounter-subcopy">
+              Look first. Then read the context.
+            </p>
+
+            <div className="jc-artifact-grid">
+              {artifactMoments.map((moment) => {
+                const source = sources.find((item) => item.id === moment.sourceId);
+                if (!source) return null;
+
+                return (
+                  <article className="jc-artifact-card" key={moment.id}>
+                    <div className="jc-artifact-image-wrap">
+                      <img
+                        src={source.imageUrl}
+                        alt={source.title}
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="jc-artifact-copy">
+                      <span>{moment.eyebrow}</span>
+                      <h3>{source.title}</h3>
+                      <p>{moment.prompt}</p>
+                      <small>{source.date}</small>
+                      <a href={source.url} target="_blank" rel="noreferrer">
+                        {source.attribution} ↗
+                      </a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              className="jc-encounter-next"
+              onClick={() => setPhase("voices")}
+            >
+              Hear voices around the text <span>→</span>
             </button>
           </section>
         )}
 
         {phase === "voices" && (
           <section className="jc-encounter-scene">
-            <div className="jc-encounter-step">03 · THE VERSE HAS A HISTORY</div>
+            <div className="jc-encounter-step">04 · THE VERSE HAS A HISTORY</div>
             <h2>People have been hearing, reciting, and arguing about these words for centuries.</h2>
             <p className="jc-encounter-subcopy">
               Jeremiah can bring those voices into the room without handing them authority over the standard.
