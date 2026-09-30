@@ -1977,3 +1977,27 @@
     padding: 10px 11px;
   }
 }
+
+
+/* source viewer context summary */
+
+.jc-source-viewer-summary {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.055);
+}
+
+.jc-source-viewer-summary > span {
+  color: #d68a54;
+  font-size: .58rem;
+  font-weight: 830;
+  text-transform: uppercase;
+  letter-spacing: .11em;
+}
+
+.jc-source-viewer-summary p {
+  margin: 7px 0 0;
+  color: #a7b5bc;
+  font-size: .8rem;
+  line-height: 1.58;
+}
