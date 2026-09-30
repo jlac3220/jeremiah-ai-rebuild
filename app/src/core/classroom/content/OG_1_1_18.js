@@ -235,6 +235,31 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             purpose:
               "Advanced enrichment. It demonstrates that Jeremiah can surface real scholarship without making scholarship the curriculum.",
           },
+          {
+            id: "great-isaiah-scroll",
+            type: "interactive_manuscript",
+            provider: "Israel Museum",
+            title: "The Great Isaiah Scroll",
+            duration: "Interactive manuscript",
+            url: "https://dss.collections.imj.org.il/isaiah",
+            hook:
+              "Explore the oldest known complete manuscript of a biblical book and see Isaiah as an ancient physical text.",
+            attribution: "Israel Museum · Digital Dead Sea Scrolls",
+            purpose:
+              "Deep visual context for the Isaiah passages used later in the lesson. The museum identifies 1QIsaa as a first-century BCE parchment scroll.",
+          },
+          {
+            id: "great-isaiah-scroll-image",
+            type: "image_reference",
+            provider: "Wikimedia Commons",
+            title: "Great Isaiah Scroll",
+            url: "https://commons.wikimedia.org/wiki/File:Great_Isaiah_Scroll.jpg",
+            hook:
+              "A public-domain photographic reproduction of the Great Isaiah Scroll.",
+            attribution: "Wikimedia Commons · Public Domain Mark",
+            purpose:
+              "Optional visual enrichment when the learner wants to see the scale and form of the entire Isaiah manuscript.",
+          },
         ],
         mediaMoments: [
           {
