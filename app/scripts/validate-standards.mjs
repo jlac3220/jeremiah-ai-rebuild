@@ -59,6 +59,18 @@ function validateStandard(standard) {
       `${standard.standardId}: encounter ${move.id} requires a continue route into instruction`
     );
 
+    const handoffMove = (standard.instructionalMoves || []).find(
+      (candidate) => candidate.id === move.next?.continue
+    );
+    assert(
+      handoffMove?.handoff,
+      `${standard.standardId}: encounter ${move.id} must flow into a teaching move with a handoff contract`
+    );
+    assert(
+      Array.isArray(handoffMove?.teaching) && handoffMove.teaching.length > 0,
+      `${standard.standardId}: handoff move ${handoffMove?.id || "missing"} must contain teaching`
+    );
+
     const encounterSourceIds = new Set(
       (encounter.curatedSources || []).map((source) => source.id)
     );
