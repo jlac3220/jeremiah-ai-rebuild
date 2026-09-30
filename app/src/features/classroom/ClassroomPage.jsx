@@ -566,6 +566,13 @@ function EncounterExperience({ move, onComplete, onExit }) {
 
             {selectedSource.hook && <p>{selectedSource.hook}</p>}
 
+            {selectedSource.summary && (
+              <div className="jc-source-viewer-summary">
+                <span>Context</span>
+                <p>{selectedSource.summary}</p>
+              </div>
+            )}
+
             {selectedSource.purpose && (
               <div className="jc-source-viewer-why">
                 <span>Why Jeremiah brought this in</span>
