@@ -1,4 +1,4 @@
-import OG_1_1_18_CLASSROOM_CONTENT from "./OG_1_1_18";
+import OG_1_1_18_CLASSROOM_CONTENT from "./OG_1_1_18.js";
 
 export const classroomContentRegistry = {
   [OG_1_1_18_CLASSROOM_CONTENT.standardId]: OG_1_1_18_CLASSROOM_CONTENT,
