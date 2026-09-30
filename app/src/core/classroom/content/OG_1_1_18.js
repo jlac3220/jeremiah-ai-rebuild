@@ -339,17 +339,25 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       id: "hear_the_shema",
       stageId: "scripture",
       type: "scripture_teach",
-      eyebrow: "READ IT SLOWLY",
-      title: "Hear the confession before you explain it",
+      eyebrow: "STAY WITH THE WORDS",
+      title: "Now name what you just encountered",
       scripture: [shema],
+      handoff: {
+        kicker: "You are still in the same moment",
+        opening:
+          "You met the text before Jeremiah explained it. Now the teaching begins from what caught your attention.",
+        memoryLabel: "What caught your eye",
+        teacherBridge:
+          "The words you noticed are not being discarded as we move forward. They become the thread Jeremiah teaches from.",
+      },
       teaching: [
-        "Deuteronomy 6:4 is commonly called the Shema from its opening command: “Hear.” It is not a side comment. It is a confession Israel is commanded to receive and carry.",
-        "The center of the confession is the identity of God: “The LORD our God is one LORD.” Before Scripture asks us to explain everything about God, it tells us where the explanation must begin.",
+        "Deuteronomy 6:4 is commonly called the Shema from its opening command: “Hear.” That matters because the verse is not introduced as trivia to analyze from a distance. Israel is commanded to receive it.",
+        "At the center is a confession about God's identity: “The LORD our God is one LORD.” Before later passages add anything else to our understanding, Scripture gives us a foundation that must remain standing.",
       ],
       focusPhrases: ["one LORD"],
       focusNote:
-        "This is the positive confession. The biblical starting point is not a collection of divine beings working together. The LORD our God is one LORD.",
-      ctaLabel: "Keep building",
+        "This is the positive confession. The lesson will keep returning to it as other passages add clarity.",
+      ctaLabel: "Build on what I noticed",
       next: { continue: "oneness_first" },
     },
     {
