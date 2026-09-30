@@ -117,6 +117,8 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             url: "https://bibleproject.com/videos/shema-listen/",
             embedUrl: "https://www.youtube.com/embed/6KQLOuIKaRA?rel=0",
             hook: "Hear why the first word of the confession is an invitation to listen.",
+            summary:
+              "BibleProject introduces the Shema by focusing on its first Hebrew word, shema, and frames the prayer as a call to hear in a way that leads to response—not merely to receive sound.",
             quote: "“shema,” meaning “listen.”",
             attribution: "BibleProject, Shema Word Study",
             purpose:
@@ -175,6 +177,8 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             url: "https://www.myjewishlearning.com/article/deuteronomy-64-the-shema/",
             hook:
               "See how a Jewish biblical scholar describes the Shema's language, liturgical use, and history.",
+            summary:
+              "Jeffrey Tigay surveys several ways Deuteronomy 6:4 has been understood and explains how the Shema became part of morning and evening prayer. He notes that this recitation practice is known from late Second Temple times.",
             quote: "“accepting the authority of the kingship of God”",
             attribution: "Jeffrey H. Tigay, JPS Torah Commentary discussion",
             purpose:
@@ -189,6 +193,8 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             url: "https://www.sefaria.org/Mishnah_Berakhot.1.1?lang=en",
             hook:
               "The first tractate of the Mishnah opens by discussing when the Shema is recited.",
+            summary:
+              "Mishnah Berakhot opens not by debating whether the Shema matters, but by discussing the proper time to recite it in the evening. That makes the confession visible as a repeated practice of daily life.",
             quote: "“From what time does one recite Shema in the evening?”",
             attribution: "Mishnah Berakhot 1:1",
             purpose:
@@ -203,6 +209,8 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             url: "https://www.jewishencyclopedia.com/articles/13548-shema",
             hook:
               "A turn-of-the-20th-century reference work summarizes how the Shema functioned in Jewish faith and liturgy.",
+            summary:
+              "The Jewish Encyclopedia describes Deuteronomy 6:4 as a confession of belief in the One God and traces the Shema's role in morning and evening recitation, instruction, memory, and Jewish communal life.",
             quote: "“the confession of belief in the One God”",
             attribution: "Kaufmann Kohler and Judah David Eisenstein",
             purpose:
@@ -217,6 +225,8 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             url: "https://www.myjewishlearning.com/article/the-shema/",
             hook:
               "Hear pronunciation and see how the confession is practiced in daily Jewish prayer.",
+            summary:
+              "This overview presents the Shema as the centerpiece of daily morning and evening prayer and connects its confession of God's singularity with the commands that follow—to love, teach, remember, and recite.",
             quote: "“centerpiece of the daily morning and evening prayer services”",
             attribution: "My Jewish Learning",
             purpose:
@@ -244,6 +254,8 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             url: "https://dss.collections.imj.org.il/isaiah",
             hook:
               "Explore the oldest known complete manuscript of a biblical book and see Isaiah as an ancient physical text.",
+            summary:
+              "The Israel Museum identifies the Great Isaiah Scroll as a first-century BCE parchment manuscript from Qumran Cave 1. At 734 centimeters long, it preserves all sixty-six chapters of Isaiah in their conventional order.",
             attribution: "Israel Museum · Digital Dead Sea Scrolls",
             purpose:
               "Deep visual context for the Isaiah passages used later in the lesson. The museum identifies 1QIsaa as a first-century BCE parchment scroll.",
@@ -284,6 +296,9 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
               "Now move from ancient manuscript to lived practice. The confession is written to be remembered in ordinary life.",
           },
         ],
+        sourcesVerifiedAt: "2026-09-30",
+        sourceVerificationNote:
+          "Curated sources were checked against their published pages or institutional records before inclusion. Displayed quotations are intentionally brief; Jeremiah paraphrases longer context.",
         sourceMoments: [
           {
             id: "lived-twice-daily",
