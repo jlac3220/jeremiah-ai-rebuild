@@ -98,14 +98,26 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
     {
       id: "arrival",
       stageId: "focus",
-      type: "launch",
+      type: "encounter",
       eyebrow: "THE ONE TRUE GOD",
-      title: "Begin with the confession Scripture gives us",
-      body:
-        "This lesson will not begin with a theological chart or a test. Jeremiah will walk you through the biblical language first, then ask you to explain what it requires.",
-      teacherLine:
-        "The goal is simple: let Scripture establish the foundation before we build anything on top of it.",
-      ctaLabel: "Begin",
+      title: "Before Israel was asked to explain God, they were told to listen.",
+      encounter: {
+        opening:
+          "No definitions yet. No quiz. Start with the words Israel was commanded to hear.",
+        primaryVerse: shema,
+        listenLabel: "Listen",
+        readLabel: "Read it myself",
+        noticePrompt:
+          "Touch the words that seem to carry the weight of this confession.",
+        bridgeLine:
+          "Now hold what you noticed beside another statement from Scripture.",
+        bridgeVerse: isaiah45,
+        bridgePrompt:
+          "Do these words merely repeat the Shema, or do they close a door the Shema leaves open?",
+        destination:
+          "By the end of this lesson, you should be able to explain why “one LORD” and “there is none else” belong together—and why Jesus repeating the Shema matters.",
+      },
+      ctaLabel: "Enter the lesson",
       next: { continue: "hear_the_shema" },
     },
     {
