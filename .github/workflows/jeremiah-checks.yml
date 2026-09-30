@@ -1,0 +1,37 @@
+name: Jeremiah checks
+
+on:
+  push:
+    branches:
+      - jeremiah-alive-classroom
+  pull_request:
+    paths:
+      - "app/**"
+      - ".github/workflows/jeremiah-checks.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Jeremiah brain
+        run: npm run test:brain
+
+      - name: Build app
+        run: npm run build
