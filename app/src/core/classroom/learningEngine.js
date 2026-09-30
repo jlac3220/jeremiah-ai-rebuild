@@ -26,6 +26,7 @@ export function createLearningState(content, presetId = "direct") {
     evidenceIds: [],
     misconceptions: [],
     teacherHistory: [],
+    encounterData: null,
     lastUpdatedAt: Date.now(),
   };
 }
@@ -147,6 +148,20 @@ export function advanceUnscoredMove(state, move) {
     ...state,
     currentMoveId: nextMoveId,
     completedMoveIds: unique([...(state.completedMoveIds || []), move.id]),
+    lastUpdatedAt: Date.now(),
+  };
+}
+
+export function advanceEncounterMove(state, move, encounterData = {}) {
+  const advanced = advanceUnscoredMove(state, move);
+
+  return {
+    ...advanced,
+    encounterData: {
+      ...(state.encounterData || {}),
+      ...encounterData,
+      completedAt: Date.now(),
+    },
     lastUpdatedAt: Date.now(),
   };
 }
