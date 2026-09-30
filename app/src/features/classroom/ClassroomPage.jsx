@@ -34,6 +34,29 @@ const UNSCORED_TYPES = new Set([
   "guided_reflection",
 ]);
 
+function getEmbeddedMediaUrl(source) {
+  if (!source?.embedUrl) return "";
+
+  try {
+    const url = new URL(source.embedUrl);
+
+    if (url.hostname.includes("youtube.com") || url.hostname.includes("youtube-nocookie.com")) {
+      url.searchParams.set("rel", "0");
+      url.searchParams.set("playsinline", "1");
+      url.searchParams.set("enablejsapi", "1");
+
+      if (typeof window !== "undefined") {
+        url.searchParams.set("origin", window.location.origin);
+        url.searchParams.set("widget_referrer", window.location.origin);
+      }
+    }
+
+    return url.toString();
+  } catch {
+    return source.embedUrl;
+  }
+}
+
 function stageLabel(stageId) {
   const labels = {
     focus: "Focus",
@@ -283,8 +306,9 @@ function EncounterExperience({ move, onComplete, onExit }) {
 
             <div className="jc-video-frame">
               <iframe
-                src={videoSource.embedUrl}
+                src={getEmbeddedMediaUrl(videoSource)}
                 title={videoSource.title}
+                referrerPolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
@@ -552,8 +576,9 @@ function EncounterExperience({ move, onComplete, onExit }) {
             {selectedSource.embedUrl && (
               <div className="jc-source-viewer-video">
                 <iframe
-                  src={selectedSource.embedUrl}
+                  src={getEmbeddedMediaUrl(selectedSource)}
                   title={selectedSource.title}
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
