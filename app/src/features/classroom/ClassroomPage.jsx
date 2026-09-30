@@ -699,6 +699,104 @@ function ChoiceGrid({ choices = [], selectedChoiceId, onSelect, disabled }) {
   );
 }
 
+function normalizeEncounterWord(value = "") {
+  return String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
+  const verse = move.scripture?.[0];
+  const noticed = [
+    ...(encounterData?.primaryWords || []),
+    ...(encounterData?.bridgeWords || []),
+  ];
+  const noticedNormalized = new Set(noticed.map(normalizeEncounterWord).filter(Boolean));
+  const words = String(verse?.text || "").split(/\s+/);
+
+  return (
+    <div className="jc-encounter-page jc-handoff-page">
+      <div className="jc-encounter-atmosphere" aria-hidden="true">
+        <span className="jc-encounter-glow one" />
+        <span className="jc-encounter-glow two" />
+      </div>
+
+      <button type="button" className="jc-encounter-exit" onClick={onExit}>
+        ← Home
+      </button>
+
+      <main className="jc-handoff-shell">
+        <section className="jc-handoff-scene">
+          <div className="jc-encounter-step">
+            {move.handoff?.kicker || "STAY WITH THE WORDS"}
+          </div>
+
+          <p className="jc-handoff-opening">
+            {move.handoff?.opening}
+          </p>
+
+          {noticed.length > 0 && (
+            <div className="jc-handoff-memory">
+              <span>{move.handoff?.memoryLabel || "What caught your eye"}</span>
+              <div>
+                {noticed.slice(0, 8).map((word, index) => (
+                  <strong key={word + index}>{word}</strong>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {verse && (
+            <div className="jc-handoff-scripture">
+              <span>{verse.reference}</span>
+              <div>
+                {words.map((word, index) => {
+                  const marked = noticedNormalized.has(normalizeEncounterWord(word));
+                  return (
+                    <em key={index + "-" + word} className={marked ? "is-marked" : ""}>
+                      {word}
+                    </em>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          <div className="jc-handoff-teacher">
+            <div className="jc-handoff-teacher-head">
+              <span>J</span>
+              <div>
+                <small>Jeremiah</small>
+                <strong>{move.title}</strong>
+              </div>
+            </div>
+
+            {move.handoff?.teacherBridge && (
+              <p className="jc-handoff-bridge">{move.handoff.teacherBridge}</p>
+            )}
+
+            <div className="jc-handoff-teaching">
+              {(move.teaching || []).map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
+
+            {move.focusPhrases?.length > 0 && (
+              <div className="jc-handoff-focus">
+                <span>Hold onto this</span>
+                <strong>“{move.focusPhrases.join(" · ")}”</strong>
+                {move.focusNote && <p>{move.focusNote}</p>}
+              </div>
+            )}
+          </div>
+
+          <button type="button" className="jc-encounter-next" onClick={onContinue}>
+            {move.ctaLabel || "Continue"} <span>→</span>
+          </button>
+        </section>
+      </main>
+    </div>
+  );
+}
+
 function EncounterThread({ encounterData }) {
   if (!encounterData) return null;
 
@@ -895,6 +993,17 @@ export default function ClassroomPage({ onNavigate }) {
       <EncounterExperience
         move={currentMove}
         onComplete={handleEncounterComplete}
+        onExit={() => onNavigate(ROUTES.HOME)}
+      />
+    );
+  }
+
+  if (currentMove.handoff && learningState.encounterData) {
+    return (
+      <EncounterHandoff
+        move={currentMove}
+        encounterData={learningState.encounterData}
+        onContinue={handleContinue}
         onExit={() => onNavigate(ROUTES.HOME)}
       />
     );
