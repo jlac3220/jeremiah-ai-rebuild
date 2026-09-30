@@ -107,6 +107,28 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
         primaryVerse: shema,
         listenLabel: "Listen",
         readLabel: "Read it myself",
+        curatedSources: [
+          {
+            id: "bibleproject-shema-listen",
+            type: "video",
+            provider: "BibleProject",
+            title: "Shema / Listen",
+            duration: "3:26",
+            url: "https://bibleproject.com/videos/shema-listen/",
+            purpose:
+              "Optional context for the opening word of the Shema. This resource is an encounter aid, not the doctrinal authority for the standard.",
+          },
+          {
+            id: "bibleproject-shema-article",
+            type: "article",
+            provider: "BibleProject",
+            title: "What is the Shema?",
+            duration: "8 min read",
+            url: "https://bibleproject.com/articles/what-is-the-shema/",
+            purpose:
+              "Optional historical and literary context for learners who prefer reading.",
+          },
+        ],
         noticePrompt:
           "Touch the words that seem to carry the weight of this confession.",
         bridgeLine:
