@@ -88,6 +88,7 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       "Do not change the required truth to accommodate a learner response.",
       "Do not tell the learner that required content can be skipped because they already know it.",
       "Correct misconceptions directly but respectfully.",
+      "Teach before testing. Checks should verify understanding, not replace instruction.",
       "Prefer one clear instructional move at a time over long lectures.",
       "Use KJV wording when quoting the supplied verses.",
     ],
@@ -99,157 +100,122 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       stageId: "focus",
       type: "launch",
       eyebrow: "THE ONE TRUE GOD",
-      title: "Start with the confession that controls everything else",
+      title: "Begin with the confession Scripture gives us",
       body:
-        "Before Jeremiah asks you to explain anything, begin where Scripture begins: hear the words, notice what they claim, and let the text set the terms.",
+        "This lesson will not begin with a theological chart or a test. Jeremiah will walk you through the biblical language first, then ask you to explain what it requires.",
       teacherLine:
-        "We are not starting with a theological diagram. We are starting with Israel's confession of who God is.",
-      ctaLabel: "Enter the text",
+        "The goal is simple: let Scripture establish the foundation before we build anything on top of it.",
+      ctaLabel: "Begin",
       next: { continue: "hear_the_shema" },
     },
     {
       id: "hear_the_shema",
       stageId: "scripture",
-      type: "scripture_observation",
-      eyebrow: "OBSERVE",
-      title: "What is the verse actually asking Israel to confess?",
+      type: "scripture_teach",
+      eyebrow: "READ IT SLOWLY",
+      title: "Hear the confession before you explain it",
       scripture: [shema],
-      prompt:
-        "Tap the phrase that carries the central claim about God's identity.",
-      choices: [
-        { id: "hear", label: "Hear, O Israel" },
-        { id: "our-god", label: "our God" },
-        { id: "one-lord", label: "one LORD" },
+      teaching: [
+        "Deuteronomy 6:4 is commonly called the Shema from its opening command: “Hear.” It is not a side comment. It is a confession Israel is commanded to receive and carry.",
+        "The center of the confession is the identity of God: “The LORD our God is one LORD.” Before Scripture asks us to explain everything about God, it tells us where the explanation must begin.",
       ],
-      expectedChoiceIds: ["one-lord"],
-      evidenceIds: ["one-lord"],
-      next: {
-        strong: "say_it_plainly",
-        partial: "shema_contrast",
-        weak: "shema_contrast",
-      },
+      focusPhrases: ["one LORD"],
+      focusNote:
+        "This is the positive confession. The biblical starting point is not a collection of divine beings working together. The LORD our God is one LORD.",
+      ctaLabel: "Keep building",
+      next: { continue: "oneness_first" },
     },
     {
-      id: "shema_contrast",
+      id: "oneness_first",
       stageId: "truth",
-      type: "contrast",
-      eyebrow: "LOOK AGAIN",
-      title: "One word changes the whole confession",
-      body:
-        "Jeremiah is narrowing the view. Do not reach for a system yet—stay with the grammar of the confession.",
-      prompt: "Which statement stays closest to Deuteronomy 6:4?",
-      choices: [
+      type: "teach",
+      eyebrow: "BUILD THE FOUNDATION",
+      title: "Oneness is the starting point, not the leftover conclusion",
+      teaching: [
+        "A foundation controls what can be built on it. If Scripture begins by confessing that God is one, later language about God cannot be interpreted in a way that destroys that confession.",
+        "That does not mean every later passage says the same thing in the same way. It means later revelation must agree with what God has already revealed about Himself.",
+      ],
+      insights: [
         {
-          id: "one-being",
-          label: "The LORD our God is one LORD.",
+          label: "Start here",
+          text: "The LORD our God is one LORD.",
         },
         {
-          id: "many-working-one",
-          label: "Several divine beings work together as one.",
-        },
-        {
-          id: "unclear-number",
-          label: "The verse does not make any claim about God's number.",
+          label: "Carry it forward",
+          text: "Later revelation adds truth; it does not overturn God's revealed identity.",
         },
       ],
-      expectedChoiceIds: ["one-being"],
-      evidenceIds: ["one-lord"],
-      satisfiesMoveIds: ["hear_the_shema"],
-      next: {
-        strong: "say_it_plainly",
-        partial: "shema_contrast",
-        weak: "shema_contrast",
-      },
+      ctaLabel: "See how Isaiah sharpens it",
+      next: { continue: "isaiah_exclusion" },
     },
     {
-      id: "say_it_plainly",
+      id: "isaiah_exclusion",
+      stageId: "scripture",
+      type: "scripture_teach",
+      eyebrow: "LET THE PROPHETS SPEAK",
+      title: "Isaiah does more than repeat “one”",
+      scripture: [isaiah44, isaiah45],
+      teaching: [
+        "The prophets sharpen the confession by stating the opposite possibility and ruling it out. Isaiah does not merely say that the LORD is Israel's preferred God.",
+        "He says, “beside me there is no God,” and again, “there is none else.” The biblical claim is both positive and exclusive: God is one, and no other God exists beside Him.",
+      ],
+      focusPhrases: ["beside me there is no God", "there is none else"],
+      focusNote:
+        "This is why biblical monotheism cannot remain a vague slogan. Scripture defines the confession by excluding another God beside the LORD.",
+      ctaLabel: "Connect the testimony",
+      next: { continue: "mark12_bridge" },
+    },
+    {
+      id: "mark12_bridge",
+      stageId: "scripture",
+      type: "scripture_teach",
+      eyebrow: "OLD TESTAMENT → NEW TESTAMENT",
+      title: "Jesus does not discard the Shema",
+      scripture: [shema, mark12],
+      teaching: [
+        "When Jesus is asked about the first commandment, He begins by repeating Israel's confession: “Hear, O Israel; The Lord our God is one Lord.”",
+        "That matters. The New Testament does not treat the Shema as an obsolete starting point. Jesus carries the confession forward.",
+      ],
+      focusPhrases: ["The Lord our God is one Lord"],
+      focusNote:
+        "The foundation remains in place. Whatever else we learn later must be read in harmony with the confession Jesus Himself repeats.",
+      ctaLabel: "Put it together",
+      next: { continue: "synthesis" },
+    },
+    {
+      id: "synthesis",
       stageId: "truth",
-      type: "choice",
-      eyebrow: "BUILD THE TRUTH",
-      title: "Turn the verse into a doctrinal statement",
-      prompt:
-        "Which statement most faithfully turns the Shema into a clear doctrinal confession?",
-      choices: [
-        { id: "only-one", label: "There is only one God." },
+      type: "synthesis",
+      eyebrow: "PUT THE TESTIMONY TOGETHER",
+      title: "Three ideas now belong together",
+      teaching: [
+        "At this point, the lesson is not asking you to memorize a sentence. It is asking you to see the structure of the biblical testimony.",
+      ],
+      insights: [
         {
-          id: "one-purpose",
-          label: "Different Gods can share one purpose.",
+          label: "1 · Positive confession",
+          text: "The LORD our God is one LORD.",
         },
         {
-          id: "one-title",
-          label: "LORD is simply one title used by several divine persons.",
+          label: "2 · Explicit exclusion",
+          text: "There is no God beside Him; there is none else.",
+        },
+        {
+          label: "3 · Controlling foundation",
+          text: "Later revelation must be understood without overturning that confession.",
         },
       ],
-      expectedChoiceIds: ["only-one"],
-      evidenceIds: ["one-lord"],
-      next: {
-        strong: "prophetic_echo",
-        partial: "shema_contrast",
-        weak: "shema_contrast",
-      },
-    },
-    {
-      id: "prophetic_echo",
-      stageId: "scripture",
-      type: "compare",
-      eyebrow: "CONNECT",
-      title: "Now let the prophets sharpen the confession",
-      scripture: [shema, isaiah44, isaiah45],
-      prompt:
-        "What do Isaiah's statements add to the Shema's positive confession that God is one?",
-      choices: [
-        {
-          id: "exclude-other",
-          label: "They explicitly exclude another God beside the LORD.",
-        },
-        {
-          id: "new-gods",
-          label: "They introduce additional divine beings beside the LORD.",
-        },
-        {
-          id: "only-israel",
-          label: "They limit God's oneness to Israel's national worship only.",
-        },
-      ],
-      expectedChoiceIds: ["exclude-other"],
-      evidenceIds: ["one-lord", "no-other"],
-      next: {
-        strong: "pressure_test",
-        partial: "prophetic_reframe",
-        weak: "prophetic_reframe",
-      },
-    },
-    {
-      id: "prophetic_reframe",
-      stageId: "scripture",
-      type: "fill",
-      eyebrow: "REBUILD",
-      title: "Let the wording do the work",
-      body:
-        "Complete the confession using the language the passages themselves emphasize.",
-      prompt: "Choose the pair that completes the idea faithfully.",
-      choices: [
-        { id: "one-none", label: "one LORD / no God beside Him" },
-        { id: "many-one", label: "many divine persons / one purpose" },
-        { id: "one-others", label: "one LORD for Israel / other Gods elsewhere" },
-      ],
-      expectedChoiceIds: ["one-none"],
-      evidenceIds: ["one-lord", "no-other"],
-      satisfiesMoveIds: ["prophetic_echo"],
-      next: {
-        strong: "pressure_test",
-        partial: "prophetic_reframe",
-        weak: "prophetic_reframe",
-      },
+      ctaLabel: "Test the foundation",
+      next: { continue: "pressure_test" },
     },
     {
       id: "pressure_test",
       stageId: "checkpoint",
       type: "scenario",
-      eyebrow: "PRESSURE TEST",
-      title: "Can the foundation hold when another idea pushes against it?",
+      eyebrow: "ONE CHECK",
+      title: "Now test the foundation under pressure",
       body:
-        "A learner says: ‘I agree there is one God, but I can define that one God however I want later.’",
+        "A learner says: “I agree there is one God, but I can define that one God however I want later.”",
       prompt:
         "Which response best protects the role of the Shema as a doctrinal foundation?",
       choices: [
@@ -266,110 +232,88 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
         {
           id: "definitions-free",
           label:
-            "As long as someone says ‘one God,’ the underlying definition does not matter.",
+            "As long as someone says “one God,” the underlying definition does not matter.",
         },
       ],
       expectedChoiceIds: ["control-later"],
       evidenceIds: ["controlling-foundation"],
       next: {
         strong: "teach_it_back",
-        partial: "foundation_reframe",
-        weak: "foundation_reframe",
+        partial: "repair_foundation",
+        weak: "repair_foundation",
       },
     },
     {
-      id: "foundation_reframe",
+      id: "repair_foundation",
       stageId: "checkpoint",
-      type: "compare",
-      eyebrow: "REORIENT",
-      title: "Foundation means foundation",
-      scripture: [shema, mark12],
-      body:
-        "Jesus repeats Israel's confession instead of discarding it. That matters for how later revelation is read.",
-      prompt: "What is the strongest conclusion from these two passages together?",
-      choices: [
+      type: "teach",
+      eyebrow: "RETEACH",
+      title: "The issue is not the phrase “one God” by itself",
+      teaching: [
+        "A person can repeat the words “one God” while giving those words a meaning the passages themselves do not support.",
+        "The Shema gives the positive confession. Isaiah gives the exclusion. Jesus carries the confession forward. Those statements place boundaries around later explanations of God.",
+      ],
+      insights: [
         {
-          id: "continued-foundation",
-          label:
-            "The Shema remains a controlling confession when Jesus teaches about God.",
-        },
-        {
-          id: "obsolete",
-          label: "Jesus treats the Shema as an obsolete confession.",
-        },
-        {
-          id: "no-doctrine",
-          label: "Neither passage is meant to shape doctrine about God.",
+          label: "Ask this",
+          text: "Does my later explanation preserve one LORD and no God beside Him?",
         },
       ],
-      expectedChoiceIds: ["continued-foundation"],
-      evidenceIds: ["controlling-foundation"],
-      satisfiesMoveIds: ["pressure_test"],
-      next: {
-        strong: "teach_it_back",
-        partial: "foundation_reframe",
-        weak: "foundation_reframe",
-      },
+      ctaLabel: "Try the pressure test again",
+      next: { continue: "pressure_test" },
     },
     {
       id: "teach_it_back",
       stageId: "checkpoint",
       type: "free_response",
       eyebrow: "TEACH IT BACK",
-      title: "Now make the confession your own",
+      title: "Explain the foundation in your own words",
+      body:
+        "Do not copy Jeremiah's wording. Imagine you are explaining this to someone who has never studied the subject.",
       prompt:
-        "In your own words, explain what the Shema requires you to confess about God and what Isaiah rules out. Use Scripture language where it helps.",
+        "What does the Shema require you to confess about God, and what does Isaiah rule out?",
       placeholder:
-        "Explain it as if you were teaching someone who had never studied this before...",
-      evidenceIds: ["one-lord", "no-other"],
+        "Explain the biblical foundation in your own words...",
+      evidenceIds: ["one-lord", "no-other", "controlling-foundation"],
       strategyRoutes: {
-        scripture_revisit: "prophetic_reframe",
-        contrast: "prophetic_reframe",
-        guided_question: "guided_build",
-        clarify: "guided_build",
-        misconception_correction: "foundation_reframe",
-        encourage_retry: "guided_build",
+        scripture_revisit: "guided_reteach",
+        contrast: "guided_reteach",
+        guided_question: "guided_reteach",
+        clarify: "guided_reteach",
+        misconception_correction: "guided_reteach",
+        encourage_retry: "guided_reteach",
       },
       next: {
         strong: "mastery",
-        partial: "guided_build",
-        weak: "guided_build",
+        partial: "guided_reteach",
+        weak: "guided_reteach",
       },
     },
     {
-      id: "guided_build",
+      id: "guided_reteach",
       stageId: "checkpoint",
-      type: "guided_build",
-      eyebrow: "BUILD IT TOGETHER",
-      title: "Jeremiah is giving you the frame—finish the thought",
-      body:
-        "The goal is not to memorize Jeremiah's wording. The frame helps expose what still needs to become clear in your own explanation.",
-      prompt:
-        "Choose the statement that gives you the strongest frame, then you will teach it back again.",
-      choices: [
+      type: "synthesis",
+      eyebrow: "BUILD IT AGAIN",
+      title: "Use the three-part frame, then explain it again",
+      teaching: [
+        "If your explanation felt incomplete, rebuild it from the actual flow of the passages instead of searching for better-sounding words.",
+      ],
+      insights: [
         {
-          id: "frame-correct",
-          label:
-            "God is one; Scripture says there is no God beside Him; therefore later teaching must preserve that confession.",
+          label: "Confess",
+          text: "God is one.",
         },
         {
-          id: "frame-vague",
-          label:
-            "God is one in some sense, but Scripture leaves the meaning completely open.",
+          label: "Ground",
+          text: "The LORD our God is one LORD; there is no God beside Him.",
         },
         {
-          id: "frame-many",
-          label:
-            "God is one collective made up of multiple separate Gods.",
+          label: "Carry",
+          text: "Later revelation must preserve that biblical foundation.",
         },
       ],
-      expectedChoiceIds: ["frame-correct"],
-      evidenceIds: ["one-lord", "no-other", "controlling-foundation"],
-      next: {
-        strong: "teach_it_back",
-        partial: "guided_build",
-        weak: "guided_build",
-      },
+      ctaLabel: "Teach it back again",
+      next: { continue: "teach_it_back" },
     },
     {
       id: "mastery",
@@ -377,23 +321,52 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       type: "mastery_response",
       eyebrow: "MASTERY",
       title: "Show that the foundation is stable",
+      body:
+        "Now bring the lesson together without multiple choice. Jeremiah is looking for clear biblical understanding, not exact wording.",
       prompt:
         "Give a concise doctrinal explanation of the oneness of God using at least one passage from this session. Include both the positive confession and what Scripture excludes.",
       placeholder: "Your final explanation...",
       evidenceIds: ["one-lord", "no-other", "controlling-foundation"],
       strategyRoutes: {
-        scripture_revisit: "prophetic_reframe",
-        contrast: "foundation_reframe",
-        guided_question: "guided_build",
-        clarify: "guided_build",
-        misconception_correction: "foundation_reframe",
-        encourage_retry: "guided_build",
+        scripture_revisit: "mastery_rebuild",
+        contrast: "mastery_rebuild",
+        guided_question: "mastery_rebuild",
+        clarify: "mastery_rebuild",
+        misconception_correction: "mastery_rebuild",
+        encourage_retry: "mastery_rebuild",
       },
       next: {
         strong: "complete",
-        partial: "guided_build",
-        weak: "guided_build",
+        partial: "mastery_rebuild",
+        weak: "mastery_rebuild",
       },
+    },
+    {
+      id: "mastery_rebuild",
+      stageId: "mastery",
+      type: "synthesis",
+      eyebrow: "REBUILD FOR MASTERY",
+      title: "Tighten the explanation around the text",
+      teaching: [
+        "Mastery needs more than the right conclusion. It needs a conclusion that can be traced back to Scripture.",
+        "Build the answer in this order: what God is, what Scripture excludes, and why that confession remains the foundation.",
+      ],
+      insights: [
+        {
+          label: "What God is",
+          text: "The LORD our God is one LORD.",
+        },
+        {
+          label: "What Scripture excludes",
+          text: "There is no God beside Him; there is none else.",
+        },
+        {
+          label: "Why it matters",
+          text: "This confession controls how later revelation is understood.",
+        },
+      ],
+      ctaLabel: "Try mastery again",
+      next: { continue: "mastery" },
     },
     {
       id: "complete",
@@ -402,9 +375,9 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       eyebrow: "STANDARD COMPLETE",
       title: "The foundation is in place",
       body:
-        "You have encountered the required Scripture, built the central confession, tested it under pressure, and explained it in your own words.",
+        "You read the confession, followed it through Isaiah and Jesus, tested it under pressure, and explained it in your own words.",
       teacherLine:
-        "This standard is complete, but Jeremiah can bring it back later through retrieval so mastery becomes durable rather than temporary.",
+        "This standard is complete for now. Later retrieval should bring the same truth back without simply replaying the lesson.",
       ctaLabel: "Return home",
     },
   ],
@@ -415,7 +388,7 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       currentMoveId: "arrival",
       learnerLevel: "Adult Endpoint Path",
       truthExplanation:
-        "This session begins with the Shema as the doctrinal foundation of biblical monotheism and lets the learner build the confession from Scripture rather than receive a finished formula first.",
+        "This session teaches the Shema as the doctrinal foundation of biblical monotheism before asking the learner to demonstrate understanding.",
       verses: [shema, isaiah44],
       checkpoint: {
         title: "What must be confessed?",
@@ -425,10 +398,10 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
     },
     resume: {
       currentStageId: "scripture",
-      currentMoveId: "prophetic_echo",
+      currentMoveId: "isaiah_exclusion",
       learnerLevel: "Adult Endpoint Path",
       truthExplanation:
-        "Resume returns the learner to the live scriptural work instead of restarting the standard from the beginning.",
+        "Resume returns the learner to the required scriptural instruction rather than restarting from the beginning.",
       verses: [shema, isaiah44, isaiah45],
       checkpoint: {
         title: "Reconnect the passages",
@@ -441,7 +414,7 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       currentMoveId: "pressure_test",
       learnerLevel: "Correction Path",
       truthExplanation:
-        "Review enters where the learner must pressure-test and repair weak understanding rather than replaying every earlier interaction.",
+        "Review begins with application, then routes into reteaching if the foundation is weak.",
       verses: [shema, isaiah44, isaiah45, mark12],
       checkpoint: {
         title: "Repair the weak foundation",
@@ -451,10 +424,10 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
     },
     adaptation: {
       currentStageId: "truth",
-      currentMoveId: "say_it_plainly",
+      currentMoveId: "oneness_first",
       learnerLevel: "Profile-Adaptive Path",
       truthExplanation:
-        "Adaptation keeps the doctrinal target fixed while changing pacing, scaffolding, and the kind of instructional move used to reach it.",
+        "Adaptation keeps the doctrinal target fixed while changing pacing, scaffolding, and the instructional route.",
       verses: [shema, mark12],
       checkpoint: {
         title: "Keep the truth fixed",
