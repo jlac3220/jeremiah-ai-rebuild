@@ -152,13 +152,21 @@ export function advanceUnscoredMove(state, move) {
 }
 
 export function getStandardProgress(content, state) {
+  const completeMove = (content.instructionalMoves || []).find(
+    (move) => move.type === "complete"
+  );
+
+  if (completeMove && state.currentMoveId === completeMove.id) {
+    return 100;
+  }
+
   const mainMoves = (content.instructionalMoves || []).filter(
-    (move) => !["complete"].includes(move.type) && !move.id.includes("reframe") && !move.id.includes("contrast") && move.id !== "guided_build"
+    (move) => move.type !== "complete" && !move.progressOptional
   );
   const required = Math.max(mainMoves.length, 1);
   const completed = mainMoves.filter((move) =>
     state.completedMoveIds?.includes(move.id)
   ).length;
 
-  return Math.min(100, Math.round((completed / required) * 100));
+  return Math.min(99, Math.round((completed / required) * 100));
 }
