@@ -139,6 +139,34 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
               "A physical historical witness that turns the Shema from abstract text into an artifact the learner can see.",
           },
           {
+            id: "shema-mezuzah-parchment",
+            type: "image",
+            provider: "Wikimedia Commons",
+            title: "Shema parchment from a mezuzah",
+            date: "Modern photograph of traditional parchment",
+            url: "https://commons.wikimedia.org/wiki/File:ShemaMezuzah.jpg",
+            imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/ShemaMezuzah.jpg",
+            hook:
+              "See the Shema written as a text meant to be carried into ordinary life and placed at the doorway.",
+            attribution: "BuickCenturyDriver · Public Domain",
+            license: "Public Domain",
+            purpose:
+              "Shows the learner that the Shema became embodied practice, not just a sentence isolated on a lesson screen.",
+          },
+          {
+            id: "british-museum-mezuzah",
+            type: "museum_object",
+            provider: "British Museum",
+            title: "Jerusalem mezuzah",
+            date: "Acquired 1893",
+            url: "https://www.britishmuseum.org/collection/object/H_1893-0521-1",
+            hook:
+              "A physical mezuzah object from Jerusalem held by the British Museum.",
+            attribution: "British Museum · Museum no. 1893,0521.1",
+            purpose:
+              "Museum context for how biblical words moved from recitation into the physical environment of daily life.",
+          },
+          {
             id: "tigay-shema",
             type: "book_excerpt",
             provider: "JPS / My Jewish Learning",
@@ -219,9 +247,16 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
           {
             id: "see-nash",
             sourceId: "nash-papyrus",
-            eyebrow: "SEE THE TEXT",
+            eyebrow: "SEE AN ANCIENT WITNESS",
             prompt:
               "Look at the artifact before reading the caption. These words have been copied, carried, and recited for centuries.",
+          },
+          {
+            id: "see-mezuzah",
+            sourceId: "shema-mezuzah-parchment",
+            eyebrow: "SEE A LIVED TEXT",
+            prompt:
+              "Now move from ancient manuscript to lived practice. The confession is written to be remembered in ordinary life.",
           },
         ],
         sourceMoments: [
