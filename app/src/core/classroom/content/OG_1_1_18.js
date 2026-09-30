@@ -102,6 +102,7 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       eyebrow: "THE ONE TRUE GOD",
       title: "Before Israel was asked to explain God, they were told to listen.",
       encounter: {
+        sourceRole: "enrichment_only",
         opening:
           "No definitions yet. No quiz. Start with the words Israel was commanded to hear.",
         primaryVerse: shema,
