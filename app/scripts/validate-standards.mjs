@@ -37,6 +37,46 @@ function validateStandard(standard) {
   );
 
   for (const move of encounterMoves) {
+    const encounter = move.encounter || {};
+    assert(
+      encounter.sourceRole === "enrichment_only",
+      `${standard.standardId}: encounter ${move.id} must mark external sources enrichment_only`
+    );
+    assert(
+      encounter.primaryVerse?.reference && encounter.primaryVerse?.text,
+      `${standard.standardId}: encounter ${move.id} requires a primaryVerse`
+    );
+    assert(
+      encounter.noticePrompt,
+      `${standard.standardId}: encounter ${move.id} requires a noticePrompt`
+    );
+    assert(
+      encounter.destination,
+      `${standard.standardId}: encounter ${move.id} requires a learning destination`
+    );
+    assert(
+      move.next?.continue,
+      `${standard.standardId}: encounter ${move.id} requires a continue route into instruction`
+    );
+
+    const encounterSourceIds = new Set(
+      (encounter.curatedSources || []).map((source) => source.id)
+    );
+
+    for (const moment of encounter.mediaMoments || []) {
+      assert(
+        encounterSourceIds.has(moment.sourceId),
+        `${standard.standardId}: encounter ${move.id} media moment ${moment.id} references missing source ${moment.sourceId}`
+      );
+    }
+
+    for (const moment of encounter.sourceMoments || []) {
+      assert(
+        encounterSourceIds.has(moment.sourceId),
+        `${standard.standardId}: encounter ${move.id} source moment ${moment.id} references missing source ${moment.sourceId}`
+      );
+    }
+
     assert(
       !(move.evidenceIds || []).length,
       `${standard.standardId}: encounter ${move.id} cannot award mastery evidence`
