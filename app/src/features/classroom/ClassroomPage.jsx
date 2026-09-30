@@ -125,6 +125,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
   const [primaryMarks, setPrimaryMarks] = useState([]);
   const [bridgeMarks, setBridgeMarks] = useState([]);
   const [showSourceShelf, setShowSourceShelf] = useState(false);
+  const [selectedSource, setSelectedSource] = useState(null);
   const sources = encounter.curatedSources || [];
   const sourceMoments = encounter.sourceMoments || [];
   const mediaMoments = encounter.mediaMoments || [];
@@ -255,9 +256,9 @@ function EncounterExperience({ move, onComplete, onExit }) {
             <div className="jc-media-source-line">
               <span>{videoSource.provider}</span>
               <span>{videoSource.duration}</span>
-              <a href={videoSource.url} target="_blank" rel="noreferrer">
-                Open source ↗
-              </a>
+              <button type="button" onClick={() => setSelectedSource(videoSource)}>
+                About this source
+              </button>
             </div>
 
             <button
@@ -362,9 +363,13 @@ function EncounterExperience({ move, onComplete, onExit }) {
                       <h3>{source.title}</h3>
                       <p>{moment.prompt}</p>
                       <small>{source.date}</small>
-                      <a href={source.url} target="_blank" rel="noreferrer">
-                        {source.attribution} ↗
-                      </a>
+                      <button
+                        type="button"
+                        className="jc-inline-source"
+                        onClick={() => setSelectedSource(source)}
+                      >
+                        {source.attribution}
+                      </button>
                     </div>
                   </article>
                 );
@@ -400,10 +405,14 @@ function EncounterExperience({ move, onComplete, onExit }) {
                     </div>
                     <p>{moment.text}</p>
                     {source?.quote && <blockquote>{source.quote}</blockquote>}
-                    {source?.url && (
-                      <a href={source.url} target="_blank" rel="noreferrer">
-                        Explore source ↗
-                      </a>
+                    {source && (
+                      <button
+                        type="button"
+                        className="jc-inline-source"
+                        onClick={() => setSelectedSource(source)}
+                      >
+                        Explore source
+                      </button>
                     )}
                   </article>
                 );
@@ -425,12 +434,11 @@ function EncounterExperience({ move, onComplete, onExit }) {
                   {sources
                     .filter((source) => source.url)
                     .map((source) => (
-                      <a
+                      <button
+                        type="button"
                         key={source.id}
-                        href={source.url}
-                        target="_blank"
-                        rel="noreferrer"
                         className="jc-source-item"
+                        onClick={() => setSelectedSource(source)}
                       >
                         <div>
                           <span>{String(source.type || "source").replaceAll("_", " ")}</span>
@@ -439,7 +447,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
                         <strong>{source.title}</strong>
                         <p>{source.hook}</p>
                         {source.attribution && <em>{source.attribution}</em>}
-                      </a>
+                      </button>
                     ))}
                 </div>
               )}
@@ -468,6 +476,87 @@ function EncounterExperience({ move, onComplete, onExit }) {
           </section>
         )}
       </main>
+
+      {selectedSource && (
+        <div
+          className="jc-source-viewer-backdrop"
+          role="presentation"
+          onClick={() => setSelectedSource(null)}
+        >
+          <aside
+            className="jc-source-viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedSource.title}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="jc-source-viewer-close"
+              onClick={() => setSelectedSource(null)}
+              aria-label="Close source"
+            >
+              ×
+            </button>
+
+            <div className="jc-source-viewer-meta">
+              <span>{String(selectedSource.type || "source").replaceAll("_", " ")}</span>
+              <small>{selectedSource.provider}</small>
+            </div>
+
+            <h3>{selectedSource.title}</h3>
+
+            {selectedSource.imageUrl && (
+              <div className="jc-source-viewer-image">
+                <img src={selectedSource.imageUrl} alt={selectedSource.title} />
+              </div>
+            )}
+
+            {selectedSource.embedUrl && (
+              <div className="jc-source-viewer-video">
+                <iframe
+                  src={selectedSource.embedUrl}
+                  title={selectedSource.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            )}
+
+            {selectedSource.quote && (
+              <blockquote>{selectedSource.quote}</blockquote>
+            )}
+
+            {selectedSource.hook && <p>{selectedSource.hook}</p>}
+
+            {selectedSource.purpose && (
+              <div className="jc-source-viewer-why">
+                <span>Why Jeremiah brought this in</span>
+                <p>{selectedSource.purpose}</p>
+              </div>
+            )}
+
+            {(selectedSource.attribution || selectedSource.date || selectedSource.license) && (
+              <div className="jc-source-viewer-foot">
+                {selectedSource.attribution && <span>{selectedSource.attribution}</span>}
+                {selectedSource.date && <span>{selectedSource.date}</span>}
+                {selectedSource.license && <span>{selectedSource.license}</span>}
+              </div>
+            )}
+
+            {selectedSource.url && (
+              <a
+                className="jc-source-original"
+                href={selectedSource.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View original source ↗
+              </a>
+            )}
+          </aside>
+        </div>
+      )}
     </div>
   );
 }
