@@ -124,6 +124,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
   const [phase, setPhase] = useState("threshold");
   const [primaryMarks, setPrimaryMarks] = useState([]);
   const [bridgeMarks, setBridgeMarks] = useState([]);
+  const [showSourceShelf, setShowSourceShelf] = useState(false);
   const sources = encounter.curatedSources || [];
   const sourceMoments = encounter.sourceMoments || [];
   const mediaMoments = encounter.mediaMoments || [];
@@ -174,6 +175,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
             type="button"
             key={index + "-" + word}
             className={marks.includes(index) ? "is-marked" : ""}
+            aria-pressed={marks.includes(index)}
             onClick={() => toggleMark(setter, marks, index)}
           >
             {word}
@@ -406,6 +408,41 @@ function EncounterExperience({ move, onComplete, onExit }) {
                   </article>
                 );
               })}
+            </div>
+
+            <div className="jc-source-shelf-wrap">
+              <button
+                type="button"
+                className="jc-source-shelf-toggle"
+                onClick={() => setShowSourceShelf((value) => !value)}
+              >
+                {showSourceShelf ? "Close source shelf" : "Open the source shelf"}
+                <span>{showSourceShelf ? "−" : "+"}</span>
+              </button>
+
+              {showSourceShelf && (
+                <div className="jc-source-shelf">
+                  {sources
+                    .filter((source) => source.url)
+                    .map((source) => (
+                      <a
+                        key={source.id}
+                        href={source.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="jc-source-item"
+                      >
+                        <div>
+                          <span>{String(source.type || "source").replaceAll("_", " ")}</span>
+                          <small>{source.provider}</small>
+                        </div>
+                        <strong>{source.title}</strong>
+                        <p>{source.hook}</p>
+                        {source.attribution && <em>{source.attribution}</em>}
+                      </a>
+                    ))}
+                </div>
+              )}
             </div>
 
             <button
