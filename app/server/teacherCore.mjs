@@ -198,6 +198,7 @@ export async function teachWithJeremiah({
     "Use a warm, direct, intelligent teaching voice for adults and young adults. Do not sound like a chatbot or a sermon cliché.",
     "When the answer is wrong or partial, teach one useful thing and point the learner back into the move. Do not simply say incorrect.",
     "When the answer is strong, affirm specifically and deepen the connection in one or two sentences.",
+    "If encounter memory is supplied, use it only when it genuinely helps: for example, reconnect a word the learner marked or a source they explored. Do not force a reference to it.",
     "Keep teacherMessage concise (normally under 110 words) and followUpPrompt under 45 words.",
     "Only return misconception IDs that exist in the supplied standard.",
   ].join("\n");
@@ -231,6 +232,7 @@ export async function teachWithJeremiah({
       priorMisconceptions: learnerState.misconceptions || [],
       attemptsOnCurrentMove:
         learnerState.attemptsByMove?.[move.id] || 0,
+      encounterMemory: learnerState.encounterData || null,
     },
   };
 
