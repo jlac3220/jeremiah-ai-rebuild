@@ -1619,3 +1619,108 @@
     gap: 3px;
   }
 }
+
+
+/* encounter source shelf */
+
+.jc-source-shelf-wrap {
+  margin-top: 24px;
+}
+
+.jc-source-shelf-toggle {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  color: #7e939d;
+  background: transparent;
+  font: 700 .69rem/1 var(--font-display);
+  text-align: left;
+  cursor: pointer;
+}
+
+.jc-source-shelf-toggle span {
+  color: #d78c58;
+  font-size: 1rem;
+}
+
+.jc-source-shelf {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 12px;
+  animation: jcEncounterIn .25s ease both;
+}
+
+.jc-source-item {
+  display: block;
+  min-height: 150px;
+  padding: 15px 16px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 15px;
+  background: rgba(255,255,255,.018);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.jc-source-item:hover {
+  transform: translateY(-1px);
+  border-color: rgba(107,172,194,.18);
+  background: rgba(107,172,194,.028);
+}
+
+.jc-source-item > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.jc-source-item > div span {
+  color: #d88d58;
+  font-size: .57rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .11em;
+}
+
+.jc-source-item > div small {
+  color: #556b76;
+  font-size: .58rem;
+}
+
+.jc-source-item strong {
+  display: block;
+  margin-top: 9px;
+  color: #dce5e8;
+  font: 690 .82rem/1.28 var(--font-display);
+}
+
+.jc-source-item p {
+  margin: 7px 0 0;
+  color: #738995;
+  font-size: .68rem;
+  line-height: 1.48;
+}
+
+.jc-source-item em {
+  display: block;
+  margin-top: 10px;
+  color: #506671;
+  font-size: .58rem;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+@media (max-width: 760px) {
+  .jc-source-shelf {
+    grid-template-columns: 1fr;
+  }
+}
