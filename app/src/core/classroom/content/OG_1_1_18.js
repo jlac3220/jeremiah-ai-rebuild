@@ -115,11 +115,28 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             title: "Shema / Listen",
             duration: "3:26",
             url: "https://bibleproject.com/videos/shema-listen/",
+            embedUrl: "https://www.youtube.com/embed/6KQLOuIKaRA?rel=0",
             hook: "Hear why the first word of the confession is an invitation to listen.",
             quote: "“shema,” meaning “listen.”",
             attribution: "BibleProject, Shema Word Study",
             purpose:
               "Optional language and literary context. The standard remains the doctrinal authority.",
+          },
+          {
+            id: "nash-papyrus",
+            type: "image",
+            provider: "Wikimedia Commons",
+            title: "Nash Papyrus",
+            date: "2nd–1st century BC",
+            url: "https://commons.wikimedia.org/wiki/File:Papyrus_Nash.jpg",
+            imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Papyrus%20Nash.jpg",
+            hook:
+              "See an ancient Hebrew manuscript fragment that preserves the Ten Commandments and the Shema.",
+            quote: "Fragment of the Ten Commandments and the Shema Yisrael prayer",
+            attribution: "Wikimedia Commons · Public Domain",
+            license: "Public Domain Mark 1.0",
+            purpose:
+              "A physical historical witness that turns the Shema from abstract text into an artifact the learner can see.",
           },
           {
             id: "tigay-shema",
@@ -189,6 +206,22 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
             attribution: "Nathan MacDonald, Journal of Biblical Literature",
             purpose:
               "Advanced enrichment. It demonstrates that Jeremiah can surface real scholarship without making scholarship the curriculum.",
+          },
+        ],
+        mediaMoments: [
+          {
+            id: "watch-shema",
+            sourceId: "bibleproject-shema-listen",
+            eyebrow: "WATCH",
+            prompt:
+              "Listen for what the Hebrew word shema asks a hearer to do—not merely what sound reaches the ear.",
+          },
+          {
+            id: "see-nash",
+            sourceId: "nash-papyrus",
+            eyebrow: "SEE THE TEXT",
+            prompt:
+              "Look at the artifact before reading the caption. These words have been copied, carried, and recited for centuries.",
           },
         ],
         sourceMoments: [
