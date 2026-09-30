@@ -245,6 +245,7 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
     },
     {
       id: "repair_foundation",
+      progressOptional: true,
       stageId: "checkpoint",
       type: "teach",
       eyebrow: "RETEACH",
@@ -291,6 +292,7 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
     },
     {
       id: "guided_reteach",
+      progressOptional: true,
       stageId: "checkpoint",
       type: "synthesis",
       eyebrow: "BUILD IT AGAIN",
@@ -343,6 +345,7 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
     },
     {
       id: "mastery_rebuild",
+      progressOptional: true,
       stageId: "mastery",
       type: "synthesis",
       eyebrow: "REBUILD FOR MASTERY",
