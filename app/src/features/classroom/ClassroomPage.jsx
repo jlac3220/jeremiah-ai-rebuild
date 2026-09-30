@@ -119,6 +119,243 @@ function TeachingContent({ move }) {
   );
 }
 
+function EncounterExperience({ move, onComplete, onExit }) {
+  const encounter = move.encounter || {};
+  const [phase, setPhase] = useState("threshold");
+  const [primaryMarks, setPrimaryMarks] = useState([]);
+  const [bridgeMarks, setBridgeMarks] = useState([]);
+  const sources = encounter.curatedSources || [];
+  const sourceMoments = encounter.sourceMoments || [];
+  const primaryWords = String(encounter.primaryVerse?.text || "").split(/\s+/);
+  const bridgeWords = String(encounter.bridgeVerse?.text || "").split(/\s+/);
+
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  function beginListening() {
+    setPhase("notice");
+
+    if (
+      typeof window === "undefined" ||
+      !window.speechSynthesis ||
+      typeof window.SpeechSynthesisUtterance === "undefined"
+    ) {
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new window.SpeechSynthesisUtterance(
+      encounter.primaryVerse?.text || ""
+    );
+    utterance.rate = 0.82;
+    utterance.pitch = 0.96;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function toggleMark(setter, marks, index) {
+    setter(
+      marks.includes(index)
+        ? marks.filter((item) => item !== index)
+        : [...marks, index]
+    );
+  }
+
+  function renderWordField(words, marks, setter, label) {
+    return (
+      <div className="jc-encounter-words" aria-label={label}>
+        {words.map((word, index) => (
+          <button
+            type="button"
+            key={index + "-" + word}
+            className={marks.includes(index) ? "is-marked" : ""}
+            onClick={() => toggleMark(setter, marks, index)}
+          >
+            {word}
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  const videoSource = sources.find((source) => source.type === "video");
+
+  return (
+    <div className="jc-encounter-page">
+      <div className="jc-encounter-atmosphere" aria-hidden="true">
+        <span className="jc-encounter-glow one" />
+        <span className="jc-encounter-glow two" />
+      </div>
+
+      <button type="button" className="jc-encounter-exit" onClick={onExit}>
+        ← Home
+      </button>
+
+      <main className="jc-encounter-shell">
+        {phase === "threshold" && (
+          <section className="jc-encounter-scene is-threshold">
+            <div className="jc-encounter-kicker">ENTER THE CLASSROOM</div>
+            <h1>{move.title}</h1>
+            <p className="jc-encounter-opening">{encounter.opening}</p>
+
+            <div className="jc-encounter-entry-grid">
+              <button type="button" onClick={beginListening}>
+                <span className="jc-entry-icon">◖</span>
+                <strong>{encounter.listenLabel || "Listen"}</strong>
+                <small>Hear the confession before anything is explained.</small>
+              </button>
+
+              <button type="button" onClick={() => setPhase("notice")}>
+                <span className="jc-entry-icon">Aa</span>
+                <strong>{encounter.readLabel || "Read it myself"}</strong>
+                <small>Enter through the words and notice what pulls your attention.</small>
+              </button>
+
+              {videoSource && (
+                <a
+                  href={videoSource.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setPhase("notice")}
+                >
+                  <span className="jc-entry-icon">▶</span>
+                  <strong>Watch a short introduction</strong>
+                  <small>{videoSource.provider} · {videoSource.duration}</small>
+                </a>
+              )}
+            </div>
+
+            <div className="jc-encounter-whisper">
+              No score. No correct answer yet. Just encounter the idea.
+            </div>
+          </section>
+        )}
+
+        {phase === "notice" && (
+          <section className="jc-encounter-scene">
+            <div className="jc-encounter-step">01 · HEAR</div>
+            <div className="jc-encounter-reference">
+              {encounter.primaryVerse?.reference}
+            </div>
+            {renderWordField(
+              primaryWords,
+              primaryMarks,
+              setPrimaryMarks,
+              "Tap words in the Shema that stand out"
+            )}
+            <p className="jc-encounter-prompt">{encounter.noticePrompt}</p>
+
+            <div className="jc-encounter-actions">
+              <button type="button" className="jc-encounter-ghost" onClick={beginListening}>
+                Listen again
+              </button>
+              <button
+                type="button"
+                className="jc-encounter-next"
+                onClick={() => setPhase("bridge")}
+                disabled={!primaryMarks.length}
+              >
+                Hold that thought <span>→</span>
+              </button>
+            </div>
+          </section>
+        )}
+
+        {phase === "bridge" && (
+          <section className="jc-encounter-scene">
+            <div className="jc-encounter-step">02 · HOLD TWO TEXTS TOGETHER</div>
+            <p className="jc-encounter-bridge-line">{encounter.bridgeLine}</p>
+
+            <div className="jc-encounter-pair">
+              <article>
+                <span>{encounter.primaryVerse?.reference}</span>
+                <p>{encounter.primaryVerse?.text}</p>
+              </article>
+              <div className="jc-pair-symbol">+</div>
+              <article>
+                <span>{encounter.bridgeVerse?.reference}</span>
+                {renderWordField(
+                  bridgeWords,
+                  bridgeMarks,
+                  setBridgeMarks,
+                  "Tap words in Isaiah that stand out"
+                )}
+              </article>
+            </div>
+
+            <p className="jc-encounter-prompt">{encounter.bridgePrompt}</p>
+
+            <button
+              type="button"
+              className="jc-encounter-next"
+              onClick={() => setPhase("voices")}
+              disabled={!bridgeMarks.length}
+            >
+              Hear a few voices around the text <span>→</span>
+            </button>
+          </section>
+        )}
+
+        {phase === "voices" && (
+          <section className="jc-encounter-scene">
+            <div className="jc-encounter-step">03 · THE VERSE HAS A HISTORY</div>
+            <h2>People have been hearing, reciting, and arguing about these words for centuries.</h2>
+            <p className="jc-encounter-subcopy">
+              Jeremiah can bring those voices into the room without handing them authority over the standard.
+            </p>
+
+            <div className="jc-voice-stack">
+              {sourceMoments.slice(0, 3).map((moment) => {
+                const source = sources.find((item) => item.id === moment.sourceId);
+                return (
+                  <article className="jc-voice-card" key={moment.id}>
+                    <div>
+                      <span>{moment.label}</span>
+                      <small>{source?.provider || "Source"}</small>
+                    </div>
+                    <p>{moment.text}</p>
+                    {source?.quote && <blockquote>{source.quote}</blockquote>}
+                    {source?.url && (
+                      <a href={source.url} target="_blank" rel="noreferrer">
+                        Explore source ↗
+                      </a>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              className="jc-encounter-next"
+              onClick={() => setPhase("destination")}
+            >
+              Show me where this lesson is going <span>→</span>
+            </button>
+          </section>
+        )}
+
+        {phase === "destination" && (
+          <section className="jc-encounter-scene is-destination">
+            <div className="jc-encounter-step">YOUR TASK</div>
+            <h2>{encounter.destination}</h2>
+            <p>
+              Everything Jeremiah teaches next should help you accomplish that—not just answer a string of questions.
+            </p>
+            <button type="button" className="jc-encounter-next" onClick={onComplete}>
+              {move.ctaLabel || "Enter the lesson"} <span>→</span>
+            </button>
+          </section>
+        )}
+      </main>
+    </div>
+  );
+}
+
 function GuidedReflection({
   move,
   value,
@@ -371,6 +608,16 @@ export default function ClassroomPage({ onNavigate }) {
           Return home
         </button>
       </div>
+    );
+  }
+
+  if (currentMove.type === "encounter") {
+    return (
+      <EncounterExperience
+        move={currentMove}
+        onComplete={handleContinue}
+        onExit={() => onNavigate(ROUTES.HOME)}
+      />
     );
   }
 
