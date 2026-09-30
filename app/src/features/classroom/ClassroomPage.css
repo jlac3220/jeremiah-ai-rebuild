@@ -1939,3 +1939,41 @@
     to { opacity: 1; transform: none; }
   }
 }
+
+
+/* encounter memory thread */
+
+.jc-encounter-thread {
+  margin: 18px 0 22px;
+  padding: 11px 13px;
+  border-left: 2px solid rgba(var(--accent-rgb), .34);
+  background: linear-gradient(90deg, rgba(var(--accent-rgb), .035), transparent 72%);
+}
+
+.jc-encounter-thread > span {
+  display: block;
+  color: #667c88;
+  font-size: .58rem;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.jc-encounter-thread p {
+  margin: 5px 0 0;
+  color: #879aa4;
+  font-size: .7rem;
+  line-height: 1.45;
+}
+
+.jc-encounter-thread strong {
+  color: #c7d3d8;
+  font-weight: 650;
+}
+
+@media (max-width: 760px) {
+  .jc-encounter-thread {
+    margin-top: 15px;
+    padding: 10px 11px;
+  }
+}
