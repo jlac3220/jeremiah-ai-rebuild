@@ -151,18 +151,24 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
     {
       id: "isaiah_exclusion",
       stageId: "scripture",
-      type: "scripture_teach",
-      eyebrow: "LET THE PROPHETS SPEAK",
-      title: "Isaiah does more than repeat “one”",
+      type: "guided_reflection",
+      eyebrow: "DISCOVER THE PATTERN",
+      title: "Read Isaiah before Jeremiah explains it",
       scripture: [isaiah44, isaiah45],
-      teaching: [
-        "The prophets sharpen the confession by stating the opposite possibility and ruling it out. Isaiah does not merely say that the LORD is Israel's preferred God.",
-        "He says, “beside me there is no God,” and again, “there is none else.” The biblical claim is both positive and exclusive: God is one, and no other God exists beside Him.",
+      prompt:
+        "Deuteronomy says the LORD is one. What do these two statements from Isaiah add to that confession?",
+      placeholder:
+        "Write what you notice in the wording. This is not graded...",
+      revealLabel: "Compare your thought",
+      revealTeaching: [
+        "Isaiah takes the positive confession and makes its boundary explicit. The LORD is not simply one God among others, and He is not merely Israel's preferred God.",
+        "The repeated language—“beside me there is no God,” “there is none else,” and “there is no God beside me”—rules out another God existing alongside the LORD.",
       ],
-      focusPhrases: ["beside me there is no God", "there is none else"],
-      focusNote:
-        "This is why biblical monotheism cannot remain a vague slogan. Scripture defines the confession by excluding another God beside the LORD.",
-      ctaLabel: "Connect the testimony",
+      revealInsight: {
+        label: "What Isaiah adds",
+        text: "The Shema says who God is: one LORD. Isaiah explicitly states what that confession excludes: another God beside Him.",
+      },
+      ctaLabel: "Carry that into the New Testament",
       next: { continue: "mark12_bridge" },
     },
     {
@@ -324,10 +330,10 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       eyebrow: "MASTERY",
       title: "Show that the foundation is stable",
       body:
-        "Now bring the lesson together without multiple choice. Jeremiah is looking for clear biblical understanding, not exact wording.",
+        "This time the lesson steps back. Start from memory before using any help. Jeremiah is looking for the biblical structure you can reconstruct, not exact wording.",
       prompt:
-        "Give a concise doctrinal explanation of the oneness of God using at least one passage from this session. Include both the positive confession and what Scripture excludes.",
-      placeholder: "Your final explanation...",
+        "Without looking back, explain the biblical foundation about the oneness of God that this lesson established. Ground your explanation in Scripture as best you can.",
+      placeholder: "Reconstruct the foundation from memory...",
       evidenceIds: ["one-lord", "no-other", "controlling-foundation"],
       strategyRoutes: {
         scripture_revisit: "mastery_rebuild",
