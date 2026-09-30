@@ -1,8 +1,6 @@
-import OG_1_1_18_CLASSROOM_CONTENT from "../src/core/classroom/content/OG_1_1_18.js";
+import { classroomContentRegistry } from "../src/core/classroom/content/classroomContentRegistry.js";
 
-const standards = {
-  [OG_1_1_18_CLASSROOM_CONTENT.standardId]: OG_1_1_18_CLASSROOM_CONTENT,
-};
+const standards = classroomContentRegistry;
 
 const allowedStrategies = [
   "affirm_and_deepen",
