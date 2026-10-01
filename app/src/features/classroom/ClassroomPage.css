@@ -3620,3 +3620,69 @@
     padding: 12px 14px;
   }
 }
+
+
+/* artifact strip no-overlap v10 */
+
+.jc-threshold-artifact-strip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 0;
+  padding: 10px 16px 10px 10px;
+  overflow: visible;
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+}
+
+.jc-threshold-artifact-strip img {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 82px;
+  display: block;
+  padding: 7px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: rgba(7,18,24,.52);
+}
+
+.jc-threshold-artifact-strip > .jc-threshold-artifact-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  position: static;
+  z-index: auto;
+  padding: 0;
+  overflow: visible;
+}
+
+.jc-threshold-artifact-copy span,
+.jc-threshold-artifact-copy strong,
+.jc-threshold-artifact-copy small {
+  position: static;
+  display: block;
+  width: auto;
+  max-width: none;
+  margin-left: 0;
+  padding-left: 0;
+  overflow: visible;
+  text-indent: 0;
+  white-space: normal;
+}
+
+@media (max-width: 760px) {
+  .jc-threshold-artifact-strip {
+    gap: 12px;
+    padding: 9px 12px 9px 9px;
+  }
+
+  .jc-threshold-artifact-strip img {
+    flex-basis: 62px;
+    width: 62px;
+    height: 72px;
+  }
+
+  .jc-threshold-artifact-strip > .jc-threshold-artifact-copy {
+    padding: 0;
+  }
+}
