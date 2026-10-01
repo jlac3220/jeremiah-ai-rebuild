@@ -18,6 +18,7 @@ import {
 import { getClassroomContentByStandardId } from "../../core/classroom/content/classroomContentRegistry";
 import { askJeremiahTeacher } from "../../services/jeremiahTeacher";
 import ShemaClassroom from "./ShemaClassroom";
+import ShemaContinuation from "./ShemaContinuation";
 import "./ClassroomPage.css";
 
 const PATH_LABELS = {
@@ -1543,6 +1544,34 @@ export default function ClassroomPage({ onNavigate }) {
   }
 
   const isUnscored = UNSCORED_TYPES.has(currentMove.type);
+
+  const useShemaContinuation =
+    content.standardId === "OG.1.1.18" &&
+    presetId === "direct" &&
+    learningState.encounterData?.entryMode === "episode" &&
+    !["arrival", "hear_the_shema", "oneness_first", "isaiah_exclusion", "mark12_bridge", "synthesis"].includes(currentMove.id);
+
+  if (useShemaContinuation) {
+    return (
+      <ShemaContinuation
+        move={currentMove}
+        encounterData={learningState.encounterData}
+        selectedChoiceId={selectedChoiceId}
+        onSelectChoice={setSelectedChoiceId}
+        responseText={responseText}
+        onResponseText={setResponseText}
+        teacherDecision={teacherDecision}
+        isThinking={isThinking}
+        errorMessage={errorMessage}
+        ready={ready}
+        onSubmit={handleSubmit}
+        onContinue={handleContinue}
+        onTeacherContinue={handleTeacherContinue}
+        onExit={() => onNavigate(ROUTES.HOME)}
+        onHome={() => onNavigate(ROUTES.HOME)}
+      />
+    );
+  }
 
   return (
     <div className={"jc-page stage-" + currentMove.stageId}>
