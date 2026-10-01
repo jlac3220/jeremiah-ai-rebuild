@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ROUTES } from "../../app/routes";
 import {
   getActiveClassroomSessionPreset,
@@ -13,7 +13,9 @@ import {
   getInstructionalMove,
   getStandardProgress,
   loadLearningState,
+  markLearningMilestones,
   saveLearningState,
+  updateLearningExperience,
 } from "../../core/classroom/learningEngine";
 import { getClassroomContentByStandardId } from "../../core/classroom/content/classroomContentRegistry";
 import { askJeremiahTeacher } from "../../services/jeremiahTeacher";
@@ -1371,6 +1373,20 @@ export default function ClassroomPage({ onNavigate }) {
   }, [learningState]);
 
   useEffect(() => {
+    if (!currentMove || !learningState) return;
+    const draft = learningState.experience?.drafts?.[currentMove.id] || {};
+    setSelectedChoiceId(draft.selectedChoiceId || "");
+    setResponseText(draft.responseText || "");
+  }, [currentMove?.id]);
+
+  useEffect(() => {
+    if (currentMove?.type !== "complete" || learningState?.milestones?.complete) {
+      return;
+    }
+    setLearningState((state) => markLearningMilestones(state, ["complete"]));
+  }, [currentMove?.type, learningState?.milestones?.complete]);
+
+  useEffect(() => {
     if (currentMove?.stageId) {
       setSavedLiveStageForPreset(presetId, currentMove.stageId);
     }
@@ -1405,29 +1421,78 @@ export default function ClassroomPage({ onNavigate }) {
     clearInteraction();
   }
 
+  const handleShemaEpisodeProgress = useCallback((progressPatch = {}) => {
+    setLearningState((state) => {
+      if (!state) return state;
+
+      let next = updateLearningExperience(state, {
+        sceneIndex: progressPatch.sceneIndex,
+        sceneId: progressPatch.sceneId,
+        selections: progressPatch.selections || {},
+        viewedSourceIds: progressPatch.viewedSourceIds || [],
+      });
+
+      next = markLearningMilestones(next, progressPatch.milestoneIds || []);
+      return next;
+    });
+  }, []);
+
+  function persistCurrentDraft(patch = {}) {
+    if (!currentMove) return;
+    setLearningState((state) =>
+      updateLearningExperience(state, {
+        drafts: {
+          [currentMove.id]: {
+            ...(state.experience?.drafts?.[currentMove.id] || {}),
+            ...patch,
+          },
+        },
+      })
+    );
+  }
+
+  function handleSelectChoice(choiceId) {
+    setSelectedChoiceId(choiceId);
+    persistCurrentDraft({ selectedChoiceId: choiceId });
+  }
+
+  function handleResponseTextChange(text) {
+    setResponseText(text);
+    persistCurrentDraft({ responseText: text });
+  }
+
   function handleShemaEpisodeComplete(encounterData) {
-    if (!content) return;
+    setLearningState((state) => {
+      if (!state) return state;
 
-    clearLearningState(content, presetId);
-    const fresh = loadLearningState(content, presetId);
+      let next = updateLearningExperience(state, {
+        ...(encounterData.episodeExperience || {}),
+        episodeComplete: true,
+      });
+      next = markLearningMilestones(next, ["started", "scripture", "evidence"]);
 
-    setLearningState({
-      ...fresh,
-      currentMoveId: "pressure_test",
-      completedMoveIds: [
-        "arrival",
-        "hear_the_shema",
-        "oneness_first",
-        "isaiah_exclusion",
-        "mark12_bridge",
-        "synthesis",
-      ],
-      encounterData: {
-        ...encounterData,
-        entryMode: "episode",
-        completedAt: Date.now(),
-      },
-      lastUpdatedAt: Date.now(),
+      return {
+        ...next,
+        currentMoveId: "pressure_test",
+        completedMoveIds: [
+          ...new Set([
+            ...(state.completedMoveIds || []),
+            "arrival",
+            "hear_the_shema",
+            "oneness_first",
+            "isaiah_exclusion",
+            "mark12_bridge",
+            "synthesis",
+          ]),
+        ],
+        encounterData: {
+          ...(state.encounterData || {}),
+          ...encounterData,
+          entryMode: "episode",
+          completedAt: Date.now(),
+        },
+        lastUpdatedAt: Date.now(),
+      };
     });
     clearInteraction();
   }
@@ -1510,12 +1575,15 @@ export default function ClassroomPage({ onNavigate }) {
 
   const needsShemaEpisode =
     Boolean(shemaEpisodeMove) &&
+    learningState.experience?.episodeComplete !== true &&
     learningState.encounterData?.entryMode !== "episode";
 
   if (needsShemaEpisode) {
     return (
       <ShemaClassroom
         move={shemaEpisodeMove}
+        initialExperience={learningState.experience}
+        onProgress={handleShemaEpisodeProgress}
         onComplete={handleShemaEpisodeComplete}
         onExit={() => onNavigate(ROUTES.HOME)}
       />
@@ -1557,9 +1625,11 @@ export default function ClassroomPage({ onNavigate }) {
         move={currentMove}
         encounterData={learningState.encounterData}
         selectedChoiceId={selectedChoiceId}
-        onSelectChoice={setSelectedChoiceId}
+        onSelectChoice={handleSelectChoice}
         responseText={responseText}
-        onResponseText={setResponseText}
+        onResponseText={handleResponseTextChange}
+        draft={learningState.experience?.drafts?.[currentMove.id] || {}}
+        onDraftChange={persistCurrentDraft}
         teacherDecision={teacherDecision}
         isThinking={isThinking}
         errorMessage={errorMessage}
