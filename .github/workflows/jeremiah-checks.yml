@@ -33,5 +33,8 @@ jobs:
       - name: Validate Jeremiah brain
         run: npm run test:brain
 
+      - name: Verify eBible source
+        run: npm run test:bible-source
+
       - name: Build app
         run: npm run build
