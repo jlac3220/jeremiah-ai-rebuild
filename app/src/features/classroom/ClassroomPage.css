@@ -4252,3 +4252,374 @@
     justify-content: space-between;
   }
 }
+
+
+/* immersive full-lesson shell v13 */
+
+/* Keep the post-encounter lesson in the same visual world */
+.jc-page {
+  background:
+    radial-gradient(circle at 14% 8%, rgba(232,143,87,.11), transparent 34%),
+    radial-gradient(circle at 88% 10%, rgba(91,164,188,.11), transparent 36%),
+    linear-gradient(180deg, #122833 0%, #17313b 52%, #1a3540 100%);
+}
+
+.jc-header {
+  min-height: 52px;
+  grid-template-columns: 1fr minmax(260px, 430px) 1fr;
+  border-bottom: 1px solid rgba(255,255,255,.075);
+  background: rgba(15, 35, 44, .76);
+  backdrop-filter: blur(18px);
+}
+
+.jc-brand-mark {
+  display: none;
+}
+
+.jc-brand strong {
+  color: #dce7ea;
+  font-size: .82rem;
+}
+
+.jc-header-progress {
+  color: #aebfc6;
+  font-size: .7rem;
+}
+
+.jc-header-progress strong {
+  color: #d5e1e5;
+}
+
+.jc-reset {
+  color: #aabac1;
+  font-size: .72rem;
+}
+
+.jc-shell {
+  width: min(1080px, calc(100% - 56px));
+  padding: 42px 0 80px;
+}
+
+.jc-pathline {
+  margin-bottom: 18px;
+  color: #a6b8c0;
+  font-size: .7rem;
+}
+
+.jc-lesson {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.jc-lesson::before {
+  display: none;
+}
+
+.jc-move-head {
+  margin-bottom: 22px;
+}
+
+.jc-eyebrow {
+  color: #f0a06b;
+  font-size: .74rem;
+  letter-spacing: .11em;
+}
+
+.jc-move-head h1 {
+  max-width: 840px;
+  margin-top: 10px;
+  font-size: clamp(2.35rem, 4.5vw, 4.15rem);
+  line-height: 1.02;
+}
+
+/* Persistent visual thread from the encounter */
+.jc-encounter-thread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin: 0 0 28px;
+  padding: 14px 16px;
+  border: 1px solid rgba(239,151,94,.18);
+  border-left: 3px solid rgba(239,151,94,.6);
+  border-radius: 14px;
+  background: rgba(239,151,94,.05);
+}
+
+.jc-encounter-thread > div {
+  flex: 0 0 auto;
+}
+
+.jc-encounter-thread > div > span {
+  display: block;
+  color: #f0a06b;
+  font-size: .68rem;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.jc-encounter-thread > div > small {
+  display: block;
+  margin-top: 3px;
+  color: #b9c8ce;
+  font-size: .72rem;
+}
+
+.jc-encounter-thread > strong {
+  color: #ffe0c8;
+  font: 700 1rem/1.35 var(--font-display);
+  text-align: right;
+}
+
+/* Scripture is no longer a stack of little cards */
+.jc-scripture {
+  gap: 14px;
+  margin: 0;
+}
+
+.jc-verse {
+  padding: 24px 26px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-left: 3px solid rgba(var(--accent-rgb), .72);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(var(--accent-rgb), .07), rgba(255,255,255,.035));
+}
+
+.jc-verse-ref {
+  color: #9fcbd9;
+  font-size: .74rem;
+}
+
+.jc-verse blockquote {
+  margin-top: 10px;
+  color: #fff7ed;
+  font-size: clamp(1.45rem, 2.8vw, 2.1rem);
+  line-height: 1.5;
+}
+
+/* Guided reflection becomes a two-panel learning scene */
+.jc-lesson.move-guided_reflection {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+  gap: 26px 34px;
+  align-items: start;
+}
+
+.jc-lesson.move-guided_reflection > .jc-move-head,
+.jc-lesson.move-guided_reflection > .jc-encounter-thread {
+  grid-column: 1 / -1;
+}
+
+.jc-lesson.move-guided_reflection > .jc-scripture {
+  grid-column: 1;
+  grid-row: 3;
+  position: sticky;
+  top: 76px;
+}
+
+.jc-lesson.move-guided_reflection > .jc-reflection {
+  grid-column: 2;
+  grid-row: 3;
+  margin: 0;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 20px;
+  background: rgba(255,255,255,.04);
+}
+
+.jc-reflection-prompt {
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+}
+
+.jc-reflection-prompt > span {
+  color: #f0a06b;
+  font-size: .72rem;
+}
+
+.jc-reflection-prompt h2 {
+  margin-top: 8px;
+  color: #f6fafb;
+  font-size: 1.2rem;
+  line-height: 1.45;
+}
+
+.jc-reflection textarea {
+  min-height: 190px;
+  padding: 16px;
+  border-color: rgba(255,255,255,.13);
+  background: rgba(6,18,24,.36);
+  color: #f7f2eb;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.jc-reflection textarea::placeholder {
+  color: #91a6af;
+}
+
+.jc-reflection-note {
+  margin-top: 10px;
+  color: #c1cfd5;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.jc-secondary-action {
+  margin-top: 16px;
+  min-height: 46px;
+  padding: 0 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(153,205,222,.24);
+  color: #f3f8fa;
+  background: rgba(117,184,207,.10);
+  font-size: .82rem;
+}
+
+/* Teaching moves stay editorial rather than returning to a card stack */
+.jc-teaching-copy {
+  max-width: 800px;
+}
+
+.jc-teaching-copy p {
+  max-width: 800px;
+  color: #d6e0e4;
+  font-size: 1.05rem;
+  line-height: 1.72;
+}
+
+.jc-focus-block {
+  max-width: 800px;
+  border-color: rgba(239,151,94,.18);
+  background: rgba(239,151,94,.055);
+}
+
+.jc-insight-stack {
+  max-width: 900px;
+}
+
+.jc-choice-grid,
+.jc-response,
+.jc-feedback,
+.jc-thinking,
+.jc-error,
+.jc-question {
+  max-width: 860px;
+}
+
+.jc-question h2 {
+  font-size: 1.28rem;
+}
+
+.jc-choice {
+  min-height: 72px;
+  border-color: rgba(255,255,255,.11);
+  background: rgba(255,255,255,.035);
+  color: #dce6e9;
+  font-size: .94rem;
+}
+
+.jc-response textarea {
+  border-color: rgba(255,255,255,.13);
+  background: rgba(6,18,24,.36);
+  font-size: 1rem;
+}
+
+.jc-response-note {
+  color: #aebfc6;
+  font-size: .72rem;
+}
+
+/* Reveal state of the reflection */
+.jc-reflection-reveal {
+  display: grid;
+  gap: 16px;
+}
+
+.jc-reflection-your-thought,
+.jc-reflection-teaching,
+.jc-reflection-insight {
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 14px;
+  background: rgba(255,255,255,.025);
+}
+
+.jc-reflection-your-thought > span,
+.jc-reflection-teaching > span,
+.jc-reflection-insight > span {
+  color: #f0a06b;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* Mobile returns to one continuous vertical story */
+@media (max-width: 860px) {
+  .jc-shell {
+    width: min(760px, calc(100% - 34px));
+    padding-top: 34px;
+  }
+
+  .jc-lesson.move-guided_reflection {
+    display: block;
+  }
+
+  .jc-lesson.move-guided_reflection > .jc-scripture {
+    position: static;
+    margin-bottom: 20px;
+  }
+
+  .jc-lesson.move-guided_reflection > .jc-reflection {
+    margin-top: 0;
+  }
+
+  .jc-encounter-thread {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .jc-encounter-thread > strong {
+    text-align: left;
+  }
+}
+
+@media (max-width: 760px) {
+  .jc-header {
+    min-height: 54px;
+  }
+
+  .jc-header-progress {
+    top: 54px;
+  }
+
+  .jc-shell {
+    width: 100%;
+    padding: 48px 17px 32px;
+  }
+
+  .jc-move-head h1 {
+    font-size: clamp(2.1rem, 10vw, 3rem);
+  }
+
+  .jc-lesson.move-guided_reflection > .jc-reflection {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .jc-verse {
+    padding: 20px 18px;
+  }
+
+  .jc-verse blockquote {
+    font-size: 1.35rem;
+  }
+}
