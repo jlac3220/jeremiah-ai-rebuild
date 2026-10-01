@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { handleJeremiahApi } from "./server/apiHandler.mjs";
+import { handleBibleApi } from "./server/bibleHandler.mjs";
 import { loadLocalEnv } from "./server/loadEnv.mjs";
 
 await loadLocalEnv();
@@ -36,6 +37,11 @@ const server = http.createServer(async (req, res) => {
 
   if (url.pathname === "/api/jeremiah/teach") {
     await handleJeremiahApi(req, res);
+    return;
+  }
+
+  if (url.pathname === "/api/bible/chapter") {
+    await handleBibleApi(req, res);
     return;
   }
 
