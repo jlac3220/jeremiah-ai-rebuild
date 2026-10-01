@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./ShemaClassroom.css";
 
 function DeepDiveSheet({ item, onClose }) {
@@ -73,16 +73,27 @@ function videoUrl(source) {
   }
 }
 
-export default function ShemaClassroom({ move, onComplete, onExit }) {
+export default function ShemaClassroom({
+  move,
+  initialExperience,
+  onProgress,
+  onComplete,
+  onExit,
+}) {
   const encounter = move.encounter || {};
   const sources = encounter.curatedSources || [];
   const video = sources.find((source) => source.id === "bibleproject-shema-listen");
   const artifact = sources.find((source) => source.id === "nash-papyrus");
+  const expandedReading = encounter.expandedReading || [];
+  const savedSelections = initialExperience?.selections || {};
+  const savedSceneIndex = Number.isInteger(initialExperience?.sceneIndex)
+    ? initialExperience.sceneIndex
+    : 0;
 
-  const [scene, setScene] = useState(0);
-  const [primary, setPrimary] = useState("");
-  const [bridge, setBridge] = useState("");
-  const [prediction, setPrediction] = useState("");
+  const [scene, setScene] = useState(Math.max(0, Math.min(savedSceneIndex, 5)));
+  const [primary, setPrimary] = useState(savedSelections.primary || "");
+  const [bridge, setBridge] = useState(savedSelections.bridge || "");
+  const [prediction, setPrediction] = useState(savedSelections.prediction || "");
   const [detail, setDetail] = useState(null);
 
   const primaryVerse = encounter.primaryVerse;
@@ -93,6 +104,36 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
   const scenes = useMemo(() => ["hear", "confession", "compare", "witness", "tension", "thread"], []);
   const sceneName = scenes[scene] || "hear";
   const progress = ((scene + 1) / scenes.length) * 100;
+
+  useEffect(() => {
+    const milestoneIds = ["started"];
+    if (scene >= 1 || primary) milestoneIds.push("scripture");
+    if (scene >= 2 || bridge) milestoneIds.push("evidence");
+
+    onProgress?.({
+      sceneIndex: scene,
+      sceneId: sceneName,
+      selections: {
+        primary,
+        bridge,
+        prediction,
+      },
+      milestoneIds,
+    });
+  }, [scene, sceneName, primary, bridge, prediction, onProgress]);
+
+  function openDetail(item) {
+    setDetail(item);
+    if (item?.id) {
+      onProgress?.({
+        sceneIndex: scene,
+        sceneId: sceneName,
+        selections: { primary, bridge, prediction },
+        viewedSourceIds: [item.id],
+        milestoneIds: ["started"],
+      });
+    }
+  }
 
   function next() {
     setScene((value) => Math.min(value + 1, scenes.length - 1));
@@ -107,6 +148,13 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
       viewedSourceIds: artifact ? [artifact.id] : [],
       sourceShelfOpened: false,
       prediction,
+      episodeExperience: {
+        sceneIndex: scene,
+        sceneId: sceneName,
+        selections: { primary, bridge, prediction },
+        viewedSourceIds: artifact ? [artifact.id] : [],
+        episodeComplete: true,
+      },
     });
   }
 
@@ -144,7 +192,7 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
 
         {sceneName === "confession" && (
           <section className="sc-scene sc-confession">
-            <VerseRef verse={primaryVerse} onOpen={setDetail} />
+            <VerseRef verse={primaryVerse} onOpen={openDetail} />
             <blockquote>“{primaryVerse?.text}”</blockquote>
             <p className="sc-prompt">Which phrase carries the confession?</p>
 
@@ -174,11 +222,11 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
 
             <div className="sc-verses">
               <div>
-                <VerseRef verse={primaryVerse} onOpen={setDetail} />
+                <VerseRef verse={primaryVerse} onOpen={openDetail} />
                 <p>{primaryVerse?.text}</p>
               </div>
               <div>
-                <VerseRef verse={bridgeVerse} onOpen={setDetail} />
+                <VerseRef verse={bridgeVerse} onOpen={openDetail} />
                 <p>{bridgeVerse?.text}</p>
               </div>
             </div>
@@ -206,7 +254,7 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
 
         {sceneName === "witness" && artifact && (
           <section className="sc-scene sc-witness">
-            <button type="button" className="sc-artifact" onClick={() => setDetail(artifact)}>
+            <button type="button" className="sc-artifact" onClick={() => openDetail(artifact)}>
               <img src={artifact.imageUrl} alt={artifact.title} />
               <span>Tap to inspect</span>
             </button>
@@ -250,7 +298,7 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
                 <button
                   type="button"
                   className="sc-reveal-ref"
-                  onClick={() => setDetail({
+                  onClick={() => openDetail({
                     kind: "scripture",
                     reference: "Mark 12:29",
                     text: "The first of all the commandments is, Hear, O Israel; The Lord our God is one Lord.",
@@ -287,6 +335,23 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
                 <p>The confession begins with one LORD, the prophets explicitly rule out another God beside Him, and Jesus carries that same confession forward.</p>
               </div>
             </div>
+
+            {expandedReading.length > 0 && (
+              <div className="sc-related-reading">
+                <span>Optional · go deeper</span>
+                {expandedReading.map((verse) => (
+                  <button
+                    type="button"
+                    key={verse.id || verse.reference}
+                    onClick={() => openDetail({ ...verse, kind: "scripture" })}
+                  >
+                    <strong>{verse.reference}</strong>
+                    <small>{verse.label || "Read related Scripture"}</small>
+                    <i>↗</i>
+                  </button>
+                ))}
+              </div>
+            )}
 
             <button type="button" className="sc-action" onClick={finish}>
               Continue the lesson <span>→</span>
