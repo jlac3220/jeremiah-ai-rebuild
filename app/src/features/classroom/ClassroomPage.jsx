@@ -238,48 +238,63 @@ function EncounterExperience({ move, onComplete, onExit }) {
                       setPhase("notice");
                     }}
                   >
-                    <span>Begin with the words</span>
+                    <span>Read the Shema</span>
                     <i>→</i>
                   </button>
-
-                  {videoSource && (
-                    <button
-                      type="button"
-                      className="jc-threshold-video"
-                      onClick={() => {
-                        setEntryMode("watch");
-                        setViewedSourceIds((ids) =>
-                          ids.includes(videoSource.id) ? ids : [...ids, videoSource.id]
-                        );
-                        setPhase("mediaIntro");
-                      }}
-                    >
-                      <span className="jc-threshold-play">▶</span>
-                      <span>
-                        <strong>Watch the 3-minute introduction</strong>
-                        <small>{videoSource.provider} · optional context</small>
-                      </span>
-                    </button>
-                  )}
                 </div>
 
                 <div className="jc-encounter-whisper">
-                  No quiz yet. First, encounter the text.
+                  No quiz yet. First, encounter the confession itself.
                 </div>
               </div>
 
-              <div className="jc-threshold-visual" aria-hidden="true">
-                {heroArtifact?.imageUrl && (
-                  <img src={heroArtifact.imageUrl} alt="" />
+              <div className="jc-threshold-media">
+                {videoSource && (
+                  <div className="jc-threshold-video-feature">
+                    <div className="jc-threshold-video-label">
+                      <span>WATCH · 3:26</span>
+                      <small>{videoSource.provider}</small>
+                    </div>
+
+                    <div className="jc-threshold-video-frame">
+                      <iframe
+                        src={getEmbeddedMediaUrl(videoSource)}
+                        title={videoSource.title}
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    </div>
+
+                    <div className="jc-threshold-video-copy">
+                      <strong>{videoSource.title}</strong>
+                      <p>{videoSource.hook}</p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEntryMode("watch");
+                          setViewedSourceIds((ids) =>
+                            ids.includes(videoSource.id) ? ids : [...ids, videoSource.id]
+                          );
+                          setPhase("notice");
+                        }}
+                      >
+                        Continue to the text <span>→</span>
+                      </button>
+                    </div>
+                  </div>
                 )}
-                <div className="jc-threshold-verse">
-                  <span>Deuteronomy 6:4</span>
-                  <p>“Hear, O Israel: The LORD our God is one LORD.”</p>
-                </div>
-                <div className="jc-threshold-caption">
-                  <span>ANCIENT WITNESS</span>
-                  <small>Nash Papyrus · 2nd–1st century BC</small>
-                </div>
+
+                {heroArtifact?.imageUrl && (
+                  <div className="jc-threshold-artifact-strip">
+                    <img src={heroArtifact.imageUrl} alt="" />
+                    <div>
+                      <span>ANCIENT WITNESS</span>
+                      <strong>Nash Papyrus</strong>
+                      <small>2nd–1st century BC</small>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </section>
