@@ -1404,6 +1404,33 @@ export default function ClassroomPage({ onNavigate }) {
     clearInteraction();
   }
 
+  function handleShemaEpisodeComplete(encounterData) {
+    if (!content) return;
+
+    clearLearningState(content, presetId);
+    const fresh = loadLearningState(content, presetId);
+
+    setLearningState({
+      ...fresh,
+      currentMoveId: "pressure_test",
+      completedMoveIds: [
+        "arrival",
+        "hear_the_shema",
+        "oneness_first",
+        "isaiah_exclusion",
+        "mark12_bridge",
+        "synthesis",
+      ],
+      encounterData: {
+        ...encounterData,
+        entryMode: "episode",
+        completedAt: Date.now(),
+      },
+      lastUpdatedAt: Date.now(),
+    });
+    clearInteraction();
+  }
+
   async function handleSubmit() {
     if (!currentMove || !learningState || !ready || isThinking || teacherDecision) {
       return;
@@ -1475,15 +1502,20 @@ export default function ClassroomPage({ onNavigate }) {
     );
   }
 
-  if (
-    currentMove.type === "encounter" &&
-    content.standardId === "OG.1.1.18" &&
-    presetId === "direct"
-  ) {
+  const shemaEpisodeMove =
+    content.standardId === "OG.1.1.18" && presetId === "direct"
+      ? getInstructionalMove(content, "arrival")
+      : null;
+
+  const needsShemaEpisode =
+    Boolean(shemaEpisodeMove) &&
+    learningState.encounterData?.entryMode !== "episode";
+
+  if (needsShemaEpisode) {
     return (
       <ShemaClassroom
-        move={currentMove}
-        onComplete={handleEncounterComplete}
+        move={shemaEpisodeMove}
+        onComplete={handleShemaEpisodeComplete}
         onExit={() => onNavigate(ROUTES.HOME)}
       />
     );
