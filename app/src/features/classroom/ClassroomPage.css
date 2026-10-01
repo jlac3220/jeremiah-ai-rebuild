@@ -3553,3 +3553,70 @@
     width: 100%;
   }
 }
+
+
+/* artifact strip repair v9 */
+
+.jc-threshold-artifact-strip {
+  grid-template-columns: 96px minmax(0, 1fr);
+  min-height: 96px;
+  gap: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.035);
+}
+
+.jc-threshold-artifact-strip img {
+  width: 96px;
+  height: 96px;
+  padding: 10px;
+  object-fit: contain;
+  background: rgba(7,18,24,.55);
+}
+
+.jc-threshold-artifact-copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 15px 18px;
+  overflow: visible;
+  background: transparent;
+}
+
+.jc-threshold-artifact-copy span,
+.jc-threshold-artifact-copy strong,
+.jc-threshold-artifact-copy small {
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+  white-space: normal;
+}
+
+.jc-threshold-artifact-copy span {
+  margin: 0 0 4px;
+}
+
+.jc-threshold-artifact-copy strong {
+  margin: 0 0 4px;
+}
+
+.jc-threshold-artifact-copy small {
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .jc-threshold-artifact-strip {
+    grid-template-columns: 84px minmax(0, 1fr);
+    min-height: 88px;
+  }
+
+  .jc-threshold-artifact-strip img {
+    width: 84px;
+    height: 88px;
+  }
+
+  .jc-threshold-artifact-copy {
+    padding: 12px 14px;
+  }
+}
