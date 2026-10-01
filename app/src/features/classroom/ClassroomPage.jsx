@@ -320,27 +320,38 @@ function EncounterExperience({ move, onComplete, onExit }) {
         )}
 
         {phase === "notice" && (
-          <section className="jc-encounter-scene">
-            <div className="jc-encounter-step">01 · HEAR</div>
-            <div className="jc-encounter-reference">
-              {encounter.primaryVerse?.reference}
+          <section className="jc-encounter-scene jc-notice-scene">
+            <div className="jc-scene-topline">
+              <div className="jc-encounter-step">01 · NOTICE</div>
+              <div className="jc-scene-progress" aria-label="Encounter step 1 of 4">
+                <i className="is-active" />
+                <i />
+                <i />
+                <i />
+              </div>
             </div>
+
+            <div className="jc-notice-intro">
+              <span>{encounter.primaryVerse?.reference}</span>
+              <h2>Don’t explain it yet. Just notice the words.</h2>
+              <p>{encounter.noticePrompt}</p>
+            </div>
+
             {renderWordField(
               primaryWords,
               primaryMarks,
               setPrimaryMarks,
               "Tap words in the Shema that stand out"
             )}
-            <p className="jc-encounter-prompt">{encounter.noticePrompt}</p>
 
-            <div className="jc-encounter-actions">
+            <div className="jc-encounter-actions jc-scene-actions">
               <button
                 type="button"
                 className="jc-encounter-ghost"
                 onClick={() => setPrimaryMarks([])}
                 disabled={!primaryMarks.length}
               >
-                Clear
+                Clear selection
               </button>
               <button
                 type="button"
@@ -348,24 +359,39 @@ function EncounterExperience({ move, onComplete, onExit }) {
                 onClick={() => setPhase("bridge")}
                 disabled={!primaryMarks.length}
               >
-                Hold that thought <span>→</span>
+                Keep these words <span>→</span>
               </button>
             </div>
           </section>
         )}
 
         {phase === "bridge" && (
-          <section className="jc-encounter-scene">
-            <div className="jc-encounter-step">02 · HOLD TWO TEXTS TOGETHER</div>
-            <p className="jc-encounter-bridge-line">{encounter.bridgeLine}</p>
+          <section className="jc-encounter-scene jc-compare-scene">
+            <div className="jc-scene-topline">
+              <div className="jc-encounter-step">02 · COMPARE</div>
+              <div className="jc-scene-progress" aria-label="Encounter step 2 of 4">
+                <i className="is-done" />
+                <i className="is-active" />
+                <i />
+                <i />
+              </div>
+            </div>
+
+            <div className="jc-compare-intro">
+              <h2>Now put a second voice beside the first.</h2>
+              <p>{encounter.bridgeLine}</p>
+            </div>
 
             <div className="jc-encounter-pair">
-              <article>
+              <article className="is-first">
                 <span>{encounter.primaryVerse?.reference}</span>
                 <p>{encounter.primaryVerse?.text}</p>
+                <small>Your first text</small>
               </article>
+
               <div className="jc-pair-symbol">+</div>
-              <article>
+
+              <article className="is-second">
                 <span>{encounter.bridgeVerse?.reference}</span>
                 {renderWordField(
                   bridgeWords,
@@ -373,19 +399,25 @@ function EncounterExperience({ move, onComplete, onExit }) {
                   setBridgeMarks,
                   "Tap words in Isaiah that stand out"
                 )}
+                <small>Touch the words that sharpen the claim</small>
               </article>
             </div>
 
-            <p className="jc-encounter-prompt">{encounter.bridgePrompt}</p>
+            <div className="jc-compare-question">
+              <span>Hold these together</span>
+              <p>{encounter.bridgePrompt}</p>
+            </div>
 
-            <button
-              type="button"
-              className="jc-encounter-next"
-              onClick={() => setPhase("artifacts")}
-              disabled={!bridgeMarks.length}
-            >
-              See the text in the real world <span>→</span>
-            </button>
+            <div className="jc-scene-actions">
+              <button
+                type="button"
+                className="jc-encounter-next"
+                onClick={() => setPhase("artifacts")}
+                disabled={!bridgeMarks.length}
+              >
+                See the text in the real world <span>→</span>
+              </button>
+            </div>
           </section>
         )}
 
