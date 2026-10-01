@@ -3686,3 +3686,286 @@
     padding: 0;
   }
 }
+
+
+/* classroom readability system v11 */
+
+/* Global readability floor across the Classroom */
+.jc-page,
+.jc-encounter-page,
+.jc-handoff-page {
+  color: #eef4f5;
+}
+
+.jc-page p,
+.jc-encounter-page p,
+.jc-handoff-page p {
+  color: #d3dde1;
+}
+
+.jc-body-copy,
+.jc-teaching-copy p,
+.jc-insight p,
+.jc-reflection-note,
+.jc-reflection-teaching p,
+.jc-reflection-insight p,
+.jc-reflection-your-thought p,
+.jc-teacher-message,
+.jc-feedback-copy,
+.jc-source-viewer > p,
+.jc-source-viewer-summary p,
+.jc-source-viewer-why p {
+  color: #d4dee2;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.jc-verse blockquote {
+  color: #fff9f0;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  line-height: 1.55;
+}
+
+.jc-verse-ref,
+.jc-eyebrow,
+.jc-stage-label,
+.jc-path-chip,
+.jc-reflection-prompt > span,
+.jc-focus-block > span,
+.jc-insight > span {
+  color: #b9c8ce;
+  font-size: .76rem;
+}
+
+/* Reduce oversized encounter headings so the content can breathe */
+.jc-encounter-scene h2 {
+  max-width: 900px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.08;
+}
+
+.jc-encounter-subcopy,
+.jc-encounter-prompt,
+.jc-encounter-bridge-line {
+  color: #d0dbe0;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* History/source section */
+.jc-voice-stack {
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.jc-voice-card {
+  padding: 20px 18px 22px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  background: rgba(255,255,255,.032);
+}
+
+.jc-voice-card + .jc-voice-card {
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+.jc-voice-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 9px 12px;
+}
+
+.jc-voice-card-head > span {
+  color: #f1a06a;
+  font-size: .75rem;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.jc-source-provider {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 999px;
+  color: #d0dce0 !important;
+  background: rgba(255,255,255,.045);
+  font-size: .72rem !important;
+}
+
+.jc-voice-card > p {
+  max-width: 920px;
+  margin-top: 12px;
+  color: #d7e0e4;
+  font-size: .98rem;
+  line-height: 1.6;
+}
+
+.jc-voice-card blockquote {
+  margin-top: 14px;
+  color: #fff5e9;
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+  line-height: 1.5;
+}
+
+.jc-source-detail-action {
+  margin-top: 14px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 13px;
+  border: 1px solid rgba(153,205,222,.24);
+  border-radius: 11px;
+  color: #eef8fb;
+  background: rgba(117,184,207,.09);
+  font: 700 .78rem/1 var(--font-display);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.jc-source-detail-action:hover {
+  border-color: rgba(174,220,235,.38);
+  background: rgba(117,184,207,.15);
+}
+
+.jc-inline-source {
+  color: #e5f1f5;
+  font-size: .78rem;
+}
+
+/* Source library should read as an action, not faint metadata */
+.jc-source-shelf-wrap {
+  margin-top: 22px;
+}
+
+.jc-source-shelf-toggle {
+  min-height: 50px;
+  padding: 0 14px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 12px;
+  color: #eef4f5;
+  background: rgba(255,255,255,.035);
+  font-size: .82rem;
+}
+
+.jc-source-shelf-toggle:hover {
+  background: rgba(255,255,255,.055);
+}
+
+.jc-source-shelf-toggle span {
+  color: #f0a06b;
+  font-size: 1.1rem;
+}
+
+.jc-source-item {
+  min-height: 170px;
+  padding: 17px;
+  border-color: rgba(255,255,255,.10);
+  background: rgba(255,255,255,.035);
+}
+
+.jc-source-item > div span {
+  color: #f0a06b;
+  font-size: .68rem;
+}
+
+.jc-source-item > div small {
+  color: #c1cfd5;
+  font-size: .68rem;
+}
+
+.jc-source-item strong {
+  color: #f3f7f8;
+  font-size: .94rem;
+}
+
+.jc-source-item p {
+  color: #d0dbe0;
+  font-size: .82rem;
+  line-height: 1.55;
+}
+
+.jc-source-item em {
+  color: #aebec5;
+  font-size: .68rem;
+}
+
+/* Artifact cards */
+.jc-artifact-copy > span {
+  font-size: .7rem;
+}
+
+.jc-artifact-copy h3 {
+  font-size: 1.05rem;
+}
+
+.jc-artifact-copy p {
+  color: #d1dce0;
+  font-size: .88rem;
+  line-height: 1.58;
+}
+
+.jc-artifact-copy small {
+  color: #b6c4ca;
+  font-size: .74rem;
+}
+
+/* In-app source viewer */
+.jc-source-viewer-meta span,
+.jc-source-viewer-meta small,
+.jc-source-viewer-why span,
+.jc-source-viewer-summary > span {
+  font-size: .7rem;
+}
+
+.jc-source-viewer h3 {
+  font-size: 1.7rem;
+}
+
+.jc-source-viewer-foot {
+  color: #aebdc4;
+  font-size: .7rem;
+}
+
+.jc-source-original {
+  color: #c5d7de;
+  font-size: .72rem;
+}
+
+/* Buttons and helper copy */
+.jc-encounter-next,
+.jc-encounter-ghost,
+.jc-primary,
+.jc-secondary-action {
+  font-size: .84rem;
+}
+
+.jc-encounter-ghost {
+  color: #d3dde1;
+  border-color: rgba(255,255,255,.13);
+  background: rgba(255,255,255,.035);
+}
+
+@media (max-width: 760px) {
+  .jc-voice-card {
+    padding: 17px 15px 19px;
+  }
+
+  .jc-voice-card > p {
+    font-size: .94rem;
+  }
+
+  .jc-source-detail-action {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .jc-source-shelf-toggle {
+    font-size: .8rem;
+  }
+}
