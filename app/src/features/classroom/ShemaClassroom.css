@@ -697,3 +697,23 @@
   color: #1d4ed8;
   font-style: normal;
 }
+
+
+.sc-sheet-bible {
+  min-height: 48px;
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: #1d4ed8;
+  color: #fff;
+  font-weight: 780;
+  cursor: pointer;
+}
+
+.sc-sheet-bible span {
+  font-size: 1rem;
+}
