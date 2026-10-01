@@ -11,7 +11,8 @@
     "start": "node server.mjs",
     "serve": "node server.mjs",
     "test:brain": "node scripts/validate-standards.mjs && node scripts/smoke-learning-engine.mjs",
-    "test:bible-source": "node scripts/smoke-ebible-source.mjs"
+    "test:bible-source": "node scripts/smoke-ebible-source.mjs",
+    "test:bible": "node scripts/test-bible-parser.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

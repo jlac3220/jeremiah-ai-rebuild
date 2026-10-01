@@ -1,3 +1,5 @@
+import { BIBLE_BOOKS } from "../src/core/bible/bibleCatalog.js";
+
 const TRANSLATIONS = {
   kjv: { sourceId: "eng-kjv2006", path: "eng-kjv2006", label: "KJV" },
   asv: { sourceId: "eng-asv", path: "asv", label: "ASV" },
@@ -57,9 +59,10 @@ function stripTags(value = "") {
 }
 
 function removeNotes(value = "") {
+  // Remove the entire anchor before its nested popup spans.
   return String(value)
-    .replace(/<[^>]+class=["'][^"']*(?:footnote|note|notemark|fn)[^"']*["'][^>]*>[\s\S]*?<\/[^>]+>/gi, " ")
-    .replace(/<a\b[^>]*(?:href=["']#(?:fn|note)|class=["'][^"']*(?:footnote|note|notemark|fn))[^>]*>[\s\S]*?<\/a>/gi, " ");
+    .replace(/<a\b[^>]*(?:href=["']#(?:fn|note)|class=["'][^"']*(?:footnote|note|notemark|fn))[^>]*>[\s\S]*?<\/a>/gi, "")
+    .replace(/<span\b[^>]*class=["'][^"']*\b(?:notemark|popup)\b[^"']*["'][^>]*>[\s\S]*?<\/span>/gi, "");
 }
 
 function markerCandidates(html) {
@@ -79,69 +82,29 @@ function markerCandidates(html) {
         end: pattern.lastIndex,
       });
     }
-    if (matches.length >= 2) return matches;
+    if (matches.length) return matches;
   }
 
   return [];
 }
 
-function parseVerses(html) {
-  const markers = markerCandidates(html);
-
-  if (markers.length) {
-    return markers
-      .map((marker, index) => {
-        const next = markers[index + 1];
-        const nextMarker = next ? next.start : html.length;
-        const blockEndCandidates = [
-          html.indexOf("</p>", marker.end),
-          html.indexOf("</li>", marker.end),
-          html.indexOf("<hr", marker.end),
-          html.indexOf("<footer", marker.end),
-          html.indexOf('<div class="footnote', marker.end),
-          html.indexOf("<div class='footnote", marker.end),
-        ].filter((value) => value >= marker.end);
-        const blockEnd = blockEndCandidates.length
-          ? Math.min(...blockEndCandidates)
-          : html.length;
-        const raw = html.slice(marker.end, Math.min(nextMarker, blockEnd));
-        const text = stripTags(removeNotes(raw))
-          .replace(/^[\s\u00a0]*(?:¶|§)+\s*/u, "")
-          .trim();
-        return { verse: marker.verse, text };
-      })
-      .filter((item) => item.verse > 0 && item.text);
-  }
-
-  // Defensive fallback for any eBible HTML variant that omits semantic verse spans.
-  const body = stripTags(
-    String(html)
-      .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, " ")
-      .replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/gi, " ")
-      .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, " ")
-  );
-
-  const hits = [];
-  const versePattern = /(?:^|\s)(\d{1,3})[\s\u00a0]+(?=\S)/g;
-  let match;
-  while ((match = versePattern.exec(body))) {
-    hits.push({ verse: Number(match[1]), start: match.index + match[0].length });
-  }
-
-  return hits
-    .map((hit, index) => {
-      const next = hits[index + 1];
-      const text = body
-        .slice(hit.start, next ? next.start - String(next.verse).length - 1 : body.length)
-        .replace(/\s+/g, " ")
-        .trim();
-      return { verse: hit.verse, text };
-    })
-    .filter((item, index, list) => (
-      item.verse > 0 &&
-      item.text &&
-      (index === 0 || item.verse > list[index - 1].verse)
-    ));
+export function parseVerses(html) {
+  // Semantic verse markers are required: numbers in navigation or prose
+  // must never become Scripture. Remove page furniture before slicing.
+  const content = String(html)
+    .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, "")
+    .replace(/<(?:ul|nav)\b[^>]*>[\s\S]*?<\/(?:ul|nav)>/gi, "")
+    .replace(/<(?:div|p)\b[^>]*(?:class=["'][^"']*\b(?:footnotes|copyright)\b|id=["']FN\d+)[\s\S]*$/i, "")
+    .replace(/<footer\b[\s\S]*$/i, "")
+    .replace(/<hr\b[\s\S]*$/i, "")
+    .replace(/<(?:div|h[1-6])\b[^>]*class=["'][^"']*\b(?:s|s1|s2|ms|ms1|mr|sr|r|d)\b[^"']*["'][^>]*>[\s\S]*?<\/(?:div|h[1-6])>/gi, "");
+  const markers = markerCandidates(content);
+  return markers.map((marker, index) => ({
+    verse: marker.verse,
+    text: stripTags(removeNotes(content.slice(marker.end, markers[index + 1]?.start ?? content.length)))
+      .replace(/^[\s\u00a0]*(?:¶|§)+\s*/u, "")
+      .trim(),
+  })).filter((item) => item.verse > 0 && item.text);
 }
 
 function chapterFilename(bookCode, chapter) {
@@ -150,10 +113,11 @@ function chapterFilename(bookCode, chapter) {
 }
 
 async function fetchChapter(translationId, osis, chapter) {
-  const translation = TRANSLATIONS[translationId];
-  const bookCode = BOOK_CODES[osis];
+  const translation = Object.hasOwn(TRANSLATIONS, translationId) ? TRANSLATIONS[translationId] : null;
+  const book = BIBLE_BOOKS.find((item) => item.osis === osis);
+  const bookCode = book && BOOK_CODES[osis];
 
-  if (!translation || !bookCode || !Number.isInteger(chapter) || chapter < 1 || chapter > 150) {
+  if (!translation || !bookCode || !Number.isInteger(chapter) || chapter < 1 || chapter > book.chapters) {
     const error = new Error("Invalid Bible chapter request.");
     error.statusCode = 400;
     throw error;
