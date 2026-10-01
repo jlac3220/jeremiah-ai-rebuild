@@ -1,13 +1,14 @@
 const INTENT_KEY = "jeremiah-bible-reader-intent";
 
 export function parseBibleReference(reference = "") {
-  const match = String(reference).trim().match(/^(.+?)\s+(\d+)(?::(\d+))?/);
+  const match = String(reference).trim().match(/^(.+?)\s+(\d+)(?::(\d+)(?:[-–](\d+))?)?/);
   if (!match) return null;
 
   return {
     book: match[1].trim(),
     chapter: Number(match[2]),
     verse: match[3] ? Number(match[3]) : null,
+    endVerse: match[4] ? Number(match[4]) : (match[3] ? Number(match[3]) : null),
   };
 }
 

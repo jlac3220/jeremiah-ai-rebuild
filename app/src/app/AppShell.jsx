@@ -4,7 +4,7 @@ import { MAIN_NAV_ROUTES, ROUTES } from './routes';
 import BottomNav from '../shared/layout/BottomNav';
 import { clearBibleReaderIntent } from '../core/bible/bibleReaderIntent';
 import { getLearningDashboard } from '../core/classroom/learningDashboard';
-import { setActiveClassroomSessionPreset } from '../core/classroom/classroomSessionData';
+import { setActiveClassroomStandardId, setActiveClassroomSessionPreset } from '../core/classroom/classroomSessionData';
 import { setClassroomEntryIntent, CLASSROOM_ENTRY_INTENTS } from '../core/classroom/classroomEntryIntent';
 function readRoute() {
   const route = window.location.hash.slice(1);
@@ -29,6 +29,7 @@ export default function AppShell() {
     if (route === ROUTES.BIBLE_SUPPORT) clearBibleReaderIntent();
     if (route === ROUTES.CLASSROOM) {
       const active = getLearningDashboard().active;
+      setActiveClassroomStandardId(active.content.standardId);
       setActiveClassroomSessionPreset(active.preset);
       setClassroomEntryIntent(active.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
     }

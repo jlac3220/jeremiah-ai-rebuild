@@ -1,6 +1,6 @@
 import { ROUTES } from '../../app/routes';
 import { CLASSROOM_ENTRY_INTENTS, setClassroomEntryIntent } from '../../core/classroom/classroomEntryIntent';
-import { setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
+import { setActiveClassroomStandardId, setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
 import { getLearningDashboard } from '../../core/classroom/learningDashboard';
 import './LearningDashboard.css';
 
@@ -9,6 +9,7 @@ export default function HomePage({ onNavigate }) {
   const active = data.active;
   function openLesson() {
     setClassroomEntryIntent(active.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
+    setActiveClassroomStandardId(active.content.standardId);
     setActiveClassroomSessionPreset(active.preset);
     onNavigate(active.started ? ROUTES.CLASSROOM_STUDY : ROUTES.CLASSROOM);
   }

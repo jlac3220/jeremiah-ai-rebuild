@@ -23,3 +23,26 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
 .ce-door-action { display: flex; justify-content: space-between; margin-top: 20px; color: var(--color-blue); font: 650 .92rem/1.5 var(--font-body); }
 .ce-door-planned { background: #fafafa; border-style: dashed; }
 @media(max-width:740px) { .ce-doors { grid-template-columns: 1fr; gap: 16px; } .ce-door { min-height: 0; padding: 26px; } .ce-door-number { margin-bottom: 22px; } }
+.ce-feature { display:flex; align-items:center; gap:32px; justify-content:space-between; }
+.ce-feature > div { max-width:650px; }
+.ce-feature .ld-primary { flex-shrink:0; }
+.ce-catalog { margin-top:48px; }
+.ce-catalog-heading { display:flex; gap:30px; justify-content:space-between; align-items:center; margin-bottom:24px; }
+.ce-catalog-heading h2 { margin:8px 0; font:500 2rem/1.2 var(--font-display); }
+.ce-catalog-heading label { display:block; color:var(--color-muted); font:600 .8rem/1.5 var(--font-body); width:min(340px,100%); }
+.ce-catalog-heading input { display:block; width:100%; margin-top:8px; padding:14px 16px; border:1px solid #dce4ea; border-radius:12px; font:.9rem/1.5 var(--font-body); }
+.ce-domain { border-bottom:1px solid #e7edf1; }
+.ce-domain > summary { display:flex; gap:20px; align-items:center; padding:24px 0; cursor:pointer; list-style:none; }
+.ce-domain > summary::-webkit-details-marker { display:none; }
+.ce-domain summary > span { color:var(--color-blue); font:500 1.4rem/1 var(--font-display); }
+.ce-domain summary > div { flex:1; }
+.ce-domain summary strong { display:block; font:650 1.02rem/1.5 var(--font-body); }
+.ce-domain summary small { display:block; margin-top:5px; color:var(--color-muted); font:.8rem/1.5 var(--font-body); }
+.ce-domain summary i { color:var(--color-blue); font-size:1.3rem; font-style:normal; }
+.ce-domain[open] summary i { transform:rotate(45deg); }
+.ce-domain-lessons { display:grid; gap:8px; padding:0 0 24px 42px; }
+.ce-domain-lessons button { display:flex; gap:24px; justify-content:space-between; align-items:center; text-align:left; padding:18px 20px; border:0; border-radius:12px; background:#f6f8fa; cursor:pointer; color:var(--color-ink); }
+.ce-domain-lessons small { display:block; font:.7rem/1.5 var(--font-body); color:var(--color-muted); margin-bottom:5px; }
+.ce-domain-lessons strong { display:block; font:600 .97rem/1.6 var(--font-body); }
+.ce-domain-lessons em { flex-shrink:0; color:var(--color-blue); font:600 .8rem/1.5 var(--font-body); }
+@media(max-width:740px) { .ce-feature,.ce-catalog-heading { flex-direction:column; align-items:stretch; gap:20px; } .ce-domain-lessons { padding-left:0; } .ce-domain-lessons button { align-items:flex-start; flex-direction:column; gap:10px; } }

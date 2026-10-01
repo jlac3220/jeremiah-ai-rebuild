@@ -20,6 +20,7 @@ import {
 import { getClassroomContentByStandardId } from "../../core/classroom/content/classroomContentRegistry";
 import { setBibleReaderIntent } from "../../core/bible/bibleReaderIntent";
 import { askJeremiahTeacher } from "../../services/jeremiahTeacher";
+import CurriculumLesson from "./CurriculumLesson";
 import ShemaClassroom from "./ShemaClassroom";
 import ShemaContinuation from "./ShemaContinuation";
 import "./ClassroomPage.css";
@@ -1414,7 +1415,9 @@ export default function ClassroomPage({ onNavigate }) {
 
   function handleContinue() {
     if (!learningState || !currentMove) return;
-    const next = advanceUnscoredMove(learningState, currentMove);
+    let next = advanceUnscoredMove(learningState, currentMove);
+    if (content.sourceStandard && currentMove.id === "scripture") next = markLearningMilestones(next, ["scripture"]);
+    if (content.sourceStandard && currentMove.id === "sources") next = markLearningMilestones(next, ["evidence"]);
     setLearningState(next);
     clearInteraction();
   }
@@ -1587,6 +1590,10 @@ export default function ClassroomPage({ onNavigate }) {
         </button>
       </div>
     );
+  }
+
+  if (content.sourceStandard) {
+    return <CurriculumLesson key={currentMove.id} content={content} move={currentMove} state={learningState} percent={progress} responseText={responseText} onResponseText={handleResponseTextChange} selectedChoiceId={selectedChoiceId} onSelectChoice={handleSelectChoice} ready={ready} teacherDecision={teacherDecision} isThinking={isThinking} errorMessage={errorMessage} onSubmit={handleSubmit} onContinue={handleContinue} onTeacherContinue={handleTeacherContinue} onNavigate={onNavigate} />;
   }
 
   const shemaEpisodeMove =

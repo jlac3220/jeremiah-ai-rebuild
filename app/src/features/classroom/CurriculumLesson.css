@@ -1,0 +1,45 @@
+.cl-page { min-height:100vh; background:#fff; color:var(--color-ink); }
+.cl-topbar { position:sticky; top:0; z-index:30; display:grid; grid-template-columns:44px 1fr 44px; align-items:center; gap:15px; padding:12px 24px; background:rgba(255,255,255,.97); border-bottom:1px solid #edf0f3; font:600 .9rem/1.4 var(--font-body); text-align:center; }
+.cl-topbar button { border:0; background:transparent; padding:10px; cursor:pointer; color:var(--color-ink); }
+.cl-percent { color:var(--color-muted); font-size:.8rem; }
+.cl-progress { height:3px; background:#edf0f3; }
+.cl-progress span { display:block; height:100%; background:var(--color-blue); }
+.cl-shell { max-width:760px; margin:auto; padding:48px 26px 90px; }
+.cl-shell h1 { font:500 clamp(2rem,5vw,3.4rem)/1.12 var(--font-display); margin:16px 0 20px; letter-spacing:-.025em; }
+.cl-shell h2 { font:500 1.8rem/1.3 var(--font-display); }
+.cl-breadcrumb,.cl-muted { color:var(--color-muted); font:.9rem/1.7 var(--font-body); }
+.cl-prose { font:1.13rem/1.85 var(--font-body); margin:24px 0; }
+.cl-target { background:#f4f7f9; padding:24px; border-radius:16px; margin:32px 0; }
+.cl-target p { font:1.25rem/1.7 var(--font-display); margin:10px 0 0; }
+.cl-vocabulary { padding:20px 0; margin:20px 0; border-top:1px solid #edf0f3; border-bottom:1px solid #edf0f3; }
+.cl-vocabulary summary { cursor:pointer; font:600 .96rem/1.5 var(--font-body); color:var(--color-blue); }
+.cl-vocabulary dt { font-weight:650; margin-top:18px; }
+.cl-vocabulary dd { margin:6px 0 0; line-height:1.7; color:var(--color-muted); }
+.cl-scripture-list { display:grid; gap:12px; }
+.cl-scripture-list button { display:grid; gap:9px; border:0; padding:22px; border-radius:14px; background:#f5f8fa; text-align:left; cursor:pointer; color:var(--color-ink); }
+.cl-scripture-list strong { display:flex; justify-content:space-between; font:650 1rem/1.5 var(--font-body); color:var(--color-blue); }
+.cl-scripture-list button > span { font:.95rem/1.7 var(--font-body); color:var(--color-muted); }
+.cl-media { margin:32px 0; padding:24px; border-radius:18px; background:#f6f8fa; }
+.cl-media video { width:100%; aspect-ratio:16/9; border-radius:12px; background:#101722; }
+.cl-media p { font:.92rem/1.7 var(--font-body); color:var(--color-muted); }
+.cl-media a { display:inline-block; margin:8px 22px 8px 0; color:var(--color-blue); font:600 .92rem/1.5 var(--font-body); }
+.cl-prompt { font:1.25rem/1.8 var(--font-body); margin:30px 0; }
+.cl-choices { display:grid; gap:14px; }
+.cl-choices button { padding:22px; border:1px solid #dfe7ed; border-radius:14px; background:#fff; color:var(--color-ink); text-align:left; cursor:pointer; line-height:1.7; }
+.cl-choices button[aria-pressed=true] { background:#eef4f8; border-color:var(--color-blue); box-shadow:inset 3px 0 0 var(--color-blue); }
+.cl-response-label { display:block; font:650 .85rem/1.5 var(--font-body); color:var(--color-muted); }
+.cl-response-label textarea { display:block; width:100%; margin:10px 0 24px; padding:20px; border:1px solid #d7e1e8; border-radius:14px; resize:vertical; color:var(--color-ink); font:1.05rem/1.8 var(--font-body); }
+.cl-next { margin-top:30px; }
+.ld-primary:disabled { opacity:.45; cursor:not-allowed; }
+.cl-feedback { padding:26px; border-radius:16px; background:#f3f7fa; margin:32px 0; }
+.cl-feedback > p { line-height:1.8; }
+.cl-error { background:#fff1ee; color:#8e3529; padding:20px; border-radius:12px; }
+.cl-complete-evidence p { display:grid; gap:8px; line-height:1.7; margin-bottom:24px; }
+.cl-save { margin-top:28px; font-size:.8rem; }
+.cl-witness-map { margin:36px 0; }
+.cl-witness-map > div { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+.cl-witness-map section { background:#f4f7f9; padding:24px; border-radius:16px; }
+.cl-witness-map h3 { margin:0 0 16px; font:650 .9rem/1.5 var(--font-body); }
+.cl-witness-map button,.cl-reference-buttons button { display:block; border:0; border-left:2px solid #dce6ed; padding:10px 14px; background:transparent; cursor:pointer; color:var(--color-blue); font:.9rem/1.5 var(--font-body); }
+.cl-reference-buttons { margin:20px 0; }
+@media(max-width:600px) { .cl-shell { padding-top:32px; } .cl-witness-map > div { grid-template-columns:1fr; } .cl-next { width:100%; } }

@@ -1,6 +1,6 @@
 import { ROUTES } from '../../app/routes';
 import { CLASSROOM_ENTRY_INTENTS, setClassroomEntryIntent } from '../../core/classroom/classroomEntryIntent';
-import { setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
+import { setActiveClassroomStandardId, setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
 import { getLearningDashboard } from '../../core/classroom/learningDashboard';
 import '../home/LearningDashboard.css';
 
@@ -8,6 +8,7 @@ export default function ProgressPage({ onNavigate }) {
   const data = getLearningDashboard();
   function open(lesson) {
     setClassroomEntryIntent(lesson.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
+    setActiveClassroomStandardId(lesson.content.standardId);
     setActiveClassroomSessionPreset(lesson.preset);
     onNavigate(ROUTES.CLASSROOM_STUDY);
   }

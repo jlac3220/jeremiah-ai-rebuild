@@ -39,5 +39,8 @@ jobs:
       - name: Validate saved learning dashboard
         run: npm run test:dashboard
 
+      - name: Validate full curriculum
+        run: npm run test:curriculum
+
       - name: Build app
         run: npm run build

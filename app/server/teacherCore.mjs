@@ -94,7 +94,14 @@ function deterministicVerdict(move, learnerResponse) {
   return selected.length ? "weak" : "weak";
 }
 
-function fallbackDecision(move, learnerResponse, reason = "") {
+function fallbackDecision(move, learnerResponse, reason = "", content = null) {
+  if (content?.sourceStandard && ["free_response", "mastery_response"].includes(move.type)) {
+    return {
+      verdict: "partial", strategy: "encourage_retry", source: "fallback", diagnostic: reason,
+      teacherMessage: "Your explanation is saved. Meaning-based assessment is unavailable right now, so this answer has not been marked as mastered. Review the lesson’s Scripture and try again when assessment is available.",
+      followUpPrompt: move.prompt, misconceptionIds: [], evidenceObserved: [],
+    };
+  }
   const verdict = deterministicVerdict(move, learnerResponse);
 
   if (verdict === "strong") {
@@ -181,7 +188,7 @@ export async function teachWithJeremiah({
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return fallbackDecision(move, learnerResponse, "OPENAI_API_KEY missing");
+  if (!apiKey) return fallbackDecision(move, learnerResponse, "OPENAI_API_KEY missing", content);
 
   const isDeepMove = ["free_response", "mastery_response"].includes(move.type);
   const model = isDeepMove
@@ -207,6 +214,8 @@ export async function teachWithJeremiah({
       title: content.standardTitle,
       essentialQuestion: content.brain?.essentialQuestion,
       masteryTarget: content.brain?.masteryTarget,
+      scopeAndClarifications: content.sourceStandard?.scope || "",
+      readinessEvidence: content.sourceStandard?.evidence || [],
       requiredKnowledge: content.brain?.requiredKnowledge,
       misconceptions: content.brain?.misconceptions,
       evidenceOfUnderstanding: content.brain?.evidenceOfUnderstanding,
@@ -272,7 +281,8 @@ export async function teachWithJeremiah({
     return fallbackDecision(
       move,
       learnerResponse,
-      `OpenAI ${apiResponse.status}: ${details.slice(0, 240)}`
+      `OpenAI ${apiResponse.status}: ${details.slice(0, 240)}`,
+      content
     );
   }
 
@@ -296,6 +306,6 @@ export async function teachWithJeremiah({
       responseId: responseJson.id || "",
     };
   } catch {
-    return fallbackDecision(move, learnerResponse, "Structured output parse failed");
+    return fallbackDecision(move, learnerResponse, "Structured output parse failed", content);
   }
 }

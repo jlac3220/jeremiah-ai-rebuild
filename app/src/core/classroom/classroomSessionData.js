@@ -5,6 +5,26 @@ import {
 } from "./content/classroomContentRegistry";
 
 const STORAGE_KEY = "jeremiah-ai-active-classroom-session";
+const ACTIVE_STANDARD_KEY = "jeremiah-active-standard";
+const ACTIVE_STUDY_KEY = "jeremiah-active-study";
+
+export function getActiveClassroomStandardId() {
+  if (typeof window === "undefined") return DEFAULT_CLASSROOM_STANDARD_ID;
+  return window.sessionStorage.getItem(ACTIVE_STANDARD_KEY) || DEFAULT_CLASSROOM_STANDARD_ID;
+}
+export function setActiveClassroomStandardId(id) {
+  if (typeof window !== "undefined" && getClassroomContentByStandardId(id)) {
+    window.sessionStorage.setItem(ACTIVE_STANDARD_KEY, id);
+    window.sessionStorage.setItem(ACTIVE_STUDY_KEY, getClassroomContentByStandardId(id).studyId);
+  }
+}
+export function getActiveClassroomStudyId() {
+  return typeof window !== "undefined" ? window.sessionStorage.getItem(ACTIVE_STUDY_KEY) || "OG" : "OG";
+}
+export function setActiveClassroomStudyId(id) {
+  if (typeof window !== "undefined" && ["OG", "NB"].includes(id)) window.sessionStorage.setItem(ACTIVE_STUDY_KEY, id);
+}
+
 const LIVE_STAGE_KEY_PREFIX = "jeremiah-ai-live-stage";
 
 export const CLASSROOM_SESSION_PRESETS = {
@@ -93,7 +113,7 @@ function firstNonEmpty(values) {
 }
 
 function getLiveStageStorageKey(presetId) {
-  return `${LIVE_STAGE_KEY_PREFIX}:${presetId}`;
+  return `${LIVE_STAGE_KEY_PREFIX}:${getActiveClassroomStandardId()}:${presetId}`;
 }
 
 export function selectHomeSessionPreset(homeData = {}) {
@@ -173,7 +193,7 @@ export function selectProfileSessionPreset(profileData = {}) {
 export function setActiveClassroomSessionPreset(presetId) {
   if (typeof window === "undefined") return;
 
-  const availablePresets = getClassroomSessionPresets();
+  const availablePresets = getClassroomSessionPresets(getActiveClassroomStandardId());
 
   const safePreset =
     availablePresets[presetId] != null
@@ -216,7 +236,7 @@ export function clearSavedLiveStageForPreset(presetId) {
 }
 
 export function getCurrentSession() {
-  const content = getFallbackClassroomContent();
+  const content = getClassroomContentByStandardId(getActiveClassroomStandardId()) || getFallbackClassroomContent();
   const presets = getClassroomSessionPresets(content.standardId);
   const presetId = getActiveClassroomSessionPreset();
   const preset =

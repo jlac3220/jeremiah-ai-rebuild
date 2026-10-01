@@ -1,7 +1,7 @@
 import { ROUTES } from '../../app/routes';
 import { getLearningDashboard } from '../../core/classroom/learningDashboard';
 import { setClassroomEntryIntent, CLASSROOM_ENTRY_INTENTS } from '../../core/classroom/classroomEntryIntent';
-import { setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
+import { setActiveClassroomStandardId, setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
 import '../home/LearningDashboard.css';
 
 export default function ProfilePage({ onNavigate }) {
@@ -9,6 +9,7 @@ export default function ProfilePage({ onNavigate }) {
   const active = data.active;
   function resume() {
     setClassroomEntryIntent(active.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
+    setActiveClassroomStandardId(active.content.standardId);
     setActiveClassroomSessionPreset(active.preset);
     onNavigate(active.started ? ROUTES.CLASSROOM_STUDY : ROUTES.CLASSROOM);
   }
