@@ -324,12 +324,22 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
           },
         ],
         noticePrompt:
-          "Touch the words that seem to carry the weight of this confession.",
+          "Read the verse once as a whole. Which phrase would you carry with you into the next passage?",
+        primaryPhraseOptions: [
+          { id: "hear-israel", text: "Hear, O Israel" },
+          { id: "lord-our-god", text: "The LORD our God" },
+          { id: "one-lord", text: "is one LORD" },
+        ],
         bridgeLine:
-          "Now hold what you noticed beside another statement from Scripture.",
+          "Now place Isaiah beside the Shema and watch what happens to the claim.",
         bridgeVerse: isaiah45,
         bridgePrompt:
-          "Do these words merely repeat the Shema, or do they close a door the Shema leaves open?",
+          "Which phrase in Isaiah most clearly sharpens the boundary around the confession?",
+        bridgePhraseOptions: [
+          { id: "i-am-lord", text: "I am the LORD" },
+          { id: "none-else", text: "there is none else" },
+          { id: "no-god-beside", text: "there is no God beside me" },
+        ],
         destination:
           "By the end of this lesson, you should be able to explain why “one LORD” and “there is none else” belong together—and why Jesus repeating the Shema matters.",
       },
