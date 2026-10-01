@@ -6309,3 +6309,197 @@
     padding-top: 26px;
   }
 }
+
+
+/* readability reset v19 */
+
+.jc-page,
+.jc-handoff-page,
+.jc-encounter-page {
+  color: #172a33;
+  background: #f3f0ea;
+}
+
+.jc-classroom-bar {
+  background: rgba(255,255,255,.97);
+  border-bottom-color: #d9dee0;
+  box-shadow: 0 4px 18px rgba(26,38,43,.05);
+}
+
+.jc-shell,
+.jc-pattern-scene,
+.jc-interaction-scene {
+  color: #172a33;
+}
+
+.jc-lesson,
+.jc-pattern-field,
+.jc-pattern-response,
+.jc-prediction-memory,
+.jc-prediction-response,
+.jc-reveal-scripture,
+.jc-builder-pool button,
+.jc-builder-chain > div,
+.jc-story-panel,
+.jc-voice-card,
+.jc-source-item,
+.jc-reflection-your-thought,
+.jc-reflection-teaching,
+.jc-reflection-insight,
+.jc-feedback,
+.jc-thinking,
+.jc-error {
+  background: #ffffff;
+  border-color: #d7dde0;
+  box-shadow: 0 10px 28px rgba(30,42,47,.055);
+}
+
+.jc-verse {
+  background: #fbfdfe;
+  border-color: #cfd9dd;
+  border-left-color: #3f8298;
+}
+
+.jc-focus-block,
+.jc-handoff-focus,
+.jc-reveal-focus,
+.jc-builder-chain > div.is-filled {
+  background: #fff8f1;
+  border-color: #e3c7b4;
+}
+
+.jc-pattern-anchor,
+.jc-choice.is-selected,
+.jc-builder-result.is-retry {
+  background: #fff7f0;
+  border-color: #dfc3b1;
+}
+
+.jc-choice,
+.jc-source-shelf-toggle,
+.jc-story-back,
+.jc-source-provider {
+  background: #ffffff;
+  border-color: #d5dcdf;
+}
+
+.jc-move-head h1,
+.jc-pattern-hero h1,
+.jc-prediction-intro h1,
+.jc-builder-intro h1,
+.jc-reflection-prompt h2,
+.jc-question h2,
+.jc-verse blockquote,
+.jc-handoff-scripture blockquote,
+.jc-reveal-scripture blockquote,
+.jc-pattern-verse blockquote,
+.jc-teaching-copy p:first-child,
+.jc-feedback-label strong,
+.jc-thinking strong {
+  color: #142b34;
+}
+
+.jc-body-copy,
+.jc-teaching-copy p,
+.jc-handoff-teaching p,
+.jc-prediction-intro p,
+.jc-builder-intro p,
+.jc-pattern-explanation,
+.jc-story-hook,
+.jc-source-item p,
+.jc-voice-card > p,
+.jc-reveal-teaching p,
+.jc-prediction-response p {
+  color: #344d56 !important;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.jc-reflection-note,
+.jc-response-note,
+.jc-feedback > small,
+.jc-thinking p,
+.jc-pattern-response-foot small,
+.jc-source-item em,
+.jc-source-item > div small,
+.jc-story-meta span,
+.jc-handoff-opening,
+.jc-handoff-bridge {
+  color: #566b73;
+}
+
+.jc-eyebrow,
+.jc-reveal-label,
+.jc-prediction-intro > span,
+.jc-builder-intro > span,
+.jc-pattern-hero > div:first-child > span,
+.jc-pattern-response > div:first-child > span {
+  color: #9b4f2e;
+}
+
+.jc-verse-ref,
+.jc-handoff-scripture > span,
+.jc-pattern-verse span,
+.jc-prediction-memory > span,
+.jc-builder-pool small,
+.jc-builder-chain small,
+.jc-builder-final small {
+  color: #2f7288;
+}
+
+.jc-classroom-progress small,
+.jc-classroom-back,
+.jc-classroom-more {
+  color: #30474f;
+}
+
+.jc-classroom-progress > div {
+  background: #dfe4e6;
+}
+
+.jc-classroom-progress i {
+  background: #3f8298;
+}
+
+.jc-pattern-verse mark {
+  color: #70371f;
+  background: #ffe7d6;
+  box-shadow: inset 0 -2px #d78b62;
+}
+
+.jc-primary,
+.jc-pattern-trigger {
+  background: #b85e35;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(142,75,43,.16);
+}
+
+.jc-primary:hover,
+.jc-pattern-trigger:hover {
+  filter: brightness(.96);
+}
+
+.jc-response textarea,
+.jc-reflection textarea,
+.jc-pattern-response textarea {
+  color: #17313a;
+  background: #ffffff;
+  border-color: #cbd4d7;
+}
+
+.jc-response textarea::placeholder,
+.jc-reflection textarea::placeholder,
+.jc-pattern-response textarea::placeholder {
+  color: #718188;
+}
+
+@media (max-width: 760px) {
+  .jc-body-copy,
+  .jc-teaching-copy p,
+  .jc-handoff-teaching p,
+  .jc-prediction-intro p,
+  .jc-builder-intro p,
+  .jc-reveal-teaching p {
+    font-size: 1.02rem;
+  }
+}
