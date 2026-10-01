@@ -3263,3 +3263,132 @@
     width: 100%;
   }
 }
+
+
+/* opening polish v6 */
+
+.jc-encounter-shell {
+  min-height: auto;
+  align-items: start;
+  padding-top: 42px;
+  padding-bottom: 48px;
+}
+
+.jc-threshold-grid {
+  align-items: start;
+}
+
+.jc-threshold-copy {
+  padding-top: 54px;
+}
+
+.jc-threshold-copy h1 {
+  font-size: clamp(2.85rem, 4vw, 3.95rem);
+  line-height: 1.02;
+}
+
+.jc-threshold-copy .jc-encounter-opening {
+  max-width: 520px;
+}
+
+.jc-threshold-video-feature {
+  overflow: hidden;
+}
+
+.jc-threshold-video-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.jc-threshold-video-note {
+  margin-top: 4px;
+  color: #aebfc6;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.jc-threshold-video-note strong {
+  display: inline;
+  color: #e8eef0;
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.jc-threshold-artifact-strip {
+  grid-template-columns: 118px minmax(0, 1fr);
+  min-height: 108px;
+  overflow: hidden;
+}
+
+.jc-threshold-artifact-strip img {
+  width: 118px;
+  height: 108px;
+  object-fit: contain;
+  padding: 10px;
+}
+
+.jc-threshold-artifact-copy {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 12px 18px 12px 0;
+}
+
+.jc-threshold-artifact-copy span,
+.jc-threshold-artifact-copy strong,
+.jc-threshold-artifact-copy small {
+  margin: 0;
+}
+
+.jc-threshold-artifact-copy span {
+  color: #efa06b;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: .04em;
+}
+
+.jc-threshold-artifact-copy strong {
+  color: #f1f5f6;
+  font-size: .94rem;
+}
+
+.jc-threshold-artifact-copy small {
+  color: #b7c5cb;
+  font-size: .74rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 980px) {
+  .jc-threshold-copy {
+    padding-top: 0;
+  }
+
+  .jc-encounter-shell {
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 760px) {
+  .jc-encounter-shell {
+    padding-top: 18px;
+  }
+
+  .jc-threshold-grid {
+    gap: 24px;
+  }
+
+  .jc-threshold-copy h1 {
+    font-size: clamp(2.35rem, 10vw, 3.25rem);
+  }
+
+  .jc-threshold-artifact-strip {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .jc-threshold-artifact-strip img {
+    width: 96px;
+    height: 100px;
+  }
+}
