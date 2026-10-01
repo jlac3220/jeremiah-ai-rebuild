@@ -6842,3 +6842,185 @@
     border-radius: 16px !important;
   }
 }
+
+
+/* familiar-app handoff v22 */
+
+.jc-handoff-page {
+  background: #f6f6f4 !important;
+  color: #161616 !important;
+}
+
+.jc-handoff-simple {
+  width: min(760px, calc(100% - 32px)) !important;
+  min-height: auto !important;
+  padding: 72px 0 88px !important;
+  display: block !important;
+}
+
+.jc-handoff-simple .jc-handoff-scene {
+  display: grid;
+  gap: 26px;
+}
+
+.jc-handoff-page .jc-encounter-exit {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  width: 100%;
+  padding: 17px max(18px, calc((100vw - 760px) / 2));
+  border-bottom: 1px solid #e2e2df;
+  color: #1b1b1b;
+  background: rgba(255,255,255,.97);
+  backdrop-filter: blur(12px);
+  text-align: left;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.jc-handoff-noticed {
+  margin: 0 !important;
+  color: #5a5a5a !important;
+  font-size: .95rem !important;
+  line-height: 1.55 !important;
+}
+
+.jc-handoff-noticed strong {
+  color: #1c1c1c;
+  font-weight: 700;
+}
+
+.jc-handoff-scripture-primary {
+  margin: 0 !important;
+  padding: 28px 28px 30px !important;
+  border: 1px solid #ddddda !important;
+  border-radius: 20px !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.035) !important;
+}
+
+.jc-handoff-scripture-primary > span {
+  color: #6a6a6a !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .07em !important;
+}
+
+.jc-handoff-scripture-primary blockquote {
+  margin: 14px 0 0 !important;
+  color: #111111 !important;
+  font: 600 clamp(2rem, 5vw, 3.35rem)/1.18 Georgia, "Times New Roman", serif !important;
+  letter-spacing: -.025em !important;
+}
+
+.jc-handoff-scripture-primary mark {
+  padding: 0 .08em .06em !important;
+  border-radius: 7px !important;
+  color: #6f351d !important;
+  background: #ffe2cf !important;
+  box-shadow: inset 0 -2px #e59a72 !important;
+}
+
+.jc-handoff-teacher-simple {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.jc-handoff-teacher-simple .jc-handoff-teacher-head {
+  grid-template-columns: 42px 1fr !important;
+  gap: 12px !important;
+}
+
+.jc-handoff-teacher-simple .jc-handoff-teacher-head > span {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  background: #d86b36 !important;
+  box-shadow: none !important;
+}
+
+.jc-handoff-teacher-simple .jc-handoff-teacher-head small {
+  color: #767676 !important;
+  font-size: .68rem !important;
+  letter-spacing: .06em !important;
+}
+
+.jc-handoff-teacher-simple .jc-handoff-teacher-head strong {
+  margin-top: 2px !important;
+  color: #151515 !important;
+  font: 760 1.2rem/1.2 var(--font-display) !important;
+}
+
+.jc-handoff-teacher-simple .jc-handoff-teaching {
+  gap: 12px !important;
+  margin-top: 18px !important;
+}
+
+.jc-handoff-teacher-simple .jc-handoff-teaching p {
+  max-width: 720px !important;
+  margin: 0 !important;
+  color: #353535 !important;
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
+}
+
+.jc-handoff-takeaway {
+  padding: 20px 22px;
+  border-left: 4px solid #d86b36;
+  border-radius: 0 14px 14px 0;
+  background: #fff7f1;
+}
+
+.jc-handoff-takeaway > span {
+  display: block;
+  color: #7d4a31;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.jc-handoff-takeaway > strong {
+  display: block;
+  margin-top: 7px;
+  color: #5d2f1d;
+  font: 760 1.18rem/1.25 var(--font-display);
+}
+
+.jc-handoff-takeaway > p {
+  margin: 7px 0 0 !important;
+  color: #5a514c !important;
+  font-size: .88rem !important;
+  line-height: 1.55 !important;
+}
+
+.jc-handoff-continue {
+  width: 100%;
+  min-height: 52px !important;
+  justify-content: center;
+  margin: 0 !important;
+  border-radius: 14px !important;
+  background: #d86b36 !important;
+  box-shadow: none !important;
+  font-size: .92rem !important;
+}
+
+@media (max-width: 640px) {
+  .jc-handoff-simple {
+    width: calc(100% - 24px) !important;
+    padding: 34px 0 56px !important;
+  }
+
+  .jc-handoff-simple .jc-handoff-scene {
+    gap: 20px;
+  }
+
+  .jc-handoff-scripture-primary {
+    padding: 22px 20px 24px !important;
+    border-radius: 16px !important;
+  }
+
+  .jc-handoff-scripture-primary blockquote {
+    font-size: clamp(1.8rem, 10vw, 2.65rem) !important;
+  }
+}
