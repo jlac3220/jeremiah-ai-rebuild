@@ -18,6 +18,7 @@ import {
   updateLearningExperience,
 } from "../../core/classroom/learningEngine";
 import { getClassroomContentByStandardId } from "../../core/classroom/content/classroomContentRegistry";
+import { setBibleReaderIntent } from "../../core/bible/bibleReaderIntent";
 import { askJeremiahTeacher } from "../../services/jeremiahTeacher";
 import ShemaClassroom from "./ShemaClassroom";
 import ShemaContinuation from "./ShemaContinuation";
@@ -1606,6 +1607,13 @@ export default function ClassroomPage({ onNavigate }) {
         initialExperience={learningState.experience}
         onProgress={handleShemaEpisodeProgress}
         onComplete={handleShemaEpisodeComplete}
+        onOpenBible={(item) => {
+          setBibleReaderIntent(item.reference, {
+            returnRoute: ROUTES.CLASSROOM,
+            source: "classroom",
+          });
+          onNavigate(ROUTES.BIBLE_SUPPORT);
+        }}
         onExit={() => onNavigate(ROUTES.HOME)}
       />
     );
