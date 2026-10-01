@@ -1,5 +1,6 @@
 import { ROUTES } from "./routes";
 import HomePage from "../features/home/HomePage";
+import ClassroomEntrance, { ClassroomStudyRoom } from "../features/classroom/ClassroomEntrance";
 import ClassroomPage from "../features/classroom/ClassroomPage";
 import ProgressPage from "../features/progress/ProgressPage";
 import ProfilePage from "../features/profile/ProfilePage";
@@ -25,6 +26,12 @@ export default function AppRouter({ currentRoute, onNavigate }) {
       return <Placeholder title="Profile Select" />;
 
     case ROUTES.CLASSROOM:
+      return <ClassroomEntrance onNavigate={onNavigate} />;
+
+    case ROUTES.CLASSROOM_STUDY:
+      return <ClassroomStudyRoom onNavigate={onNavigate} />;
+
+    case ROUTES.CLASSROOM_LESSON:
       return <ClassroomPage onNavigate={onNavigate} />;
 
     case ROUTES.PROGRESS:

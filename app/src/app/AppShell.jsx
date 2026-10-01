@@ -8,7 +8,7 @@ import { setActiveClassroomSessionPreset } from '../core/classroom/classroomSess
 import { setClassroomEntryIntent, CLASSROOM_ENTRY_INTENTS } from '../core/classroom/classroomEntryIntent';
 function readRoute() {
   const route = window.location.hash.slice(1);
-  return MAIN_NAV_ROUTES.includes(route) ? route : ROUTES.HOME;
+  return [...MAIN_NAV_ROUTES, ROUTES.CLASSROOM_STUDY, ROUTES.CLASSROOM_LESSON].includes(route) ? route : ROUTES.HOME;
 }
 export default function AppShell() {
   const [currentRoute, setCurrentRoute] = useState(readRoute);
@@ -20,7 +20,7 @@ export default function AppShell() {
   function navigate(route) {
     if (route === currentRoute) return;
     // A reader opened from the main navigation is independent of a lesson link.
-    if (currentRoute === ROUTES.BIBLE_SUPPORT && route !== ROUTES.CLASSROOM) clearBibleReaderIntent();
+    if (currentRoute === ROUTES.BIBLE_SUPPORT && route !== ROUTES.CLASSROOM_LESSON) clearBibleReaderIntent();
     window.location.hash = route;
     setCurrentRoute(route);
     window.scrollTo(0, 0);
@@ -34,6 +34,6 @@ export default function AppShell() {
     }
     navigate(route);
   }
-  const showBottomNav = MAIN_NAV_ROUTES.includes(currentRoute) && currentRoute !== ROUTES.CLASSROOM;
-  return <div className="app-shell"><main className={showBottomNav ? 'app-main has-nav' : 'app-main'}><AppRouter currentRoute={currentRoute} onNavigate={navigate} /></main>{showBottomNav && <BottomNav currentRoute={currentRoute} onNavigate={navigateFromNav} />}</div>;
+  const showBottomNav = MAIN_NAV_ROUTES.includes(currentRoute) || currentRoute === ROUTES.CLASSROOM_STUDY;
+  return <div className="app-shell"><main className={showBottomNav ? 'app-main has-nav' : 'app-main'}><AppRouter currentRoute={currentRoute} onNavigate={navigate} /></main>{showBottomNav && <BottomNav currentRoute={currentRoute === ROUTES.CLASSROOM_STUDY ? ROUTES.CLASSROOM : currentRoute} onNavigate={navigateFromNav} />}</div>;
 }

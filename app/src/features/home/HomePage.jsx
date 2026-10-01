@@ -10,7 +10,7 @@ export default function HomePage({ onNavigate }) {
   function openLesson() {
     setClassroomEntryIntent(active.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
     setActiveClassroomSessionPreset(active.preset);
-    onNavigate(ROUTES.CLASSROOM);
+    onNavigate(active.started ? ROUTES.CLASSROOM_STUDY : ROUTES.CLASSROOM);
   }
   return <div className="ld-page"><div className="ld-content">
     <header className="ld-header"><span className="ld-brand">JEREMIAH</span><span className="ld-header-note">Rooted in the Word.</span></header>

@@ -9,7 +9,7 @@ export default function ProgressPage({ onNavigate }) {
   function open(lesson) {
     setClassroomEntryIntent(lesson.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
     setActiveClassroomSessionPreset(lesson.preset);
-    onNavigate(ROUTES.CLASSROOM);
+    onNavigate(ROUTES.CLASSROOM_STUDY);
   }
   return <div className="ld-page"><div className="ld-content">
     <header className="ld-header"><span className="ld-brand">JEREMIAH</span><button type="button" className="ld-link" onClick={() => onNavigate(ROUTES.HOME)}>Back to Home</button></header>

@@ -1614,12 +1614,12 @@ export default function ClassroomPage({ onNavigate }) {
         onOpenBible={(item) => {
           setBibleReaderIntent(item.reference, {
             translation: "kjv",
-            returnRoute: ROUTES.CLASSROOM,
+            returnRoute: ROUTES.CLASSROOM_LESSON,
             source: "classroom",
           });
           onNavigate(ROUTES.BIBLE_SUPPORT);
         }}
-        onExit={() => onNavigate(ROUTES.HOME)}
+        onExit={() => onNavigate(ROUTES.CLASSROOM_STUDY)}
       />
     );
   }
@@ -1629,7 +1629,7 @@ export default function ClassroomPage({ onNavigate }) {
       <EncounterExperience
         move={currentMove}
         onComplete={handleEncounterComplete}
-        onExit={() => onNavigate(ROUTES.HOME)}
+        onExit={() => onNavigate(ROUTES.CLASSROOM_STUDY)}
       />
     );
   }
@@ -1640,7 +1640,7 @@ export default function ClassroomPage({ onNavigate }) {
         move={currentMove}
         encounterData={learningState.encounterData}
         onContinue={handleContinue}
-        onExit={() => onNavigate(ROUTES.HOME)}
+        onExit={() => onNavigate(ROUTES.CLASSROOM_STUDY)}
       />
     );
   }
@@ -1671,7 +1671,7 @@ export default function ClassroomPage({ onNavigate }) {
         onSubmit={handleSubmit}
         onContinue={handleContinue}
         onTeacherContinue={handleTeacherContinue}
-        onExit={() => onNavigate(ROUTES.HOME)}
+        onExit={() => onNavigate(ROUTES.CLASSROOM_STUDY)}
         onHome={() => onNavigate(ROUTES.HOME)}
         onReview={handleReviewShemaEpisode}
       />

@@ -4,6 +4,8 @@ export const ROUTES = {
   PROFILE_SELECT: "profileSelect",
   HOME: "home",
   CLASSROOM: "classroom",
+  CLASSROOM_STUDY: "study",
+  CLASSROOM_LESSON: "lesson",
   PROGRESS: "progress",
   PROFILE: "profile",
   BIBLE_SUPPORT: "bibleSupport",

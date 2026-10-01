@@ -10,7 +10,7 @@ export default function ProfilePage({ onNavigate }) {
   function resume() {
     setClassroomEntryIntent(active.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
     setActiveClassroomSessionPreset(active.preset);
-    onNavigate(ROUTES.CLASSROOM);
+    onNavigate(active.started ? ROUTES.CLASSROOM_STUDY : ROUTES.CLASSROOM);
   }
   return <div className="ld-page"><div className="ld-content">
     <header className="ld-header"><span className="ld-brand">JEREMIAH</span><button type="button" className="ld-link" onClick={() => onNavigate(ROUTES.HOME)}>Back to Home</button></header>
