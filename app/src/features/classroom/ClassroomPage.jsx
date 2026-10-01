@@ -971,6 +971,7 @@ function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
             {move.ctaLabel || "Continue"} <span>→</span>
           </button>
         </section>
+        )}
       </main>
     </div>
   );
@@ -994,6 +995,222 @@ function EncounterThread({ encounterData }) {
       </div>
       <strong>{noticed.map((item) => "“" + item + "”").join("  →  ")}</strong>
     </div>
+  );
+}
+
+function PredictionReveal({ move, encounterData, onContinue }) {
+  const interaction = move.interaction || {};
+  const [selectedId, setSelectedId] = useState("");
+  const [revealed, setRevealed] = useState(false);
+  const selected = interaction.options?.find((item) => item.id === selectedId);
+  const firstVerse = move.scripture?.[0];
+  const revealVerse = move.scripture?.[1] || move.scripture?.[0];
+
+  return (
+    <section className="jc-interaction-scene jc-prediction">
+      <EncounterThread encounterData={encounterData} />
+
+      {firstVerse && (
+        <div className="jc-prediction-memory">
+          <span>What you already have</span>
+          <blockquote>“{firstVerse.text}”</blockquote>
+          <small>{firstVerse.reference}</small>
+        </div>
+      )}
+
+      {!revealed ? (
+        <>
+          <div className="jc-prediction-intro">
+            <span>Predict before the text opens</span>
+            <h1>{interaction.prompt}</h1>
+            <p>No grade here. Commit to what you expect the story to do.</p>
+          </div>
+
+          <div className="jc-prediction-options">
+            {(interaction.options || []).map((option) => (
+              <button
+                type="button"
+                key={option.id}
+                className={selectedId === option.id ? "is-selected" : ""}
+                onClick={() => setSelectedId(option.id)}
+              >
+                <strong>{option.label}</strong>
+                <i aria-hidden="true">{selectedId === option.id ? "✓" : "→"}</i>
+              </button>
+            ))}
+          </div>
+
+          {selected && (
+            <div className="jc-prediction-response">
+              <p>{selected.response}</p>
+              <button
+                type="button"
+                className="jc-primary"
+                onClick={() => setRevealed(true)}
+              >
+                {interaction.revealLabel || "Reveal the text"} <span>→</span>
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="jc-prediction-reveal">
+          <div className="jc-reveal-label">THE TEXT OPENS</div>
+
+          {revealVerse && (
+            <div className="jc-reveal-scripture">
+              <span>{revealVerse.reference}</span>
+              <blockquote>“{revealVerse.text}”</blockquote>
+            </div>
+          )}
+
+          <div className="jc-reveal-teaching">
+            {(move.teaching || []).map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+
+          {move.focusNote && (
+            <div className="jc-reveal-focus">
+              <span>Why that matters</span>
+              <p>{move.focusNote}</p>
+            </div>
+          )}
+
+          <button type="button" className="jc-primary" onClick={onContinue}>
+            {move.ctaLabel || "Continue"} <span>→</span>
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function EvidenceChain({ move, encounterData, onContinue }) {
+  const interaction = move.interaction || {};
+  const pieces = interaction.pieces || [];
+  const [chain, setChain] = useState([]);
+  const [checked, setChecked] = useState(false);
+
+  const complete = chain.length === pieces.length;
+  const correct =
+    complete &&
+    chain.every((id, index) => id === interaction.sequence?.[index]);
+
+  function addPiece(id) {
+    if (chain.includes(id) || checked) return;
+    setChain((current) => [...current, id]);
+  }
+
+  function reset() {
+    setChain([]);
+    setChecked(false);
+  }
+
+  return (
+    <section className="jc-interaction-scene jc-evidence-builder">
+      <EncounterThread encounterData={encounterData} />
+
+      <div className="jc-builder-intro">
+        <span>Build it, don’t just read it</span>
+        <h1>{interaction.prompt}</h1>
+        <p>Tap the passages in the order the biblical testimony developed.</p>
+      </div>
+
+      <div className="jc-builder-stage">
+        <div className="jc-builder-pool">
+          {pieces.map((piece) => {
+            const used = chain.includes(piece.id);
+            return (
+              <button
+                type="button"
+                key={piece.id}
+                disabled={used || checked}
+                className={used ? "is-used" : ""}
+                onClick={() => addPiece(piece.id)}
+              >
+                <small>{piece.label}</small>
+                <strong>{piece.short}</strong>
+                <span>{piece.text}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="jc-builder-chain" aria-label="Your evidence chain">
+          {[0, 1, 2].map((index) => {
+            const piece = pieces.find((item) => item.id === chain[index]);
+            return (
+              <div key={index} className={piece ? "is-filled" : ""}>
+                <i>{index + 1}</i>
+                {piece ? (
+                  <span>
+                    <small>{piece.label}</small>
+                    <strong>{piece.short}</strong>
+                  </span>
+                ) : (
+                  <em>Choose the next piece</em>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {!checked && (
+        <div className="jc-builder-actions">
+          <button
+            type="button"
+            className="jc-encounter-ghost"
+            onClick={reset}
+            disabled={!chain.length}
+          >
+            Start over
+          </button>
+          <button
+            type="button"
+            className="jc-primary"
+            onClick={() => setChecked(true)}
+            disabled={!complete}
+          >
+            Test my chain <span>→</span>
+          </button>
+        </div>
+      )}
+
+      {checked && !correct && (
+        <div className="jc-builder-result is-retry">
+          <strong>Not quite.</strong>
+          <p>The pieces are right; the sequence needs another look. Start with what Scripture establishes first.</p>
+          <button type="button" className="jc-secondary-action" onClick={reset}>
+            Rebuild the chain
+          </button>
+        </div>
+      )}
+
+      {checked && correct && (
+        <div className="jc-builder-result is-success">
+          <strong>Now you can see the structure.</strong>
+          <p>{interaction.success}</p>
+
+          <div className="jc-builder-final">
+            {pieces.map((piece, index) => (
+              <div key={piece.id}>
+                <i>{index + 1}</i>
+                <span>
+                  <small>{piece.label}</small>
+                  <strong>{piece.text}</strong>
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <button type="button" className="jc-primary" onClick={onContinue}>
+            {move.ctaLabel || "Continue"} <span>→</span>
+          </button>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -1240,6 +1457,19 @@ export default function ClassroomPage({ onNavigate }) {
           <span>{stageLabel(currentMove.stageId)}</span>
         </div>
 
+        {currentMove.interaction?.type === "prediction_reveal" ? (
+          <PredictionReveal
+            move={currentMove}
+            encounterData={learningState.encounterData}
+            onContinue={handleContinue}
+          />
+        ) : currentMove.interaction?.type === "evidence_chain" ? (
+          <EvidenceChain
+            move={currentMove}
+            encounterData={learningState.encounterData}
+            onContinue={handleContinue}
+          />
+        ) : (
         <section className={"jc-lesson move-" + currentMove.type}>
           <div className="jc-move-head">
             <div className="jc-eyebrow">{currentMove.eyebrow || stageLabel(currentMove.stageId)}</div>
