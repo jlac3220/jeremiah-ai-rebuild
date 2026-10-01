@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./ShemaClassroom.css";
 
-function DeepDiveSheet({ item, onClose }) {
+function DeepDiveSheet({ item, onClose, onOpenBible }) {
   if (!item) return null;
 
   return (
@@ -22,6 +22,15 @@ function DeepDiveSheet({ item, onClose }) {
             <h2>{item.reference}</h2>
             <blockquote>“{item.text}”</blockquote>
             {item.note && <p>{item.note}</p>}
+            {onOpenBible && (
+              <button
+                type="button"
+                className="sc-sheet-bible"
+                onClick={() => onOpenBible(item)}
+              >
+                Read full chapter <span>→</span>
+              </button>
+            )}
           </>
         ) : (
           <>
@@ -78,6 +87,7 @@ export default function ShemaClassroom({
   initialExperience,
   onProgress,
   onComplete,
+  onOpenBible,
   onExit,
 }) {
   const encounter = move.encounter || {};
@@ -360,7 +370,7 @@ export default function ShemaClassroom({
         )}
       </main>
 
-      <DeepDiveSheet item={detail} onClose={() => setDetail(null)} />
+      <DeepDiveSheet item={detail} onClose={() => setDetail(null)} onOpenBible={onOpenBible} />
     </div>
   );
 }
