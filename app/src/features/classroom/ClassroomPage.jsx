@@ -269,18 +269,9 @@ function EncounterExperience({ move, onComplete, onExit }) {
                     <div className="jc-threshold-video-copy">
                       <strong>{videoSource.title}</strong>
                       <p>{videoSource.hook}</p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setEntryMode("watch");
-                          setViewedSourceIds((ids) =>
-                            ids.includes(videoSource.id) ? ids : [...ids, videoSource.id]
-                          );
-                          setPhase("notice");
-                        }}
-                      >
-                        Continue to the text <span>→</span>
-                      </button>
+                      <div className="jc-threshold-video-note">
+                        Watch here, then use <strong>Read the Shema</strong> when you are ready.
+                      </div>
                     </div>
                   </div>
                 )}
@@ -288,10 +279,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
                 {heroArtifact?.imageUrl && (
                   <div className="jc-threshold-artifact-strip">
                     <img src={heroArtifact.imageUrl} alt="" />
-                    <div>
-                      <span>ANCIENT WITNESS</span>
+                    <div className="jc-threshold-artifact-copy">
+                      <span>Ancient witness</span>
                       <strong>Nash Papyrus</strong>
-                      <small>2nd–1st century BC</small>
+                      <small>An early manuscript containing the Shema</small>
                     </div>
                   </div>
                 )}
