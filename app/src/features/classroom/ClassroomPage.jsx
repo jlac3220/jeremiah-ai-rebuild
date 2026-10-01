@@ -773,16 +773,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
               </div>
             )}
 
-            {selectedSource.url && (
-              <a
-                className="jc-source-original"
-                href={selectedSource.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                View original source ↗
-              </a>
-            )}
+
           </aside>
         </div>
       )}

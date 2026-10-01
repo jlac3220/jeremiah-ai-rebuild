@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import ScripturePassage from "./ScripturePassage";
+import PosterViewer from "./PosterViewer";
 
 export default function DeepDiveSheet({ item, onClose, onOpenBible }) {
   const panel = useRef(null);
@@ -30,7 +31,7 @@ export default function DeepDiveSheet({ item, onClose, onOpenBible }) {
     <div className="sc-sheet-backdrop" role="presentation" onClick={onClose}>
       <aside
         ref={panel}
-        className="sc-sheet"
+        className={item.kind === "poster" ? "sc-sheet sc-sheet-poster" : "sc-sheet"}
         role="dialog"
         aria-modal="true"
         aria-label={item.title || item.reference || "Classroom detail"}
@@ -41,6 +42,8 @@ export default function DeepDiveSheet({ item, onClose, onOpenBible }) {
 
         {item.kind === "scripture" ? (
           <ScripturePassage key={item.reference} item={item} onOpenBible={onOpenBible} />
+        ) : item.kind === "poster" ? (
+          <PosterViewer key={item.imageUrl} item={item} />
         ) : (
           <>
             <span className="sc-sheet-label">{item.provider || "Source"}</span>
