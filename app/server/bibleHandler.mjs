@@ -1,6 +1,6 @@
 const TRANSLATIONS = {
   kjv: { sourceId: "eng-kjv2006", label: "KJV" },
-  asv: { sourceId: "eng-asv", label: "ASV" },
+  asv: { sourceId: "asv", label: "ASV" },
   web: { sourceId: "engwebp", label: "WEB" },
 };
 
