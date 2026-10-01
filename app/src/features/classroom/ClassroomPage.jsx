@@ -231,35 +231,61 @@ function EncounterExperience({ move, onComplete, onExit }) {
       <main className="jc-encounter-shell">
         {phase === "threshold" && (
           <section className="jc-encounter-scene is-threshold">
-            <div className="jc-threshold-grid">
-              <div className="jc-threshold-copy">
-                <div className="jc-encounter-kicker">THE ONE TRUE GOD · OG.1.1.18</div>
-                <h1>{move.title}</h1>
-                <p className="jc-encounter-opening">{encounter.opening}</p>
+            <div className="jc-threshold-cover">
+              <section className="jc-threshold-reading-panel">
+                <div className="jc-threshold-wordmark" aria-hidden="true">SHEMA</div>
 
-                <div className="jc-threshold-actions">
-                  <button
-                    type="button"
-                    className="jc-threshold-primary"
-                    onClick={() => {
-                      setEntryMode("read");
-                      setPhase("notice");
-                    }}
-                  >
-                    <span className="jc-threshold-primary-copy">
-                      <strong>Start with the confession</strong>
-                      <small>Deuteronomy 6:4</small>
-                    </span>
-                    <i>→</i>
-                  </button>
+                <div className="jc-threshold-overline">
+                  <span>THE ONE TRUE GOD</span>
+                  <i />
+                  <small>OG.1.1.18</small>
                 </div>
 
-                <div className="jc-encounter-whisper">
-                  No quiz yet. First, encounter the confession itself.
+                <div className="jc-threshold-copy-block">
+                  <div className="jc-threshold-index" aria-hidden="true">01</div>
+                  <h1>{move.title}</h1>
+                  <p>{encounter.opening}</p>
                 </div>
-              </div>
 
-              <div className="jc-threshold-media">
+                <div className="jc-threshold-route" aria-label="Learning route">
+                  <div className="is-current">
+                    <span>01</span>
+                    <strong>Listen</strong>
+                    <small>Meet the confession</small>
+                  </div>
+                  <div>
+                    <span>02</span>
+                    <strong>Compare</strong>
+                    <small>Place Isaiah beside it</small>
+                  </div>
+                  <div>
+                    <span>03</span>
+                    <strong>Explain</strong>
+                    <small>Build the doctrine</small>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="jc-threshold-primary"
+                  onClick={() => {
+                    setEntryMode("read");
+                    setPhase("notice");
+                  }}
+                >
+                  <span className="jc-threshold-primary-copy">
+                    <strong>Start with the confession</strong>
+                    <small>Deuteronomy 6:4</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+                <p className="jc-threshold-helper">
+                  No quiz yet. First, hear what Scripture puts in front of you.
+                </p>
+              </section>
+
+              <section className="jc-threshold-media-stage">
                 {videoSource && (
                   <div className="jc-threshold-video-feature">
                     <div className="jc-threshold-video-label">
@@ -278,26 +304,30 @@ function EncounterExperience({ move, onComplete, onExit }) {
                     </div>
 
                     <div className="jc-threshold-video-copy">
-                      <strong>{videoSource.title}</strong>
-                      <p>{videoSource.hook}</p>
-                      <div className="jc-threshold-video-note">
-                        Watch here, then start with the confession when you are ready.
+                      <div>
+                        <strong>{videoSource.title}</strong>
+                        <p>{videoSource.hook}</p>
                       </div>
+                      <span className="jc-threshold-watch-note">Optional context · stays inside Jeremiah</span>
                     </div>
                   </div>
                 )}
 
                 {heroArtifact?.imageUrl && (
-                  <div className="jc-threshold-artifact-strip">
+                  <button
+                    type="button"
+                    className="jc-threshold-artifact-float"
+                    onClick={() => openSource(heroArtifact)}
+                  >
                     <img src={heroArtifact.imageUrl} alt="" />
-                    <div className="jc-threshold-artifact-copy">
-                      <span>Ancient witness</span>
+                    <span>
+                      <small>Ancient witness</small>
                       <strong>Nash Papyrus</strong>
-                      <small>An early manuscript containing the Shema</small>
-                    </div>
-                  </div>
+                      <em>See the physical text →</em>
+                    </span>
+                  </button>
                 )}
-              </div>
+              </section>
             </div>
           </section>
         )}
