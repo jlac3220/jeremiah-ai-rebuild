@@ -100,11 +100,11 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       stageId: "focus",
       type: "encounter",
       eyebrow: "THE ONE TRUE GOD",
-      title: "Before Israel was asked to explain God, they were told to listen.",
+      title: "Before you explain God, listen.",
       encounter: {
         sourceRole: "enrichment_only",
         opening:
-          "No definitions yet. No quiz. Start with the words Israel was commanded to hear.",
+          "Israel’s confession begins with a command: Hear. Start with the text itself, then follow how Scripture sharpens and carries that confession forward.",
         primaryVerse: shema,
         listenLabel: "Listen",
         readLabel: "Read it myself",
