@@ -900,56 +900,55 @@ function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
   const teaching = move.teaching || [];
 
   return (
-    <div className="jc-encounter-page jc-handoff-page">
-      <button type="button" className="jc-encounter-exit" onClick={onExit}>
-        ← Classroom
-      </button>
+    <div className="jc-reading-page">
+      <header className="jc-reading-header">
+        <button type="button" onClick={onExit} aria-label="Leave Classroom">←</button>
+        <strong>The One True God</strong>
+        <span />
+      </header>
 
-      <main className="jc-handoff-shell jc-handoff-simple">
-        <section className="jc-handoff-scene">
-          {noticed.length > 0 && (
-            <p className="jc-handoff-noticed">
-              You noticed <strong>{noticed.map((item) => item).join(" · ")}</strong>
-            </p>
-          )}
+      <main className="jc-reading-shell">
+        {noticed.length > 0 && (
+          <p className="jc-reading-noticed">
+            You noticed <strong>{noticed.join(" · ")}</strong>
+          </p>
+        )}
 
-          {verse && (
-            <div className="jc-handoff-scripture jc-handoff-scripture-primary">
-              <span>{verse.reference}</span>
-              <blockquote>
-                “{renderVerseWithPhrase(verse.text, primaryPhrase)}”
-              </blockquote>
-            </div>
-          )}
+        {verse && (
+          <section className="jc-reading-scripture">
+            <span>{verse.reference}</span>
+            <blockquote>
+              “{renderVerseWithPhrase(verse.text, primaryPhrase)}”
+            </blockquote>
+          </section>
+        )}
 
-          <div className="jc-handoff-teacher jc-handoff-teacher-simple">
-            <div className="jc-handoff-teacher-head">
-              <span>J</span>
-              <div>
-                <small>Jeremiah</small>
-                <strong>{move.title}</strong>
-              </div>
-            </div>
-
-            <div className="jc-handoff-teaching">
-              {teaching.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
+        <section className="jc-reading-teacher">
+          <div className="jc-reading-teacher-head">
+            <span>J</span>
+            <div>
+              <small>Jeremiah</small>
+              <strong>{move.title}</strong>
             </div>
           </div>
 
-          {move.focusPhrases?.length > 0 && (
-            <div className="jc-handoff-takeaway">
-              <span>Keep this with you</span>
-              <strong>“{move.focusPhrases.join(" · ")}”</strong>
-              {move.focusNote && <p>{move.focusNote}</p>}
-            </div>
-          )}
-
-          <button type="button" className="jc-encounter-next jc-handoff-continue" onClick={onContinue}>
-            {move.ctaLabel || "Continue"} <span>→</span>
-          </button>
+          <div className="jc-reading-copy">
+            {teaching.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
         </section>
+
+        {move.focusPhrases?.length > 0 && (
+          <p className="jc-reading-keyline">
+            <span>Keep this with you</span>
+            <strong>“{move.focusPhrases.join(" · ")}”</strong>
+          </p>
+        )}
+
+        <button type="button" className="jc-reading-continue" onClick={onContinue}>
+          {move.ctaLabel || "Continue"} <span>→</span>
+        </button>
       </main>
     </div>
   );
