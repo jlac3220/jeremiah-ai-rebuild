@@ -1,5 +1,7 @@
 import { classroomContentRegistry } from "../src/core/classroom/content/classroomContentRegistry.js";
 
+import { evaluateTeachingChoice } from "../src/core/classroom/teacherLedEngine.js";
+
 const standards = classroomContentRegistry;
 
 const allowedStrategies = [
@@ -187,6 +189,9 @@ export async function teachWithJeremiah({
     };
   }
 
+  const authoredDecision = evaluateTeachingChoice(move, learnerResponse);
+  if (authoredDecision) return authoredDecision;
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return fallbackDecision(move, learnerResponse, "OPENAI_API_KEY missing", content);
 
@@ -206,6 +211,7 @@ export async function teachWithJeremiah({
     "If encounter memory is supplied, use it only when it genuinely helps: for example, reconnect a word the learner marked or a source they explored. Do not force a reference to it.",
     "Keep teacherMessage concise (normally under 110 words) and followUpPrompt under 45 words.",
     "Only return misconception IDs that exist in the supplied standard.",
+    "When assessmentCriteria are supplied, assess every criterion by meaning, not by keyword presence. A verse citation alone does not show understanding. Give a strong verdict only when all criteria are demonstrated. Return the current evidence IDs only when their criteria are met. Otherwise identify the specific gap and teach toward it without writing the learner’s complete answer for them.",
   ].join("\n");
 
   const modelInput = {
@@ -231,6 +237,7 @@ export async function teachWithJeremiah({
       choices: move.choices || [],
       expectedChoiceIds: move.expectedChoiceIds || [],
       evidenceIds: move.evidenceIds || [],
+      assessmentCriteria: move.assessmentCriteria || [],
     },
     learner: {
       response: learnerResponse,

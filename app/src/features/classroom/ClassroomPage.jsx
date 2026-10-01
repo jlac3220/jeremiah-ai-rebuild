@@ -21,6 +21,7 @@ import { getClassroomContentByStandardId } from "../../core/classroom/content/cl
 import { setBibleReaderIntent } from "../../core/bible/bibleReaderIntent";
 import { askJeremiahTeacher } from "../../services/jeremiahTeacher";
 import CurriculumLesson from "./CurriculumLesson";
+import TeacherLedLesson from "./TeacherLedLesson";
 import ShemaClassroom from "./ShemaClassroom";
 import ShemaContinuation from "./ShemaContinuation";
 import "./ClassroomPage.css";
@@ -1581,6 +1582,10 @@ export default function ClassroomPage({ onNavigate }) {
         </button>
       </div>
     );
+  }
+
+  if (content.lessonFormat === "teacher-led") {
+    return <TeacherLedLesson content={content} state={learningState} onStateChange={setLearningState} onNavigate={onNavigate} />;
   }
 
   if (content.sourceStandard) {

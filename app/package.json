@@ -14,7 +14,8 @@
     "test:bible-source": "node scripts/smoke-ebible-source.mjs",
     "test:bible": "node scripts/test-bible-parser.mjs",
     "test:dashboard": "node scripts/test-learning-dashboard.mjs",
-    "test:curriculum": "node scripts/test-curriculum.mjs"
+    "test:curriculum": "node scripts/test-curriculum.mjs",
+    "test:teacher-led": "node scripts/test-teacher-led.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

@@ -32,6 +32,7 @@ for (const study of CURRICULUM_STUDIES) {
     assert.equal(getLessonExperience(content).witnesses.length,3);
     assert.equal(getLessonExperience(content).vocabulary.length,3);
     assert.ok(getLessonMedia(content).every(s=>s.review.status==='approved'),standard.id+' reviewed reinforcement');
+    if (content.lessonFormat === 'teacher-led') continue; // Full branching and rubric tests live in test-teacher-led.mjs.
     let state=createLearningState(content);
     for (const id of ['learn','scripture','sources']) state=advanceUnscoredMove(state,content.instructionalMoves.find(m=>m.id===id));
     assert.equal(state.currentMoveId,'check');

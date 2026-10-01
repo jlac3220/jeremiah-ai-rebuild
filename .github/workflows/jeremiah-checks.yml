@@ -42,5 +42,8 @@ jobs:
       - name: Validate full curriculum
         run: npm run test:curriculum
 
+      - name: Validate teacher-led lesson
+        run: npm run test:teacher-led
+
       - name: Build app
         run: npm run build

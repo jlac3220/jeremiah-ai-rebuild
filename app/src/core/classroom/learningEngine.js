@@ -19,6 +19,7 @@ export function getInitialMoveId(content, presetId = "direct") {
 export function createLearningState(content, presetId = "direct") {
   return {
     standardId: content.standardId,
+    curriculumVersion: content.curriculumVersion || 1,
     presetId,
     currentMoveId: getInitialMoveId(content, presetId),
     completedMoveIds: [],
@@ -57,7 +58,19 @@ export function loadLearningState(content, presetId = "direct") {
   if (!raw) return createLearningState(content, presetId);
 
   try {
-    const parsed = JSON.parse(raw);
+    let parsed = JSON.parse(raw);
+    if (content.curriculumVersion && (parsed.curriculumVersion || 1) < content.curriculumVersion) {
+      const archived = { currentMoveId:parsed.currentMoveId, drafts:parsed.experience?.drafts || {}, milestones:parsed.milestones || {} };
+      const base = createLearningState(content,presetId);
+      const previouslyComplete = Boolean(parsed.milestones?.complete);
+      parsed = {
+        ...base,
+        currentMoveId:previouslyComplete?'complete':(content.legacyMoveMap?.[parsed.currentMoveId] || base.currentMoveId),
+        milestones:previouslyComplete?parsed.milestones:{...base.milestones,started:Boolean(parsed.milestones?.started)},
+        experience:{...base.experience,earlierLesson:archived,earlierCompletion:previouslyComplete},
+        lastUpdatedAt:parsed.lastUpdatedAt || base.lastUpdatedAt,
+      };
+    }
     const moveExists = getInstructionalMove(content, parsed.currentMoveId);
 
     if (!moveExists) return createLearningState(content, presetId);
