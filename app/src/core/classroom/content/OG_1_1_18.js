@@ -340,6 +340,14 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
           { id: "none-else", text: "there is none else" },
           { id: "no-god-beside", text: "there is no God beside me" },
         ],
+        expandedReading: [
+          {
+            ...isaiah44,
+            label: "Read one more prophetic witness",
+            purpose:
+              "Optional reinforcement: Isaiah 44:6 repeats the same exclusion without changing the lesson's required path."
+          }
+        ],
         destination:
           "By the end of this lesson, you should be able to explain why “one LORD” and “there is none else” belong together—and why Jesus repeating the Shema matters.",
       },
@@ -666,6 +674,61 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       prompt:
         "Without looking back, explain the biblical foundation about the oneness of God that this lesson established. Ground your explanation in Scripture as best you can.",
       placeholder: "Reconstruct the foundation from memory...",
+      retrievalCheck: {
+        passThreshold: 0.7,
+        intro:
+          "Before the final explanation, rebuild four pieces from memory. Jeremiah will explain each answer immediately.",
+        items: [
+          {
+            id: "shema-core",
+            prompt: "Which statement is the controlling confession in Deuteronomy 6:4?",
+            options: [
+              "The LORD our God is one LORD.",
+              "The LORD is one God among several.",
+              "God's identity is left undefined."
+            ],
+            correctIndex: 0,
+            explanation:
+              "The Shema gives the positive confession: the LORD our God is one LORD."
+          },
+          {
+            id: "isaiah-boundary",
+            prompt: "What does Isaiah add to the confession of one LORD?",
+            options: [
+              "Another God may exist beside the LORD.",
+              "There is none else and no God beside Him.",
+              "The confession applies only to Israel's worship."
+            ],
+            correctIndex: 1,
+            explanation:
+              "Isaiah makes the boundary explicit: there is none else and no God beside the LORD."
+          },
+          {
+            id: "jesus-continuity",
+            prompt: "What does Jesus do with the Shema in Mark 12:29?",
+            options: [
+              "He replaces it with a new formula.",
+              "He avoids the question.",
+              "He repeats Israel's confession."
+            ],
+            correctIndex: 2,
+            explanation:
+              "Jesus begins with the Shema, carrying the confession into the New Testament."
+          },
+          {
+            id: "foundation-rule",
+            prompt: "How should later revelation relate to this foundation?",
+            options: [
+              "It may overturn the earlier confession if the language is newer.",
+              "It must be understood without destroying one LORD and no God beside Him.",
+              "The earlier passages no longer control doctrine."
+            ],
+            correctIndex: 1,
+            explanation:
+              "Later revelation can add truth, but it cannot overturn God's already revealed identity."
+          }
+        ]
+      },
       evidenceIds: ["one-lord", "no-other", "controlling-foundation"],
       strategyRoutes: {
         scripture_revisit: "mastery_rebuild",
