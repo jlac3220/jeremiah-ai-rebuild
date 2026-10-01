@@ -1,7 +1,7 @@
 const TRANSLATIONS = {
-  kjv: { sourceId: "eng-kjv2006", label: "KJV" },
-  asv: { sourceId: "asv", label: "ASV" },
-  web: { sourceId: "engwebp", label: "WEB" },
+  kjv: { sourceId: "eng-kjv2006", path: "eng-kjv2006", label: "KJV" },
+  asv: { sourceId: "eng-asv", path: "asv", label: "ASV" },
+  web: { sourceId: "engwebp", path: "engwebp", label: "WEB" },
 };
 
 const BOOK_CODES = {
@@ -92,7 +92,19 @@ function parseVerses(html) {
     return markers
       .map((marker, index) => {
         const next = markers[index + 1];
-        const raw = html.slice(marker.end, next ? next.start : html.length);
+        const nextMarker = next ? next.start : html.length;
+        const blockEndCandidates = [
+          html.indexOf("</p>", marker.end),
+          html.indexOf("</li>", marker.end),
+          html.indexOf("<hr", marker.end),
+          html.indexOf("<footer", marker.end),
+          html.indexOf('<div class="footnote', marker.end),
+          html.indexOf("<div class='footnote", marker.end),
+        ].filter((value) => value >= marker.end);
+        const blockEnd = blockEndCandidates.length
+          ? Math.min(...blockEndCandidates)
+          : html.length;
+        const raw = html.slice(marker.end, Math.min(nextMarker, blockEnd));
         const text = stripTags(removeNotes(raw))
           .replace(/^[\s\u00a0]*(?:¶|§)+\s*/u, "")
           .trim();
@@ -151,7 +163,7 @@ async function fetchChapter(translationId, osis, chapter) {
   const cached = cache.get(cacheKey);
   if (cached && Date.now() - cached.at < CACHE_TTL_MS) return cached.value;
 
-  const sourceUrl = `https://ebible.org/${translation.sourceId}/${chapterFilename(bookCode, chapter)}`;
+  const sourceUrl = `https://ebible.org/${translation.path}/${chapterFilename(bookCode, chapter)}`;
   const response = await fetch(sourceUrl, {
     headers: {
       Accept: "text/html,application/xhtml+xml",
