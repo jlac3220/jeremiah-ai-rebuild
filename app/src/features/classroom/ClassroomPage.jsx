@@ -238,7 +238,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
                       setPhase("notice");
                     }}
                   >
-                    <span>Read the Shema</span>
+                    <span className="jc-threshold-primary-copy">
+                      <strong>Start with the confession</strong>
+                      <small>Deuteronomy 6:4</small>
+                    </span>
                     <i>→</i>
                   </button>
                 </div>
