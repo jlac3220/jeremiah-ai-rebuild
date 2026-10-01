@@ -895,43 +895,26 @@ function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
   const noticed = [
     ...(encounterData?.primaryPhrases || []),
     ...(encounterData?.bridgePhrases || []),
-  ];
+  ].slice(0, 2);
   const primaryPhrase = encounterData?.primaryPhrases?.[0] || "";
+  const teaching = move.teaching || [];
 
   return (
     <div className="jc-encounter-page jc-handoff-page">
-      <div className="jc-encounter-atmosphere" aria-hidden="true">
-        <span className="jc-encounter-glow one" />
-        <span className="jc-encounter-glow two" />
-      </div>
-
       <button type="button" className="jc-encounter-exit" onClick={onExit}>
-        ← Home
+        ← Classroom
       </button>
 
-      <main className="jc-handoff-shell">
+      <main className="jc-handoff-shell jc-handoff-simple">
         <section className="jc-handoff-scene">
-          <div className="jc-encounter-step">
-            {move.handoff?.kicker || "STAY WITH THE WORDS"}
-          </div>
-
-          <p className="jc-handoff-opening">
-            {move.handoff?.opening}
-          </p>
-
           {noticed.length > 0 && (
-            <div className="jc-handoff-memory">
-              <span>{move.handoff?.memoryLabel || "What caught your eye"}</span>
-              <div>
-                {noticed.slice(0, 8).map((word, index) => (
-                  <strong key={word + index}>{word}</strong>
-                ))}
-              </div>
-            </div>
+            <p className="jc-handoff-noticed">
+              You noticed <strong>{noticed.map((item) => item).join(" · ")}</strong>
+            </p>
           )}
 
           {verse && (
-            <div className="jc-handoff-scripture">
+            <div className="jc-handoff-scripture jc-handoff-scripture-primary">
               <span>{verse.reference}</span>
               <blockquote>
                 “{renderVerseWithPhrase(verse.text, primaryPhrase)}”
@@ -939,7 +922,7 @@ function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
             </div>
           )}
 
-          <div className="jc-handoff-teacher">
+          <div className="jc-handoff-teacher jc-handoff-teacher-simple">
             <div className="jc-handoff-teacher-head">
               <span>J</span>
               <div>
@@ -948,26 +931,22 @@ function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
               </div>
             </div>
 
-            {move.handoff?.teacherBridge && (
-              <p className="jc-handoff-bridge">{move.handoff.teacherBridge}</p>
-            )}
-
             <div className="jc-handoff-teaching">
-              {(move.teaching || []).map((paragraph, index) => (
+              {teaching.map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
-
-            {move.focusPhrases?.length > 0 && (
-              <div className="jc-handoff-focus">
-                <span>Hold onto this</span>
-                <strong>“{move.focusPhrases.join(" · ")}”</strong>
-                {move.focusNote && <p>{move.focusNote}</p>}
-              </div>
-            )}
           </div>
 
-          <button type="button" className="jc-encounter-next" onClick={onContinue}>
+          {move.focusPhrases?.length > 0 && (
+            <div className="jc-handoff-takeaway">
+              <span>Keep this with you</span>
+              <strong>“{move.focusPhrases.join(" · ")}”</strong>
+              {move.focusNote && <p>{move.focusNote}</p>}
+            </div>
+          )}
+
+          <button type="button" className="jc-encounter-next jc-handoff-continue" onClick={onContinue}>
             {move.ctaLabel || "Continue"} <span>→</span>
           </button>
         </section>
