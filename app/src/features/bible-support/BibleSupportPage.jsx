@@ -7,7 +7,7 @@ import {
   findBibleBook,
   getBibleTranslation,
   getChapterVerses,
-  loadBibleBook,
+  loadBibleChapter,
   normalizeBibleBookName,
 } from "../../core/bible/bibleCatalog";
 import {
@@ -79,7 +79,7 @@ export default function BibleSupportPage({ onNavigate }) {
       setBookData(null);
 
       try {
-        const data = await loadBibleBook(translationId, currentBook);
+        const data = await loadBibleChapter(translationId, currentBook, chapter);
         if (!cancelled) setBookData(data);
       } catch (err) {
         if (!cancelled) {
@@ -97,7 +97,7 @@ export default function BibleSupportPage({ onNavigate }) {
     return () => {
       cancelled = true;
     };
-  }, [translationId, currentBook.osis, reloadKey]);
+  }, [translationId, currentBook.osis, chapter, reloadKey]);
 
   useEffect(() => {
     saveLocation({
@@ -132,7 +132,7 @@ export default function BibleSupportPage({ onNavigate }) {
   }, []);
 
   const chapterVerses = useMemo(
-    () => getChapterVerses(bookData, chapter),
+    () => getChapterVerses(bookData),
     [bookData, chapter]
   );
 
@@ -416,7 +416,7 @@ export default function BibleSupportPage({ onNavigate }) {
         </div>
 
         <p className="br-source-note">
-          These editions are public-domain texts. Each book is cached after it is opened,
+          These editions are public-domain texts from eBible.org. Each chapter is cached after it is opened,
           so returning to it is fast.
         </p>
       </aside>
