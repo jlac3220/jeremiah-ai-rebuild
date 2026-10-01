@@ -61,9 +61,24 @@ export function loadLearningState(content, presetId = "direct") {
 
     if (!moveExists) return createLearningState(content, presetId);
 
+    const base = createLearningState(content, presetId);
+
     return {
-      ...createLearningState(content, presetId),
+      ...base,
       ...parsed,
+      milestones: {
+        ...base.milestones,
+        ...(parsed.milestones || {}),
+      },
+      experience: {
+        ...base.experience,
+        ...(parsed.experience || {}),
+        selections: {
+          ...base.experience.selections,
+          ...(parsed.experience?.selections || {}),
+        },
+        viewedSourceIds: parsed.experience?.viewedSourceIds || [],
+      },
       standardId: content.standardId,
       presetId,
     };
