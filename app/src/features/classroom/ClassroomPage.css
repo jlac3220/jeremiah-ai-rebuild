@@ -3392,3 +3392,34 @@
     height: 100px;
   }
 }
+
+
+/* opening CTA refinement v7 */
+
+.jc-threshold-primary {
+  min-height: 66px;
+  padding: 0 18px 0 20px;
+  text-align: left;
+}
+
+.jc-threshold-primary-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.jc-threshold-primary-copy strong {
+  color: #fff;
+  font: 760 .98rem/1.1 var(--font-display);
+}
+
+.jc-threshold-primary-copy small {
+  color: rgba(255,255,255,.78);
+  font-size: .72rem;
+  font-weight: 560;
+  letter-spacing: .01em;
+}
+
+.jc-threshold-primary > i {
+  flex: 0 0 auto;
+  font-size: 1.05rem;
+}
