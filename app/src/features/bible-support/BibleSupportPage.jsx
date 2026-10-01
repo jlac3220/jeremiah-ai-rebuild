@@ -1,500 +1,424 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ROUTES } from "../../app/routes";
-import { getCurrentSession } from "../../core/classroom/classroomSessionData";
+import {
+  clearBibleReaderIntent,
+  getBibleReaderIntent,
+} from "../../core/bible/bibleReaderIntent";
+import "./BibleSupportPage.css";
 
-const SESSION_TYPE_LABELS = {
-  resume: "Resume Path",
-  review: "Review Path",
-  adaptation: "Learner Adaptation Path",
-  direct: "Direct Classroom Path",
-};
+const LAST_LOCATION_KEY = "jeremiah-bible-reader-last";
+const chunkCache = new Map();
+
+function normalizeBookName(value = "") {
+  return String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "")
+    .replace(/^psalm$/, "psalms");
+}
+
+async function loadChunk(filename) {
+  if (chunkCache.has(filename)) return chunkCache.get(filename);
+
+  const response = await fetch(`/bible/${filename}`);
+  if (!response.ok) throw new Error(`Could not load Bible data (${response.status}).`);
+  const data = await response.json();
+  chunkCache.set(filename, data);
+  return data;
+}
+
+function readSavedLocation() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(LAST_LOCATION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveLocation(location) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(LAST_LOCATION_KEY, JSON.stringify(location));
+}
 
 export default function BibleSupportPage({ onNavigate }) {
-  const session = getCurrentSession();
-  const verses = session.verses || [];
-  const [selectedReference, setSelectedReference] = useState(
-    verses[0]?.reference || ""
-  );
+  const initialIntentRef = useRef(getBibleReaderIntent());
+  const verseRefs = useRef({});
+  const [manifest, setManifest] = useState(null);
+  const [bookData, setBookData] = useState(null);
+  const [bookIndex, setBookIndex] = useState(0);
+  const [chapter, setChapter] = useState(1);
+  const [highlightVerse, setHighlightVerse] = useState(null);
+  const [fontSize, setFontSize] = useState(1.08);
+  const [showBookPicker, setShowBookPicker] = useState(false);
+  const [showChapterPicker, setShowChapterPicker] = useState(false);
+  const [bookQuery, setBookQuery] = useState("");
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [loadingBook, setLoadingBook] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setSelectedReference((currentReference) => {
-      const hasCurrentReference = verses.some(
-        (verse) => verse.reference === currentReference
-      );
+    let cancelled = false;
 
-      if (hasCurrentReference) {
-        return currentReference;
+    async function loadManifest() {
+      try {
+        const response = await fetch("/bible/manifest.json");
+        if (!response.ok) throw new Error("Could not load Bible index.");
+        const data = await response.json();
+        if (cancelled) return;
+
+        setManifest(data);
+
+        const intent = initialIntentRef.current;
+        const saved = readSavedLocation();
+        const requestedBook = intent?.book || saved?.book || "Genesis";
+        const requestedChapter = intent?.chapter || saved?.chapter || 1;
+        const requestedVerse = intent?.verse || null;
+
+        const index = Math.max(
+          0,
+          data.books.findIndex(
+            (item) => normalizeBookName(item.name) === normalizeBookName(requestedBook)
+          )
+        );
+
+        setBookIndex(index);
+        setChapter(
+          Math.min(
+            Math.max(Number(requestedChapter) || 1, 1),
+            data.books[index]?.chapters || 1
+          )
+        );
+        setHighlightVerse(requestedVerse ? Number(requestedVerse) : null);
+      } catch (err) {
+        if (!cancelled) setError(err?.message || "Could not load the Bible.");
       }
+    }
 
-      return verses[0]?.reference || "";
-    });
-  }, [session.standardId, session.sessionType, verses]);
+    loadManifest();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const selectedVerse =
-    verses.find((verse) => verse.reference === selectedReference) ||
-    verses[0] ||
-    null;
+  const books = manifest?.books || [];
+  const currentMeta = books[bookIndex] || null;
+
+  useEffect(() => {
+    if (!currentMeta) return;
+    let cancelled = false;
+
+    async function loadCurrentBook() {
+      setLoadingBook(true);
+      setError("");
+      try {
+        const chunk = await loadChunk(currentMeta.chunk);
+        const found = chunk.find((item) => item.abbrev === currentMeta.abbrev);
+        if (!cancelled) {
+          if (!found) throw new Error("Bible book data is unavailable.");
+          setBookData(found);
+        }
+      } catch (err) {
+        if (!cancelled) setError(err?.message || "Could not load this book.");
+      } finally {
+        if (!cancelled) setLoadingBook(false);
+      }
+    }
+
+    loadCurrentBook();
+    return () => {
+      cancelled = true;
+    };
+  }, [currentMeta?.abbrev, currentMeta?.chunk]);
+
+  useEffect(() => {
+    if (!currentMeta) return;
+    saveLocation({ book: currentMeta.name, chapter });
+  }, [currentMeta?.name, chapter]);
+
+  useEffect(() => {
+    if (!highlightVerse || !bookData) return;
+    const timer = window.setTimeout(() => {
+      verseRefs.current[highlightVerse]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 120);
+
+    return () => window.clearTimeout(timer);
+  }, [bookData, chapter, highlightVerse]);
+
+  useEffect(() => {
+    function handleScroll() {
+      const top = window.scrollY;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      setReadingProgress(height > 0 ? Math.min(100, (top / height) * 100) : 0);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const chapterVerses = useMemo(() => {
+    const raw = bookData?.chapters?.[chapter - 1] || [];
+    return raw.map((text, index) => ({
+      verse: index + 1,
+      text: String(text),
+    }));
+  }, [bookData, chapter]);
+
+  const filteredBooks = useMemo(() => {
+    const query = normalizeBookName(bookQuery);
+    if (!query) return books.map((book, index) => ({ ...book, index }));
+    return books
+      .map((book, index) => ({ ...book, index }))
+      .filter((book) => normalizeBookName(book.name).includes(query));
+  }, [books, bookQuery]);
+
+  const intent = initialIntentRef.current;
+  const canGoPrev = bookIndex > 0 || chapter > 1;
+  const canGoNext =
+    bookIndex < books.length - 1 || chapter < (currentMeta?.chapters || 1);
+
+  function selectBook(index) {
+    const meta = books[index];
+    if (!meta) return;
+    setBookIndex(index);
+    setChapter(1);
+    setHighlightVerse(null);
+    setShowBookPicker(false);
+    setBookQuery("");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function selectChapter(nextChapter) {
+    setChapter(nextChapter);
+    setHighlightVerse(null);
+    setShowChapterPicker(false);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function goPrevious() {
+    if (!canGoPrev) return;
+    setHighlightVerse(null);
+
+    if (chapter > 1) {
+      setChapter((value) => value - 1);
+    } else {
+      const nextIndex = bookIndex - 1;
+      setBookIndex(nextIndex);
+      setChapter(books[nextIndex]?.chapters || 1);
+    }
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function goNext() {
+    if (!canGoNext) return;
+    setHighlightVerse(null);
+
+    if (chapter < (currentMeta?.chapters || 1)) {
+      setChapter((value) => value + 1);
+    } else {
+      setBookIndex((value) => value + 1);
+      setChapter(1);
+    }
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function returnFromReader() {
+    const target = intent?.returnRoute || ROUTES.HOME;
+    clearBibleReaderIntent();
+    onNavigate?.(target);
+  }
+
+  const testament = bookIndex < 39 ? "Old Testament" : "New Testament";
 
   return (
-    <div style={pageStyle}>
-      <div style={contentStyle}>
-        <section style={heroStyle}>
-          <p style={eyebrowStyle}>JEREMIAH AI BIBLE SUPPORT</p>
-          <h1 style={titleStyle}>Scripture support</h1>
-          <p style={subtitleStyle}>
-            Bible Support serves the active Classroom session by opening the
-            passages tied to the current doctrinal standard in a cleaner reading
-            environment.
-          </p>
+    <div className="br-page">
+      <div className="br-read-progress" style={{ width: `${readingProgress}%` }} />
+
+      <header className="br-topbar">
+        <button
+          type="button"
+          className="br-back"
+          onClick={returnFromReader}
+          aria-label={intent?.returnRoute ? "Return to Classroom" : "Return home"}
+        >
+          ←
+        </button>
+
+        <div className="br-top-title">
+          <strong>Bible</strong>
+          <small>King James Version</small>
+        </div>
+
+        <div className="br-font-controls" aria-label="Text size">
+          <button
+            type="button"
+            onClick={() => setFontSize((value) => Math.max(.9, +(value - .1).toFixed(2)))}
+            disabled={fontSize <= .9}
+            aria-label="Decrease text size"
+          >
+            A−
+          </button>
+          <button
+            type="button"
+            onClick={() => setFontSize((value) => Math.min(1.5, +(value + .1).toFixed(2)))}
+            disabled={fontSize >= 1.5}
+            aria-label="Increase text size"
+          >
+            A+
+          </button>
+        </div>
+      </header>
+
+      <main className="br-shell">
+        <section className="br-controls" aria-label="Bible location">
+          <button type="button" onClick={() => setShowBookPicker(true)}>
+            <small>Book</small>
+            <strong>{currentMeta?.name || "Loading…"}</strong>
+            <span>⌄</span>
+          </button>
+
+          <button type="button" onClick={() => setShowChapterPicker(true)} disabled={!currentMeta}>
+            <small>Chapter</small>
+            <strong>{chapter}</strong>
+            <span>⌄</span>
+          </button>
         </section>
 
-        <section style={primaryCardStyle}>
-          <div style={primaryTopStyle}>
-            <div>
-              <p style={sectionEyebrowLightStyle}>Current Session Support</p>
-              <h2 style={primaryTitleStyle}>
-                Key verses for "{session.standardTitle}"
-              </h2>
-            </div>
+        <section className="br-heading">
+          <span>{testament}</span>
+          <h1>{currentMeta?.name || "Bible"} {chapter}</h1>
+        </section>
 
-            <div style={primaryActionsStyle}>
-              <div style={trackPillStyle}>{session.studyTitle}</div>
+        {error && <div className="br-error">{error}</div>}
+
+        {loadingBook && !chapterVerses.length ? (
+          <div className="br-loading">Loading Scripture…</div>
+        ) : (
+          <article
+            className="br-scripture"
+            style={{ "--reader-font-size": `${fontSize}rem` }}
+            aria-label={currentMeta ? `${currentMeta.name} chapter ${chapter}` : "Bible chapter"}
+          >
+            {chapterVerses.map((item) => {
+              const highlighted = item.verse === highlightVerse;
+
+              return (
+                <p
+                  key={item.verse}
+                  ref={(element) => {
+                    verseRefs.current[item.verse] = element;
+                  }}
+                  className={highlighted ? "is-highlighted" : ""}
+                  onClick={() =>
+                    setHighlightVerse((current) =>
+                      current === item.verse ? null : item.verse
+                    )
+                  }
+                >
+                  <sup>{item.verse}</sup>
+                  <span>{item.text}</span>
+                </p>
+              );
+            })}
+          </article>
+        )}
+
+        <nav className="br-chapter-nav" aria-label="Chapter navigation">
+          <button type="button" onClick={goPrevious} disabled={!canGoPrev}>
+            <span>←</span>
+            <div>
+              <small>Previous</small>
+              <strong>Chapter</strong>
+            </div>
+          </button>
+
+          <span>{currentMeta?.name} {chapter}</span>
+
+          <button type="button" onClick={goNext} disabled={!canGoNext}>
+            <div>
+              <small>Next</small>
+              <strong>Chapter</strong>
+            </div>
+            <span>→</span>
+          </button>
+        </nav>
+      </main>
+
+      {(showBookPicker || showChapterPicker) && (
+        <button
+          type="button"
+          className="br-sheet-backdrop"
+          aria-label="Close picker"
+          onClick={() => {
+            setShowBookPicker(false);
+            setShowChapterPicker(false);
+          }}
+        />
+      )}
+
+      <aside className={`br-sheet ${showBookPicker ? "is-open" : ""}`} aria-hidden={!showBookPicker}>
+        <div className="br-sheet-handle" />
+        <div className="br-sheet-header">
+          <div>
+            <small>Choose a book</small>
+            <strong>66 books</strong>
+          </div>
+          <button type="button" onClick={() => setShowBookPicker(false)} aria-label="Close">×</button>
+        </div>
+
+        <input
+          className="br-book-search"
+          value={bookQuery}
+          onChange={(event) => setBookQuery(event.target.value)}
+          placeholder="Find a book…"
+        />
+
+        <div className="br-book-list">
+          {filteredBooks.map((book) => (
+            <button
+              type="button"
+              key={book.abbrev}
+              className={book.index === bookIndex ? "is-current" : ""}
+              onClick={() => selectBook(book.index)}
+            >
+              <span>{book.name}</span>
+              <small>{book.chapters} chapters</small>
+            </button>
+          ))}
+        </div>
+      </aside>
+
+      <aside className={`br-sheet ${showChapterPicker ? "is-open" : ""}`} aria-hidden={!showChapterPicker}>
+        <div className="br-sheet-handle" />
+        <div className="br-sheet-header">
+          <div>
+            <small>{currentMeta?.name}</small>
+            <strong>Choose a chapter</strong>
+          </div>
+          <button type="button" onClick={() => setShowChapterPicker(false)} aria-label="Close">×</button>
+        </div>
+
+        <div className="br-chapter-grid">
+          {Array.from({ length: currentMeta?.chapters || 0 }, (_, index) => index + 1).map(
+            (number) => (
               <button
                 type="button"
-                style={returnButtonStyle}
-                onClick={() => onNavigate?.(ROUTES.CLASSROOM)}
+                key={number}
+                className={number === chapter ? "is-current" : ""}
+                onClick={() => selectChapter(number)}
               >
-                Back to Classroom
+                {number}
               </button>
-            </div>
-          </div>
-
-          <p style={primaryTextStyle}>{session.truthExplanation}</p>
-
-          <div style={summaryGridStyle}>
-            <div style={summaryCardStyle}>
-              <p style={summaryLabelStyle}>Standard</p>
-              <p style={summaryValueStyle}>{session.standardId}</p>
-            </div>
-
-            <div style={summaryCardStyle}>
-              <p style={summaryLabelStyle}>Truth Statement</p>
-              <p style={summaryValueStyle}>{session.truthStatement}</p>
-            </div>
-
-            <div style={summaryCardStyle}>
-              <p style={summaryLabelStyle}>Session Type</p>
-              <p style={summaryValueStyle}>{SESSION_TYPE_LABELS[session.sessionType] || session.sessionType}</p>
-            </div>
-          </div>
-        </section>
-
-        <section style={sectionCardStyle}>
-          <div style={sectionHeaderStyle}>
-            <div>
-              <p style={sectionEyebrowStyle}>Passage List</p>
-              <h3 style={sectionTitleStyle}>Open scriptures in this session</h3>
-            </div>
-
-            <div style={countPillStyle}>
-              {verses.length} passage{verses.length === 1 ? "" : "s"}
-            </div>
-          </div>
-
-          {verses.length ? (
-            <div style={verseListStyle}>
-              {verses.map((verse) => {
-                const isSelected = verse.reference === selectedReference;
-
-                return (
-                  <div key={verse.reference} style={verseCardStyle}>
-                    <div style={verseContentStyle}>
-                      <p style={verseRefStyle}>{verse.reference}</p>
-                      <p style={verseMetaStyle}>{verse.note}</p>
-                    </div>
-
-                    <button
-                      type="button"
-                      style={
-                        isSelected
-                          ? { ...openButtonStyle, ...openButtonActiveStyle }
-                          : openButtonStyle
-                      }
-                      onClick={() => setSelectedReference(verse.reference)}
-                    >
-                      {isSelected ? "Reading" : "Open Passage"}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div style={emptyCardStyle}>
-              <p style={emptyTitleStyle}>No passages found</p>
-              <p style={emptyTextStyle}>
-                The current session does not yet include verse support data.
-              </p>
-            </div>
+            )
           )}
-        </section>
-
-        <section style={readerCardStyle}>
-          <p style={sectionEyebrowStyle}>Passage Reader</p>
-
-          {selectedVerse ? (
-            <>
-              <div style={readerHeaderStyle}>
-                <h3 style={sectionTitleStyle}>{selectedVerse.reference}</h3>
-                <div style={readerPillStyle}>{session.standardTitle}</div>
-              </div>
-
-              <p style={readerTextStyle}>{selectedVerse.text}</p>
-
-              <p style={readerNoteStyle}>{selectedVerse.note}</p>
-
-              <div style={readerSupportCardStyle}>
-                <p style={readerSupportLabelStyle}>Why this passage matters</p>
-                <p style={readerSupportTextStyle}>
-                  This passage is part of the active Classroom session and
-                  supports the doctrinal claim: {session.truthStatement}
-                </p>
-              </div>
-            </>
-          ) : (
-            <p style={readerNoteStyle}>
-              Select a passage to open the scripture reader.
-            </p>
-          )}
-        </section>
-      </div>
+        </div>
+      </aside>
     </div>
   );
 }
-
-const pageStyle = {
-  minHeight: "100%",
-  background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
-};
-
-const contentStyle = {
-  width: "100%",
-  maxWidth: "1040px",
-  margin: "0 auto",
-  padding: "32px 20px 120px",
-  boxSizing: "border-box",
-};
-
-const heroStyle = {
-  marginBottom: "24px",
-};
-
-const eyebrowStyle = {
-  margin: 0,
-  fontSize: "0.82rem",
-  fontWeight: 800,
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  color: "#475569",
-};
-
-const titleStyle = {
-  margin: "8px 0 0",
-  fontSize: "clamp(2.3rem, 5vw, 3.8rem)",
-  lineHeight: 1.02,
-  fontWeight: 900,
-  color: "#0f172a",
-};
-
-const subtitleStyle = {
-  margin: "14px 0 0",
-  maxWidth: "760px",
-  fontSize: "1.05rem",
-  lineHeight: 1.7,
-  color: "#475569",
-};
-
-const primaryCardStyle = {
-  background: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
-  color: "#ffffff",
-  borderRadius: "28px",
-  padding: "26px",
-  boxShadow: "0 28px 70px rgba(15, 23, 42, 0.18)",
-  marginBottom: "20px",
-};
-
-const primaryTopStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  gap: "16px",
-  flexWrap: "wrap",
-};
-
-const primaryActionsStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "12px",
-  flexWrap: "wrap",
-};
-
-const sectionEyebrowLightStyle = {
-  margin: 0,
-  fontSize: "0.8rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "rgba(255,255,255,0.65)",
-  fontWeight: 700,
-};
-
-const primaryTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.65rem",
-  lineHeight: 1.15,
-  color: "#ffffff",
-  fontWeight: 900,
-};
-
-const trackPillStyle = {
-  display: "inline-flex",
-  alignItems: "center",
-  padding: "10px 14px",
-  borderRadius: "999px",
-  background: "rgba(255,255,255,0.14)",
-  fontSize: "0.9rem",
-  fontWeight: 800,
-};
-
-const returnButtonStyle = {
-  border: "1px solid rgba(255,255,255,0.24)",
-  background: "#ffffff",
-  color: "#0f172a",
-  padding: "10px 14px",
-  borderRadius: "999px",
-  fontSize: "0.9rem",
-  fontWeight: 800,
-  cursor: "pointer",
-};
-
-const primaryTextStyle = {
-  margin: "14px 0 0",
-  fontSize: "1rem",
-  lineHeight: 1.75,
-  color: "rgba(255,255,255,0.84)",
-  maxWidth: "760px",
-};
-
-const summaryGridStyle = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-  gap: "14px",
-  marginTop: "18px",
-};
-
-const summaryCardStyle = {
-  borderRadius: "18px",
-  padding: "16px",
-  background: "rgba(255,255,255,0.09)",
-  border: "1px solid rgba(255,255,255,0.12)",
-};
-
-const summaryLabelStyle = {
-  margin: 0,
-  fontSize: "0.76rem",
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  color: "rgba(255,255,255,0.62)",
-  fontWeight: 700,
-};
-
-const summaryValueStyle = {
-  margin: "8px 0 0",
-  fontSize: "0.98rem",
-  lineHeight: 1.5,
-  color: "#ffffff",
-  fontWeight: 800,
-};
-
-const sectionCardStyle = {
-  background: "#ffffff",
-  borderRadius: "26px",
-  padding: "24px",
-  boxShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
-  marginBottom: "20px",
-};
-
-const sectionHeaderStyle = {
-  marginBottom: "18px",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  gap: "14px",
-  flexWrap: "wrap",
-};
-
-const sectionEyebrowStyle = {
-  margin: 0,
-  fontSize: "0.8rem",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  color: "#64748b",
-  fontWeight: 700,
-};
-
-const sectionTitleStyle = {
-  margin: "10px 0 0",
-  fontSize: "1.35rem",
-  lineHeight: 1.2,
-  color: "#0f172a",
-  fontWeight: 900,
-};
-
-const countPillStyle = {
-  display: "inline-flex",
-  alignItems: "center",
-  padding: "10px 14px",
-  borderRadius: "999px",
-  background: "#eef2ff",
-  color: "#3730a3",
-  fontSize: "0.88rem",
-  fontWeight: 800,
-};
-
-const verseListStyle = {
-  display: "grid",
-  gap: "14px",
-};
-
-const verseCardStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  gap: "16px",
-  padding: "18px",
-  borderRadius: "20px",
-  background: "#f8fafc",
-  border: "1px solid #e2e8f0",
-};
-
-const verseContentStyle = {
-  minWidth: 0,
-  flex: 1,
-};
-
-const verseRefStyle = {
-  margin: 0,
-  fontSize: "1rem",
-  lineHeight: 1.4,
-  color: "#0f172a",
-  fontWeight: 800,
-};
-
-const verseMetaStyle = {
-  margin: "6px 0 0",
-  fontSize: "0.94rem",
-  lineHeight: 1.6,
-  color: "#64748b",
-};
-
-const openButtonStyle = {
-  border: "1px solid #cbd5e1",
-  background: "#ffffff",
-  color: "#0f172a",
-  padding: "12px 14px",
-  borderRadius: "14px",
-  fontSize: "0.92rem",
-  fontWeight: 800,
-  cursor: "pointer",
-  minWidth: "120px",
-};
-
-const openButtonActiveStyle = {
-  border: "1px solid #1d4ed8",
-  background: "#1d4ed8",
-  color: "#ffffff",
-};
-
-const emptyCardStyle = {
-  borderRadius: "20px",
-  padding: "20px",
-  background: "#f8fafc",
-  border: "1px dashed #cbd5e1",
-};
-
-const emptyTitleStyle = {
-  margin: 0,
-  fontSize: "1rem",
-  fontWeight: 800,
-  color: "#0f172a",
-};
-
-const emptyTextStyle = {
-  margin: "8px 0 0",
-  fontSize: "0.95rem",
-  lineHeight: 1.6,
-  color: "#64748b",
-};
-
-const readerCardStyle = {
-  background: "#ffffff",
-  borderRadius: "26px",
-  padding: "24px",
-  boxShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
-};
-
-const readerHeaderStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  gap: "14px",
-  flexWrap: "wrap",
-};
-
-const readerPillStyle = {
-  display: "inline-flex",
-  alignItems: "center",
-  padding: "10px 14px",
-  borderRadius: "999px",
-  background: "#eff6ff",
-  color: "#1d4ed8",
-  fontSize: "0.88rem",
-  fontWeight: 800,
-};
-
-const readerTextStyle = {
-  margin: "18px 0 0",
-  fontSize: "1.15rem",
-  lineHeight: 1.9,
-  color: "#0f172a",
-  fontWeight: 500,
-};
-
-const readerNoteStyle = {
-  margin: "16px 0 0",
-  fontSize: "0.98rem",
-  lineHeight: 1.7,
-  color: "#475569",
-};
-
-const readerSupportCardStyle = {
-  marginTop: "18px",
-  borderRadius: "18px",
-  padding: "18px",
-  background: "#f8fafc",
-  border: "1px solid #e2e8f0",
-};
-
-const readerSupportLabelStyle = {
-  margin: 0,
-  fontSize: "0.78rem",
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  color: "#64748b",
-  fontWeight: 700,
-};
-
-const readerSupportTextStyle = {
-  margin: "8px 0 0",
-  fontSize: "0.98rem",
-  lineHeight: 1.7,
-  color: "#0f172a",
-};
