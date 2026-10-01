@@ -997,6 +997,120 @@ function EncounterThread({ encounterData }) {
   );
 }
 
+function IsaiahPatternReveal({ move, encounterData, value, onChange, onContinue }) {
+  const [revealed, setRevealed] = useState(false);
+  const verses = move.scripture || [];
+  const ready = value.trim().length >= 8;
+
+  function highlightClaim(text = "") {
+    const phrases = [
+      "beside me there is no God",
+      "there is none else",
+      "there is no God beside me",
+    ];
+
+    let parts = [text];
+    phrases.forEach((phrase) => {
+      parts = parts.flatMap((part) => {
+        if (typeof part !== "string" || !part.includes(phrase)) return [part];
+        const split = part.split(phrase);
+        return split.flatMap((segment, index) =>
+          index < split.length - 1
+            ? [segment, <mark key={phrase + index}>{phrase}</mark>]
+            : [segment]
+        );
+      });
+    });
+
+    return parts;
+  }
+
+  return (
+    <section className={"jc-pattern-scene " + (revealed ? "is-revealed" : "")}>
+      <EncounterThread encounterData={encounterData} />
+
+      <div className="jc-pattern-hero">
+        <div>
+          <span>WATCH THE CLAIM TIGHTEN</span>
+          <h1>Isaiah does not merely repeat “one.” He closes the door on “another.”</h1>
+        </div>
+        <div className="jc-pattern-anchor">
+          <small>Start with the confession</small>
+          <strong>ONE LORD</strong>
+          <em>Deuteronomy 6:4</em>
+        </div>
+      </div>
+
+      <div className="jc-pattern-field">
+        {verses.map((verse, index) => (
+          <article key={verse.reference} className="jc-pattern-verse">
+            <div className="jc-pattern-number">0{index + 1}</div>
+            <div>
+              <span>{verse.reference}</span>
+              <blockquote>
+                “{revealed ? highlightClaim(verse.text) : verse.text}”
+              </blockquote>
+            </div>
+          </article>
+        ))}
+
+        {!revealed && (
+          <button
+            type="button"
+            className="jc-pattern-trigger"
+            onClick={() => setRevealed(true)}
+          >
+            <span>Bring the claims together</span>
+            <i>→</i>
+          </button>
+        )}
+      </div>
+
+      {revealed && (
+        <div className="jc-pattern-reveal">
+          <div className="jc-pattern-chain" aria-label="Biblical pattern">
+            <strong>ONE LORD</strong>
+            <i>→</i>
+            <strong>NONE ELSE</strong>
+            <i>→</i>
+            <strong>NO GOD BESIDE ME</strong>
+          </div>
+
+          <p className="jc-pattern-explanation">
+            Isaiah takes the confession of one LORD and makes the boundary explicit: there is no other God existing beside Him.
+          </p>
+
+          <div className="jc-pattern-response">
+            <div>
+              <span>Now say the pattern in your own words</span>
+              <p>{move.prompt}</p>
+            </div>
+
+            <textarea
+              value={value}
+              onChange={(event) => onChange(event.target.value)}
+              placeholder="One or two sentences is enough..."
+              rows={4}
+            />
+
+            <div className="jc-pattern-response-foot">
+              <small>This is discovery, not a grade.</small>
+              <button
+                type="button"
+                className="jc-primary"
+                onClick={onContinue}
+                disabled={!ready}
+              >
+                {move.ctaLabel || "Continue"} <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
 function PredictionReveal({ move, encounterData, onContinue }) {
   const interaction = move.interaction || {};
   const [selectedId, setSelectedId] = useState("");
@@ -1456,7 +1570,15 @@ export default function ClassroomPage({ onNavigate }) {
           <span>{stageLabel(currentMove.stageId)}</span>
         </div>
 
-        {currentMove.interaction?.type === "prediction_reveal" ? (
+        {currentMove.id === "isaiah_exclusion" ? (
+          <IsaiahPatternReveal
+            move={currentMove}
+            encounterData={learningState.encounterData}
+            value={reflectionText}
+            onChange={setReflectionText}
+            onContinue={handleContinue}
+          />
+        ) : currentMove.interaction?.type === "prediction_reveal" ? (
           <PredictionReveal
             move={currentMove}
             encounterData={learningState.encounterData}
