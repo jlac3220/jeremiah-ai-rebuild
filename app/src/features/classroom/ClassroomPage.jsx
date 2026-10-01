@@ -158,35 +158,6 @@ function EncounterExperience({ move, onComplete, onExit }) {
   const primaryWords = String(encounter.primaryVerse?.text || "").split(/\s+/);
   const bridgeWords = String(encounter.bridgeVerse?.text || "").split(/\s+/);
 
-  useEffect(() => {
-    return () => {
-      if (typeof window !== "undefined" && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
-
-  function beginListening() {
-    setEntryMode("listen");
-    setPhase("notice");
-
-    if (
-      typeof window === "undefined" ||
-      !window.speechSynthesis ||
-      typeof window.SpeechSynthesisUtterance === "undefined"
-    ) {
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const utterance = new window.SpeechSynthesisUtterance(
-      encounter.primaryVerse?.text || ""
-    );
-    utterance.rate = 0.82;
-    utterance.pitch = 0.96;
-    window.speechSynthesis.speak(utterance);
-  }
-
   function openSource(source) {
     if (!source) return;
     setSelectedSource(source);
@@ -232,6 +203,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
   }
 
   const videoSource = sources.find((source) => source.type === "video");
+  const heroArtifact = sources.find((source) => source.id === "nash-papyrus");
   const artifactMoments = mediaMoments.filter((moment) => {
     const source = sources.find((item) => item.id === moment.sourceId);
     return source?.type === "image";
@@ -251,49 +223,64 @@ function EncounterExperience({ move, onComplete, onExit }) {
       <main className="jc-encounter-shell">
         {phase === "threshold" && (
           <section className="jc-encounter-scene is-threshold">
-            <div className="jc-encounter-kicker">ENTER THE CLASSROOM</div>
-            <h1>{move.title}</h1>
-            <p className="jc-encounter-opening">{encounter.opening}</p>
+            <div className="jc-threshold-grid">
+              <div className="jc-threshold-copy">
+                <div className="jc-encounter-kicker">THE ONE TRUE GOD · OG.1.1.18</div>
+                <h1>{move.title}</h1>
+                <p className="jc-encounter-opening">{encounter.opening}</p>
 
-            <div className="jc-encounter-entry-grid">
-              <button type="button" onClick={beginListening}>
-                <span className="jc-entry-icon">◖</span>
-                <strong>{encounter.listenLabel || "Listen"}</strong>
-                <small>Hear the confession before anything is explained.</small>
-              </button>
+                <div className="jc-threshold-actions">
+                  <button
+                    type="button"
+                    className="jc-threshold-primary"
+                    onClick={() => {
+                      setEntryMode("read");
+                      setPhase("notice");
+                    }}
+                  >
+                    <span>Begin with the words</span>
+                    <i>→</i>
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setEntryMode("read");
-                  setPhase("notice");
-                }}
-              >
-                <span className="jc-entry-icon">Aa</span>
-                <strong>{encounter.readLabel || "Read it myself"}</strong>
-                <small>Enter through the words and notice what pulls your attention.</small>
-              </button>
+                  {videoSource && (
+                    <button
+                      type="button"
+                      className="jc-threshold-video"
+                      onClick={() => {
+                        setEntryMode("watch");
+                        setViewedSourceIds((ids) =>
+                          ids.includes(videoSource.id) ? ids : [...ids, videoSource.id]
+                        );
+                        setPhase("mediaIntro");
+                      }}
+                    >
+                      <span className="jc-threshold-play">▶</span>
+                      <span>
+                        <strong>Watch the 3-minute introduction</strong>
+                        <small>{videoSource.provider} · optional context</small>
+                      </span>
+                    </button>
+                  )}
+                </div>
 
-              {videoSource && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEntryMode("watch");
-                    setViewedSourceIds((ids) =>
-                      ids.includes(videoSource.id) ? ids : [...ids, videoSource.id]
-                    );
-                    setPhase("mediaIntro");
-                  }}
-                >
-                  <span className="jc-entry-icon">▶</span>
-                  <strong>Watch a short introduction</strong>
-                  <small>{videoSource.provider} · {videoSource.duration}</small>
-                </button>
-              )}
-            </div>
+                <div className="jc-encounter-whisper">
+                  No quiz yet. First, encounter the text.
+                </div>
+              </div>
 
-            <div className="jc-encounter-whisper">
-              No score. No correct answer yet. Just encounter the idea.
+              <div className="jc-threshold-visual" aria-hidden="true">
+                {heroArtifact?.imageUrl && (
+                  <img src={heroArtifact.imageUrl} alt="" />
+                )}
+                <div className="jc-threshold-verse">
+                  <span>Deuteronomy 6:4</span>
+                  <p>“Hear, O Israel: The LORD our God is one LORD.”</p>
+                </div>
+                <div className="jc-threshold-caption">
+                  <span>ANCIENT WITNESS</span>
+                  <small>Nash Papyrus · 2nd–1st century BC</small>
+                </div>
+              </div>
             </div>
           </section>
         )}
@@ -347,8 +334,13 @@ function EncounterExperience({ move, onComplete, onExit }) {
             <p className="jc-encounter-prompt">{encounter.noticePrompt}</p>
 
             <div className="jc-encounter-actions">
-              <button type="button" className="jc-encounter-ghost" onClick={beginListening}>
-                Listen again
+              <button
+                type="button"
+                className="jc-encounter-ghost"
+                onClick={() => setPrimaryMarks([])}
+                disabled={!primaryMarks.length}
+              >
+                Clear
               </button>
               <button
                 type="button"
