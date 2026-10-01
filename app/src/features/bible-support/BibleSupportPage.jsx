@@ -222,7 +222,7 @@ export default function BibleSupportPage({ onNavigate }) {
 
   return (
     <div className="br-page">
-      <div className="br-read-progress" style={{ width: \`\${readingProgress}%\` }} />
+      <div className="br-read-progress" style={{ width: `${readingProgress}%` }} />
 
       <header className="br-topbar">
         <button
@@ -325,8 +325,8 @@ export default function BibleSupportPage({ onNavigate }) {
         ) : !error ? (
           <article
             className="br-scripture"
-            style={{ "--reader-font-size": \`\${fontSize}rem\` }}
-            aria-label={\`\${currentBook.name} chapter \${chapter}, \${activeTranslation.name}\`}
+            style={{ "--reader-font-size": `${fontSize}rem` }}
+            aria-label={`${currentBook.name} chapter ${chapter}, ${activeTranslation.name}`}
           >
             {chapterVerses.map((item) => {
               const highlighted = item.verse === highlightVerse;
@@ -383,7 +383,7 @@ export default function BibleSupportPage({ onNavigate }) {
       )}
 
       <aside
-        className={\`br-sheet \${showTranslationPicker ? "is-open" : ""}\`}
+        className={`br-sheet ${showTranslationPicker ? "is-open" : ""}`}
         aria-hidden={!showTranslationPicker}
       >
         <div className="br-sheet-handle" />
@@ -422,7 +422,7 @@ export default function BibleSupportPage({ onNavigate }) {
       </aside>
 
       <aside
-        className={\`br-sheet \${showBookPicker ? "is-open" : ""}\`}
+        className={`br-sheet ${showBookPicker ? "is-open" : ""}`}
         aria-hidden={!showBookPicker}
       >
         <div className="br-sheet-handle" />
@@ -459,7 +459,7 @@ export default function BibleSupportPage({ onNavigate }) {
       </aside>
 
       <aside
-        className={\`br-sheet \${showChapterPicker ? "is-open" : ""}\`}
+        className={`br-sheet ${showChapterPicker ? "is-open" : ""}`}
         aria-hidden={!showChapterPicker}
       >
         <div className="br-sheet-handle" />
