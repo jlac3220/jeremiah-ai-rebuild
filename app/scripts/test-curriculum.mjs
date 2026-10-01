@@ -5,6 +5,9 @@ import { resolveCurriculumReference } from '../src/core/bible/curriculumReferenc
 import { parseBibleReference } from '../src/core/bible/bibleReaderIntent.js';
 import { getLessonMedia } from '../src/data/curriculum/mediaCatalog.js';
 import { createLearningState, saveLearningState, loadLearningState, advanceLearningState, advanceUnscoredMove } from '../src/core/classroom/learningEngine.js';
+import { getTeachingPlan } from '../src/data/curriculum/teachingPlans.js';
+import { classroomResources } from '../src/data/curriculum/classroomResources.js';
+import { getLessonExperience } from '../src/core/classroom/content/lessonExperience.js';
 import { teachWithJeremiah } from '../server/teacherCore.mjs';
 const saved = new Map();
 globalThis.window = { localStorage: { getItem: key=>saved.get(key)||null, setItem:(key,value)=>saved.set(key,value) } };
@@ -25,7 +28,10 @@ for (const study of CURRICULUM_STUDIES) {
     assert.ok(standard.scope && standard.focus && standard.statement);
     const content=classroomContentRegistry[standard.id];
     if (!content.sourceStandard) continue; // Original curated Shema lesson has its own smoke test.
-    assert.ok(getLessonMedia(content).length,standard.id+' reinforcement');
+    assert.ok(getTeachingPlan(content).encounter);
+    assert.equal(getLessonExperience(content).witnesses.length,3);
+    assert.equal(getLessonExperience(content).vocabulary.length,3);
+    assert.ok(getLessonMedia(content).every(s=>s.review.status==='approved'),standard.id+' reviewed reinforcement');
     let state=createLearningState(content);
     for (const id of ['learn','scripture','sources']) state=advanceUnscoredMove(state,content.instructionalMoves.find(m=>m.id===id));
     assert.equal(state.currentMoveId,'check');
@@ -45,6 +51,11 @@ for (const study of CURRICULUM_STUDIES) {
     }
     assert.equal(state.currentMoveId,'complete');
   }
+}
+for(const resource of classroomResources) {
+ assert.equal(resource.review.status,'approved');
+ assert.ok(resource.standards.length<=2,'Resources need intentional, limited placement');
+ for(const id of resource.standards) assert.ok(classroomContentRegistry[id]);
 }
 const previousKey=process.env.OPENAI_API_KEY;
 delete process.env.OPENAI_API_KEY;

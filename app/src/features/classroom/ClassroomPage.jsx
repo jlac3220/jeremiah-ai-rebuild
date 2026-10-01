@@ -1584,7 +1584,7 @@ export default function ClassroomPage({ onNavigate }) {
   }
 
   if (content.sourceStandard) {
-    return <CurriculumLesson key={currentMove.id} content={content} move={currentMove} state={learningState} percent={progress} responseText={responseText} onResponseText={handleResponseTextChange} selectedChoiceId={selectedChoiceId} onSelectChoice={handleSelectChoice} ready={ready} teacherDecision={teacherDecision} isThinking={isThinking} errorMessage={errorMessage} onSubmit={handleSubmit} onContinue={handleContinue} onTeacherContinue={handleTeacherContinue} onNavigate={onNavigate} />;
+    return <CurriculumLesson key={currentMove.id} content={content} move={currentMove} state={learningState} onProgress={handleShemaEpisodeProgress} percent={progress} responseText={responseText} onResponseText={handleResponseTextChange} selectedChoiceId={selectedChoiceId} onSelectChoice={handleSelectChoice} ready={ready} teacherDecision={teacherDecision} isThinking={isThinking} errorMessage={errorMessage} onSubmit={handleSubmit} onContinue={handleContinue} onTeacherContinue={handleTeacherContinue} onNavigate={onNavigate} />;
   }
 
   const shemaEpisodeMove =

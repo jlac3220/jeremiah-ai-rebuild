@@ -1,0 +1,54 @@
+[
+  {
+    "id": "upci-gospel-1",
+    "title": "Sin",
+    "provider": "UPCI Youth Ministries",
+    "source": "https://upciyouth.com/thegospel",
+    "publisherVideoUrl": "https://www.youtube.com/watch?v=Yr3ROXp2cn4",
+    "discoveredAt": "2026-10-01",
+    "reviewStatus": "candidate",
+    "publisherAlignment": "Apostolic, explicitly described by publisher",
+    "contentReview": "Full audiovisual review pending",
+    "availability": "Publisher MP4 download link reports File Deleted; not placed in app",
+    "placement": []
+  },
+  {
+    "id": "upci-gospel-2",
+    "title": "Repentance",
+    "provider": "UPCI Youth Ministries",
+    "source": "https://upciyouth.com/thegospel",
+    "publisherVideoUrl": "https://www.youtube.com/watch?v=dlmM2vQTRcg",
+    "discoveredAt": "2026-10-01",
+    "reviewStatus": "candidate",
+    "publisherAlignment": "Apostolic, explicitly described by publisher",
+    "contentReview": "Full audiovisual review pending",
+    "availability": "Publisher MP4 download link reports File Deleted; not placed in app",
+    "placement": []
+  },
+  {
+    "id": "upci-gospel-3",
+    "title": "Baptism",
+    "provider": "UPCI Youth Ministries",
+    "source": "https://upciyouth.com/thegospel",
+    "publisherVideoUrl": "https://www.youtube.com/watch?v=HObL_ver4Q0",
+    "discoveredAt": "2026-10-01",
+    "reviewStatus": "candidate",
+    "publisherAlignment": "Apostolic, explicitly described by publisher",
+    "contentReview": "Full audiovisual review pending",
+    "availability": "Publisher MP4 download link reports File Deleted; not placed in app",
+    "placement": []
+  },
+  {
+    "id": "upci-gospel-4",
+    "title": "The Holy Ghost",
+    "provider": "UPCI Youth Ministries",
+    "source": "https://upciyouth.com/thegospel",
+    "publisherVideoUrl": "https://www.youtube.com/watch?v=OpYJQK0GByI",
+    "discoveredAt": "2026-10-01",
+    "reviewStatus": "candidate",
+    "publisherAlignment": "Apostolic, explicitly described by publisher",
+    "contentReview": "Full audiovisual review pending",
+    "availability": "Publisher MP4 download link reports File Deleted; not placed in app",
+    "placement": []
+  }
+]
