@@ -146,8 +146,8 @@ function TeachingContent({ move }) {
 function EncounterExperience({ move, onComplete, onExit }) {
   const encounter = move.encounter || {};
   const [phase, setPhase] = useState("threshold");
-  const [primaryMarks, setPrimaryMarks] = useState([]);
-  const [bridgeMarks, setBridgeMarks] = useState([]);
+  const [primaryPhraseId, setPrimaryPhraseId] = useState("");
+  const [bridgePhraseId, setBridgePhraseId] = useState("");
   const [showSourceShelf, setShowSourceShelf] = useState(false);
   const [selectedSource, setSelectedSource] = useState(null);
   const [entryMode, setEntryMode] = useState("");
@@ -155,8 +155,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
   const sources = encounter.curatedSources || [];
   const sourceMoments = encounter.sourceMoments || [];
   const mediaMoments = encounter.mediaMoments || [];
-  const primaryWords = String(encounter.primaryVerse?.text || "").split(/\s+/);
-  const bridgeWords = String(encounter.bridgeVerse?.text || "").split(/\s+/);
+  const primaryPhraseOptions = encounter.primaryPhraseOptions || [];
+  const bridgePhraseOptions = encounter.bridgePhraseOptions || [];
+  const primaryPhrase = primaryPhraseOptions.find((item) => item.id === primaryPhraseId);
+  const bridgePhrase = bridgePhraseOptions.find((item) => item.id === bridgePhraseId);
 
   function openSource(source) {
     if (!source) return;
@@ -169,35 +171,31 @@ function EncounterExperience({ move, onComplete, onExit }) {
   function finishEncounter() {
     onComplete({
       entryMode: entryMode || "read",
-      primaryWords: primaryMarks.map((index) => primaryWords[index]).filter(Boolean),
-      bridgeWords: bridgeMarks.map((index) => bridgeWords[index]).filter(Boolean),
+      primaryPhrases: primaryPhrase ? [primaryPhrase.text] : [],
+      bridgePhrases: bridgePhrase ? [bridgePhrase.text] : [],
       viewedSourceIds,
       sourceShelfOpened: showSourceShelf,
     });
   }
 
-  function toggleMark(setter, marks, index) {
-    setter(
-      marks.includes(index)
-        ? marks.filter((item) => item !== index)
-        : [...marks, index]
-    );
-  }
-
-  function renderWordField(words, marks, setter, label) {
+  function renderPhraseChoices(options, selectedId, onSelect, label) {
     return (
-      <div className="jc-encounter-words" aria-label={label}>
-        {words.map((word, index) => (
-          <button
-            type="button"
-            key={index + "-" + word}
-            className={marks.includes(index) ? "is-marked" : ""}
-            aria-pressed={marks.includes(index)}
-            onClick={() => toggleMark(setter, marks, index)}
-          >
-            {word}
-          </button>
-        ))}
+      <div className="jc-phrase-choices" aria-label={label}>
+        {options.map((option) => {
+          const selected = option.id === selectedId;
+          return (
+            <button
+              type="button"
+              key={option.id}
+              className={selected ? "is-selected" : ""}
+              aria-pressed={selected}
+              onClick={() => onSelect(option.id)}
+            >
+              <span>{option.text}</span>
+              <i aria-hidden="true">{selected ? "✓" : ""}</i>
+            </button>
+          );
+        })}
       </div>
     );
   }
@@ -273,7 +271,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
                       <strong>{videoSource.title}</strong>
                       <p>{videoSource.hook}</p>
                       <div className="jc-threshold-video-note">
-                        Watch here, then use <strong>Read the Shema</strong> when you are ready.
+                        Watch here, then start with the confession when you are ready.
                       </div>
                     </div>
                   </div>
@@ -342,33 +340,37 @@ function EncounterExperience({ move, onComplete, onExit }) {
 
             <div className="jc-notice-intro">
               <span>{encounter.primaryVerse?.reference}</span>
-              <h2>Don’t explain it yet. Just notice the words.</h2>
+              <h2>Read the confession as a whole.</h2>
               <p>{encounter.noticePrompt}</p>
             </div>
 
-            {renderWordField(
-              primaryWords,
-              primaryMarks,
-              setPrimaryMarks,
-              "Tap words in the Shema that stand out"
+            <blockquote className="jc-notice-verse">
+              “{encounter.primaryVerse?.text}”
+            </blockquote>
+
+            {renderPhraseChoices(
+              primaryPhraseOptions,
+              primaryPhraseId,
+              setPrimaryPhraseId,
+              "Choose a phrase from Deuteronomy 6:4 to carry forward"
             )}
 
             <div className="jc-encounter-actions jc-scene-actions">
               <button
                 type="button"
                 className="jc-encounter-ghost"
-                onClick={() => setPrimaryMarks([])}
-                disabled={!primaryMarks.length}
+                onClick={() => setPrimaryPhraseId("")}
+                disabled={!primaryPhraseId}
               >
-                Clear selection
+                Choose again
               </button>
               <button
                 type="button"
                 className="jc-encounter-next"
                 onClick={() => setPhase("bridge")}
-                disabled={!primaryMarks.length}
+                disabled={!primaryPhraseId}
               >
-                Keep these words <span>→</span>
+                Carry this phrase forward <span>→</span>
               </button>
             </div>
           </section>
@@ -386,8 +388,13 @@ function EncounterExperience({ move, onComplete, onExit }) {
               </div>
             </div>
 
+            <div className="jc-continuity-thread">
+              <span>You carried forward</span>
+              <strong>“{primaryPhrase?.text}”</strong>
+            </div>
+
             <div className="jc-compare-intro">
-              <h2>Now put a second voice beside the first.</h2>
+              <h2>Now put Isaiah beside it.</h2>
               <p>{encounter.bridgeLine}</p>
             </div>
 
@@ -402,13 +409,8 @@ function EncounterExperience({ move, onComplete, onExit }) {
 
               <article className="is-second">
                 <span>{encounter.bridgeVerse?.reference}</span>
-                {renderWordField(
-                  bridgeWords,
-                  bridgeMarks,
-                  setBridgeMarks,
-                  "Tap words in Isaiah that stand out"
-                )}
-                <small>Touch the words that sharpen the claim</small>
+                <p>{encounter.bridgeVerse?.text}</p>
+                <small>Read Isaiah as a whole before choosing a phrase.</small>
               </article>
             </div>
 
@@ -417,14 +419,21 @@ function EncounterExperience({ move, onComplete, onExit }) {
               <p>{encounter.bridgePrompt}</p>
             </div>
 
+            {renderPhraseChoices(
+              bridgePhraseOptions,
+              bridgePhraseId,
+              setBridgePhraseId,
+              "Choose the phrase in Isaiah that sharpens the confession"
+            )}
+
             <div className="jc-scene-actions">
               <button
                 type="button"
                 className="jc-encounter-next"
                 onClick={() => setPhase("artifacts")}
-                disabled={!bridgeMarks.length}
+                disabled={!bridgePhraseId}
               >
-                See the text in the real world <span>→</span>
+                See why that matters <span>→</span>
               </button>
             </div>
           </section>
@@ -432,6 +441,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
 
         {phase === "artifacts" && (
           <section className="jc-encounter-scene is-artifacts">
+            <div className="jc-continuity-thread is-compact">
+              <span>Your thread</span>
+              <strong>“{primaryPhrase?.text}” → “{bridgePhrase?.text}”</strong>
+            </div>
             <div className="jc-encounter-step">03 · THE WORDS HAVE A PHYSICAL HISTORY</div>
             <h2>Before this was a lesson screen, it was ink, parchment, memory, and practice.</h2>
             <p className="jc-encounter-subcopy">
@@ -482,6 +495,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
 
         {phase === "voices" && (
           <section className="jc-encounter-scene">
+            <div className="jc-continuity-thread is-compact">
+              <span>Your thread</span>
+              <strong>“{primaryPhrase?.text}” → “{bridgePhrase?.text}”</strong>
+            </div>
             <div className="jc-encounter-step">04 · THE VERSE HAS A HISTORY</div>
             <h2>People have been hearing, reciting, and arguing about these words for centuries.</h2>
             <p className="jc-encounter-subcopy">
@@ -559,6 +576,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
 
         {phase === "destination" && (
           <section className="jc-encounter-scene is-destination">
+            <div className="jc-continuity-thread is-compact">
+              <span>You have already started building the answer</span>
+              <strong>“{primaryPhrase?.text}” → “{bridgePhrase?.text}”</strong>
+            </div>
             <div className="jc-encounter-step">YOUR TASK</div>
             <h2>{encounter.destination}</h2>
             <p>
@@ -757,18 +778,25 @@ function ChoiceGrid({ choices = [], selectedChoiceId, onSelect, disabled }) {
   );
 }
 
-function normalizeEncounterWord(value = "") {
-  return String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
+function renderVerseWithPhrase(text = "", phrase = "") {
+  if (!phrase || !text.includes(phrase)) return text;
+  const [before, ...rest] = text.split(phrase);
+  return (
+    <>
+      {before}
+      <mark>{phrase}</mark>
+      {rest.join(phrase)}
+    </>
+  );
 }
 
 function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
   const verse = move.scripture?.[0];
   const noticed = [
-    ...(encounterData?.primaryWords || []),
-    ...(encounterData?.bridgeWords || []),
+    ...(encounterData?.primaryPhrases || []),
+    ...(encounterData?.bridgePhrases || []),
   ];
-  const noticedNormalized = new Set(noticed.map(normalizeEncounterWord).filter(Boolean));
-  const words = String(verse?.text || "").split(/\s+/);
+  const primaryPhrase = encounterData?.primaryPhrases?.[0] || "";
 
   return (
     <div className="jc-encounter-page jc-handoff-page">
@@ -805,16 +833,9 @@ function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
           {verse && (
             <div className="jc-handoff-scripture">
               <span>{verse.reference}</span>
-              <div>
-                {words.map((word, index) => {
-                  const marked = noticedNormalized.has(normalizeEncounterWord(word));
-                  return (
-                    <em key={index + "-" + word} className={marked ? "is-marked" : ""}>
-                      {word}
-                    </em>
-                  );
-                })}
-              </div>
+              <blockquote>
+                “{renderVerseWithPhrase(verse.text, primaryPhrase)}”
+              </blockquote>
             </div>
           )}
 
@@ -859,9 +880,9 @@ function EncounterThread({ encounterData }) {
   if (!encounterData) return null;
 
   const noticed = [
-    ...(encounterData.primaryWords || []),
-    ...(encounterData.bridgeWords || []),
-  ].slice(0, 6);
+    ...(encounterData.primaryPhrases || []),
+    ...(encounterData.bridgePhrases || []),
+  ].slice(0, 4);
 
   if (!noticed.length) return null;
 
