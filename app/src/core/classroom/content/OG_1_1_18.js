@@ -576,6 +576,43 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
         "What does the Shema require you to confess about God, and what does Isaiah rule out?",
       placeholder:
         "Explain the biblical foundation in your own words...",
+      witnessBuilder: {
+        intro:
+          "Build the explanation the way you would give it to a real person: open clearly, state the doctrine, then show why it matters.",
+        steps: [
+          {
+            id: "open",
+            label: "Open",
+            prompt: "How would you begin?",
+            options: [
+              "Start with the Bible's own confession: the LORD our God is one LORD.",
+              "Start by telling them which theological system is wrong.",
+              "Start by saying the details probably do not matter as long as everyone believes in God."
+            ]
+          },
+          {
+            id: "doctrine",
+            label: "State it",
+            prompt: "What is the clearest doctrinal statement?",
+            options: [
+              "Deuteronomy confesses one LORD, and Isaiah explicitly says there is none else and no God beside Him.",
+              "There is one God, but Scripture leaves His identity undefined.",
+              "The Old Testament teaches one God, but the New Testament replaces that confession."
+            ]
+          },
+          {
+            id: "land",
+            label: "Land it",
+            prompt: "How should you bring the explanation home?",
+            options: [
+              "Jesus repeats the Shema, so later revelation must remain inside that same confession rather than overturn it.",
+              "The safest conclusion is to avoid connecting the passages.",
+              "The main goal is winning the argument, even if the explanation becomes harsh."
+            ]
+          }
+        ],
+        preferredOptionIndexes: [0, 0, 0]
+      },
       evidenceIds: ["one-lord", "no-other", "controlling-foundation"],
       strategyRoutes: {
         scripture_revisit: "guided_reteach",
