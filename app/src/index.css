@@ -1,6 +1,12 @@
 :root {
   --font-body: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+  --color-ink: #17283b;
+  --color-muted: #64748b;
+  --color-blue: #315d82;
+  --color-blue-dark: #244767;
+  --color-accent: #bd5929;
+  --color-accent-dark: #a94d22;
   font-family: var(--font-body);
   color: #14202a;
   background: #f6f7f8;
@@ -10,8 +16,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html { min-width: 320px; min-height: 100%; background: #081421; }
+html { min-width: 320px; min-height: 100%; background: #fff; }
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 button, textarea, input, select { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
 #root { min-height: 100vh; }
+
+* { box-sizing: border-box; }
+button { touch-action: manipulation; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid #eaa574; outline-offset: 4px; }
+.app-shell { min-height: 100vh; background: #fff; }
+.app-main.has-nav { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+.app-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; background: rgba(255,255,255,.97); border-top: 1px solid #edf0f3; backdrop-filter: blur(12px); }
+.app-nav-rail { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); max-width: 980px; margin: auto; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); }
+.app-nav button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 9px 2px; min-width: 0; border: 0; border-radius: 12px; background: transparent; color: #64748b; font: 600 .72rem/1.2 var(--font-body); cursor: pointer; }
+.app-nav svg { width: 22px; height: 22px; }
+.app-nav button[aria-current] { color: var(--color-blue); background: #f0f5f8; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+.sc-page button, .scl-page button, .br-page button { font-family: var(--font-body); }
+.sc-page, .scl-page, .br-page { color: var(--color-ink); }

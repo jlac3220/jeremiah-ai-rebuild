@@ -183,7 +183,7 @@ export default function ShemaClassroom({
       <header className="sc-topbar">
         <button type="button" className="sc-back" onClick={onExit} aria-label="Leave Classroom">←</button>
         <div className="sc-progress"><i style={{ width: progress + "%" }} /></div>
-        <button type="button" className="sc-more" aria-label="More options">•••</button>
+        <button type="button" className="sc-more" onClick={() => openDetail({ ...primaryVerse, kind: "scripture" })} aria-label="Open lesson Scripture">↗</button>
       </header>
 
       <main className={"sc-shell scene-" + sceneName}>

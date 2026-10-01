@@ -16,14 +16,14 @@
 .ld-next p { margin: 6px 0 0; font: 600 1.05rem/1.5 system-ui, sans-serif; }
 .ld-progress-label { display: flex; justify-content: space-between; font: .8rem/1.5 system-ui, sans-serif; color: #64748b; }
 .ld-progress { height: 4px; background: #e2e8ee; border-radius: 4px; margin: 10px 0 26px; overflow: hidden; }
-.ld-progress > span { height: 100%; display: block; background: #315d82; border-radius: inherit; }
-.ld-primary { display: inline-flex; gap: 44px; justify-content: space-between; align-items: center; background: #bd5929; color: #fff; border: 0; border-radius: 12px; padding: 17px 24px; cursor: pointer; font: 650 1rem/1.4 system-ui, sans-serif; }
-.ld-primary:hover { background: #a94d22; }
+.ld-progress > span { height: 100%; display: block; background: var(--color-blue); border-radius: inherit; }
+.ld-primary { display: inline-flex; gap: 44px; justify-content: space-between; align-items: center; background: var(--color-accent); color: #fff; border: 0; border-radius: 12px; padding: 17px 24px; cursor: pointer; font: 650 1rem/1.4 system-ui, sans-serif; }
+.ld-primary:hover { background: var(--color-accent-dark); }
 .ld-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; padding: 44px 0 0; }
 .ld-stats { display: flex; gap: 32px; margin: 20px 0 16px; }
 .ld-stats strong { display: block; font: 500 2.4rem/1.2 Georgia, serif; }
 .ld-stats span { display: block; color: #64748b; font: .82rem/1.6 system-ui, sans-serif; margin-top: 5px; }
-.ld-link { border: 0; background: transparent; color: #315d82; font: 650 .95rem/1.5 system-ui, sans-serif; padding: 10px 0; cursor: pointer; }
+.ld-link { border: 0; background: transparent; color: var(--color-blue); font: 650 .95rem/1.5 system-ui, sans-serif; padding: 10px 0; cursor: pointer; }
 .ld-bible h3 { font: 500 1.9rem/1.2 Georgia, serif; margin: 14px 0 10px; }
 .ld-bible p, .ld-muted { color: #64748b; font: 1rem/1.7 system-ui, sans-serif; }
 .ld-page button:focus-visible { outline: 3px solid #eaa574; outline-offset: 5px; }

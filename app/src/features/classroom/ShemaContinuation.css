@@ -1,7 +1,7 @@
 .scl-page {
   min-height: 100vh;
   background: #fff;
-  color: #111827;
+  color: var(--color-ink);
 }
 
 .scl-page * { box-sizing: border-box; }
@@ -25,7 +25,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.05rem;
   cursor: pointer;
 }
@@ -53,7 +53,7 @@
   padding: 7px 11px;
   border-radius: 999px;
   background: #eff6ff;
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: .78rem;
   font-weight: 750;
 }
@@ -65,7 +65,7 @@
 }
 
 .scl-kicker {
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: .74rem;
   font-weight: 850;
   text-transform: uppercase;
@@ -75,7 +75,7 @@
 .scl-scene h1 {
   max-width: 720px;
   margin: 10px 0 0;
-  color: #111827;
+  color: var(--color-ink);
   font: 790 clamp(2.5rem, 6vw, 4.5rem)/1 var(--font-display);
   letter-spacing: -.055em;
 }
@@ -122,7 +122,7 @@
 .scl-insights strong {
   display: block;
   margin-top: 5px;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.05rem;
   line-height: 1.5;
 }
@@ -137,7 +137,7 @@
 .scl-question h2 {
   max-width: 680px;
   margin: 0;
-  color: #111827;
+  color: var(--color-ink);
   font: 740 clamp(1.35rem, 3vw, 2rem)/1.25 var(--font-display);
   letter-spacing: -.025em;
 }
@@ -166,7 +166,7 @@
 }
 
 .scl-options button.is-selected {
-  border-color: #1d4ed8;
+  border-color: var(--color-blue);
   background: #eff6ff;
 }
 
@@ -187,8 +187,8 @@
 }
 
 .scl-options button.is-selected i {
-  border-color: #1d4ed8;
-  background: #1d4ed8;
+  border-color: var(--color-blue);
+  background: var(--color-blue);
 }
 
 .scl-response {
@@ -204,13 +204,13 @@
   border: 1px solid #d1d5db;
   border-radius: 14px;
   outline: none;
-  color: #111827;
+  color: var(--color-ink);
   background: #fff;
   font: 500 1rem/1.65 var(--font-body);
 }
 
 .scl-response textarea:focus {
-  border-color: #1d4ed8;
+  border-color: var(--color-blue);
   box-shadow: 0 0 0 3px rgba(29,78,216,.08);
 }
 
@@ -230,7 +230,7 @@
   border: 0;
   border-radius: 999px;
   color: #fff;
-  background: #1d4ed8;
+  background: var(--color-blue);
   font: 760 .94rem/1 var(--font-display);
   cursor: pointer;
 }
@@ -261,7 +261,7 @@
   place-items: center;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #111827;
+  background: var(--color-ink);
   color: #fff;
   font-weight: 800;
 }
@@ -289,7 +289,7 @@
 .scl-teacher strong {
   display: block;
   margin-top: 2px;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.15rem;
 }
 
@@ -390,7 +390,7 @@
   place-items: center;
   border-radius: 50%;
   background: #eff6ff;
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: .72rem;
   font-weight: 800;
 }
@@ -407,7 +407,7 @@
 .scl-witness-step-head strong {
   display: block;
   margin-top: 4px;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.05rem;
   line-height: 1.35;
 }
@@ -435,7 +435,7 @@
 }
 
 .scl-witness-options button.is-selected {
-  border-color: #1d4ed8;
+  border-color: var(--color-blue);
   background: #eff6ff;
 }
 
@@ -456,14 +456,14 @@
 }
 
 .scl-witness-options button.is-selected i {
-  border-color: #1d4ed8;
-  background: #1d4ed8;
+  border-color: var(--color-blue);
+  background: var(--color-blue);
 }
 
 .scl-witness-built {
   margin-top: 28px;
   padding: 20px 22px;
-  border-left: 4px solid #f97316;
+  border-left: 4px solid var(--color-accent);
   border-radius: 0 14px 14px 0;
   background: #fff7ed;
 }
@@ -509,7 +509,7 @@
 
 .scl-retrieval-head span {
   display: block;
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: .7rem;
   font-weight: 850;
   text-transform: uppercase;
@@ -519,7 +519,7 @@
 .scl-retrieval-head strong {
   display: block;
   margin-top: 4px;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.05rem;
 }
 
@@ -539,7 +539,7 @@
 .scl-retrieval h3 {
   max-width: 680px;
   margin: 24px 0 0;
-  color: #111827;
+  color: var(--color-ink);
   font: 740 1.3rem/1.35 var(--font-display);
   letter-spacing: -.02em;
 }
@@ -567,7 +567,7 @@
 }
 
 .scl-retrieval-options button.is-selected {
-  border-color: #1d4ed8;
+  border-color: var(--color-blue);
   background: #eff6ff;
 }
 
@@ -593,7 +593,7 @@
   place-items: center;
   border-radius: 50%;
   color: #fff;
-  background: #1d4ed8;
+  background: var(--color-blue);
   font-style: normal;
   font-weight: 800;
 }
@@ -609,13 +609,13 @@
 .scl-retrieval-explanation {
   margin-top: 16px;
   padding: 16px 18px;
-  border-left: 4px solid #1d4ed8;
+  border-left: 4px solid var(--color-blue);
   border-radius: 0 12px 12px 0;
   background: #f8fafc;
 }
 
 .scl-retrieval-explanation strong {
-  color: #111827;
+  color: var(--color-ink);
   font-size: .84rem;
 }
 
@@ -643,7 +643,7 @@
 }
 
 .scl-retrieval-result > strong {
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.05rem;
 }
 

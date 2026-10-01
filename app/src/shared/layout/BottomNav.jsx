@@ -1,83 +1,11 @@
-import { ROUTES } from "../../app/routes";
-
+import { ROUTES } from '../../app/routes';
 const NAV_ITEMS = [
-  { id: ROUTES.HOME, label: "Home" },
-  { id: ROUTES.CLASSROOM, label: "Classroom" },
-  { id: ROUTES.PROGRESS, label: "Progress" },
-  { id: ROUTES.PROFILE, label: "Profile" },
-  { id: ROUTES.BIBLE_SUPPORT, label: "Bible" },
+  { id: ROUTES.HOME, label: 'Home', path: 'M3 10 12 3l9 7v10h-6v-6H9v6H3Z' },
+  { id: ROUTES.CLASSROOM, label: 'Classroom', path: 'm2 8 10-5 10 5-10 5Zm4 3v6c4 3 8 3 12 0v-6M22 8v9' },
+  { id: ROUTES.PROGRESS, label: 'Progress', path: 'M4 20V10m8 10V4m8 16v-7' },
+  { id: ROUTES.PROFILE, label: 'Profile', path: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 21v-2a8 8 0 0 1 16 0v2' },
+  { id: ROUTES.BIBLE_SUPPORT, label: 'Bible', path: 'M12 5v16M3 4c3-1 6-1 9 1 3-2 6-2 9-1v16c-3-1-6-1-9 1-3-2-6-2-9-1Z' },
 ];
-
 export default function BottomNav({ currentRoute, onNavigate }) {
-  return (
-    <nav aria-label="Main navigation" style={navStyle}>
-      <div style={railStyle}>
-        {NAV_ITEMS.map((item) => {
-          const isActive = currentRoute === item.id;
-
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => onNavigate(item.id)}
-              aria-current={isActive ? "page" : undefined}
-              style={{
-                ...itemStyle,
-                ...(isActive ? activeItemStyle : inactiveItemStyle),
-              }}
-            >
-              <span style={labelStyle}>{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    </nav>
-  );
+  return <nav className="app-nav" aria-label="Main navigation"><div className="app-nav-rail">{NAV_ITEMS.map((item) => <button key={item.id} type="button" onClick={() => onNavigate(item.id)} aria-current={currentRoute === item.id ? 'page' : undefined}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={item.path} /></svg><span>{item.label}</span></button>)}</div></nav>;
 }
-
-const navStyle = {
-  width: "100%",
-  background: "rgba(255,255,255,0.96)",
-  backdropFilter: "blur(12px)",
-  borderTop: "1px solid #e2e8f0",
-  boxShadow: "0 -8px 24px rgba(15, 23, 42, 0.06)",
-};
-
-const railStyle = {
-  width: "100%",
-  maxWidth: "980px",
-  margin: "0 auto",
-  display: "grid",
-  gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
-  gap: "8px",
-  padding: "10px 12px calc(10px + env(safe-area-inset-bottom))",
-  boxSizing: "border-box",
-};
-
-const itemStyle = {
-  minWidth: 0,
-  border: "none",
-  padding: "12px 8px",
-  borderRadius: "16px",
-  fontSize: "0.9rem",
-  fontWeight: 800,
-  cursor: "pointer",
-  transition: "all 180ms ease",
-  whiteSpace: "nowrap",
-};
-
-const activeItemStyle = {
-  background: "#0f172a",
-  color: "#ffffff",
-};
-
-const inactiveItemStyle = {
-  background: "#ffffff",
-  color: "#334155",
-};
-
-const labelStyle = {
-  display: "block",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-};

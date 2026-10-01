@@ -1388,6 +1388,10 @@ export default function ClassroomPage({ onNavigate }) {
   }, [currentMove?.type, learningState?.milestones?.complete]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [currentMove?.id]);
+
+  useEffect(() => {
     if (currentMove?.stageId) {
       setSavedLiveStageForPreset(presetId, currentMove.stageId);
     }

@@ -1,7 +1,7 @@
 .br-page {
   min-height: 100vh;
   background: #ffffff;
-  color: #111827;
+  color: var(--color-ink);
 }
 
 .br-page * {
@@ -14,7 +14,7 @@
   left: 0;
   z-index: 80;
   height: 3px;
-  background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 78%, #f97316 100%);
+  background: linear-gradient(90deg, var(--color-blue) 0%, var(--color-blue) 78%, var(--color-accent) 100%);
   transition: width 120ms linear;
 }
 
@@ -39,7 +39,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.15rem;
   cursor: pointer;
 }
@@ -56,7 +56,7 @@
 
 .br-top-title strong {
   display: block;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 0.92rem;
   line-height: 1.1;
 }
@@ -80,7 +80,7 @@
 
 .br-top-title small i {
   margin-left: 3px;
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-style: normal;
 }
 
@@ -129,7 +129,7 @@
   border: 0;
   border-radius: 14px;
   background: #eff6ff;
-  color: #111827;
+  color: var(--color-ink);
   text-align: left;
   cursor: pointer;
 }
@@ -138,7 +138,7 @@
   min-width: 47px;
   padding: 8px 9px;
   border-radius: 10px;
-  background: #1d4ed8;
+  background: var(--color-blue);
   color: #fff;
   font-size: 0.74rem;
   font-weight: 900;
@@ -162,7 +162,7 @@
 }
 
 .br-version-strip i {
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: 0.72rem;
   font-style: normal;
   font-weight: 850;
@@ -185,7 +185,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 15px;
   background: #fff;
-  color: #111827;
+  color: var(--color-ink);
   text-align: left;
   cursor: pointer;
 }
@@ -201,7 +201,7 @@
 .br-controls strong {
   min-width: 0;
   overflow: hidden;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1rem;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -219,7 +219,7 @@
 }
 
 .br-heading > span {
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: 0.72rem;
   font-weight: 850;
   text-transform: uppercase;
@@ -229,7 +229,7 @@
 .br-heading h1 {
   display: inline;
   margin: 7px 0 0;
-  color: #111827;
+  color: var(--color-ink);
   font: 800 clamp(2.5rem, 6vw, 4.2rem) / 1 var(--font-display, system-ui, sans-serif);
   letter-spacing: -0.05em;
 }
@@ -269,7 +269,7 @@
 
 .br-scripture p.is-highlighted {
   background: #fff7ed;
-  box-shadow: inset 4px 0 0 #f97316;
+  box-shadow: inset 4px 0 0 var(--color-accent);
 }
 
 .br-scripture sup {
@@ -278,7 +278,7 @@
   display: inline-block;
   min-width: 25px;
   margin-right: 4px;
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-family: var(--font-body, system-ui, sans-serif);
   font-size: 0.62em;
   font-weight: 850;
@@ -306,7 +306,7 @@
   width: 17px;
   height: 17px;
   border: 2px solid #dbeafe;
-  border-top-color: #1d4ed8;
+  border-top-color: var(--color-blue);
   border-radius: 50%;
   animation: br-spin 0.8s linear infinite;
 }
@@ -341,7 +341,7 @@
   padding: 8px 11px;
   border: 0;
   border-radius: 9px;
-  background: #111827;
+  background: var(--color-ink);
   color: #fff;
   font-size: 0.76rem;
   font-weight: 800;
@@ -372,7 +372,7 @@
   gap: 10px;
   border: 0;
   background: transparent;
-  color: #111827;
+  color: var(--color-ink);
   cursor: pointer;
 }
 
@@ -387,7 +387,7 @@
 }
 
 .br-chapter-nav button > span {
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: 1.1rem;
 }
 
@@ -402,7 +402,7 @@
 .br-chapter-nav strong {
   display: block;
   margin-top: 2px;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 0.9rem;
 }
 
@@ -448,7 +448,7 @@
 
 .br-sheet-header small {
   display: block;
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: 0.7rem;
   font-weight: 850;
   text-transform: uppercase;
@@ -458,7 +458,7 @@
 .br-sheet-header strong {
   display: block;
   margin-top: 3px;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.25rem;
 }
 
@@ -468,7 +468,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 50%;
   background: #fff;
-  color: #111827;
+  color: var(--color-ink);
   font-size: 1.2rem;
   cursor: pointer;
 }
@@ -490,7 +490,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 14px;
   background: #fff;
-  color: #111827;
+  color: var(--color-ink);
   text-align: left;
   cursor: pointer;
 }
@@ -528,7 +528,7 @@
 }
 
 .br-translation-list i {
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-size: 0.85rem;
   font-style: normal;
   font-weight: 900;
@@ -549,13 +549,13 @@
   border: 1px solid #d1d5db;
   border-radius: 12px;
   outline: none;
-  color: #111827;
+  color: var(--color-ink);
   background: #fff;
   font: 500 0.95rem / 1 var(--font-body, system-ui, sans-serif);
 }
 
 .br-book-search:focus {
-  border-color: #1d4ed8;
+  border-color: var(--color-blue);
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.08);
 }
 
@@ -574,13 +574,13 @@
   border: 0;
   border-bottom: 1px solid #eef0f2;
   background: transparent;
-  color: #111827;
+  color: var(--color-ink);
   text-align: left;
   cursor: pointer;
 }
 
 .br-book-list button.is-current span {
-  color: #1d4ed8;
+  color: var(--color-blue);
   font-weight: 850;
 }
 
@@ -614,8 +614,8 @@
 }
 
 .br-chapter-grid button.is-current {
-  border-color: #1d4ed8;
-  background: #1d4ed8;
+  border-color: var(--color-blue);
+  background: var(--color-blue);
   color: #fff;
 }
 
