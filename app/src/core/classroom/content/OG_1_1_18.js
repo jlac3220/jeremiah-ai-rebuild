@@ -431,6 +431,27 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
       focusPhrases: ["The Lord our God is one Lord"],
       focusNote:
         "The foundation remains in place. Whatever else we learn later must be read in harmony with the confession Jesus Himself repeats.",
+      interaction: {
+        type: "prediction_reveal",
+        prompt:
+          "When Jesus is asked for the first commandment, what do you think He does with Israel's confession?",
+        options: [
+          {
+            id: "starts-new",
+            label: "He starts with a new formula",
+            response:
+              "That would create a break in the story. Now see what the text actually does.",
+          },
+          {
+            id: "repeats-shema",
+            label: "He repeats the Shema",
+            response:
+              "Yes. The New Testament moment begins by carrying Israel's confession forward.",
+          },
+        ],
+        revealChoiceId: "repeats-shema",
+        revealLabel: "Reveal Mark 12:29",
+      },
       ctaLabel: "Put it together",
       next: { continue: "synthesis" },
     },
@@ -453,10 +474,38 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
           text: "There is no God beside Him; there is none else.",
         },
         {
-          label: "3 · Controlling foundation",
-          text: "Later revelation must be understood without overturning that confession.",
+          label: "3 · New Testament continuity",
+          text: "Jesus repeats the Shema rather than replacing it.",
         },
       ],
+      interaction: {
+        type: "evidence_chain",
+        prompt:
+          "Build the biblical chain in the order the lesson established it.",
+        pieces: [
+          {
+            id: "confession",
+            short: "ONE LORD",
+            label: "Deuteronomy 6:4",
+            text: "The LORD our God is one LORD.",
+          },
+          {
+            id: "exclusion",
+            short: "NONE ELSE",
+            label: "Isaiah 45:5",
+            text: "There is none else; there is no God beside me.",
+          },
+          {
+            id: "continuity",
+            short: "JESUS REPEATS IT",
+            label: "Mark 12:29",
+            text: "Jesus begins with the Shema.",
+          },
+        ],
+        sequence: ["confession", "exclusion", "continuity"],
+        success:
+          "That is the structure of the testimony: confession, explicit boundary, New Testament continuity.",
+      },
       ctaLabel: "Test the foundation",
       next: { continue: "pressure_test" },
     },
