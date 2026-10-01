@@ -1526,30 +1526,30 @@ export default function ClassroomPage({ onNavigate }) {
         <span className="jc-ambient jc-ambient-cool" />
       </div>
 
-      <header className="jc-header">
+      <header className="jc-header jc-classroom-bar">
         <button
           type="button"
-          className="jc-brand"
+          className="jc-classroom-back"
           onClick={() => onNavigate(ROUTES.HOME)}
-          aria-label="Return home"
+          aria-label="Leave Classroom"
         >
-          <span className="jc-brand-mark">J</span>
-          <strong>Jeremiah</strong>
+          <span>←</span>
+          <strong>Classroom</strong>
         </button>
 
-        <div className="jc-header-progress" aria-label={progress + " percent complete"}>
-          <span>{content.standardId}</span>
+        <div className="jc-classroom-progress" aria-label={progress + " percent complete"}>
+          <small>{content.studyTitle}</small>
           <div><i style={{ width: progress + "%" }} /></div>
-          <strong>{progress}%</strong>
         </div>
 
         <button
           type="button"
-          className="jc-reset"
+          className="jc-classroom-more"
           onClick={() => setShowResetPrompt(true)}
           disabled={!canReset}
+          aria-label="Classroom options"
         >
-          Reset
+          •••
         </button>
       </header>
 
@@ -1564,12 +1564,6 @@ export default function ClassroomPage({ onNavigate }) {
       )}
 
       <main className="jc-shell">
-        <div className="jc-pathline">
-          <span>{PATH_LABELS[presetId] || "Guided"}</span>
-          <i />
-          <span>{stageLabel(currentMove.stageId)}</span>
-        </div>
-
         {currentMove.id === "isaiah_exclusion" ? (
           <IsaiahPatternReveal
             move={currentMove}
