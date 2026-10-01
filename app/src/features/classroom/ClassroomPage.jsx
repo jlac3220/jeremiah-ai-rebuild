@@ -1465,15 +1465,17 @@ export default function ClassroomPage({ onNavigate }) {
     setLearningState((state) => {
       if (!state) return state;
 
+      const wasReviewing = state.experience?.reviewMode === true;
       let next = updateLearningExperience(state, {
         ...(encounterData.episodeExperience || {}),
         episodeComplete: true,
+        reviewMode: false,
       });
       next = markLearningMilestones(next, ["started", "scripture", "evidence"]);
 
       return {
         ...next,
-        currentMoveId: "pressure_test",
+        currentMoveId: wasReviewing ? "complete" : "pressure_test",
         completedMoveIds: [
           ...new Set([
             ...(state.completedMoveIds || []),
@@ -1557,6 +1559,20 @@ export default function ClassroomPage({ onNavigate }) {
     clearInteraction();
   }
 
+  function handleReviewShemaEpisode() {
+    setLearningState((state) => ({
+      ...updateLearningExperience(state, {
+        sceneIndex: 1,
+        sceneId: "confession",
+        episodeComplete: false,
+        reviewMode: true,
+      }),
+      currentMoveId: "complete",
+      lastUpdatedAt: Date.now(),
+    }));
+    clearInteraction();
+  }
+
   if (!content || !learningState || !currentMove) {
     return (
       <div className="jc-missing">
@@ -1575,8 +1591,13 @@ export default function ClassroomPage({ onNavigate }) {
 
   const needsShemaEpisode =
     Boolean(shemaEpisodeMove) &&
-    learningState.experience?.episodeComplete !== true &&
-    learningState.encounterData?.entryMode !== "episode";
+    (
+      learningState.experience?.reviewMode === true ||
+      (
+        learningState.experience?.episodeComplete !== true &&
+        learningState.encounterData?.entryMode !== "episode"
+      )
+    );
 
   if (needsShemaEpisode) {
     return (
@@ -1639,6 +1660,7 @@ export default function ClassroomPage({ onNavigate }) {
         onTeacherContinue={handleTeacherContinue}
         onExit={() => onNavigate(ROUTES.HOME)}
         onHome={() => onNavigate(ROUTES.HOME)}
+        onReview={handleReviewShemaEpisode}
       />
     );
   }
