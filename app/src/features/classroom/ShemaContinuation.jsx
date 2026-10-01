@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import "./ShemaContinuation.css";
 
+function emptyRetrievalState() {
+  return {
+    index: 0,
+    selectedIndex: null,
+    submitted: false,
+    score: 0,
+    answered: 0,
+    finished: false,
+    passed: false,
+  };
+}
+
 export default function ShemaContinuation({
   move,
   encounterData,
@@ -8,6 +20,8 @@ export default function ShemaContinuation({
   onSelectChoice,
   responseText,
   onResponseText,
+  draft,
+  onDraftChange,
   teacherDecision,
   isThinking,
   errorMessage,
@@ -22,15 +36,23 @@ export default function ShemaContinuation({
   const isUnscored = ["teach", "synthesis"].includes(move.type);
   const isComplete = move.type === "complete";
   const witnessBuilder = move.witnessBuilder;
-  const [witnessSelections, setWitnessSelections] = useState({});
+  const retrievalCheck = move.retrievalCheck;
+  const [witnessSelections, setWitnessSelections] = useState(
+    draft?.witnessSelections || {}
+  );
+  const [retrievalState, setRetrievalState] = useState(
+    draft?.retrievalState || emptyRetrievalState()
+  );
 
   useEffect(() => {
-    setWitnessSelections({});
+    setWitnessSelections(draft?.witnessSelections || {});
+    setRetrievalState(draft?.retrievalState || emptyRetrievalState());
   }, [move.id]);
 
   function chooseWitness(stepIndex, optionIndex) {
     const next = { ...witnessSelections, [stepIndex]: optionIndex };
     setWitnessSelections(next);
+    onDraftChange?.({ witnessSelections: next });
 
     if (!witnessBuilder) return;
     const complete = witnessBuilder.steps.every((_, index) => next[index] !== undefined);
@@ -45,6 +67,60 @@ export default function ShemaContinuation({
   const witnessReady =
     !witnessBuilder ||
     witnessBuilder.steps.every((_, index) => witnessSelections[index] !== undefined);
+
+  function commitRetrieval(next) {
+    setRetrievalState(next);
+    onDraftChange?.({ retrievalState: next });
+  }
+
+  function selectRetrievalOption(optionIndex) {
+    if (retrievalState.submitted || retrievalState.finished) return;
+    commitRetrieval({ ...retrievalState, selectedIndex: optionIndex });
+  }
+
+  function submitRetrievalAnswer() {
+    const item = retrievalCheck?.items?.[retrievalState.index];
+    if (!item || retrievalState.selectedIndex == null || retrievalState.submitted) return;
+    const correct = retrievalState.selectedIndex === item.correctIndex;
+
+    commitRetrieval({
+      ...retrievalState,
+      submitted: true,
+      answered: retrievalState.answered + 1,
+      score: retrievalState.score + (correct ? 1 : 0),
+    });
+  }
+
+  function advanceRetrieval() {
+    if (!retrievalCheck) return;
+    const isLast = retrievalState.index >= retrievalCheck.items.length - 1;
+
+    if (isLast) {
+      const percent =
+        retrievalCheck.items.length > 0
+          ? retrievalState.score / retrievalCheck.items.length
+          : 0;
+      commitRetrieval({
+        ...retrievalState,
+        finished: true,
+        passed: percent >= (retrievalCheck.passThreshold || 0.7),
+      });
+      return;
+    }
+
+    commitRetrieval({
+      ...retrievalState,
+      index: retrievalState.index + 1,
+      selectedIndex: null,
+      submitted: false,
+    });
+  }
+
+  function retryRetrieval() {
+    commitRetrieval(emptyRetrievalState());
+  }
+
+  const retrievalReady = !retrievalCheck || retrievalState.passed;
   const thread = [
     ...(encounterData?.primaryPhrases || []),
     ...(encounterData?.bridgePhrases || []),
@@ -169,7 +245,112 @@ export default function ShemaContinuation({
             </div>
           )}
 
-          {isResponse && !teacherDecision && (!witnessBuilder || witnessReady) && (
+          {retrievalCheck && !teacherDecision && (
+            <div className="scl-retrieval">
+              <div className="scl-retrieval-head">
+                <div>
+                  <span>Quick recall</span>
+                  <strong>
+                    {retrievalState.finished
+                      ? "Recall check"
+                      : `Question ${retrievalState.index + 1} of ${retrievalCheck.items.length}`}
+                  </strong>
+                </div>
+                {!retrievalState.finished && (
+                  <small>
+                    {Math.round((retrievalState.index / retrievalCheck.items.length) * 100)}%
+                  </small>
+                )}
+              </div>
+
+              {!retrievalState.finished && (
+                <>
+                  {retrievalState.index === 0 && (
+                    <p className="scl-retrieval-intro">{retrievalCheck.intro}</p>
+                  )}
+
+                  <h3>{retrievalCheck.items[retrievalState.index]?.prompt}</h3>
+
+                  <div className="scl-retrieval-options">
+                    {retrievalCheck.items[retrievalState.index]?.options.map((option, optionIndex) => {
+                      const item = retrievalCheck.items[retrievalState.index];
+                      const selected = retrievalState.selectedIndex === optionIndex;
+                      const correct = retrievalState.submitted && optionIndex === item.correctIndex;
+                      const wrongSelected =
+                        retrievalState.submitted && selected && optionIndex !== item.correctIndex;
+
+                      return (
+                        <button
+                          type="button"
+                          key={optionIndex}
+                          className={[
+                            selected ? "is-selected" : "",
+                            correct ? "is-correct" : "",
+                            wrongSelected ? "is-wrong" : "",
+                          ].filter(Boolean).join(" ")}
+                          onClick={() => selectRetrievalOption(optionIndex)}
+                          disabled={retrievalState.submitted}
+                        >
+                          <span>{option}</span>
+                          <i>{correct ? "✓" : wrongSelected ? "×" : selected ? "•" : ""}</i>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {retrievalState.submitted && (
+                    <div className="scl-retrieval-explanation">
+                      <strong>
+                        {retrievalState.selectedIndex ===
+                        retrievalCheck.items[retrievalState.index]?.correctIndex
+                          ? "Correct"
+                          : "Notice this"}
+                      </strong>
+                      <p>{retrievalCheck.items[retrievalState.index]?.explanation}</p>
+                    </div>
+                  )}
+
+                  {!retrievalState.submitted ? (
+                    <button
+                      type="button"
+                      className="scl-action"
+                      onClick={submitRetrievalAnswer}
+                      disabled={retrievalState.selectedIndex == null}
+                    >
+                      Check answer <span>→</span>
+                    </button>
+                  ) : (
+                    <button type="button" className="scl-action" onClick={advanceRetrieval}>
+                      {retrievalState.index >= retrievalCheck.items.length - 1
+                        ? "See result"
+                        : "Next question"} <span>→</span>
+                    </button>
+                  )}
+                </>
+              )}
+
+              {retrievalState.finished && (
+                <div className={"scl-retrieval-result " + (retrievalState.passed ? "is-pass" : "is-retry")}>
+                  <strong>
+                    {retrievalState.passed ? "Recall is holding." : "Rebuild it once more."}
+                  </strong>
+                  <p>
+                    You answered {retrievalState.score} of {retrievalCheck.items.length} correctly.
+                    {retrievalState.passed
+                      ? " Now explain the foundation from memory."
+                      : " Review the explanations and try the recall check again."}
+                  </p>
+                  {!retrievalState.passed && (
+                    <button type="button" className="scl-secondary" onClick={retryRetrieval}>
+                      Retry recall
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {isResponse && !teacherDecision && (!witnessBuilder || witnessReady) && retrievalReady && (
             <div className="scl-response">
               <textarea
                 value={responseText}
@@ -227,7 +408,7 @@ export default function ShemaContinuation({
               type="button"
               className="scl-action"
               onClick={onSubmit}
-              disabled={!ready || isThinking || !witnessReady}
+              disabled={!ready || isThinking || !witnessReady || !retrievalReady}
             >
               {isThinking
                 ? "Reading…"
