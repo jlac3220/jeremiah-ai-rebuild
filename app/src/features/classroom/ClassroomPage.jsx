@@ -1609,6 +1609,7 @@ export default function ClassroomPage({ onNavigate }) {
         onComplete={handleShemaEpisodeComplete}
         onOpenBible={(item) => {
           setBibleReaderIntent(item.reference, {
+            translation: "kjv",
             returnRoute: ROUTES.CLASSROOM,
             source: "classroom",
           });

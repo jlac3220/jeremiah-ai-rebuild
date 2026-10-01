@@ -20,6 +20,7 @@ export function setBibleReaderIntent(reference, options = {}) {
     INTENT_KEY,
     JSON.stringify({
       ...parsed,
+      translation: options.translation || "",
       returnRoute: options.returnRoute || "",
       source: options.source || "",
       at: Date.now(),

@@ -1,30 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ROUTES } from "../../app/routes";
 import {
+  BIBLE_BOOKS,
+  BIBLE_TRANSLATIONS,
+  DEFAULT_BIBLE_TRANSLATION,
+  findBibleBook,
+  getBibleTranslation,
+  getChapterVerses,
+  loadBibleBook,
+  normalizeBibleBookName,
+} from "../../core/bible/bibleCatalog";
+import {
   clearBibleReaderIntent,
   getBibleReaderIntent,
 } from "../../core/bible/bibleReaderIntent";
 import "./BibleSupportPage.css";
 
 const LAST_LOCATION_KEY = "jeremiah-bible-reader-last";
-const chunkCache = new Map();
-
-function normalizeBookName(value = "") {
-  return String(value)
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "")
-    .replace(/^psalm$/, "psalms");
-}
-
-async function loadChunk(filename) {
-  if (chunkCache.has(filename)) return chunkCache.get(filename);
-
-  const response = await fetch(`/bible/${filename}`);
-  if (!response.ok) throw new Error(`Could not load Bible data (${response.status}).`);
-  const data = await response.json();
-  chunkCache.set(filename, data);
-  return data;
-}
 
 function readSavedLocation() {
   if (typeof window === "undefined") return null;
@@ -43,83 +35,59 @@ function saveLocation(location) {
 
 export default function BibleSupportPage({ onNavigate }) {
   const initialIntentRef = useRef(getBibleReaderIntent());
+  const savedLocationRef = useRef(readSavedLocation());
   const verseRefs = useRef({});
-  const [manifest, setManifest] = useState(null);
-  const [bookData, setBookData] = useState(null);
-  const [bookIndex, setBookIndex] = useState(0);
-  const [chapter, setChapter] = useState(1);
-  const [highlightVerse, setHighlightVerse] = useState(null);
+
+  const initialIntent = initialIntentRef.current;
+  const savedLocation = savedLocationRef.current;
+  const requestedBook = findBibleBook(initialIntent?.book || savedLocation?.book || "Genesis");
+  const requestedTranslation = getBibleTranslation(
+    initialIntent?.translation || savedLocation?.translation || DEFAULT_BIBLE_TRANSLATION
+  );
+
+  const [translationId, setTranslationId] = useState(requestedTranslation.id);
+  const [bookIndex, setBookIndex] = useState(
+    Math.max(0, BIBLE_BOOKS.findIndex((book) => book.bookId === requestedBook.bookId))
+  );
+  const [chapter, setChapter] = useState(() => {
+    const requested = Number(initialIntent?.chapter || savedLocation?.chapter || 1);
+    return Math.min(Math.max(requested || 1, 1), requestedBook.chapters);
+  });
+  const [highlightVerse, setHighlightVerse] = useState(
+    initialIntent?.verse ? Number(initialIntent.verse) : null
+  );
   const [fontSize, setFontSize] = useState(1.08);
+  const [bookData, setBookData] = useState(null);
+  const [showTranslationPicker, setShowTranslationPicker] = useState(false);
   const [showBookPicker, setShowBookPicker] = useState(false);
   const [showChapterPicker, setShowChapterPicker] = useState(false);
   const [bookQuery, setBookQuery] = useState("");
   const [readingProgress, setReadingProgress] = useState(0);
   const [loadingBook, setLoadingBook] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadManifest() {
-      try {
-        const response = await fetch("/bible/manifest.json");
-        if (!response.ok) throw new Error("Could not load Bible index.");
-        const data = await response.json();
-        if (cancelled) return;
-
-        setManifest(data);
-
-        const intent = initialIntentRef.current;
-        const saved = readSavedLocation();
-        const requestedBook = intent?.book || saved?.book || "Genesis";
-        const requestedChapter = intent?.chapter || saved?.chapter || 1;
-        const requestedVerse = intent?.verse || null;
-
-        const index = Math.max(
-          0,
-          data.books.findIndex(
-            (item) => normalizeBookName(item.name) === normalizeBookName(requestedBook)
-          )
-        );
-
-        setBookIndex(index);
-        setChapter(
-          Math.min(
-            Math.max(Number(requestedChapter) || 1, 1),
-            data.books[index]?.chapters || 1
-          )
-        );
-        setHighlightVerse(requestedVerse ? Number(requestedVerse) : null);
-      } catch (err) {
-        if (!cancelled) setError(err?.message || "Could not load the Bible.");
-      }
-    }
-
-    loadManifest();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const books = manifest?.books || [];
-  const currentMeta = books[bookIndex] || null;
+  const currentBook = BIBLE_BOOKS[bookIndex] || BIBLE_BOOKS[0];
+  const activeTranslation = getBibleTranslation(translationId);
 
   useEffect(() => {
-    if (!currentMeta) return;
     let cancelled = false;
 
     async function loadCurrentBook() {
       setLoadingBook(true);
       setError("");
+      setBookData(null);
+
       try {
-        const chunk = await loadChunk(currentMeta.chunk);
-        const found = chunk.find((item) => item.abbrev === currentMeta.abbrev);
-        if (!cancelled) {
-          if (!found) throw new Error("Bible book data is unavailable.");
-          setBookData(found);
-        }
+        const data = await loadBibleBook(translationId, currentBook);
+        if (!cancelled) setBookData(data);
       } catch (err) {
-        if (!cancelled) setError(err?.message || "Could not load this book.");
+        if (!cancelled) {
+          setError(
+            err?.message ||
+              "Could not load this translation. Check the connection and try again."
+          );
+        }
       } finally {
         if (!cancelled) setLoadingBook(false);
       }
@@ -129,12 +97,15 @@ export default function BibleSupportPage({ onNavigate }) {
     return () => {
       cancelled = true;
     };
-  }, [currentMeta?.abbrev, currentMeta?.chunk]);
+  }, [translationId, currentBook.osis, reloadKey]);
 
   useEffect(() => {
-    if (!currentMeta) return;
-    saveLocation({ book: currentMeta.name, chapter });
-  }, [currentMeta?.name, chapter]);
+    saveLocation({
+      translation: translationId,
+      book: currentBook.name,
+      chapter,
+    });
+  }, [translationId, currentBook.name, chapter]);
 
   useEffect(() => {
     if (!highlightVerse || !bookData) return;
@@ -160,30 +131,42 @@ export default function BibleSupportPage({ onNavigate }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const chapterVerses = useMemo(() => {
-    const raw = bookData?.chapters?.[chapter - 1] || [];
-    return raw.map((text, index) => ({
-      verse: index + 1,
-      text: String(text),
-    }));
-  }, [bookData, chapter]);
+  const chapterVerses = useMemo(
+    () => getChapterVerses(bookData, chapter),
+    [bookData, chapter]
+  );
 
   const filteredBooks = useMemo(() => {
-    const query = normalizeBookName(bookQuery);
-    if (!query) return books.map((book, index) => ({ ...book, index }));
-    return books
+    const query = normalizeBibleBookName(bookQuery);
+    if (!query) return BIBLE_BOOKS.map((book, index) => ({ ...book, index }));
+
+    return BIBLE_BOOKS
       .map((book, index) => ({ ...book, index }))
-      .filter((book) => normalizeBookName(book.name).includes(query));
-  }, [books, bookQuery]);
+      .filter((book) => {
+        const labels = [book.name, book.osis, ...(book.aliases || [])];
+        return labels.some((label) => normalizeBibleBookName(label).includes(query));
+      });
+  }, [bookQuery]);
 
   const intent = initialIntentRef.current;
   const canGoPrev = bookIndex > 0 || chapter > 1;
   const canGoNext =
-    bookIndex < books.length - 1 || chapter < (currentMeta?.chapters || 1);
+    bookIndex < BIBLE_BOOKS.length - 1 || chapter < currentBook.chapters;
+
+  function closeSheets() {
+    setShowTranslationPicker(false);
+    setShowBookPicker(false);
+    setShowChapterPicker(false);
+  }
+
+  function selectTranslation(nextId) {
+    setTranslationId(nextId);
+    setShowTranslationPicker(false);
+  }
 
   function selectBook(index) {
-    const meta = books[index];
-    if (!meta) return;
+    const book = BIBLE_BOOKS[index];
+    if (!book) return;
     setBookIndex(index);
     setChapter(1);
     setHighlightVerse(null);
@@ -208,7 +191,7 @@ export default function BibleSupportPage({ onNavigate }) {
     } else {
       const nextIndex = bookIndex - 1;
       setBookIndex(nextIndex);
-      setChapter(books[nextIndex]?.chapters || 1);
+      setChapter(BIBLE_BOOKS[nextIndex]?.chapters || 1);
     }
 
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -218,7 +201,7 @@ export default function BibleSupportPage({ onNavigate }) {
     if (!canGoNext) return;
     setHighlightVerse(null);
 
-    if (chapter < (currentMeta?.chapters || 1)) {
+    if (chapter < currentBook.chapters) {
       setChapter((value) => value + 1);
     } else {
       setBookIndex((value) => value + 1);
@@ -234,11 +217,12 @@ export default function BibleSupportPage({ onNavigate }) {
     onNavigate?.(target);
   }
 
-  const testament = bookIndex < 39 ? "Old Testament" : "New Testament";
+  const hasSheetOpen =
+    showTranslationPicker || showBookPicker || showChapterPicker;
 
   return (
     <div className="br-page">
-      <div className="br-read-progress" style={{ width: `${readingProgress}%` }} />
+      <div className="br-read-progress" style={{ width: \`\${readingProgress}%\` }} />
 
       <header className="br-topbar">
         <button
@@ -250,23 +234,36 @@ export default function BibleSupportPage({ onNavigate }) {
           ←
         </button>
 
-        <div className="br-top-title">
+        <button
+          type="button"
+          className="br-top-title"
+          onClick={() => setShowTranslationPicker(true)}
+          aria-label="Choose Bible translation"
+        >
           <strong>Bible</strong>
-          <small>King James Version</small>
-        </div>
+          <small>
+            {activeTranslation.shortName}
+            <span> · {activeTranslation.name}</span>
+            <i>⌄</i>
+          </small>
+        </button>
 
         <div className="br-font-controls" aria-label="Text size">
           <button
             type="button"
-            onClick={() => setFontSize((value) => Math.max(.9, +(value - .1).toFixed(2)))}
-            disabled={fontSize <= .9}
+            onClick={() =>
+              setFontSize((value) => Math.max(0.9, +(value - 0.1).toFixed(2)))
+            }
+            disabled={fontSize <= 0.9}
             aria-label="Decrease text size"
           >
             A−
           </button>
           <button
             type="button"
-            onClick={() => setFontSize((value) => Math.min(1.5, +(value + .1).toFixed(2)))}
+            onClick={() =>
+              setFontSize((value) => Math.min(1.5, +(value + 0.1).toFixed(2)))
+            }
             disabled={fontSize >= 1.5}
             aria-label="Increase text size"
           >
@@ -276,14 +273,28 @@ export default function BibleSupportPage({ onNavigate }) {
       </header>
 
       <main className="br-shell">
+        <section className="br-version-strip">
+          <button type="button" onClick={() => setShowTranslationPicker(true)}>
+            <span>{activeTranslation.shortName}</span>
+            <div>
+              <strong>{activeTranslation.name}</strong>
+              <small>{activeTranslation.year} · {activeTranslation.license}</small>
+            </div>
+            <i>Change</i>
+          </button>
+        </section>
+
         <section className="br-controls" aria-label="Bible location">
           <button type="button" onClick={() => setShowBookPicker(true)}>
             <small>Book</small>
-            <strong>{currentMeta?.name || "Loading…"}</strong>
+            <strong>{currentBook.name}</strong>
             <span>⌄</span>
           </button>
 
-          <button type="button" onClick={() => setShowChapterPicker(true)} disabled={!currentMeta}>
+          <button
+            type="button"
+            onClick={() => setShowChapterPicker(true)}
+          >
             <small>Chapter</small>
             <strong>{chapter}</strong>
             <span>⌄</span>
@@ -291,19 +302,31 @@ export default function BibleSupportPage({ onNavigate }) {
         </section>
 
         <section className="br-heading">
-          <span>{testament}</span>
-          <h1>{currentMeta?.name || "Bible"} {chapter}</h1>
+          <span>{currentBook.testament === "OT" ? "Old Testament" : "New Testament"}</span>
+          <h1>{currentBook.name} {chapter}</h1>
+          <small>{activeTranslation.shortName}</small>
         </section>
 
-        {error && <div className="br-error">{error}</div>}
+        {error && (
+          <div className="br-error">
+            <strong>Scripture did not load.</strong>
+            <p>{error}</p>
+            <button type="button" onClick={() => setReloadKey((value) => value + 1)}>
+              Try again
+            </button>
+          </div>
+        )}
 
-        {loadingBook && !chapterVerses.length ? (
-          <div className="br-loading">Loading Scripture…</div>
-        ) : (
+        {loadingBook ? (
+          <div className="br-loading">
+            <span />
+            Loading {activeTranslation.shortName}…
+          </div>
+        ) : !error ? (
           <article
             className="br-scripture"
-            style={{ "--reader-font-size": `${fontSize}rem` }}
-            aria-label={currentMeta ? `${currentMeta.name} chapter ${chapter}` : "Bible chapter"}
+            style={{ "--reader-font-size": \`\${fontSize}rem\` }}
+            aria-label={\`\${currentBook.name} chapter \${chapter}, \${activeTranslation.name}\`}
           >
             {chapterVerses.map((item) => {
               const highlighted = item.verse === highlightVerse;
@@ -327,7 +350,7 @@ export default function BibleSupportPage({ onNavigate }) {
               );
             })}
           </article>
-        )}
+        ) : null}
 
         <nav className="br-chapter-nav" aria-label="Chapter navigation">
           <button type="button" onClick={goPrevious} disabled={!canGoPrev}>
@@ -338,7 +361,7 @@ export default function BibleSupportPage({ onNavigate }) {
             </div>
           </button>
 
-          <span>{currentMeta?.name} {chapter}</span>
+          <span>{currentBook.name} {chapter}</span>
 
           <button type="button" onClick={goNext} disabled={!canGoNext}>
             <div>
@@ -350,26 +373,67 @@ export default function BibleSupportPage({ onNavigate }) {
         </nav>
       </main>
 
-      {(showBookPicker || showChapterPicker) && (
+      {hasSheetOpen && (
         <button
           type="button"
           className="br-sheet-backdrop"
           aria-label="Close picker"
-          onClick={() => {
-            setShowBookPicker(false);
-            setShowChapterPicker(false);
-          }}
+          onClick={closeSheets}
         />
       )}
 
-      <aside className={`br-sheet ${showBookPicker ? "is-open" : ""}`} aria-hidden={!showBookPicker}>
+      <aside
+        className={\`br-sheet \${showTranslationPicker ? "is-open" : ""}\`}
+        aria-hidden={!showTranslationPicker}
+      >
+        <div className="br-sheet-handle" />
+        <div className="br-sheet-header">
+          <div>
+            <small>Bible translation</small>
+            <strong>Choose a version</strong>
+          </div>
+          <button type="button" onClick={() => setShowTranslationPicker(false)} aria-label="Close">
+            ×
+          </button>
+        </div>
+
+        <div className="br-translation-list">
+          {BIBLE_TRANSLATIONS.map((translation) => (
+            <button
+              type="button"
+              key={translation.id}
+              className={translation.id === translationId ? "is-current" : ""}
+              onClick={() => selectTranslation(translation.id)}
+            >
+              <span className="br-translation-badge">{translation.shortName}</span>
+              <div>
+                <strong>{translation.name}</strong>
+                <small>{translation.year} · {translation.editionNote}</small>
+              </div>
+              <i>{translation.id === translationId ? "✓" : "→"}</i>
+            </button>
+          ))}
+        </div>
+
+        <p className="br-source-note">
+          These editions are public-domain texts. Each book is cached after it is opened,
+          so returning to it is fast.
+        </p>
+      </aside>
+
+      <aside
+        className={\`br-sheet \${showBookPicker ? "is-open" : ""}\`}
+        aria-hidden={!showBookPicker}
+      >
         <div className="br-sheet-handle" />
         <div className="br-sheet-header">
           <div>
             <small>Choose a book</small>
             <strong>66 books</strong>
           </div>
-          <button type="button" onClick={() => setShowBookPicker(false)} aria-label="Close">×</button>
+          <button type="button" onClick={() => setShowBookPicker(false)} aria-label="Close">
+            ×
+          </button>
         </div>
 
         <input
@@ -383,7 +447,7 @@ export default function BibleSupportPage({ onNavigate }) {
           {filteredBooks.map((book) => (
             <button
               type="button"
-              key={book.abbrev}
+              key={book.osis}
               className={book.index === bookIndex ? "is-current" : ""}
               onClick={() => selectBook(book.index)}
             >
@@ -394,18 +458,23 @@ export default function BibleSupportPage({ onNavigate }) {
         </div>
       </aside>
 
-      <aside className={`br-sheet ${showChapterPicker ? "is-open" : ""}`} aria-hidden={!showChapterPicker}>
+      <aside
+        className={\`br-sheet \${showChapterPicker ? "is-open" : ""}\`}
+        aria-hidden={!showChapterPicker}
+      >
         <div className="br-sheet-handle" />
         <div className="br-sheet-header">
           <div>
-            <small>{currentMeta?.name}</small>
+            <small>{currentBook.name}</small>
             <strong>Choose a chapter</strong>
           </div>
-          <button type="button" onClick={() => setShowChapterPicker(false)} aria-label="Close">×</button>
+          <button type="button" onClick={() => setShowChapterPicker(false)} aria-label="Close">
+            ×
+          </button>
         </div>
 
         <div className="br-chapter-grid">
-          {Array.from({ length: currentMeta?.chapters || 0 }, (_, index) => index + 1).map(
+          {Array.from({ length: currentBook.chapters }, (_, index) => index + 1).map(
             (number) => (
               <button
                 type="button"
