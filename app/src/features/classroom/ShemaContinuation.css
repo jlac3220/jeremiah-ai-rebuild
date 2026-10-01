@@ -665,3 +665,29 @@
   font-weight: 750;
   cursor: pointer;
 }
+
+
+.scl-complete-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.scl-complete-actions .scl-action,
+.scl-complete-actions .scl-secondary {
+  margin-top: 12px;
+}
+
+@media (max-width: 640px) {
+  .scl-complete-actions {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .scl-complete-actions .scl-secondary {
+    width: 100%;
+  }
+}
