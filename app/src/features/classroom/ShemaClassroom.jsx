@@ -1,6 +1,62 @@
 import { useMemo, useState } from "react";
 import "./ShemaClassroom.css";
 
+function DeepDiveSheet({ item, onClose }) {
+  if (!item) return null;
+
+  return (
+    <div className="sc-sheet-backdrop" role="presentation" onClick={onClose}>
+      <aside
+        className="sc-sheet"
+        role="dialog"
+        aria-modal="true"
+        aria-label={item.title || item.reference || "Classroom detail"}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="sc-sheet-handle" aria-hidden="true" />
+        <button type="button" className="sc-sheet-close" onClick={onClose} aria-label="Close">×</button>
+
+        {item.kind === "scripture" ? (
+          <>
+            <span className="sc-sheet-label">Scripture</span>
+            <h2>{item.reference}</h2>
+            <blockquote>“{item.text}”</blockquote>
+            {item.note && <p>{item.note}</p>}
+          </>
+        ) : (
+          <>
+            <span className="sc-sheet-label">{item.provider || "Source"}</span>
+            <h2>{item.title}</h2>
+            {item.imageUrl && <img className="sc-sheet-image" src={item.imageUrl} alt={item.title} />}
+            {item.summary && <p>{item.summary}</p>}
+            {!item.summary && item.hook && <p>{item.hook}</p>}
+            {item.purpose && (
+              <div className="sc-sheet-note">
+                <strong>Why it matters here</strong>
+                <p>{item.purpose}</p>
+              </div>
+            )}
+            {item.attribution && <small>{item.attribution}</small>}
+          </>
+        )}
+      </aside>
+    </div>
+  );
+}
+
+function VerseRef({ verse, onOpen }) {
+  if (!verse) return null;
+  return (
+    <button
+      type="button"
+      className="sc-verse-ref"
+      onClick={() => onOpen({ ...verse, kind: "scripture" })}
+    >
+      {verse.reference} <span>↗</span>
+    </button>
+  );
+}
+
 function videoUrl(source) {
   if (!source?.embedUrl) return "";
   try {
@@ -27,6 +83,7 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
   const [primary, setPrimary] = useState("");
   const [bridge, setBridge] = useState("");
   const [prediction, setPrediction] = useState("");
+  const [detail, setDetail] = useState(null);
 
   const primaryVerse = encounter.primaryVerse;
   const bridgeVerse = encounter.bridgeVerse;
@@ -87,7 +144,7 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
 
         {sceneName === "confession" && (
           <section className="sc-scene sc-confession">
-            <span className="sc-reference">{primaryVerse?.reference}</span>
+            <VerseRef verse={primaryVerse} onOpen={setDetail} />
             <blockquote>“{primaryVerse?.text}”</blockquote>
             <p className="sc-prompt">Which phrase carries the confession?</p>
 
@@ -117,11 +174,11 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
 
             <div className="sc-verses">
               <div>
-                <small>{primaryVerse?.reference}</small>
+                <VerseRef verse={primaryVerse} onOpen={setDetail} />
                 <p>{primaryVerse?.text}</p>
               </div>
               <div>
-                <small>{bridgeVerse?.reference}</small>
+                <VerseRef verse={bridgeVerse} onOpen={setDetail} />
                 <p>{bridgeVerse?.text}</p>
               </div>
             </div>
@@ -149,9 +206,10 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
 
         {sceneName === "witness" && artifact && (
           <section className="sc-scene sc-witness">
-            <div className="sc-artifact">
+            <button type="button" className="sc-artifact" onClick={() => setDetail(artifact)}>
               <img src={artifact.imageUrl} alt={artifact.title} />
-            </div>
+              <span>Tap to inspect</span>
+            </button>
             <div className="sc-witness-copy">
               <span>Ancient witness</span>
               <h1>{artifact.title}</h1>
@@ -189,7 +247,18 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
 
             {prediction && (
               <div className="sc-reveal">
-                <span>Mark 12:29</span>
+                <button
+                  type="button"
+                  className="sc-reveal-ref"
+                  onClick={() => setDetail({
+                    kind: "scripture",
+                    reference: "Mark 12:29",
+                    text: "The first of all the commandments is, Hear, O Israel; The Lord our God is one Lord.",
+                    note: "Jesus repeats the Shema as the first commandment."
+                  })}
+                >
+                  Mark 12:29 <span>↗</span>
+                </button>
                 <blockquote>“The first of all the commandments is, Hear, O Israel; The Lord our God is one Lord.”</blockquote>
               </div>
             )}
@@ -225,6 +294,8 @@ export default function ShemaClassroom({ move, onComplete, onExit }) {
           </section>
         )}
       </main>
+
+      <DeepDiveSheet item={detail} onClose={() => setDetail(null)} />
     </div>
   );
 }
