@@ -17,6 +17,7 @@ import {
 } from "../../core/classroom/learningEngine";
 import { getClassroomContentByStandardId } from "../../core/classroom/content/classroomContentRegistry";
 import { askJeremiahTeacher } from "../../services/jeremiahTeacher";
+import ShemaClassroom from "./ShemaClassroom";
 import "./ClassroomPage.css";
 
 const PATH_LABELS = {
@@ -1471,6 +1472,20 @@ export default function ClassroomPage({ onNavigate }) {
           Return home
         </button>
       </div>
+    );
+  }
+
+  if (
+    currentMove.type === "encounter" &&
+    content.standardId === "OG.1.1.18" &&
+    presetId === "direct"
+  ) {
+    return (
+      <ShemaClassroom
+        move={currentMove}
+        onComplete={handleEncounterComplete}
+        onExit={() => onNavigate(ROUTES.HOME)}
+      />
     );
   }
 
