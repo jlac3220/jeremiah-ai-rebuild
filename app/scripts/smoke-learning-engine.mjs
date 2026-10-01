@@ -19,8 +19,8 @@ let move = getInstructionalMove(content, state.currentMoveId);
 assert(move.id === "arrival", "direct path should begin with the encounter");
 state = advanceEncounterMove(state, move, {
   entryMode: "read",
-  primaryWords: ["one", "LORD"],
-  bridgeWords: ["none", "else"],
+  primaryPhrases: ["is one LORD"],
+  bridgePhrases: ["there is no God beside me"],
   viewedSourceIds: ["nash-papyrus"],
 });
 assert(
@@ -28,8 +28,8 @@ assert(
   "encounter should lead into required Shema instruction"
 );
 assert(
-  state.encounterData?.primaryWords?.includes("LORD"),
-  "encounter memory should preserve words the learner noticed"
+  state.encounterData?.primaryPhrases?.includes("is one LORD"),
+  "encounter memory should preserve the phrase the learner carried forward"
 );
 assert(
   state.encounterData?.viewedSourceIds?.includes("nash-papyrus"),
