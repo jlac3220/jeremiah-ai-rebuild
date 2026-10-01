@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./ShemaContinuation.css";
 
 export default function ShemaContinuation({
@@ -20,6 +21,30 @@ export default function ShemaContinuation({
   const isResponse = ["free_response", "mastery_response"].includes(move.type);
   const isUnscored = ["teach", "synthesis"].includes(move.type);
   const isComplete = move.type === "complete";
+  const witnessBuilder = move.witnessBuilder;
+  const [witnessSelections, setWitnessSelections] = useState({});
+
+  useEffect(() => {
+    setWitnessSelections({});
+  }, [move.id]);
+
+  function chooseWitness(stepIndex, optionIndex) {
+    const next = { ...witnessSelections, [stepIndex]: optionIndex };
+    setWitnessSelections(next);
+
+    if (!witnessBuilder) return;
+    const complete = witnessBuilder.steps.every((_, index) => next[index] !== undefined);
+    if (!complete) return;
+
+    const built = witnessBuilder.steps
+      .map((step, index) => step.options[next[index]])
+      .join(" ");
+    onResponseText(built);
+  }
+
+  const witnessReady =
+    !witnessBuilder ||
+    witnessBuilder.steps.every((_, index) => witnessSelections[index] !== undefined);
   const thread = [
     ...(encounterData?.primaryPhrases || []),
     ...(encounterData?.bridgePhrases || []),
@@ -78,6 +103,49 @@ export default function ShemaContinuation({
             </div>
           )}
 
+          {witnessBuilder && !teacherDecision && (
+            <div className="scl-witness-builder">
+              <p className="scl-witness-intro">{witnessBuilder.intro}</p>
+
+              {witnessBuilder.steps.map((step, stepIndex) => (
+                <section className="scl-witness-step" key={step.id}>
+                  <div className="scl-witness-step-head">
+                    <span>{String(stepIndex + 1).padStart(2, "0")}</span>
+                    <div>
+                      <small>{step.label}</small>
+                      <strong>{step.prompt}</strong>
+                    </div>
+                  </div>
+
+                  <div className="scl-witness-options">
+                    {step.options.map((option, optionIndex) => {
+                      const selected = witnessSelections[stepIndex] === optionIndex;
+                      return (
+                        <button
+                          type="button"
+                          key={optionIndex}
+                          className={selected ? "is-selected" : ""}
+                          onClick={() => chooseWitness(stepIndex, optionIndex)}
+                        >
+                          <span>{option}</span>
+                          <i>{selected ? "✓" : ""}</i>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+              ))}
+
+              {witnessReady && (
+                <div className="scl-witness-built">
+                  <small>Your witness</small>
+                  <p>{responseText}</p>
+                  <span>Make it sound like you before sending it to Jeremiah.</span>
+                </div>
+              )}
+            </div>
+          )}
+
           {move.prompt && !teacherDecision && !isComplete && (
             <div className="scl-question">
               <h2>{move.prompt}</h2>
@@ -101,7 +169,7 @@ export default function ShemaContinuation({
             </div>
           )}
 
-          {isResponse && !teacherDecision && (
+          {isResponse && !teacherDecision && (!witnessBuilder || witnessReady) && (
             <div className="scl-response">
               <textarea
                 value={responseText}
@@ -159,7 +227,7 @@ export default function ShemaContinuation({
               type="button"
               className="scl-action"
               onClick={onSubmit}
-              disabled={!ready || isThinking}
+              disabled={!ready || isThinking || !witnessReady}
             >
               {isThinking
                 ? "Reading…"
