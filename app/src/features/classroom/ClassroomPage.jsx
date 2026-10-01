@@ -152,6 +152,8 @@ function EncounterExperience({ move, onComplete, onExit }) {
   const [selectedSource, setSelectedSource] = useState(null);
   const [entryMode, setEntryMode] = useState("");
   const [viewedSourceIds, setViewedSourceIds] = useState([]);
+  const [artifactIndex, setArtifactIndex] = useState(0);
+  const [voiceIndex, setVoiceIndex] = useState(0);
   const sources = encounter.curatedSources || [];
   const sourceMoments = encounter.sourceMoments || [];
   const mediaMoments = encounter.mediaMoments || [];
@@ -206,6 +208,14 @@ function EncounterExperience({ move, onComplete, onExit }) {
     const source = sources.find((item) => item.id === moment.sourceId);
     return source?.type === "image";
   });
+  const artifactMoment = artifactMoments[artifactIndex] || null;
+  const artifactSource = artifactMoment
+    ? sources.find((item) => item.id === artifactMoment.sourceId)
+    : null;
+  const voiceMoment = sourceMoments[voiceIndex] || null;
+  const voiceSource = voiceMoment
+    ? sources.find((item) => item.id === voiceMoment.sourceId)
+    : null;
 
   return (
     <div className="jc-encounter-page">
@@ -439,138 +449,198 @@ function EncounterExperience({ move, onComplete, onExit }) {
           </section>
         )}
 
-        {phase === "artifacts" && (
-          <section className="jc-encounter-scene is-artifacts">
-            <div className="jc-continuity-thread is-compact">
-              <span>Your thread</span>
-              <strong>“{primaryPhrase?.text}” → “{bridgePhrase?.text}”</strong>
-            </div>
-            <div className="jc-encounter-step">03 · THE WORDS HAVE A PHYSICAL HISTORY</div>
-            <h2>Before this was a lesson screen, it was ink, parchment, memory, and practice.</h2>
-            <p className="jc-encounter-subcopy">
-              Look first. Then read the context.
-            </p>
+        {phase === "artifacts" && artifactMoment && artifactSource && (
+          <section className="jc-encounter-scene jc-story-reel">
+            <div className="jc-story-topbar">
+              <div className="jc-continuity-thread is-compact">
+                <span>Your thread</span>
+                <strong>“{primaryPhrase?.text}” → “{bridgePhrase?.text}”</strong>
+              </div>
 
-            <div className="jc-artifact-grid">
-              {artifactMoments.map((moment) => {
-                const source = sources.find((item) => item.id === moment.sourceId);
-                if (!source) return null;
-
-                return (
-                  <article className="jc-artifact-card" key={moment.id}>
-                    <div className="jc-artifact-image-wrap">
-                      <img
-                        src={source.imageUrl}
-                        alt={source.title}
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="jc-artifact-copy">
-                      <span>{moment.eyebrow}</span>
-                      <h3>{source.title}</h3>
-                      <p>{moment.prompt}</p>
-                      <small>{source.date}</small>
-                      <button
-                        type="button"
-                        className="jc-source-detail-action"
-                        onClick={() => openSource(source)}
-                      >
-                        View source details <span>→</span>
-                      </button>
-                    </div>
-                  </article>
-                );
-              })}
+              <div
+                className="jc-story-progress"
+                aria-label={"Artifact " + (artifactIndex + 1) + " of " + artifactMoments.length}
+              >
+                {artifactMoments.map((item, index) => (
+                  <i key={item.id} className={index <= artifactIndex ? "is-active" : ""} />
+                ))}
+              </div>
             </div>
 
-            <button
-              type="button"
-              className="jc-encounter-next"
-              onClick={() => setPhase("voices")}
-            >
-              Hear voices around the text <span>→</span>
-            </button>
+            <article className="jc-story-panel is-artifact">
+              <div className="jc-story-media">
+                <img src={artifactSource.imageUrl} alt={artifactSource.title} />
+              </div>
+
+              <div className="jc-story-copy">
+                <div className="jc-story-kicker">{artifactMoment.eyebrow}</div>
+                <h2>{artifactSource.title}</h2>
+                <p className="jc-story-hook">{artifactMoment.prompt}</p>
+
+                {artifactSource.quote && (
+                  <blockquote>{artifactSource.quote}</blockquote>
+                )}
+
+                <div className="jc-story-meta">
+                  <span>{artifactSource.provider}</span>
+                  {artifactSource.date && <span>{artifactSource.date}</span>}
+                </div>
+
+                <button
+                  type="button"
+                  className="jc-source-detail-action"
+                  onClick={() => openSource(artifactSource)}
+                >
+                  See the source in Jeremiah <span>→</span>
+                </button>
+              </div>
+            </article>
+
+            <div className="jc-story-actions">
+              <button
+                type="button"
+                className="jc-story-back"
+                onClick={() => setArtifactIndex((value) => Math.max(0, value - 1))}
+                disabled={artifactIndex === 0}
+              >
+                ← Previous
+              </button>
+
+              {artifactIndex < artifactMoments.length - 1 ? (
+                <button
+                  type="button"
+                  className="jc-encounter-next"
+                  onClick={() => setArtifactIndex((value) => value + 1)}
+                >
+                  Next artifact <span>→</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="jc-encounter-next"
+                  onClick={() => setPhase("voices")}
+                >
+                  Hear how people carried these words <span>→</span>
+                </button>
+              )}
+            </div>
           </section>
         )}
 
-        {phase === "voices" && (
-          <section className="jc-encounter-scene">
-            <div className="jc-continuity-thread is-compact">
-              <span>Your thread</span>
-              <strong>“{primaryPhrase?.text}” → “{bridgePhrase?.text}”</strong>
-            </div>
-            <div className="jc-encounter-step">04 · THE VERSE HAS A HISTORY</div>
-            <h2>People have been hearing, reciting, and arguing about these words for centuries.</h2>
-            <p className="jc-encounter-subcopy">
-              Jeremiah can bring those voices into the room without handing them authority over the standard.
-            </p>
+        {phase === "voices" && voiceMoment && voiceSource && (
+          <section className="jc-encounter-scene jc-story-reel">
+            <div className="jc-story-topbar">
+              <div className="jc-continuity-thread is-compact">
+                <span>Your thread</span>
+                <strong>“{primaryPhrase?.text}” → “{bridgePhrase?.text}”</strong>
+              </div>
 
-            <div className="jc-voice-stack">
-              {sourceMoments.slice(0, 3).map((moment) => {
-                const source = sources.find((item) => item.id === moment.sourceId);
-                return (
-                  <article className="jc-voice-card" key={moment.id}>
-                    <div className="jc-voice-card-head">
-                      <span>{moment.label}</span>
-                      <small className="jc-source-provider">{source?.provider || "Source"}</small>
-                    </div>
-                    <p>{moment.text}</p>
-                    {source?.quote && <blockquote>{source.quote}</blockquote>}
-                    {source && (
-                      <button
-                        type="button"
-                        className="jc-source-detail-action"
-                        onClick={() => openSource(source)}
-                      >
-                        View source details <span>→</span>
-                      </button>
-                    )}
-                  </article>
-                );
-              })}
+              <div
+                className="jc-story-progress"
+                aria-label={"Source voice " + (voiceIndex + 1) + " of " + sourceMoments.length}
+              >
+                {sourceMoments.map((item, index) => (
+                  <i key={item.id} className={index <= voiceIndex ? "is-active" : ""} />
+                ))}
+              </div>
             </div>
 
-            <div className="jc-source-shelf-wrap">
+            <article className="jc-story-panel is-voice">
+              <div className="jc-story-voice-rail">
+                <span>{String(voiceIndex + 1).padStart(2, "0")}</span>
+                <small>{voiceSource.provider}</small>
+              </div>
+
+              <div className="jc-story-copy">
+                <div className="jc-story-kicker">{voiceMoment.label}</div>
+                <h2>{voiceSource.title}</h2>
+                <p className="jc-story-hook">{voiceMoment.text}</p>
+
+                {voiceSource.quote && (
+                  <blockquote>“{voiceSource.quote.replace(/^“|”$/g, "")}”</blockquote>
+                )}
+
+                <div className="jc-story-why">
+                  <span>Why this is here</span>
+                  <p>
+                    This source adds historical context to the confession. It does not define the doctrine—the standard and Scripture do.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  className="jc-source-detail-action"
+                  onClick={() => openSource(voiceSource)}
+                >
+                  See the source in Jeremiah <span>→</span>
+                </button>
+              </div>
+            </article>
+
+            <div className="jc-story-actions">
               <button
                 type="button"
-                className="jc-source-shelf-toggle"
-                onClick={() => setShowSourceShelf((value) => !value)}
+                className="jc-story-back"
+                onClick={() => setVoiceIndex((value) => Math.max(0, value - 1))}
+                disabled={voiceIndex === 0}
               >
-                {showSourceShelf ? "Close source library" : "Browse all sources"}
-                <span>{showSourceShelf ? "−" : "+"}</span>
+                ← Previous
               </button>
 
-              {showSourceShelf && (
-                <div className="jc-source-shelf">
-                  {sources
-                    .filter((source) => source.url)
-                    .map((source) => (
-                      <button
-                        type="button"
-                        key={source.id}
-                        className="jc-source-item"
-                        onClick={() => openSource(source)}
-                      >
-                        <div>
-                          <span>{String(source.type || "source").replaceAll("_", " ")}</span>
-                          <small>{source.provider}</small>
-                        </div>
-                        <strong>{source.title}</strong>
-                        <p>{source.hook}</p>
-                        {source.attribution && <em>{source.attribution}</em>}
-                      </button>
-                    ))}
-                </div>
+              {voiceIndex < sourceMoments.length - 1 ? (
+                <button
+                  type="button"
+                  className="jc-encounter-next"
+                  onClick={() => setVoiceIndex((value) => value + 1)}
+                >
+                  Next voice <span>→</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="jc-encounter-next"
+                  onClick={() => setPhase("destination")}
+                >
+                  Bring it back to the lesson <span>→</span>
+                </button>
               )}
             </div>
 
-            <button
-              type="button"
-              className="jc-encounter-next"
-              onClick={() => setPhase("destination")}
-            >
-              Show me where this lesson is going <span>→</span>
-            </button>
+            {voiceIndex === sourceMoments.length - 1 && (
+              <div className="jc-source-shelf-wrap jc-story-library">
+                <button
+                  type="button"
+                  className="jc-source-shelf-toggle"
+                  onClick={() => setShowSourceShelf((value) => !value)}
+                >
+                  {showSourceShelf ? "Close source library" : "Want to explore deeper? Browse all sources"}
+                  <span>{showSourceShelf ? "−" : "+"}</span>
+                </button>
+
+                {showSourceShelf && (
+                  <div className="jc-source-shelf">
+                    {sources
+                      .filter((source) => source.url)
+                      .map((source) => (
+                        <button
+                          type="button"
+                          key={source.id}
+                          className="jc-source-item"
+                          onClick={() => openSource(source)}
+                        >
+                          <div>
+                            <span>{String(source.type || "source").replaceAll("_", " ")}</span>
+                            <small>{source.provider}</small>
+                          </div>
+                          <strong>{source.title}</strong>
+                          <p>{source.hook}</p>
+                          {source.attribution && <em>{source.attribution}</em>}
+                        </button>
+                      ))}
+                  </div>
+                )}
+              </div>
+            )}
           </section>
         )}
 
