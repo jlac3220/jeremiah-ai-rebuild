@@ -958,12 +958,11 @@ function EncounterThread({ encounterData }) {
 
   return (
     <div className="jc-encounter-thread">
-      <span>From your entrance</span>
-      <p>
-        You noticed{" "}
-        <strong>{noticed.join(" · ")}</strong>
-        . Jeremiah will keep that thread in view.
-      </p>
+      <div>
+        <span>Your thread</span>
+        <small>Carried from the opening encounter</small>
+      </div>
+      <strong>{noticed.map((item) => "“" + item + "”").join("  →  ")}</strong>
     </div>
   );
 }
