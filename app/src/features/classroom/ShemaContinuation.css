@@ -352,3 +352,140 @@
     justify-content: space-between;
   }
 }
+
+
+/* witness builder */
+
+.scl-witness-builder {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.scl-witness-intro {
+  max-width: 680px;
+  margin: 0;
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.68;
+}
+
+.scl-witness-step {
+  width: 100%;
+  margin-top: 26px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.scl-witness-step-head {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.scl-witness-step-head > span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.scl-witness-step-head small {
+  display: block;
+  color: #6b7280;
+  font-size: .7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.scl-witness-step-head strong {
+  display: block;
+  margin-top: 4px;
+  color: #111827;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.scl-witness-options {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.scl-witness-options button {
+  width: 100%;
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 1fr 28px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  background: #fff;
+  color: #1f2937;
+  text-align: left;
+  cursor: pointer;
+}
+
+.scl-witness-options button.is-selected {
+  border-color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.scl-witness-options span {
+  font-size: .94rem;
+  line-height: 1.5;
+}
+
+.scl-witness-options i {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+  color: #fff;
+  font-style: normal;
+}
+
+.scl-witness-options button.is-selected i {
+  border-color: #1d4ed8;
+  background: #1d4ed8;
+}
+
+.scl-witness-built {
+  margin-top: 28px;
+  padding: 20px 22px;
+  border-left: 4px solid #f97316;
+  border-radius: 0 14px 14px 0;
+  background: #fff7ed;
+}
+
+.scl-witness-built small {
+  color: #9a3412;
+  font-size: .7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.scl-witness-built p {
+  margin: 8px 0 0;
+  color: #3f3f46;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.scl-witness-built > span {
+  display: block;
+  margin-top: 9px;
+  color: #78716c;
+  font-size: .78rem;
+}
