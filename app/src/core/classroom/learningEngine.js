@@ -27,6 +27,22 @@ export function createLearningState(content, presetId = "direct") {
     misconceptions: [],
     teacherHistory: [],
     encounterData: null,
+    milestones: {
+      started: false,
+      scripture: false,
+      evidence: false,
+      checkpoint: false,
+      teachBack: false,
+      mastery: false,
+      complete: false,
+    },
+    experience: {
+      sceneIndex: 0,
+      sceneId: "",
+      selections: {},
+      viewedSourceIds: [],
+      updatedAt: null,
+    },
     lastUpdatedAt: Date.now(),
   };
 }
@@ -72,6 +88,41 @@ export function clearLearningState(content, presetId = "direct") {
   window.localStorage.removeItem(keyFor(content.standardId, presetId));
 }
 
+export function updateLearningExperience(state, patch = {}) {
+  return {
+    ...state,
+    experience: {
+      ...(state.experience || {}),
+      ...patch,
+      selections: {
+        ...(state.experience?.selections || {}),
+        ...(patch.selections || {}),
+      },
+      viewedSourceIds: [
+        ...new Set([
+          ...(state.experience?.viewedSourceIds || []),
+          ...(patch.viewedSourceIds || []),
+        ]),
+      ],
+      updatedAt: Date.now(),
+    },
+    lastUpdatedAt: Date.now(),
+  };
+}
+
+export function markLearningMilestones(state, milestoneIds = []) {
+  const milestones = { ...(state.milestones || {}) };
+  milestoneIds.forEach((id) => {
+    if (id) milestones[id] = true;
+  });
+
+  return {
+    ...state,
+    milestones,
+    lastUpdatedAt: Date.now(),
+  };
+}
+
 function unique(values = []) {
   return [...new Set(values.filter(Boolean))];
 }
@@ -80,8 +131,22 @@ export function recordAttempt(state, move, teacherDecision) {
   const attemptCount = (state.attemptsByMove?.[move.id] || 0) + 1;
   const completed = teacherDecision.verdict === "strong";
 
+  const milestoneId =
+    completed && move.type === "scenario"
+      ? "checkpoint"
+      : completed && move.type === "free_response"
+        ? "teachBack"
+        : completed && move.type === "mastery_response"
+          ? "mastery"
+          : "";
+
   return {
     ...state,
+    milestones: {
+      ...(state.milestones || {}),
+      ...(completed ? { started: true } : {}),
+      ...(milestoneId ? { [milestoneId]: true } : {}),
+    },
     attemptsByMove: {
       ...state.attemptsByMove,
       [move.id]: attemptCount,
@@ -146,6 +211,10 @@ export function advanceUnscoredMove(state, move) {
   const nextMoveId = resolveNextMoveId(move, "continue");
   return {
     ...state,
+    milestones: {
+      ...(state.milestones || {}),
+      started: true,
+    },
     currentMoveId: nextMoveId,
     completedMoveIds: unique([...(state.completedMoveIds || []), move.id]),
     lastUpdatedAt: Date.now(),
@@ -157,6 +226,12 @@ export function advanceEncounterMove(state, move, encounterData = {}) {
 
   return {
     ...advanced,
+    milestones: {
+      ...(advanced.milestones || {}),
+      started: true,
+      scripture: true,
+      evidence: true,
+    },
     encounterData: {
       ...(state.encounterData || {}),
       ...encounterData,
