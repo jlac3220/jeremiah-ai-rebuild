@@ -9,8 +9,8 @@ export const BIBLE_TRANSLATIONS = [
     "language": "English",
     "license": "Public domain",
     "editionNote": "Standard 1769 text",
-    "sourceLabel": "midvash/bible-data",
-    "sourcePath": "versions/en/kjv"
+    "sourceLabel": "eBible.org",
+    "sourcePath": "eng-kjv2006"
   },
   {
     "id": "asv",
@@ -20,8 +20,8 @@ export const BIBLE_TRANSLATIONS = [
     "language": "English",
     "license": "Public domain",
     "editionNote": "1901 American Standard Version",
-    "sourceLabel": "midvash/bible-data",
-    "sourcePath": "versions/en/asv"
+    "sourceLabel": "eBible.org",
+    "sourcePath": "asv"
   },
   {
     "id": "web",
@@ -31,8 +31,8 @@ export const BIBLE_TRANSLATIONS = [
     "language": "English",
     "license": "Public domain",
     "editionNote": "Modern public-domain English",
-    "sourceLabel": "midvash/bible-data",
-    "sourcePath": "versions/en/web"
+    "sourceLabel": "eBible.org",
+    "sourcePath": "engwebp"
   }
 ];
 
@@ -730,10 +730,7 @@ export const BIBLE_BOOKS = [
   }
 ];
 
-const bookCache = new Map();
-const CACHE_NAME = "jeremiah-bible-books-v2";
-const RAW_BASE = "https://raw.githubusercontent.com/midvash/bible-data/main/";
-const CDN_BASE = "https://cdn.jsdelivr.net/gh/midvash/bible-data@main/";
+const chapterCache = new Map();
 
 export function normalizeBibleBookName(value = "") {
   return String(value)
@@ -761,77 +758,77 @@ export function findBibleBook(value) {
   );
 }
 
-function sourceUrls(translation, book) {
-  const suffix = translation.sourcePath + "/books/" + book.osis + ".json";
-  return [RAW_BASE + suffix, CDN_BASE + suffix];
-}
-
-async function readCached(url) {
-  if (typeof window === "undefined" || !("caches" in window)) return null;
-  try {
-    const cache = await window.caches.open(CACHE_NAME);
-    const response = await cache.match(url);
-    return response || null;
-  } catch {
-    return null;
-  }
-}
-
-async function storeCached(url, response) {
-  if (typeof window === "undefined" || !("caches" in window)) return;
-  try {
-    const cache = await window.caches.open(CACHE_NAME);
-    await cache.put(url, response.clone());
-  } catch {
-    // Cache support is optional. A successful network response still wins.
-  }
-}
-
-export async function loadBibleBook(translationId, bookLike) {
+export async function loadBibleChapter(translationId, bookLike, chapterNumber) {
   const translation = getBibleTranslation(translationId);
   const book = typeof bookLike === "string" ? findBibleBook(bookLike) : bookLike;
-  const cacheKey = translation.id + ":" + book.osis;
+  const chapter = Number(chapterNumber);
 
-  if (bookCache.has(cacheKey)) return bookCache.get(cacheKey);
-
-  const urls = sourceUrls(translation, book);
-  let lastError = null;
-
-  for (const url of urls) {
-    try {
-      const cached = await readCached(url);
-      const response = cached || (await fetch(url, { cache: "force-cache" }));
-      if (!response.ok) {
-        throw new Error("Bible source returned " + response.status + ".");
-      }
-
-      if (!cached) await storeCached(url, response);
-      const data = await response.json();
-
-      if (!Array.isArray(data?.chapters) || Number(data?.bookId) !== book.bookId) {
-        throw new Error("Bible source returned an unexpected book shape.");
-      }
-
-      bookCache.set(cacheKey, data);
-      return data;
-    } catch (error) {
-      lastError = error;
-    }
+  if (!book || !Number.isInteger(chapter) || chapter < 1 || chapter > book.chapters) {
+    throw new Error("That Bible chapter is not available.");
   }
 
-  throw new Error(
-    "Could not load " + translation.shortName + " " + book.name + ". " +
-    (lastError?.message || "Check the connection and try again.")
-  );
+  const cacheKey = translation.id + ":" + book.osis + ":" + chapter;
+  if (chapterCache.has(cacheKey)) return chapterCache.get(cacheKey);
+
+  const params = new URLSearchParams({
+    translation: translation.id,
+    book: book.osis,
+    chapter: String(chapter),
+  });
+
+  let response;
+  try {
+    response = await fetch("/api/bible/chapter?" + params.toString(), {
+      headers: { Accept: "application/json" },
+      cache: "force-cache",
+    });
+  } catch (error) {
+    throw new Error(
+      "Could not reach the Bible source. " +
+      (error?.message || "Check the connection and try again.")
+    );
+  }
+
+  let data = null;
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error ||
+      "Could not load " + translation.shortName + " " + book.name + " " + chapter + "."
+    );
+  }
+
+  if (!Array.isArray(data?.verses) || data.verses.length === 0) {
+    throw new Error("The Bible source returned an unexpected chapter shape.");
+  }
+
+  const normalized = {
+    translation: translation.id,
+    source: data.source || "eBible.org",
+    sourceId: data.sourceId || translation.sourcePath,
+    book: book.osis,
+    bookId: book.bookId,
+    chapter,
+    verses: data.verses
+      .map((verse) => ({
+        verse: Number(verse.verse),
+        text: String(verse.text || ""),
+      }))
+      .filter((verse) => verse.verse > 0 && verse.text),
+  };
+
+  chapterCache.set(cacheKey, normalized);
+  return normalized;
 }
 
-export function getChapterVerses(bookData, chapterNumber) {
-  const chapter = bookData?.chapters?.find(
-    (item) => Number(item.chapter) === Number(chapterNumber)
-  );
-
-  return (chapter?.verses || []).map((verse) => ({
-    verse: Number(verse.number),
+export function getChapterVerses(chapterData) {
+  return (chapterData?.verses || []).map((verse) => ({
+    verse: Number(verse.verse),
     text: String(verse.text || ""),
   }));
 }
