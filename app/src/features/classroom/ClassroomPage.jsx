@@ -971,7 +971,6 @@ function EncounterHandoff({ move, encounterData, onContinue, onExit }) {
             {move.ctaLabel || "Continue"} <span>→</span>
           </button>
         </section>
-        )}
       </main>
     </div>
   );
@@ -1641,6 +1640,7 @@ export default function ClassroomPage({ onNavigate }) {
             </div>
           )}
         </section>
+        )}
       </main>
     </div>
   );
