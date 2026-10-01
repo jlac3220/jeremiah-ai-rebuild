@@ -6189,3 +6189,123 @@
     width: 100%;
   }
 }
+
+
+/* classroom mode chrome v18 */
+
+.jc-classroom-bar {
+  min-height: 58px;
+  grid-template-columns: auto minmax(180px, 360px) auto;
+  gap: 18px;
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(24,49,58,.08);
+  background: rgba(249,246,240,.92);
+  box-shadow: 0 6px 24px rgba(43,55,58,.035);
+  backdrop-filter: blur(18px);
+}
+
+.jc-classroom-back,
+.jc-classroom-more {
+  border: 0;
+  background: transparent;
+  color: #2f4851;
+  cursor: pointer;
+}
+
+.jc-classroom-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.jc-classroom-back > span {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.jc-classroom-back > strong {
+  font: 730 .78rem/1 var(--font-display);
+}
+
+.jc-classroom-progress {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.jc-classroom-progress small {
+  color: #61757c;
+  font-size: .68rem;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.jc-classroom-progress > div {
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(24,49,58,.10);
+}
+
+.jc-classroom-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #4f98b2, #d86c3a);
+  transition: width .35s ease;
+}
+
+.jc-classroom-more {
+  justify-self: end;
+  min-width: 38px;
+  min-height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(24,49,58,.08);
+  border-radius: 50%;
+  background: rgba(255,255,255,.62);
+  font-size: .95rem;
+  letter-spacing: .08em;
+}
+
+.jc-classroom-more:disabled {
+  opacity: .25;
+  cursor: default;
+}
+
+.jc-shell {
+  padding-top: 34px;
+}
+
+@media (max-width: 760px) {
+  .jc-classroom-bar {
+    min-height: 54px;
+    grid-template-columns: auto 1fr auto;
+    padding: 0 12px;
+  }
+
+  .jc-classroom-back > strong {
+    display: none;
+  }
+
+  .jc-classroom-progress {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .jc-classroom-progress small {
+    text-align: center;
+    font-size: .64rem;
+  }
+
+  .jc-classroom-more {
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .jc-shell {
+    padding-top: 26px;
+  }
+}
