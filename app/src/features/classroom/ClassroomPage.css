@@ -2840,3 +2840,221 @@
     width: 82px;
   }
 }
+
+
+/* readability and visual balance v4 */
+
+.jc-encounter-page,
+.jc-handoff-page {
+  background:
+    radial-gradient(circle at 16% 8%, rgba(232,143,87,.13), transparent 34%),
+    radial-gradient(circle at 88% 10%, rgba(91,164,188,.12), transparent 34%),
+    linear-gradient(180deg, #122833 0%, #17313b 52%, #1a3540 100%);
+}
+
+.jc-encounter-glow {
+  opacity: .16;
+}
+
+.jc-encounter-exit {
+  color: #c1ced3;
+  font-size: .8rem;
+}
+
+.jc-threshold-grid {
+  grid-template-columns: minmax(0, .9fr) minmax(420px, 1.1fr);
+  gap: clamp(38px, 5vw, 64px);
+}
+
+.jc-threshold-copy h1 {
+  max-width: 620px;
+  font-size: clamp(2.8rem, 4.8vw, 4.45rem);
+  line-height: 1.02;
+}
+
+.jc-threshold-copy .jc-encounter-opening {
+  max-width: 590px;
+  color: #d3dde1;
+  font-size: 1.06rem;
+  line-height: 1.7;
+}
+
+.jc-threshold-copy .jc-encounter-kicker,
+.jc-encounter-kicker,
+.jc-encounter-step {
+  color: #b8c8ce;
+  font-size: .73rem;
+  letter-spacing: .13em;
+}
+
+.jc-threshold-copy .jc-encounter-whisper {
+  color: #9fb0b8;
+  font-size: .76rem;
+}
+
+.jc-threshold-primary {
+  min-height: 64px;
+  font-size: 1rem;
+}
+
+.jc-threshold-video-feature {
+  border-color: rgba(255,255,255,.14);
+  background:
+    radial-gradient(circle at 85% 5%, rgba(97,171,195,.11), transparent 30%),
+    linear-gradient(180deg, #17303a, #132a34);
+  box-shadow:
+    0 26px 65px rgba(0,0,0,.22),
+    inset 0 1px rgba(255,255,255,.04);
+}
+
+.jc-threshold-video-label {
+  min-height: 48px;
+  border-bottom-color: rgba(255,255,255,.10);
+}
+
+.jc-threshold-video-label span {
+  color: #f1a16b;
+  font-size: .72rem;
+}
+
+.jc-threshold-video-label small {
+  color: #b0c1c8;
+  font-size: .72rem;
+}
+
+.jc-threshold-video-copy {
+  padding: 18px 19px 20px;
+}
+
+.jc-threshold-video-copy strong {
+  color: #f5f8f8;
+  font-size: 1.03rem;
+}
+
+.jc-threshold-video-copy p {
+  color: #c1cdd2;
+  font-size: .88rem;
+  line-height: 1.58;
+}
+
+.jc-threshold-video-copy button {
+  min-height: 44px;
+  padding: 0 15px;
+  border-color: rgba(139,201,220,.20);
+  color: #d6e6ec;
+  background: rgba(119,183,205,.07);
+  font-size: .78rem;
+}
+
+.jc-threshold-artifact-strip {
+  min-height: 96px;
+  border-color: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.035);
+}
+
+.jc-threshold-artifact-strip img {
+  height: 96px;
+  background: #10242d;
+  opacity: .92;
+}
+
+.jc-threshold-artifact-strip span {
+  color: #efa06b;
+  font-size: .66rem;
+}
+
+.jc-threshold-artifact-strip strong {
+  color: #eff4f5;
+  font-size: .88rem;
+}
+
+.jc-threshold-artifact-strip small {
+  color: #aebdc4;
+  font-size: .72rem;
+}
+
+.jc-notice-intro h2,
+.jc-compare-intro h2 {
+  font-size: clamp(2rem, 4.2vw, 3.15rem);
+}
+
+.jc-notice-intro p,
+.jc-compare-intro p,
+.jc-compare-question p,
+.jc-handoff-opening,
+.jc-handoff-bridge {
+  color: #c4d0d5;
+  font-size: .96rem;
+}
+
+.jc-notice-intro > span,
+.jc-compare-question > span,
+.jc-handoff-memory > span,
+.jc-handoff-focus > span {
+  font-size: .68rem;
+}
+
+.jc-encounter-words button {
+  color: #f8f4ed;
+}
+
+.jc-compare-scene .jc-encounter-pair article {
+  border-color: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.035);
+}
+
+.jc-compare-scene .jc-encounter-pair article > span {
+  color: #91c6d8;
+  font-size: .72rem;
+}
+
+.jc-compare-scene .jc-encounter-pair article > p {
+  color: #f4f0e9;
+  font-size: 1.2rem;
+}
+
+.jc-compare-scene .jc-encounter-pair article > small {
+  color: #a4b5bc;
+  font-size: .7rem;
+}
+
+.jc-handoff-scripture > span {
+  color: #8fc6d8;
+  font-size: .72rem;
+}
+
+.jc-handoff-teacher-head small {
+  color: #9db0b8;
+  font-size: .68rem;
+}
+
+.jc-handoff-teaching p {
+  color: #d0d9dd;
+  font-size: 1.03rem;
+}
+
+@media (max-width: 900px) {
+  .jc-threshold-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jc-threshold-copy h1 {
+    max-width: 760px;
+  }
+}
+
+@media (max-width: 760px) {
+  .jc-threshold-copy h1 {
+    font-size: clamp(2.45rem, 11vw, 3.6rem);
+  }
+
+  .jc-threshold-copy .jc-encounter-opening {
+    font-size: 1rem;
+  }
+
+  .jc-threshold-video-copy p,
+  .jc-notice-intro p,
+  .jc-compare-intro p {
+    font-size: .92rem;
+  }
+}
