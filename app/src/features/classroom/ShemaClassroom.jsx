@@ -1,12 +1,36 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import "./ShemaClassroom.css";
+import ScripturePassage from "./ScripturePassage";
 
 function DeepDiveSheet({ item, onClose, onOpenBible }) {
+  const panel = useRef(null);
+  useEffect(() => {
+    if (!item) return;
+    const previous = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panel.current?.querySelector("button")?.focus();
+    function keydown(event) {
+      if (event.key === "Escape") { event.preventDefault(); onClose(); }
+      if (event.key !== "Tab") return;
+      const targets = Array.from(panel.current?.querySelectorAll('button, a[href], input, select, textarea, [tabindex="0"]') || []).filter((node) => !node.disabled);
+      const first = targets[0]; const last = targets.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    document.addEventListener("keydown", keydown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", keydown);
+      previous?.focus();
+    };
+  }, [item, onClose]);
   if (!item) return null;
 
   return (
     <div className="sc-sheet-backdrop" role="presentation" onClick={onClose}>
       <aside
+        ref={panel}
         className="sc-sheet"
         role="dialog"
         aria-modal="true"
@@ -17,21 +41,7 @@ function DeepDiveSheet({ item, onClose, onOpenBible }) {
         <button type="button" className="sc-sheet-close" onClick={onClose} aria-label="Close">×</button>
 
         {item.kind === "scripture" ? (
-          <>
-            <span className="sc-sheet-label">Scripture</span>
-            <h2>{item.reference}</h2>
-            <blockquote>“{item.text}”</blockquote>
-            {item.note && <p>{item.note}</p>}
-            {onOpenBible && (
-              <button
-                type="button"
-                className="sc-sheet-bible"
-                onClick={() => onOpenBible(item)}
-              >
-                Read full chapter <span>→</span>
-              </button>
-            )}
-          </>
+          <ScripturePassage key={item.reference} item={item} onOpenBible={onOpenBible} />
         ) : (
           <>
             <span className="sc-sheet-label">{item.provider || "Source"}</span>

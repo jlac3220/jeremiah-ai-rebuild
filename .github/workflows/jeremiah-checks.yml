@@ -36,5 +36,8 @@ jobs:
       - name: Validate Bible parser
         run: npm run test:bible
 
+      - name: Validate saved learning dashboard
+        run: npm run test:dashboard
+
       - name: Build app
         run: npm run build

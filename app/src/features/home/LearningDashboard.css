@@ -1,0 +1,35 @@
+.ld-page { min-height: 100vh; background: #fff; color: #17283b; padding: 32px 28px 72px; }
+.ld-content { max-width: 980px; margin: 0 auto; }
+.ld-header { display: flex; justify-content: space-between; gap: 20px; align-items: center; padding: 0 0 32px; }
+.ld-brand { font: 800 .9rem/1.2 system-ui, sans-serif; letter-spacing: .2em; }
+.ld-header-note { color: #72808c; font: .85rem/1.4 system-ui, sans-serif; }
+.ld-hero { max-width: 700px; padding: 32px 0 44px; }
+.ld-eyebrow { display: block; color: #657b8e; font: 700 .7rem/1.6 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .13em; margin: 0; }
+.ld-hero h1 { font: 500 clamp(2.7rem, 6vw, 4.4rem)/1.06 Georgia, serif; letter-spacing: -.04em; margin: 14px 0 22px; }
+.ld-hero > p:last-child { color: #657080; font: 1.12rem/1.7 system-ui, sans-serif; max-width: 520px; }
+.ld-feature { background: #f6f8fa; padding: 36px 40px; border-radius: 22px; }
+.ld-feature-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.ld-path { color: #64748b; font: .8rem/1.5 system-ui, sans-serif; }
+.ld-feature h2 { max-width: 680px; font: 500 clamp(1.9rem,4vw,2.8rem)/1.14 Georgia, serif; letter-spacing: -.025em; margin: 22px 0 16px; }
+.ld-truth { color: #516578; font: 1.1rem/1.6 Georgia, serif; }
+.ld-next { margin: 30px 0; }
+.ld-next p { margin: 6px 0 0; font: 600 1.05rem/1.5 system-ui, sans-serif; }
+.ld-progress-label { display: flex; justify-content: space-between; font: .8rem/1.5 system-ui, sans-serif; color: #64748b; }
+.ld-progress { height: 4px; background: #e2e8ee; border-radius: 4px; margin: 10px 0 26px; overflow: hidden; }
+.ld-progress > span { height: 100%; display: block; background: #315d82; border-radius: inherit; }
+.ld-primary { display: inline-flex; gap: 44px; justify-content: space-between; align-items: center; background: #bd5929; color: #fff; border: 0; border-radius: 12px; padding: 17px 24px; cursor: pointer; font: 650 1rem/1.4 system-ui, sans-serif; }
+.ld-primary:hover { background: #a94d22; }
+.ld-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; padding: 44px 0 0; }
+.ld-stats { display: flex; gap: 32px; margin: 20px 0 16px; }
+.ld-stats strong { display: block; font: 500 2.4rem/1.2 Georgia, serif; }
+.ld-stats span { display: block; color: #64748b; font: .82rem/1.6 system-ui, sans-serif; margin-top: 5px; }
+.ld-link { border: 0; background: transparent; color: #315d82; font: 650 .95rem/1.5 system-ui, sans-serif; padding: 10px 0; cursor: pointer; }
+.ld-bible h3 { font: 500 1.9rem/1.2 Georgia, serif; margin: 14px 0 10px; }
+.ld-bible p, .ld-muted { color: #64748b; font: 1rem/1.7 system-ui, sans-serif; }
+.ld-page button:focus-visible { outline: 3px solid #eaa574; outline-offset: 5px; }
+.ld-section { margin-top: 40px; }
+.ld-section h2 { font: 500 1.8rem/1.3 Georgia, serif; }
+.ld-record { display: flex; justify-content: space-between; gap: 24px; padding: 22px 0; border-bottom: 1px solid #eef1f4; }
+.ld-record h3 { margin: 0 0 5px; font: 600 1.05rem/1.5 system-ui, sans-serif; }
+.ld-record p { margin: 0; color: #64748b; font: .9rem/1.6 system-ui, sans-serif; }
+@media (max-width: 640px) { .ld-page { padding: 24px 22px 48px; } .ld-header { padding-bottom: 14px; } .ld-header-note { display: none; } .ld-hero { padding: 24px 0 28px; } .ld-feature { padding: 26px 24px; } .ld-feature-heading { align-items: flex-start; flex-direction: column; gap: 4px; } .ld-bottom { grid-template-columns: 1fr; gap: 36px; } .ld-primary { width: 100%; } .ld-record { flex-direction: column; gap: 6px; } }

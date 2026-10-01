@@ -717,3 +717,13 @@
 .sc-sheet-bible span {
   font-size: 1rem;
 }
+
+.sc-passage { margin: 28px 0 20px; }
+.sc-passage p { margin: 0 0 18px; font: 1.45rem/1.65 Georgia, serif; color: #182438; }
+.sc-passage p.sc-passage-context { color: #64748b; font-size: 1.15rem; }
+.sc-passage sup { font: 600 .7rem/1 system-ui, sans-serif; color: #53708c; margin-right: 9px; }
+.sc-passage .sc-passage-status { font: 1rem/1.6 system-ui, sans-serif; color: #64748b; }
+.sc-context-toggle, .sc-passage-status button { border: 0; border-radius: 10px; padding: 12px 0; background: transparent; color: #225889; font: 600 .9rem/1.4 system-ui, sans-serif; cursor: pointer; }
+.sc-passage-source { display: block; margin-top: 22px; color: #64748b; }
+.sc-sheet button:focus-visible { outline: 3px solid #ea9c63; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .sc-sheet { animation: none; } }
