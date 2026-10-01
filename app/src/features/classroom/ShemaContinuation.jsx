@@ -31,6 +31,7 @@ export default function ShemaContinuation({
   onTeacherContinue,
   onExit,
   onHome,
+  onReview,
 }) {
   const isResponse = ["free_response", "mastery_response"].includes(move.type);
   const isUnscored = ["teach", "synthesis"].includes(move.type);
@@ -424,9 +425,14 @@ export default function ShemaContinuation({
             <div className="scl-complete">
               <div>✓</div>
               <p>{move.teacherLine || move.body}</p>
-              <button type="button" className="scl-action" onClick={onHome}>
-                {move.ctaLabel || "Return home"} <span>→</span>
-              </button>
+              <div className="scl-complete-actions">
+                <button type="button" className="scl-action" onClick={onHome}>
+                  {move.ctaLabel || "Return home"} <span>→</span>
+                </button>
+                <button type="button" className="scl-secondary" onClick={onReview}>
+                  Review the biblical thread
+                </button>
+              </div>
             </div>
           )}
         </section>
