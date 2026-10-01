@@ -472,10 +472,10 @@ function EncounterExperience({ move, onComplete, onExit }) {
                       <small>{source.date}</small>
                       <button
                         type="button"
-                        className="jc-inline-source"
+                        className="jc-source-detail-action"
                         onClick={() => openSource(source)}
                       >
-                        {source.attribution}
+                        View source details <span>→</span>
                       </button>
                     </div>
                   </article>
@@ -510,19 +510,19 @@ function EncounterExperience({ move, onComplete, onExit }) {
                 const source = sources.find((item) => item.id === moment.sourceId);
                 return (
                   <article className="jc-voice-card" key={moment.id}>
-                    <div>
+                    <div className="jc-voice-card-head">
                       <span>{moment.label}</span>
-                      <small>{source?.provider || "Source"}</small>
+                      <small className="jc-source-provider">{source?.provider || "Source"}</small>
                     </div>
                     <p>{moment.text}</p>
                     {source?.quote && <blockquote>{source.quote}</blockquote>}
                     {source && (
                       <button
                         type="button"
-                        className="jc-inline-source"
+                        className="jc-source-detail-action"
                         onClick={() => openSource(source)}
                       >
-                        Explore source
+                        View source details <span>→</span>
                       </button>
                     )}
                   </article>
@@ -536,7 +536,7 @@ function EncounterExperience({ move, onComplete, onExit }) {
                 className="jc-source-shelf-toggle"
                 onClick={() => setShowSourceShelf((value) => !value)}
               >
-                {showSourceShelf ? "Close source shelf" : "Open the source shelf"}
+                {showSourceShelf ? "Close source library" : "Browse all sources"}
                 <span>{showSourceShelf ? "−" : "+"}</span>
               </button>
 
