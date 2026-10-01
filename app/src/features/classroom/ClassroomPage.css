@@ -6503,3 +6503,342 @@
     font-size: 1.02rem;
   }
 }
+
+
+/* YouVersion-inspired Classroom reset v21 */
+
+/* Core canvas */
+.jc-page,
+.jc-handoff-page,
+.jc-encounter-page {
+  background: #f5f5f3 !important;
+  color: #151515 !important;
+}
+
+.jc-atmosphere,
+.jc-ambient,
+.jc-ambient-warm,
+.jc-ambient-cool {
+  display: none !important;
+}
+
+/* Simple native app bar */
+.jc-classroom-bar {
+  min-height: 58px !important;
+  padding: 0 18px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e3e3df !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.jc-classroom-back,
+.jc-classroom-more {
+  color: #161616 !important;
+}
+
+.jc-classroom-back > strong {
+  font-size: .84rem !important;
+  font-weight: 760 !important;
+}
+
+.jc-classroom-more {
+  border: 0 !important;
+  background: transparent !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+}
+
+.jc-classroom-progress {
+  gap: 10px !important;
+}
+
+.jc-classroom-progress small {
+  color: #595959 !important;
+  font-size: .7rem !important;
+  font-weight: 700 !important;
+}
+
+.jc-classroom-progress > div {
+  height: 4px !important;
+  background: #e7e7e3 !important;
+}
+
+.jc-classroom-progress i {
+  background: #d86b36 !important;
+}
+
+/* Content width + rhythm */
+.jc-shell {
+  width: min(920px, calc(100% - 32px)) !important;
+  padding-top: 28px !important;
+  padding-bottom: 72px !important;
+}
+
+.jc-lesson,
+.jc-pattern-scene,
+.jc-interaction-scene {
+  max-width: 920px !important;
+  margin: 0 auto !important;
+}
+
+/* Typography: readable, high-contrast, restrained */
+.jc-move-head h1,
+.jc-pattern-hero h1,
+.jc-prediction-intro h1,
+.jc-builder-intro h1,
+.jc-reflection-prompt h2,
+.jc-question h2 {
+  color: #111111 !important;
+  font-family: var(--font-display) !important;
+  font-weight: 780 !important;
+  letter-spacing: -.035em !important;
+}
+
+.jc-move-head h1 {
+  font-size: clamp(2rem, 4vw, 3.2rem) !important;
+  line-height: 1.04 !important;
+}
+
+.jc-body-copy,
+.jc-teaching-copy p,
+.jc-handoff-teaching p,
+.jc-prediction-intro p,
+.jc-builder-intro p,
+.jc-pattern-explanation,
+.jc-story-hook,
+.jc-source-item p,
+.jc-voice-card > p,
+.jc-reveal-teaching p,
+.jc-prediction-response p {
+  color: #383838 !important;
+  font-size: 1.02rem !important;
+  line-height: 1.68 !important;
+}
+
+.jc-eyebrow,
+.jc-reveal-label,
+.jc-prediction-intro > span,
+.jc-builder-intro > span,
+.jc-pattern-hero > div:first-child > span,
+.jc-pattern-response > div:first-child > span,
+.jc-verse-ref,
+.jc-handoff-scripture > span,
+.jc-pattern-verse span,
+.jc-prediction-memory > span {
+  color: #6a6a6a !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+}
+
+/* YouVersion-like card language: solid white, soft radius, clear border */
+.jc-lesson,
+.jc-pattern-field,
+.jc-pattern-response,
+.jc-prediction-memory,
+.jc-prediction-response,
+.jc-reveal-scripture,
+.jc-builder-pool button,
+.jc-builder-chain > div,
+.jc-story-panel,
+.jc-voice-card,
+.jc-source-item,
+.jc-reflection-your-thought,
+.jc-reflection-teaching,
+.jc-reflection-insight,
+.jc-feedback,
+.jc-thinking,
+.jc-error,
+.jc-choice,
+.jc-source-shelf-toggle,
+.jc-story-back,
+.jc-source-provider,
+.jc-handoff-scripture,
+.jc-handoff-memory,
+.jc-handoff-focus {
+  background: #ffffff !important;
+  border: 1px solid #dfdfdc !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.035) !important;
+  border-radius: 18px !important;
+}
+
+/* Scripture gets priority without looking decorative */
+.jc-verse {
+  background: #ffffff !important;
+  border: 1px solid #ddddda !important;
+  border-left: 4px solid #d86b36 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.03) !important;
+}
+
+.jc-verse blockquote,
+.jc-handoff-scripture blockquote,
+.jc-reveal-scripture blockquote,
+.jc-pattern-verse blockquote {
+  color: #171717 !important;
+  font-size: clamp(1.5rem, 3vw, 2.25rem) !important;
+  line-height: 1.42 !important;
+}
+
+.jc-focus-block,
+.jc-handoff-focus,
+.jc-reveal-focus,
+.jc-builder-chain > div.is-filled,
+.jc-pattern-anchor {
+  background: #fff7f1 !important;
+  border-color: #ead4c5 !important;
+  box-shadow: none !important;
+}
+
+.jc-focus-block > span,
+.jc-handoff-focus > span,
+.jc-reveal-focus > span,
+.jc-focus-phrases strong,
+.jc-handoff-focus > strong {
+  color: #8b4a2a !important;
+}
+
+/* Interactive choices feel like app rows, not tiles */
+.jc-choice,
+.jc-prediction-options button,
+.jc-builder-pool button {
+  color: #181818 !important;
+  background: #ffffff !important;
+  border: 1px solid #dededb !important;
+  box-shadow: none !important;
+}
+
+.jc-choice:hover,
+.jc-prediction-options button:hover,
+.jc-builder-pool button:hover:not(:disabled) {
+  background: #fafafa !important;
+  border-color: #c9c9c5 !important;
+}
+
+.jc-choice.is-selected,
+.jc-prediction-options button.is-selected {
+  color: #151515 !important;
+  background: #fff4ec !important;
+  border-color: #d99570 !important;
+}
+
+/* Buttons: one clear warm action */
+.jc-primary,
+.jc-pattern-trigger {
+  min-height: 46px !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #ffffff !important;
+  background: #d86b36 !important;
+  box-shadow: none !important;
+  font-weight: 760 !important;
+}
+
+.jc-secondary-action,
+.jc-encounter-ghost {
+  color: #2d2d2d !important;
+  background: #ffffff !important;
+  border: 1px solid #d9d9d5 !important;
+  box-shadow: none !important;
+}
+
+/* Forms */
+.jc-response textarea,
+.jc-reflection textarea,
+.jc-pattern-response textarea {
+  color: #171717 !important;
+  background: #ffffff !important;
+  border: 1px solid #d5d5d1 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  font-size: 1rem !important;
+}
+
+.jc-response textarea::placeholder,
+.jc-reflection textarea::placeholder,
+.jc-pattern-response textarea::placeholder {
+  color: #858585 !important;
+}
+
+.jc-reflection-note,
+.jc-response-note,
+.jc-feedback > small,
+.jc-thinking p,
+.jc-pattern-response-foot small,
+.jc-source-item em,
+.jc-source-item > div small,
+.jc-story-meta span,
+.jc-handoff-opening,
+.jc-handoff-bridge {
+  color: #646464 !important;
+}
+
+/* Remove decorative visual noise */
+.jc-pattern-field,
+.jc-reveal-scripture,
+.jc-story-panel,
+.jc-source-viewer {
+  background-image: none !important;
+}
+
+.jc-pattern-number {
+  color: #c8c8c5 !important;
+}
+
+.jc-pattern-verse mark {
+  color: #6f341e !important;
+  background: #ffe4d4 !important;
+  box-shadow: none !important;
+}
+
+/* Media can remain immersive */
+.jc-video-frame,
+.jc-threshold-video-feature,
+.jc-threshold-media-stage,
+.jc-story-media {
+  background: #111111 !important;
+}
+
+/* Mobile spacing closer to a native Bible app */
+@media (max-width: 760px) {
+  .jc-shell {
+    width: calc(100% - 24px) !important;
+    padding-top: 18px !important;
+    padding-bottom: 52px !important;
+  }
+
+  .jc-classroom-bar {
+    padding: 0 12px !important;
+  }
+
+  .jc-move-head h1,
+  .jc-pattern-hero h1,
+  .jc-prediction-intro h1,
+  .jc-builder-intro h1 {
+    font-size: 2rem !important;
+  }
+
+  .jc-body-copy,
+  .jc-teaching-copy p,
+  .jc-handoff-teaching p,
+  .jc-prediction-intro p,
+  .jc-builder-intro p,
+  .jc-reveal-teaching p {
+    font-size: 1rem !important;
+    line-height: 1.64 !important;
+  }
+
+  .jc-lesson,
+  .jc-pattern-field,
+  .jc-pattern-response,
+  .jc-prediction-memory,
+  .jc-prediction-response,
+  .jc-reveal-scripture,
+  .jc-story-panel,
+  .jc-voice-card,
+  .jc-source-item {
+    border-radius: 16px !important;
+  }
+}
