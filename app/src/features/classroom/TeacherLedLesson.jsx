@@ -5,6 +5,7 @@ import { setBibleReaderIntent } from '../../core/bible/bibleReaderIntent';
 import { getInstructionalMove, getStandardProgress, updateLearningExperience, saveLearningState } from '../../core/classroom/learningEngine';
 import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, restartTeaching } from '../../core/classroom/teacherLedEngine';
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
+import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import DeepDiveSheet from './DeepDiveSheet';
 import LessonIllustration from './LessonIllustration';
 import LessonActivity, { LessonVisual, WorkedExample } from './LessonActivity';
@@ -19,6 +20,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const [error,setError]=useState('');
  const [showGuide,setShowGuide]=useState(false);
  const [showRestart,setShowRestart]=useState(false);
+ const [mediaAnswer,setMediaAnswer]=useState('');
  const restartRef=useRef(null);
  useEffect(()=>{if(showRestart)restartRef.current?.focus();},[showRestart]);
  const abortRef=useRef(null);
@@ -34,6 +36,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const ready=written?Boolean(draft.responseText?.trim()):reasoning?Boolean(draft.claimId && draft.reasonId):matching?move.interaction.items.every(item=>draft.placements?.[item.id]):Boolean(draft.selectedChoiceId);
  const percent=getStandardProgress(content,state);
  const mainMoves=content.instructionalMoves.filter(m=>!m.progressOptional && m.type!=='complete');
+ const shemaVideo=getLessonMedia(content).find(source=>source.id==='unpacked-shema');
  const currentIndex=mainMoves.findIndex(m=>m.id===move.id);
  const letters=['A','B','C'];
  useEffect(()=>()=>abortRef.current?.abort(),[]);
@@ -99,6 +102,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {move.illustration && <LessonIllustration key={move.id} kind={move.illustration}/>}
     {!written && move.scripture?.length>0 && <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>}
+    {move.id==='shema-show' && shemaVideo && <section className="tl-media" aria-label="Optional historical context video"><div><span className="tl-small">Historical lens · Jewish tradition</span><h2>{shemaVideo.title}</h2><p>{shemaVideo.purpose}</p><small>{shemaVideo.duration} · Optional viewing · Source: {shemaVideo.provider}</small></div><div className="tl-media-frame"><iframe src={shemaVideo.embedUrl} title={shemaVideo.videoTitle || shemaVideo.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowFullScreen sandbox="allow-scripts allow-same-origin allow-presentation" /></div><fieldset><legend>{shemaVideo.lessonCheck.title}</legend><p>{shemaVideo.lessonCheck.prompt}</p>{shemaVideo.lessonCheck.choices.map(choice=><label key={choice.id}><input type="radio" name="shema-video-check" value={choice.id} checked={mediaAnswer===choice.id} onChange={()=>setMediaAnswer(choice.id)} />{choice.label}</label>)}{mediaAnswer && <p className={mediaAnswer===shemaVideo.lessonCheck.answerId?'tl-media-feedback is-correct':'tl-media-feedback'} role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}</fieldset></section>}
     {move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
     {move.prompt && <section className="tl-question" aria-label="Check your understanding"><p className="tl-small">{written?'Your explanation':move.id==='check'?'A fresh situation':'Let me check your understanding'}</p><h2>{move.prompt}</h2>
      {(matching || reasoning) && <LessonActivity move={move} draft={draft} feedback={feedback} onChange={changeDraft}/>}

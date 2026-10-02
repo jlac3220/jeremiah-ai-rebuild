@@ -58,12 +58,13 @@ for(const resource of classroomResources) {
  assert.ok(resource.standards.length<=2,'Resources need intentional, limited placement');
  for(const id of resource.standards) assert.ok(classroomContentRegistry[id]);
 }
-const shemaMedia=getLessonMedia(classroomContentRegistry['OG.1.1.18']);
-assert.deepEqual(shemaMedia.map(item=>item.id),['unpacked-shema'],'The Shema context video is placed only in its matching lesson');
+const shemaMedia=getLessonMedia(classroomContentRegistry['OG.1.LESSON.18']);
+assert.deepEqual(shemaMedia.map(item=>item.id),['unpacked-shema'],'The Shema context video is placed in the combined lesson learners open from the OG.1 room');
 assert.equal(shemaMedia[0].review.doctrinalAlignment,'context-only','Context video must not be treated as the doctrinal authority');
 assert.match(shemaMedia[0].embedUrl,/youtube-nocookie\.com\/embed\/8bN1LfiNQSk/,'The reviewed clip uses an embedded privacy-enhanced player');
 assert.equal(shemaMedia[0].lessonCheck.answerId,'practice','The in-app check reinforces the source’s historical-context role');
-const otherOGLesson=Object.values(classroomContentRegistry).find(content=>content.studyId==='OG' && content.standardId!=='OG.1.1.18');
+assert.deepEqual(getLessonMedia(classroomContentRegistry['OG.1.1.18']),[],'The Shema context video is not duplicated in the legacy standalone lesson');
+const otherOGLesson=Object.values(classroomContentRegistry).find(content=>content.studyId==='OG' && content.standardId!=='OG.1.1.18' && content.standardId!=='OG.1.LESSON.18');
 assert.ok(otherOGLesson,'Another OG lesson exists for checking media placement');
 assert.deepEqual(getLessonMedia(otherOGLesson),[],'The Shema video must not be repeated in other domains');
 const previousKey=process.env.OPENAI_API_KEY;
