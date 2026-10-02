@@ -1,4 +1,4 @@
-import { advanceUnscoredMove, recordAttempt, resolveNextMoveId, updateLearningExperience, markLearningMilestones } from './learningEngine.js';
+import { createLearningState, advanceUnscoredMove, recordAttempt, resolveNextMoveId, updateLearningExperience, markLearningMilestones } from './learningEngine.js';
 
 export function evaluateTeachingChoice(move, learnerResponse) {
  if (move.interaction?.type === 'reasoning') {
@@ -66,4 +66,12 @@ export function continueTeaching(state, content) {
  const independentRetry=content.coveredStandards && nextId===move.id && retryDraft?.usedSupport && feedback.decision.supportedPass;
  const next=updateLearningExperience({...state,currentMoveId:nextId},{teachingDecision:null,...(independentRetry?{drafts:{[move.id]:{...retryDraft,supportedResponse:retryDraft.responseText,responseText:'',usedSupport:false}}}: {})});
  return nextId==='complete'?markLearningMilestones(next,['complete']):next;
+}
+
+export function restartTeaching(content, state) {
+ const fresh=createLearningState(content,'review');
+ const archived={currentMoveId:state.currentMoveId,drafts:state.experience?.drafts || {},milestones:state.milestones || {},standardEvidence:state.experience?.standardEvidence || {}};
+ return {...fresh,
+  milestones:{...fresh.milestones,mastery:state.presetId==='review' && Boolean(state.milestones?.complete || state.milestones?.mastery)},
+  experience:{...fresh.experience,restartAt:Date.now(),earlierLesson:archived,previousRuns:[...(state.experience?.previousRuns || []),...(state.experience?.earlierLesson?[state.experience.earlierLesson]:[])]}};
 }

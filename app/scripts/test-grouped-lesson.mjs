@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import content from '../src/core/classroom/content/OG_1_LESSON.js';
 import {createLearningState,saveLearningState,loadLearningState} from '../src/core/classroom/learningEngine.js';
-import {evaluateTeachingChoice,saveTeachingDecision,continueTeaching} from '../src/core/classroom/teacherLedEngine.js';
+import {evaluateTeachingChoice,saveTeachingDecision,continueTeaching,restartTeaching} from '../src/core/classroom/teacherLedEngine.js';
 import {getLearningDashboard} from '../src/core/classroom/learningDashboard.js';
 import {teachWithJeremiah} from '../server/teacherCore.mjs';
 const saved=new Map();globalThis.window={localStorage:{getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value)}};
@@ -58,4 +58,12 @@ saveLearningState(state);assert.equal(loadLearningState(content).currentMoveId,'
 const dashboard=getLearningDashboard();assert.equal(dashboard.standards.filter(s=>s.content.domainId==='OG.1').length,1);
 assert.equal(dashboard.mastered,1);
 assert.equal(loadLearningState(content,'review').currentMoveId,'learn');
+const partiallyDone={...state,currentMoveId:'prayer-challenge',presetId:'direct',experience:{...state.experience,drafts:{'shema-try':{responseText:'Keep this answer'}}}};
+const restarted=restartTeaching(content,partiallyDone);
+assert.equal(restarted.currentMoveId,'learn');assert.equal(restarted.experience.drafts['shema-try'],undefined);
+assert.equal(restarted.experience.earlierLesson.drafts['shema-try'].responseText,'Keep this answer');
+const restartedAgain=restartTeaching(content,{...restarted,experience:{...restarted.experience,drafts:{'isaiah-try':{responseText:'Second saved answer'}}}});
+assert.equal(restartedAgain.experience.previousRuns[0].drafts['shema-try'].responseText,'Keep this answer');
+assert.equal(restartedAgain.experience.earlierLesson.drafts['isaiah-try'].responseText,'Second saved answer');
+assert.equal(restartTeaching(content,{...state,presetId:'review',milestones:{...state.milestones,complete:true}}).milestones.mastery,true);
 console.log('Grouped OG.1: five standards, all three teaching phases, twenty rubric criteria, wrong answers, supported attempts, per-standard evidence, resume and dashboard deduplication passed. AI grading used fixtures, not a live model.');

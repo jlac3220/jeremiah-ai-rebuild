@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { ROUTES } from '../../app/routes';
 import { setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
 import { setBibleReaderIntent } from '../../core/bible/bibleReaderIntent';
-import { getInstructionalMove, getStandardProgress, updateLearningExperience, createLearningState } from '../../core/classroom/learningEngine';
-import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching } from '../../core/classroom/teacherLedEngine';
+import { getInstructionalMove, getStandardProgress, updateLearningExperience, saveLearningState } from '../../core/classroom/learningEngine';
+import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, restartTeaching } from '../../core/classroom/teacherLedEngine';
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import DeepDiveSheet from './DeepDiveSheet';
 import LessonIllustration from './LessonIllustration';
@@ -18,6 +18,9 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [showGuide,setShowGuide]=useState(false);
+ const [showRestart,setShowRestart]=useState(false);
+ const restartRef=useRef(null);
+ useEffect(()=>{if(showRestart)restartRef.current?.focus();},[showRestart]);
  const abortRef=useRef(null);
  const headingRef=useRef(null);
  const feedbackRef=useRef(null);
@@ -73,22 +76,24 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
   setDetail({kind:'notes',provider:'Your lesson notes',title:'Keep the reasoning together',summary:learned.length?learned.map(m=>`${m.title}: ${m.teaching.at(-1)}`).join('\n\n'):content.truthStatement});
  }
  function restart(){
+  abortRef.current?.abort();
+  setThinking(false);setError('');setShowGuide(false);setDetail(null);setShowRestart(false);
+  saveLearningState(state);
   setActiveClassroomSessionPreset('review');
-  onStateChange(current=>{
-   const fresh=createLearningState(content,'review');
-   return {...fresh,milestones:{...fresh.milestones,mastery:current.presetId==='review' && Boolean(current.milestones.mastery)},experience:{...fresh.experience,earlierLesson:current.experience?.earlierLesson || {drafts:current.experience?.drafts}}};
-  });
+  onStateChange(current=>restartTeaching(content,current));
  }
+
  return <div className="tl-page">
-  <header className="tl-header"><button type="button" aria-label="Leave lesson" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>←</button><span>JEREMIAH <small>{content.studyTitle}</small></span><button type="button" onClick={showNotes}>Lesson notes</button></header>
+  <header className="tl-header"><button type="button" aria-label="Leave lesson" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>←</button><span>JEREMIAH <small>{content.studyTitle}</small></span><div className="tl-header-actions"><button type="button" onClick={showNotes}>Lesson notes</button><button type="button" aria-expanded={showRestart} onClick={()=>setShowRestart(value=>!value)}>Start from the beginning</button></div></header>
   <div className="tl-progress" role="progressbar" aria-label="Lesson progress" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}><span style={{width:`${percent}%`}}/></div>
   <main className="tl-main">
+   {showRestart && <section className="tl-restart" role="group" aria-label="Restart lesson" tabIndex={-1} ref={restartRef}><h2>Start this lesson again?</h2><p>You’ll return to the opening in a fresh review. Your earlier answers and earned completion will be kept.</p><button type="button" className="tl-primary" onClick={restart}>Start from the beginning →</button><button type="button" className="tl-text-button" onClick={()=>setShowRestart(false)}>Keep my place</button></section>}
    <div className="tl-step"><span>{complete?'Lesson reflection':move.progressOptional?'A closer look':`${String(currentIndex+1).padStart(2,'0')} / ${String(mainMoves.length).padStart(2,'0')}`}</span><span>{move.phase || move.eyebrow || (move.progressOptional?'Let’s approach it another way':written?'Put the reasoning into words':'Build your understanding')}</span></div>
    <h1 ref={headingRef} tabIndex={-1}>{move.title}</h1>
-   {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">This lesson now has a guided teaching sequence. Your earlier written answers are saved. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:Object.values(state.experience.earlierLesson.drafts).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
+   {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">Your earlier written answers are saved while you work through this lesson. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:[state.experience.earlierLesson,...(state.experience.previousRuns || [])].flatMap(run=>Object.values(run.drafts || {})).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
-    {move.visual && <LessonVisual key={move.id} kind={move.visual}/>}
+    {move.visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     {move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}
     {move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
     {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
