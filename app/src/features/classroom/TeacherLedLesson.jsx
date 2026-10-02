@@ -7,7 +7,7 @@ import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching } from '
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import DeepDiveSheet from './DeepDiveSheet';
 import LessonIllustration from './LessonIllustration';
-import LessonActivity, { LessonVisual } from './LessonActivity';
+import LessonActivity, { LessonVisual, WorkedExample } from './LessonActivity';
 import './TeacherLedLesson.css';
 
 export default function TeacherLedLesson({ content, state, onStateChange, onNavigate }) {
@@ -27,7 +27,8 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const written=['free_response','mastery_response'].includes(move.type);
  const complete=move.type==='complete';
  const matching=move.interaction?.type==='match';
- const ready=written?Boolean(draft.responseText?.trim()):matching?move.interaction.items.every(item=>draft.placements?.[item.id]):Boolean(draft.selectedChoiceId);
+ const reasoning=move.interaction?.type==='reasoning';
+ const ready=written?Boolean(draft.responseText?.trim()):reasoning?Boolean(draft.claimId && draft.reasonId):matching?move.interaction.items.every(item=>draft.placements?.[item.id]):Boolean(draft.selectedChoiceId);
  const percent=getStandardProgress(content,state);
  const mainMoves=content.instructionalMoves.filter(m=>!m.progressOptional && m.type!=='complete');
  const currentIndex=mainMoves.findIndex(m=>m.id===move.id);
@@ -48,7 +49,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  }
  async function submit(){
   if(thinking || feedback || !ready) return;
-  const learnerResponse=written?{text:draft.responseText.trim()}:matching?{placements:draft.placements}:{choiceIds:[draft.selectedChoiceId]};
+  const learnerResponse=written?{text:draft.responseText.trim()}:reasoning?{claimId:draft.claimId,reasonId:draft.reasonId}:matching?{placements:draft.placements}:{choiceIds:[draft.selectedChoiceId]};
   setError('');
   let decision=evaluateTeachingChoice(move,learnerResponse);
   if(!decision){
@@ -89,16 +90,17 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
     {move.visual && <LessonVisual key={move.id} kind={move.visual}/>}
     {move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}
+    {move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
     {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {move.illustration && <LessonIllustration key={move.id} kind={move.illustration}/>}
     {!written && move.scripture?.length>0 && <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>}
     {move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
     {move.prompt && <section className="tl-question" aria-label="Check your understanding"><p className="tl-small">{written?'Your explanation':move.id==='check'?'A fresh situation':'Let me check your understanding'}</p><h2>{move.prompt}</h2>
-     {matching && <LessonActivity move={move} draft={draft} feedback={feedback} onChange={changeDraft}/>}
-     {!written && !matching && <div className="tl-choices" role="group" aria-label="Choose an explanation">{move.choices.map((choice,i)=><button type="button" key={choice.id} disabled={Boolean(feedback)} aria-pressed={draft.selectedChoiceId===choice.id} onClick={()=>changeDraft({selectedChoiceId:choice.id})}><span>{letters[i]}</span><span>{choice.label}</span></button>)}</div>}
+     {(matching || reasoning) && <LessonActivity move={move} draft={draft} feedback={feedback} onChange={changeDraft}/>}
+     {!written && !matching && !reasoning && <div className="tl-choices" role="group" aria-label="Choose an explanation">{move.choices.map((choice,i)=><button type="button" key={choice.id} disabled={Boolean(feedback)} aria-pressed={draft.selectedChoiceId===choice.id} onClick={()=>changeDraft({selectedChoiceId:choice.id})}><span>{letters[i]}</span><span>{choice.label}</span></button>)}</div>}
      {written && <><label className="tl-response">Your answer<textarea rows={7} value={draft.responseText || ''} disabled={thinking || Boolean(feedback)} onChange={event=>changeDraft({responseText:event.target.value})} placeholder="Explain your reasoning. Show how the passage supports it."/></label>
       <button type="button" className="tl-text-button" aria-expanded={showGuide} onClick={()=>{if(!showGuide && content.coveredStandards)changeDraft({usedSupport:true});setShowGuide(value=>!value);}}>{showGuide?'Close the support':'Need support before you answer?'}</button>
-      {showGuide && <aside className="tl-support"><p>{content.coveredStandards?'Read the passages in context. Explain how their wording supports the claim, address the actual objection fairly, and distinguish each part of the question. This support is practice; a later attempt without this drawer establishes independent understanding.':move.id==='defend'?'Start with the claim you are answering. Explain the moral standard, the damage sin causes, and the need for God’s rescue. Choose a passage and explain its connection.':'Work through the question one part at a time. Name the truth, explain the distinction, and connect the passage to your reasoning.'}</p>{move.scripture.map(item=><button type="button" key={item.reference} onClick={()=>openScripture(item)}>{item.reference} →</button>)}</aside>}
+      {showGuide && <aside className="tl-support"><p>{content.coveredStandards?'Read the passages in context. Explain how their wording supports the claim, address the actual objection fairly, and distinguish each part of the question. This support is practice; a later attempt without this drawer establishes independent understanding.':move.id==='defend'?'Start with the claim you are answering. Explain the moral standard, the damage sin causes, and the need for God’s rescue. Choose a passage and explain its connection.':'Work through the question one part at a time. Name the truth, explain the distinction, and connect the passage to your reasoning.'}</p>{move.supportSteps && <ol>{move.supportSteps.map(step=><li key={step}>{step}</li>)}</ol>}{move.scripture.map(item=><button type="button" key={item.reference} onClick={()=>openScripture(item)}>{item.reference} →</button>)}</aside>}
      </>}
      {!feedback && <button type="button" className="tl-primary" disabled={thinking || !ready} onClick={submit}>{thinking?'Reading your explanation…':written?'Discuss my explanation':'Discuss my answer'} {!thinking && '→'}</button>}
     </section>}

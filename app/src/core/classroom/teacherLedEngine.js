@@ -1,6 +1,18 @@
 import { advanceUnscoredMove, recordAttempt, resolveNextMoveId, updateLearningExperience, markLearningMilestones } from './learningEngine.js';
 
 export function evaluateTeachingChoice(move, learnerResponse) {
+ if (move.interaction?.type === 'reasoning') {
+  const task=move.interaction;
+  const claim=task.claims.find(item=>item.id===learnerResponse?.claimId);
+  const reason=task.reasons.find(item=>item.id===learnerResponse?.reasonId);
+  const correctClaim=claim?.id===task.answer.claim;
+  const correctReason=reason?.id===task.answer.reason;
+  const strong=Boolean(claim && reason && correctClaim && correctReason);
+  return {verdict:strong?'strong':'weak',strategy:strong?'affirm_and_deepen':'clarify',source:'lesson',
+   teacherMessage:strong?'Your conclusion and its supporting reason fit together. Keep that reasoning when the example changes.':correctClaim?'Your conclusion fits, but its supporting reason needs work.':correctReason?'You found relevant evidence. Reconsider the conclusion you connected to it.':'Reconsider both the conclusion and the evidence used to support it.',
+   itemResults:[{id:'claim',correct:Boolean(correctClaim),message:claim?.feedback || 'Choose a conclusion.'},{id:'reason',correct:Boolean(correctReason),message:reason?.feedback || 'Choose a supporting reason.'}],
+   evidenceObserved:[],misconceptionIds:[]};
+ }
  if (move.interaction?.type === 'match') {
   const placements=learnerResponse?.placements || {};
   const results=move.interaction.items.map(item=>({id:item.id,correct:placements[item.id]===item.answer,message:item.explanation}));

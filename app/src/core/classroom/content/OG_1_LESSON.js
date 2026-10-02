@@ -1,3 +1,4 @@
+import { deepenOG1 } from './OG_1_deeper.js';
 import { curriculumContentRegistry, CURRICULUM_STUDIES } from './curriculumContent.js';
 const base = curriculumContentRegistry['OG.1.1.18'];
 const standards = CURRICULUM_STUDIES.find(s=>s.id==='OG').standards.filter(s=>s.domain===1);
@@ -91,6 +92,7 @@ for(const [index,prefix] of ['shema','isaiah','continuity','distinction','devoti
 // Work through all connected concepts before asking for their independent synthesis.
 const guidedRoute={'shema-guide':'isaiah-show','isaiah-guide':'continuity-show','continuity-guide':'distinction-show','distinction-guide':'devotion-show','devotion-guide':'shema-try','shema-try':'isaiah-try','isaiah-try':'continuity-try','continuity-try':'distinction-try','distinction-try':'devotion-try'};
 for(const [id,next] of Object.entries(guidedRoute))moves.find(m=>m.id===id).next.strong=next;
+deepenOG1(moves);
 const orderedMoves=[];
 let cursor='learn';
 while(cursor){const move=moves.find(m=>m.id===cursor);orderedMoves.push(move);cursor=move.next?.continue || move.next?.strong;}

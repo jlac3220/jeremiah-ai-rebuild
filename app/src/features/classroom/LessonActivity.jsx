@@ -25,6 +25,7 @@ export function LessonVisual({kind}){
  return <figure className="la-comparison"><span className="la-kicker">Locate the actual disagreement</span><h2>Both say “one God.”</h2><div><section><h3>Trinitarian confession</h3><p>One divine essence</p><strong>Three eternal persons</strong></section><section><h3>Oneness confession</h3><p>One undivided God</p><strong>No eternal division into persons</strong></section></div><figcaption>Now explain the incarnation. A fair comparison must preserve both the actual disagreement and Jesus’ real humanity.</figcaption></figure>;
 }
 export default function LessonActivity({move,draft,feedback,onChange}){
+ if(move.interaction.type==='reasoning')return <div className="la-reasoning">{[['claim','claimId','claims','claimPrompt'],['reason','reasonId','reasons','reasonPrompt']].map(([id,field,options,prompt])=>{const result=feedback?.itemResults?.find(r=>r.id===id);return <fieldset key={id} disabled={Boolean(feedback)}><legend>{move.interaction[prompt]}</legend>{move.interaction[options].map(option=><button type="button" key={option.id} aria-pressed={draft[field]===option.id} onClick={()=>onChange({[field]:option.id})}>{option.label}</button>)}{result && <p className={result.correct?'la-correct':'la-rethink'}>{result.message}</p>}</fieldset>;})}</div>;
  const {items,options}=move.interaction;
  const results=feedback?.itemResults || [];
  const trail=move.id==='continuity-guide';
@@ -36,4 +37,10 @@ export default function LessonActivity({move,draft,feedback,onChange}){
    {result && <p className={result.correct?'la-correct':'la-rethink'}><strong>{result.correct?'Connected: ':'Reconsider: '}</strong>{result.message}</p>}
   </fieldset>;})}
  </div>;
+}
+
+export function WorkedExample({move,draft,onChange}) {
+ const steps=move.workedExample.steps;
+ const current=Math.min(draft.workedStep || 0,steps.length-1);
+ return <section className="la-worked" aria-label="A worked example"><p className="la-kicker">Think it through with Jeremiah</p><h2>{move.workedExample.title}</h2><div className="la-worked-tabs" role="group" aria-label="Reasoning steps">{steps.map((step,i)=><button type="button" key={step.label} aria-pressed={current===i} onClick={()=>onChange({workedStep:i})}>{i+1} · {step.label}</button>)}</div><div aria-live="polite"><h3>{steps[current].label}</h3><p>{steps[current].text}</p></div>{current<steps.length-1 && <button type="button" onClick={()=>onChange({workedStep:current+1})}>Follow the reasoning →</button>}<small>Explore at your pace. These steps model the reasoning; opening them does not earn assessment credit.</small></section>;
 }

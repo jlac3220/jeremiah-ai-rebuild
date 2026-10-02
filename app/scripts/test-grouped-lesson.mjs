@@ -14,7 +14,23 @@ let state=createLearningState(content);
 while(state.currentMoveId!=='complete'){
  const move=content.instructionalMoves.find(m=>m.id===state.currentMoveId);
  if(move.type==='teach'){state=continueTeaching(state,content);continue;}
- if(move.interaction){
+ if(move.interaction?.type==='reasoning'){
+  const task=move.interaction;
+  for(const claim of task.claims)for(const reason of task.reasons){
+   const response=evaluateTeachingChoice(move,{claimId:claim.id,reasonId:reason.id});
+   const correct=claim.id===task.answer.claim && reason.id===task.answer.reason;
+   assert.equal(response.verdict,correct?'strong':'weak','A correct conclusion with a wrong reason cannot pass');
+   assert.equal(response.evidenceObserved.length,0,'Practice is not independent mastery');
+   const attempted=saveTeachingDecision(state,content,move,response);
+   saveLearningState(attempted);const restored=loadLearningState(content);
+   assert.deepEqual(restored.experience.teachingDecision.decision.itemResults,response.itemResults);
+   assert.equal(continueTeaching(restored,content).currentMoveId,correct?move.next.strong:move.id);
+  }
+  assert.equal(evaluateTeachingChoice(move,{}).verdict,'weak');
+  const learnerResponse={claimId:task.answer.claim,reasonId:task.answer.reason};
+  const api=await teachWithJeremiah({standardId:content.standardId,moveId:move.id,learnerResponse});assert.equal(api.verdict,'strong');
+  state=saveTeachingDecision(state,content,move,api);
+ }else if(move.interaction){
   const missing=evaluateTeachingChoice(move,{placements:{}});assert.equal(missing.verdict,'weak');
   let wrong=saveTeachingDecision(state,content,move,missing);wrong=continueTeaching(wrong,content);assert.equal(wrong.currentMoveId,move.id);assert.equal(wrong.evidenceIds.length,state.evidenceIds.length);
   const placements=Object.fromEntries(move.interaction.items.map(i=>[i.id,i.answer]));
