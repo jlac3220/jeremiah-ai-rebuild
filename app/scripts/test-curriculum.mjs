@@ -61,7 +61,7 @@ for(const resource of classroomResources) {
 const shemaMedia=getLessonMedia(classroomContentRegistry['OG.1.1.18']);
 assert.deepEqual(shemaMedia.map(item=>item.id),['unpacked-shema'],'The Shema context video is placed only in its matching lesson');
 assert.equal(shemaMedia[0].review.doctrinalAlignment,'context-only','Context video must not be treated as the doctrinal authority');
-assert.match(shemaMedia[0].embedUrl,/youtube-nocookie\.com\/embed\/8bN1LfiNQSk/,'The reviewed clip plays in an embedded privacy-enhanced player');
+assert.match(shemaMedia[0].embedUrl,/youtube-nocookie\.com\/embed\/8bN1LfiNQSk/,'The reviewed clip uses an embedded privacy-enhanced player');
 assert.equal(shemaMedia[0].lessonCheck.answerId,'practice','The in-app check reinforces the source’s historical-context role');
 const otherOGLesson=Object.values(classroomContentRegistry).find(content=>content.studyId==='OG' && content.standardId!=='OG.1.1.18');
 assert.ok(otherOGLesson,'Another OG lesson exists for checking media placement');
