@@ -2,7 +2,8 @@ import { classroomContentRegistry } from './content/classroomContentRegistry.js'
 import { loadLearningState, getStandardProgress, getInstructionalMove } from './learningEngine.js';
 
 export function getLearningDashboard() {
-  const standards = Object.values(classroomContentRegistry).map((content) => {
+  const covered = new Set(Object.values(classroomContentRegistry).flatMap(c=>c.coveredStandards?.map(s=>s.id) || []));
+  const standards = Object.values(classroomContentRegistry).filter(c=>!covered.has(c.standardId)).map((content) => {
     const paths = Object.keys(content.presets || {}).map((preset) => {
       const state = loadLearningState(content, preset);
       const started = Boolean(state.milestones.started || state.completedMoveIds.length || state.experience.updatedAt || Object.keys(state.attemptsByMove).length);

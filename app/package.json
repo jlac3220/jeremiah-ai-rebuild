@@ -15,7 +15,8 @@
     "test:bible": "node scripts/test-bible-parser.mjs",
     "test:dashboard": "node scripts/test-learning-dashboard.mjs",
     "test:curriculum": "node scripts/test-curriculum.mjs",
-    "test:teacher-led": "node scripts/test-teacher-led.mjs"
+    "test:teacher-led": "node scripts/test-teacher-led.mjs",
+    "test:grouped": "node scripts/test-grouped-lesson.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

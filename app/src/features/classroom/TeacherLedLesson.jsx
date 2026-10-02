@@ -7,6 +7,7 @@ import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching } from '
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import DeepDiveSheet from './DeepDiveSheet';
 import LessonIllustration from './LessonIllustration';
+import LessonActivity, { LessonVisual } from './LessonActivity';
 import './TeacherLedLesson.css';
 
 export default function TeacherLedLesson({ content, state, onStateChange, onNavigate }) {
@@ -25,6 +26,8 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  currentMoveRef.current=move.id;
  const written=['free_response','mastery_response'].includes(move.type);
  const complete=move.type==='complete';
+ const matching=move.interaction?.type==='match';
+ const ready=written?Boolean(draft.responseText?.trim()):matching?move.interaction.items.every(item=>draft.placements?.[item.id]):Boolean(draft.selectedChoiceId);
  const percent=getStandardProgress(content,state);
  const mainMoves=content.instructionalMoves.filter(m=>!m.progressOptional && m.type!=='complete');
  const currentIndex=mainMoves.findIndex(m=>m.id===move.id);
@@ -44,8 +47,8 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
   onNavigate(ROUTES.BIBLE_SUPPORT);
  }
  async function submit(){
-  if(thinking || feedback || (written?!draft.responseText?.trim():!draft.selectedChoiceId)) return;
-  const learnerResponse=written?{text:draft.responseText.trim()}:{choiceIds:[draft.selectedChoiceId]};
+  if(thinking || feedback || !ready) return;
+  const learnerResponse=written?{text:draft.responseText.trim()}:matching?{placements:draft.placements}:{choiceIds:[draft.selectedChoiceId]};
   setError('');
   let decision=evaluateTeachingChoice(move,learnerResponse);
   if(!decision){
@@ -66,7 +69,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  }
  function showNotes(){
   const learned=mainMoves.filter(m=>state.completedMoveIds.includes(m.id) && m.teaching?.length);
-  setDetail({kind:'notes',provider:'Your lesson notes',title:'Keep the reasoning together',summary:learned.length?learned.map(m=>`${m.title}: ${m.teaching.at(-1)}`).join('\n\n'):'We are beginning with the difference between public reputation and a person’s relationship with God.'});
+  setDetail({kind:'notes',provider:'Your lesson notes',title:'Keep the reasoning together',summary:learned.length?learned.map(m=>`${m.title}: ${m.teaching.at(-1)}`).join('\n\n'):content.truthStatement});
  }
  function restart(){
   setActiveClassroomSessionPreset('review');
@@ -76,37 +79,41 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
   });
  }
  return <div className="tl-page">
-  <header className="tl-header"><button type="button" aria-label="Leave lesson" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>←</button><span>JEREMIAH <small>New Birth</small></span><button type="button" onClick={showNotes}>Lesson notes</button></header>
+  <header className="tl-header"><button type="button" aria-label="Leave lesson" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>←</button><span>JEREMIAH <small>{content.studyTitle}</small></span><button type="button" onClick={showNotes}>Lesson notes</button></header>
   <div className="tl-progress" role="progressbar" aria-label="Lesson progress" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}><span style={{width:`${percent}%`}}/></div>
   <main className="tl-main">
-   <div className="tl-step"><span>{complete?'Lesson reflection':move.progressOptional?'A closer look':`${String(currentIndex+1).padStart(2,'0')} / ${String(mainMoves.length).padStart(2,'0')}`}</span><span>{move.eyebrow || (move.progressOptional?'Let’s approach it another way':written?'Put the reasoning into words':'Build your understanding')}</span></div>
+   <div className="tl-step"><span>{complete?'Lesson reflection':move.progressOptional?'A closer look':`${String(currentIndex+1).padStart(2,'0')} / ${String(mainMoves.length).padStart(2,'0')}`}</span><span>{move.phase || move.eyebrow || (move.progressOptional?'Let’s approach it another way':written?'Put the reasoning into words':'Build your understanding')}</span></div>
    <h1 ref={headingRef} tabIndex={-1}>{move.title}</h1>
    {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">This lesson now has a guided teaching sequence. Your earlier written answers are saved. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:Object.values(state.experience.earlierLesson.drafts).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
+    {move.visual && <LessonVisual key={move.id} kind={move.visual}/>}
     {move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}
+    {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {move.illustration && <LessonIllustration key={move.id} kind={move.illustration}/>}
     {!written && move.scripture?.length>0 && <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>}
     {move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
     {move.prompt && <section className="tl-question" aria-label="Check your understanding"><p className="tl-small">{written?'Your explanation':move.id==='check'?'A fresh situation':'Let me check your understanding'}</p><h2>{move.prompt}</h2>
-     {!written && <div className="tl-choices" role="group" aria-label="Choose an explanation">{move.choices.map((choice,i)=><button type="button" key={choice.id} disabled={Boolean(feedback)} aria-pressed={draft.selectedChoiceId===choice.id} onClick={()=>changeDraft({selectedChoiceId:choice.id})}><span>{letters[i]}</span><span>{choice.label}</span></button>)}</div>}
+     {matching && <LessonActivity move={move} draft={draft} feedback={feedback} onChange={changeDraft}/>}
+     {!written && !matching && <div className="tl-choices" role="group" aria-label="Choose an explanation">{move.choices.map((choice,i)=><button type="button" key={choice.id} disabled={Boolean(feedback)} aria-pressed={draft.selectedChoiceId===choice.id} onClick={()=>changeDraft({selectedChoiceId:choice.id})}><span>{letters[i]}</span><span>{choice.label}</span></button>)}</div>}
      {written && <><label className="tl-response">Your answer<textarea rows={7} value={draft.responseText || ''} disabled={thinking || Boolean(feedback)} onChange={event=>changeDraft({responseText:event.target.value})} placeholder="Explain your reasoning. Show how the passage supports it."/></label>
-      <button type="button" className="tl-text-button" aria-expanded={showGuide} onClick={()=>setShowGuide(value=>!value)}>{showGuide?'Close the support':'Need support before you answer?'}</button>
-      {showGuide && <aside className="tl-support"><p>{move.id==='defend'?'Start with the claim you are answering. Explain the moral standard, the damage sin causes, and the need for God’s rescue. Choose a passage and explain its connection.':'Work through the question one part at a time. Name the truth, explain the distinction, and connect the passage to your reasoning.'}</p>{move.scripture.map(item=><button type="button" key={item.reference} onClick={()=>openScripture(item)}>{item.reference} →</button>)}</aside>}
+      <button type="button" className="tl-text-button" aria-expanded={showGuide} onClick={()=>{if(!showGuide && content.coveredStandards)changeDraft({usedSupport:true});setShowGuide(value=>!value);}}>{showGuide?'Close the support':'Need support before you answer?'}</button>
+      {showGuide && <aside className="tl-support"><p>{content.coveredStandards?'Read the passages in context. Explain how their wording supports the claim, address the actual objection fairly, and distinguish each part of the question. This support is practice; a later attempt without this drawer establishes independent understanding.':move.id==='defend'?'Start with the claim you are answering. Explain the moral standard, the damage sin causes, and the need for God’s rescue. Choose a passage and explain its connection.':'Work through the question one part at a time. Name the truth, explain the distinction, and connect the passage to your reasoning.'}</p>{move.scripture.map(item=><button type="button" key={item.reference} onClick={()=>openScripture(item)}>{item.reference} →</button>)}</aside>}
      </>}
-     {!feedback && <button type="button" className="tl-primary" disabled={thinking || (written?!draft.responseText?.trim():!draft.selectedChoiceId)} onClick={submit}>{thinking?'Reading your explanation…':written?'Discuss my explanation':'Discuss my answer'} {!thinking && '→'}</button>}
+     {!feedback && <button type="button" className="tl-primary" disabled={thinking || !ready} onClick={submit}>{thinking?'Reading your explanation…':written?'Discuss my explanation':'Discuss my answer'} {!thinking && '→'}</button>}
     </section>}
     {thinking && <p role="status" className="tl-saved-note">Your explanation is being assessed against this lesson’s Scripture and learning goals.</p>}
     {error && <p className="tl-error" role="alert">{error}</p>}
     {feedback && <section ref={feedbackRef} tabIndex={-1} aria-label="Jeremiah’s feedback" className={`tl-feedback ${feedback.verdict==='strong'?'is-understood':'is-teaching'}`} aria-live="polite"><span className="tl-small">{feedback.source==='fallback' && written?'Assessment unavailable':'Jeremiah’s response'}</span><p>{feedback.teacherMessage}</p>{feedback.followUpPrompt && <p className="tl-follow-up">{feedback.followUpPrompt}</p>}<button type="button" className="tl-primary" onClick={next}>{feedback.verdict==='strong'?(move.id==='defend'?'See what you have established':'Build on that understanding'):written?'Develop my explanation':move.next.weak===move.id?'Reconsider my answer':'Work through another example'} →</button></section>}
    </>}
-   {complete && <section className="tl-complete"><p className="tl-teaching">{state.experience?.earlierCompletion?'Your completion from the earlier version is saved. You can revisit this lesson through the new teaching sequence.':'You traced the moral boundary, distinguished wrongdoing from feelings and limitation, and connected guilt, corruption, and separation to the need for God’s saving work.'}</p>
-    <h2>Keep these connections with you</h2><ul><li>Sin is evaluated against God’s will.</li><li>Its consequences reach accountability, the inward person, and relationship with God.</li><li>The need for rescue includes every person.</li><li>God gives the life that self-improvement cannot supply.</li></ul>
-    <h2>Your explanations</h2>{['explain','apply','defend'].map(id=>{const answer=state.experience?.drafts?.[id]?.responseText;return answer?<details key={id}><summary>{getInstructionalMove(content,id).title}</summary><p>{answer}</p></details>:null;})}
-    <button type="button" className="tl-primary" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Return to the New Birth room →</button>
+   {complete && <section className="tl-complete"><p className="tl-teaching">{state.experience?.earlierCompletion?'Your completion from the earlier version is saved. You can revisit this lesson through the new teaching sequence.':content.completionSummary || 'You traced the moral boundary, distinguished wrongdoing from feelings and limitation, and connected guilt, corruption, and separation to the need for God’s saving work.'}</p>
+    <h2>Keep these connections with you</h2><ul>{(content.takeaways || ['Sin is evaluated against God’s will.','Its consequences reach accountability, the inward person, and relationship with God.','The need for rescue includes every person.','God gives the life that self-improvement cannot supply.']).map(text=><li key={text}>{text}</li>)}</ul>
+    <h2>Your explanations</h2>{content.instructionalMoves.filter(m=>['free_response','mastery_response'].includes(m.type)).map(m=>m.id).map(id=>{const answer=state.experience?.drafts?.[id]?.responseText;return answer?<details key={id}><summary>{getInstructionalMove(content,id).title}</summary><p>{answer}</p></details>:null;})}
+    <button type="button" className="tl-primary" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Return to the {content.studyTitle} room →</button>
     <button type="button" className="tl-text-button" onClick={restart}>{state.experience?.earlierCompletion?'Study the new teaching sequence':'Review this lesson'}</button>
    </section>}
    {!complete && <details className="tl-vocabulary"><summary>Keep the key words close</summary><dl>{content.sourceDomain.vocabulary.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.definition}</dd></div>)}</dl></details>}
+   {content.coveredStandards && <details className="tl-vocabulary"><summary>Your learning goals · {Object.keys(state.experience?.standardEvidence || {}).length} established</summary><ul>{content.coveredStandards.map(s=><li key={s.id}><strong>{s.title}</strong><p>{state.experience?.standardEvidence?.[s.id]?'Independent understanding established':'Still developing'} · {s.id}</p></li>)}</ul></details>}
    <footer className="tl-footer">{content.standardId} · Your answers and place are saved in this browser.</footer>
   </main>
   <DeepDiveSheet item={detail} onClose={()=>setDetail(null)} onOpenBible={openBible}/>

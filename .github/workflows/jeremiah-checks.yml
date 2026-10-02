@@ -45,5 +45,8 @@ jobs:
       - name: Validate teacher-led lesson
         run: npm run test:teacher-led
 
+      - name: Validate grouped lesson coverage and assessment
+        run: npm run test:grouped
+
       - name: Build app
         run: npm run build

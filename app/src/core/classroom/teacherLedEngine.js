@@ -1,6 +1,14 @@
 import { advanceUnscoredMove, recordAttempt, resolveNextMoveId, updateLearningExperience, markLearningMilestones } from './learningEngine.js';
 
 export function evaluateTeachingChoice(move, learnerResponse) {
+ if (move.interaction?.type === 'match') {
+  const placements=learnerResponse?.placements || {};
+  const results=move.interaction.items.map(item=>({id:item.id,correct:placements[item.id]===item.answer,message:item.explanation}));
+  const strong=results.every(item=>item.correct);
+  return {verdict:strong?'strong':'weak',strategy:strong?'affirm_and_deepen':'clarify',source:'lesson',
+   teacherMessage:strong?'You connected every item to its evidence. Now carry the reasoning into a new situation.':'Some connections need another look. Compare the explanations below, then revise your choices.',
+   itemResults:results,evidenceObserved:strong?(move.evidenceIds || []):[],misconceptionIds:[]};
+ }
  if (!move.authoredFeedback) return null;
  const selected=learnerResponse?.choiceIds || [];
  const choice=selected.length===1 ? move.choices.find(c=>c.id===selected[0]) : null;
@@ -24,7 +32,13 @@ export function saveTeachingDecision(state, content, move, decision) {
  if (['free_response','mastery_response'].includes(move.type) && checked.verdict==='strong' && !(move.evidenceIds || []).every(id=>checked.evidenceObserved?.includes(id))) {
   checked={...checked,verdict:'partial',teacherMessage:'Your answer is saved, but the assessment did not establish every part of this task. Review the question and develop the missing reasoning.',evidenceObserved:[]};
  }
+ if(content.coveredStandards && state.experience?.drafts?.[move.id]?.usedSupport && checked.verdict==='strong') {
+  checked={...checked,verdict:'partial',supportedPass:true,evidenceObserved:[],teacherMessage:'Your supported explanation meets the criteria. Close the support and try again from memory in your own words to establish independent understanding.'};
+ }
  let next=recordAttempt(state,move,checked);
+ if(content.coveredStandards && checked.verdict==='strong' && move.evidenceIds?.length) {
+  next=updateLearningExperience(next,{standardEvidence:{...(next.experience?.standardEvidence || {}),...Object.fromEntries((move.standardIds || []).map(id=>[id,{evidenceIds:move.evidenceIds,moveId:move.id,establishedAt:Date.now()}]))}});
+ }
  if(checked.verdict==='strong' && move.scripture?.length) next=markLearningMilestones(next,['scripture']);
  return updateLearningExperience(next,{teachingDecision:{moveId:move.id,decision:checked}});
 }
@@ -36,6 +50,8 @@ export function continueTeaching(state, content) {
  const feedback=state.experience?.teachingDecision;
  if(!feedback || feedback.moveId!==move.id) return state;
  const nextId=resolveNextMoveId(move,feedback.decision.verdict,feedback.decision.strategy);
- const next=updateLearningExperience({...state,currentMoveId:nextId},{teachingDecision:null});
+ const retryDraft=state.experience?.drafts?.[move.id];
+ const independentRetry=content.coveredStandards && nextId===move.id && retryDraft?.usedSupport && feedback.decision.supportedPass;
+ const next=updateLearningExperience({...state,currentMoveId:nextId},{teachingDecision:null,...(independentRetry?{drafts:{[move.id]:{...retryDraft,supportedResponse:retryDraft.responseText,responseText:'',usedSupport:false}}}: {})});
  return nextId==='complete'?markLearningMilestones(next,['complete']):next;
 }
