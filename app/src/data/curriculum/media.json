@@ -118,5 +118,50 @@
     "verifiedAt": "2026-10-01",
     "role": "enrichment_only",
     "purpose": "Language, setting, and biblical-story reinforcement. Evaluate doctrine against the lesson\u2019s Scripture and Apostolic standard."
+  },
+  {
+    "id": "unpacked-shema",
+    "url": "https://unpacked.education/video/unpacking-the-shema/",
+    "title": "Unpacking the Shema",
+    "videoTitle": "The 6 Words Every Jew D!es Saying | Unpacked",
+    "provider": "Unpacked for Educators · Judaism Unpacked",
+    "embedUrl": "https://www.youtube-nocookie.com/embed/8bN1LfiNQSk?controls=1&rel=0&playsinline=1",
+    "duration": "9:45",
+    "verifiedAt": "2026-10-02",
+    "role": "historical_context",
+    "purpose": "Watch for how Jewish communities carry the Shema through prayer, ritual, and family life. This is historical and religious context; Scripture and the Apostolic standard establish the doctrine taught here.",
+    "review": {
+      "status": "approved",
+      "doctrinalAlignment": "context-only",
+      "scope": "The publisher's own summary, topic classification, and public embedded player were checked. The video presents Jewish tradition and practice; it is not an Apostolic-Pentecostal doctrinal source.",
+      "verifiedAt": "2026-10-02"
+    },
+    "lessonPlacements": [
+      {
+        "standardId": "OG.1.1.18",
+        "purpose": "Give learners a view of the Shema's lived Jewish setting, then distinguish historical context from the scriptural and Apostolic basis for doctrine."
+      }
+    ],
+    "lessonCheck": {
+      "title": "Keep the source in its right place",
+      "prompt": "What does this video add to the lesson?",
+      "choices": [
+        {
+          "id": "practice",
+          "label": "A view of the Shema’s place in Jewish prayer, ritual, and family life."
+        },
+        {
+          "id": "doctrine",
+          "label": "An Apostolic-Pentecostal doctrinal teaching on the Godhead."
+        },
+        {
+          "id": "replacement",
+          "label": "A source that can replace reading the Bible passages in this lesson."
+        }
+      ],
+      "answerId": "practice",
+      "correctFeedback": "Right. The video helps you picture the Shema in Jewish life. Use Deuteronomy 6:4, Jesus’ repetition in Mark 12:29, and the Apostolic witness to establish doctrine.",
+      "incorrectFeedback": "Look at the source’s frame: it describes Jewish tradition and practice. That context can enrich the lesson, while Scripture and the Apostolic standard carry the doctrinal claim."
+    }
   }
 ]

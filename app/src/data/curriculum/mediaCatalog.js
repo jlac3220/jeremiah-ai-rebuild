@@ -1,6 +1,10 @@
 import sources from './media.json' with { type: 'json' };
-// A broad domain match is not sufficient. Video selection requires reviewed content,
-// an explicit lesson placement, and a reason for any later return to the same video.
+// A broad domain match is not sufficient. Videos need reviewed content and an
+// explicit lesson placement. Context-only material must remain visibly scoped as such.
 export function getLessonMedia(content) {
- return sources.filter(source=>source.review?.status==='approved' && source.review?.doctrinalAlignment==='apostolic-pentecostal' && source.lessonPlacements?.some(p=>p.standardId===content.standardId && p.purpose)).slice(0,1);
+ return sources.filter(source=>{
+  const review=source.review;
+  const approvedScope=review?.doctrinalAlignment==='apostolic-pentecostal' || (review?.doctrinalAlignment==='context-only' && source.role==='historical_context');
+  return review?.status==='approved' && approvedScope && source.lessonPlacements?.some(p=>p.standardId===content.standardId && p.purpose);
+ }).slice(0,1);
 }
