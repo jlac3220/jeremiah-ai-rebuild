@@ -1,0 +1,4784 @@
+{
+  "version": 1,
+  "scanDate": "2026-10-22",
+  "scanName": "Remaining OG/NB education-resource scan",
+  "excludes": [
+    "OG.1.1.18"
+  ],
+  "sourceCatalog": "research/sources/educational-content-candidates.json",
+  "summary": {
+    "standardsReviewed": 125,
+    "domainsReviewed": 31,
+    "studyCounts": {
+      "OG": 59,
+      "NB": 66
+    },
+    "potentialSourceLinks": 89,
+    "standardsWithMediaLeads": 56,
+    "standardsWithoutMediaLeads": 69,
+    "existingContentUnchanged": true,
+    "sourceVideoClaimsAudited": 0,
+    "clipsWithTimestampVerified": 0,
+    "approvedForPublication": 0
+  },
+  "domains": [
+    {
+      "domainId": "OG.1",
+      "domainTitle": "Absolute Divine Identity And Scriptural Monotheism",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 1,
+      "gaps": [
+        "OG.1.2.18",
+        "OG.1.3.18",
+        "OG.1.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-first-commandment"
+      ],
+      "activityPattern": "Side-by-side confession comparison"
+    },
+    {
+      "domainId": "OG.2",
+      "domainTitle": "The Nature And Attributes Of The One God",
+      "studyId": "OG",
+      "standards": 5,
+      "withSourceLead": 1,
+      "gaps": [
+        "OG.2.1.18",
+        "OG.2.2.18",
+        "OG.2.4.18",
+        "OG.2.5.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-holiness",
+        "bp-justice",
+        "bp-compassion"
+      ],
+      "activityPattern": "Attribute sorting lab"
+    },
+    {
+      "domainId": "OG.3",
+      "domainTitle": "God Revealed In Creation, Covenant, And Judgment",
+      "studyId": "OG",
+      "standards": 5,
+      "withSourceLead": 4,
+      "gaps": [
+        "OG.3.5.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-creation",
+        "bp-image-of-god",
+        "bp-covenants",
+        "met-cylinder",
+        "met-tablet",
+        "bp-justice",
+        "bp-day"
+      ],
+      "activityPattern": "Creation and covenant evidence trail"
+    },
+    {
+      "domainId": "OG.4",
+      "domainTitle": "Sinai, The Tabernacle, And The Presence Of God",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 4,
+      "gaps": [],
+      "potentialSourceLeadIds": [
+        "bp-exodus-part2",
+        "bp-yhwh",
+        "bp-temple",
+        "bp-atonement"
+      ],
+      "activityPattern": "Tabernacle floor-plan exploration"
+    },
+    {
+      "domainId": "OG.5",
+      "domainTitle": "The Names And Titles Of God",
+      "studyId": "OG",
+      "standards": 3,
+      "withSourceLead": 1,
+      "gaps": [
+        "OG.5.2.18",
+        "OG.5.3.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-yhwh"
+      ],
+      "activityPattern": "Name and title comparison"
+    },
+    {
+      "domainId": "OG.6",
+      "domainTitle": "Progressive Revelation And The Prophetic Line",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 2,
+      "gaps": [
+        "OG.6.3.18",
+        "OG.6.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-covenants",
+        "bp-messiah"
+      ],
+      "activityPattern": "Prophecy-to-fulfillment timeline"
+    },
+    {
+      "domainId": "OG.7",
+      "domainTitle": "Jesus Christ As The Full Revelation Of God",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 0,
+      "gaps": [
+        "OG.7.1.18",
+        "OG.7.2.18",
+        "OG.7.3.18",
+        "OG.7.4.18"
+      ],
+      "potentialSourceLeadIds": [],
+      "activityPattern": "Identity text investigation"
+    },
+    {
+      "domainId": "OG.8",
+      "domainTitle": "Incarnation, Sonship, And The True Humanity Of Christ",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 1,
+      "gaps": [
+        "OG.8.2.18",
+        "OG.8.3.18",
+        "OG.8.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-messiah"
+      ],
+      "activityPattern": "Incarnation witness sort"
+    },
+    {
+      "domainId": "OG.9",
+      "domainTitle": "Father, Son, And Holy Spirit In Scriptural Interpretation",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 0,
+      "gaps": [
+        "OG.9.1.18",
+        "OG.9.2.18",
+        "OG.9.3.18",
+        "OG.9.4.18"
+      ],
+      "potentialSourceLeadIds": [],
+      "activityPattern": "Scriptural wording comparison"
+    },
+    {
+      "domainId": "OG.10",
+      "domainTitle": "The Deity And Humanity Of Christ In Difficult Passages",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 0,
+      "gaps": [
+        "OG.10.1.18",
+        "OG.10.2.18",
+        "OG.10.3.18",
+        "OG.10.4.18"
+      ],
+      "potentialSourceLeadIds": [],
+      "activityPattern": "Difficult-passage interpretation lab"
+    },
+    {
+      "domainId": "OG.11",
+      "domainTitle": "The Holy Spirit As The Spirit Of The One God",
+      "studyId": "OG",
+      "standards": 3,
+      "withSourceLead": 2,
+      "gaps": [
+        "OG.11.3.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-spirit"
+      ],
+      "activityPattern": "Spirit across Scripture storyboard"
+    },
+    {
+      "domainId": "OG.12",
+      "domainTitle": "Pentecost And The Name Of Jesus In Apostolic Revelation",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 2,
+      "gaps": [
+        "OG.12.2.18",
+        "OG.12.3.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-pentecost"
+      ],
+      "activityPattern": "Pentecost evidence sequence"
+    },
+    {
+      "domainId": "OG.13",
+      "domainTitle": "Apostolic Witness To The Identity Of Jesus Christ",
+      "studyId": "OG",
+      "standards": 3,
+      "withSourceLead": 1,
+      "gaps": [
+        "OG.13.2.18",
+        "OG.13.3.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-acts1",
+        "bp-acts2",
+        "bp-witness"
+      ],
+      "activityPattern": "Apostolic witness map"
+    },
+    {
+      "domainId": "OG.14",
+      "domainTitle": "Historical Distortion And The Rise Of Trinitarian Formulation",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 0,
+      "gaps": [
+        "OG.14.1.18",
+        "OG.14.2.18",
+        "OG.14.3.18",
+        "OG.14.4.18"
+      ],
+      "potentialSourceLeadIds": [],
+      "activityPattern": "Primary-source history timeline"
+    },
+    {
+      "domainId": "OG.15",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability",
+      "studyId": "OG",
+      "standards": 4,
+      "withSourceLead": 2,
+      "gaps": [
+        "OG.15.3.18",
+        "OG.15.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-first-commandment",
+        "bp-law",
+        "bp-witness"
+      ],
+      "activityPattern": "Respectful claim-and-evidence clinic"
+    },
+    {
+      "domainId": "NB.1",
+      "domainTitle": "Sin, Human Fall, And The Need For New Birth",
+      "studyId": "NB",
+      "standards": 4,
+      "withSourceLead": 3,
+      "gaps": [
+        "NB.1.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-sin",
+        "bp-transgression",
+        "bp-image-of-god",
+        "bp-day"
+      ],
+      "activityPattern": "Fall-to-need cause-and-effect map"
+    },
+    {
+      "domainId": "NB.2",
+      "domainTitle": "Promise, Covenant, And The Redemptive Structure Of Salvation",
+      "studyId": "NB",
+      "standards": 4,
+      "withSourceLead": 4,
+      "gaps": [],
+      "potentialSourceLeadIds": [
+        "bp-covenants",
+        "bp-exodus-part2",
+        "met-tablet",
+        "bp-passover",
+        "bp-atonement",
+        "bp-temple"
+      ],
+      "activityPattern": "Covenant and atonement timeline"
+    },
+    {
+      "domainId": "NB.3",
+      "domainTitle": "The Gospel As The Basis Of New Birth",
+      "studyId": "NB",
+      "standards": 4,
+      "withSourceLead": 4,
+      "gaps": [],
+      "potentialSourceLeadIds": [
+        "bp-atonement",
+        "bp-gospel",
+        "bp-messiah",
+        "bp-gospel-word",
+        "bp-passover"
+      ],
+      "activityPattern": "Gospel-event storyboard"
+    },
+    {
+      "domainId": "NB.4",
+      "domainTitle": "Repentance As Turning, Surrender, And Covenant Response",
+      "studyId": "NB",
+      "standards": 5,
+      "withSourceLead": 2,
+      "gaps": [
+        "NB.4.2.18",
+        "NB.4.3.18",
+        "NB.4.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-sin",
+        "bp-transgression"
+      ],
+      "activityPattern": "Repentance decision scenarios"
+    },
+    {
+      "domainId": "NB.5",
+      "domainTitle": "Water Baptism And Apostolic Gospel Response",
+      "studyId": "NB",
+      "standards": 6,
+      "withSourceLead": 0,
+      "gaps": [
+        "NB.5.1.18",
+        "NB.5.2.18",
+        "NB.5.3.18",
+        "NB.5.4.18",
+        "NB.5.5.18",
+        "NB.5.6.18"
+      ],
+      "potentialSourceLeadIds": [],
+      "activityPattern": "Acts baptism-case comparison"
+    },
+    {
+      "domainId": "NB.6",
+      "domainTitle": "The Holy Spirit And The Necessity Of Spiritual Birth",
+      "studyId": "NB",
+      "standards": 4,
+      "withSourceLead": 2,
+      "gaps": [
+        "NB.6.1.18",
+        "NB.6.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-spirit"
+      ],
+      "activityPattern": "Spirit-promise comparison"
+    },
+    {
+      "domainId": "NB.7",
+      "domainTitle": "Pentecost And The Opening Of New-Covenant Birth",
+      "studyId": "NB",
+      "standards": 5,
+      "withSourceLead": 4,
+      "gaps": [
+        "NB.7.5.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-pentecost",
+        "bp-spirit"
+      ],
+      "activityPattern": "Pentecost event-and-response sequence"
+    },
+    {
+      "domainId": "NB.8",
+      "domainTitle": "The Apostolic Pattern Of The New Birth",
+      "studyId": "NB",
+      "standards": 4,
+      "withSourceLead": 3,
+      "gaps": [
+        "NB.8.4.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-acts1",
+        "bp-acts2",
+        "met-lamp"
+      ],
+      "activityPattern": "Interactive Acts conversion matrix"
+    },
+    {
+      "domainId": "NB.9",
+      "domainTitle": "Faith, Obedience, And Full Saving Response",
+      "studyId": "NB",
+      "standards": 5,
+      "withSourceLead": 2,
+      "gaps": [
+        "NB.9.3.18",
+        "NB.9.4.18",
+        "NB.9.5.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-gospel",
+        "bp-law"
+      ],
+      "activityPattern": "Faith, grace and obedience reasoning cards"
+    },
+    {
+      "domainId": "NB.10",
+      "domainTitle": "The Name Of Jesus In Salvation And Covenant Entry",
+      "studyId": "NB",
+      "standards": 3,
+      "withSourceLead": 0,
+      "gaps": [
+        "NB.10.1.18",
+        "NB.10.2.18",
+        "NB.10.3.18"
+      ],
+      "potentialSourceLeadIds": [],
+      "activityPattern": "Name-of-Jesus Scripture trail"
+    },
+    {
+      "domainId": "NB.11",
+      "domainTitle": "Remission, Cleansing, And Covenant Application",
+      "studyId": "NB",
+      "standards": 3,
+      "withSourceLead": 2,
+      "gaps": [
+        "NB.11.3.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-atonement",
+        "bp-holiness"
+      ],
+      "activityPattern": "Remission and washing category sort"
+    },
+    {
+      "domainId": "NB.12",
+      "domainTitle": "Spirit Reception, Signs, And New-Covenant Identification",
+      "studyId": "NB",
+      "standards": 3,
+      "withSourceLead": 1,
+      "gaps": [
+        "NB.12.2.18",
+        "NB.12.3.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-spirit"
+      ],
+      "activityPattern": "Spirit reception evidence matrix"
+    },
+    {
+      "domainId": "NB.13",
+      "domainTitle": "The New Birth And Entry Into The Church",
+      "studyId": "NB",
+      "standards": 3,
+      "withSourceLead": 2,
+      "gaps": [
+        "NB.13.3.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-covenants",
+        "bp-acts1",
+        "met-lamp",
+        "bp-temple"
+      ],
+      "activityPattern": "Church-as-community mapping"
+    },
+    {
+      "domainId": "NB.14",
+      "domainTitle": "The New Birth And Transformed Living",
+      "studyId": "NB",
+      "standards": 4,
+      "withSourceLead": 4,
+      "gaps": [],
+      "potentialSourceLeadIds": [
+        "bp-image-of-god",
+        "bp-justice",
+        "bp-compassion",
+        "bp-holiness",
+        "bp-law"
+      ],
+      "activityPattern": "Transformed-life scenario cards"
+    },
+    {
+      "domainId": "NB.15",
+      "domainTitle": "Historical Reduction, Doctrinal Distortion, And Partial Salvation Claims",
+      "studyId": "NB",
+      "standards": 3,
+      "withSourceLead": 0,
+      "gaps": [
+        "NB.15.1.18",
+        "NB.15.2.18",
+        "NB.15.3.18"
+      ],
+      "potentialSourceLeadIds": [],
+      "activityPattern": "Reduced-claim comparison"
+    },
+    {
+      "domainId": "NB.16",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
+      "studyId": "NB",
+      "standards": 6,
+      "withSourceLead": 2,
+      "gaps": [
+        "NB.16.1.18",
+        "NB.16.3.18",
+        "NB.16.5.18",
+        "NB.16.6.18"
+      ],
+      "potentialSourceLeadIds": [
+        "bp-witness",
+        "bp-acts2"
+      ],
+      "activityPattern": "Respectful gospel defense simulator"
+    }
+  ],
+  "standards": [
+    {
+      "standardId": "OG.1.2.18",
+      "standardTitle": "Isaiah's Monotheistic Declarations",
+      "studyId": "OG",
+      "domainId": "OG.1",
+      "domainTitle": "Absolute Divine Identity And Scriptural Monotheism",
+      "anchorScriptures": [
+        "Deut. 6:4",
+        "Isa. 43:10",
+        "Isa. 44:6",
+        "Isa. 45:5",
+        "Mark 12:29",
+        "1 Cor. 8:4–6",
+        "Eph. 4:5–6",
+        "1 Tim. 2:5"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Side-by-side confession comparison",
+        "plan": "Ask learners to mark what Deuteronomy, Isaiah, Jesus and Paul explicitly affirm; distinguish Scripture from later formulations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.1.3.18",
+      "standardTitle": "New Testament Continuity with Old Testament Monotheism",
+      "studyId": "OG",
+      "domainId": "OG.1",
+      "domainTitle": "Absolute Divine Identity And Scriptural Monotheism",
+      "anchorScriptures": [
+        "Deut. 6:4",
+        "Isa. 43:10",
+        "Isa. 44:6",
+        "Isa. 45:5",
+        "Mark 12:29",
+        "1 Cor. 8:4–6",
+        "Eph. 4:5–6",
+        "1 Tim. 2:5"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Side-by-side confession comparison",
+        "plan": "Ask learners to mark what Deuteronomy, Isaiah, Jesus and Paul explicitly affirm; distinguish Scripture from later formulations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.1.4.18",
+      "standardTitle": "Oneness vs. Trinitarianism — The Core Distinction",
+      "studyId": "OG",
+      "domainId": "OG.1",
+      "domainTitle": "Absolute Divine Identity And Scriptural Monotheism",
+      "anchorScriptures": [
+        "Deut. 6:4",
+        "Isa. 43:10",
+        "Isa. 44:6",
+        "Isa. 45:5",
+        "Mark 12:29",
+        "1 Cor. 8:4–6",
+        "Eph. 4:5–6",
+        "1 Tim. 2:5"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Side-by-side confession comparison",
+        "plan": "Ask learners to mark what Deuteronomy, Isaiah, Jesus and Paul explicitly affirm; distinguish Scripture from later formulations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.1.5.18",
+      "standardTitle": "The Unity of God as Ethical and Doxological Foundation",
+      "studyId": "OG",
+      "domainId": "OG.1",
+      "domainTitle": "Absolute Divine Identity And Scriptural Monotheism",
+      "anchorScriptures": [
+        "Deut. 6:4",
+        "Isa. 43:10",
+        "Isa. 44:6",
+        "Isa. 45:5",
+        "Mark 12:29",
+        "1 Cor. 8:4–6",
+        "Eph. 4:5–6",
+        "1 Tim. 2:5"
+      ],
+      "sourceLeadIds": [
+        "bp-first-commandment"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Side-by-side confession comparison",
+        "plan": "Ask learners to mark what Deuteronomy, Isaiah, Jesus and Paul explicitly affirm; distinguish Scripture from later formulations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.2.1.18",
+      "standardTitle": "God as Spirit — Essential Nature",
+      "studyId": "OG",
+      "domainId": "OG.2",
+      "domainTitle": "The Nature And Attributes Of The One God",
+      "anchorScriptures": [
+        "John 4:24",
+        "Deut. 4:15–16",
+        "Ps. 90:2",
+        "Mal. 3:6",
+        "Isa. 40:28",
+        "Jer. 23:24",
+        "Rev. 19:6",
+        "Exod. 34:6–7"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Attribute sorting lab",
+        "plan": "Sort eternal, moral, and revealed characteristics and trace each one to its passage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.2.2.18",
+      "standardTitle": "The Incommunicable Attributes",
+      "studyId": "OG",
+      "domainId": "OG.2",
+      "domainTitle": "The Nature And Attributes Of The One God",
+      "anchorScriptures": [
+        "John 4:24",
+        "Deut. 4:15–16",
+        "Ps. 90:2",
+        "Mal. 3:6",
+        "Isa. 40:28",
+        "Jer. 23:24",
+        "Rev. 19:6",
+        "Exod. 34:6–7"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Attribute sorting lab",
+        "plan": "Sort eternal, moral, and revealed characteristics and trace each one to its passage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.2.3.18",
+      "standardTitle": "The Moral Attributes — Holiness, Love, Justice, Mercy",
+      "studyId": "OG",
+      "domainId": "OG.2",
+      "domainTitle": "The Nature And Attributes Of The One God",
+      "anchorScriptures": [
+        "John 4:24",
+        "Deut. 4:15–16",
+        "Ps. 90:2",
+        "Mal. 3:6",
+        "Isa. 40:28",
+        "Jer. 23:24",
+        "Rev. 19:6",
+        "Exod. 34:6–7"
+      ],
+      "sourceLeadIds": [
+        "bp-holiness",
+        "bp-justice",
+        "bp-compassion"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Attribute sorting lab",
+        "plan": "Sort eternal, moral, and revealed characteristics and trace each one to its passage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.2.4.18",
+      "standardTitle": "Divine Sovereignty and Human Responsibility",
+      "studyId": "OG",
+      "domainId": "OG.2",
+      "domainTitle": "The Nature And Attributes Of The One God",
+      "anchorScriptures": [
+        "John 4:24",
+        "Deut. 4:15–16",
+        "Ps. 90:2",
+        "Mal. 3:6",
+        "Isa. 40:28",
+        "Jer. 23:24",
+        "Rev. 19:6",
+        "Exod. 34:6–7"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Attribute sorting lab",
+        "plan": "Sort eternal, moral, and revealed characteristics and trace each one to its passage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.2.5.18",
+      "standardTitle": "God's Invisibility and the Purpose of Theophanies",
+      "studyId": "OG",
+      "domainId": "OG.2",
+      "domainTitle": "The Nature And Attributes Of The One God",
+      "anchorScriptures": [
+        "John 4:24",
+        "Deut. 4:15–16",
+        "Ps. 90:2",
+        "Mal. 3:6",
+        "Isa. 40:28",
+        "Jer. 23:24",
+        "Rev. 19:6",
+        "Exod. 34:6–7"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Attribute sorting lab",
+        "plan": "Sort eternal, moral, and revealed characteristics and trace each one to its passage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.3.1.18",
+      "standardTitle": "Jesus as Creator — John 1 and Colossians 1",
+      "studyId": "OG",
+      "domainId": "OG.3",
+      "domainTitle": "God Revealed In Creation, Covenant, And Judgment",
+      "anchorScriptures": [
+        "Gen. 1:1",
+        "Gen. 1:26",
+        "John 1:1–3",
+        "Col. 1:16",
+        "Gen. 3:15",
+        "Gen. 9:12–13",
+        "Amos 3:6",
+        "Ps. 19:1"
+      ],
+      "sourceLeadIds": [
+        "bp-creation"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Creation and covenant evidence trail",
+        "plan": "Place creation, Genesis promises, judgment and later fulfillment onto a biblical timeline.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.3.2.18",
+      "standardTitle": "\"Let Us Make Man\" — The Plural of Genesis 1:26",
+      "studyId": "OG",
+      "domainId": "OG.3",
+      "domainTitle": "God Revealed In Creation, Covenant, And Judgment",
+      "anchorScriptures": [
+        "Gen. 1:1",
+        "Gen. 1:26",
+        "John 1:1–3",
+        "Col. 1:16",
+        "Gen. 3:15",
+        "Gen. 9:12–13",
+        "Amos 3:6",
+        "Ps. 19:1"
+      ],
+      "sourceLeadIds": [
+        "bp-image-of-god",
+        "bp-creation"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Creation and covenant evidence trail",
+        "plan": "Place creation, Genesis promises, judgment and later fulfillment onto a biblical timeline.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.3.3.18",
+      "standardTitle": "Covenant as the Structure of Redemptive History",
+      "studyId": "OG",
+      "domainId": "OG.3",
+      "domainTitle": "God Revealed In Creation, Covenant, And Judgment",
+      "anchorScriptures": [
+        "Gen. 1:1",
+        "Gen. 1:26",
+        "John 1:1–3",
+        "Col. 1:16",
+        "Gen. 3:15",
+        "Gen. 9:12–13",
+        "Amos 3:6",
+        "Ps. 19:1"
+      ],
+      "sourceLeadIds": [
+        "bp-covenants",
+        "met-cylinder",
+        "met-tablet"
+      ],
+      "sourceLeadKinds": [
+        "video",
+        "historical-object"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Creation and covenant evidence trail",
+        "plan": "Place creation, Genesis promises, judgment and later fulfillment onto a biblical timeline.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.3.4.18",
+      "standardTitle": "Divine Judgment as Revelation of Character",
+      "studyId": "OG",
+      "domainId": "OG.3",
+      "domainTitle": "God Revealed In Creation, Covenant, And Judgment",
+      "anchorScriptures": [
+        "Gen. 1:1",
+        "Gen. 1:26",
+        "John 1:1–3",
+        "Col. 1:16",
+        "Gen. 3:15",
+        "Gen. 9:12–13",
+        "Amos 3:6",
+        "Ps. 19:1"
+      ],
+      "sourceLeadIds": [
+        "bp-justice",
+        "bp-day"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Creation and covenant evidence trail",
+        "plan": "Place creation, Genesis promises, judgment and later fulfillment onto a biblical timeline.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.3.5.18",
+      "standardTitle": "Creation's Testimony and the Limits of General Revelation",
+      "studyId": "OG",
+      "domainId": "OG.3",
+      "domainTitle": "God Revealed In Creation, Covenant, And Judgment",
+      "anchorScriptures": [
+        "Gen. 1:1",
+        "Gen. 1:26",
+        "John 1:1–3",
+        "Col. 1:16",
+        "Gen. 3:15",
+        "Gen. 9:12–13",
+        "Amos 3:6",
+        "Ps. 19:1"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Creation and covenant evidence trail",
+        "plan": "Place creation, Genesis promises, judgment and later fulfillment onto a biblical timeline.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.4.1.18",
+      "standardTitle": "The I AM Declaration and Covenant Identity",
+      "studyId": "OG",
+      "domainId": "OG.4",
+      "domainTitle": "Sinai, The Tabernacle, And The Presence Of God",
+      "anchorScriptures": [
+        "Exod. 3:14",
+        "Exod. 19:5–6",
+        "Exod. 25:8",
+        "Exod. 40:34–35",
+        "Lev. 16:2",
+        "1 Kings 8:10–11",
+        "Ezek. 10:18–19",
+        "John 1:14"
+      ],
+      "sourceLeadIds": [
+        "bp-exodus-part2",
+        "bp-yhwh"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Tabernacle floor-plan exploration",
+        "plan": "Use a labeled room diagram to relate Sinai, priestly access and divine presence; images are context, not evidence for incarnation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.4.2.18",
+      "standardTitle": "The Tabernacle as Type of Divine Indwelling",
+      "studyId": "OG",
+      "domainId": "OG.4",
+      "domainTitle": "Sinai, The Tabernacle, And The Presence Of God",
+      "anchorScriptures": [
+        "Exod. 3:14",
+        "Exod. 19:5–6",
+        "Exod. 25:8",
+        "Exod. 40:34–35",
+        "Lev. 16:2",
+        "1 Kings 8:10–11",
+        "Ezek. 10:18–19",
+        "John 1:14"
+      ],
+      "sourceLeadIds": [
+        "bp-temple",
+        "bp-exodus-part2"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Tabernacle floor-plan exploration",
+        "plan": "Use a labeled room diagram to relate Sinai, priestly access and divine presence; images are context, not evidence for incarnation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.4.3.18",
+      "standardTitle": "The Departure and Return of God's Glory",
+      "studyId": "OG",
+      "domainId": "OG.4",
+      "domainTitle": "Sinai, The Tabernacle, And The Presence Of God",
+      "anchorScriptures": [
+        "Exod. 3:14",
+        "Exod. 19:5–6",
+        "Exod. 25:8",
+        "Exod. 40:34–35",
+        "Lev. 16:2",
+        "1 Kings 8:10–11",
+        "Ezek. 10:18–19",
+        "John 1:14"
+      ],
+      "sourceLeadIds": [
+        "bp-temple",
+        "bp-exodus-part2"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Tabernacle floor-plan exploration",
+        "plan": "Use a labeled room diagram to relate Sinai, priestly access and divine presence; images are context, not evidence for incarnation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.4.4.18",
+      "standardTitle": "The High Priestly Typology and Access to God",
+      "studyId": "OG",
+      "domainId": "OG.4",
+      "domainTitle": "Sinai, The Tabernacle, And The Presence Of God",
+      "anchorScriptures": [
+        "Exod. 3:14",
+        "Exod. 19:5–6",
+        "Exod. 25:8",
+        "Exod. 40:34–35",
+        "Lev. 16:2",
+        "1 Kings 8:10–11",
+        "Ezek. 10:18–19",
+        "John 1:14"
+      ],
+      "sourceLeadIds": [
+        "bp-atonement"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Tabernacle floor-plan exploration",
+        "plan": "Use a labeled room diagram to relate Sinai, priestly access and divine presence; images are context, not evidence for incarnation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.5.1.18",
+      "standardTitle": "YHWH — The Covenant Name and Its New Testament Application",
+      "studyId": "OG",
+      "domainId": "OG.5",
+      "domainTitle": "The Names And Titles Of God",
+      "anchorScriptures": [
+        "Exod. 3:15",
+        "Isa. 9:6",
+        "Joel 2:32",
+        "Matt. 1:21",
+        "John 17:6",
+        "Acts 4:12",
+        "Phil. 2:9–11",
+        "Rev. 19:13"
+      ],
+      "sourceLeadIds": [
+        "bp-yhwh"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Name and title comparison",
+        "plan": "Match the divine names or titles to their immediate textual context and then compare their New Testament usage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.5.2.18",
+      "standardTitle": "Isaiah 9:6 — The Names of the Messiah",
+      "studyId": "OG",
+      "domainId": "OG.5",
+      "domainTitle": "The Names And Titles Of God",
+      "anchorScriptures": [
+        "Exod. 3:15",
+        "Isa. 9:6",
+        "Joel 2:32",
+        "Matt. 1:21",
+        "John 17:6",
+        "Acts 4:12",
+        "Phil. 2:9–11",
+        "Rev. 19:13"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Name and title comparison",
+        "plan": "Match the divine names or titles to their immediate textual context and then compare their New Testament usage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.5.3.18",
+      "standardTitle": "The Name of Jesus as the Fulfillment of All Divine Names",
+      "studyId": "OG",
+      "domainId": "OG.5",
+      "domainTitle": "The Names And Titles Of God",
+      "anchorScriptures": [
+        "Exod. 3:15",
+        "Isa. 9:6",
+        "Joel 2:32",
+        "Matt. 1:21",
+        "John 17:6",
+        "Acts 4:12",
+        "Phil. 2:9–11",
+        "Rev. 19:13"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Name and title comparison",
+        "plan": "Match the divine names or titles to their immediate textual context and then compare their New Testament usage.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.6.1.18",
+      "standardTitle": "The Structure of Progressive Revelation",
+      "studyId": "OG",
+      "domainId": "OG.6",
+      "domainTitle": "Progressive Revelation And The Prophetic Line",
+      "anchorScriptures": [
+        "Heb. 1:1–2",
+        "Joel 2:28–29",
+        "Isa. 53:1–12",
+        "Jer. 31:31–34",
+        "Ezek. 36:26–27",
+        "Mic. 5:2",
+        "Mal. 3:1",
+        "2 Cor. 1:20"
+      ],
+      "sourceLeadIds": [
+        "bp-covenants"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Prophecy-to-fulfillment timeline",
+        "plan": "Connect Joel, Isaiah, Jeremiah and Ezekiel to later passages without erasing their original context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.6.2.18",
+      "standardTitle": "Isaiah 53 as Evangelistic Centerpiece",
+      "studyId": "OG",
+      "domainId": "OG.6",
+      "domainTitle": "Progressive Revelation And The Prophetic Line",
+      "anchorScriptures": [
+        "Heb. 1:1–2",
+        "Joel 2:28–29",
+        "Isa. 53:1–12",
+        "Jer. 31:31–34",
+        "Ezek. 36:26–27",
+        "Mic. 5:2",
+        "Mal. 3:1",
+        "2 Cor. 1:20"
+      ],
+      "sourceLeadIds": [
+        "bp-messiah"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Prophecy-to-fulfillment timeline",
+        "plan": "Connect Joel, Isaiah, Jeremiah and Ezekiel to later passages without erasing their original context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.6.3.18",
+      "standardTitle": "Joel 2:28–29 and the Age of the Spirit",
+      "studyId": "OG",
+      "domainId": "OG.6",
+      "domainTitle": "Progressive Revelation And The Prophetic Line",
+      "anchorScriptures": [
+        "Heb. 1:1–2",
+        "Joel 2:28–29",
+        "Isa. 53:1–12",
+        "Jer. 31:31–34",
+        "Ezek. 36:26–27",
+        "Mic. 5:2",
+        "Mal. 3:1",
+        "2 Cor. 1:20"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Prophecy-to-fulfillment timeline",
+        "plan": "Connect Joel, Isaiah, Jeremiah and Ezekiel to later passages without erasing their original context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.6.4.18",
+      "standardTitle": "Jeremiah 31 and Ezekiel 36 — The New Covenant Promise",
+      "studyId": "OG",
+      "domainId": "OG.6",
+      "domainTitle": "Progressive Revelation And The Prophetic Line",
+      "anchorScriptures": [
+        "Heb. 1:1–2",
+        "Joel 2:28–29",
+        "Isa. 53:1–12",
+        "Jer. 31:31–34",
+        "Ezek. 36:26–27",
+        "Mic. 5:2",
+        "Mal. 3:1",
+        "2 Cor. 1:20"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Prophecy-to-fulfillment timeline",
+        "plan": "Connect Joel, Isaiah, Jeremiah and Ezekiel to later passages without erasing their original context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.7.1.18",
+      "standardTitle": "Colossians 2:9 — All the Fullness of the Godhead Bodily",
+      "studyId": "OG",
+      "domainId": "OG.7",
+      "domainTitle": "Jesus Christ As The Full Revelation Of God",
+      "anchorScriptures": [
+        "Col. 2:9",
+        "Col. 1:19",
+        "1 Tim. 3:16",
+        "2 Cor. 5:19",
+        "John 14:9",
+        "John 10:30",
+        "Heb. 1:3",
+        "Isa. 9:6"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Identity text investigation",
+        "plan": "Collect descriptions of Jesus across John, Colossians and Timothy before articulating the Apostolic reading.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.7.2.18",
+      "standardTitle": "1 Timothy 3:16 — God Manifest in the Flesh",
+      "studyId": "OG",
+      "domainId": "OG.7",
+      "domainTitle": "Jesus Christ As The Full Revelation Of God",
+      "anchorScriptures": [
+        "Col. 2:9",
+        "Col. 1:19",
+        "1 Tim. 3:16",
+        "2 Cor. 5:19",
+        "John 14:9",
+        "John 10:30",
+        "Heb. 1:3",
+        "Isa. 9:6"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Identity text investigation",
+        "plan": "Collect descriptions of Jesus across John, Colossians and Timothy before articulating the Apostolic reading.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.7.3.18",
+      "standardTitle": "John 14:9–11 — \"He That Hath Seen Me Hath Seen the Father\"",
+      "studyId": "OG",
+      "domainId": "OG.7",
+      "domainTitle": "Jesus Christ As The Full Revelation Of God",
+      "anchorScriptures": [
+        "Col. 2:9",
+        "Col. 1:19",
+        "1 Tim. 3:16",
+        "2 Cor. 5:19",
+        "John 14:9",
+        "John 10:30",
+        "Heb. 1:3",
+        "Isa. 9:6"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Identity text investigation",
+        "plan": "Collect descriptions of Jesus across John, Colossians and Timothy before articulating the Apostolic reading.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.7.4.18",
+      "standardTitle": "The Fifteen Descriptions of Christ in Colossians 1:15–2:10",
+      "studyId": "OG",
+      "domainId": "OG.7",
+      "domainTitle": "Jesus Christ As The Full Revelation Of God",
+      "anchorScriptures": [
+        "Col. 2:9",
+        "Col. 1:19",
+        "1 Tim. 3:16",
+        "2 Cor. 5:19",
+        "John 14:9",
+        "John 10:30",
+        "Heb. 1:3",
+        "Isa. 9:6"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Identity text investigation",
+        "plan": "Collect descriptions of Jesus across John, Colossians and Timothy before articulating the Apostolic reading.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.8.1.18",
+      "standardTitle": "The Incarnational Origin of the Son",
+      "studyId": "OG",
+      "domainId": "OG.8",
+      "domainTitle": "Incarnation, Sonship, And The True Humanity Of Christ",
+      "anchorScriptures": [
+        "Luke 1:35",
+        "Gal. 4:4",
+        "Heb. 1:5",
+        "Heb. 2:14",
+        "Heb. 2:17",
+        "John 1:14",
+        "Phil. 2:6–8",
+        "Rom. 8:3"
+      ],
+      "sourceLeadIds": [
+        "bp-messiah"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Incarnation witness sort",
+        "plan": "Distinguish texts describing true humanity, divine identity and redemptive mission; test oversimplified explanations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.8.2.18",
+      "standardTitle": "The Word and the Son — Two Dimensions of One Person",
+      "studyId": "OG",
+      "domainId": "OG.8",
+      "domainTitle": "Incarnation, Sonship, And The True Humanity Of Christ",
+      "anchorScriptures": [
+        "Luke 1:35",
+        "Gal. 4:4",
+        "Heb. 1:5",
+        "Heb. 2:14",
+        "Heb. 2:17",
+        "John 1:14",
+        "Phil. 2:6–8",
+        "Rom. 8:3"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Incarnation witness sort",
+        "plan": "Distinguish texts describing true humanity, divine identity and redemptive mission; test oversimplified explanations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.8.3.18",
+      "standardTitle": "The Necessity of Christ's True Humanity",
+      "studyId": "OG",
+      "domainId": "OG.8",
+      "domainTitle": "Incarnation, Sonship, And The True Humanity Of Christ",
+      "anchorScriptures": [
+        "Luke 1:35",
+        "Gal. 4:4",
+        "Heb. 1:5",
+        "Heb. 2:14",
+        "Heb. 2:17",
+        "John 1:14",
+        "Phil. 2:6–8",
+        "Rom. 8:3"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Incarnation witness sort",
+        "plan": "Distinguish texts describing true humanity, divine identity and redemptive mission; test oversimplified explanations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.8.4.18",
+      "standardTitle": "The Kenosis — Voluntary Limitation for Redemptive Purpose",
+      "studyId": "OG",
+      "domainId": "OG.8",
+      "domainTitle": "Incarnation, Sonship, And The True Humanity Of Christ",
+      "anchorScriptures": [
+        "Luke 1:35",
+        "Gal. 4:4",
+        "Heb. 1:5",
+        "Heb. 2:14",
+        "Heb. 2:17",
+        "John 1:14",
+        "Phil. 2:6–8",
+        "Rom. 8:3"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Incarnation witness sort",
+        "plan": "Distinguish texts describing true humanity, divine identity and redemptive mission; test oversimplified explanations.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.9.1.18",
+      "standardTitle": "Matthew 28:19 — One Name, Three Titles",
+      "studyId": "OG",
+      "domainId": "OG.9",
+      "domainTitle": "Father, Son, And Holy Spirit In Scriptural Interpretation",
+      "anchorScriptures": [
+        "Matt. 28:19",
+        "John 14:16–18",
+        "Acts 5:3–4",
+        "2 Cor. 3:17",
+        "John 10:30",
+        "Isa. 63:16",
+        "Eph. 4:4–6",
+        "John 4:24"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Scriptural wording comparison",
+        "plan": "Annotate Father, Son and Spirit references across passages; the lesson must explain interpretations fairly.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.9.2.18",
+      "standardTitle": "The Three Meanings of \"Father\" in Scripture",
+      "studyId": "OG",
+      "domainId": "OG.9",
+      "domainTitle": "Father, Son, And Holy Spirit In Scriptural Interpretation",
+      "anchorScriptures": [
+        "Matt. 28:19",
+        "John 14:16–18",
+        "Acts 5:3–4",
+        "2 Cor. 3:17",
+        "John 10:30",
+        "Isa. 63:16",
+        "Eph. 4:4–6",
+        "John 4:24"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Scriptural wording comparison",
+        "plan": "Annotate Father, Son and Spirit references across passages; the lesson must explain interpretations fairly.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.9.3.18",
+      "standardTitle": "The Holy Spirit as the Spirit of the One God",
+      "studyId": "OG",
+      "domainId": "OG.9",
+      "domainTitle": "Father, Son, And Holy Spirit In Scriptural Interpretation",
+      "anchorScriptures": [
+        "Matt. 28:19",
+        "John 14:16–18",
+        "Acts 5:3–4",
+        "2 Cor. 3:17",
+        "John 10:30",
+        "Isa. 63:16",
+        "Eph. 4:4–6",
+        "John 4:24"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Scriptural wording comparison",
+        "plan": "Annotate Father, Son and Spirit references across passages; the lesson must explain interpretations fairly.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.9.4.18",
+      "standardTitle": "The Comforter — Jesus Coming in the Spirit",
+      "studyId": "OG",
+      "domainId": "OG.9",
+      "domainTitle": "Father, Son, And Holy Spirit In Scriptural Interpretation",
+      "anchorScriptures": [
+        "Matt. 28:19",
+        "John 14:16–18",
+        "Acts 5:3–4",
+        "2 Cor. 3:17",
+        "John 10:30",
+        "Isa. 63:16",
+        "Eph. 4:4–6",
+        "John 4:24"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Scriptural wording comparison",
+        "plan": "Annotate Father, Son and Spirit references across passages; the lesson must explain interpretations fairly.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.10.1.18",
+      "standardTitle": "The Dual Nature Principle as Interpretive Key",
+      "studyId": "OG",
+      "domainId": "OG.10",
+      "domainTitle": "The Deity And Humanity Of Christ In Difficult Passages",
+      "anchorScriptures": [
+        "John 5:19",
+        "Mark 13:32",
+        "Luke 2:52",
+        "John 17:3",
+        "Matt. 26:39",
+        "Heb. 4:15",
+        "Acts 2:36",
+        "1 Cor. 15:28"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Difficult-passage interpretation lab",
+        "plan": "Read a hard passage in context and build an explanation that preserves real humanity and divine identity.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.10.2.18",
+      "standardTitle": "Mark 13:32 — The Son Did Not Know the Hour",
+      "studyId": "OG",
+      "domainId": "OG.10",
+      "domainTitle": "The Deity And Humanity Of Christ In Difficult Passages",
+      "anchorScriptures": [
+        "John 5:19",
+        "Mark 13:32",
+        "Luke 2:52",
+        "John 17:3",
+        "Matt. 26:39",
+        "Heb. 4:15",
+        "Acts 2:36",
+        "1 Cor. 15:28"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Difficult-passage interpretation lab",
+        "plan": "Read a hard passage in context and build an explanation that preserves real humanity and divine identity.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.10.3.18",
+      "standardTitle": "The Gethsemane Prayer — Two Wills, One Person",
+      "studyId": "OG",
+      "domainId": "OG.10",
+      "domainTitle": "The Deity And Humanity Of Christ In Difficult Passages",
+      "anchorScriptures": [
+        "John 5:19",
+        "Mark 13:32",
+        "Luke 2:52",
+        "John 17:3",
+        "Matt. 26:39",
+        "Heb. 4:15",
+        "Acts 2:36",
+        "1 Cor. 15:28"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Difficult-passage interpretation lab",
+        "plan": "Read a hard passage in context and build an explanation that preserves real humanity and divine identity.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.10.4.18",
+      "standardTitle": "1 Corinthians 15:28 — The Son Delivered to God",
+      "studyId": "OG",
+      "domainId": "OG.10",
+      "domainTitle": "The Deity And Humanity Of Christ In Difficult Passages",
+      "anchorScriptures": [
+        "John 5:19",
+        "Mark 13:32",
+        "Luke 2:52",
+        "John 17:3",
+        "Matt. 26:39",
+        "Heb. 4:15",
+        "Acts 2:36",
+        "1 Cor. 15:28"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Difficult-passage interpretation lab",
+        "plan": "Read a hard passage in context and build an explanation that preserves real humanity and divine identity.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.11.1.18",
+      "standardTitle": "The Holy Spirit as the Spirit of the One God",
+      "studyId": "OG",
+      "domainId": "OG.11",
+      "domainTitle": "The Holy Spirit As The Spirit Of The One God",
+      "anchorScriptures": [
+        "Gen. 1:2",
+        "Isa. 63:10–14",
+        "John 4:24",
+        "Rom. 8:9–11",
+        "II Cor. 3:17",
+        "Gal. 4:6",
+        "Eph. 4:4–6",
+        "I Pet. 1:10–12"
+      ],
+      "sourceLeadIds": [
+        "bp-spirit"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit across Scripture storyboard",
+        "plan": "Trace the Spirit in creation, prophets, Jesus and the church; compare descriptions and their context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.11.2.18",
+      "standardTitle": "Continuity of the Spirit Across Creation, Prophecy, Christ, and the Church",
+      "studyId": "OG",
+      "domainId": "OG.11",
+      "domainTitle": "The Holy Spirit As The Spirit Of The One God",
+      "anchorScriptures": [
+        "Gen. 1:2",
+        "Isa. 63:10–14",
+        "John 4:24",
+        "Rom. 8:9–11",
+        "II Cor. 3:17",
+        "Gal. 4:6",
+        "Eph. 4:4–6",
+        "I Pet. 1:10–12"
+      ],
+      "sourceLeadIds": [
+        "bp-spirit"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit across Scripture storyboard",
+        "plan": "Trace the Spirit in creation, prophets, Jesus and the church; compare descriptions and their context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.11.3.18",
+      "standardTitle": "Personal Language About the Spirit Without Dividing God",
+      "studyId": "OG",
+      "domainId": "OG.11",
+      "domainTitle": "The Holy Spirit As The Spirit Of The One God",
+      "anchorScriptures": [
+        "Gen. 1:2",
+        "Isa. 63:10–14",
+        "John 4:24",
+        "Rom. 8:9–11",
+        "II Cor. 3:17",
+        "Gal. 4:6",
+        "Eph. 4:4–6",
+        "I Pet. 1:10–12"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit across Scripture storyboard",
+        "plan": "Trace the Spirit in creation, prophets, Jesus and the church; compare descriptions and their context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.12.1.18",
+      "standardTitle": "Pentecost as a Revelatory Turning Point",
+      "studyId": "OG",
+      "domainId": "OG.12",
+      "domainTitle": "Pentecost And The Name Of Jesus In Apostolic Revelation",
+      "anchorScriptures": [
+        "Acts 2:16–18",
+        "Acts 2:22–36",
+        "Acts 2:33",
+        "Acts 3:16",
+        "Acts 4:10–12",
+        "Phil. 2:9–11",
+        "Col. 3:17",
+        "Matt. 28:19"
+      ],
+      "sourceLeadIds": [
+        "bp-pentecost"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost evidence sequence",
+        "plan": "Order Acts 2 events, then examine where Jesus' name occurs in apostolic proclamation and practice.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.12.2.18",
+      "standardTitle": "The Name of Jesus as Apostolic Disclosure of Divine Identity",
+      "studyId": "OG",
+      "domainId": "OG.12",
+      "domainTitle": "Pentecost And The Name Of Jesus In Apostolic Revelation",
+      "anchorScriptures": [
+        "Acts 2:16–18",
+        "Acts 2:22–36",
+        "Acts 2:33",
+        "Acts 3:16",
+        "Acts 4:10–12",
+        "Phil. 2:9–11",
+        "Col. 3:17",
+        "Matt. 28:19"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost evidence sequence",
+        "plan": "Order Acts 2 events, then examine where Jesus' name occurs in apostolic proclamation and practice.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.12.3.18",
+      "standardTitle": "Apostolic Baptism in Jesus' Name as Identity-Bearing Practice",
+      "studyId": "OG",
+      "domainId": "OG.12",
+      "domainTitle": "Pentecost And The Name Of Jesus In Apostolic Revelation",
+      "anchorScriptures": [
+        "Acts 2:16–18",
+        "Acts 2:22–36",
+        "Acts 2:33",
+        "Acts 3:16",
+        "Acts 4:10–12",
+        "Phil. 2:9–11",
+        "Col. 3:17",
+        "Matt. 28:19"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost evidence sequence",
+        "plan": "Order Acts 2 events, then examine where Jesus' name occurs in apostolic proclamation and practice.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.12.4.18",
+      "standardTitle": "Synthesis: Pentecost, the Name of Jesus, and Apostolic Practice as One Revelation of God in Christ",
+      "studyId": "OG",
+      "domainId": "OG.12",
+      "domainTitle": "Pentecost And The Name Of Jesus In Apostolic Revelation",
+      "anchorScriptures": [
+        "Acts 2:16–18",
+        "Acts 2:22–36",
+        "Acts 2:33",
+        "Acts 3:16",
+        "Acts 4:10–12",
+        "Phil. 2:9–11",
+        "Col. 3:17",
+        "Matt. 28:19"
+      ],
+      "sourceLeadIds": [
+        "bp-pentecost"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost evidence sequence",
+        "plan": "Order Acts 2 events, then examine where Jesus' name occurs in apostolic proclamation and practice.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.13.1.18",
+      "standardTitle": "The Structure of Apostolic Witness to Jesus Christ",
+      "studyId": "OG",
+      "domainId": "OG.13",
+      "domainTitle": "Apostolic Witness To The Identity Of Jesus Christ",
+      "anchorScriptures": [
+        "Acts 2:22–36",
+        "Acts 3:12–16",
+        "Acts 10:36–43",
+        "Acts 13:27–33",
+        "I Cor. 15:1–20",
+        "Ps. 110:1",
+        "Acts 2:33–36",
+        "Rev. 1:17–18"
+      ],
+      "sourceLeadIds": [
+        "bp-acts1",
+        "bp-acts2",
+        "bp-witness"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Apostolic witness map",
+        "plan": "Trace witnesses, audiences and proclamations across Acts and compare testimony with Scripture.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.13.2.18",
+      "standardTitle": "The Resurrection as Public Vindication of Jesus' Identity and Lordship",
+      "studyId": "OG",
+      "domainId": "OG.13",
+      "domainTitle": "Apostolic Witness To The Identity Of Jesus Christ",
+      "anchorScriptures": [
+        "Acts 2:22–36",
+        "Acts 3:12–16",
+        "Acts 10:36–43",
+        "Acts 13:27–33",
+        "I Cor. 15:1–20",
+        "Ps. 110:1",
+        "Acts 2:33–36",
+        "Rev. 1:17–18"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Apostolic witness map",
+        "plan": "Trace witnesses, audiences and proclamations across Acts and compare testimony with Scripture.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.13.3.18",
+      "standardTitle": "\"The Right Hand of God\" as Language of Authority and Exaltation",
+      "studyId": "OG",
+      "domainId": "OG.13",
+      "domainTitle": "Apostolic Witness To The Identity Of Jesus Christ",
+      "anchorScriptures": [
+        "Acts 2:22–36",
+        "Acts 3:12–16",
+        "Acts 10:36–43",
+        "Acts 13:27–33",
+        "I Cor. 15:1–20",
+        "Ps. 110:1",
+        "Acts 2:33–36",
+        "Rev. 1:17–18"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Apostolic witness map",
+        "plan": "Trace witnesses, audiences and proclamations across Acts and compare testimony with Scripture.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.14.1.18",
+      "standardTitle": "The Apostolic Oneness Baseline — First-Century Evidence",
+      "studyId": "OG",
+      "domainId": "OG.14",
+      "domainTitle": "Historical Distortion And The Rise Of Trinitarian Formulation",
+      "anchorScriptures": [
+        "Gal. 1:8–9",
+        "Acts 20:29–30",
+        "2 Thess. 2:3",
+        "2 Tim. 4:3–4",
+        "1 John 4:1",
+        "Col. 2:8",
+        "Rev. 2:4–5"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Primary-source history timeline",
+        "plan": "Use dated early-Christian primary texts and historically reputable secondary scholarship; require careful distinction between historical fact and Apostolic interpretation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.14.2.18",
+      "standardTitle": "The Greek Philosophical Pressure — Logos Theology and Person-Language",
+      "studyId": "OG",
+      "domainId": "OG.14",
+      "domainTitle": "Historical Distortion And The Rise Of Trinitarian Formulation",
+      "anchorScriptures": [
+        "Gal. 1:8–9",
+        "Acts 20:29–30",
+        "2 Thess. 2:3",
+        "2 Tim. 4:3–4",
+        "1 John 4:1",
+        "Col. 2:8",
+        "Rev. 2:4–5"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Primary-source history timeline",
+        "plan": "Use dated early-Christian primary texts and historically reputable secondary scholarship; require careful distinction between historical fact and Apostolic interpretation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.14.3.18",
+      "standardTitle": "Distinguishing Oneness from Classical Modalism",
+      "studyId": "OG",
+      "domainId": "OG.14",
+      "domainTitle": "Historical Distortion And The Rise Of Trinitarian Formulation",
+      "anchorScriptures": [
+        "Gal. 1:8–9",
+        "Acts 20:29–30",
+        "2 Thess. 2:3",
+        "2 Tim. 4:3–4",
+        "1 John 4:1",
+        "Col. 2:8",
+        "Rev. 2:4–5"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Primary-source history timeline",
+        "plan": "Use dated early-Christian primary texts and historically reputable secondary scholarship; require careful distinction between historical fact and Apostolic interpretation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.14.4.18",
+      "standardTitle": "Nicea, Arianism, and the Political Dimension of the Creed",
+      "studyId": "OG",
+      "domainId": "OG.14",
+      "domainTitle": "Historical Distortion And The Rise Of Trinitarian Formulation",
+      "anchorScriptures": [
+        "Gal. 1:8–9",
+        "Acts 20:29–30",
+        "2 Thess. 2:3",
+        "2 Tim. 4:3–4",
+        "1 John 4:1",
+        "Col. 2:8",
+        "Rev. 2:4–5"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Primary-source history timeline",
+        "plan": "Use dated early-Christian primary texts and historically reputable secondary scholarship; require careful distinction between historical fact and Apostolic interpretation.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.15.1.18",
+      "standardTitle": "Naming and Distinguishing the Theological Alternatives",
+      "studyId": "OG",
+      "domainId": "OG.15",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability",
+      "anchorScriptures": [
+        "1 Pet. 3:15",
+        "2 Tim. 2:15",
+        "1 John 4:1",
+        "Col. 2:8",
+        "2 Tim. 3:16–17",
+        "Matt. 7:15",
+        "Acts 17:11"
+      ],
+      "sourceLeadIds": [
+        "bp-first-commandment"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful claim-and-evidence clinic",
+        "plan": "Distinguish opponents' actual claims from caricatures; support an answer with Scripture and respect.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.15.2.18",
+      "standardTitle": "The Pastoral Dimension of Doctrinal Conviction",
+      "studyId": "OG",
+      "domainId": "OG.15",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability",
+      "anchorScriptures": [
+        "1 Pet. 3:15",
+        "2 Tim. 2:15",
+        "1 John 4:1",
+        "Col. 2:8",
+        "2 Tim. 3:16–17",
+        "Matt. 7:15",
+        "Acts 17:11"
+      ],
+      "sourceLeadIds": [
+        "bp-law",
+        "bp-witness"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful claim-and-evidence clinic",
+        "plan": "Distinguish opponents' actual claims from caricatures; support an answer with Scripture and respect.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.15.3.18",
+      "standardTitle": "Stability Under Challenge — Doctrinal Maturity in Real Life",
+      "studyId": "OG",
+      "domainId": "OG.15",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability",
+      "anchorScriptures": [
+        "1 Pet. 3:15",
+        "2 Tim. 2:15",
+        "1 John 4:1",
+        "Col. 2:8",
+        "2 Tim. 3:16–17",
+        "Matt. 7:15",
+        "Acts 17:11"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful claim-and-evidence clinic",
+        "plan": "Distinguish opponents' actual claims from caricatures; support an answer with Scripture and respect.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "OG.15.4.18",
+      "standardTitle": "World-Facing Stability Under Alternate Religions, Counterfeit Christian Claims, and Social Pressure",
+      "studyId": "OG",
+      "domainId": "OG.15",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability",
+      "anchorScriptures": [
+        "1 Pet. 3:15",
+        "2 Tim. 2:15",
+        "1 John 4:1",
+        "Col. 2:8",
+        "2 Tim. 3:16–17",
+        "Matt. 7:15",
+        "Acts 17:11"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful claim-and-evidence clinic",
+        "plan": "Distinguish opponents' actual claims from caricatures; support an answer with Scripture and respect.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.1.1.18",
+      "standardTitle": "Sin as Rebellion Against God and the Cause of Human Separation",
+      "studyId": "NB",
+      "domainId": "NB.1",
+      "domainTitle": "Sin, Human Fall, And The Need For New Birth",
+      "anchorScriptures": [
+        "Gen. 2:15–17",
+        "Gen. 3:1–24",
+        "Gen. 6:5",
+        "Ps. 51:1–5",
+        "Isa. 59:1–2",
+        "Rom. 3:10–23",
+        "Rom. 5:12–19",
+        "Rom. 6:23"
+      ],
+      "sourceLeadIds": [
+        "bp-sin",
+        "bp-transgression"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Fall-to-need cause-and-effect map",
+        "plan": "Trace command, rebellion, consequence and universal need through Genesis, Isaiah and Romans.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.1.2.18",
+      "standardTitle": "The Fall as the Beginning of Man’s Ruined Condition",
+      "studyId": "NB",
+      "domainId": "NB.1",
+      "domainTitle": "Sin, Human Fall, And The Need For New Birth",
+      "anchorScriptures": [
+        "Gen. 2:15–17",
+        "Gen. 3:1–24",
+        "Gen. 6:5",
+        "Ps. 51:1–5",
+        "Isa. 59:1–2",
+        "Rom. 3:10–23",
+        "Rom. 5:12–19",
+        "Rom. 6:23"
+      ],
+      "sourceLeadIds": [
+        "bp-sin",
+        "bp-image-of-god"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Fall-to-need cause-and-effect map",
+        "plan": "Trace command, rebellion, consequence and universal need through Genesis, Isaiah and Romans.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.1.3.18",
+      "standardTitle": "The Universal Need for Salvation",
+      "studyId": "NB",
+      "domainId": "NB.1",
+      "domainTitle": "Sin, Human Fall, And The Need For New Birth",
+      "anchorScriptures": [
+        "Gen. 2:15–17",
+        "Gen. 3:1–24",
+        "Gen. 6:5",
+        "Ps. 51:1–5",
+        "Isa. 59:1–2",
+        "Rom. 3:10–23",
+        "Rom. 5:12–19",
+        "Rom. 6:23"
+      ],
+      "sourceLeadIds": [
+        "bp-sin",
+        "bp-day"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Fall-to-need cause-and-effect map",
+        "plan": "Trace command, rebellion, consequence and universal need through Genesis, Isaiah and Romans.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.1.4.18",
+      "standardTitle": "Synthesis: Sin, Fall, Separation, and Universal Need as the Foundation of the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.1",
+      "domainTitle": "Sin, Human Fall, And The Need For New Birth",
+      "anchorScriptures": [
+        "Gen. 2:15–17",
+        "Gen. 3:1–24",
+        "Gen. 6:5",
+        "Ps. 51:1–5",
+        "Isa. 59:1–2",
+        "Rom. 3:10–23",
+        "Rom. 5:12–19",
+        "Rom. 6:23"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Fall-to-need cause-and-effect map",
+        "plan": "Trace command, rebellion, consequence and universal need through Genesis, Isaiah and Romans.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.2.1.18",
+      "standardTitle": "Promise and Covenant as the Preparatory Structure for Salvation",
+      "studyId": "NB",
+      "domainId": "NB.2",
+      "domainTitle": "Promise, Covenant, And The Redemptive Structure Of Salvation",
+      "anchorScriptures": [
+        "Gen. 3:15",
+        "Gen. 12:1–3",
+        "Exod. 12:1–14",
+        "Exod. 24:3–8",
+        "Lev. 16:1–34",
+        "Jer. 31:31–34",
+        "Ezek. 36:25–27",
+        "Heb. 9:11–15"
+      ],
+      "sourceLeadIds": [
+        "bp-covenants",
+        "bp-exodus-part2",
+        "met-tablet"
+      ],
+      "sourceLeadKinds": [
+        "video",
+        "historical-object"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Covenant and atonement timeline",
+        "plan": "Connect promise, Passover, sacrifice, cleansing and indwelling as preparatory themes.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.2.2.18",
+      "standardTitle": "Sacrifice, Blood, and Cleansing as Preparatory Categories for the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.2",
+      "domainTitle": "Promise, Covenant, And The Redemptive Structure Of Salvation",
+      "anchorScriptures": [
+        "Gen. 3:15",
+        "Gen. 12:1–3",
+        "Exod. 12:1–14",
+        "Exod. 24:3–8",
+        "Lev. 16:1–34",
+        "Jer. 31:31–34",
+        "Ezek. 36:25–27",
+        "Heb. 9:11–15"
+      ],
+      "sourceLeadIds": [
+        "bp-passover",
+        "bp-atonement"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Covenant and atonement timeline",
+        "plan": "Connect promise, Passover, sacrifice, cleansing and indwelling as preparatory themes.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.2.3.18",
+      "standardTitle": "Divine Dwelling Promise as Preparatory for Spirit-Born Covenant Life",
+      "studyId": "NB",
+      "domainId": "NB.2",
+      "domainTitle": "Promise, Covenant, And The Redemptive Structure Of Salvation",
+      "anchorScriptures": [
+        "Gen. 3:15",
+        "Gen. 12:1–3",
+        "Exod. 12:1–14",
+        "Exod. 24:3–8",
+        "Lev. 16:1–34",
+        "Jer. 31:31–34",
+        "Ezek. 36:25–27",
+        "Heb. 9:11–15"
+      ],
+      "sourceLeadIds": [
+        "bp-temple"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Covenant and atonement timeline",
+        "plan": "Connect promise, Passover, sacrifice, cleansing and indwelling as preparatory themes.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.2.4.18",
+      "standardTitle": "Synthesis: Promise, Covenant, Sacrifice, Cleansing, and Divine Dwelling as the Redemptive Structure Preparing the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.2",
+      "domainTitle": "Promise, Covenant, And The Redemptive Structure Of Salvation",
+      "anchorScriptures": [
+        "Gen. 3:15",
+        "Gen. 12:1–3",
+        "Exod. 12:1–14",
+        "Exod. 24:3–8",
+        "Lev. 16:1–34",
+        "Jer. 31:31–34",
+        "Ezek. 36:25–27",
+        "Heb. 9:11–15"
+      ],
+      "sourceLeadIds": [
+        "bp-covenants"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Covenant and atonement timeline",
+        "plan": "Connect promise, Passover, sacrifice, cleansing and indwelling as preparatory themes.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.3.1.18",
+      "standardTitle": "The Death, Burial, and Resurrection of Christ as the Basis of Salvation",
+      "studyId": "NB",
+      "domainId": "NB.3",
+      "domainTitle": "The Gospel As The Basis Of New Birth",
+      "anchorScriptures": [
+        "Isa. 53:4–12",
+        "Matt. 27:45–54",
+        "Matt. 28:5–7",
+        "Acts 2:22–36",
+        "Rom. 4:25",
+        "Rom. 5:6–11",
+        "Rom. 6:3–4",
+        "I Cor. 15:1–8"
+      ],
+      "sourceLeadIds": [
+        "bp-atonement",
+        "bp-gospel",
+        "bp-messiah"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Gospel-event storyboard",
+        "plan": "Reconstruct death, burial and resurrection before discussing apostolic response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.3.2.18",
+      "standardTitle": "The Gospel as Redemptive Accomplishment and Not Mere Religious Information",
+      "studyId": "NB",
+      "domainId": "NB.3",
+      "domainTitle": "The Gospel As The Basis Of New Birth",
+      "anchorScriptures": [
+        "Isa. 53:4–12",
+        "Matt. 27:45–54",
+        "Matt. 28:5–7",
+        "Acts 2:22–36",
+        "Rom. 4:25",
+        "Rom. 5:6–11",
+        "Rom. 6:3–4",
+        "I Cor. 15:1–8"
+      ],
+      "sourceLeadIds": [
+        "bp-gospel",
+        "bp-gospel-word"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Gospel-event storyboard",
+        "plan": "Reconstruct death, burial and resurrection before discussing apostolic response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.3.3.18",
+      "standardTitle": "The Relationship Between the Gospel Event and the Pattern of New Birth Response",
+      "studyId": "NB",
+      "domainId": "NB.3",
+      "domainTitle": "The Gospel As The Basis Of New Birth",
+      "anchorScriptures": [
+        "Isa. 53:4–12",
+        "Matt. 27:45–54",
+        "Matt. 28:5–7",
+        "Acts 2:22–36",
+        "Rom. 4:25",
+        "Rom. 5:6–11",
+        "Rom. 6:3–4",
+        "I Cor. 15:1–8"
+      ],
+      "sourceLeadIds": [
+        "bp-passover",
+        "bp-messiah"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Gospel-event storyboard",
+        "plan": "Reconstruct death, burial and resurrection before discussing apostolic response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.3.4.18",
+      "standardTitle": "Synthesis: Gospel Accomplishment and New Birth Doctrine as One Redemptive Structure",
+      "studyId": "NB",
+      "domainId": "NB.3",
+      "domainTitle": "The Gospel As The Basis Of New Birth",
+      "anchorScriptures": [
+        "Isa. 53:4–12",
+        "Matt. 27:45–54",
+        "Matt. 28:5–7",
+        "Acts 2:22–36",
+        "Rom. 4:25",
+        "Rom. 5:6–11",
+        "Rom. 6:3–4",
+        "I Cor. 15:1–8"
+      ],
+      "sourceLeadIds": [
+        "bp-gospel-word"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Gospel-event storyboard",
+        "plan": "Reconstruct death, burial and resurrection before discussing apostolic response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.4.1.18",
+      "standardTitle": "Repentance as Necessary Turning from Sin to God",
+      "studyId": "NB",
+      "domainId": "NB.4",
+      "domainTitle": "Repentance As Turning, Surrender, And Covenant Response",
+      "anchorScriptures": [
+        "Isa. 55:6–7",
+        "Ezek. 18:30–32",
+        "Matt. 3:7–8",
+        "Luke 13:3",
+        "Luke 24:46–47",
+        "Acts 2:37–38",
+        "Acts 3:19",
+        "Acts 17:30–31"
+      ],
+      "sourceLeadIds": [
+        "bp-sin",
+        "bp-transgression"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Repentance decision scenarios",
+        "plan": "Distinguish mere remorse from a genuine turn in response to the gospel.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.4.2.18",
+      "standardTitle": "Repentance as Surrender of Self-Rule Under the Authority of God",
+      "studyId": "NB",
+      "domainId": "NB.4",
+      "domainTitle": "Repentance As Turning, Surrender, And Covenant Response",
+      "anchorScriptures": [
+        "Isa. 55:6–7",
+        "Ezek. 18:30–32",
+        "Matt. 3:7–8",
+        "Luke 13:3",
+        "Luke 24:46–47",
+        "Acts 2:37–38",
+        "Acts 3:19",
+        "Acts 17:30–31"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Repentance decision scenarios",
+        "plan": "Distinguish mere remorse from a genuine turn in response to the gospel.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.4.3.18",
+      "standardTitle": "Godly Sorrow, Confession, and Changed Direction as Fruits of True Repentance",
+      "studyId": "NB",
+      "domainId": "NB.4",
+      "domainTitle": "Repentance As Turning, Surrender, And Covenant Response",
+      "anchorScriptures": [
+        "Isa. 55:6–7",
+        "Ezek. 18:30–32",
+        "Matt. 3:7–8",
+        "Luke 13:3",
+        "Luke 24:46–47",
+        "Acts 2:37–38",
+        "Acts 3:19",
+        "Acts 17:30–31"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Repentance decision scenarios",
+        "plan": "Distinguish mere remorse from a genuine turn in response to the gospel.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.4.4.18",
+      "standardTitle": "Synthesis: Repentance as the Necessary Moral and Covenant Response to the Gospel",
+      "studyId": "NB",
+      "domainId": "NB.4",
+      "domainTitle": "Repentance As Turning, Surrender, And Covenant Response",
+      "anchorScriptures": [
+        "Isa. 55:6–7",
+        "Ezek. 18:30–32",
+        "Matt. 3:7–8",
+        "Luke 13:3",
+        "Luke 24:46–47",
+        "Acts 2:37–38",
+        "Acts 3:19",
+        "Acts 17:30–31"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Repentance decision scenarios",
+        "plan": "Distinguish mere remorse from a genuine turn in response to the gospel.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.4.5.18",
+      "standardTitle": "Repentance as Renunciation of False Allegiance, Occult Practice, and Former Sin Structures",
+      "studyId": "NB",
+      "domainId": "NB.4",
+      "domainTitle": "Repentance As Turning, Surrender, And Covenant Response",
+      "anchorScriptures": [
+        "Isa. 55:6–7",
+        "Ezek. 18:30–32",
+        "Matt. 3:7–8",
+        "Luke 13:3",
+        "Luke 24:46–47",
+        "Acts 2:37–38",
+        "Acts 3:19",
+        "Acts 17:30–31"
+      ],
+      "sourceLeadIds": [
+        "bp-transgression"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Repentance decision scenarios",
+        "plan": "Distinguish mere remorse from a genuine turn in response to the gospel.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.5.1.18",
+      "standardTitle": "Water Baptism as Part of Apostolic Response to the Gospel",
+      "studyId": "NB",
+      "domainId": "NB.5",
+      "domainTitle": "Water Baptism And Apostolic Gospel Response",
+      "anchorScriptures": [
+        "Ezek. 36:25",
+        "Mark 16:16",
+        "John 3:5",
+        "Acts 2:38",
+        "Acts 22:16",
+        "Rom. 6:3–4",
+        "Gal. 3:27",
+        "Col. 2:11–12"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Acts baptism-case comparison",
+        "plan": "Read who was baptized, when, in whose name and how the text describes its purpose.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.5.2.18",
+      "standardTitle": "Baptism in Relation to Burial with Christ",
+      "studyId": "NB",
+      "domainId": "NB.5",
+      "domainTitle": "Water Baptism And Apostolic Gospel Response",
+      "anchorScriptures": [
+        "Ezek. 36:25",
+        "Mark 16:16",
+        "John 3:5",
+        "Acts 2:38",
+        "Acts 22:16",
+        "Rom. 6:3–4",
+        "Gal. 3:27",
+        "Col. 2:11–12"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Acts baptism-case comparison",
+        "plan": "Read who was baptized, when, in whose name and how the text describes its purpose.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.5.3.18",
+      "standardTitle": "Baptism in Relation to Remission, Washing, and Covenant Entry",
+      "studyId": "NB",
+      "domainId": "NB.5",
+      "domainTitle": "Water Baptism And Apostolic Gospel Response",
+      "anchorScriptures": [
+        "Ezek. 36:25",
+        "Mark 16:16",
+        "John 3:5",
+        "Acts 2:38",
+        "Acts 22:16",
+        "Rom. 6:3–4",
+        "Gal. 3:27",
+        "Col. 2:11–12"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Acts baptism-case comparison",
+        "plan": "Read who was baptized, when, in whose name and how the text describes its purpose.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.5.4.18",
+      "standardTitle": "Baptism in Jesus’ Name as Apostolic Baptismal Practice",
+      "studyId": "NB",
+      "domainId": "NB.5",
+      "domainTitle": "Water Baptism And Apostolic Gospel Response",
+      "anchorScriptures": [
+        "Ezek. 36:25",
+        "Mark 16:16",
+        "John 3:5",
+        "Acts 2:38",
+        "Acts 22:16",
+        "Rom. 6:3–4",
+        "Gal. 3:27",
+        "Col. 2:11–12"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Acts baptism-case comparison",
+        "plan": "Read who was baptized, when, in whose name and how the text describes its purpose.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.5.5.18",
+      "standardTitle": "Synthesis: Baptism, Burial, Remission, Name, and Apostolic Obedience as One Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.5",
+      "domainTitle": "Water Baptism And Apostolic Gospel Response",
+      "anchorScriptures": [
+        "Ezek. 36:25",
+        "Mark 16:16",
+        "John 3:5",
+        "Acts 2:38",
+        "Acts 22:16",
+        "Rom. 6:3–4",
+        "Gal. 3:27",
+        "Col. 2:11–12"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Acts baptism-case comparison",
+        "plan": "Read who was baptized, when, in whose name and how the text describes its purpose.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.5.6.18",
+      "standardTitle": "Urgency, Immersion, and Immediate Baptismal Obedience in Apostolic Practice",
+      "studyId": "NB",
+      "domainId": "NB.5",
+      "domainTitle": "Water Baptism And Apostolic Gospel Response",
+      "anchorScriptures": [
+        "Ezek. 36:25",
+        "Mark 16:16",
+        "John 3:5",
+        "Acts 2:38",
+        "Acts 22:16",
+        "Rom. 6:3–4",
+        "Gal. 3:27",
+        "Col. 2:11–12"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Acts baptism-case comparison",
+        "plan": "Read who was baptized, when, in whose name and how the text describes its purpose.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.6.1.18",
+      "standardTitle": "The Necessity of Spiritual Birth in the Doctrine of the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.6",
+      "domainTitle": "The Holy Spirit And The Necessity Of Spiritual Birth",
+      "anchorScriptures": [
+        "Isa. 44:3",
+        "Ezek. 36:26–27",
+        "Joel 2:28–29",
+        "John 3:3–8",
+        "John 7:37–39",
+        "Acts 2:38–39",
+        "Acts 10:44–47",
+        "Rom. 8:9"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit-promise comparison",
+        "plan": "Pair prophecies with John 3 and reception accounts without substituting a video for Scripture.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.6.2.18",
+      "standardTitle": "The Holy Spirit as the Promised Gift of New-Covenant Indwelling Life",
+      "studyId": "NB",
+      "domainId": "NB.6",
+      "domainTitle": "The Holy Spirit And The Necessity Of Spiritual Birth",
+      "anchorScriptures": [
+        "Isa. 44:3",
+        "Ezek. 36:26–27",
+        "Joel 2:28–29",
+        "John 3:3–8",
+        "John 7:37–39",
+        "Acts 2:38–39",
+        "Acts 10:44–47",
+        "Rom. 8:9"
+      ],
+      "sourceLeadIds": [
+        "bp-spirit"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit-promise comparison",
+        "plan": "Pair prophecies with John 3 and reception accounts without substituting a video for Scripture.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.6.3.18",
+      "standardTitle": "Regeneration and Renewal as Works of God by the Spirit",
+      "studyId": "NB",
+      "domainId": "NB.6",
+      "domainTitle": "The Holy Spirit And The Necessity Of Spiritual Birth",
+      "anchorScriptures": [
+        "Isa. 44:3",
+        "Ezek. 36:26–27",
+        "Joel 2:28–29",
+        "John 3:3–8",
+        "John 7:37–39",
+        "Acts 2:38–39",
+        "Acts 10:44–47",
+        "Rom. 8:9"
+      ],
+      "sourceLeadIds": [
+        "bp-spirit"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit-promise comparison",
+        "plan": "Pair prophecies with John 3 and reception accounts without substituting a video for Scripture.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.6.4.18",
+      "standardTitle": "Synthesis: Necessity, Promise, Indwelling, and Renewal as One Doctrine of Spirit-Born Life",
+      "studyId": "NB",
+      "domainId": "NB.6",
+      "domainTitle": "The Holy Spirit And The Necessity Of Spiritual Birth",
+      "anchorScriptures": [
+        "Isa. 44:3",
+        "Ezek. 36:26–27",
+        "Joel 2:28–29",
+        "John 3:3–8",
+        "John 7:37–39",
+        "Acts 2:38–39",
+        "Acts 10:44–47",
+        "Rom. 8:9"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit-promise comparison",
+        "plan": "Pair prophecies with John 3 and reception accounts without substituting a video for Scripture.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.7.1.18",
+      "standardTitle": "Pentecost as the Public Opening of New-Covenant Birth",
+      "studyId": "NB",
+      "domainId": "NB.7",
+      "domainTitle": "Pentecost And The Opening Of New-Covenant Birth",
+      "anchorScriptures": [
+        "Joel 2:28–32",
+        "Luke 24:46–49",
+        "Acts 1:4–8",
+        "Acts 2:1–18",
+        "Acts 2:22–38",
+        "Acts 2:39",
+        "Acts 10:44–47",
+        "Acts 11:15–17"
+      ],
+      "sourceLeadIds": [
+        "bp-pentecost"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost event-and-response sequence",
+        "plan": "Use Acts 2 to link promise, outpouring, Peter's proclamation and the crowd's response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.7.2.18",
+      "standardTitle": "Pentecost as Fulfillment of Promise and Christ’s Own Teaching",
+      "studyId": "NB",
+      "domainId": "NB.7",
+      "domainTitle": "Pentecost And The Opening Of New-Covenant Birth",
+      "anchorScriptures": [
+        "Joel 2:28–32",
+        "Luke 24:46–49",
+        "Acts 1:4–8",
+        "Acts 2:1–18",
+        "Acts 2:22–38",
+        "Acts 2:39",
+        "Acts 10:44–47",
+        "Acts 11:15–17"
+      ],
+      "sourceLeadIds": [
+        "bp-spirit",
+        "bp-pentecost"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost event-and-response sequence",
+        "plan": "Use Acts 2 to link promise, outpouring, Peter's proclamation and the crowd's response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.7.3.18",
+      "standardTitle": "Pentecost as the Beginning of Apostolic Proclamation and Salvation Response",
+      "studyId": "NB",
+      "domainId": "NB.7",
+      "domainTitle": "Pentecost And The Opening Of New-Covenant Birth",
+      "anchorScriptures": [
+        "Joel 2:28–32",
+        "Luke 24:46–49",
+        "Acts 1:4–8",
+        "Acts 2:1–18",
+        "Acts 2:22–38",
+        "Acts 2:39",
+        "Acts 10:44–47",
+        "Acts 11:15–17"
+      ],
+      "sourceLeadIds": [
+        "bp-pentecost"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost event-and-response sequence",
+        "plan": "Use Acts 2 to link promise, outpouring, Peter's proclamation and the crowd's response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.7.4.18",
+      "standardTitle": "Synthesis: Fulfillment, Spirit Outpouring, Proclamation, and Response as One Doctrine of Pentecost",
+      "studyId": "NB",
+      "domainId": "NB.7",
+      "domainTitle": "Pentecost And The Opening Of New-Covenant Birth",
+      "anchorScriptures": [
+        "Joel 2:28–32",
+        "Luke 24:46–49",
+        "Acts 1:4–8",
+        "Acts 2:1–18",
+        "Acts 2:22–38",
+        "Acts 2:39",
+        "Acts 10:44–47",
+        "Acts 11:15–17"
+      ],
+      "sourceLeadIds": [
+        "bp-pentecost"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost event-and-response sequence",
+        "plan": "Use Acts 2 to link promise, outpouring, Peter's proclamation and the crowd's response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.7.5.18",
+      "standardTitle": "Pentecost as the Covenant Turning Point and Ongoing Apostolic Reference Point",
+      "studyId": "NB",
+      "domainId": "NB.7",
+      "domainTitle": "Pentecost And The Opening Of New-Covenant Birth",
+      "anchorScriptures": [
+        "Joel 2:28–32",
+        "Luke 24:46–49",
+        "Acts 1:4–8",
+        "Acts 2:1–18",
+        "Acts 2:22–38",
+        "Acts 2:39",
+        "Acts 10:44–47",
+        "Acts 11:15–17"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Pentecost event-and-response sequence",
+        "plan": "Use Acts 2 to link promise, outpouring, Peter's proclamation and the crowd's response.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.8.1.18",
+      "standardTitle": "Acts as the Historical Unfolding of Apostolic Salvation Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.8",
+      "domainTitle": "The Apostolic Pattern Of The New Birth",
+      "anchorScriptures": [
+        "Acts 2:37–42",
+        "Acts 8:12–17",
+        "Acts 9:17–18",
+        "Acts 10:44–48",
+        "Acts 16:30–33",
+        "Acts 19:1–6",
+        "Acts 22:16",
+        "Acts 8:35–39"
+      ],
+      "sourceLeadIds": [
+        "bp-acts1",
+        "bp-acts2",
+        "met-lamp"
+      ],
+      "sourceLeadKinds": [
+        "video",
+        "historical-object"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Interactive Acts conversion matrix",
+        "plan": "Compare the Jewish, Samaritan, Gentile and Ephesian accounts and distinguish recurring elements from varying order.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.8.2.18",
+      "standardTitle": "The Recurring Apostolic Response Pattern in Acts",
+      "studyId": "NB",
+      "domainId": "NB.8",
+      "domainTitle": "The Apostolic Pattern Of The New Birth",
+      "anchorScriptures": [
+        "Acts 2:37–42",
+        "Acts 8:12–17",
+        "Acts 9:17–18",
+        "Acts 10:44–48",
+        "Acts 16:30–33",
+        "Acts 19:1–6",
+        "Acts 22:16",
+        "Acts 8:35–39"
+      ],
+      "sourceLeadIds": [
+        "bp-acts1"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Interactive Acts conversion matrix",
+        "plan": "Compare the Jewish, Samaritan, Gentile and Ephesian accounts and distinguish recurring elements from varying order.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.8.3.18",
+      "standardTitle": "Apostolic Consistency Across Jewish, Samaritan, Gentile, and Later Conversion Settings",
+      "studyId": "NB",
+      "domainId": "NB.8",
+      "domainTitle": "The Apostolic Pattern Of The New Birth",
+      "anchorScriptures": [
+        "Acts 2:37–42",
+        "Acts 8:12–17",
+        "Acts 9:17–18",
+        "Acts 10:44–48",
+        "Acts 16:30–33",
+        "Acts 19:1–6",
+        "Acts 22:16",
+        "Acts 8:35–39"
+      ],
+      "sourceLeadIds": [
+        "bp-acts1",
+        "bp-acts2"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Interactive Acts conversion matrix",
+        "plan": "Compare the Jewish, Samaritan, Gentile and Ephesian accounts and distinguish recurring elements from varying order.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.8.4.18",
+      "standardTitle": "Synthesis: Apostolic Preaching, Response, and Historical Practice as One Doctrine of the New Birth Pattern",
+      "studyId": "NB",
+      "domainId": "NB.8",
+      "domainTitle": "The Apostolic Pattern Of The New Birth",
+      "anchorScriptures": [
+        "Acts 2:37–42",
+        "Acts 8:12–17",
+        "Acts 9:17–18",
+        "Acts 10:44–48",
+        "Acts 16:30–33",
+        "Acts 19:1–6",
+        "Acts 22:16",
+        "Acts 8:35–39"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Interactive Acts conversion matrix",
+        "plan": "Compare the Jewish, Samaritan, Gentile and Ephesian accounts and distinguish recurring elements from varying order.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.9.1.18",
+      "standardTitle": "Saving Faith as Obedient Trust in God’s Revealed Gospel",
+      "studyId": "NB",
+      "domainId": "NB.9",
+      "domainTitle": "Faith, Obedience, And Full Saving Response",
+      "anchorScriptures": [
+        "Gen. 15:6",
+        "Hab. 2:4",
+        "John 3:16",
+        "Acts 2:37–41",
+        "Rom. 1:5",
+        "Heb. 5:8–9",
+        "Heb. 11:1–8",
+        "James 2:14–26"
+      ],
+      "sourceLeadIds": [
+        "bp-gospel"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Faith, grace and obedience reasoning cards",
+        "plan": "Distinguish obedient trust from a claim of earning salvation; interpret each cited text in context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.9.2.18",
+      "standardTitle": "Why Obedience Does Not Compete with Grace in the Doctrine of Salvation",
+      "studyId": "NB",
+      "domainId": "NB.9",
+      "domainTitle": "Faith, Obedience, And Full Saving Response",
+      "anchorScriptures": [
+        "Gen. 15:6",
+        "Hab. 2:4",
+        "John 3:16",
+        "Acts 2:37–41",
+        "Rom. 1:5",
+        "Heb. 5:8–9",
+        "Heb. 11:1–8",
+        "James 2:14–26"
+      ],
+      "sourceLeadIds": [
+        "bp-law"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Faith, grace and obedience reasoning cards",
+        "plan": "Distinguish obedient trust from a claim of earning salvation; interpret each cited text in context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.9.3.18",
+      "standardTitle": "Answering the Works Objection in Apostolic Salvation Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.9",
+      "domainTitle": "Faith, Obedience, And Full Saving Response",
+      "anchorScriptures": [
+        "Gen. 15:6",
+        "Hab. 2:4",
+        "John 3:16",
+        "Acts 2:37–41",
+        "Rom. 1:5",
+        "Heb. 5:8–9",
+        "Heb. 11:1–8",
+        "James 2:14–26"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Faith, grace and obedience reasoning cards",
+        "plan": "Distinguish obedient trust from a claim of earning salvation; interpret each cited text in context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.9.4.18",
+      "standardTitle": "Distinguishing Living Faith from Dead Faith in Relation to the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.9",
+      "domainTitle": "Faith, Obedience, And Full Saving Response",
+      "anchorScriptures": [
+        "Gen. 15:6",
+        "Hab. 2:4",
+        "John 3:16",
+        "Acts 2:37–41",
+        "Rom. 1:5",
+        "Heb. 5:8–9",
+        "Heb. 11:1–8",
+        "James 2:14–26"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Faith, grace and obedience reasoning cards",
+        "plan": "Distinguish obedient trust from a claim of earning salvation; interpret each cited text in context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.9.5.18",
+      "standardTitle": "Synthesis: Faith, Obedience, Grace, and Response as One Doctrine of Saving Faith",
+      "studyId": "NB",
+      "domainId": "NB.9",
+      "domainTitle": "Faith, Obedience, And Full Saving Response",
+      "anchorScriptures": [
+        "Gen. 15:6",
+        "Hab. 2:4",
+        "John 3:16",
+        "Acts 2:37–41",
+        "Rom. 1:5",
+        "Heb. 5:8–9",
+        "Heb. 11:1–8",
+        "James 2:14–26"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Faith, grace and obedience reasoning cards",
+        "plan": "Distinguish obedient trust from a claim of earning salvation; interpret each cited text in context.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.10.1.18",
+      "standardTitle": "The Name of Jesus as Central to Apostolic Salvation Proclamation",
+      "studyId": "NB",
+      "domainId": "NB.10",
+      "domainTitle": "The Name Of Jesus In Salvation And Covenant Entry",
+      "anchorScriptures": [
+        "Isa. 43:10–11",
+        "Joel 2:32",
+        "Matt. 1:21",
+        "Luke 24:47",
+        "Acts 2:21",
+        "Acts 2:38",
+        "Acts 4:10–12",
+        "Acts 10:43"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Name-of-Jesus Scripture trail",
+        "plan": "Trace the name in prophecy, apostolic preaching, repentance and baptism; avoid treating the name as a charm.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.10.2.18",
+      "standardTitle": "Invocation of the Name of Jesus in Relation to Repentance, Baptism, and Remission",
+      "studyId": "NB",
+      "domainId": "NB.10",
+      "domainTitle": "The Name Of Jesus In Salvation And Covenant Entry",
+      "anchorScriptures": [
+        "Isa. 43:10–11",
+        "Joel 2:32",
+        "Matt. 1:21",
+        "Luke 24:47",
+        "Acts 2:21",
+        "Acts 2:38",
+        "Acts 4:10–12",
+        "Acts 10:43"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Name-of-Jesus Scripture trail",
+        "plan": "Trace the name in prophecy, apostolic preaching, repentance and baptism; avoid treating the name as a charm.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.10.3.18",
+      "standardTitle": "Synthesis: The Name of Jesus, Authority, and Covenant Response as One Doctrine of Salvation Entry",
+      "studyId": "NB",
+      "domainId": "NB.10",
+      "domainTitle": "The Name Of Jesus In Salvation And Covenant Entry",
+      "anchorScriptures": [
+        "Isa. 43:10–11",
+        "Joel 2:32",
+        "Matt. 1:21",
+        "Luke 24:47",
+        "Acts 2:21",
+        "Acts 2:38",
+        "Acts 4:10–12",
+        "Acts 10:43"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Name-of-Jesus Scripture trail",
+        "plan": "Trace the name in prophecy, apostolic preaching, repentance and baptism; avoid treating the name as a charm.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.11.1.18",
+      "standardTitle": "Remission as Part of Apostolic Salvation Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.11",
+      "domainTitle": "Remission, Cleansing, And Covenant Application",
+      "anchorScriptures": [
+        "Ps. 51:7–12",
+        "Isa. 1:16–18",
+        "Isa. 53:11–12",
+        "Zech. 13:1",
+        "Matt. 26:28",
+        "Acts 2:38",
+        "Acts 10:43",
+        "Acts 22:16"
+      ],
+      "sourceLeadIds": [
+        "bp-atonement"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Remission and washing category sort",
+        "plan": "Match forgiveness, washing, cleansing and application wording to the passages that use it.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.11.2.18",
+      "standardTitle": "Cleansing and Washing as Covenant Application Categories",
+      "studyId": "NB",
+      "domainId": "NB.11",
+      "domainTitle": "Remission, Cleansing, And Covenant Application",
+      "anchorScriptures": [
+        "Ps. 51:7–12",
+        "Isa. 1:16–18",
+        "Isa. 53:11–12",
+        "Zech. 13:1",
+        "Matt. 26:28",
+        "Acts 2:38",
+        "Acts 10:43",
+        "Acts 22:16"
+      ],
+      "sourceLeadIds": [
+        "bp-atonement",
+        "bp-holiness"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Remission and washing category sort",
+        "plan": "Match forgiveness, washing, cleansing and application wording to the passages that use it.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.11.3.18",
+      "standardTitle": "Synthesis: Remission, Cleansing, Washing, and Application as One Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.11",
+      "domainTitle": "Remission, Cleansing, And Covenant Application",
+      "anchorScriptures": [
+        "Ps. 51:7–12",
+        "Isa. 1:16–18",
+        "Isa. 53:11–12",
+        "Zech. 13:1",
+        "Matt. 26:28",
+        "Acts 2:38",
+        "Acts 10:43",
+        "Acts 22:16"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Remission and washing category sort",
+        "plan": "Match forgiveness, washing, cleansing and application wording to the passages that use it.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.12.1.18",
+      "standardTitle": "Spirit Reception as a Real and Recognizable Part of Apostolic Salvation Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.12",
+      "domainTitle": "Spirit Reception, Signs, And New-Covenant Identification",
+      "anchorScriptures": [
+        "Isa. 28:11–12",
+        "Joel 2:28–29",
+        "Acts 2:1–4",
+        "Acts 2:33",
+        "Acts 8:14–20",
+        "Acts 10:44–47",
+        "Acts 11:15–17",
+        "Acts 19:1–6"
+      ],
+      "sourceLeadIds": [
+        "bp-spirit"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit reception evidence matrix",
+        "plan": "Distinguish receiving the Spirit, the signs in Acts and the life that follows.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.12.2.18",
+      "standardTitle": "The Sign Dimension of Spirit Reception in Relation to Apostolic Witness",
+      "studyId": "NB",
+      "domainId": "NB.12",
+      "domainTitle": "Spirit Reception, Signs, And New-Covenant Identification",
+      "anchorScriptures": [
+        "Isa. 28:11–12",
+        "Joel 2:28–29",
+        "Acts 2:1–4",
+        "Acts 2:33",
+        "Acts 8:14–20",
+        "Acts 10:44–47",
+        "Acts 11:15–17",
+        "Acts 19:1–6"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit reception evidence matrix",
+        "plan": "Distinguish receiving the Spirit, the signs in Acts and the life that follows.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.12.3.18",
+      "standardTitle": "Synthesis: Spirit Reception, Sign, and New-Covenant Identity as One Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.12",
+      "domainTitle": "Spirit Reception, Signs, And New-Covenant Identification",
+      "anchorScriptures": [
+        "Isa. 28:11–12",
+        "Joel 2:28–29",
+        "Acts 2:1–4",
+        "Acts 2:33",
+        "Acts 8:14–20",
+        "Acts 10:44–47",
+        "Acts 11:15–17",
+        "Acts 19:1–6"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Spirit reception evidence matrix",
+        "plan": "Distinguish receiving the Spirit, the signs in Acts and the life that follows.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.13.1.18",
+      "standardTitle": "The New Birth as Entrance into Apostolic Covenant Community",
+      "studyId": "NB",
+      "domainId": "NB.13",
+      "domainTitle": "The New Birth And Entry Into The Church",
+      "anchorScriptures": [
+        "Exod. 19:5–6",
+        "Jer. 31:31–34",
+        "Matt. 16:18",
+        "Acts 2:41–47",
+        "I Cor. 12:12–13",
+        "Eph. 2:19–22",
+        "Eph. 4:4–6",
+        "I Pet. 2:9–10"
+      ],
+      "sourceLeadIds": [
+        "bp-covenants",
+        "bp-acts1",
+        "met-lamp"
+      ],
+      "sourceLeadKinds": [
+        "video",
+        "historical-object"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Church-as-community mapping",
+        "plan": "Connect conversion, fellowship, teaching, worship and belonging in the Acts narratives.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.13.2.18",
+      "standardTitle": "The Church as the Body Formed by One Gospel, One Spirit, and One Covenant Life",
+      "studyId": "NB",
+      "domainId": "NB.13",
+      "domainTitle": "The New Birth And Entry Into The Church",
+      "anchorScriptures": [
+        "Exod. 19:5–6",
+        "Jer. 31:31–34",
+        "Matt. 16:18",
+        "Acts 2:41–47",
+        "I Cor. 12:12–13",
+        "Eph. 2:19–22",
+        "Eph. 4:4–6",
+        "I Pet. 2:9–10"
+      ],
+      "sourceLeadIds": [
+        "bp-temple"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Church-as-community mapping",
+        "plan": "Connect conversion, fellowship, teaching, worship and belonging in the Acts narratives.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.13.3.18",
+      "standardTitle": "Synthesis: New Birth, Covenant Belonging, and Church Identity as One Doctrine of Apostolic Entry",
+      "studyId": "NB",
+      "domainId": "NB.13",
+      "domainTitle": "The New Birth And Entry Into The Church",
+      "anchorScriptures": [
+        "Exod. 19:5–6",
+        "Jer. 31:31–34",
+        "Matt. 16:18",
+        "Acts 2:41–47",
+        "I Cor. 12:12–13",
+        "Eph. 2:19–22",
+        "Eph. 4:4–6",
+        "I Pet. 2:9–10"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Church-as-community mapping",
+        "plan": "Connect conversion, fellowship, teaching, worship and belonging in the Acts narratives.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.14.1.18",
+      "standardTitle": "Transformed Living as the Fruit of the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.14",
+      "domainTitle": "The New Birth And Transformed Living",
+      "anchorScriptures": [
+        "Lev. 11:44–45",
+        "Ezek. 36:26–27",
+        "Matt. 5:13–16",
+        "Rom. 6:11–23",
+        "Rom. 12:1–2",
+        "Gal. 5:16–25",
+        "Eph. 4:17–32",
+        "Col. 3:1–17"
+      ],
+      "sourceLeadIds": [
+        "bp-image-of-god",
+        "bp-justice",
+        "bp-compassion"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Transformed-life scenario cards",
+        "plan": "Compare life before and after new birth and connect new conduct to the Spirit's work.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.14.2.18",
+      "standardTitle": "Holiness and Separation as Fitting Responses to New-Covenant Salvation",
+      "studyId": "NB",
+      "domainId": "NB.14",
+      "domainTitle": "The New Birth And Transformed Living",
+      "anchorScriptures": [
+        "Lev. 11:44–45",
+        "Ezek. 36:26–27",
+        "Matt. 5:13–16",
+        "Rom. 6:11–23",
+        "Rom. 12:1–2",
+        "Gal. 5:16–25",
+        "Eph. 4:17–32",
+        "Col. 3:1–17"
+      ],
+      "sourceLeadIds": [
+        "bp-holiness"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Transformed-life scenario cards",
+        "plan": "Compare life before and after new birth and connect new conduct to the Spirit's work.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.14.3.18",
+      "standardTitle": "Worship, Prayer, and Obedience as Continuing Practices of Spirit-Born Life",
+      "studyId": "NB",
+      "domainId": "NB.14",
+      "domainTitle": "The New Birth And Transformed Living",
+      "anchorScriptures": [
+        "Lev. 11:44–45",
+        "Ezek. 36:26–27",
+        "Matt. 5:13–16",
+        "Rom. 6:11–23",
+        "Rom. 12:1–2",
+        "Gal. 5:16–25",
+        "Eph. 4:17–32",
+        "Col. 3:1–17"
+      ],
+      "sourceLeadIds": [
+        "bp-law"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Transformed-life scenario cards",
+        "plan": "Compare life before and after new birth and connect new conduct to the Spirit's work.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.14.4.18",
+      "standardTitle": "Synthesis: New Birth, Holiness, Devotion, and Obedience as One Doctrine of Transformed Kingdom Life",
+      "studyId": "NB",
+      "domainId": "NB.14",
+      "domainTitle": "The New Birth And Transformed Living",
+      "anchorScriptures": [
+        "Lev. 11:44–45",
+        "Ezek. 36:26–27",
+        "Matt. 5:13–16",
+        "Rom. 6:11–23",
+        "Rom. 12:1–2",
+        "Gal. 5:16–25",
+        "Eph. 4:17–32",
+        "Col. 3:1–17"
+      ],
+      "sourceLeadIds": [
+        "bp-holiness"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Transformed-life scenario cards",
+        "plan": "Compare life before and after new birth and connect new conduct to the Spirit's work.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.15.1.18",
+      "standardTitle": "Identifying Partial Salvation Claims That Reduce Apostolic New-Birth Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.15",
+      "domainTitle": "Historical Reduction, Doctrinal Distortion, And Partial Salvation Claims",
+      "anchorScriptures": [
+        "Deut. 4:2",
+        "Isa. 29:13",
+        "Matt. 7:21–23",
+        "Acts 8:12–17",
+        "Acts 19:1–6",
+        "Gal. 1:6–9",
+        "Col. 2:8",
+        "II Tim. 4:3–4"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Reduced-claim comparison",
+        "plan": "Present a competing salvation claim fairly; inspect which apostolic passages it includes or leaves out.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.15.2.18",
+      "standardTitle": "Why Selective Readings of Faith, Grace, or Experience Can Distort the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.15",
+      "domainTitle": "Historical Reduction, Doctrinal Distortion, And Partial Salvation Claims",
+      "anchorScriptures": [
+        "Deut. 4:2",
+        "Isa. 29:13",
+        "Matt. 7:21–23",
+        "Acts 8:12–17",
+        "Acts 19:1–6",
+        "Gal. 1:6–9",
+        "Col. 2:8",
+        "II Tim. 4:3–4"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Reduced-claim comparison",
+        "plan": "Present a competing salvation claim fairly; inspect which apostolic passages it includes or leaves out.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.15.3.18",
+      "standardTitle": "Synthesis: Doctrinal Discernment and Apostolic Fullness as the Safeguard of the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.15",
+      "domainTitle": "Historical Reduction, Doctrinal Distortion, And Partial Salvation Claims",
+      "anchorScriptures": [
+        "Deut. 4:2",
+        "Isa. 29:13",
+        "Matt. 7:21–23",
+        "Acts 8:12–17",
+        "Acts 19:1–6",
+        "Gal. 1:6–9",
+        "Col. 2:8",
+        "II Tim. 4:3–4"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Reduced-claim comparison",
+        "plan": "Present a competing salvation claim fairly; inspect which apostolic passages it includes or leaves out.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.16.1.18",
+      "standardTitle": "Demonstrate Discernment by Identifying Teachings That Distort the Doctrine of the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.16",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
+      "anchorScriptures": [
+        "Prov. 4:7",
+        "Matt. 10:19–20",
+        "Acts 4:18–20",
+        "Rom. 1:16",
+        "I Cor. 15:58",
+        "II Tim. 1:12",
+        "II Tim. 2:24–25",
+        "I Pet. 3:15"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful gospel defense simulator",
+        "plan": "Practice concise, Scripture-grounded explanations under realistic questions without aggressive rhetoric.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.16.2.18",
+      "standardTitle": "Defend the Doctrine of the New Birth with Scriptural Clarity and Composure",
+      "studyId": "NB",
+      "domainId": "NB.16",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
+      "anchorScriptures": [
+        "Prov. 4:7",
+        "Matt. 10:19–20",
+        "Acts 4:18–20",
+        "Rom. 1:16",
+        "I Cor. 15:58",
+        "II Tim. 1:12",
+        "II Tim. 2:24–25",
+        "I Pet. 3:15"
+      ],
+      "sourceLeadIds": [
+        "bp-witness"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful gospel defense simulator",
+        "plan": "Practice concise, Scripture-grounded explanations under realistic questions without aggressive rhetoric.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.16.3.18",
+      "standardTitle": "Remain Stable Under Religious, Cultural, and Intellectual Pressure Concerning Salvation Doctrine",
+      "studyId": "NB",
+      "domainId": "NB.16",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
+      "anchorScriptures": [
+        "Prov. 4:7",
+        "Matt. 10:19–20",
+        "Acts 4:18–20",
+        "Rom. 1:16",
+        "I Cor. 15:58",
+        "II Tim. 1:12",
+        "II Tim. 2:24–25",
+        "I Pet. 3:15"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful gospel defense simulator",
+        "plan": "Practice concise, Scripture-grounded explanations under realistic questions without aggressive rhetoric.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.16.4.18",
+      "standardTitle": "Bear Faithful Witness to the Apostolic Doctrine of the New Birth in the World",
+      "studyId": "NB",
+      "domainId": "NB.16",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
+      "anchorScriptures": [
+        "Prov. 4:7",
+        "Matt. 10:19–20",
+        "Acts 4:18–20",
+        "Rom. 1:16",
+        "I Cor. 15:58",
+        "II Tim. 1:12",
+        "II Tim. 2:24–25",
+        "I Pet. 3:15"
+      ],
+      "sourceLeadIds": [
+        "bp-acts2",
+        "bp-witness"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful gospel defense simulator",
+        "plan": "Practice concise, Scripture-grounded explanations under realistic questions without aggressive rhetoric.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.16.5.18",
+      "standardTitle": "Synthesis: Discernment, Defense, Witness, and Endurance as the Mature World-Facing Outcome of the Doctrine of the New Birth",
+      "studyId": "NB",
+      "domainId": "NB.16",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
+      "anchorScriptures": [
+        "Prov. 4:7",
+        "Matt. 10:19–20",
+        "Acts 4:18–20",
+        "Rom. 1:16",
+        "I Cor. 15:58",
+        "II Tim. 1:12",
+        "II Tim. 2:24–25",
+        "I Pet. 3:15"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful gospel defense simulator",
+        "plan": "Practice concise, Scripture-grounded explanations under realistic questions without aggressive rhetoric.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    },
+    {
+      "standardId": "NB.16.6.18",
+      "standardTitle": "World-Facing Stability Under Alternate Religions, False Christs, and Occult Pressure",
+      "studyId": "NB",
+      "domainId": "NB.16",
+      "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
+      "anchorScriptures": [
+        "Prov. 4:7",
+        "Matt. 10:19–20",
+        "Acts 4:18–20",
+        "Rom. 1:16",
+        "I Cor. 15:58",
+        "II Tim. 1:12",
+        "II Tim. 2:24–25",
+        "I Pet. 3:15"
+      ],
+      "sourceLeadIds": [],
+      "sourceLeadKinds": [],
+      "researchStatus": "needs_external_media_research",
+      "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
+      "proposedInteraction": {
+        "title": "Respectful gospel defense simulator",
+        "plan": "Practice concise, Scripture-grounded explanations under realistic questions without aggressive rhetoric.",
+        "status": "idea_only"
+      },
+      "requirements": [
+        "Exact Scripture and doctrinal scope must be taught by Jeremiah",
+        "Vet historical/contextual claims",
+        "Verify rights and exact embed/image media before using",
+        "Do not assign a title-based source as verified spoken material"
+      ]
+    }
+  ],
+  "limitations": [
+    "Source matching is an editorial hypothesis based on official publisher descriptions and curriculum topics, not a recording/transcript study.",
+    "A standard with no outside media lead still has its Scripture and curricular teaching; that gap is not a missing doctrinal lesson.",
+    "An interactive activity idea is a proposed design, not an implemented activity.",
+    "Multiple standards may reference the same source: do not repeat one video as padding; select purposeful placements.",
+    "All external materials require independent doctrinal, factual, accessibility and rights review before use."
+  ]
+}
