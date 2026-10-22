@@ -14,9 +14,9 @@
 .ce-doors { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 22px; }
 .ce-door { position: relative; display: flex; flex-direction: column; text-align: left; min-width: 0; min-height: 340px; padding: 34px 26px 26px; border: 1px solid #e5ebef; border-radius: 20px; background: #fff; color: var(--color-ink); }
 button.ce-door { cursor: pointer; transition: background .18s ease, transform .18s ease; }
-button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
-.ce-door-active { background: #f4f7f9; border-color: transparent; }
-.ce-door-number { display: block; margin-bottom: 34px; font: 500 2.2rem/1 Georgia, serif; color: #8a9caa; }
+button.ce-door:hover { background: #f8fafc; transform: translateY(-3px); }
+.ce-door-active { background: #f8fafc; border-color: transparent; }
+.ce-door-number { display: block; margin-bottom: 34px; font: 500 2.2rem/1 Georgia, serif; color: #475569; }
 .ce-door h2 { margin: 12px 0 14px; font: 500 1.8rem/1.14 var(--font-display); letter-spacing: -.025em; }
 .ce-door p { margin: 0 0 26px; color: var(--color-muted); font: .95rem/1.7 var(--font-body); }
 .ce-door-status { color: var(--color-muted); font: .78rem/1.6 var(--font-body); margin-top: auto; }
@@ -41,7 +41,7 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
 .ce-domain summary i { color:var(--color-blue); font-size:1.3rem; font-style:normal; }
 .ce-domain[open] summary i { transform:rotate(45deg); }
 .ce-domain-lessons { display:grid; gap:8px; padding:0 0 24px 42px; }
-.ce-domain-lessons button { display:flex; gap:24px; justify-content:space-between; align-items:center; text-align:left; padding:18px 20px; border:0; border-radius:12px; background:#f6f8fa; cursor:pointer; color:var(--color-ink); }
+.ce-domain-lessons button { display:flex; gap:24px; justify-content:space-between; align-items:center; text-align:left; padding:18px 20px; border:0; border-radius:12px; background:#f8fafc; cursor:pointer; color:var(--color-ink); }
 .ce-domain-lessons small { display:block; font:.7rem/1.5 var(--font-body); color:var(--color-muted); margin-bottom:5px; }
 .ce-domain-lessons strong { display:block; font:600 .97rem/1.6 var(--font-body); }
 .ce-domain-lessons em { flex-shrink:0; color:var(--color-blue); font:600 .8rem/1.5 var(--font-body); }
@@ -50,7 +50,7 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
 
 /* Study rooms: compact, tappable iPhone rows instead of long website cards. */
 @media (max-width: 640px) {
-  .ce-page { background: #F6F7FE; padding: calc(14px + env(safe-area-inset-top)) 16px 96px; }
+  .ce-page { background: #ffffff; padding: calc(14px + env(safe-area-inset-top)) 16px 96px; }
   .ce-page .ld-header { align-items: center; padding-bottom: 8px; }
   .ce-page .ld-brand { font: 800 .91rem/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing: .1em; }
   .ce-page .ld-hero { padding: 12px 0 19px; }
@@ -68,7 +68,7 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
   .ce-door-number {
     grid-column: 1; grid-row: 1 / span 2; display: grid; place-items: center;
     width: 43px; height: 43px; margin: 0; border-radius: 14px;
-    background: #EDF1FF; color: #3659DD;
+    background: #EDF1FF; color: #1463e8;
     font: 790 .97rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   }
   .ce-door .ld-eyebrow { display: none; }
@@ -77,8 +77,8 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
   .ce-door-status { grid-column: 2; grid-row: 2; font-size: .73rem; line-height: 1.35; margin: 0; }
   .ce-door-action { grid-column: 3; grid-row: 1 / span 2; margin: 0; justify-self: end; font-size: 0; }
   .ce-door-action > span { display: none; }
-  .ce-door-action::after { content: '›'; font-size: 1.75rem; line-height: 1; color: #3659DD; }
-  .ce-door:not(.ce-door-active) .ce-door-number { background: #f0f3f8; color: #7053C4; }
+  .ce-door-action::after { content: '›'; font-size: 1.75rem; line-height: 1; color: #1463e8; }
+  .ce-door:not(.ce-door-active) .ce-door-number { background: #f0f3f8; color: #1463e8; }
   .ce-door:active { transform: scale(.985); }
   .ce-feature { padding: 19px !important; gap: 14px; border: 1px solid #e6eaf2; border-radius: 20px; background: #fff; }
   .ce-feature h2 { margin: 8px 0; font: 770 1.35rem/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
@@ -91,7 +91,7 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
   .ce-catalog-heading input { border-radius: 13px; padding: 12px 13px; background: #fff; margin-top: 5px; }
   .ce-domain { margin-top: 9px; border: 1px solid #e6eaf2; border-radius: 17px; padding: 0 14px; background: #fff; overflow: hidden; }
   .ce-domain > summary { min-height: 65px; gap: 13px; padding: 12px 0; }
-  .ce-domain summary > span { width: 29px; font: 780 .85rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color: #3659DD; }
+  .ce-domain summary > span { width: 29px; font: 780 .85rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color: #1463e8; }
   .ce-domain summary strong { font-size: .86rem; line-height: 1.35; }
   .ce-domain summary small { margin-top: 3px; font-size: .7rem; }
   .ce-domain-lessons { padding: 0 0 12px; gap: 6px; }
@@ -99,3 +99,10 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
   .ce-domain-lessons strong { font-size: .9rem; }
   .ce-domain-lessons em { font-size: .72rem; }
 }
+
+/* Consistent classroom cards on the neutral app canvas. */
+.ce-page,.ce-door,.ce-door.ce-door-active { background: #fff; }
+.ce-door { border-color: #E5E7EB; box-shadow: none; }
+.ce-door:hover { background: #F8FAFC; }
+.ce-feature { background: #F8FAFC; }
+@media(max-width:640px){.ce-page,.ce-door,.ce-door.ce-door-active { background: #fff; }.ce-feature { background: #F8FAFC; }}
