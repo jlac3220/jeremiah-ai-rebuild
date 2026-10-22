@@ -108,6 +108,34 @@ export const OG_1_1_18_CLASSROOM_CONTENT = {
         primaryVerse: shema,
         listenLabel: "Listen",
         readLabel: "Read it myself",
+        mediaEnrichment: {
+          shemaListening: {
+            title: "Shema: hearing that leads to response",
+            introduction: "Select each idea to explore why this biblical confession begins with a call to hear.",
+            steps: [
+              {
+                id: "hear", label: "Hear",
+                explanation: "Shema is a Hebrew word meaning hear or listen. Deuteronomy 6:4 begins by calling Israel to listen.",
+              },
+              {
+                id: "attend", label: "Pay attention",
+                explanation: "The command asks for more than hearing a sound. Attend to what the words actually say.",
+              },
+              {
+                id: "respond", label: "Respond",
+                explanation: "Now respond to the Scripture itself: What does Israel have to confess? The LORD our God is one LORD.",
+              },
+            ],
+            sourceNote: "Language context: BibleProject, Shema / Listen. Scripture and the standard—not the video—establish the doctrinal claim.",
+          },
+          lordAnnotation: {
+            title: "Why is LORD in capital letters?",
+            invitation: "Explore the verse: select either highlighted LORD to see a brief translation note.",
+            explanation: "In many English Old Testament Bibles, LORD in capital letters represents the Hebrew personal name of Israel's God, often written YHWH. The usual title Lord is generally written differently. This is a translation convention, not a second divine identity.",
+            returnToVerse: "Read the entire KJV verse again. The biblical confession is that the LORD our God is one LORD. Isaiah will explain that there is no God beside Him.",
+            sourceNote: "Language context: BibleProject, YHWH / LORD; translation practice. This optional note is not a new mastery requirement.",
+          },
+        },
         curatedSources: [
           {
             id: "bibleproject-shema-listen",
