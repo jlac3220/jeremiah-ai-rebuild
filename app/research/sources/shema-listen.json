@@ -1,0 +1,48 @@
+{
+  "id": "bibleproject-shema-listen",
+  "standardId": "OG.1.1.18",
+  "status": "research_candidate",
+  "mediaType": "video",
+  "title": "Shema / Listen",
+  "publisher": "BibleProject",
+  "sourceUrl": "https://bibleproject.com/videos/shema-listen/",
+  "publisherScriptReferenceUrl": "https://d1bsmz3sdihplr.cloudfront.net/media/Script%20References/word_studies/Shema-Listen_script-references_UPDATED.pdf",
+  "rights": "external-reference",
+  "permissionToRehost": false,
+  "originalVideoAlreadyLinkedInClassroom": true,
+  "segments": [
+    {
+      "start": "00:00",
+      "end": "00:25",
+      "focus": "Introduce the Shema and its opening call to listen.",
+      "standardKnowledgeIds": [
+        "one-lord"
+      ],
+      "role": "opening vocabulary encounter"
+    },
+    {
+      "start": "00:26",
+      "end": "01:10",
+      "focus": "Distinguish hearing a sound from paying attention.",
+      "standardKnowledgeIds": [],
+      "role": "language context"
+    },
+    {
+      "start": "01:11",
+      "end": "03:05",
+      "focus": "Explore the connection between attentive listening and response.",
+      "standardKnowledgeIds": [],
+      "role": "application enrichment"
+    }
+  ],
+  "provenance": "Segments taken from the publisher's own script-references PDF; no transcript reproduced or automatically verified by an AI model.",
+  "review": {
+    "sourceIdentity": true,
+    "transcriptComparedToAudio": false,
+    "factualClaims": false,
+    "doctrinalAlignment": false,
+    "reusePermissions": false,
+    "lessonApproved": false
+  },
+  "nextStep": "Feed authorized transcript text or caption/audio file to research-media CLI. Review resulting evidence and suggested activities before changing any standard."
+}
