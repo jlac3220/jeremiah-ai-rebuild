@@ -21,7 +21,9 @@
     "research:media": "node scripts/research-media.mjs",
     "discover:media": "node scripts/discover-media.mjs",
     "extract:youtube": "node scripts/extract-youtube.mjs",
-    "transcribe:sermon": "node scripts/transcribe-authorized-sermon.mjs"
+    "transcribe:sermon": "node scripts/transcribe-authorized-sermon.mjs",
+    "crawl:site": "python3 server/websiteCrawler.py",
+    "test:crawler": "python3 -m unittest discover -s scripts -p 'test-website-crawler.py' -v"
   },
   "dependencies": {
     "react": "^19.2.4",
