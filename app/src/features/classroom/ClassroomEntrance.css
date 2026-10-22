@@ -46,3 +46,55 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
 .ce-domain-lessons strong { display:block; font:600 .97rem/1.6 var(--font-body); }
 .ce-domain-lessons em { flex-shrink:0; color:var(--color-blue); font:600 .8rem/1.5 var(--font-body); }
 @media(max-width:740px) { .ce-feature,.ce-catalog-heading { flex-direction:column; align-items:stretch; gap:20px; } .ce-domain-lessons { padding-left:0; } .ce-domain-lessons button { align-items:flex-start; flex-direction:column; gap:10px; } }
+
+
+/* Study rooms: compact, tappable iPhone rows instead of long website cards. */
+@media (max-width: 640px) {
+  .ce-page { background: #f5f6fa; padding: calc(14px + env(safe-area-inset-top)) 16px 96px; }
+  .ce-page .ld-header { align-items: center; padding-bottom: 8px; }
+  .ce-page .ld-brand { font: 800 .91rem/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing: .1em; }
+  .ce-page .ld-hero { padding: 12px 0 19px; }
+  .ce-page .ld-hero h1 { margin: 8px 0 0; font: 790 clamp(1.8rem,8vw,2.35rem)/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing: -.035em; }
+  .ce-page .ld-hero > p:last-child { display: none; }
+  .ce-page .ld-eyebrow { font-size: .67rem; letter-spacing: .07em; color: #687895; }
+  .ce-doors { gap: 11px; grid-template-columns: 1fr; }
+  .ce-door, .ce-door.ce-door-active {
+    display: grid; grid-template-columns: 43px minmax(0,1fr) 22px;
+    grid-template-rows: auto auto; align-items: center;
+    gap: 3px 12px; min-height: 102px; padding: 17px 16px;
+    border: 1px solid #e7ebf2; border-radius: 20px;
+    background: #fff; box-shadow: 0 3px 14px rgba(20,37,79,.045);
+  }
+  .ce-door-number {
+    grid-column: 1; grid-row: 1 / span 2; display: grid; place-items: center;
+    width: 43px; height: 43px; margin: 0; border-radius: 14px;
+    background: #edf0ff; color: #40539b;
+    font: 790 .97rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  .ce-door .ld-eyebrow { display: none; }
+  .ce-door h2 { grid-column: 2; grid-row: 1; margin: 0; font: 770 1.14rem/1.25 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing: -.02em; }
+  .ce-door p { display: none; }
+  .ce-door-status { grid-column: 2; grid-row: 2; font-size: .73rem; line-height: 1.35; margin: 0; }
+  .ce-door-action { grid-column: 3; grid-row: 1 / span 2; margin: 0; justify-self: end; font-size: 0; }
+  .ce-door-action > span { font-size: 1.3rem; }
+  .ce-door:not(.ce-door-active) .ce-door-number { background: #f0f3f8; color: #3d5974; }
+  .ce-door:active { transform: scale(.985); }
+  .ce-feature { padding: 19px !important; gap: 14px; border: 1px solid #e6eaf2; border-radius: 20px; background: #fff; }
+  .ce-feature h2 { margin: 8px 0; font: 770 1.35rem/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .ce-feature .ld-muted { margin: 0; font-size: .83rem; line-height: 1.4; }
+  .ce-feature .ld-primary { margin: 0; min-height: 47px; border-radius: 14px; }
+  .ce-catalog { margin-top: 23px; }
+  .ce-catalog-heading { gap: 9px; margin-bottom: 7px; }
+  .ce-catalog-heading h2 { margin: 0; font: 780 1.15rem/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .ce-catalog-heading label { font-size: .74rem; }
+  .ce-catalog-heading input { border-radius: 13px; padding: 12px 13px; background: #fff; margin-top: 5px; }
+  .ce-domain { margin-top: 9px; border: 1px solid #e6eaf2; border-radius: 17px; padding: 0 14px; background: #fff; overflow: hidden; }
+  .ce-domain > summary { min-height: 65px; gap: 13px; padding: 12px 0; }
+  .ce-domain summary > span { width: 29px; font: 780 .85rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color: #394d94; }
+  .ce-domain summary strong { font-size: .86rem; line-height: 1.35; }
+  .ce-domain summary small { margin-top: 3px; font-size: .7rem; }
+  .ce-domain-lessons { padding: 0 0 12px; gap: 6px; }
+  .ce-domain-lessons button { padding: 13px; border-radius: 12px; gap: 4px; }
+  .ce-domain-lessons strong { font-size: .9rem; }
+  .ce-domain-lessons em { font-size: .72rem; }
+}
