@@ -65,6 +65,11 @@ test("only keeps transcript-grounded evidence; never publishes to lessons", asyn
   assert.deepEqual(proposal.activities[0].knowledgeIds, ["one-lord"]);
   assert.equal(proposal.activities.length, 1);
   assert.equal(proposal.activities[0].timestamp, "00:00:01.000");
+  assert.deepEqual(proposal.claims[0].sourceLocation, {
+    kind: "timed-captions", sourceUrl: "https://example.org/test",
+    start: "00:00:01.000", end: "00:00:05.000",
+    cueStart: 1, cueEnd: 1, ambiguous: false,
+  });
   assert.ok(proposal.concerns.filter((item) => item.includes("Discarded")).length >= 2);
   assert.equal(proposal.review.lessonApproved, false);
   assert.equal(proposal.transcript.hasTimestamps, true);
@@ -109,4 +114,78 @@ test("rejects generic activities invented from the standard without source evide
   assert.equal(proposal.activities.length, 0);
   assert.equal(proposal.relevance, "none");
   assert.ok(proposal.concerns.some((item) => item.includes("No usable transcript-grounded enrichment")));
+});
+
+
+test("derives playback times from captions, including evidence crossing cue boundaries", async () => {
+  const transcript = parseTranscript(
+    "WEBVTT\n\n00:00:10.000 --> 00:00:12.000\nPay attention.\n\n00:00:12.000 --> 00:00:15.000\nThen respond to what you hear.\n",
+    ".vtt"
+  );
+  const result = {
+    relevance: "strong", summary: "Listen and respond.",
+    claims: [{
+      claim: "Hearing should produce a response.",
+      evidence: "Pay attention. Then respond",
+      timestamp: "99:99:99.999", knowledgeIds: ["one-lord"],
+      verificationNeeded: "Verify interpretation.", doctrinalConcern: "",
+    }],
+    activities: [{
+      kind: "listen", idea: "Identify attention and response in the lesson.",
+      sourceEvidence: "Pay attention. Then respond", timestamp: "untrusted",
+      addedValue: "An example of listening in action.", knowledgeIds: ["one-lord"],
+    }],
+    concerns: [],
+  };
+  const fetcher = async () => ({
+    ok: true, json: async () => ({
+      output: [{ type: "message", content: [{
+        type: "output_text", text: JSON.stringify(result),
+      }] }],
+    }),
+  });
+  const proposal = await proposeMediaEnrichment({
+    standardId: "OG.1.1.18", transcript, apiKey: "test-only", fetcher,
+    source: { title: "Timed source", url: "https://example.org/timed", rights: "external-reference" },
+  });
+  for (const item of [...proposal.claims, ...proposal.activities]) {
+    assert.equal(item.timestamp, "00:00:10.000");
+    assert.equal(item.sourceLocation.start, "00:00:10.000");
+    assert.equal(item.sourceLocation.end, "00:00:15.000");
+    assert.equal(item.sourceLocation.cueStart, 1);
+    assert.equal(item.sourceLocation.cueEnd, 2);
+    assert.equal(item.sourceLocation.sourceUrl, "https://example.org/timed");
+    assert.equal(item.sourceLocation.ambiguous, false);
+  }
+});
+
+test("untimed publisher text has source references but never invented playback times", async () => {
+  const result = {
+    relevance: "possible", summary: "The source includes a word study.",
+    claims: [{
+      claim: "The script describes listening.", evidence: "Hear carefully",
+      timestamp: "01:23", knowledgeIds: ["one-lord"],
+      verificationNeeded: "Check meaning.", doctrinalConcern: "",
+    }],
+    activities: [], concerns: [],
+  };
+  const fetcher = async () => ({
+    ok: true, json: async () => ({
+      output: [{ type: "message", content: [{
+        type: "output_text", text: JSON.stringify(result),
+      }] }],
+    }),
+  });
+  const proposal = await proposeMediaEnrichment({
+    standardId: "OG.1.1.18",
+    transcript: parseTranscript("Hear carefully before answering.", ".txt"),
+    apiKey: "test-only", fetcher,
+    source: { title: "Publisher PDF extract", url: "https://example.org/source", rights: "external-reference" },
+  });
+  assert.equal(proposal.claims.length, 1);
+  assert.equal(proposal.claims[0].timestamp, "");
+  assert.deepEqual(proposal.claims[0].sourceLocation, {
+    kind: "untimed-transcript", sourceUrl: "https://example.org/source",
+    start: "", end: "", cueStart: null, cueEnd: null, ambiguous: false,
+  });
 });
