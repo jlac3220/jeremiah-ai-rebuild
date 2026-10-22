@@ -48,5 +48,8 @@ jobs:
       - name: Validate grouped lesson coverage and assessment
         run: npm run test:grouped
 
+      - name: Validate media research proposals
+        run: npm run test:media
+
       - name: Build app
         run: npm run build
