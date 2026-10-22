@@ -11,6 +11,7 @@ It does not scrape sites automatically or modify published lessons.
 - Ask OpenAI to identify concepts and learning activities relevant to a specified standard.
 - Reject extracted quotes that are not found in the source transcript and discard unknown standard knowledge IDs.
 - Produce a source-linked JSON proposal with an incomplete credibility/doctrine/rights approval checklist.
+- Attach a `sourceLocation` to each accepted claim and activity. VTT/SRT or authorized transcription segments yield caption-matched start/end times (even when the excerpt spans adjacent cues); untimed TXT/PDF extracts retain a source URL but **no invented playback timestamp**. Ambiguous repeated quotes have their times withheld.
 - Leave all existing standards, classroom moves, and media untouched.
 
 Important: Exact transcript evidence **does not independently verify the claim**. Every output is marked needs_review. Video visuals are not inspected yet.
@@ -56,7 +57,7 @@ npm run research:media -- \
 
 The CLI loads the server-only .env API key and saves a review proposal in .jeremiah-research/ (Git-ignored). It does not output or save the full transcript.
 
-Review the exact evidence and timestamps, independently check historical and linguistic claims, compare doctrinal implications with the standard, and verify permissions for the proposed use before adding anything to a published lesson.
+Review exact evidence and `sourceLocation` references. Timestamps are sourced from actual caption/recording cues, not inferred from text or trusted from the AI model; these timestamps do not confirm video frames or that the source is reliable. Independently check historical and linguistic claims, compare doctrinal implications with the standard, and verify permissions for the proposed use before adding anything to a published lesson.
 
 ## Not yet implemented
 
