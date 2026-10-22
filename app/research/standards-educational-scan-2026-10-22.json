@@ -13,13 +13,15 @@
       "OG": 59,
       "NB": 66
     },
-    "potentialSourceLinks": 89,
-    "standardsWithMediaLeads": 56,
-    "standardsWithoutMediaLeads": 69,
+    "potentialSourceLinks": 109,
+    "standardsWithMediaLeads": 65,
+    "standardsWithoutMediaLeads": 60,
     "existingContentUnchanged": true,
     "sourceVideoClaimsAudited": 0,
     "clipsWithTimestampVerified": 0,
-    "approvedForPublication": 0
+    "approvedForPublication": 0,
+    "uniquePublisherCandidates": 31,
+    "historicalObjectCandidates": 3
   },
   "domains": [
     {
@@ -27,13 +29,13 @@
       "domainTitle": "Absolute Divine Identity And Scriptural Monotheism",
       "studyId": "OG",
       "standards": 4,
-      "withSourceLead": 1,
+      "withSourceLead": 2,
       "gaps": [
         "OG.1.2.18",
-        "OG.1.3.18",
         "OG.1.4.18"
       ],
       "potentialSourceLeadIds": [
+        "bp-ephesians",
         "bp-first-commandment"
       ],
       "activityPattern": "Side-by-side confession comparison"
@@ -53,7 +55,8 @@
       "potentialSourceLeadIds": [
         "bp-holiness",
         "bp-justice",
-        "bp-compassion"
+        "bp-compassion",
+        "bp-faithful"
       ],
       "activityPattern": "Attribute sorting lab"
     },
@@ -68,6 +71,8 @@
       ],
       "potentialSourceLeadIds": [
         "bp-creation",
+        "bp-john1",
+        "bp-colossians",
         "bp-image-of-god",
         "bp-covenants",
         "met-cylinder",
@@ -88,7 +93,8 @@
         "bp-exodus-part2",
         "bp-yhwh",
         "bp-temple",
-        "bp-atonement"
+        "bp-atonement",
+        "bp-anointing"
       ],
       "activityPattern": "Tabernacle floor-plan exploration"
     },
@@ -128,14 +134,14 @@
       "domainTitle": "Jesus Christ As The Full Revelation Of God",
       "studyId": "OG",
       "standards": 4,
-      "withSourceLead": 0,
+      "withSourceLead": 3,
       "gaps": [
-        "OG.7.1.18",
-        "OG.7.2.18",
-        "OG.7.3.18",
-        "OG.7.4.18"
+        "OG.7.2.18"
       ],
-      "potentialSourceLeadIds": [],
+      "potentialSourceLeadIds": [
+        "bp-colossians",
+        "bp-john-overview"
+      ],
       "activityPattern": "Identity text investigation"
     },
     {
@@ -143,14 +149,15 @@
       "domainTitle": "Incarnation, Sonship, And The True Humanity Of Christ",
       "studyId": "OG",
       "standards": 4,
-      "withSourceLead": 1,
+      "withSourceLead": 2,
       "gaps": [
-        "OG.8.2.18",
         "OG.8.3.18",
         "OG.8.4.18"
       ],
       "potentialSourceLeadIds": [
-        "bp-messiah"
+        "bp-messiah",
+        "bp-john-overview",
+        "bp-john1"
       ],
       "activityPattern": "Incarnation witness sort"
     },
@@ -250,15 +257,15 @@
       "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability",
       "studyId": "OG",
       "standards": 4,
-      "withSourceLead": 2,
+      "withSourceLead": 3,
       "gaps": [
-        "OG.15.3.18",
         "OG.15.4.18"
       ],
       "potentialSourceLeadIds": [
         "bp-first-commandment",
         "bp-law",
-        "bp-witness"
+        "bp-witness",
+        "bp-1timothy"
       ],
       "activityPattern": "Respectful claim-and-evidence clinic"
     },
@@ -351,13 +358,14 @@
       "domainTitle": "The Holy Spirit And The Necessity Of Spiritual Birth",
       "studyId": "NB",
       "standards": 4,
-      "withSourceLead": 2,
+      "withSourceLead": 3,
       "gaps": [
-        "NB.6.1.18",
         "NB.6.4.18"
       ],
       "potentialSourceLeadIds": [
-        "bp-spirit"
+        "bp-john-overview",
+        "bp-spirit",
+        "bp-anointing"
       ],
       "activityPattern": "Spirit-promise comparison"
     },
@@ -372,7 +380,8 @@
       ],
       "potentialSourceLeadIds": [
         "bp-pentecost",
-        "bp-spirit"
+        "bp-spirit",
+        "bp-anointing"
       ],
       "activityPattern": "Pentecost event-and-response sequence"
     },
@@ -405,6 +414,7 @@
       ],
       "potentialSourceLeadIds": [
         "bp-gospel",
+        "bp-faithful",
         "bp-law"
       ],
       "activityPattern": "Faith, grace and obedience reasoning cards"
@@ -466,7 +476,8 @@
         "bp-covenants",
         "bp-acts1",
         "met-lamp",
-        "bp-temple"
+        "bp-temple",
+        "bp-ephesians"
       ],
       "activityPattern": "Church-as-community mapping"
     },
@@ -481,8 +492,10 @@
         "bp-image-of-god",
         "bp-justice",
         "bp-compassion",
+        "bp-colossians",
         "bp-holiness",
-        "bp-law"
+        "bp-law",
+        "bp-ephesians"
       ],
       "activityPattern": "Transformed-life scenario cards"
     },
@@ -491,13 +504,14 @@
       "domainTitle": "Historical Reduction, Doctrinal Distortion, And Partial Salvation Claims",
       "studyId": "NB",
       "standards": 3,
-      "withSourceLead": 0,
+      "withSourceLead": 1,
       "gaps": [
-        "NB.15.1.18",
         "NB.15.2.18",
         "NB.15.3.18"
       ],
-      "potentialSourceLeadIds": [],
+      "potentialSourceLeadIds": [
+        "bp-1timothy"
+      ],
       "activityPattern": "Reduced-claim comparison"
     },
     {
@@ -505,14 +519,14 @@
       "domainTitle": "Doctrinal Discernment, Defense, And World-Facing Stability In The New Birth",
       "studyId": "NB",
       "standards": 6,
-      "withSourceLead": 2,
+      "withSourceLead": 3,
       "gaps": [
-        "NB.16.1.18",
         "NB.16.3.18",
         "NB.16.5.18",
         "NB.16.6.18"
       ],
       "potentialSourceLeadIds": [
+        "bp-1timothy",
         "bp-witness",
         "bp-acts2"
       ],
@@ -568,9 +582,13 @@
         "Eph. 4:5–6",
         "1 Tim. 2:5"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-ephesians"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Side-by-side confession comparison",
@@ -735,7 +753,8 @@
       "sourceLeadIds": [
         "bp-holiness",
         "bp-justice",
-        "bp-compassion"
+        "bp-compassion",
+        "bp-faithful"
       ],
       "sourceLeadKinds": [
         "video"
@@ -835,7 +854,9 @@
         "Ps. 19:1"
       ],
       "sourceLeadIds": [
-        "bp-creation"
+        "bp-creation",
+        "bp-john1",
+        "bp-colossians"
       ],
       "sourceLeadKinds": [
         "video"
@@ -1127,7 +1148,8 @@
         "John 1:14"
       ],
       "sourceLeadIds": [
-        "bp-atonement"
+        "bp-atonement",
+        "bp-anointing"
       ],
       "sourceLeadKinds": [
         "video"
@@ -1398,9 +1420,13 @@
         "Heb. 1:3",
         "Isa. 9:6"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-colossians"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Identity text investigation",
@@ -1462,9 +1488,13 @@
         "Heb. 1:3",
         "Isa. 9:6"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-john-overview"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Identity text investigation",
@@ -1494,9 +1524,13 @@
         "Heb. 1:3",
         "Isa. 9:6"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-colossians"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Identity text investigation",
@@ -1527,7 +1561,8 @@
         "Rom. 8:3"
       ],
       "sourceLeadIds": [
-        "bp-messiah"
+        "bp-messiah",
+        "bp-john-overview"
       ],
       "sourceLeadKinds": [
         "video"
@@ -1562,9 +1597,13 @@
         "Phil. 2:6–8",
         "Rom. 8:3"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-john1"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Incarnation witness sort",
@@ -2450,9 +2489,13 @@
         "Matt. 7:15",
         "Acts 17:11"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-1timothy"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Respectful claim-and-evidence clinic",
@@ -3313,9 +3356,13 @@
         "Acts 10:44–47",
         "Rom. 8:9"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-john-overview"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Spirit-promise comparison",
@@ -3346,7 +3393,8 @@
         "Rom. 8:9"
       ],
       "sourceLeadIds": [
-        "bp-spirit"
+        "bp-spirit",
+        "bp-anointing"
       ],
       "sourceLeadKinds": [
         "video"
@@ -3487,7 +3535,8 @@
       ],
       "sourceLeadIds": [
         "bp-spirit",
-        "bp-pentecost"
+        "bp-pentecost",
+        "bp-anointing"
       ],
       "sourceLeadKinds": [
         "video"
@@ -3771,7 +3820,8 @@
         "James 2:14–26"
       ],
       "sourceLeadIds": [
-        "bp-gospel"
+        "bp-gospel",
+        "bp-faithful"
       ],
       "sourceLeadKinds": [
         "video"
@@ -4279,7 +4329,8 @@
         "I Pet. 2:9–10"
       ],
       "sourceLeadIds": [
-        "bp-temple"
+        "bp-temple",
+        "bp-ephesians"
       ],
       "sourceLeadKinds": [
         "video"
@@ -4349,7 +4400,8 @@
       "sourceLeadIds": [
         "bp-image-of-god",
         "bp-justice",
-        "bp-compassion"
+        "bp-compassion",
+        "bp-colossians"
       ],
       "sourceLeadKinds": [
         "video"
@@ -4457,7 +4509,8 @@
         "Col. 3:1–17"
       ],
       "sourceLeadIds": [
-        "bp-holiness"
+        "bp-holiness",
+        "bp-ephesians"
       ],
       "sourceLeadKinds": [
         "video"
@@ -4492,9 +4545,13 @@
         "Col. 2:8",
         "II Tim. 4:3–4"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-1timothy"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Reduced-claim comparison",
@@ -4588,9 +4645,13 @@
         "II Tim. 2:24–25",
         "I Pet. 3:15"
       ],
-      "sourceLeadIds": [],
-      "sourceLeadKinds": [],
-      "researchStatus": "needs_external_media_research",
+      "sourceLeadIds": [
+        "bp-1timothy"
+      ],
+      "sourceLeadKinds": [
+        "video"
+      ],
+      "researchStatus": "potential_media_identified",
       "sourceAssessment": "Publisher landing-page summary or museum catalog only; actual excerpt and Apostolic doctrine not verified",
       "proposedInteraction": {
         "title": "Respectful gospel defense simulator",
