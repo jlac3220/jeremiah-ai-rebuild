@@ -51,5 +51,8 @@ jobs:
       - name: Validate media research proposals
         run: npm run test:media
 
+      - name: Validate public website crawler
+        run: npm run test:crawler
+
       - name: Build app
         run: npm run build
