@@ -76,7 +76,8 @@ button.ce-door:hover { background: #f6f8fa; transform: translateY(-3px); }
   .ce-door p { display: none; }
   .ce-door-status { grid-column: 2; grid-row: 2; font-size: .73rem; line-height: 1.35; margin: 0; }
   .ce-door-action { grid-column: 3; grid-row: 1 / span 2; margin: 0; justify-self: end; font-size: 0; }
-  .ce-door-action > span { font-size: 1.3rem; }
+  .ce-door-action > span { display: none; }
+  .ce-door-action::after { content: '›'; font-size: 1.75rem; line-height: 1; color: #394d94; }
   .ce-door:not(.ce-door-active) .ce-door-number { background: #f0f3f8; color: #3d5974; }
   .ce-door:active { transform: scale(.985); }
   .ce-feature { padding: 19px !important; gap: 14px; border: 1px solid #e6eaf2; border-radius: 20px; background: #fff; }
