@@ -31,9 +31,7 @@ class WebsiteCrawlerTests(unittest.TestCase):
         self.assertIn("New Birth", out["headings"])
         self.assertNotIn("Donate", out["text"])
         self.assertEqual(out["media"][0]["type"], "iframe")
-        self.assertIn("https://example.org/teaching/second", out["links"] if False else
-                      ["https://example.org/teaching/second"] if "https://example.org/teaching/second" in out["links"]
-                      else [])
+        self.assertIn("https://example.org/teaching/second", out["links"])
         self.assertEqual(out["feeds"], ["https://example.org/feed/"])
 
     def test_urls_no_external_crawl(self):
