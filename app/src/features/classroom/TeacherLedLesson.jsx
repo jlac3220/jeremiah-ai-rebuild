@@ -11,6 +11,22 @@ import LessonIllustration from './LessonIllustration';
 import LessonActivity, { LessonVisual, WorkedExample } from './LessonActivity';
 import './TeacherLedLesson.css';
 
+function MobileTeachingCards({ paragraphs = [] }) {
+ const [index, setIndex] = useState(0);
+ if (!paragraphs.length) return null;
+ const active = Math.min(index, paragraphs.length - 1);
+ return <div className="tl-mobile-teaching" aria-label="Teaching explanation">
+  <p className="tl-teaching">{paragraphs[active]}</p>
+  {paragraphs.length > 1 && <div className="tl-teaching-controls">
+   <span aria-live="polite">Thought {active + 1} of {paragraphs.length}</span>
+   <div>
+    <button type="button" disabled={active === 0} onClick={() => setIndex(i => Math.max(0, i - 1))} aria-label="Previous teaching thought">←</button>
+    <button type="button" disabled={active === paragraphs.length - 1} onClick={() => setIndex(i => Math.min(paragraphs.length - 1, i + 1))} aria-label="Next teaching thought">Next →</button>
+   </div>
+  </div>}
+ </div>;
+}
+
 export default function TeacherLedLesson({ content, state, onStateChange, onNavigate }) {
  const move=getInstructionalMove(content,state.currentMoveId);
  const draft=state.experience?.drafts?.[move.id] || {};
@@ -97,7 +113,8 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
    {!complete && <>
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
     {move.visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
-    {move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}
+    <div className="tl-desktop-teaching">{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
+    <MobileTeachingCards key={move.id} paragraphs={move.teaching || []} />
     {move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
     {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {move.illustration && <LessonIllustration key={move.id} kind={move.illustration}/>}
