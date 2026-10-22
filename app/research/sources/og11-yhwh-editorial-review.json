@@ -1,0 +1,67 @@
+{
+  "id": "og11-yhwh-lord-capitalization",
+  "standardId": "OG.1.1.18",
+  "status": "editorial_review_candidate",
+  "publicationAllowed": false,
+  "proposedPlacement": "After learner reads Deuteronomy 6:4 KJV, as optional brief visual vocabulary support",
+  "proposal": {
+    "type": "scripture-annotation",
+    "title": "Why is LORD written in capital letters?",
+    "primaryVerse": "Deuteronomy 6:4",
+    "useSuppliedKjvVerse": true,
+    "interaction": "Learner selects either occurrence of LORD in the existing KJV verse and sees a short explanation of how English translation typography distinguishes the divine name from the ordinary title lord.",
+    "draftExplanation": "In many English Bibles, LORD in capitals represents the Hebrew personal name of Israel's God. This translation convention helps readers recognize whom the Shema confesses. It does not change the biblical truth that the LORD our God is one LORD.",
+    "learnerCheck": "In Deuteronomy 6:4, what does the repeated LORD emphasize about the God Israel is commanded to hear and acknowledge?",
+    "teachingLimits": "Keep focus on Deuteronomy 6:4, Isaiah 44:6, Isaiah 45:5, and Mark 12:29. This note supports reading the Shema, not a test on Hebrew phonetics, Jewish ritual practices, or divine-name etymology."
+  },
+  "sources": [
+    {
+      "title": "YHWH / LORD",
+      "publisher": "BibleProject",
+      "url": "https://bibleproject.com/videos/yhwh-lord/",
+      "sectionStart": "02:58",
+      "sectionEnd": "03:40",
+      "timingBasis": "publisher-script-section-range-not-verified-exact-quote",
+      "role": "research-only-external-media"
+    },
+    {
+      "title": "Bible translation typography discussion",
+      "publisher": "SIL Bible Translation resource (TIPs)",
+      "url": "https://tips.translation.bible/tip_verse/deut-64/",
+      "role": "independent translation-reference"
+    },
+    {
+      "title": "CSB translation decisions",
+      "publisher": "Christian Standard Bible",
+      "url": "https://csbible.com/wp-content/uploads/2017/01/Translation-Decisions-QA.pdf",
+      "role": "independent translator explanation"
+    }
+  ],
+  "evidenceNotes": [
+    "The user-side v2 research run reported four claims and two activities; this editorial note does not copy that local proposal or represent its unreviewed claims as verified.",
+    "BibleProject's video page and its linked publisher-script section describe the LORD/ordinary Lord distinction.",
+    "Many modern English translations use LORD capitals/small capitals to represent YHWH; verify presentation details against the application's exact KJV rendering.",
+    "The publisher's script reference is not confirmed as a full timed caption transcript."
+  ],
+  "deferredTopics": [
+    "Speculative or simplified etymological explanations of Yahweh",
+    "Pronunciation claims",
+    "Jehovah spelling-history digression",
+    "Ritual practice history"
+  ],
+  "reviews": {
+    "sourceIdentity": "publisher-page-identified",
+    "translationConvention": "externally-supported-pending-editor",
+    "doctrinalAlignment": false,
+    "sourceTextComparedToVideo": false,
+    "rightsAndEmbedding": false,
+    "lessonApproved": false
+  },
+  "requires": [
+    "Confirm exact KJV verse display and selectable tokens",
+    "Review wording for Apostolic/Pentecostal alignment",
+    "Check the media's terms and any embed rights before using a clip",
+    "Approve or reject the optional classroom interaction"
+  ],
+  "note": "Research-only proposal. Do not inject into registry, lesson, student view, or assessments automatically."
+}
