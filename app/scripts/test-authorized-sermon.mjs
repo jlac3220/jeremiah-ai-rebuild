@@ -55,7 +55,7 @@ test("authorized originals can be converted and transcribed without external vid
       assert.equal(key, "test-key");
       count++;
       return { cues: [{ timestamp: "0.0s", endTimestamp: count === 3 ? "0.5s" : "3.0s",
-        text: "A spoken sentence on repentance." }] };
+        text: "A spoken sentence on repentance, segment " + count + "." }] };
     };
     const result = await ingestAuthorizedSermon({
       media: source, title: "Test sermon", publisher: "Test publisher",
