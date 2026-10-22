@@ -78,9 +78,10 @@ export function parseTranscript(raw, extension = ".txt") {
     const lines = block.split("\n").map((line) => line.trim()).filter(Boolean);
     const separator = lines.findIndex((line) => line.includes("-->"));
     if (separator < 0) continue;
-    const timestamp = lines[separator].split("-->")[0].trim();
+    const [timestamp, endRaw] = lines[separator].split("-->");
+    const endTimestamp = endRaw?.trim().split(/\s+/)[0] || "";
     const text = lines.slice(separator + 1).join(" ").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
-    if (text && cues.at(-1)?.text !== text) cues.push({ timestamp, text });
+    if (text && cues.at(-1)?.text !== text) cues.push({ timestamp: timestamp.trim(), endTimestamp, text });
   }
   if (!cues.length) throw new Error("No timed caption cues were found.");
   return { text: cues.map((cue) => "[" + cue.timestamp + "] " + cue.text).join("\n"), cues };
@@ -110,6 +111,7 @@ export async function transcribeLocalMedia(mediaPath, apiKey, fetcher = fetch) {
   }
   const cues = json.segments.map((segment) => ({
     timestamp: Number(segment.start).toFixed(1) + "s",
+    endTimestamp: Number(segment.end).toFixed(1) + "s",
     text: String(segment.text || "").trim(),
   })).filter((cue) => cue.text);
   return { text: cues.map((cue) => "[" + cue.timestamp + "] " + cue.text).join("\n"), cues };
@@ -145,11 +147,36 @@ function groundedQuote(quote, transcript) {
   const words = quote.trim().split(/\s+/).filter(Boolean);
   return words.length > 0 && words.length <= 20 && normalized(transcript).includes(normalized(quote));
 }
-function verifiedTimestamp(quote, statedTimestamp, transcript) {
-  // Untimed text (including text extracted from PDFs) cannot substantiate an exact playback time.
-  if (!transcript?.cues?.length) return "";
-  const cue = transcript.cues.find((item) => normalized(item.text).includes(normalized(quote)));
-  return cue && cue.timestamp === statedTimestamp ? cue.timestamp : "";
+function evidenceLocation(quote, transcript, sourceUrl) {
+  // Untimed source material never authorizes a playback timestamp, even if the model claims one.
+  if (!transcript?.cues?.length) {
+    return { kind: "untimed-transcript", sourceUrl, start: "", end: "", cueStart: null, cueEnd: null, ambiguous: false };
+  }
+  const cues = transcript.cues;
+  const matches = [];
+  const target = normalized(quote);
+  // Short quotations may span consecutive caption cues. Never infer timing from a PDF or AI output.
+  for (let first = 0; first < cues.length; first++) {
+    let text = "";
+    for (let last = first; last < Math.min(first + 8, cues.length); last++) {
+      text += (text ? " " : "") + cues[last].text;
+      if (normalized(text).includes(target)) {
+        matches.push({ first, last });
+        break;
+      }
+    }
+  }
+  if (!matches.length) return null;
+  const { first, last } = matches[0];
+  const ambiguous = matches.length > 1;
+  return {
+    kind: "timed-captions", sourceUrl,
+    start: ambiguous ? "" : cues[first].timestamp,
+    end: ambiguous ? "" : (cues[last].endTimestamp || ""),
+    cueStart: ambiguous ? null : first + 1,
+    cueEnd: ambiguous ? null : last + 1,
+    ambiguous,
+  };
 }
 
 // Research proposals are deliberately NOT published into a lesson or standards registry.
@@ -178,7 +205,7 @@ export async function proposeMediaEnrichment({ standardId, transcript, source, a
           "Extract only teaching ideas directly relevant to the standard; preserve its doctrinal authority.",
           "Distinguish source claims from verified facts. Identify gaps and conflicts for a human reviewer.",
           "Every evidence quote must appear exactly in the transcript excerpt, be 20 words or less, and never be invented.",
-          "Provide a timestamp only when present in the transcript. Do not manufacture timestamps.",
+          "Timestamp values from the model are NOT authoritative; the server locates quotes in caption cues.",
           "Use only supplied requiredKnowledge IDs. Offer original educational activity ideas, not copied script.",
           "For EVERY proposed activity, quote up to 20 EXACT words from this transcript excerpt in sourceEvidence, and explain in addedValue what THIS media contributes beyond the standard.",
           "An activity merely asking to read, compare, or recall verses already supplied in the standard is NOT media enrichment. Omit it unless the media contributes a demonstrable new example, explanation, or method.",
@@ -198,9 +225,16 @@ export async function proposeMediaEnrichment({ standardId, transcript, source, a
         concerns.push("Discarded a claim without exact supporting transcript evidence.");
         continue;
       }
+      const location = evidenceLocation(claim.evidence, transcript, source.url);
+      if (!location) {
+        concerns.push("Discarded a claim without a matching timed caption location.");
+        continue;
+      }
+      if (location.ambiguous) concerns.push("A claim quote occurs in multiple caption locations; playback time withheld.");
       claims.push({
         ...claim,
-        timestamp: verifiedTimestamp(claim.evidence, claim.timestamp, transcript),
+        timestamp: location.start,
+        sourceLocation: location,
         knowledgeIds: (claim.knowledgeIds || []).filter((id) => knowledgeIds.has(id)),
         reviewStatus: "unverified",
       });
@@ -210,9 +244,16 @@ export async function proposeMediaEnrichment({ standardId, transcript, source, a
         concerns.push("Discarded an activity without transcript evidence and a clear added educational value.");
         continue;
       }
+      const location = evidenceLocation(activity.sourceEvidence, transcript, source.url);
+      if (!location) {
+        concerns.push("Discarded an activity without a matching timed caption location.");
+        continue;
+      }
+      if (location.ambiguous) concerns.push("An activity quote occurs in multiple caption locations; playback time withheld.");
       activities.push({
         ...activity,
-        timestamp: verifiedTimestamp(activity.sourceEvidence, activity.timestamp, transcript),
+        timestamp: location.start,
+        sourceLocation: location,
         knowledgeIds: (activity.knowledgeIds || []).filter((id) => knowledgeIds.has(id)),
         reviewStatus: "proposed",
       });
