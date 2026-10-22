@@ -54,5 +54,8 @@ jobs:
       - name: Validate public website crawler
         run: npm run test:crawler
 
+      - name: Validate standards content scan
+        run: npm run test:content-scan
+
       - name: Build app
         run: npm run build
