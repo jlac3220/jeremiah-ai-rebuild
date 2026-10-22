@@ -9,6 +9,7 @@ import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import DeepDiveSheet from './DeepDiveSheet';
 import LessonIllustration from './LessonIllustration';
 import LessonActivity, { LessonVisual, WorkedExample } from './LessonActivity';
+import InteractivePractice from './InteractivePractice';
 import './TeacherLedLesson.css';
 
 function MobileTeachingCards({ paragraphs = [] }) {
@@ -115,6 +116,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     {move.visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     <div className="tl-desktop-teaching">{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
     <MobileTeachingCards key={move.id} paragraphs={move.teaching || []} />
+    {move.id==='learn' && <InteractivePractice content={content} state={state} onProgress={(patch)=>onStateChange(current=>updateLearningExperience(current,patch))} />}
     {move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
     {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {move.illustration && <LessonIllustration key={move.id} kind={move.illustration}/>}
