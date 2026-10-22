@@ -17,10 +17,11 @@
     "test:curriculum": "node scripts/test-curriculum.mjs",
     "test:teacher-led": "node scripts/test-teacher-led.mjs",
     "test:grouped": "node scripts/test-grouped-lesson.mjs",
-    "test:media": "node --test scripts/test-media-research.mjs scripts/test-media-discovery.mjs scripts/test-youtube-extraction.mjs",
+    "test:media": "node --test scripts/test-media-research.mjs scripts/test-media-discovery.mjs scripts/test-youtube-extraction.mjs scripts/test-authorized-sermon.mjs",
     "research:media": "node scripts/research-media.mjs",
     "discover:media": "node scripts/discover-media.mjs",
-    "extract:youtube": "node scripts/extract-youtube.mjs"
+    "extract:youtube": "node scripts/extract-youtube.mjs",
+    "transcribe:sermon": "node scripts/transcribe-authorized-sermon.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
