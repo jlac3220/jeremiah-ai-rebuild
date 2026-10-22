@@ -159,7 +159,7 @@
 .sc-choices button.is-selected,
 .sc-prediction button.is-selected {
   border-color: var(--color-accent);
-  background: #F1EEFF;
+  background: #eff6ff;
   color: #5B46B3;
 }
 
@@ -396,7 +396,7 @@
 
 .sc-progress {
   position: relative;
-  background: #F0EDFF;
+  background: #eff6ff;
 }
 
 .sc-progress i {
@@ -428,7 +428,7 @@
 .sc-choices button.is-selected,
 .sc-prediction button.is-selected {
   border-color: var(--color-blue);
-  background: #F1EEFF;
+  background: #eff6ff;
   color: #5145B5;
 }
 
@@ -569,7 +569,7 @@
   padding: 18px;
   border-left: 4px solid var(--color-accent);
   border-radius: 0 12px 12px 0;
-  background: #F1EEFF;
+  background: #eff6ff;
 }
 
 .sc-sheet-note strong {
@@ -598,7 +598,7 @@
   margin-right: 2px;
   border-radius: 50%;
   color: #fff;
-  background: #3659DD;
+  background: #1463e8;
   font-size: .72rem;
   font-weight: 900;
 }
@@ -721,9 +721,9 @@
 .sc-passage { margin: 28px 0 20px; }
 .sc-passage p { margin: 0 0 18px; font: 1.45rem/1.65 Georgia, serif; color: #182438; }
 .sc-passage p.sc-passage-context { color: #64748b; font-size: 1.15rem; }
-.sc-passage sup { font: 600 .7rem/1 system-ui, sans-serif; color: #53708c; margin-right: 9px; }
+.sc-passage sup { font: 600 .7rem/1 system-ui, sans-serif; color: #1D4ED8; margin-right: 9px; }
 .sc-passage .sc-passage-status { font: 1rem/1.6 system-ui, sans-serif; color: #64748b; }
-.sc-context-toggle, .sc-passage-status button { border: 0; border-radius: 10px; padding: 12px 0; background: transparent; color: #3659DD; font: 600 .9rem/1.4 system-ui, sans-serif; cursor: pointer; }
+.sc-context-toggle, .sc-passage-status button { border: 0; border-radius: 10px; padding: 12px 0; background: transparent; color: #1463e8; font: 600 .9rem/1.4 system-ui, sans-serif; cursor: pointer; }
 .sc-passage-source { display: block; margin-top: 22px; color: #64748b; }
-.sc-sheet button:focus-visible { outline: 3px solid #7457DF; outline-offset: 4px; }
+.sc-sheet button:focus-visible { outline: 3px solid #1463e8; outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) { .sc-sheet { animation: none; } }
