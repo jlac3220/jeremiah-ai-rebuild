@@ -3,10 +3,10 @@
   --font-display: Georgia, "Times New Roman", serif;
   --color-ink: #17283b;
   --color-muted: #64748b;
-  --color-blue: #315d82;
-  --color-blue-dark: #244767;
-  --color-accent: #bd5929;
-  --color-accent-dark: #a94d22;
+  --color-blue: #3659DD;
+  --color-blue-dark: #2847B6;
+  --color-accent: #E45D7C;
+  --color-accent-dark: #C84665;
   font-family: var(--font-body);
   color: #14202a;
   background: #f6f7f8;
@@ -40,14 +40,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Phone-sized bottom navigation: familiar iOS layout, safe-area and active-state treatment. */
 @media (max-width: 640px) {
-  .app-shell { background: #f5f6fa; }
+  .app-shell { background: #F6F7FE; }
   .app-main.has-nav { padding-bottom: calc(77px + env(safe-area-inset-bottom)); }
   .app-nav { background: rgba(252,253,255,.92); border-top: 1px solid #e4e9f2; -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); }
   .app-nav-rail { padding: 5px 9px calc(7px + env(safe-area-inset-bottom)); gap: 2px; }
   .app-nav button { min-height: 56px; gap: 3px; border-radius: 12px; color: #8a93a8; font-size: .64rem; font-weight: 650; }
   .app-nav svg { width: 23px; height: 23px; stroke-width: 1.75; }
-  .app-nav button[aria-current] { color: #394d94; background: transparent; font-weight: 800; }
+  .app-nav button[aria-current] { color: #3659DD; background: transparent; font-weight: 800; }
   .app-nav button[aria-current] svg { stroke-width: 2.3; }
-  .app-nav button:active { background: #eef1fb; }
+  .app-nav button:active { background: #EEF0FF; }
   .app-nav button:focus-visible { outline-offset: -2px; }
 }
