@@ -187,6 +187,51 @@ If the owner cannot supply an original recording, YouTube's normal
 where available. Save it as an untracked .txt file and run research:media;
 a plain-text transcript has **no defensible playback timestamps**.
 
+## Website crawling pilot (HTML text and media discovery)
+
+Instead of needing a special extractor for each ministry, Jeremiah can now crawl a
+public HTTPS website with a bounded, same-host, robots-aware standard-library
+Python crawler. It discovers ordinary page links and sitemaps, extracts readable
+text, title/description/headings, referenced Bible passages, RSS/Atom discovery
+links, and external media/iframe URLs. The output is written locally into the
+gitignored .jeremiah-research directory. All extracted content remains
+**unreviewed** and is not added to lessons.
+
+From the app directory:
+
+~~~bash
+npm run crawl:site -- --site https://promise.church --max-pages 30 --depth 4
+~~~
+
+To inspect the output, open the JSON path printed by the crawler. Each page
+has `text`, `scriptureReferences`, `media` and `feeds` fields, plus
+source URL and a content hash. The command prints per-page word counts,
+Scripture references, media counts, failures and robots status.
+
+The website root is treated as a strict site boundary. The crawler does not
+automatically follow YouTube, podcast hosts, or unrelated domains. It refuses
+localhost/private hosts, checks robots.txt (stops when robots policy cannot be
+confirmed), limits page count, depth and response sizes, and throttles requests.
+Avoid launching lots of site crawls at once; obey each host's crawl requirements.
+
+**Known limitation:** A site may expose only a video title/player and no
+teaching transcript. This crawler can discover the video reference, but cannot
+extract sermon speech from a YouTube iframe or a JS-rendered application.
+Some sites also use dynamic browser rendering or complex pagination. Such
+sources require a separately approved connector or publisher-provided feed,
+transcript or media export. Website crawling alone does **not** solve
+YouTube bot verification and must never be represented as a full sermon
+transcription.
+
+This is a **single-site proof of concept**, not a production system for 1,000
+sites. Scaling requires a persistent source registry, queue workers,
+change detection, per-host quotas, indexing and audit logs. See the crawler
+tests:
+
+~~~bash
+npm run test:crawler
+~~~
+
 ## Not yet implemented
 
 General web search, historical publisher catalog crawling, video frame inspection, multi-standard recommendation, media rights verification, or a review/dashboard approval UI. These are future increments, not capabilities of this pilot.
