@@ -68,6 +68,8 @@ npm run research:media -- \
 
 The CLI loads the server-only .env API key and saves a review proposal in .jeremiah-research/ (Git-ignored). It does not output or save the full transcript.
 
+The review JSON now preserves the model's summary, distinguishes `modelRelevance` from accepted-evidence `relevance`, and reports an `assessment` of `review-proposal`, `insufficient-source-evidence`, or `no-enrichment-identified`. This prevents unsupported PDF-extracted quotations being misreported as definitive evidence that a video lacks educational value. It also tracks accepted and rejected proposals in `evidenceReview`. The matcher tolerates punctuation and PDF line breaks but still requires the same word sequence, not a paraphrase.
+
 Review exact evidence and `sourceLocation` references. Timestamps are sourced from actual caption/recording cues, not inferred from text or trusted from the AI model; these timestamps do not confirm video frames or that the source is reliable. Independently check historical and linguistic claims, compare doctrinal implications with the standard, and verify permissions for the proposed use before adding anything to a published lesson.
 
 ## Not yet implemented
