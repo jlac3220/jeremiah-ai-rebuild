@@ -21,7 +21,7 @@ From the app directory, find possible teaching resources for one standard:
 npm run discover:media -- --standard OG.1.1.18
 ~~~
 
-This fetches **only metadata** from an allowlisted public YouTube Atom feed and includes already-curated classroom videos. It writes a review queue under `.jeremiah-research/` and does **not** require an OpenAI key. The live feed contains only recent uploads, so an older relevant video can appear through the classroom's existing resource catalog but may not appear in the feed.
+This fetches **only metadata** from an allowlisted public YouTube Atom feed, includes already-curated classroom videos, and also reads a local `research/sources/publisher-catalog.json` index of older videos checked against official publisher pages. The archive index currently adds `YHWH / LORD` and `1st Commandment: No Other Gods` as *provisional* OG.1.1.18 topical candidates. It writes a review queue under `.jeremiah-research/` and does **not** require an OpenAI key. The live feed contains only recent uploads; the archive index is a manually checked starting point, **not** automatic historical catalog crawling.
 
 Candidates are filtered for a distinctive concept in the standard's title or an exact Scripture reference (or multiple supporting metadata terms), so vague overlaps such as generic language or prophetic themes are omitted. This conservative filter can also miss relevant resources; scores remain **metadata-only**, not theological or factual assessments. Publisher permissions and restrictions, including whether your app may charge for access to embedded media, must be reviewed before using a candidate.
 
