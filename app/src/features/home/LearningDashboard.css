@@ -2,16 +2,16 @@
 .ld-content { max-width: 980px; margin: 0 auto; }
 .ld-header { display: flex; justify-content: space-between; gap: 20px; align-items: center; padding: 0 0 32px; }
 .ld-brand { font: 800 .9rem/1.2 system-ui, sans-serif; letter-spacing: .2em; }
-.ld-header-note { color: #72808c; font: .85rem/1.4 system-ui, sans-serif; }
+.ld-header-note { color: #475569; font: .85rem/1.4 system-ui, sans-serif; }
 .ld-hero { max-width: 700px; padding: 32px 0 44px; }
-.ld-eyebrow { display: block; color: #657b8e; font: 700 .7rem/1.6 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .13em; margin: 0; }
+.ld-eyebrow { display: block; color: #475569; font: 700 .7rem/1.6 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .13em; margin: 0; }
 .ld-hero h1 { font: 500 clamp(2.7rem, 6vw, 4.4rem)/1.06 Georgia, serif; letter-spacing: -.04em; margin: 14px 0 22px; }
 .ld-hero > p:last-child { color: #657080; font: 1.12rem/1.7 system-ui, sans-serif; max-width: 520px; }
-.ld-feature { background: #f6f8fa; padding: 36px 40px; border-radius: 22px; }
+.ld-feature { background: #f8fafc; padding: 36px 40px; border-radius: 22px; }
 .ld-feature-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
 .ld-path { color: #64748b; font: .8rem/1.5 system-ui, sans-serif; }
 .ld-feature h2 { max-width: 680px; font: 500 clamp(1.9rem,4vw,2.8rem)/1.14 Georgia, serif; letter-spacing: -.025em; margin: 22px 0 16px; }
-.ld-truth { color: #516578; font: 1.1rem/1.6 Georgia, serif; }
+.ld-truth { color: #1D4ED8; font: 1.1rem/1.6 Georgia, serif; }
 .ld-next { margin: 30px 0; }
 .ld-next p { margin: 6px 0 0; font: 600 1.05rem/1.5 system-ui, sans-serif; }
 .ld-progress-label { display: flex; justify-content: space-between; font: .8rem/1.5 system-ui, sans-serif; color: #64748b; }
@@ -26,7 +26,7 @@
 .ld-link { border: 0; background: transparent; color: var(--color-blue); font: 650 .95rem/1.5 system-ui, sans-serif; padding: 10px 0; cursor: pointer; }
 .ld-bible h3 { font: 500 1.9rem/1.2 Georgia, serif; margin: 14px 0 10px; }
 .ld-bible p, .ld-muted { color: #64748b; font: 1rem/1.7 system-ui, sans-serif; }
-.ld-page button:focus-visible { outline: 3px solid #eaa574; outline-offset: 5px; }
+.ld-page button:focus-visible { outline: 3px solid #60a5fa; outline-offset: 5px; }
 .ld-section { margin-top: 40px; }
 .ld-section h2 { font: 500 1.8rem/1.3 Georgia, serif; }
 .ld-record { display: flex; justify-content: space-between; gap: 24px; padding: 22px 0; border-bottom: 1px solid #eef1f4; }
@@ -38,9 +38,9 @@
 /* Compact iPhone-first home: accessible content without the document-length landing page. */
 .ld-home {
   --ld-ink: #212943;
-  --ld-indigo: #3659DD;
+  --ld-indigo: #1463E8;
   min-height: 100svh;
-  background: #F6F7FE;
+  background: #ffffff;
   color: var(--ld-ink);
   padding: 22px 24px 100px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -48,8 +48,8 @@
 .ld-home .ld-content { max-width: 880px; }
 .ld-home .ld-header { padding: 0 0 24px; }
 .ld-logo { display: inline-flex; gap: 10px; align-items: center; font-size: 1.03rem; letter-spacing: -.025em; font-weight: 800; }
-.ld-logo-mark { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 12px; background: #3659DD; color: #fff; font-size: 1.05rem; box-shadow: 0 3px 8px #3659DD29; }
-.ld-profile-shortcut { display: grid; place-items: center; width: 42px; height: 42px; padding: 10px; border-radius: 50%; border: 1px solid #e5e9f2; background: #fff; color: #3659DD; cursor: pointer; }
+.ld-logo-mark { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 12px; background: #1463e8; color: #fff; font-size: 1.05rem; box-shadow: 0 3px 8px #3659DD29; }
+.ld-profile-shortcut { display: grid; place-items: center; width: 42px; height: 42px; padding: 10px; border-radius: 50%; border: 1px solid #e5e9f2; background: #fff; color: #1463e8; cursor: pointer; }
 .ld-profile-shortcut svg { width: 21px; height: 21px; }
 .ld-home-intro { padding: 4px 0 23px; }
 .ld-home-label { color: #63718d; font-size: .7rem; letter-spacing: .12em; font-weight: 750; }
@@ -57,17 +57,17 @@
 .ld-home-intro p { margin: 0; color: #66728a; font-size: .94rem; line-height: 1.45; }
 .ld-continue-card { padding: 27px 28px 19px; background: #fff; border: 1px solid #e9ecf3; border-radius: 24px; box-shadow: 0 8px 30px rgba(37,55,96,.055); }
 .ld-home .ld-feature-heading { gap: 12px; }
-.ld-card-kicker { display: inline-flex; align-items: center; gap: 8px; color: #3659DD; font-weight: 760; font-size: .73rem; letter-spacing: .01em; }
-.ld-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #E45D7C; flex-shrink: 0; }
+.ld-card-kicker { display: inline-flex; align-items: center; gap: 8px; color: #1463e8; font-weight: 760; font-size: .73rem; letter-spacing: .01em; }
+.ld-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #1463e8; flex-shrink: 0; }
 .ld-lesson-status { color: #687994; font-size: .73rem; font-weight: 650; white-space: nowrap; }
 .ld-continue-card h2 { margin: 16px 0 12px; font: 760 clamp(1.5rem, 3.2vw, 2.05rem)/1.18 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: -.035em; }
 .ld-move-chip { display: flex; align-items: center; gap: 9px; color: #6d748b; font-size: .82rem; line-height: 1.35; margin: 0 0 20px; }
-.ld-move-chip > span { display: grid; place-items: center; flex-shrink: 0; width: 23px; height: 23px; border-radius: 8px; background: #edf0fa; color: #3659DD; font-size: .86rem; }
+.ld-move-chip > span { display: grid; place-items: center; flex-shrink: 0; width: 23px; height: 23px; border-radius: 8px; background: #edf0fa; color: #1463e8; font-size: .86rem; }
 .ld-home .ld-progress-label { font-size: .75rem; font-weight: 600; color: #68718b; }
-.ld-home .ld-progress-label strong { color: #3659DD; }
+.ld-home .ld-progress-label strong { color: #1463e8; }
 .ld-home .ld-progress { height: 6px; margin: 8px 0 18px; border-radius: 999px; background: #e8ebf4; }
-.ld-home .ld-progress > span { background: #7457DF; }
-.ld-home .ld-primary { width: 100%; justify-content: space-between; border-radius: 15px; background: #3659DD; font-size: .94rem; font-weight: 760; padding: 15px 18px; min-height: 52px; }
+.ld-home .ld-progress > span { background: #1463e8; }
+.ld-home .ld-primary { width: 100%; justify-content: space-between; border-radius: 15px; background: #1463e8; font-size: .94rem; font-weight: 760; padding: 15px 18px; min-height: 52px; }
 .ld-home .ld-primary:hover { background: #2948B4; }
 .ld-home .ld-primary span { font-size: 1.2rem; }
 .ld-overview { margin-top: 12px; color: #6e7590; font-size: .78rem; line-height: 1.6; }
@@ -79,7 +79,7 @@
 .ld-section-heading > span { color: #8992a5; font-size: .75rem; }
 .ld-quick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .ld-quick-tile { display: grid; text-align: left; grid-template-columns: 38px 1fr auto; align-items: center; gap: 10px; border: 1px solid #e9ecf3; border-radius: 19px; padding: 16px; background: #fff; color: var(--ld-ink); cursor: pointer; box-shadow: 0 3px 12px rgba(37,55,96,.025); }
-.ld-tile-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #EDF1FF; color: #3659DD; }
+.ld-tile-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #EDF1FF; color: #1463e8; }
 .ld-quick-progress .ld-tile-icon { background: #F0ECFF; color: #7254D8; }
 .ld-tile-icon svg { width: 20px; height: 20px; }
 .ld-quick-copy { display: grid; gap: 3px; min-width: 0; }
@@ -114,9 +114,17 @@
 }
 
 /* A little vibrancy, with clean white cards and no tan/green UI. */
-.ld-logo-mark { background: linear-gradient(140deg, #3659DD, #7457DF); }
-.ld-home .ld-progress > span { background: linear-gradient(90deg, #3659DD, #7457DF); }
-.ld-quick-progress .ld-tile-icon { background: #F0ECFF; color: #7457DF; }
-.ld-quick-bible .ld-tile-icon { background: #EDF1FF; color: #3659DD; }
-.ld-home .ld-primary { background: #3659DD; }
+.ld-logo-mark { background: #1463E8; }
+.ld-home .ld-progress > span { background: #1463E8; }
+.ld-quick-progress .ld-tile-icon { background: #F0ECFF; color: #1463e8; }
+.ld-quick-bible .ld-tile-icon { background: #EDF1FF; color: #1463e8; }
+.ld-home .ld-primary { background: #1463e8; }
 .ld-home .ld-primary:hover { background: #2847B6; }
+
+/* Inspired by native iOS cards: white canvas, quiet dividers, one blue CTA. */
+.ld-home { background: #fff; }
+.ld-continue-card { border-color: #E5E7EB; box-shadow: 0 3px 16px rgba(15,23,42,.035); }
+.ld-quick-tile { background: #F8FAFC; border-color: #E5E7EB; box-shadow: none; }
+.ld-snapshot { background: #fff; border-color: #E5E7EB; }
+.ld-logo-mark,.ld-home .ld-primary { background: #1463E8; box-shadow: none; }
+.ld-home .ld-progress>span { background: #1463E8; }
