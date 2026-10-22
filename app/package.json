@@ -17,8 +17,9 @@
     "test:curriculum": "node scripts/test-curriculum.mjs",
     "test:teacher-led": "node scripts/test-teacher-led.mjs",
     "test:grouped": "node scripts/test-grouped-lesson.mjs",
-    "test:media": "node --test scripts/test-media-research.mjs",
-    "research:media": "node scripts/research-media.mjs"
+    "test:media": "node --test scripts/test-media-research.mjs scripts/test-media-discovery.mjs",
+    "research:media": "node scripts/research-media.mjs",
+    "discover:media": "node scripts/discover-media.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
