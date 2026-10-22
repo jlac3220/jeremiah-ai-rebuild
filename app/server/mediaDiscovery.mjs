@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { classroomContentRegistry } from "../src/core/classroom/content/classroomContentRegistry.js";
 import { standardMediaBrief } from "./mediaEnrichment.mjs";
 
@@ -62,6 +63,18 @@ export function parseYoutubeFeed(xml, publisher = "Unknown publisher") {
     });
   }
   return items.filter((item) => item.title);
+}
+async function publishedArchiveCandidates(standardId) {
+  // This repository-reviewed index supplements the channel's recent-upload feed.
+  // Links and topical assignments are editorial metadata, NOT approval to teach or reuse.
+  const json = JSON.parse(await readFile(new URL("../research/sources/publisher-catalog.json", import.meta.url), "utf8"));
+  return (json.entries || []).filter((item) => {
+    if (!item.standardIds?.includes(standardId)) return false;
+    try { const url = new URL(item.url); return url.protocol === "https:" && url.hostname === "bibleproject.com"; }
+    catch { return false; }
+  }).map((item) => ({
+    ...item, origin: "publisher-catalog", publishedAt: "",
+  }));
 }
 function curriculumVideos(standardId) {
   const content = classroomContentRegistry[standardId];
@@ -134,8 +147,10 @@ export function rankDiscoveryCandidates(standardId, candidates, limit = 12) {
       && score >= 8 && matches.length >= 2;
     const text = String(item.title || "") + " " + String(item.description || "");
     const verseMatch = scriptureAnchors.some((reference) => text.toLowerCase().includes(reference));
-    if (item.origin !== "existing-classroom-resource" && !(titleMatch || descriptionMatch || verseMatch)) continue;
+    const archiveTag = item.origin === "publisher-catalog" && item.standardIds?.includes(standardId);
+    if (item.origin !== "existing-classroom-resource" && !archiveTag && !(titleMatch || descriptionMatch || verseMatch)) continue;
     const matchBasis = item.origin === "existing-classroom-resource" ? "previously-curated"
+      : archiveTag ? "provisional-publisher-topic-tag"
       : titleMatch ? "standard-title-concept"
       : verseMatch ? "exact-scripture-reference" : "corroborated-description";
     ranked.push({
@@ -145,7 +160,9 @@ export function rankDiscoveryCandidates(standardId, candidates, limit = 12) {
       matchBasis,
       matchReason: item.origin === "existing-classroom-resource"
         ? "Already referenced by the classroom; review status and usefulness still require confirmation."
-        : "Metadata matched " + matchBasis + "; the recording and its claims have not been reviewed.",
+        : archiveTag
+          ? "Official publisher page and provisional editorial topic tag only; claims, doctrine, and reuse rights are not verified."
+          : "Metadata matched " + matchBasis + "; the recording and its claims have not been reviewed.",
       standardId,
       status: "discovery_candidate",
       rights: "external-reference",
@@ -161,6 +178,8 @@ export async function discoverMediaCandidates({
   standardMediaBrief(standardId);
   const candidates = curriculumVideos(standardId);
   const warnings = [];
+  try { candidates.push(...await publishedArchiveCandidates(standardId)); }
+  catch (error) { warnings.push("publisher-catalog: " + error.message); }
   for (const feed of feeds) {
     try {
       if (!TRUSTED_MEDIA_FEEDS.some((allowed) => allowed.id === feed.id && allowed.feedUrl === feed.feedUrl)) {
