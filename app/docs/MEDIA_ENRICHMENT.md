@@ -133,6 +133,60 @@ permission to embed or reuse footage is distinct from permission to analyze
 publicly accessible metadata and captions. Do not rehost videos or publish
 transcript text without verifying reuse rights.
 
+## When YouTube blocks captions: owner-authorized original recordings
+
+Some videos require YouTube bot verification even for public captions, including
+the Promise Church recording JSFGj1qFbQ0. Do not depend on bypassing
+verification or providing login cookies. We could not verify the spoken
+content of that sermon.
+
+If you control the channel, ask its owner for original MP3/MP4 recordings
+(or export your own videos from YouTube Studio / Takeout). Having the channel
+title or its public video URL does not itself grant permission to download,
+rehost, transcribe, or republish copyrighted material.
+
+From Codespaces, ensure ffmpeg and ffprobe are installed. The application
+now supports converting a **locally supplied, authorized original recording**
+into <=10-minute 48 kbps audio chunks and requesting timestamped OpenAI
+Whisper transcription. It automatically deletes temporary audio after
+transcription, keeps the resulting VTT in the gitignored
+.jeremiah-research directory, and **does not** upload any media to GitHub.
+Every audio chunk sends content to OpenAI under the account's API key; API
+usage is chargeable and requires appropriate permissions. A default limit of
+90 minutes prevents unexpectedly transcribing longer recordings; use
+--max-minutes only to explicitly raise the limit (up to 240 minutes).
+
+~~~bash
+npm run transcribe:sermon -- \
+  --media /path/to/authorized-sermon.mp4 \
+  --title "Actual sermon title" \
+  --publisher "Promise Church" \
+  --url "https://www.youtube.com/watch?v=VIDEO_ID" \
+  --rights permission \
+  --rights-evidence "Documented permission from owner"
+~~~
+
+After checking the returned VTT path, call the existing research command:
+
+~~~bash
+npm run research:media -- \
+  --standard NB.1.1.18 \
+  --transcript .jeremiah-research/authorized-sermon-captions/sermon-ID.vtt \
+  --title "Actual sermon title" --publisher "Promise Church" \
+  --url "https://www.youtube.com/watch?v=VIDEO_ID" --rights external-reference
+~~~
+
+The chosen standard must match the actual transcript subject; do not assume
+it matches from the sermon title alone. Automatic speech recognition and
+ten-minute file boundaries can produce imperfect timings and words. Do not
+represent an extracted quotation or timestamp as independently verified.
+The analysis remains human-review-only.
+
+If the owner cannot supply an original recording, YouTube's normal
+**Show transcript** interface may be used to export a transcript manually
+where available. Save it as an untracked .txt file and run research:media;
+a plain-text transcript has **no defensible playback timestamps**.
+
 ## Not yet implemented
 
 General web search, historical publisher catalog crawling, video frame inspection, multi-standard recommendation, media rights verification, or a review/dashboard approval UI. These are future increments, not capabilities of this pilot.
