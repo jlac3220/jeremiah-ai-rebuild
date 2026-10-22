@@ -33,3 +33,82 @@
 .ld-record h3 { margin: 0 0 5px; font: 600 1.05rem/1.5 system-ui, sans-serif; }
 .ld-record p { margin: 0; color: #64748b; font: .9rem/1.6 system-ui, sans-serif; }
 @media (max-width: 640px) { .ld-page { padding: 24px 22px 48px; } .ld-header { padding-bottom: 14px; } .ld-header-note { display: none; } .ld-hero { padding: 24px 0 28px; } .ld-feature { padding: 26px 24px; } .ld-feature-heading { align-items: flex-start; flex-direction: column; gap: 4px; } .ld-bottom { grid-template-columns: 1fr; gap: 36px; } .ld-primary { width: 100%; } .ld-record { flex-direction: column; gap: 6px; } }
+
+
+/* Compact iPhone-first home: accessible content without the document-length landing page. */
+.ld-home {
+  --ld-ink: #222844;
+  --ld-indigo: #394d94;
+  min-height: 100svh;
+  background: #f5f6fa;
+  color: var(--ld-ink);
+  padding: 22px 24px 100px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.ld-home .ld-content { max-width: 880px; }
+.ld-home .ld-header { padding: 0 0 24px; }
+.ld-logo { display: inline-flex; gap: 10px; align-items: center; font-size: 1.03rem; letter-spacing: -.025em; font-weight: 800; }
+.ld-logo-mark { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 12px; background: #394d94; color: #fff; font-size: 1.05rem; box-shadow: 0 3px 8px #394d9429; }
+.ld-profile-shortcut { display: grid; place-items: center; width: 42px; height: 42px; padding: 10px; border-radius: 50%; border: 1px solid #e5e9f2; background: #fff; color: #394d94; cursor: pointer; }
+.ld-profile-shortcut svg { width: 21px; height: 21px; }
+.ld-home-intro { padding: 4px 0 23px; }
+.ld-home-label { color: #63718d; font-size: .7rem; letter-spacing: .12em; font-weight: 750; }
+.ld-home-intro h1 { margin: 7px 0 6px; font: 750 clamp(1.9rem, 4vw, 2.75rem)/1.12 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: -.045em; }
+.ld-home-intro p { margin: 0; color: #66728a; font-size: .94rem; line-height: 1.45; }
+.ld-continue-card { padding: 27px 28px 19px; background: #fff; border: 1px solid #e9ecf3; border-radius: 24px; box-shadow: 0 8px 30px rgba(37,55,96,.055); }
+.ld-home .ld-feature-heading { gap: 12px; }
+.ld-card-kicker { display: inline-flex; align-items: center; gap: 8px; color: #394d94; font-weight: 760; font-size: .73rem; letter-spacing: .01em; }
+.ld-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #5d79d4; flex-shrink: 0; }
+.ld-lesson-status { color: #687994; font-size: .73rem; font-weight: 650; white-space: nowrap; }
+.ld-continue-card h2 { margin: 16px 0 12px; font: 760 clamp(1.5rem, 3.2vw, 2.05rem)/1.18 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: -.035em; }
+.ld-move-chip { display: flex; align-items: center; gap: 9px; color: #6d748b; font-size: .82rem; line-height: 1.35; margin: 0 0 20px; }
+.ld-move-chip > span { display: grid; place-items: center; flex-shrink: 0; width: 23px; height: 23px; border-radius: 8px; background: #edf0fa; color: #394d94; font-size: .86rem; }
+.ld-home .ld-progress-label { font-size: .75rem; font-weight: 600; color: #68718b; }
+.ld-home .ld-progress-label strong { color: #303e79; }
+.ld-home .ld-progress { height: 6px; margin: 8px 0 18px; border-radius: 999px; background: #e8ebf4; }
+.ld-home .ld-progress > span { background: #4b62ba; }
+.ld-home .ld-primary { width: 100%; justify-content: space-between; border-radius: 15px; background: #394d94; font-size: .94rem; font-weight: 760; padding: 15px 18px; min-height: 52px; }
+.ld-home .ld-primary:hover { background: #303f7b; }
+.ld-home .ld-primary span { font-size: 1.2rem; }
+.ld-overview { margin-top: 12px; color: #6e7590; font-size: .78rem; line-height: 1.6; }
+.ld-overview summary { cursor: pointer; padding: 8px 0; color: #505c7d; font-weight: 650; text-align: center; }
+.ld-overview p { padding: 9px 3px 2px; border-top: 1px solid #edf0f4; margin: 0; color: #4d5a6e; }
+.ld-quick-section { margin-top: 25px; }
+.ld-section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+.ld-section-heading h2 { margin: 0; font-size: 1.08rem; font-weight: 780; letter-spacing: -.015em; }
+.ld-section-heading > span { color: #8992a5; font-size: .75rem; }
+.ld-quick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ld-quick-tile { display: grid; text-align: left; grid-template-columns: 38px 1fr auto; align-items: center; gap: 10px; border: 1px solid #e9ecf3; border-radius: 19px; padding: 16px; background: #fff; color: var(--ld-ink); cursor: pointer; box-shadow: 0 3px 12px rgba(37,55,96,.025); }
+.ld-tile-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #edf1ff; color: #3c559e; }
+.ld-quick-progress .ld-tile-icon { background: #edf6f3; color: #337668; }
+.ld-tile-icon svg { width: 20px; height: 20px; }
+.ld-quick-copy { display: grid; gap: 3px; min-width: 0; }
+.ld-quick-copy strong { font-size: .82rem; font-weight: 740; line-height: 1.25; }
+.ld-quick-copy small { color: #79829a; font-size: .69rem; line-height: 1.35; }
+.ld-tile-arrow { align-self: start; color: #a5abc0; font-size: .93rem; }
+.ld-snapshot { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 18px; padding: 16px 0; border: 1px solid #e9ecf3; border-radius: 19px; background: #fff; }
+.ld-snapshot > div { display: grid; text-align: center; gap: 2px; }
+.ld-snapshot > div + div { border-left: 1px solid #e9ecf3; }
+.ld-snapshot strong { font-size: 1.35rem; font-weight: 800; color: #2e3c75; font-variant-numeric: tabular-nums; }
+.ld-snapshot span { font-size: .7rem; color: #697691; }
+@media (max-width: 640px) {
+  .ld-home { padding: calc(12px + env(safe-area-inset-top)) 16px 95px; }
+  .ld-home .ld-header { padding-bottom: 14px; }
+  .ld-home-intro { padding-bottom: 18px; }
+  .ld-home-intro h1 { font-size: clamp(1.9rem, 8vw, 2.35rem); }
+  .ld-home-intro p { font-size: .86rem; }
+  .ld-continue-card { border-radius: 21px; padding: 21px 19px 13px; }
+  .ld-continue-card h2 { margin-top: 13px; font-size: 1.52rem; }
+  .ld-move-chip { margin-bottom: 14px; }
+  .ld-home .ld-feature-heading { align-items: center; flex-direction: row; }
+  .ld-card-kicker { max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ld-home .ld-primary { min-height: 49px; }
+  .ld-quick-section { margin-top: 19px; }
+  .ld-quick-tile { grid-template-columns: 34px 1fr; gap: 9px; padding: 13px 11px; border-radius: 16px; }
+  .ld-tile-icon { width: 34px; height: 34px; }
+  .ld-tile-arrow { display: none; }
+  .ld-quick-copy strong { font-size: .8rem; }
+  .ld-snapshot { margin-top: 14px; padding: 12px 0; }
+  .ld-snapshot strong { font-size: 1.18rem; }
+  .ld-snapshot span { font-size: .66rem; }
+}
