@@ -89,3 +89,23 @@ test("filters off-topic feed titles despite generic words shared with the standa
   ].sort());
   assert.ok(ranked.every((x) => ["standard-title-concept", "exact-scripture-reference"].includes(x.matchBasis)));
 });
+
+
+test("finds older official publisher archive videos absent from recent-upload feed", async () => {
+  const result = await discoverMediaCandidates({
+    standardId: "OG.1.1.18",
+    feeds: [],
+    fetcher: async () => { throw new Error("Should not call network for archival seed"); },
+  });
+  const archival = result.candidates.filter((x) => x.origin === "publisher-catalog");
+  assert.equal(archival.length, 2);
+  assert.deepEqual(archival.map((x) => x.title).sort(),
+    ["1st Commandment: No Other Gods", "YHWH / LORD"].sort());
+  assert.ok(archival.every((x) =>
+    x.matchBasis === "provisional-publisher-topic-tag" &&
+    x.review.doctrinalAlignment === false &&
+    x.review.lessonApproved === false &&
+    x.url.startsWith("https://bibleproject.com/videos/")));
+  assert.ok(result.candidates.some((x) => x.origin === "existing-classroom-resource"));
+  assert.equal(result.warnings.length, 0);
+});
