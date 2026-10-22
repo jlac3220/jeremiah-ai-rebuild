@@ -258,3 +258,27 @@ test("reports model interest separately when every suggested quote fails verific
   assert.equal(proposal.evidenceReview.proposedClaims, 1);
   assert.equal(proposal.evidenceReview.rejectedClaims, 1);
 });
+
+
+test("approved OG.1.1.18 media microactivities preserve Scripture, doctrine and lesson routing", async () => {
+  const { classroomContentRegistry } = await import("../src/core/classroom/content/classroomContentRegistry.js");
+  const standard = classroomContentRegistry["OG.1.1.18"];
+  const encounter = standard.instructionalMoves.find((move) => move.id === "arrival");
+  const activities = encounter.encounter.mediaEnrichment;
+  assert.equal(encounter.encounter.sourceRole, "enrichment_only");
+  assert.deepEqual(activities.shemaListening.steps.map((x) => x.id), ["hear", "attend", "respond"]);
+  assert.ok(activities.shemaListening.steps.every((x) => x.label && x.explanation));
+  assert.match(activities.shemaListening.sourceNote, /context/i);
+  assert.match(activities.lordAnnotation.explanation, /translation convention/i);
+  assert.match(activities.lordAnnotation.returnToVerse, /no God beside Him/i);
+  assert.match(activities.lordAnnotation.sourceNote, /optional/i);
+  const verse = encounter.encounter.primaryVerse;
+  assert.equal(verse.text, "Hear, O Israel: The LORD our God is one LORD.");
+  assert.equal(verse.text.match(/\bLORD\b/g)?.length, 2);
+  assert.equal(encounter.next.continue, "hear_the_shema");
+  assert.equal(encounter.evidenceIds?.length || 0, 0);
+  assert.deepEqual(standard.brain.requiredKnowledge.map((x) => x.id),
+    ["one-lord", "no-other", "controlling-foundation"]);
+  assert.deepEqual(standard.brain.requiredScripture.map((x) => x.reference),
+    ["Deuteronomy 6:4", "Isaiah 44:6", "Isaiah 45:5", "Mark 12:29"]);
+});
