@@ -60,6 +60,10 @@ test("only keeps transcript-grounded evidence; never publishes to lessons", asyn
       url: "https://example.org/test", rights: "external-reference" },
   });
   assert.equal(proposal.status, "needs_review");
+  assert.equal(proposal.summary, "This example focuses on attentive listening.");
+  assert.equal(proposal.assessment, "review-proposal");
+  assert.equal(proposal.evidenceReview.rejectedClaims, 1);
+  assert.equal(proposal.evidenceReview.rejectedActivities, 1);
   assert.equal(proposal.claims.length, 1);
   assert.deepEqual(proposal.claims[0].knowledgeIds, ["one-lord"]);
   assert.deepEqual(proposal.activities[0].knowledgeIds, ["one-lord"]);
@@ -113,6 +117,10 @@ test("rejects generic activities invented from the standard without source evide
   });
   assert.equal(proposal.activities.length, 0);
   assert.equal(proposal.relevance, "none");
+  assert.equal(proposal.modelRelevance, "strong");
+  assert.equal(proposal.summary, "A reading prompt.");
+  assert.equal(proposal.assessment, "insufficient-source-evidence");
+  assert.equal(proposal.evidenceReview.rejectedActivities, 1);
   assert.ok(proposal.concerns.some((item) => item.includes("No usable transcript-grounded enrichment")));
 });
 
@@ -188,4 +196,65 @@ test("untimed publisher text has source references but never invented playback t
     kind: "untimed-transcript", sourceUrl: "https://example.org/source",
     start: "", end: "", cueStart: null, cueEnd: null, ambiguous: false,
   });
+});
+
+
+test("accepts source-exact words across PDF punctuation and line wrapping, not paraphrases", async () => {
+  const modelResult = {
+    relevance: "possible", summary: "The author discusses the name LORD.",
+    claims: [
+      { claim: "LORD is used in the translation.", evidence: "The name LORD through translation appears in the text",
+        timestamp: "01:45", knowledgeIds: ["one-lord"], verificationNeeded: "Review the language claim.",
+        doctrinalConcern: "Context, not doctrine." },
+      { claim: "Invented paraphrase.", evidence: "The biblical manuscripts teach the Trinity",
+        timestamp: "", knowledgeIds: ["one-lord"], verificationNeeded: "", doctrinalConcern: "" },
+    ],
+    activities: [], concerns: [],
+  };
+  const fetcher = async () => ({
+    ok: true, json: async () => ({
+      output: [{ type: "message", content: [{
+        type: "output_text", text: JSON.stringify(modelResult),
+      }] }],
+    }),
+  });
+  const proposal = await proposeMediaEnrichment({
+    standardId: "OG.1.1.18",
+    transcript: parseTranscript("The name\nLORD—through translation—appears in the text.", ".txt"),
+    apiKey: "test-only", fetcher,
+    source: { title: "PDF source", url: "https://example.org/pdf", rights: "external-reference" },
+  });
+  assert.equal(proposal.summary, modelResult.summary);
+  assert.equal(proposal.claims.length, 1);
+  assert.equal(proposal.claims[0].timestamp, "");
+  assert.equal(proposal.assessment, "review-proposal");
+  assert.equal(proposal.evidenceReview.rejectedClaims, 1);
+  assert.equal(proposal.review.doctrinalAlignment, false);
+});
+
+test("reports model interest separately when every suggested quote fails verification", async () => {
+  const result = {
+    relevance: "strong", summary: "The PDF might explain God's name.",
+    claims: [{ claim: "A claim", evidence: "words not present in the source", timestamp: "",
+      knowledgeIds: ["one-lord"], verificationNeeded: "", doctrinalConcern: "" }],
+    activities: [], concerns: [],
+  };
+  const fetcher = async () => ({
+    ok: true, json: async () => ({
+      output: [{ type: "message", content: [{
+        type: "output_text", text: JSON.stringify(result),
+      }] }],
+    }),
+  });
+  const proposal = await proposeMediaEnrichment({
+    standardId: "OG.1.1.18", transcript: "LORD appears in the printed text.",
+    apiKey: "test-only", fetcher,
+    source: { title: "Script references", url: "https://example.org/pdf", rights: "external-reference" },
+  });
+  assert.equal(proposal.relevance, "none");
+  assert.equal(proposal.modelRelevance, "strong");
+  assert.equal(proposal.assessment, "insufficient-source-evidence");
+  assert.equal(proposal.summary, result.summary);
+  assert.equal(proposal.evidenceReview.proposedClaims, 1);
+  assert.equal(proposal.evidenceReview.rejectedClaims, 1);
 });
