@@ -24,7 +24,7 @@ export default function HomePage({ onNavigate }) {
     setClassroomEntryIntent(active.started ? CLASSROOM_ENTRY_INTENTS.RESUME : CLASSROOM_ENTRY_INTENTS.DIRECT);
     setActiveClassroomStandardId(active.content.standardId);
     setActiveClassroomSessionPreset(active.preset);
-    onNavigate(active.started ? ROUTES.CLASSROOM_STUDY : ROUTES.CLASSROOM);
+    onNavigate(ROUTES.CLASSROOM_LESSON);
   }
   const action = active.mastered ? 'Revisit lesson' : active.started ? 'Continue learning' : 'Start learning';
 
