@@ -1,7 +1,7 @@
 // Curriculum-grounded formative practice. Editorial NB.5 examples, with a
 // conservative Scripture-to-purpose match available for every other standard.
 // Practice is NOT a mastery assessment or an approval of external media.
-import { getLessonExperience } from '../../core/classroom/content/lessonExperience';
+import { getLessonExperience } from '../../core/classroom/content/lessonExperience.js';
 
 const curated = {
   'NB.5.1.18': [
