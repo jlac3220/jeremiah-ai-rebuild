@@ -73,3 +73,19 @@ test("feed failure does not hide existing curated resources and unapproved feeds
   assert.match(blocked.warnings[0], /allowlist/i);
   await assert.rejects(discoverMediaCandidates({ standardId: "NOT_A_STANDARD", feeds: [] }), /Unknown standard/);
 });
+
+
+test("filters off-topic feed titles despite generic words shared with the standard", () => {
+  const candidates = [
+    { title: "Meet the Japanese Language Advisor", description: "Language and Bible background", url: "https://www.youtube.com/watch?v=Z2345678901", origin: "trusted-channel-feed" },
+    { title: "What Did the Prophets Remind the People?", description: "Ancient prophets and God's message", url: "https://www.youtube.com/watch?v=Z2345678902", origin: "trusted-channel-feed" },
+    { title: "Spirit of God", description: "Biblical theology and the Spirit", url: "https://www.youtube.com/watch?v=Z2345678903", origin: "trusted-channel-feed" },
+    { title: "Shema: Hear O Israel", description: "The confession of Deuteronomy 6:4", url: "https://www.youtube.com/watch?v=Z2345678904", origin: "trusted-channel-feed" },
+    { title: "Understanding Deuteronomy 6:4", description: "Hear O Israel and the confession of the LORD", url: "https://www.youtube.com/watch?v=Z2345678905", origin: "trusted-channel-feed" },
+  ];
+  const ranked = rankDiscoveryCandidates("OG.1.1.18", candidates);
+  assert.deepEqual(ranked.map((x) => x.title).sort(), [
+    "Shema: Hear O Israel", "Understanding Deuteronomy 6:4",
+  ].sort());
+  assert.ok(ranked.every((x) => ["standard-title-concept", "exact-scripture-reference"].includes(x.matchBasis)));
+});
