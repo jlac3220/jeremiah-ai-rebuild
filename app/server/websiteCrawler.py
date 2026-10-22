@@ -39,7 +39,7 @@ BOOKS = (r"(?:[1-3]\s*)?(?:Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua|J
          r"Amos|Obadiah|Jonah|Micah|Nahum|Habakkuk|Zephaniah|Haggai|Zechariah|"
          r"Malachi|Matthew|Mark|Luke|John|Acts|Romans|Corinthians|Galatians|"
          r"Ephesians|Philippians|Colossians|Thessalonians|Timothy|Titus|Philemon|"
-         r"Hebrews|James|Peter|Jude|Revelation|Deut\\.?|Isa\\.?|Matt\\.?|Rom\\.?)")
+         r"Hebrews|James|Peter|Jude|Revelation|Deut\.?|Isa\.?|Matt\.?|Rom\.?)")
 SCRIPTURE_RE = re.compile(r"\b" + BOOKS + r"\s+\d{1,3}(?::\d{1,3}(?:\s*[-–]\s*\d{1,3})?)?\b", re.I)
 
 
