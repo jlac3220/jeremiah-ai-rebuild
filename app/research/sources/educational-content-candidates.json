@@ -506,6 +506,131 @@
       "delivery": "Only verified public-domain collection image if chosen; preserve object identification and museum credit",
       "transcriptMayBeAvailable": false,
       "limits": "Historical context only. Object is not proof of Biblical narrative and should not be represented as from Biblical Israel."
+    },
+    {
+      "id": "bp-john1",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "John 1",
+      "url": "https://bibleproject.com/videos/john-1/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Genesis creation by God's Word and the Word becoming flesh",
+      "standardIds": [
+        "OG.3.1.18",
+        "OG.8.2.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-colossians",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Colossians",
+      "url": "https://bibleproject.com/videos/colossians/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Literary overview of Colossians' high Christology and transformed life",
+      "standardIds": [
+        "OG.3.1.18",
+        "OG.7.1.18",
+        "OG.7.4.18",
+        "NB.14.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-john-overview",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "John 1-12",
+      "url": "https://bibleproject.com/videos/john-1-12/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Narrative overview: Jesus' identity, I AM language and John 3 new birth",
+      "standardIds": [
+        "OG.7.3.18",
+        "OG.8.1.18",
+        "NB.6.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-ephesians",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Ephesians",
+      "url": "https://bibleproject.com/videos/ephesians/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Church unity, covenant community and Spirit-empowered life in Ephesians",
+      "standardIds": [
+        "OG.1.3.18",
+        "NB.13.2.18",
+        "NB.14.4.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-1timothy",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "1 Timothy",
+      "url": "https://bibleproject.com/videos/1-timothy/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Discernment around false teaching and the relation of doctrine and conduct",
+      "standardIds": [
+        "OG.15.3.18",
+        "NB.15.1.18",
+        "NB.16.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-anointing",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Anointing",
+      "url": "https://bibleproject.com/videos/anointing/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Background for priestly anointing, the Spirit and Acts 2",
+      "standardIds": [
+        "OG.4.4.18",
+        "NB.6.2.18",
+        "NB.7.2.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-faithful",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Emet / Faithfulness",
+      "url": "https://bibleproject.com/videos/faithful/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "God's faithfulness and covenant reliability",
+      "standardIds": [
+        "OG.2.3.18",
+        "NB.9.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
     }
   ]
 }
