@@ -72,6 +72,67 @@ The review JSON now preserves the model's summary, distinguishes `modelRelevance
 
 Review exact evidence and `sourceLocation` references. Timestamps are sourced from actual caption/recording cues, not inferred from text or trusted from the AI model; these timestamps do not confirm video frames or that the source is reliable. Independently check historical and linguistic claims, compare doctrinal implications with the standard, and verify permissions for the proposed use before adding anything to a published lesson.
 
+## Apostolic channel extraction pilot — Promise Church
+
+Source: https://www.youtube.com/@Promiseapostolic/videos
+
+This opt-in workflow is separate from the BibleProject recent-upload feed. It uses
+the open-source **yt-dlp** CLI to list a bounded number of public channel videos.
+A full channel may contain hundreds of uploads; flat-playlist mode reads metadata,
+not media content. YouTube rate limits, unavailable captions and changed layouts
+may cause failures. Nothing is inserted into a classroom automatically.
+
+One-time installation in a **temporary virtual environment** (from Codespaces):
+
+~~~bash
+python3 -m venv /tmp/jeremiah-yt && /tmp/jeremiah-yt/bin/pip install -q -U yt-dlp
+~~~
+
+Inventory up to 80 recent channel videos, optionally searching the extracted titles
+for a standard's distinctive concepts or cited Scriptures:
+
+~~~bash
+npm run extract:youtube -- \
+  --channel https://www.youtube.com/@Promiseapostolic/videos \
+  --limit 80 --standard OG.1.1.18 \
+  --binary /tmp/jeremiah-yt/bin/yt-dlp
+~~~
+
+The JSON catalog is written under the gitignored .jeremiah-research directory;
+the first 25 titles are printed in the terminal. All videos remain discovery
+candidates with an unapproved checklist. Title matching is just triage; sermons
+can contain useful teaching even when their titles are generic, so check the inventory.
+
+For a specific public video, retrieve any publicly accessible human or
+automatic English VTT caption files without downloading the video:
+
+~~~bash
+npm run extract:youtube -- \
+  --video VIDEO_ID \
+  --binary /tmp/jeremiah-yt/bin/yt-dlp
+~~~
+
+That outputs the caption file path (if YouTube provides one). Automatic
+captions may be inaccurate and are not guaranteed for livestreams.
+
+After checking source identity, context and permission to analyze the captions,
+pass the resulting VTT to the existing grounded research pipeline:
+
+~~~bash
+npm run research:media -- \
+  --standard OG.1.1.18 \
+  --transcript .jeremiah-research/youtube-captions/VIDEO_ID.en.vtt \
+  --title "Actual video title" --publisher "Promise Church" \
+  --url "https://www.youtube.com/watch?v=VIDEO_ID" \
+  --rights external-reference
+~~~
+
+Do not use an invented VIDEO_ID; substitute an exact returned catalog ID.
+No claim or playback timestamp is accepted without matching caption text. Publisher
+permission to embed or reuse footage is distinct from permission to analyze
+publicly accessible metadata and captions. Do not rehost videos or publish
+transcript text without verifying reuse rights.
+
 ## Not yet implemented
 
 General web search, historical publisher catalog crawling, video frame inspection, multi-standard recommendation, media rights verification, or a review/dashboard approval UI. These are future increments, not capabilities of this pilot.
