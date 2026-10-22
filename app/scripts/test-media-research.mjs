@@ -34,7 +34,11 @@ test("only keeps transcript-grounded evidence; never publishes to lessons", asyn
     ],
     activities: [
       { kind: "listen", idea: "Ask learners to identify the central confession.",
-        knowledgeIds: ["one-lord", "FAKE_ID"] },
+        knowledgeIds: ["one-lord", "FAKE_ID"], sourceEvidence: "Listen to the text.",
+        timestamp: "00:00:01.000", addedValue: "Connect attentive hearing to a concrete listener activity." },
+      { kind: "compare", idea: "Compare passages already in the standard.",
+        knowledgeIds: ["one-lord"], sourceEvidence: "This quote is absent.",
+        timestamp: "", addedValue: "No additional content" },
     ],
     concerns: [],
   };
@@ -59,7 +63,9 @@ test("only keeps transcript-grounded evidence; never publishes to lessons", asyn
   assert.equal(proposal.claims.length, 1);
   assert.deepEqual(proposal.claims[0].knowledgeIds, ["one-lord"]);
   assert.deepEqual(proposal.activities[0].knowledgeIds, ["one-lord"]);
-  assert.ok(proposal.concerns.some((item) => item.includes("Discarded")));
+  assert.equal(proposal.activities.length, 1);
+  assert.equal(proposal.activities[0].timestamp, "00:00:01.000");
+  assert.ok(proposal.concerns.filter((item) => item.includes("Discarded")).length >= 2);
   assert.equal(proposal.review.lessonApproved, false);
   assert.equal(proposal.transcript.hasTimestamps, true);
 });
@@ -74,4 +80,33 @@ test("requires declared rights and an AI key for analysis", async () => {
     source: { title: "Video", url: "https://example.org", rights: "owned" },
     apiKey: "",
   }), /OPENAI_API_KEY/);
+});
+
+
+test("rejects generic activities invented from the standard without source evidence", async () => {
+  const modelResult = {
+    relevance: "strong", summary: "A reading prompt.",
+    claims: [], activities: [{
+      kind: "scripture", idea: "Read the verses already listed by the curriculum.",
+      knowledgeIds: ["one-lord"], sourceEvidence: "",
+      timestamp: "00:45", addedValue: "The standard already supplies the activity.",
+    }],
+    concerns: [],
+  };
+  const fetcher = async () => ({
+    ok: true, json: async () => ({
+      output: [{ type: "message", content: [{
+        type: "output_text", text: JSON.stringify(modelResult),
+      }] }],
+    }),
+  });
+  const proposal = await proposeMediaEnrichment({
+    standardId: "OG.1.1.18",
+    transcript: "This source does not contain relevant explanations.",
+    apiKey: "test-only", fetcher,
+    source: { title: "Generic example", url: "https://example.org/resource", rights: "external-reference" },
+  });
+  assert.equal(proposal.activities.length, 0);
+  assert.equal(proposal.relevance, "none");
+  assert.ok(proposal.concerns.some((item) => item.includes("No usable transcript-grounded enrichment")));
 });
