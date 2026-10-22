@@ -110,6 +110,14 @@ export function rankDiscoveryCandidates(standardId, candidates, limit = 12) {
   }
   for (const verse of brief.scripture) add(verse.reference, 2);
 
+  // A shared word such as "prophets", "language", or "spirit" does not establish
+  // relevance. Require a distinctive title concept or an exact Scripture citation.
+  const titleAnchors = tokens(brief.title);
+  const primaryAnchors = titleAnchors.length
+    ? titleAnchors
+    : [...new Set(brief.requiredKnowledge.flatMap((item) => tokens(item.title)))];
+  const scriptureAnchors = brief.scripture.map((verse) => verse.reference?.toLowerCase().trim()).filter(Boolean);
+
   const seen = new Set();
   const ranked = [];
   for (const item of candidates) {
@@ -121,14 +129,23 @@ export function rankDiscoveryCandidates(standardId, candidates, limit = 12) {
     const inDescription = tokens(item.description);
     const matches = [...weights.keys()].filter((key) => inTitle.includes(key) || inDescription.includes(key));
     const score = matches.reduce((sum, word) => sum + (weights.get(word) || 0) * (inTitle.includes(word) ? 3 : 1), 0);
-    if (!score && item.origin !== "existing-classroom-resource") continue;
+    const titleMatch = primaryAnchors.some((term) => inTitle.includes(term));
+    const descriptionMatch = primaryAnchors.some((term) => inDescription.includes(term))
+      && score >= 8 && matches.length >= 2;
+    const text = String(item.title || "") + " " + String(item.description || "");
+    const verseMatch = scriptureAnchors.some((reference) => text.toLowerCase().includes(reference));
+    if (item.origin !== "existing-classroom-resource" && !(titleMatch || descriptionMatch || verseMatch)) continue;
+    const matchBasis = item.origin === "existing-classroom-resource" ? "previously-curated"
+      : titleMatch ? "standard-title-concept"
+      : verseMatch ? "exact-scripture-reference" : "corroborated-description";
     ranked.push({
       ...item,
       matchScore: score,
       matchTerms: matches.slice(0, 8),
+      matchBasis,
       matchReason: item.origin === "existing-classroom-resource"
         ? "Already referenced by the classroom; review status and usefulness still require confirmation."
-        : "Potential title/description keyword match only; the content has not been reviewed.",
+        : "Metadata matched " + matchBasis + "; the recording and its claims have not been reviewed.",
       standardId,
       status: "discovery_candidate",
       rights: "external-reference",
