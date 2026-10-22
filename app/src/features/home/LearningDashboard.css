@@ -37,10 +37,10 @@
 
 /* Compact iPhone-first home: accessible content without the document-length landing page. */
 .ld-home {
-  --ld-ink: #222844;
-  --ld-indigo: #394d94;
+  --ld-ink: #212943;
+  --ld-indigo: #3659DD;
   min-height: 100svh;
-  background: #f5f6fa;
+  background: #F6F7FE;
   color: var(--ld-ink);
   padding: 22px 24px 100px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -48,8 +48,8 @@
 .ld-home .ld-content { max-width: 880px; }
 .ld-home .ld-header { padding: 0 0 24px; }
 .ld-logo { display: inline-flex; gap: 10px; align-items: center; font-size: 1.03rem; letter-spacing: -.025em; font-weight: 800; }
-.ld-logo-mark { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 12px; background: #394d94; color: #fff; font-size: 1.05rem; box-shadow: 0 3px 8px #394d9429; }
-.ld-profile-shortcut { display: grid; place-items: center; width: 42px; height: 42px; padding: 10px; border-radius: 50%; border: 1px solid #e5e9f2; background: #fff; color: #394d94; cursor: pointer; }
+.ld-logo-mark { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 12px; background: #3659DD; color: #fff; font-size: 1.05rem; box-shadow: 0 3px 8px #3659DD29; }
+.ld-profile-shortcut { display: grid; place-items: center; width: 42px; height: 42px; padding: 10px; border-radius: 50%; border: 1px solid #e5e9f2; background: #fff; color: #3659DD; cursor: pointer; }
 .ld-profile-shortcut svg { width: 21px; height: 21px; }
 .ld-home-intro { padding: 4px 0 23px; }
 .ld-home-label { color: #63718d; font-size: .7rem; letter-spacing: .12em; font-weight: 750; }
@@ -57,18 +57,18 @@
 .ld-home-intro p { margin: 0; color: #66728a; font-size: .94rem; line-height: 1.45; }
 .ld-continue-card { padding: 27px 28px 19px; background: #fff; border: 1px solid #e9ecf3; border-radius: 24px; box-shadow: 0 8px 30px rgba(37,55,96,.055); }
 .ld-home .ld-feature-heading { gap: 12px; }
-.ld-card-kicker { display: inline-flex; align-items: center; gap: 8px; color: #394d94; font-weight: 760; font-size: .73rem; letter-spacing: .01em; }
-.ld-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #5d79d4; flex-shrink: 0; }
+.ld-card-kicker { display: inline-flex; align-items: center; gap: 8px; color: #3659DD; font-weight: 760; font-size: .73rem; letter-spacing: .01em; }
+.ld-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #E45D7C; flex-shrink: 0; }
 .ld-lesson-status { color: #687994; font-size: .73rem; font-weight: 650; white-space: nowrap; }
 .ld-continue-card h2 { margin: 16px 0 12px; font: 760 clamp(1.5rem, 3.2vw, 2.05rem)/1.18 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: -.035em; }
 .ld-move-chip { display: flex; align-items: center; gap: 9px; color: #6d748b; font-size: .82rem; line-height: 1.35; margin: 0 0 20px; }
-.ld-move-chip > span { display: grid; place-items: center; flex-shrink: 0; width: 23px; height: 23px; border-radius: 8px; background: #edf0fa; color: #394d94; font-size: .86rem; }
+.ld-move-chip > span { display: grid; place-items: center; flex-shrink: 0; width: 23px; height: 23px; border-radius: 8px; background: #edf0fa; color: #3659DD; font-size: .86rem; }
 .ld-home .ld-progress-label { font-size: .75rem; font-weight: 600; color: #68718b; }
-.ld-home .ld-progress-label strong { color: #303e79; }
+.ld-home .ld-progress-label strong { color: #3659DD; }
 .ld-home .ld-progress { height: 6px; margin: 8px 0 18px; border-radius: 999px; background: #e8ebf4; }
-.ld-home .ld-progress > span { background: #4b62ba; }
-.ld-home .ld-primary { width: 100%; justify-content: space-between; border-radius: 15px; background: #394d94; font-size: .94rem; font-weight: 760; padding: 15px 18px; min-height: 52px; }
-.ld-home .ld-primary:hover { background: #303f7b; }
+.ld-home .ld-progress > span { background: #7457DF; }
+.ld-home .ld-primary { width: 100%; justify-content: space-between; border-radius: 15px; background: #3659DD; font-size: .94rem; font-weight: 760; padding: 15px 18px; min-height: 52px; }
+.ld-home .ld-primary:hover { background: #2948B4; }
 .ld-home .ld-primary span { font-size: 1.2rem; }
 .ld-overview { margin-top: 12px; color: #6e7590; font-size: .78rem; line-height: 1.6; }
 .ld-overview summary { cursor: pointer; padding: 8px 0; color: #505c7d; font-weight: 650; text-align: center; }
@@ -79,8 +79,8 @@
 .ld-section-heading > span { color: #8992a5; font-size: .75rem; }
 .ld-quick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .ld-quick-tile { display: grid; text-align: left; grid-template-columns: 38px 1fr auto; align-items: center; gap: 10px; border: 1px solid #e9ecf3; border-radius: 19px; padding: 16px; background: #fff; color: var(--ld-ink); cursor: pointer; box-shadow: 0 3px 12px rgba(37,55,96,.025); }
-.ld-tile-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #edf1ff; color: #3c559e; }
-.ld-quick-progress .ld-tile-icon { background: #edf6f3; color: #337668; }
+.ld-tile-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #EDF1FF; color: #3659DD; }
+.ld-quick-progress .ld-tile-icon { background: #F0ECFF; color: #7254D8; }
 .ld-tile-icon svg { width: 20px; height: 20px; }
 .ld-quick-copy { display: grid; gap: 3px; min-width: 0; }
 .ld-quick-copy strong { font-size: .82rem; font-weight: 740; line-height: 1.25; }
@@ -89,7 +89,7 @@
 .ld-snapshot { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 18px; padding: 16px 0; border: 1px solid #e9ecf3; border-radius: 19px; background: #fff; }
 .ld-snapshot > div { display: grid; text-align: center; gap: 2px; }
 .ld-snapshot > div + div { border-left: 1px solid #e9ecf3; }
-.ld-snapshot strong { font-size: 1.35rem; font-weight: 800; color: #2e3c75; font-variant-numeric: tabular-nums; }
+.ld-snapshot strong { font-size: 1.35rem; font-weight: 800; color: #4C41AE; font-variant-numeric: tabular-nums; }
 .ld-snapshot span { font-size: .7rem; color: #697691; }
 @media (max-width: 640px) {
   .ld-home { padding: calc(12px + env(safe-area-inset-top)) 16px 95px; }
@@ -112,3 +112,11 @@
   .ld-snapshot strong { font-size: 1.18rem; }
   .ld-snapshot span { font-size: .66rem; }
 }
+
+/* A little vibrancy, with clean white cards and no tan/green UI. */
+.ld-logo-mark { background: linear-gradient(140deg, #3659DD, #7457DF); }
+.ld-home .ld-progress > span { background: linear-gradient(90deg, #3659DD, #7457DF); }
+.ld-quick-progress .ld-tile-icon { background: #F0ECFF; color: #7457DF; }
+.ld-quick-bible .ld-tile-icon { background: #EDF1FF; color: #3659DD; }
+.ld-home .ld-primary { background: #3659DD; }
+.ld-home .ld-primary:hover { background: #2847B6; }
