@@ -1,7 +1,7 @@
 # Jeremiah Media Standards Enrichment — Pilot
 
-This is the first **review-only** implementation of standards-based audio/video research.
-It does not scrape sites automatically or modify published lessons.
+This is a **review-only** implementation of standards-based audio/video research.
+It discovers metadata from an editorially approved public channel feed, but does not download video, scrape arbitrary websites, or modify published lessons.
 
 ## Implemented
 
@@ -12,7 +12,18 @@ It does not scrape sites automatically or modify published lessons.
 - Reject extracted quotes that are not found in the source transcript and discard unknown standard knowledge IDs.
 - Produce a source-linked JSON proposal with an incomplete credibility/doctrine/rights approval checklist.
 - Attach a `sourceLocation` to each accepted claim and activity. VTT/SRT or authorized transcription segments yield caption-matched start/end times (even when the excerpt spans adjacent cues); untimed TXT/PDF extracts retain a source URL but **no invented playback timestamp**. Ambiguous repeated quotes have their times withheld.
+- Discover prospective videos from BibleProject's public YouTube channel feed alongside videos already referenced in the classroom; match titles/descriptions against existing standards as metadata-only candidates.
 - Leave all existing standards, classroom moves, and media untouched.
+
+From the app directory, find possible teaching resources for one standard:
+
+~~~bash
+npm run discover:media -- --standard OG.1.1.18
+~~~
+
+This fetches **only metadata** from an allowlisted public YouTube Atom feed and includes already-curated classroom videos. It writes a review queue under `.jeremiah-research/` and does **not** require an OpenAI key. The live feed contains only recent uploads, so an older relevant video can appear through the classroom's existing resource catalog but may not appear in the feed.
+
+Candidate scores are basic title/description keyword matches, **not** a theological or factual assessment. Publisher permissions and restrictions, including whether your app may charge for access to embedded media, must be reviewed before using a candidate.
 
 Important: Exact transcript evidence **does not independently verify the claim**. Every output is marked needs_review. Video visuals are not inspected yet.
 
@@ -61,6 +72,6 @@ Review exact evidence and `sourceLocation` references. Timestamps are sourced fr
 
 ## Not yet implemented
 
-Automatic searching of the web or trusted channels, video frame inspection, multi-standard recommendation, media rights verification, or a review/dashboard approval UI. These are future increments, not capabilities of this pilot.
+General web search, historical publisher catalog crawling, video frame inspection, multi-standard recommendation, media rights verification, or a review/dashboard approval UI. These are future increments, not capabilities of this pilot.
 
 **Rule:** Outside media may enrich a standard but never quietly rewrite its required doctrine or mastery target.
