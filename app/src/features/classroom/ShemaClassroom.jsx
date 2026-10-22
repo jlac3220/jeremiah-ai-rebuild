@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./ShemaClassroom.css";
 import DeepDiveSheet from "./DeepDiveSheet";
+import { ShemaListeningActivity, LordWordAnnotation } from "./ShemaMediaActivities";
 
 
 function VerseRef({ verse, onOpen }) {
@@ -144,6 +145,8 @@ export default function ShemaClassroom({
               </div>
             )}
 
+            <ShemaListeningActivity activity={encounter.mediaEnrichment?.shemaListening} />
+
             <button type="button" className="sc-action" onClick={next}>
               Read the confession <span>→</span>
             </button>
@@ -153,7 +156,14 @@ export default function ShemaClassroom({
         {sceneName === "confession" && (
           <section className="sc-scene sc-confession">
             <VerseRef verse={primaryVerse} onOpen={openDetail} />
-            <blockquote>“{primaryVerse?.text}”</blockquote>
+            {encounter.mediaEnrichment?.lordAnnotation ? (
+              <LordWordAnnotation
+                verseText={primaryVerse?.text}
+                activity={encounter.mediaEnrichment.lordAnnotation}
+              />
+            ) : (
+              <blockquote>“{primaryVerse?.text}”</blockquote>
+            )}
             <p className="sc-prompt">Which phrase carries the confession?</p>
 
             <div className="sc-choices">
