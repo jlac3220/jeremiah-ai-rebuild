@@ -23,7 +23,7 @@ npm run discover:media -- --standard OG.1.1.18
 
 This fetches **only metadata** from an allowlisted public YouTube Atom feed and includes already-curated classroom videos. It writes a review queue under `.jeremiah-research/` and does **not** require an OpenAI key. The live feed contains only recent uploads, so an older relevant video can appear through the classroom's existing resource catalog but may not appear in the feed.
 
-Candidate scores are basic title/description keyword matches, **not** a theological or factual assessment. Publisher permissions and restrictions, including whether your app may charge for access to embedded media, must be reviewed before using a candidate.
+Candidates are filtered for a distinctive concept in the standard's title or an exact Scripture reference (or multiple supporting metadata terms), so vague overlaps such as generic language or prophetic themes are omitted. This conservative filter can also miss relevant resources; scores remain **metadata-only**, not theological or factual assessments. Publisher permissions and restrictions, including whether your app may charge for access to embedded media, must be reviewed before using a candidate.
 
 Important: Exact transcript evidence **does not independently verify the claim**. Every output is marked needs_review. Video visuals are not inspected yet.
 
