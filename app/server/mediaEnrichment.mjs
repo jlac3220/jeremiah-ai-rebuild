@@ -32,11 +32,14 @@ const proposalSchema = {
     } },
     activities: { type: "array", items: {
       type: "object", additionalProperties: false,
-      required: ["kind", "idea", "knowledgeIds"],
+      required: ["kind", "idea", "knowledgeIds", "sourceEvidence", "timestamp", "addedValue"],
       properties: {
         kind: { type: "string", enum: ["watch", "listen", "vocabulary", "scripture", "compare", "practice"] },
         idea: { type: "string" },
         knowledgeIds: { type: "array", items: { type: "string" } },
+        sourceEvidence: { type: "string" },
+        timestamp: { type: "string" },
+        addedValue: { type: "string" },
       },
     } },
     concerns: { type: "array", items: { type: "string" } },
@@ -142,6 +145,12 @@ function groundedQuote(quote, transcript) {
   const words = quote.trim().split(/\s+/).filter(Boolean);
   return words.length > 0 && words.length <= 20 && normalized(transcript).includes(normalized(quote));
 }
+function verifiedTimestamp(quote, statedTimestamp, transcript) {
+  // Untimed text (including text extracted from PDFs) cannot substantiate an exact playback time.
+  if (!transcript?.cues?.length) return "";
+  const cue = transcript.cues.find((item) => normalized(item.text).includes(normalized(quote)));
+  return cue && cue.timestamp === statedTimestamp ? cue.timestamp : "";
+}
 
 // Research proposals are deliberately NOT published into a lesson or standards registry.
 export async function proposeMediaEnrichment({ standardId, transcript, source, apiKey, fetcher = fetch }) {
@@ -171,6 +180,9 @@ export async function proposeMediaEnrichment({ standardId, transcript, source, a
           "Every evidence quote must appear exactly in the transcript excerpt, be 20 words or less, and never be invented.",
           "Provide a timestamp only when present in the transcript. Do not manufacture timestamps.",
           "Use only supplied requiredKnowledge IDs. Offer original educational activity ideas, not copied script.",
+          "For EVERY proposed activity, quote up to 20 EXACT words from this transcript excerpt in sourceEvidence, and explain in addedValue what THIS media contributes beyond the standard.",
+          "An activity merely asking to read, compare, or recall verses already supplied in the standard is NOT media enrichment. Omit it unless the media contributes a demonstrable new example, explanation, or method.",
+          "If the source adds no distinct educational value, return empty claims and activities arrays; do not fabricate improvements.",
           "Do not claim to have independently fact-checked sources, examined video frames, or verified permissions.",
         ].join("\n"),
         input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify({ brief, source, transcriptExcerpt: chunk }) }] }],
@@ -188,15 +200,28 @@ export async function proposeMediaEnrichment({ standardId, transcript, source, a
       }
       claims.push({
         ...claim,
+        timestamp: verifiedTimestamp(claim.evidence, claim.timestamp, transcript),
         knowledgeIds: (claim.knowledgeIds || []).filter((id) => knowledgeIds.has(id)),
         reviewStatus: "unverified",
       });
     }
-    activities.push(...(parsed.activities || []).map((item) => ({
-      ...item, knowledgeIds: (item.knowledgeIds || []).filter((id) => knowledgeIds.has(id)),
-      reviewStatus: "proposed",
-    })));
+    for (const activity of parsed.activities || []) {
+      if (!groundedQuote(activity.sourceEvidence || "", chunk) || !activity.addedValue?.trim()) {
+        concerns.push("Discarded an activity without transcript evidence and a clear added educational value.");
+        continue;
+      }
+      activities.push({
+        ...activity,
+        timestamp: verifiedTimestamp(activity.sourceEvidence, activity.timestamp, transcript),
+        knowledgeIds: (activity.knowledgeIds || []).filter((id) => knowledgeIds.has(id)),
+        reviewStatus: "proposed",
+      });
+    }
     concerns.push(...(parsed.concerns || []));
+  }
+  if (!claims.length && !activities.length) {
+    relevance = "none";
+    concerns.push("No usable transcript-grounded enrichment was identified for this standard.");
   }
   const id = createHash("sha256").update(standardId + "\n" + source.url + "\n" + text).digest("hex").slice(0, 16);
   return {
