@@ -2,16 +2,25 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 // Browser-native narration keeps Scripture reading available without network calls,
 // credentials, or an external audio service. Narration is always opt-in.
-function chooseVoice(synth) {
- // Strictly choose United States English first. "Natural"/"Neural" alone
- // previously selected en-AU voices before checking locale.
- const voices = synth.getVoices();
- const american = voices.filter(voice => /^en[-_]US$/i.test(voice.lang));
- return american.find(voice => /natural|neural/i.test(voice.name))
-  || american.find(voice => /Microsoft (David|Guy|Jenny|Aria|Mark|Zira)|Google US English|Samantha/i.test(voice.name))
-  || american.find(voice => voice.default)
-  || american[0]
-  || null;
+function getAmericanVoices(synth) {
+ return synth.getVoices().filter(voice => /^en[-_]US$/i.test(voice.lang));
+}
+function chooseVoice(synth, preferredName) {
+ const american = getAmericanVoices(synth);
+ if (preferredName && preferredName !== 'auto') {
+  const selected = american.find(voice => voice.name === preferredName);
+  if (selected) return selected;
+ }
+ // Prefer a resonant, American English male narrator if installed.
+ // Browser/OS voices differ, so a particular sound cannot be guaranteed.
+ const score = voice => {
+  const name = voice.name;
+  return (/(?:^|\b)(guy|david|andrew|christopher|mark|eric|aaron|josh|fred|alex)(?:\b|$)/i.test(name) ? 30 : 0)
+   + (/\bmale\b/i.test(name) ? 20 : 0)
+   + (/natural|neural|premium|enhanced/i.test(name) ? 8 : 0)
+   + (voice.localService ? 1 : 0);
+ };
+ return american.slice().sort((a,b) => score(b)-score(a))[0] || null;
 }
 
 export default function useLessonNarration({ text, key: sceneKey }) {
@@ -20,6 +29,16 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   typeof window !== 'undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
  );
  const [speaking, setSpeaking] = useState(false);
+ const [voiceName, setVoiceName] = useState('auto');
+ const [voiceOptions, setVoiceOptions] = useState([]);
+ useEffect(() => {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  const synth = window.speechSynthesis;
+  const syncVoices = () => setVoiceOptions(getAmericanVoices(synth).map(voice=>({name:voice.name,label:voice.name})));
+  syncVoices();
+  synth.addEventListener?.('voiceschanged',syncVoices);
+  return () => synth.removeEventListener?.('voiceschanged',syncVoices);
+ }, []);
  const activeRef = useRef(null);
  const lastAutoSceneRef = useRef(null);
 
@@ -40,13 +59,13 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   activeRef.current = null;
   synth.cancel();
   const utterance = new window.SpeechSynthesisUtterance(words);
-  const voice = chooseVoice(synth);
+  const voice = chooseVoice(synth, voiceName);
   if (voice) utterance.voice = voice;
   // Force en-US synthesis when no explicit US voice is installed.
   // Never deliberately substitute an Australian or British voice.
   utterance.lang = 'en-US';
-  utterance.rate = 0.87;
-  utterance.pitch = 0.94;
+  utterance.rate = 0.88;
+  utterance.pitch = 0.85;
   utterance.volume = 1;
   activeRef.current = utterance;
   utterance.onstart = () => {
@@ -72,7 +91,7 @@ export default function useLessonNarration({ text, key: sceneKey }) {
    setSpeaking(false);
    return false;
   }
- }, []);
+ }, [voiceName]);
 
  const toggle = useCallback(() => {
   if (enabled) {
@@ -116,5 +135,5 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   };
  }, [stop]);
 
- return { enabled, supported, speaking, toggle, speak, stop };
+ return { enabled, supported, speaking, toggle, speak, stop, voiceName, voiceOptions, chooseVoice: setVoiceName };
 }
