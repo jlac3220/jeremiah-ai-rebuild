@@ -3,7 +3,7 @@ import { ROUTES } from '../../app/routes';
 import { setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
 import { setBibleReaderIntent } from '../../core/bible/bibleReaderIntent';
 import { getInstructionalMove, getStandardProgress, updateLearningExperience, saveLearningState } from '../../core/classroom/learningEngine';
-import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, restartTeaching } from '../../core/classroom/teacherLedEngine';
+import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, restartTeaching, skipTeachingMove } from '../../core/classroom/teacherLedEngine';
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import DeepDiveSheet from './DeepDiveSheet';
@@ -125,6 +125,10 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
   setError('');setShowGuide(false);
   onStateChange(current=>continueTeaching(current,content));
  }
+ function skipDiscussion(){
+  abortRef.current?.abort();setThinking(false);setError('');setShowGuide(false);
+  onStateChange(current=>skipTeachingMove(current,content));
+ }
  function showNotes(){
   const learned=mainMoves.filter(m=>state.completedMoveIds.includes(m.id) && m.teaching?.length);
   setDetail({kind:'notes',provider:'Your lesson notes',title:'Keep the reasoning together',summary:learned.length?learned.map(m=>`${m.title}: ${m.teaching.at(-1)}`).join('\n\n'):content.truthStatement});
@@ -169,6 +173,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
      </>}
      {!feedback && <button type="button" className="tl-primary" disabled={thinking || !ready} onClick={submit}>{thinking?'Reading your explanation…':written?'Discuss my explanation':'Discuss my answer'} {!thinking && '→'}</button>}
     </section>}
+    {move.prompt && <div className="tl-skip-discussion"><button type="button" onClick={skipDiscussion}>Skip question for now →</button><small>Continue exploring. This won't count toward mastery.</small></div>}
     {thinking && <p role="status" className="tl-saved-note">Your explanation is being assessed against this lesson’s Scripture and learning goals.</p>}
     {error && <p className="tl-error" role="alert">{error}</p>}
     {feedback && <section ref={feedbackRef} tabIndex={-1} aria-label="Jeremiah’s feedback" className={`tl-feedback ${feedback.verdict==='strong'?'is-understood':'is-teaching'}`} aria-live="polite"><span className="tl-small">{feedback.source==='fallback' && written?'Assessment unavailable':'Jeremiah’s response'}</span><p>{feedback.teacherMessage}</p>{feedback.followUpPrompt && <p className="tl-follow-up">{feedback.followUpPrompt}</p>}<button type="button" className="tl-primary" onClick={next}>{feedback.verdict==='strong'?(move.id==='defend'?'See what you have established':'Build on that understanding'):written?'Develop my explanation':move.next.weak===move.id?'Reconsider my answer':'Work through another example'} →</button></section>}
