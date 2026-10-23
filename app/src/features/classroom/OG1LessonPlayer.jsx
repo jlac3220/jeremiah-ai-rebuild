@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ROUTES } from '../../app/routes';
 import { setBibleReaderIntent } from '../../core/bible/bibleReaderIntent';
 import { getInstructionalMove, getStandardProgress, updateLearningExperience } from '../../core/classroom/learningEngine';
-import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, skipTeachingMove } from '../../core/classroom/teacherLedEngine';
+import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, skipTeachingMove, restartTeaching } from '../../core/classroom/teacherLedEngine';
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import LessonActivity from './LessonActivity';
@@ -36,6 +36,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [mediaChoice,setMediaChoice]=useState('');
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
+ const [confirmRestart,setConfirmRestart]=useState(false);
  const abort=useRef(null);
  const priorMove=useRef(move.id);
  const finish=move.type==='complete';
@@ -65,6 +66,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  function advance(){if(moment<total-1){setMoment(i=>i+1);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
+ function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -80,8 +82,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  }
  const buttonText=current?.kind==='watch'?'I watched / Continue':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':'Reveal the next idea';
  return <div className="ogp-page">
-  <header className="ogp-header"><button type="button" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>← <span>Classroom</span></button><strong>JEREMIAH <small>THE ONE TRUE GOD</small></strong><button type="button" className="ogp-classic" onClick={onUseClassic}>Original view</button></header>
+  <header className="ogp-header"><button type="button" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>← <span>Classroom</span></button><strong>JEREMIAH <small>THE ONE TRUE GOD</small></strong><div className="ogp-header-tools"><button type="button" onClick={()=>setConfirmRestart(true)}>Start from beginning</button><button type="button" className="ogp-classic" onClick={onUseClassic}>Original view</button></div></header>
   <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
+  {confirmRestart && <div className="ogp-restart-overlay" role="presentation"><section className="ogp-restart-dialog" role="dialog" aria-modal="true" aria-labelledby="ogp-restart-title"><h2 id="ogp-restart-title">Start OG.1 from the beginning?</h2><p>You'll return to the first lesson moment. Your earlier answers and learning history will be kept for review.</p><div className="ogp-restart-actions"><button type="button" className="ogp-action" onClick={restart}>Start from beginning →</button><button type="button" className="ogp-back" onClick={()=>setConfirmRestart(false)}>Keep my place</button></div></section></div>}
   <main className="ogp-shell" key={move.id}>
    <div className="ogp-context"><span>{CHAPTERS[chapter]||'The One True God'}</span><small>{finish?'FINISH':moment+1+' / '+total}</small></div>
    {finish?<section className="ogp-finish"><span className="ogp-verb">JOURNEY REVIEWED</span><h1>One Lord. One unfolding story.</h1><p>You've explored Israel's confession, Isaiah's declarations, the apostolic witness, and the call to love the Lord. Your responses remain saved for review.</p><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button></section>:<>
