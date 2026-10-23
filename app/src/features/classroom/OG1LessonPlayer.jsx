@@ -11,6 +11,24 @@ import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import './OG1LessonPlayer.css';
 
+// Distinct contemporary people and settings for three lived-faith decisions.
+// Photographs are illustrative, not depictions of the user's circumstances.
+const TODAY_SCENES = [
+ {src:'https://images.unsplash.com/photo-1770097286875-0cbf4ca2f8c1?auto=format&fit=crop&w=1400&q=82',alt:'Modern congregation gathered in worship',credit:'AMONWAT DUMKRUT · Unsplash',label:'YOUR WORSHIP'},
+ {src:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1400&q=82',alt:'Real people collaborating at a work table',credit:'Rawpixel · Unsplash',label:'YOUR EVERYDAY CHOICES'},
+ {src:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=82',alt:'Young adults gathered around a table learning and talking together',credit:'Unsplash · Everyday conversation',label:'YOUR CONVERSATIONS'}
+];
+function EverydayScenePhoto({index}) {
+ const [failed,setFailed]=useState(false);
+ useEffect(()=>setFailed(false),[index]);
+ const scene=TODAY_SCENES[index]||TODAY_SCENES[0];
+ return <div className="ogp-mission-photo">
+  {!failed&&<img key={scene.src} src={scene.src} alt={scene.alt} loading="lazy" decoding="async" onError={()=>setFailed(true)}/>}
+  <span>{scene.label}</span>
+  {!failed&&<small>{scene.credit}</small>}
+ </div>;
+}
+
 const CHAPTER_NAMES = ['The Shema','Isaiah’s Witness','The Apostolic Witness','The Difference','Living the Confession'];
 const CHAPTER_SLUGS = ['shema','isaiah','continuity','distinction','devotion'];
 const SCENE_DESCRIPTIONS = {
@@ -182,7 +200,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       </div>
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
-      <span className="ogp-scripture-ornament" aria-hidden="true">{chapter==='isaiah'||chapter==='continuity'?<DestinationArt tone={chapter==='isaiah'?'prophets':'apostles'}/>:chapter==='devotion'?'♡':'✦'}</span>
+      <span className="ogp-scripture-ornament" aria-hidden="true">{chapter==='isaiah'||chapter==='continuity'?<DestinationArt tone={chapter==='isaiah'?'prophets':'jesus'}/>:chapter==='devotion'?'♡':'✦'}</span>
       <div className="ogp-scripture-content">
        <span className="ogp-scripture-index">SCRIPTURE · {current.verse.reference.toUpperCase()}</span>
        <blockquote className="ogp-verse">“{current.verse.text}”</blockquote>
@@ -206,7 +224,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='timeline'&&<div className="ogp-trail">
       <p className="ogp-prompt">Trace the confession from Moses to Jesus to Paul. Each witness adds to the story.</p>
       <div className="ogp-trail-track" role="group" aria-label="Scripture witnesses">{[['MOSES','Deuteronomy 6:4'],['JESUS','Mark 12:29'],['PAUL','1 Corinthians 8:4']].map(([name,ref],i)=><button type="button" key={name} aria-pressed={evidenceIndex===i} onClick={()=>setEvidenceIndex(i)} disabled={i>evidenceIndex}><span>{i+1}</span><strong>{name}</strong><small>{ref}</small></button>)}</div>
-      <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses':'apostles'}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
+      <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses':evidenceIndex===1?'jesus':'apostles'}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
      </div>}
      {current.kind==='comparison'&&<div className="ogp-compare">
       <p className="ogp-prompt">Start with common ground. Then uncover the actual theological disagreement instead of assuming the other view believes in three gods.</p>
@@ -219,7 +237,14 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      </div>}
      {current.kind==='mission'&&<div className="ogp-mission">
       <p className="ogp-prompt">The Shema continues into Deuteronomy 6:5. What would wholehearted love look like beyond a spoken confession?</p>
-      <div className="ogp-mission-scene"><span>{['SCENE 1 · WORSHIP','SCENE 2 · CONDUCT','SCENE 3 · MISSION'][evidenceIndex]}</span><h2>{['Who receives your devotion?','What happens when honesty costs you?','Who should hear this confession?'][evidenceIndex]}</h2><p>{['A person offers God an hour of worship, but gives competing loyalties ultimate control of life.','A person knows that admitting a mistake will bring consequences.','A believer meets someone unfamiliar with Scripture and with a very different background.'][evidenceIndex]}</p></div>
+      <div className="ogp-mission-scene ogp-mission-scene--photo">
+       <EverydayScenePhoto index={evidenceIndex}/>
+       <div className="ogp-mission-copy">
+        <span>{['SCENE 1 · WORSHIP','SCENE 2 · CONDUCT','SCENE 3 · MISSION'][evidenceIndex]}</span>
+        <h2>{['Who receives your devotion?','What happens when honesty costs you?','Who should hear this confession?'][evidenceIndex]}</h2>
+        <p>{['A person offers God an hour of worship, but gives competing loyalties ultimate control of life.','A person knows that admitting a mistake will bring consequences.','A believer meets someone unfamiliar with Scripture and with a very different background.'][evidenceIndex]}</p>
+       </div>
+      </div>
       <div className="ogp-mission-options">{(evidenceIndex===0?['Keep worship separate from daily priorities','Let the one Lord shape every allegiance']:evidenceIndex===1?['Hide the mistake to protect your reputation','Tell the truth and take responsibility']:['Assume the message is only for people like you','Share the good news with humility and care']).map((choice,i)=><button key={choice} type="button" aria-pressed={caseChoice===i} onClick={()=>setCaseChoice(i)}>{choice}</button>)}</div>
       {caseChoice!==null&&<p className="ogp-mission-response">{caseChoice===1?['Wholehearted love involves undivided worship and allegiance.','Faithfulness extends to honest conduct, even when difficult.','The witness to one God calls believers to care about others.'][evidenceIndex]:'Consider whether that choice reflects wholehearted love for the LORD in Deuteronomy 6:5.'}</p>}
      </div>}
