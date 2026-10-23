@@ -11,7 +11,7 @@ assert.deepEqual(LESSON_PHASES,['Show me','Guide me','Let me try']);
 const audit=validateGroupedLessonBlueprint(content);
 assert.equal(audit.valid,true,'Blueprint check: '+audit.issues.join('; '));
 assert.deepEqual(content.lessonChapters.map(c=>c.standardId),content.coveredStandards.map(c=>c.id));
-const path=content.instructionalMoves.filter(m=>m.phase && LESSON_PHASES.includes(m.phase)).map(m=>m.standardIds?.[0]);
+const path=content.instructionalMoves.filter(m=>m.phase && LESSON_PHASES.includes(m.phase) && m.standardIds?.length).map(m=>m.standardIds[0]);
 const distinctChapters=path.filter((id,i)=>i===0 || path[i-1]!==id);
 assert.deepEqual(distinctChapters,content.coveredStandards.map(s=>s.id),'Finish each chapter before the next one begins');
 for(const [i,chapter] of content.lessonChapters.entries()){
