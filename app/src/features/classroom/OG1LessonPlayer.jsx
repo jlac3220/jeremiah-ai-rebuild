@@ -15,13 +15,24 @@ const CHAPTERS = {
 const VERBS = { learn:'BEGIN', 'shema-show':'READ', 'isaiah-show':'EXAMINE', 'continuity-show':'CONNECT','distinction-show':'COMPARE','devotion-show':'APPLY' };
 const TITLES = {learn:'One confession. One story.', 'shema-show':'Hear, O Israel.', 'isaiah-show':'No God before, beside, or after.', 'continuity-show':'Jesus repeats the confession.', 'distinction-show':'What is the actual disagreement?', 'devotion-show':'The confession shapes your life.'};
 
+const DISCOVERIES={
+ 'learn':{question:'Where will this confession lead?',options:[['Moses','Israel hears the confession in Deuteronomy 6.'],['Prophets','Isaiah tests whether any other God exists.'],['Apostles','Jesus and the apostles carry the confession forward.']],closer:'One confession travels across the whole biblical story.'},
+ 'shema-show':{question:'Touch a phrase to discover its role.',options:[['HEAR','Shema is a call to listen and respond.'],['OUR GOD','The LORD is the God to whom Israel belongs.'],['ONE LORD','The confession identifies the one LORD, leading into wholehearted love.']],closer:'These are not disconnected vocabulary words. Together, they form a confession and a response.'},
+ 'isaiah-show':{question:'Could another god exist in any direction?',options:[['BEFORE','Isaiah 43:10: no God was formed before him.'],['BESIDE','Isaiah 44:6: no God exists beside him.'],['AFTER','Isaiah 43:10: none shall be after him.']],closer:'Isaiah excludes rivals across time and alongside the LORD.'},
+ 'continuity-show':{question:'Follow the confession through Scripture.',options:[['MOSES','Deuteronomy 6:4: the LORD our God is one LORD.'],['JESUS','Mark 12:29: Jesus begins with the same confession.'],['PAUL','1 Corinthians 8:4: there is none other God but one.']],closer:'The witness advances in history without replacing the confession.'},
+ 'distinction-show':{question:'Touch each position to see where the disagreement really is.',options:[['SHARED','Both Oneness and trinitarian theology confess one God.'],['TRINITARIAN','One divine essence in three coequal, coeternal persons.'],['ONENESS','The one God is revealed as Father, in the incarnate Son, and as Holy Spirit; no eternal plurality of divine persons.']],closer:'A fair explanation starts with what is shared, then identifies the precise difference.'},
+ 'devotion-show':{question:'Where does love for the one LORD become visible?',options:[['WORSHIP','The LORD receives undivided devotion.'],['CONDUCT','Honesty and care reflect allegiance beyond words.'],['MISSION','The confession shapes how believers share the gospel.']],closer:'The confession reaches beyond a correct answer into the life of the whole person.'}
+};
+
 function createMoments(move,video) {
  if(move.type==='complete')return [];
  if(move.type!=='teach')return [{kind:'task',verb:move.type==='free_response'?'EXPLAIN':move.interaction?.type==='match'?'CONNECT':'ANSWER',title:move.title}];
  const moments=[];
  if(move.scripture?.length)moments.push({kind:'read',verb:VERBS[move.id]||'READ',title:TITLES[move.id]||move.title,verse:move.scripture[0]});
  else moments.push({kind:'intro',verb:'ENCOUNTER',title:TITLES[move.id]||move.title});
- (move.teaching||[]).forEach((text,i)=>moments.push({kind:'teach',verb:['NOTICE','DISCOVER','CONNECT'][i%3],title:['Look closer','Think about this','Make the connection'][i%3],text}));
+ const discovery=DISCOVERIES[move.id];
+ if(discovery)moments.push({kind:'discovery',verb:'INVESTIGATE',title:discovery.question,discovery});
+ (move.teaching||[]).forEach((text,i)=>moments.push({kind:'teach',verb:['UNDERSTAND','CONSIDER','REVEAL'][i%3],title:['Why it matters','Look beneath the surface','The deeper connection'][i%3],text}));
  if(move.id==='shema-show'&&video)moments.push({kind:'watch',verb:'WATCH',title:'Listen to the meaning of Shema',video});
  if(move.id==='shema-show'&&video?.lessonCheck)moments.push({kind:'videoCheck',verb:'NOTICE',title:'What did you notice?',check:video.lessonCheck});
  return moments;
@@ -34,6 +45,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [moment,setMoment]=useState(0);
  const [draft,setDraft]=useState({});
  const [mediaChoice,setMediaChoice]=useState('');
+ const [discoveryChoice,setDiscoveryChoice]=useState(null);
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
@@ -52,7 +64,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const current=moments[Math.min(moment,total-1)];
  const percent=getStandardProgress(content,state);
  const chapter=move.id.split('-')[0];
- useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setError('');}},[move.id]);
+ useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  function change(patch) {
   if(thinking||feedback)return;
@@ -63,10 +75,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   setBibleReaderIntent(reference,{translation:'kjv',returnRoute:ROUTES.CLASSROOM_LESSON,source:'classroom'});
   onNavigate(ROUTES.BIBLE_SUPPORT);
  }
- function advance(){if(moment<total-1){setMoment(i=>i+1);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
- function back(){setMoment(i=>Math.max(0,i-1));}
+ function advance(){if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
+ function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
- function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
+ function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -94,6 +106,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='read'&&<><blockquote className="ogp-verse">“{current.verse.text}”</blockquote><span className="ogp-reference">{current.verse.reference} · KJV</span><p className="ogp-prompt">Read it once, then notice what the passage actually says.</p><button type="button" className="ogp-link" onClick={()=>readVerse(current.verse.reference)}>Open in the Bible ↗</button></>}
      {current.kind==='intro'&&<p className="ogp-thought">Let's follow the confession from Moses through the prophets and into the apostolic witness.</p>}
      {current.kind==='teach'&&<p className="ogp-thought">{current.text}</p>}
+     {current.kind==='discovery'&&<div className="ogp-discovery"><p className="ogp-prompt">Choose what to investigate. Every path reveals a piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label,detail],i)=><button type="button" key={label} aria-pressed={discoveryChoice===i} onClick={()=>setDiscoveryChoice(i)}>{label}<span aria-hidden="true">↗</span></button>)}</div>{discoveryChoice!==null&&<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[discoveryChoice][0]}</strong><p>{current.discovery.options[discoveryChoice][1]}</p><small>{current.discovery.closer}</small></div>}</div>}
      {current.kind==='watch'&&<><p className="ogp-prompt">Watch for the meaning of <em>shema</em>. This is historical and language context; Jeremiah will connect it to Apostolic teaching.</p><div className="ogp-video"><iframe src={current.video.embedUrl} title={current.video.videoTitle||current.video.title} loading="lazy" allow="encrypted-media; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div><small>Optional · {current.video.provider} · {current.video.duration}</small></>}
      {current.kind==='videoCheck'&&<><p className="ogp-prompt">{current.check.prompt}</p><div className="ogp-options">{current.check.choices.map(c=><button type="button" key={c.id} aria-pressed={mediaChoice===c.id} onClick={()=>setMediaChoice(c.id)}>{c.label}</button>)}</div>{mediaChoice&&<p className="ogp-feedback">{mediaChoice===current.check.answerId?current.check.correctFeedback:current.check.incorrectFeedback}</p>}</>}
      {current.kind==='task'&&<><p className="ogp-prompt">{move.prompt}</p>
@@ -106,7 +119,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>)
-     :<button type="button" className="ogp-action" onClick={advance}>{buttonText} →</button>}
+     :<button type="button" className="ogp-action" onClick={advance} disabled={current?.kind==='discovery'&&discoveryChoice===null}>{current?.kind==='discovery'?'Continue the discovery':buttonText} →</button>}
      {!assessment&&moment>0&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      {assessment&&<button type="button" className="ogp-back" onClick={skip}>Skip for now (no mastery)</button>}
     </nav>
