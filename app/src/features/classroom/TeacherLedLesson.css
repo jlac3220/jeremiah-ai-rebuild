@@ -194,3 +194,9 @@
 .og1-scene-read{display:inline-block;margin-top:16px;border:0;background:transparent;color:#145bb5;font-size:.81rem;font-weight:800;text-align:left;cursor:pointer;padding:7px 0}
 .og1-scene button:focus-visible{outline:3px solid #f9d86a;outline-offset:2px}
 @media(max-width:640px){.og1-scene{margin:16px 0 24px;border-radius:17px}.og1-scene-art{min-height:225px;padding:23px 17px}.og1-scene-emblem{width:59px;height:59px;font-size:2.3rem}.og1-scene-art h2{font-size:1.55rem}.og1-scene-art blockquote{font-size:1.04rem}.og1-scene-body{padding:19px 16px}.og1-scene-body>p{font-size:.88rem}.og1-scene-tabs{gap:6px}.og1-scene-tabs button{font-size:.72rem;padding:9px}.og1-scene-insight{padding:13px}.og1-scene-insight p{font-size:.81rem}}
+
+.tl-skip-discussion{display:flex;align-items:center;flex-wrap:wrap;gap:9px 16px;margin:12px 0 23px;padding-top:12px;border-top:1px solid #e4eaf5}
+.tl-skip-discussion button{background:transparent;color:#1556ae;border:1px solid #bcd4f5;border-radius:12px;padding:11px 14px;font-size:.88rem;font-weight:780;cursor:pointer}
+.tl-skip-discussion button:hover{background:#eaf3ff}
+.tl-skip-discussion small{color:#677a94;font-size:.74rem;line-height:1.5}
+.tl-skip-discussion button:focus-visible{outline:3px solid #f9d86a;outline-offset:2px}
