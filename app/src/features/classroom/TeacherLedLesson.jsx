@@ -46,6 +46,22 @@ function OG1OpeningEncounter({onReadBible}) {
  </section>;
 }
 
+const OG1_CHAPTER_SCENES = {
+ 'isaiah-show': {label:'THE PROPHETIC WITNESS',heading:'There is none else.',reference:'ISAIAH 45:5',verse:'I am the LORD, and there is none else, there is no God beside me:',theme:'witness',prompt:'Isaiah challenges every rival claim. Explore what each declaration rules out.',options:[{name:'Before',detail:'Isaiah 43:10 — no God formed before the LORD.'},{name:'Beside',detail:'Isaiah 44:6 — no God beside the LORD.'},{name:'After',detail:'Isaiah 43:10 — none shall come after him.'}]},
+ 'continuity-show': {label:'THE APOSTOLIC WITNESS',heading:'The same confession.',reference:'MARK 12:29',verse:'The Lord our God is one Lord:',theme:'continuity',prompt:'Follow the confession as it moves from Israel, through Jesus, to the apostles.',options:[{name:'Moses',detail:'Deuteronomy 6:4 — Israel confesses the one LORD.'},{name:'Jesus',detail:'Mark 12:29 — Jesus repeats the Shema.'},{name:'Paul',detail:'1 Corinthians 8:4 — there is none other God but one.'}]},
+ 'distinction-show': {label:'UNDERSTAND THE DIFFERENCE',heading:'Speak truthfully. Listen carefully.',reference:'1 TIMOTHY 2:5',verse:'For there is one God, and one mediator between God and men, the man Christ Jesus;',theme:'distinction',prompt:'Compare these descriptions without misrepresenting either view.',options:[{name:'Apostolic Oneness',detail:'The one God is revealed in Jesus Christ; Father, Son, and Holy Ghost are not three divine persons.'},{name:'Trinitarian teaching',detail:'One divine essence in three distinct, coequal, coeternal persons — not three separate gods.'},{name:'Shared confession',detail:'Both affirm that there is one God and confess Jesus Christ, while explaining divine identity differently.'}]},
+ 'devotion-show': {label:'FAITH IN ACTION',heading:'Love the LORD with all your heart.',reference:'DEUTERONOMY 6:5',verse:'And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.',theme:'devotion',prompt:'The Shema calls for more than a correct answer. Where does it lead?',options:[{name:'Heart',detail:'Love God with undivided devotion.'},{name:'Soul',detail:'Let faith shape your whole life.'},{name:'Might',detail:'Respond with the strength and actions of daily obedience.'}]}
+};
+function OG1ChapterScene({move,onReadBible}) {
+ const scene=OG1_CHAPTER_SCENES[move.id];
+ const [selected,setSelected]=useState(0);
+ if(!scene)return null;
+ return <section className={'og1-scene og1-scene-'+scene.theme} aria-label={scene.label}>
+  <div className="og1-scene-art"><div className="og1-scene-rays" aria-hidden="true"/><span className="og1-scene-eyebrow">{scene.label}</span><div className="og1-scene-emblem" aria-hidden="true">{scene.theme==='witness'?'✦':scene.theme==='continuity'?'∞':scene.theme==='distinction'?'✳':'♥'}</div><h2>{scene.heading}</h2><blockquote>“{scene.verse}”</blockquote><span className="og1-scene-reference">{scene.reference} · KJV</span></div>
+  <div className="og1-scene-body"><p>{scene.prompt}</p><div className="og1-scene-tabs" role="group" aria-label="Explore the Scripture connections">{scene.options.map((option,i)=><button type="button" key={option.name} aria-pressed={selected===i} onClick={()=>setSelected(i)}>{option.name}</button>)}</div><div className="og1-scene-insight" role="status" key={selected}><span className="og1-scene-insight-number">{String(selected+1).padStart(2,'0')}</span><strong>{scene.options[selected].name}</strong><p>{scene.options[selected].detail}</p></div><button type="button" className="og1-scene-read" onClick={()=>onReadBible({reference:scene.reference.split(' · ')[0]})}>Explore {scene.reference.toLowerCase()} in the Bible ↗</button></div>
+ </section>;
+}
+
 export default function TeacherLedLesson({ content, state, onStateChange, onNavigate }) {
  const move=getInstructionalMove(content,state.currentMoveId);
  const draft=state.experience?.drafts?.[move.id] || {};
@@ -132,6 +148,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
    {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">Your earlier written answers are saved while you work through this lesson. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:[state.experience.earlierLesson,...(state.experience.previousRuns || [])].flatMap(run=>Object.values(run.drafts || {})).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
     {content.standardId==='OG.1.LESSON.18' && move.id==='learn' && <OG1OpeningEncounter onReadBible={()=>openBible({reference:'Deuteronomy 6'})} />}
+    {content.standardId==='OG.1.LESSON.18' && <OG1ChapterScene key={move.id} move={move} onReadBible={openBible} />}
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
     {move.visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     <div className="tl-desktop-teaching">{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
