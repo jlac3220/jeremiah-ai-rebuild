@@ -123,3 +123,26 @@
 .shema-practice-forward:disabled{opacity:.35}
 .shema-practice-footer p{color:#62766b;line-height:1.65;font-size:.87rem}
 @media(max-width:750px){.shema-practice-options{grid-template-columns:1fr}.shema-practice-options button{min-height:66px}.shema-practice-scene{min-height:180px;padding:27px 17px}}
+
+/* Chapter-one mastery: an evidence dossier, not a long quiz page. */
+.shema-teachback{max-width:1050px;margin:5px auto 0}
+.shema-teachback-intro .shema-eyebrow{color:#9d7447}
+.shema-teachback-intro h2{font:500 clamp(2.15rem,4.9vw,3.7rem)/1.15 Georgia,serif;letter-spacing:-.04em;color:#182f3d;margin:18px 0}
+.shema-teachback-intro>p{font:500 clamp(1.03rem,2.1vw,1.3rem)/1.65 Georgia,serif;color:#4e6570;max-width:780px}
+.shema-teachback-layout{display:grid;grid-template-columns:minmax(240px,.75fr) minmax(0,1.35fr);gap:24px;margin-top:31px;align-items:stretch}
+.shema-teachback-brief{background:#163447;border-radius:17px;padding:26px;color:#fff}
+.shema-teachback-brief .shema-kicker{color:#dfc084}
+.shema-teachback-brief ol{counter-reset:shema-brief;list-style:none;padding:0;margin:22px 0 0}
+.shema-teachback-brief li{display:grid;grid-template-columns:28px 1fr;column-gap:9px;margin:0 0 18px;counter-increment:shema-brief}
+.shema-teachback-brief li:before{content:counter(shema-brief,decimal-leading-zero);font-size:.7rem;font-weight:800;color:#cbb17c;grid-row:span 2;padding-top:3px}
+.shema-teachback-brief li strong{font-size:.84rem;letter-spacing:.04em}
+.shema-teachback-brief li span{font-size:.8rem;line-height:1.6;color:#c9d7dc;margin-top:4px}
+.shema-teachback-response{display:flex;flex-direction:column}
+.shema-teachback-response label{font-size:.75rem;font-weight:800;letter-spacing:.14em;color:#526e6d;margin:0 0 10px;text-transform:uppercase}
+.shema-teachback-response textarea{flex:1;width:100%;min-height:350px;padding:24px 25px;border:1px solid #cbd4cb;background:#fffcf6;border-radius:15px;resize:vertical;font:1rem/1.8 system-ui,sans-serif;box-shadow:0 13px 29px #223b4010;color:#243e45}
+.shema-response-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.74rem;color:#7c8982;margin-top:10px}
+.shema-full-rubric{margin-top:26px;padding-top:16px;border-top:1px solid #d3dcd1}
+.shema-full-rubric summary{font-size:.85rem;color:#567064;font-weight:750;cursor:pointer}
+.shema-full-rubric p{max-width:760px;font-size:.92rem;line-height:1.72;color:#546962}
+@media(max-width:750px){.shema-teachback-layout{grid-template-columns:1fr;gap:18px}.shema-teachback-brief{padding:23px}.shema-teachback-brief ol{display:grid;grid-template-columns:1fr 1fr;column-gap:12px}.shema-teachback-response textarea{min-height:280px}.shema-response-footer{font-size:.64rem}}
+@media(max-width:430px){.shema-teachback-brief ol{grid-template-columns:1fr}}
