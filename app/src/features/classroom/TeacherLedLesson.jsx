@@ -10,6 +10,7 @@ import DeepDiveSheet from './DeepDiveSheet';
 import LessonIllustration from './LessonIllustration';
 import LessonActivity, { LessonVisual, WorkedExample } from './LessonActivity';
 import InteractivePractice from './InteractivePractice';
+import LessonPath from './LessonPath';
 import './TeacherLedLesson.css';
 
 function MobileTeachingCards({ paragraphs = [] }) {
@@ -109,6 +110,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
   <main className="tl-main">
    {showRestart && <section className="tl-restart" role="group" aria-label="Restart lesson" tabIndex={-1} ref={restartRef}><h2>Start this lesson again?</h2><p>You’ll return to the opening in a fresh review. Your earlier answers and earned completion will be kept.</p><button type="button" className="tl-primary" onClick={restart}>Start from the beginning →</button><button type="button" className="tl-text-button" onClick={()=>setShowRestart(false)}>Keep my place</button></section>}
    <div className="tl-step"><span>{complete?'Lesson reflection':move.progressOptional?'A closer look':`${String(currentIndex+1).padStart(2,'0')} / ${String(mainMoves.length).padStart(2,'0')}`}</span><span>{move.phase || move.eyebrow || (move.progressOptional?'Let’s approach it another way':written?'Put the reasoning into words':'Build your understanding')}</span></div>
+   <LessonPath content={content} move={move} state={state} />
    <h1 ref={headingRef} tabIndex={-1}>{move.title}</h1>
    {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">Your earlier written answers are saved while you work through this lesson. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:[state.experience.earlierLesson,...(state.experience.previousRuns || [])].flatMap(run=>Object.values(run.drafts || {})).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
