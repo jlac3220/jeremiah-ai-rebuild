@@ -1,29 +1,120 @@
 import { useEffect, useState } from 'react';
 import './LessonActivity.css';
 
-const scenes=[
- {title:'Israel listens',reference:'Deuteronomy 6:4',caption:'The LORD our God is one LORD.',detail:'The confession begins with a summons to hear. Read Deuteronomy 6:5: the response is wholehearted love.'},
- {title:'Jesus reaffirms',reference:'Mark 12:29',caption:'Hear, O Israel; The Lord our God is one Lord.',detail:'When asked about the first commandment, Jesus repeats the confession. Notice what remains the same.'},
- {title:'The apostles apply',reference:'1 Corinthians 8:4',caption:'There is none other God but one.',detail:'Paul brings the confession into a setting where people speak of many gods. The exclusive claim continues.'}
+// Every scene has its own verified subject, image, and credit.
+// Biblical scenes are historic artistic depictions, not photographs of events.
+const scenes = [
+  {
+    id: 'moses',
+    step: '01 / 04',
+    tab: 'Moses',
+    kicker: 'THE ORIGINAL CONFESSION',
+    title: 'Moses calls Israel to hear',
+    reference: 'Deuteronomy 6:4',
+    caption: 'The LORD our God is one LORD.',
+    detail: 'On the plains of Moab, Moses calls Israel to listen. The confession is followed by a call to love God with the whole heart. This is where the journey begins.',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Moses_Pleading_with_Israel.jpg?width=1200',
+    alt: 'Historical color Bible illustration showing Moses speaking to the people of Israel.',
+    credit: 'Providence Lithograph Company, 1907 · Public domain',
+  },
+  {
+    id: 'jesus',
+    step: '02 / 04',
+    tab: 'Jesus',
+    kicker: 'THE SAME CONFESSION',
+    title: 'Jesus repeats the confession',
+    reference: 'Mark 12:29',
+    caption: 'Hear, O Israel; The Lord our God is one Lord.',
+    detail: 'Asked which commandment comes first, Jesus answers with the Shema. He does not replace the confession: He reaffirms it, and calls for love of God and neighbor.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/27/Brooklyn_Museum_-_The_Scribe_Stood_to_Tempt_Jesus_%28Le_scribe_se_leva_pour_tenter_J%C3%A9sus%29_-_James_Tissot_-_overall.jpg',
+    alt: 'Painting by James Tissot depicting Jesus seated with followers while a scribe questions him.',
+    credit: 'James Tissot · Brooklyn Museum · Public domain',
+  },
+  {
+    id: 'paul',
+    step: '03 / 04',
+    tab: 'Paul',
+    kicker: 'THE APOSTOLIC WITNESS',
+    title: 'Paul carries it into the church',
+    reference: '1 Corinthians 8:4',
+    caption: 'There is none other God but one.',
+    detail: 'Writing to believers surrounded by claims about many gods, Paul preserves the same confession. Different audience. The same truth.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Valentin_de_Boulogne_-_Saint_Paul_Writing_His_Epistles_-_BF.1991.4_-_Museum_of_Fine_Arts.jpg',
+    alt: 'A painting by Valentin de Boulogne of the apostle Paul writing at a desk.',
+    credit: 'Valentin de Boulogne · Public domain',
+  },
+  {
+    id: 'today',
+    step: '04 / 04',
+    tab: 'Your world',
+    kicker: 'THE CONFESSION REACHES YOU',
+    title: 'What does one Lord mean on an ordinary Tuesday?',
+    reference: 'Deuteronomy 6:5 · Mark 12:30',
+    caption: 'Love the LORD thy God with all thine heart.',
+    detail: 'The confession does not belong only to ancient courtyards and letters. It reaches the conversations, commitments, relationships, and choices of ordinary people today.',
+    image: 'https://images.unsplash.com/photo-1758445038510-1ed36a6e6edd?auto=format&fit=crop&w=1400&q=82',
+    alt: 'Candid modern photograph of two people talking together at a café table by a window.',
+    credit: 'Zhen Yao · Unsplash License',
+  },
 ];
-function Landscape({scene=0}){
- return <svg viewBox="0 0 720 240" role="img" aria-label={['An illustrated gathering in a desert landscape','An illustrated open courtyard with people gathered to listen','An illustrated writing table looking toward a city'][scene]}>
-  <defs><linearGradient id={`sky-${scene}`} x2="0" y2="1"><stop stopColor="#133c4a"/><stop offset="1" stopColor="#839b96"/></linearGradient></defs>
-  <path fill={`url(#sky-${scene})`} d="M0 0h720v240H0z"/><circle cx="586" cy="60" r="28" fill="#edc785"/>
-  <path d="M0 167L105 76 204 165 307 101 436 190 564 120 720 173V240H0Z" fill="#758679"/><path d="M0 208Q200 142 383 208T720 184V240H0Z" fill="#b4936e"/>
-  {scene===0?<g fill="#e7d4af" stroke="#5c6356" strokeWidth="3"><path d="M65 201l49-76 55 76zM495 207l49-65 53 65z"/><path d="M114 125v76M544 142v65"/>{[230,275,321,370,420].map((x,i)=><g key={x} transform={`translate(${x} ${173+i%2*12})`}><circle r="9" cy="-22" fill="#503e30"/><path d="M-13 14l5-26h16l7 26z"/></g>)}</g>:scene===1?<g fill="#d2bc94"><path d="M52 58h24v167H52zM178 58h24v167h-24zM40 44h177v20H40zM509 62h25v160h-25zM650 62h25v160h-25zM497 47h190v22H497z"/>{[255,310,365,420,463].map(x=><g key={x}><circle cx={x} cy="176" r="9" fill="#503e30"/><path d={`M${x-12} 213l4-26h16l5 26z`} fill="#f0dec1"/></g>)}</g>:<g><path d="M84 104h36V64h35v40h45v85H84zM225 113h34V80h29v33h27v77h-90zM510 90h40V55h28v35h54v99H510z" fill="#d1bb98"/><path d="M123 212h474v28H123z" fill="#543d2f"/><path d="M220 160q70-22 140 0v68q-70-20-140 0zM360 160q70-22 140 0v68q-70-20-140 0z" fill="#f3dfb8"/><path d="M360 161v65M240 179h99m-99 13h99m-99 13h99m41-26h95m-95 13h95" stroke="#9c835e" strokeWidth="3"/></g>}
- </svg>;
+
+function SceneImage({ scene }) {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [scene.id]);
+  return <div className="la-scene-media">
+    {failed
+      ? <div className="la-scene-fallback" role="img" aria-label={scene.alt}>An image of this scene could not load.</div>
+      : <img key={scene.id} src={scene.image} alt={scene.alt} loading="lazy" decoding="async" onError={() => setFailed(true)} />}
+    <span className="la-scene-media-label">{scene.kicker}</span>
+    <small className="la-scene-credit">{scene.credit}</small>
+  </div>;
 }
-export function LessonVisual({kind}){
+
+export function LessonVisual({kind}) {
  const [index,setIndex]=useState(0);
  const [playing,setPlaying]=useState(false);
- useEffect(()=>{if(!playing)return;const timer=setTimeout(()=>{if(index===2)setPlaying(false);else setIndex(index+1);},6500);return()=>clearTimeout(timer);},[playing,index]);
- if(kind==='story')return <figure className="la-film"><Landscape scene={index}/><figcaption><span className="la-kicker">Illustrated Scripture journey · {index+1} of 3</span><h2>{scenes[index].title}</h2><blockquote>“{scenes[index].caption}”</blockquote><strong>{scenes[index].reference} · KJV</strong><p>{scenes[index].detail}</p><div className="la-controls"><button type="button" onClick={()=>{if(index===2)setIndex(0);setPlaying(!playing);}}>{playing?'Pause':'Play the sequence'}</button>{scenes.map((s,i)=><button type="button" key={s.reference} aria-label={s.title} aria-pressed={index===i} onClick={()=>{setIndex(i);setPlaying(false);}}>{i+1}</button>)}</div><small>Original instructional illustration; not a historical reconstruction. Read at your pace or play the sequence.</small></figcaption></figure>;
- if(kind==='devotion')return <figure className="la-evidence"><span className="la-kicker">Follow the confession into life</span><h2>“With all thine heart”</h2><div className="la-directions">{['Worship','Ethics','Mission'].map((label,i)=><button type="button" key={label} aria-pressed={index===i} onClick={()=>setIndex(i)}>{label}<span aria-hidden="true">{['♡','⚖','↗'][i]}</span></button>)}</div><p>{['Exclusive devotion: the one Lord receives worship, not a share alongside rival gods.','Undivided allegiance: honesty and care remain under the same Lord as public worship.','One gospel: the call to know and respond to this God reaches beyond one community.'][index]}</p><figcaption>Deuteronomy 6:4–5 connects who God is with the response of the whole person.</figcaption></figure>;
+ useEffect(()=>{
+   if(kind!=='story' || !playing)return;
+   const timer=setTimeout(()=>{
+     if(index===scenes.length-1)setPlaying(false);
+     else setIndex(value=>Math.min(value+1,scenes.length-1));
+   },7000);
+   return()=>clearTimeout(timer);
+ },[kind,playing,index]);
+ if(kind==='story'){
+   const scene=scenes[index];
+   return <figure className="la-film la-film-cinematic">
+     <SceneImage scene={scene}/>
+     <figcaption className="la-scene-copy" aria-live="polite">
+       <span className="la-kicker">{scene.step} · Scripture across time</span>
+       <h2>{scene.title}</h2>
+       <blockquote>“{scene.caption}”</blockquote>
+       <strong>{scene.reference} · KJV {scene.id==='today'?'excerpt':''}</strong>
+       <p>{scene.detail}</p>
+       <div className="la-controls la-story-controls" aria-label="Choose a moment in the journey">
+         <button type="button" onClick={()=>{if(index===scenes.length-1)setIndex(0);setPlaying(value=>!value);}}>{playing?'Pause journey':'Play journey'} <span aria-hidden="true">▶</span></button>
+         {scenes.map((s,i)=><button type="button" key={s.id} aria-label={'Show '+s.tab} aria-pressed={index===i} onClick={()=>{setIndex(i);setPlaying(false);}}>{s.tab}</button>)}
+       </div>
+       <small className="la-art-notice">Historical scenes are artists’ interpretations, not photographs. Each screen uses a different image.</small>
+     </figcaption>
+   </figure>;
+ }
+ if(kind==='devotion')return <figure className="la-evidence la-devotion">
+   <div className="la-devotion-visual">
+     <img src="https://images.unsplash.com/photo-1770097286875-0cbf4ca2f8c1?auto=format&fit=crop&w=1400&q=82" alt="Present-day people standing together in prayer and worship inside a church." loading="lazy" decoding="async"/>
+     <span>WORSHIP IN THE WORLD YOU KNOW</span>
+     <small>AMONWAT DUMKRUT · Unsplash License</small>
+   </div>
+   <span className="la-kicker">Follow the confession into life</span><h2>“With all thine heart”</h2>
+   <div className="la-directions">{['Worship','Ethics','Mission'].map((label,i)=><button type="button" key={label} aria-pressed={index===i} onClick={()=>setIndex(i)}>{label}<span aria-hidden="true">{['♡','⚖','↗'][i]}</span></button>)}</div>
+   <p>{['Exclusive devotion: the one Lord receives worship, not a share alongside rival gods.','Undivided allegiance: honesty and care remain under the same Lord as public worship.','One gospel: the call to know and respond to this God reaches beyond one community.'][index]}</p>
+   <figcaption>Deuteronomy 6:4–5 connects who God is with the response of the whole person.</figcaption>
+ </figure>;
  if(kind==='scroll')return <figure className="la-scroll"><span className="la-kicker">Look closely at the confession</span><div lang="he" dir="rtl" className="la-hebrew">שְׁמַע יִשְׂרָאֵל</div><p>Shema Yisrael · Hear, O Israel</p><div className="la-phrase">The LORD <span>our God</span> is <strong>one LORD.</strong></div><figcaption>The words identify God and summon a people to listen. This is a typeset teaching illustration, not an ancient manuscript.</figcaption></figure>;
  if(kind==='exclusivity')return <figure className="la-evidence"><span className="la-kicker">Examine the scope of the claim</span><h2>Before. Beside. After.</h2><div className="la-directions">{['Before','Beside','After'].map((label,i)=><button type="button" key={label} aria-pressed={index===i} onClick={()=>setIndex(i)}>{label}<span aria-hidden="true">{['←','↔','→'][i]}</span></button>)}</div><blockquote>{['“before me there was no God formed”','“beside me there is no God”','“neither shall there be after me”'][index]}</blockquote><p>{index===1?'Isaiah 44:6':'Isaiah 43:10'} · KJV excerpt</p><figcaption>{['Not a successor to an earlier god.','Not one deity standing alongside another.','Not replaced by a later deity.'][index]} These directions organize Isaiah’s language; they do not depict God.</figcaption></figure>;
  return <figure className="la-comparison"><span className="la-kicker">Locate the actual disagreement</span><h2>Both say “one God.”</h2><div><section><h3>Trinitarian confession</h3><p>One divine essence</p><strong>Three eternal persons</strong></section><section><h3>Oneness confession</h3><p>One undivided God</p><strong>No eternal division into persons</strong></section></div><figcaption>Now explain the incarnation. A fair comparison must preserve both the actual disagreement and Jesus’ real humanity.</figcaption></figure>;
 }
+
 export default function LessonActivity({move,draft,feedback,onChange}){
  if(move.interaction.type==='reasoning')return <div className="la-reasoning">{[['claim','claimId','claims','claimPrompt'],['reason','reasonId','reasons','reasonPrompt']].map(([id,field,options,prompt])=>{const result=feedback?.itemResults?.find(r=>r.id===id);return <fieldset key={id} disabled={Boolean(feedback)}><legend>{move.interaction[prompt]}</legend>{move.interaction[options].map(option=><button type="button" key={option.id} aria-pressed={draft[field]===option.id} onClick={()=>onChange({[field]:option.id})}>{option.label}</button>)}{result && <p className={result.correct?'la-correct':'la-rethink'}>{result.message}</p>}</fieldset>;})}</div>;
  const {items,options}=move.interaction;
