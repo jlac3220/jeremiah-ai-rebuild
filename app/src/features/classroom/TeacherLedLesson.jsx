@@ -211,12 +211,22 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     {error && <p className="tl-error" role="alert">{error}</p>}
     {feedback && <section ref={feedbackRef} tabIndex={-1} aria-label="Jeremiah’s feedback" className={`tl-feedback ${feedback.verdict==='strong'?'is-understood':'is-teaching'}`} aria-live="polite"><span className="tl-small">{feedback.source==='fallback' && written?'Assessment unavailable':'Jeremiah’s response'}</span><p>{feedback.teacherMessage}</p>{feedback.followUpPrompt && <p className="tl-follow-up">{feedback.followUpPrompt}</p>}<button type="button" className="tl-primary" onClick={next}>{feedback.verdict==='strong'?(move.id==='defend'?'See what you have established':'Build on that understanding'):written?'Develop my explanation':move.next.weak===move.id?'Reconsider my answer':'Work through another example'} →</button></section>}
    </>}
-   {complete && <section className="tl-complete"><p className="tl-teaching">{state.experience?.earlierCompletion?'Your completion from the earlier version is saved. You can revisit this lesson through the new teaching sequence.':content.completionSummary || 'You traced the moral boundary, distinguished wrongdoing from feelings and limitation, and connected guilt, corruption, and separation to the need for God’s saving work.'}</p>
-    <h2>Keep these connections with you</h2><ul>{(content.takeaways || ['Sin is evaluated against God’s will.','Its consequences reach accountability, the inward person, and relationship with God.','The need for rescue includes every person.','God gives the life that self-improvement cannot supply.']).map(text=><li key={text}>{text}</li>)}</ul>
-    <h2>Your explanations</h2>{content.instructionalMoves.filter(m=>['free_response','mastery_response'].includes(m.type)).map(m=>m.id).map(id=>{const answer=state.experience?.drafts?.[id]?.responseText;return answer?<details key={id}><summary>{getInstructionalMove(content,id).title}</summary><p>{answer}</p></details>:null;})}
-    <button type="button" className="tl-primary" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Return to the {content.studyTitle} room →</button>
-    <button type="button" className="tl-text-button" onClick={restart}>{state.experience?.earlierCompletion?'Study the new teaching sequence':'Review this lesson'}</button>
-   </section>}
+   {complete && (isOG1 ? <section className="tl-complete tl-og1-finish">
+    <div className="tl-og1-finish-mark" aria-hidden="true">✦</div>
+    <span className="tl-og1-finish-kicker">THE ONE TRUE GOD · JOURNEY REVIEWED</span>
+    <h2>You've followed the confession.</h2>
+    <p>From the Shema to the apostles, you traced the biblical witness to the one LORD. The next step is to carry that understanding into the rest of Scripture.</p>
+    <div className="tl-og1-finish-actions">
+     <button type="button" className="tl-primary" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore the next lesson →</button>
+     <button type="button" className="tl-text-button" onClick={()=>openBible({reference:'Mark 12:29'})}>Read Jesus' words in Mark 12 →</button>
+    </div>
+    <details className="tl-og1-finish-notes"><summary>Review my notes and answers</summary>
+     <p>{content.completionSummary}</p>
+     {(content.takeaways||[]).length>0 && <ul>{content.takeaways.map(item=><li key={item}>{item}</li>)}</ul>}
+     {content.instructionalMoves.filter(m=>['free_response','mastery_response'].includes(m.type)).map(m=>{const answer=state.experience?.drafts?.[m.id]?.responseText;return answer?<div key={m.id}><strong>{m.title}</strong><p>{answer}</p></div>:null})}
+    </details>
+    <button type="button" className="tl-text-button" onClick={restart}>Revisit this journey</button>
+   </section> : <section className="tl-complete"><p className="tl-teaching">{state.experience?.earlierCompletion?'Your completion from the earlier version is saved. You can revisit this lesson through the new teaching sequence.':content.completionSummary || 'You have completed this lesson.'}</p><h2>Keep these connections with you</h2><ul>{(content.takeaways || []).map(text=><li key={text}>{text}</li>)}</ul><h2>Your explanations</h2>{content.instructionalMoves.filter(m=>['free_response','mastery_response'].includes(m.type)).map(m=>m.id).map(id=>{const answer=state.experience?.drafts?.[id]?.responseText;return answer?<details key={id}><summary>{getInstructionalMove(content,id).title}</summary><p>{answer}</p></details>:null;})}<button type="button" className="tl-primary" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Return to the {content.studyTitle} room →</button><button type="button" className="tl-text-button" onClick={restart}>Review this lesson</button></section>)}
    {!complete && <details className="tl-vocabulary"><summary>Keep the key words close</summary><dl>{content.sourceDomain.vocabulary.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.definition}</dd></div>)}</dl></details>}
    {content.coveredStandards && <details className="tl-vocabulary"><summary>Your learning goals · {Object.keys(state.experience?.standardEvidence || {}).length} established</summary><ul>{content.coveredStandards.map(s=><li key={s.id}><strong>{s.title}</strong><p>{state.experience?.standardEvidence?.[s.id]?'Independent understanding established':'Still developing'} · {s.id}</p></li>)}</ul></details>}
    <footer className="tl-footer">{content.standardId} · Your answers and place are saved in this browser.</footer>
