@@ -134,7 +134,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   <main className="ogp-shell" key={move.id}>
    <div className="ogp-context">
      <div className="ogp-context-meta"><span>{chapterNumber===0?'PROLOGUE':`CHAPTER ${String(chapterNumber).padStart(2,'0')} / 05`}</span><span className="ogp-context-line"/><span>{finish?'COMPLETE':SCENE_DESCRIPTIONS[sceneClass]||'THE JOURNEY'}</span></div>
-     <div className="ogp-context-name">{chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}</div>
+     <div className="ogp-context-name">{chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}{!finish&&<span className="ogp-scene-counter">MOMENT {String(moment+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>}</div>
      <div className="ogp-chapter-track" aria-label={chapterNumber===0?'Opening':`Chapter ${chapterNumber} of five`}>
       {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={chapterNumber>i?'is-reached':''}/>)}
      </div>
