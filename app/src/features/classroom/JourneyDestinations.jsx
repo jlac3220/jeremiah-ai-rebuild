@@ -26,12 +26,12 @@ export const BIBLICAL_ART = {
   quote:'“I am the first, and I am the last; and beside me there is no God.”'
  },
  apostles: {
-  src:'https://upload.wikimedia.org/wikipedia/commons/e/e7/Raphael_-_St_Paul_Preaching_at_Athens_c.1515-6.jpg',
-  alt:'Raphael artwork depicting the apostle Paul preaching to a gathered crowd in Athens',
-  artist:'Raphael',
-  work:'St Paul Preaching at Athens (c. 1515)',
-  source:'https://commons.wikimedia.org/wiki/File:Raphael_-_St_Paul_Preaching_at_Athens_c.1515-6.jpg',
-  focal:'30% 42%',
+  src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Jan_Lievens_-_St._Paul_writing_to_the_Thessalonians.jpg',
+  alt:'Jan Lievens painting portraying the apostle Paul writing a letter at his desk',
+  artist:'Jan Lievens',
+  work:'St Paul Writing to the Thessalonians (c. 1629)',
+  source:'https://commons.wikimedia.org/wiki/File:Jan_Lievens_-_St._Paul_writing_to_the_Thessalonians.jpg',
+  focal:'50% 34%',
   reference:'1 Corinthians 8:4',
   quote:'“There is none other God but one.”'
  }
