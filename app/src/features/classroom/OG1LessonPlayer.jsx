@@ -7,6 +7,7 @@ import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
+import useLessonNarration from './useLessonNarration';
 import './OG1LessonPlayer.css';
 
 const CHAPTER_NAMES = ['The Shema','Isaiah’s Witness','The Apostolic Witness','The Difference','Living the Confession'];
@@ -93,6 +94,21 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const chapter=move.id.split('-')[0];
  const chapterNumber=CHAPTER_SLUGS.indexOf(chapter)+1;
  const sceneClass=current?.kind||'complete';
+ // Spoken moments are editorial choices, not narration of every button and quiz.
+ // Reveals inside the Shema scene are voiced only when the student chooses them.
+ const narrationText =
+  current?.kind==='shema-encounter'||(move.id==='learn'&&current?.kind==='read')
+   ? 'Hear, O Israel: The LORD our God is one LORD.'
+  : current?.kind==='shema-resolution'
+   ? 'Hear, O Israel. The LORD our God is one LORD. And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.'
+  : current?.kind==='witness'
+   ? ['Before me there was no God formed, neither shall there be after me.','Beside me there is no God.','Neither shall there be after me.'][evidenceIndex]
+  : current?.kind==='timeline'
+   ? ['The LORD our God is one LORD.','The Lord our God is one Lord.','There is none other God but one.'][evidenceIndex]
+  : current?.kind==='read'&&current?.verse?.text
+   ? current.verse.text
+  : null;
+ const narration=useLessonNarration({text:narrationText,key:move.id+':'+moment+':'+evidenceIndex});
  useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setPracticeStep(0);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
@@ -102,13 +118,14 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   onStateChange(old=>updateLearningExperience(old,{drafts:{[move.id]:{...(old.experience?.drafts?.[move.id]||{}),...patch}}}));
  }
  function readVerse(reference) {
+  narration.stop();
   setBibleReaderIntent(reference,{translation:'kjv',returnRoute:ROUTES.CLASSROOM_LESSON,source:'classroom'});
   onNavigate(ROUTES.BIBLE_SUPPORT);
  }
  function advance(){if(current?.kind==='mission'&&caseChoice===null)return;if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison'||current?.kind==='mission')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);setCaseChoice(null);return;}if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
- function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setPracticeStep(0);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
+ function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setPracticeStep(0);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -125,9 +142,16 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const buttonText=current?.kind==='insight'?'Put this understanding to work':current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className={`ogp-page ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
   <header className="ogp-header">
-   <button type="button" className="ogp-exit" aria-label="Return to classroom" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>← <span>CLASSROOM</span></button>
+   <button type="button" className="ogp-exit" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}>← <span>CLASSROOM</span></button>
    <div className="ogp-brand"><span className="ogp-monogram" aria-hidden="true">J</span><span>JEREMIAH <small>THE ONE TRUE GOD</small></span></div>
-   <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button></div></details>
+   <div className="ogp-header-actions">
+    <button type="button" className="ogp-voice-toggle" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn narration off':'Turn narration on'} disabled={!narration.supported} title={narration.supported?'Narrate selected Scripture scenes':'Narration not available in this browser'} onClick={narration.toggle}>
+     <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/>{narration.enabled?<><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8 8 0 0 1 0 12"/></>:<path d="m16 9 5 6m0-6-5 6"/>}</svg>
+     <span>{narration.enabled?'Voice on':'Voice off'}</span>
+    </button>
+    {narration.enabled&&narrationText&&<button type="button" className="ogp-voice-replay" aria-label={narration.speaking?'Stop narration':'Replay narration'} title={narration.speaking?'Stop speaking':'Hear again'} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}>{narration.speaking?'■ Stop':'↻ Replay'}</button>}
+    <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button></div></details>
+   </div>
   </header>
   <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
   {confirmRestart && <div className="ogp-restart-overlay" role="presentation"><section className="ogp-restart-dialog" role="dialog" aria-modal="true" aria-labelledby="ogp-restart-title"><h2 id="ogp-restart-title">Start OG.1 from the beginning?</h2><p>You'll return to the first lesson moment. Your earlier answers and learning history will be kept for review.</p><div className="ogp-restart-actions"><button type="button" className="ogp-action" onClick={restart}>Start from beginning →</button><button type="button" className="ogp-back" onClick={()=>setConfirmRestart(false)}>Keep my place</button></div></section></div>}
@@ -142,7 +166,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    {finish?<section className="ogp-finish"><span className="ogp-verb">JOURNEY REVIEWED</span><h1>One Lord. One unfolding story.</h1><p>You've explored Israel's confession, Isaiah's declarations, the apostolic witness, and the call to love the Lord. Your responses remain saved for review.</p><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button></section>:<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
      {(move.id!=='learn'||current.kind!=='read')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
-     {current.kind?.startsWith('shema-')&&<ShemaExperience kind={current.kind} video={current.video} onOpenBible={readVerse}/>}
+     {current.kind?.startsWith('shema-')&&<ShemaExperience kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
       <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
       <div className="ogp-encounter-inner">
