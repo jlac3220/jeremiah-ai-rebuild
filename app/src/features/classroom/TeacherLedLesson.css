@@ -236,3 +236,18 @@
 }
 
 .tl-og1-flow .tl-action-cue{border-top:1px solid #dbe6f4;padding:20px 0 0;margin:26px 0 8px;display:grid;gap:4px}.tl-og1-flow .tl-action-cue span{font-size:.7rem;letter-spacing:.12em;color:#57708d;font-weight:760}.tl-og1-flow .tl-action-cue strong{font-size:1.38rem;letter-spacing:-.02em;color:#1855a6}.tl-og1-flow .tl-action-cue p{font-size:.88rem;color:#536780;margin:3px 0 0;line-height:1.5}
+
+/* OG.1 subsequent chapters: one light Scripture exploration, not another hero banner. */
+.tl-og1-flow .og1-scene-lite{margin:13px 0 23px;padding:21px 23px;border:1px solid #dce6f3;border-radius:16px;background:#fff;color:#213a58}
+.og1-scene-lite-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:.69rem;font-weight:820;letter-spacing:.09em;color:#2466b8}
+.og1-scene-lite-head strong{color:#657a96;font-size:.67rem}
+.tl-og1-flow .og1-scene-lite h2{margin:15px 0 6px;font-size:1.5rem;line-height:1.2;color:#173c70}
+.tl-og1-flow .og1-scene-lite blockquote{margin:10px 0 16px;padding:0 0 0 17px;border:0;border-left:3px solid #e7bd52;font:500 1.16rem/1.55 Georgia,serif;color:#243950}
+.tl-og1-flow .og1-scene-lite>p{font-size:.88rem;line-height:1.55;margin:0 0 14px;color:#55708e}
+.og1-scene-lite-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.og1-scene-lite-tabs button{padding:10px 13px;border:1px solid #d6e4f7;border-radius:10px;background:#f7faff;color:#23548c;font-size:.8rem;font-weight:750;cursor:pointer}
+.og1-scene-lite-tabs button[aria-pressed=true]{background:#195fbb;border-color:#195fbb;color:#fff}
+.og1-scene-lite-insight{background:#eef5ff;border-radius:11px;padding:13px 15px;margin:12px 0 8px;font-size:.84rem;color:#214972}
+.og1-scene-lite-insight p{margin:5px 0 0;line-height:1.55}
+.og1-scene-lite-read{border:0;background:none;padding:9px 0;color:#1760b9;font-size:.81rem;font-weight:780;cursor:pointer}
+@media(max-width:640px){.tl-og1-flow .og1-scene-lite{padding:18px 16px;border-radius:13px}.tl-og1-flow .og1-scene-lite h2{font-size:1.32rem}.tl-og1-flow .og1-scene-lite blockquote{font-size:1.03rem}}
