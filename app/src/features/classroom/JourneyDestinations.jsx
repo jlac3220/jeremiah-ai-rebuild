@@ -6,7 +6,7 @@ const STOPS = [
  {title:'Apostles',era:'THE CONTINUATION',place:'JESUS & THE EARLY CHURCH',tone:'apostles',narration:'Jesus repeats the Shema in Mark chapter twelve, verse twenty nine. Paul declares, there is none other God but one.'}
 ];
 
-function DestinationArt({tone}) {
+export function DestinationArt({tone}) {
  const prefix='journey-'+tone;
  return <svg className="ogj-art" viewBox="0 0 400 420" preserveAspectRatio="xMidYMid slice" role="img" aria-label={
   tone==='moses'?'Illustrated rocky wilderness and a distant traveler beneath dawn light':
