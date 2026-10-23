@@ -1,0 +1,25 @@
+.lp-panel { margin: 17px 0 25px; padding: 17px 18px; border: 1px solid #E5E7EB; border-radius: 18px; background: #F8FAFC; color: #172033; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+.lp-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+.lp-kicker { font-size:.69rem; font-weight:850; letter-spacing:.085em; text-transform:uppercase; color:#1463E8; }
+.lp-standard { font-size:.71rem; font-weight:680; color:#64748B; }
+.lp-chapter { display:block; font-size:1.15rem; line-height:1.3; font-weight:800; letter-spacing:-.025em; margin-top:8px; }
+.lp-question { margin:5px 0 13px; font-size:.87rem; line-height:1.5; color:#475569; }
+.lp-chapter-track { display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:5px; margin:13px 0 16px; }
+.lp-chapter-track span { height:5px; background:#DBE3ED; border-radius:10px; }
+.lp-chapter-track span.is-before { background:#90B6F8; }
+.lp-chapter-track span.is-current { background:#1463E8; }
+.lp-phases { display:flex; align-items:center; justify-content:space-between; gap:5px; }
+.lp-phases span { display:flex; align-items:center; gap:6px; font-size:.73rem; font-weight:700; color:#64748B; white-space:nowrap; }
+.lp-phases i { display:grid; place-items:center; width:21px; height:21px; flex:0 0 21px; background:#E2E8F0; border-radius:50%; color:#64748B; font:750 .7rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-style:normal; }
+.lp-phases .is-active { color:#1463E8; }
+.lp-phases .is-active i { color:#fff; background:#1463E8; }
+.lp-phases .is-finished i { color:#1463E8; background:#DBEAFE; }
+.lp-compact { margin:12px 0 19px; padding:13px 15px; }
+.lp-compact .lp-phases { margin-top:10px; }
+@media (max-width:640px) {
+ .lp-panel { margin:12px 0 20px; padding:15px; }
+ .lp-chapter { font-size:1.06rem; }
+ .lp-question { font-size:.84rem; }
+ .lp-phases span { font-size:.69rem; gap:4px; }
+ .lp-phases i { width:19px; height:19px; flex-basis:19px; font-size:.66rem; }
+}
