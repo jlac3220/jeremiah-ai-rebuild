@@ -1,37 +1,236 @@
-.ogp-page{min-height:100svh;background:#f7f9fd;color:#17283f;font-family:system-ui,-apple-system,sans-serif}.ogp-header{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px max(19px,calc((100vw - 900px)/2));background:#fff;border-bottom:1px solid #e5edf5}.ogp-header button{border:0;background:none;color:#225a9c;font-size:.82rem;font-weight:700;cursor:pointer}.ogp-header strong{text-align:center;letter-spacing:.1em;font-size:.83rem}.ogp-header small{display:block;letter-spacing:.08em;color:#627899;font-size:.61rem;margin-top:4px}.ogp-progress{height:4px;background:#e0e9f5}.ogp-progress span{display:block;height:100%;background:#216fe5}.ogp-shell{max-width:720px;margin:auto;padding:35px 23px 90px}.ogp-context{display:flex;justify-content:space-between;gap:15px;align-items:center;text-transform:uppercase;font-size:.72rem;font-weight:800;color:#547494;letter-spacing:.1em;border-bottom:1px solid #dde7f3;padding-bottom:15px}.ogp-context small{color:#1d5db2;font-size:.72rem}.ogp-stage{padding:48px 0 12px;min-height:320px}.ogp-verb{display:inline-block;font-size:.79rem;letter-spacing:.16em;font-weight:900;color:#1e68c3}.ogp-stage h1,.ogp-finish h1{font-size:clamp(2rem,5vw,3.1rem);line-height:1.15;letter-spacing:-.04em;margin:16px 0 27px;font-weight:800}.ogp-verse{border-left:4px solid #efbf56;padding:13px 0 13px 23px;margin:12px 0 17px;font:500 clamp(1.45rem,3vw,2.2rem)/1.48 Georgia,serif;color:#143d76}.ogp-reference{display:block;color:#657d9b;letter-spacing:.09em;font-size:.72rem;font-weight:760}.ogp-thought{font-size:clamp(1.16rem,2.6vw,1.38rem);line-height:1.85;max-width:660px;color:#30435e}.ogp-prompt{font-size:1rem;line-height:1.7;color:#506680;max-width:610px}.ogp-link{border:0;background:none;padding:14px 0;color:#1764c2;font-weight:790;cursor:pointer}.ogp-controls{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding-top:26px;border-top:1px solid #dce7f4;margin-top:19px}.ogp-action{border:0;border-radius:12px;background:#165fd5;color:#fff;padding:15px 22px;min-height:52px;font-size:.94rem;font-weight:800;cursor:pointer}.ogp-action:disabled{opacity:.45;cursor:default}.ogp-back{border:0;background:transparent;color:#5a7190;padding:12px;cursor:pointer;font-size:.85rem}.ogp-video{aspect-ratio:16/9;overflow:hidden;background:#10294b;border-radius:16px;margin:24px 0 12px}.ogp-video iframe{width:100%;height:100%;border:0}.ogp-options{display:grid;gap:10px;margin:20px 0}.ogp-options button{border:1px solid #cfdeef;border-radius:12px;background:#fff;text-align:left;padding:16px 18px;color:#284a72;line-height:1.5;cursor:pointer;font-size:.95rem}.ogp-options button[aria-pressed=true]{background:#e7f0ff;border-color:#1765d2;color:#164d91}.ogp-stage textarea{width:100%;box-sizing:border-box;border:1px solid #cbd9eb;border-radius:14px;padding:16px;font:1rem/1.6 system-ui,sans-serif;color:#17283f}.ogp-help{margin-top:14px;color:#365b86}.ogp-help summary{cursor:pointer}.ogp-help p{line-height:1.6}.ogp-feedback{background:#eaf3ff;padding:18px;border-left:3px solid #2671d5;border-radius:6px 12px 12px 6px;color:#244971;line-height:1.65;margin-top:19px}.ogp-error{color:#9c2530}.ogp-finish{padding-top:75px}.ogp-finish p{font-size:1.13rem;line-height:1.75;max-width:600px;margin-bottom:30px}@media(max-width:600px){.ogp-header{padding:13px 12px}.ogp-header button span{display:none}.ogp-shell{padding:21px 17px 80px}.ogp-stage{padding:30px 0 8px;min-height:230px}.ogp-stage h1{margin:13px 0 21px}.ogp-action{width:100%}.ogp-back{margin:auto}.ogp-thought{font-size:1.13rem;line-height:1.75}}
-.ogp-header-tools{display:flex;align-items:center;gap:13px}.ogp-restart-overlay{position:fixed;inset:0;z-index:100;background:rgba(15,29,55,.54);display:grid;place-items:center;padding:20px}.ogp-restart-dialog{width:min(100%,440px);box-sizing:border-box;background:white;border-radius:20px;padding:30px;box-shadow:0 25px 65px rgba(0,0,0,.21)}.ogp-restart-dialog h2{font-size:1.45rem;margin:0 0 12px}.ogp-restart-dialog p{line-height:1.6;color:#566b85;margin:0 0 25px}.ogp-restart-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}@media(max-width:600px){.ogp-header-tools{gap:7px}.ogp-header-tools button{font-size:.68rem}.ogp-restart-dialog{padding:24px}.ogp-restart-actions .ogp-action{width:100%}}
 
-/* Opening is a Scripture encounter, not a worksheet card. */
-.ogp-stage:has(.ogp-encounter){padding-top:12px}
-.ogp-encounter{position:relative;isolation:isolate;overflow:hidden;min-height:430px;border-radius:24px;background:radial-gradient(ellipse 85% 58% at 53% 0%,#435f9b 0%,transparent 80%),linear-gradient(155deg,#122d5e 2%,#0b1c42 48%,#080f27 100%);color:#fff;box-shadow:0 18px 44px rgba(11,30,69,.15);display:grid;align-items:center;text-align:center}
-.ogp-encounter:before{content:'';position:absolute;inset:0;opacity:.45;background-image:radial-gradient(1px 1px at 12% 20%,white 98%,transparent),radial-gradient(2px 2px at 73% 14%,#f7d79b 98%,transparent),radial-gradient(1px 1px at 44% 80%,white 98%,transparent),radial-gradient(1px 1px at 89% 65%,white 98%,transparent),radial-gradient(1px 1px at 32% 38%,#bdd3ff 98%,transparent),radial-gradient(1px 1px at 56% 25%,white 98%,transparent)}
-.ogp-encounter-light{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.ogp-encounter-light span{position:absolute;border:1px solid rgba(247,214,143,.21);border-radius:50%;width:480px;height:480px;left:50%;top:46%;transform:translate(-50%,-50%)}
-.ogp-encounter-light span:nth-child(2){width:365px;height:365px;border-color:rgba(247,214,143,.15)}
-.ogp-encounter-light span:nth-child(3){width:250px;height:250px;border-color:rgba(247,214,143,.11)}
-.ogp-encounter-inner{z-index:1;padding:45px 28px;position:relative}
-.ogp-encounter-tag{font-size:.67rem;letter-spacing:.2em;font-weight:850;color:#e6c781}
-.ogp-encounter-symbol{font:400 3rem Georgia,serif;color:#e3c681;opacity:.85;margin:21px 0 3px}
-.ogp-encounter blockquote{border:0;margin:12px auto 19px;max-width:600px;padding:0;font:500 clamp(1.8rem,4vw,2.85rem)/1.35 Georgia,serif;letter-spacing:-.025em;color:#fff}
-.ogp-encounter blockquote em{font-style:normal;color:#ffda82}
-.ogp-encounter-reference{display:block;color:#cad7f1;font-size:.82rem;margin-bottom:27px}
-.ogp-encounter-touch{border:1px solid rgba(255,219,148,.55);border-radius:999px;background:rgba(255,220,135,.1);color:#ffdc97;font-size:.85rem;font-weight:760;padding:12px 18px;cursor:pointer}
-.ogp-encounter-touch span{margin-left:9px}
-.ogp-encounter-reveal{max-width:440px;margin:20px auto 0;padding:17px;border-top:1px solid rgba(244,213,152,.35);animation:ogp-appear .3s ease both}
-.ogp-encounter-reveal strong{color:#ffdb91;letter-spacing:.14em}
-.ogp-encounter-reveal p{color:#f1f4fc;line-height:1.65;font-size:.96rem;margin:9px 0 0}
-@keyframes ogp-appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:600px){.ogp-encounter{min-height:380px;border-radius:17px}.ogp-encounter-inner{padding:38px 19px}.ogp-encounter-symbol{font-size:2.4rem}.ogp-encounter blockquote{font-size:1.85rem}.ogp-encounter-tag{letter-spacing:.13em}}
-@media(prefers-reduced-motion:reduce){.ogp-encounter-reveal{animation:none}}
+/* JEREMIAH · ONE TRUE GOD
+   A unified editorial lesson player. Keep all styling in this file; old player is untouched. */
+.ogp-page{
+ --og-ink:#152a41;--og-muted:#667889;--og-brass:#bf914c;--og-deep:#10253e;
+ --og-paper:#f9f6f0;--og-line:#d9dcd7;--og-tint:#eff0ea;--og-accent:#245c72;
+ min-height:100svh;background:radial-gradient(ellipse 880px 460px at 14% 35%,#ede9ddaa,transparent),
+ radial-gradient(ellipse 600px 490px at 97% 76%,#d7e4df66,transparent),var(--og-paper);
+ color:var(--og-ink);font:400 16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.ogp-page *{box-sizing:border-box}
+.ogp-theme-isaiah{--og-paper:#f9f4e9;--og-tint:#efe4cf;--og-accent:#946027;--og-brass:#a16c35}
+.ogp-theme-continuity{--og-paper:#f1f7f7;--og-tint:#e1eff0;--og-accent:#147b86;--og-brass:#b38b50}
+.ogp-theme-distinction{--og-paper:#f8f7f4;--og-tint:#e9edea;--og-accent:#36566d;--og-brass:#b58a48}
+.ogp-theme-devotion{--og-paper:#f3f6ef;--og-tint:#e3ebe0;--og-accent:#52725c;--og-brass:#b68d52}
+.ogp-page button{font:inherit}
+.ogp-page button:focus-visible,.ogp-page summary:focus-visible,.ogp-page textarea:focus-visible,.ogp-page select:focus-visible{outline:3px solid #daaf58;outline-offset:3px}
+.ogp-page button:disabled{cursor:not-allowed}
 
-.ogp-encounter .ogp-encounter-word{font:inherit;color:#ffda82;background:transparent;border:0;border-bottom:2px dotted #fbd17d;padding:0 2px 3px;cursor:pointer;line-height:inherit;transition:color .2s,background .2s;border-radius:3px}.ogp-encounter .ogp-encounter-word:hover,.ogp-encounter .ogp-encounter-word:focus-visible{color:#fff;background:rgba(241,197,100,.22);outline:2px solid #f5d58d;outline-offset:4px}.ogp-encounter-word span{font-size:.48em;vertical-align:super}.ogp-encounter .ogp-encounter-word[aria-expanded=true]{border-bottom-style:solid;color:#fff}.ogp-encounter-touch{margin-top:8px}
+/* Minimal brand bar, not a dashboard. */
+.ogp-header{height:76px;padding:0 max(24px,calc((100vw - 1100px)/2));background:#0e2238;color:#fff;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px;border-bottom:1px solid #b993543d;position:relative;z-index:30}
+.ogp-header button{border:0;background:none;color:#e4edf2;cursor:pointer;font-size:.79rem;font-weight:680;letter-spacing:.04em}
+.ogp-exit{justify-self:start;display:flex;align-items:center;gap:10px;padding:12px 0}.ogp-exit::first-letter{font-size:1.15rem}
+.ogp-brand{display:flex;align-items:center;gap:12px;font-family:Georgia,serif;font-weight:800;font-size:1.05rem;letter-spacing:.13em;line-height:1}
+.ogp-brand small{display:block;font:600 .55rem/1.6 system-ui,sans-serif;letter-spacing:.22em;color:#d2ae6b;margin-top:5px}
+.ogp-monogram{display:grid;place-items:center;border:1px solid #caa86b77;border-radius:50%;color:#deb976;font:italic 700 1.15rem Georgia,serif;width:39px;height:39px}
+.ogp-menu{position:relative;justify-self:end}.ogp-menu summary{list-style:none;cursor:pointer;color:#e7d2ac;font-size:1.35rem;font-weight:900;line-height:1;width:46px;height:42px;display:grid;place-items:center;border-radius:11px;border:1px solid #d4c09b35}
+.ogp-menu summary::-webkit-details-marker{display:none}.ogp-menu[open] summary{background:#ffffff14}
+.ogp-menu-panel{position:absolute;right:0;top:49px;z-index:20;width:238px;background:#fff;border:1px solid #dce3e6;border-radius:15px;box-shadow:0 20px 50px #081d3050;padding:8px;display:grid;gap:2px}
+.ogp-menu-panel button{color:#243d57;background:transparent;border:0;border-radius:9px;text-align:left;padding:13px 11px;font-size:.87rem;letter-spacing:0}.ogp-menu-panel button:hover{background:#eef3f7}
+.ogp-progress{height:3px;background:#dcdacf}.ogp-progress span{display:block;background:linear-gradient(90deg,#aa874e,#e1bd78);height:100%;transition:width .4s ease}
 
-.ogp-insight{padding:25px 0 10px;position:relative}.ogp-insight-mark{display:block;font-size:2.4rem;color:#ce9f3e;margin-bottom:17px}.ogp-insight .ogp-thought{font:500 clamp(1.25rem,2.8vw,1.65rem)/1.7 Georgia,serif;color:#173860;max-width:680px}.ogp-depth-button{border:0;border-bottom:1px solid #9cb7d9;color:#175bac;background:transparent;padding:12px 0 8px;font-size:.9rem;font-weight:750;cursor:pointer}.ogp-depth{margin-top:17px;padding:18px 22px;background:#edf3fb;border-left:3px solid #c19b4e;border-radius:0 12px 12px 0;animation:ogp-appear .3s ease}.ogp-depth p{font-size:.98rem;line-height:1.75;color:#39506c}.ogp-depth p+p{margin-top:18px}
+/* Chapter identity and map. */
+.ogp-shell{width:min(100%,1030px);margin:0 auto;padding:38px 34px 100px}
+.ogp-context{display:grid;grid-template-columns:minmax(0,1fr) 155px;align-items:center;gap:18px;padding:0 0 25px;border-bottom:1px solid var(--og-line)}
+.ogp-context-meta{display:flex;align-items:center;gap:13px;grid-column:1;letter-spacing:.17em;font-size:.67rem;font-weight:800;color:#856d4d}
+.ogp-context-line{width:27px;height:1px;background:#ac9f89}
+.ogp-context-name{grid-column:1;color:var(--og-ink);font:500 1.18rem/1.15 Georgia,serif;letter-spacing:-.02em}
+.ogp-chapter-track{grid-column:2;grid-row:1/3;display:flex;justify-content:space-between;gap:7px}
+.ogp-chapter-track span{flex:1;height:4px;border-radius:50px;background:#d9d7ce;transition:background .3s}
+.ogp-chapter-track .is-reached{background:var(--og-brass)}
 
-.ogp-witness{margin:18px 0 8px}.ogp-witness-timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:26px 0 18px}.ogp-witness-timeline span{text-align:center;padding:12px 4px;font-size:.7rem;letter-spacing:.1em;color:#9c8458;border-bottom:3px solid #d5d0c5;font-weight:850}.ogp-witness-timeline span.active{color:#74470c;border-color:#b88939}.ogp-witness-scroll{background:linear-gradient(140deg,#fbf4e5,#f0e4ca);border:1px solid #d6c19a;border-radius:7px 24px 7px 24px;padding:28px clamp(20px,5vw,42px);box-shadow:0 18px 30px rgba(72,51,18,.09);animation:ogp-appear .3s ease}.ogp-witness-scroll>span{font-size:.72rem;letter-spacing:.14em;font-weight:800;color:#806136}.ogp-witness-scroll blockquote{margin:25px 0;font:500 clamp(1.65rem,4vw,2.35rem)/1.4 Georgia,serif;color:#583c20;border:0}.ogp-witness-scroll strong{display:block;color:#785b33;font-size:.76rem;letter-spacing:.1em}.ogp-witness-scroll p{color:#6f5938;line-height:1.65}.ogp-witness-unseal{background:#724c23;border:0;color:white;font-weight:800;padding:15px 22px;border-radius:10px;margin-top:22px;cursor:pointer}.ogp-witness-conclusion{font:600 1.1rem/1.6 Georgia,serif;color:#70491e;margin:22px 0}.ogp-trail{margin-top:22px}.ogp-trail-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:relative;margin:25px 0}.ogp-trail-track button{display:flex;flex-direction:column;align-items:center;gap:9px;border:1px solid #cddbef;background:#fff;border-radius:15px;padding:16px 7px;color:#365e8e;cursor:pointer}.ogp-trail-track button[aria-pressed=true]{background:#173f7b;border-color:#173f7b;color:#fff}.ogp-trail-track button>span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e8eff9;color:#1c579d;font-weight:800}.ogp-trail-track button strong{font-size:.78rem;letter-spacing:.07em}.ogp-trail-track button small{font-size:.7rem;line-height:1.3;text-align:center}.ogp-trail-quote{border-left:4px solid #e4b85a;padding:20px 25px;background:#e9f0fa;border-radius:0 16px 16px 0;animation:ogp-appear .3s ease}.ogp-trail-quote span{font-size:.72rem;color:#2e6bac;letter-spacing:.13em;font-weight:850}.ogp-trail-quote blockquote{border:0;padding:0;margin:19px 0;font:500 clamp(1.5rem,3vw,2.1rem)/1.45 Georgia,serif;color:#173b69}.ogp-trail-quote p{font-size:.94rem;line-height:1.65;color:#4b6685}@media(max-width:600px){.ogp-trail-track{gap:5px}.ogp-trail-track button{padding:13px 3px}.ogp-trail-track button small{font-size:.6rem}.ogp-witness-scroll{padding:24px 19px}}
+/* Each destination enters as its own moment. */
+.ogp-stage{padding:48px 0 20px;min-height:380px;animation:ogp-arrive .48s cubic-bezier(.17,.67,.34,1) both}
+.ogp-verb{display:flex;align-items:center;gap:12px;color:var(--og-accent);font-size:.69rem;font-weight:850;letter-spacing:.23em}
+.ogp-verb-dash{width:33px;height:1px;background:var(--og-brass);display:inline-block}
+.ogp-stage h1,.ogp-finish h1{max-width:850px;margin:19px 0 28px;font:500 clamp(2.15rem,5.1vw,4.1rem)/1.09 Georgia,"Palatino Linotype",serif;letter-spacing:-.045em;color:var(--og-ink)}
+.ogp-prompt{font-size:1.02rem;max-width:630px;color:#526679;line-height:1.68}
+.ogp-thought{max-width:720px;font:500 clamp(1.25rem,2.7vw,1.65rem)/1.72 Georgia,serif;letter-spacing:-.01em;color:#304c5e}
+.ogp-link{padding:10px 0;border:0;background:transparent;color:#b78e51;font-weight:750;font-size:.9rem;cursor:pointer}
+.ogp-link:hover{color:#fff1c6}
+.ogp-controls{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:33px;padding-top:25px;border-top:1px solid var(--og-line)}
+.ogp-action{border:1px solid #14334d;border-radius:10px;background:#15344c;color:#fff;padding:14px 26px;min-height:54px;font-size:.89rem;letter-spacing:.01em;font-weight:750;cursor:pointer;box-shadow:0 9px 24px #122d4325;transition:transform .2s ease,box-shadow .2s ease,background .2s}
+.ogp-action:not(:disabled):hover{background:#20506b;box-shadow:0 11px 25px #122d4340;transform:translateY(-2px)}
+.ogp-action:disabled{opacity:.45;box-shadow:none;transform:none}
+.ogp-back{border:0;background:transparent;padding:13px 4px;color:#576d7d;cursor:pointer;font-size:.86rem}
+.ogp-back:hover{color:#123752}
 
-.ogp-trail-track button:disabled{opacity:.43;cursor:default}.ogp-trail-track button:disabled>span{filter:grayscale(1)}
+/* Prologue: a single sacred encounter, no extra panel clutter. */
+.ogp-stage:has(.ogp-encounter){padding-top:28px}
+.ogp-encounter{position:relative;isolation:isolate;overflow:hidden;min-height:470px;border-radius:24px;display:grid;align-items:center;text-align:center;color:#fff;background:radial-gradient(ellipse 75% 60% at 48% -2%,#47628a99,transparent),radial-gradient(circle at 50% 75%,#0e3353,#08152e 85%);box-shadow:0 22px 55px #0e27314b}
+.ogp-encounter:before{content:'';position:absolute;inset:0;opacity:.5;pointer-events:none;background-image:radial-gradient(1px 1px at 12% 20%,white 99%,transparent),radial-gradient(1px 1px at 73% 15%,#fff3c1 99%,transparent),radial-gradient(2px 2px at 28% 64%,white 99%,transparent),radial-gradient(1px 1px at 90% 72%,#fff3c1 99%,transparent),radial-gradient(1px 1px at 48% 89%,white 99%,transparent)}
+.ogp-encounter-light{position:absolute;inset:0;pointer-events:none}.ogp-encounter-light span{position:absolute;left:50%;top:48%;width:470px;height:470px;border-radius:50%;border:1px solid #e4c58422;transform:translate(-50%,-50%)}
+.ogp-encounter-light span:nth-child(2){width:340px;height:340px}.ogp-encounter-light span:nth-child(3){width:220px;height:220px}
+.ogp-encounter-inner{position:relative;z-index:1;padding:55px 28px}
+.ogp-encounter-tag{font-size:.72rem;color:#f1d397;font-weight:800;letter-spacing:.16em}
+.ogp-encounter-symbol{font:400 3.5rem Georgia,serif;color:#e4c38b;margin:15px 0;opacity:.88}
+.ogp-encounter blockquote{max-width:680px;border:0;margin:12px auto 20px;padding:0;font:500 clamp(2rem,4.4vw,3.5rem)/1.28 Georgia,serif;color:#fff;letter-spacing:-.035em}
+.ogp-encounter-word{border:0;border-bottom:2px dotted #e1be7d;color:#ffe0a3;background:transparent;font:inherit;line-height:inherit;cursor:pointer;padding:0 3px 2px}
+.ogp-encounter-word[aria-expanded=true]{border-bottom-style:solid;color:#fff}.ogp-encounter-word:hover{color:#fff}
+.ogp-encounter-word span{font-size:.45em;vertical-align:super}
+.ogp-encounter-reference{display:block;color:#c9d7e8;font-size:.78rem;margin:21px 0 19px}
+.ogp-encounter-touch{border:1px solid #ebcd8e7f;background:#ffffff0e;color:#f2d093;border-radius:999px;padding:12px 21px;cursor:pointer;font-size:.83rem;font-weight:740;transition:background .2s}
+.ogp-encounter-touch:hover{background:#fff2d01e}
+.ogp-encounter-touch span{padding-left:7px}
+.ogp-encounter-reveal{border-top:1px solid #ebcc8555;padding-top:18px;margin:23px auto 0;max-width:470px;animation:ogp-arrive .4s ease}
+.ogp-encounter-reveal strong{color:#f5d99c;letter-spacing:.13em;font-size:.76rem}
+.ogp-encounter-reveal p{line-height:1.65;color:#ecf5fc;font-size:1rem}
 
-/* Doctrinal comparison: common ground first, distinctions revealed one at a time */
-.ogp-compare{margin:20px 0}.ogp-compare-ring{width:174px;height:174px;margin:22px auto 30px;display:flex;flex-direction:column;justify-content:center;align-items:center;border:3px double #a98742;border-radius:50%;color:#f9e7ba;background:radial-gradient(circle,#2b5788,#10264c);box-shadow:0 15px 32px #10264c22}.ogp-compare-ring span{font:700 1.6rem Georgia,serif}.ogp-compare-ring small{margin-top:8px;font-size:.75rem}.ogp-compare-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.ogp-compare-columns section{padding:22px 19px;min-height:175px;background:#e8edf5;border-radius:17px;border:1px solid #d5e0ed;opacity:.65;transition:opacity .3s,background .3s}.ogp-compare-columns section.is-revealed{opacity:1;background:#fff;border-color:#9db9dc}.ogp-compare-columns section>span{font-size:.7rem;letter-spacing:.11em;font-weight:850;color:#29639a}.ogp-compare-columns h2{font-size:1.3rem;line-height:1.2;margin:20px 0 12px;color:#133659}.ogp-compare-columns p{font-size:.9rem;line-height:1.6;color:#465e78}.ogp-compare-conclusion{padding:20px;background:#e6f0fa;border-left:3px solid #b89346;border-radius:0 12px 12px 0;line-height:1.7;color:#204c74;margin-top:19px}
-.ogp-mission{margin:20px 0}.ogp-mission-scene{background:linear-gradient(140deg,#193b61,#102342);color:#fff;border-radius:22px;min-height:210px;padding:32px 27px;display:flex;flex-direction:column;justify-content:center}.ogp-mission-scene>span{font-size:.75rem;font-weight:850;letter-spacing:.14em;color:#e8ce98}.ogp-mission-scene h2{font:600 clamp(1.5rem,3.3vw,2.2rem)/1.3 Georgia,serif;margin:22px 0}.ogp-mission-scene p{color:#d7e5f6;line-height:1.7;max-width:550px}.ogp-mission-options{display:grid;gap:10px;margin-top:19px}.ogp-mission-options button{border:1px solid #d0dfed;border-radius:13px;padding:16px 20px;background:#fff;color:#244a75;text-align:left;line-height:1.45;cursor:pointer;font-size:.95rem}.ogp-mission-options button[aria-pressed=true]{border-color:#c09c5a;background:#fff4d9;color:#694a20}.ogp-mission-response{background:#e9f1fc;border-radius:12px;padding:19px 21px;line-height:1.65;color:#264e76}@media(max-width:600px){.ogp-compare-columns{grid-template-columns:1fr}.ogp-compare-columns section{min-height:0}.ogp-mission-scene{padding:28px 21px}.ogp-compare-ring{width:148px;height:148px}}
+/* Cinematic Scripture slides: distinct environments for each chapter. */
+.ogp-stage--read .ogp-scripture-scene{display:grid;grid-template-columns:235px minmax(0,1fr);overflow:hidden;min-height:395px;border-radius:24px;background:linear-gradient(130deg,#153651,#0c1e34);color:#fff;box-shadow:0 24px 50px #0e2d4330}
+.ogp-scripture-ornament{display:grid;place-items:center;font:400 7rem/1 Georgia,serif;color:#e9c683;position:relative;background:radial-gradient(circle at 50% 45%,#3e6174 0%,#20425c 36%,#0c2742 78%);border-right:1px solid #c29c592f}
+.ogp-scripture-ornament:after{content:'';position:absolute;width:158px;height:158px;border:1px solid #d5ba7e55;border-radius:50%}
+.ogp-scripture-content{padding:48px 44px 31px}
+.ogp-scripture-index{font-size:.72rem;letter-spacing:.18em;font-weight:800;color:#e8c98a}
+.ogp-scripture-scene .ogp-verse{border:0;padding:0;max-width:590px;margin:32px 0 22px;font:500 clamp(1.55rem,3vw,2.4rem)/1.42 Georgia,serif;color:#fff;letter-spacing:-.015em}
+.ogp-scripture-scene .ogp-reference{color:#a9bccd;font-size:.7rem;letter-spacing:.15em;font-weight:750}
+.ogp-scripture-footer{margin-top:27px;display:flex;align-items:center;gap:16px;justify-content:space-between;border-top:1px solid #ffffff35}
+.ogp-scripture-footer p{color:#b5c8d8;font-size:.84rem}
+.ogp-scripture-scene .ogp-link{color:#efcd8e;white-space:nowrap}
+.ogp-theme-isaiah .ogp-scripture-scene{background:linear-gradient(132deg,#6b492e,#291c19)}
+.ogp-theme-isaiah .ogp-scripture-ornament{background:radial-gradient(circle,#a38153,#71492f 50%,#34231f)}
+.ogp-theme-continuity .ogp-scripture-scene{background:linear-gradient(130deg,#1d5966,#153343)}
+.ogp-theme-distinction .ogp-scripture-scene{background:linear-gradient(130deg,#364b57,#192c3c)}
+.ogp-theme-devotion .ogp-scripture-scene{background:linear-gradient(130deg,#365f51,#19352e)}
+
+/* Discovery is a lens, not another lecture. */
+.ogp-discovery{padding:6px 0 16px}
+.ogp-discovery-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:29px}
+.ogp-discovery-choices button{min-height:166px;position:relative;border:1px solid #cdd5d3;border-radius:19px;background:#ffffffbf;color:var(--og-ink);font:600 clamp(1rem,1.8vw,1.25rem) Georgia,serif;letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .2s,border .2s,box-shadow .2s}
+.ogp-discovery-choices button span{position:absolute;bottom:13px;right:19px;color:var(--og-brass);font-size:1.2rem}
+.ogp-discovery-choices button:hover{transform:translateY(-3px);border-color:#b48c53;box-shadow:0 12px 32px #37453c18}
+.ogp-discovery-choices button[aria-pressed=true]{background:#17354d;color:#fff;border-color:#17354d;box-shadow:0 16px 28px #1634492c}
+.ogp-discovery-answer{background:#fffdf8;border-left:3px solid var(--og-brass);border-radius:0 16px 16px 0;padding:25px 28px;margin-top:19px;box-shadow:0 11px 25px #31463a0c;animation:ogp-arrive .35s ease}
+.ogp-discovery-answer strong{font-size:.76rem;color:#947343;letter-spacing:.15em}
+.ogp-discovery-answer p{font:500 clamp(1.15rem,2.2vw,1.38rem)/1.58 Georgia,serif;color:#1c3a53}
+.ogp-discovery-answer small{display:block;font-size:.85rem;color:#67777f;line-height:1.6}
+
+/* Editorial insight: one big idea; depth remains optional. */
+.ogp-insight{padding:15px 0 25px;position:relative;max-width:860px}
+.ogp-insight-mark{display:block;font:400 2rem Georgia,serif;color:var(--og-brass);margin-bottom:18px}
+.ogp-insight .ogp-thought{font:500 clamp(1.45rem,3vw,2.1rem)/1.58 Georgia,serif;color:#193b51;max-width:790px}
+.ogp-depth-button{background:transparent;border:0;border-bottom:1px solid #b79865;color:#665231;font-size:.92rem;font-weight:700;padding:13px 0 9px;cursor:pointer}
+.ogp-depth{background:#fffdf9c9;border:1px solid #e6e0d0;border-radius:18px;padding:24px 30px;margin-top:25px;box-shadow:0 16px 35px #253e4511;animation:ogp-arrive .3s ease}
+.ogp-depth p{font-size:1rem;color:#425669;line-height:1.8}.ogp-depth p+p{margin-top:23px}
+
+/* Isaiah: archival testimony with progressive wax-seal markers. */
+.ogp-witness{margin:15px 0 10px}.ogp-witness-timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:30px 0 14px}
+.ogp-witness-timeline span{border-top:2px solid #d7cbb5;color:#a38e70;padding:13px 0 3px;text-align:center;font-size:.71rem;font-weight:850;letter-spacing:.19em}
+.ogp-witness-timeline span.active{border-color:#8b5928;color:#72451f}
+.ogp-witness-scroll{min-height:340px;padding:45px 54px 38px;position:relative;overflow:hidden;border:1px solid #bda57b;background:linear-gradient(140deg,#fff8e9 0%,#ebdbb9 100%);box-shadow:0 25px 48px #4e38192a;border-radius:5px 28px 5px 28px;animation:ogp-arrive .38s ease}
+.ogp-witness-scroll:after{content:'';position:absolute;right:-64px;top:-68px;border-radius:50%;width:235px;height:235px;border:2px solid #b99b6b29;box-shadow:0 0 0 18px #b99b6b0a,0 0 0 37px #b99b6b0a;pointer-events:none}
+.ogp-witness-scroll>span{font-size:.73rem;letter-spacing:.18em;font-weight:800;color:#836339}
+.ogp-witness-scroll blockquote{margin:35px 0 25px;max-width:600px;font:500 clamp(1.85rem,4vw,3.1rem)/1.26 Georgia,serif;letter-spacing:-.026em;color:#543a25}
+.ogp-witness-scroll strong{font-size:.73rem;letter-spacing:.14em;color:#856033}
+.ogp-witness-scroll p{max-width:520px;color:#705635;font-size:.95rem;line-height:1.7}
+.ogp-witness-conclusion{font:500 1.24rem/1.6 Georgia,serif;color:#704d23;margin:25px 0 0;border-left:2px solid #b08b55;padding-left:22px}
+
+/* Apostolic continuity: living thread with night-blue illuminated quote. */
+.ogp-trail{margin-top:14px}
+.ogp-trail-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin:32px 0 25px;position:relative}
+.ogp-trail-track:before{content:'';height:2px;position:absolute;left:14%;right:14%;top:25px;background:linear-gradient(90deg,#bd9457,#2b8890);z-index:0}
+.ogp-trail-track button{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:10px;border:0;background:transparent;color:#1f5261;border-radius:14px;padding:0 7px 10px;cursor:pointer}
+.ogp-trail-track button>span{width:52px;height:52px;border:2px solid #c49c5e;border-radius:50%;display:grid;place-items:center;color:#33596d;background:#f5faf7;font:600 1.12rem Georgia,serif;box-shadow:0 0 0 7px var(--og-paper)}
+.ogp-trail-track button[aria-pressed=true]>span{background:#143e50;color:#fff;border-color:#d9bb7d}
+.ogp-trail-track button:disabled{opacity:.35;cursor:not-allowed}
+.ogp-trail-track button strong{font-size:.85rem;letter-spacing:.13em}.ogp-trail-track button small{font-size:.73rem;line-height:1.45}
+.ogp-trail-quote{background:radial-gradient(ellipse at 100% 0%,#235b68,#102d40 68%);border:1px solid #56879255;border-radius:21px;min-height:295px;padding:47px clamp(30px,6vw,70px);color:#f7faf8;box-shadow:0 23px 45px #0b3a4b36;animation:ogp-arrive .35s ease}
+.ogp-trail-quote span{color:#e4bd79;font-size:.72rem;font-weight:800;letter-spacing:.18em}
+.ogp-trail-quote blockquote{font:500 clamp(1.9rem,4vw,3.3rem)/1.22 Georgia,serif;letter-spacing:-.03em;margin:32px 0 23px;max-width:740px}
+.ogp-trail-quote p{color:#c2dcde;font-size:1rem;line-height:1.65;max-width:600px}
+
+/* Doctrinal comparison: respectful, luminous central assertion. */
+.ogp-compare{margin:10px 0}
+.ogp-compare-ring{width:168px;height:168px;margin:10px auto 30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#ffe2a2;background:radial-gradient(circle at 50% 35%,#37637b,#0d243a 74%);border:1px solid #d3ac68;box-shadow:0 0 0 10px #cba96a16,0 20px 40px #142f4732}
+.ogp-compare-ring span{font:600 1.45rem Georgia,serif}.ogp-compare-ring small{color:#d5e0e7;font-size:.74rem;margin-top:8px}
+.ogp-compare-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.ogp-compare-columns section{background:#e6ebed;border:1px solid #cad5d9;border-radius:18px;padding:28px;opacity:.55;min-height:220px;transition:opacity .3s,box-shadow .3s,background .3s}
+.ogp-compare-columns section.is-revealed{background:#fff;opacity:1;box-shadow:0 16px 36px #1e3b4c16;border-color:#b9ced5}
+.ogp-compare-columns section>span{font-size:.7rem;letter-spacing:.15em;font-weight:850;color:#4f7a8b}
+.ogp-compare-columns h2{font:500 1.65rem/1.27 Georgia,serif;letter-spacing:-.025em;color:#1e3e52;margin:19px 0}
+.ogp-compare-columns p{line-height:1.7;color:#475e6b}
+.ogp-compare-conclusion{border-left:3px solid #b8924f;background:#fff9e9;padding:20px 26px;border-radius:0 12px 12px 0;margin:23px 0 0;color:#435363;font:500 1.1rem/1.65 Georgia,serif}
+
+/* Devotion: immersive decision scenes, not another matching quiz. */
+.ogp-mission{margin:14px 0}.ogp-mission-scene{min-height:265px;position:relative;overflow:hidden;border-radius:23px;background:radial-gradient(circle at 95% 15%,#5f846c80,transparent 49%),linear-gradient(132deg,#244a3e,#122d2e);display:flex;flex-direction:column;justify-content:center;color:#fff;padding:39px 46px;box-shadow:0 19px 38px #153d2e29}
+.ogp-mission-scene:after{content:'';position:absolute;width:320px;height:320px;border-radius:50%;border:1px solid #eed5a334;top:-120px;right:-88px;pointer-events:none}
+.ogp-mission-scene>span{color:#e5c895;font-size:.72rem;font-weight:850;letter-spacing:.18em}
+.ogp-mission-scene h2{font:500 clamp(1.8rem,3.3vw,2.65rem)/1.25 Georgia,serif;max-width:610px;letter-spacing:-.03em;margin:23px 0 13px}
+.ogp-mission-scene p{max-width:620px;font-size:.97rem;line-height:1.7;color:#d4e7df}
+.ogp-mission-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.ogp-mission-options button{cursor:pointer;min-height:100px;line-height:1.52;text-align:left;padding:22px;background:#fff;border:1px solid #c4d4ca;border-radius:16px;color:#22483e;transition:transform .2s,border-color .2s,box-shadow .2s}
+.ogp-mission-options button:hover{transform:translateY(-2px);box-shadow:0 13px 24px #1438261a}
+.ogp-mission-options button[aria-pressed=true]{border-color:#49775a;background:#e5efdf;box-shadow:inset 0 0 0 2px #49775a}
+.ogp-mission-response{border-left:3px solid #b79a66;border-radius:0 13px 13px 0;background:#fffdf3;margin-top:16px;padding:19px 23px;color:#445e4d;line-height:1.7;animation:ogp-arrive .3s ease}
+
+/* Film and assessments: restrained, legible, direct. */
+.ogp-video{width:100%;aspect-ratio:16/9;background:#0d2236;border:8px solid #122f41;border-radius:19px;overflow:hidden;box-shadow:0 24px 45px #142e3d32;margin:27px 0 16px}
+.ogp-video iframe{width:100%;height:100%;display:block;border:0}
+.ogp-stage--watch>small{font-size:.8rem;color:#687a82}
+.ogp-options{display:grid;gap:12px;margin:26px 0}
+.ogp-options button{display:block;min-height:60px;text-align:left;line-height:1.5;border:1px solid #d5dcd8;border-radius:13px;padding:16px 20px;color:var(--og-ink);background:#fffcf8;cursor:pointer;transition:background .2s,border-color .2s}
+.ogp-options button[aria-pressed=true]{background:#e7efed;border-color:#53807b;box-shadow:inset 0 0 0 2px #53807b}
+.ogp-stage--task .ogp-prompt{font:500 clamp(1.1rem,2.2vw,1.4rem)/1.63 Georgia,serif;color:#2d455a;max-width:850px}
+.ogp-stage textarea{display:block;width:100%;min-height:220px;border:1px solid #cbd6d4;background:#fffefa;border-radius:14px;color:#1c3645;padding:22px;font:1rem/1.8 system-ui,sans-serif;resize:vertical}
+.ogp-help{margin:15px 0;color:#526b70;font-size:.88rem}.ogp-help summary{cursor:pointer;font-weight:750}
+.ogp-feedback{margin-top:20px;background:#ecf2eb;padding:21px 24px;color:#31584f;border-left:3px solid #66947f;border-radius:0 12px 12px 0;line-height:1.7;animation:ogp-arrive .3s ease}.ogp-feedback strong{font-size:.74rem;letter-spacing:.13em}.ogp-error{color:#9e3031}
+.ogp-stage--task .la-activity{max-width:800px}.ogp-stage--task .la-activity fieldset{background:#fffdf9;border-color:#d8dcd5;border-radius:15px}
+.ogp-stage--task .la-guided-navigation button{border-color:#c2c9bb;background:#edf0e9;color:#33584b}
+.ogp-stage--task .la-guided-counter strong{color:#537768}
+
+/* Completion and restart remain available and calm. */
+.ogp-finish{padding:68px 0 50px;max-width:760px}.ogp-finish:before{content:'✦';display:block;font:400 4rem Georgia,serif;color:#b7955d}
+.ogp-finish .ogp-verb{color:#8a754f}.ogp-finish p{font:400 1.23rem/1.75 Georgia,serif;color:#486073;max-width:640px;margin-bottom:30px}
+.ogp-restart-overlay{position:fixed;inset:0;z-index:100;background:#081724b0;display:grid;place-items:center;padding:20px}
+.ogp-restart-dialog{max-width:460px;width:100%;background:#fffdf8;border-radius:19px;padding:36px;box-shadow:0 35px 70px #07192765}
+.ogp-restart-dialog h2{font:500 1.9rem/1.25 Georgia,serif;margin:0 0 16px}.ogp-restart-dialog p{color:#586a77;line-height:1.7;margin:0 0 25px}
+.ogp-restart-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* Deliberate micro-motion, never compulsory animation. */
+@keyframes ogp-arrive{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:720px){
+ .ogp-header{height:66px;padding:0 18px;gap:9px}
+ .ogp-exit span{display:none}
+ .ogp-brand{font-size:.86rem;gap:8px}.ogp-monogram{width:34px;height:34px}
+ .ogp-brand small{font-size:.48rem;letter-spacing:.13em}
+ .ogp-shell{padding:24px 19px 95px}
+ .ogp-context{grid-template-columns:1fr 96px;gap:13px;padding-bottom:20px}
+ .ogp-context-meta{font-size:.58rem;gap:8px}.ogp-context-line{width:15px}
+ .ogp-context-name{font-size:1.05rem}
+ .ogp-stage{padding:33px 0 16px;min-height:290px}
+ .ogp-stage h1{font-size:clamp(2rem,8vw,3rem);margin:15px 0 22px}
+ .ogp-encounter{min-height:405px;border-radius:16px}.ogp-encounter-inner{padding:39px 20px}.ogp-encounter-symbol{font-size:2.9rem}
+ .ogp-encounter blockquote{font-size:clamp(1.8rem,7.1vw,2.7rem)}
+ .ogp-encounter-tag{font-size:.59rem}
+ .ogp-stage--read .ogp-scripture-scene{grid-template-columns:1fr;border-radius:17px}
+ .ogp-scripture-ornament{height:94px;font-size:4rem;border-right:0;border-bottom:1px solid #d7ae6d41}
+ .ogp-scripture-ornament:after{width:80px;height:80px}
+ .ogp-scripture-content{padding:28px 24px}
+ .ogp-scripture-scene .ogp-verse{margin:20px 0;font-size:clamp(1.5rem,5.7vw,2.2rem)}
+ .ogp-scripture-footer{display:block}.ogp-scripture-footer p{margin:15px 0 0}
+ .ogp-discovery-choices{gap:7px}
+ .ogp-discovery-choices button{min-height:112px;font-size:.85rem;border-radius:13px;letter-spacing:0}
+ .ogp-discovery-choices button span{right:8px;bottom:6px;font-size:.9rem}
+ .ogp-witness-scroll{padding:31px 23px;min-height:300px;border-radius:5px 20px 5px 20px}
+ .ogp-witness-scroll blockquote{font-size:clamp(1.7rem,6vw,2.3rem)}
+ .ogp-trail-track{gap:7px}.ogp-trail-track button small{font-size:.59rem}
+ .ogp-trail-track button strong{font-size:.67rem}.ogp-trail-track button>span{width:43px;height:43px}
+ .ogp-trail-track:before{top:20px}
+ .ogp-trail-quote{min-height:280px;padding:30px 24px}.ogp-trail-quote blockquote{font-size:clamp(1.75rem,6.2vw,2.5rem)}
+ .ogp-compare-ring{width:142px;height:142px}
+ .ogp-compare-columns{grid-template-columns:1fr;gap:10px}
+ .ogp-compare-columns section{padding:20px;min-height:0}
+ .ogp-compare-columns h2{font-size:1.34rem;margin:14px 0}
+ .ogp-mission-scene{min-height:270px;padding:30px 24px;border-radius:17px}
+ .ogp-mission-options{grid-template-columns:1fr;gap:10px}.ogp-mission-options button{min-height:72px;padding:17px}
+ .ogp-video{border-width:5px}
+ .ogp-controls{gap:8px;margin-top:18px}
+ .ogp-action{width:100%;text-align:center}.ogp-back{margin:0 auto}
+ .ogp-depth{padding:21px}
+ .ogp-restart-dialog{padding:27px}
+}
+@media(prefers-reduced-motion:reduce){
+ .ogp-page *,.ogp-page *:before,.ogp-page *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
