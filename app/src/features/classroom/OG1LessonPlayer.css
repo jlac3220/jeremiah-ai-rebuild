@@ -239,3 +239,14 @@
 .ogp-stage:has(.shema-teachback)>.ogp-verb,.ogp-stage:has(.shema-teachback)>h1{display:none}
 .ogp-stage:has(.shema-teachback){padding-top:25px}
 @media(max-width:720px){.ogp-scene-counter{display:block;margin:7px 0 0;padding:0;border:0;font-size:.54rem}}
+
+/* Spoken Scripture is available by choice, never an unexpected autoplay. */
+.ogp-header-actions{display:flex;align-items:center;justify-self:end;gap:9px;min-width:0}
+.ogp-voice-toggle{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent!important;border:1px solid #d3ad7247!important;border-radius:999px!important;padding:10px 14px!important;white-space:nowrap;color:#d5dce0!important;cursor:pointer;transition:background .2s,color .2s}
+.ogp-voice-toggle svg{flex:0 0 auto}
+.ogp-voice-toggle[aria-pressed=true]{background:#ceac7025!important;color:#f4d49d!important;border-color:#e2c18999!important}
+.ogp-voice-toggle:disabled{opacity:.5;cursor:not-allowed}
+.ogp-voice-toggle span{font-size:.75rem;font-weight:720;letter-spacing:0}
+.ogp-voice-replay{padding:8px 9px!important;white-space:nowrap;color:#e5c78f!important;font-size:.75rem!important;background:transparent!important;border:0!important}
+.ogp-voice-replay:hover{color:#fff!important}
+@media(max-width:720px){.ogp-header-actions{gap:4px}.ogp-voice-toggle{padding:10px!important;width:40px;height:40px}.ogp-voice-toggle span{display:none}.ogp-voice-replay{font-size:.7rem!important;padding:5px!important}.ogp-menu summary{width:36px;height:38px}}
