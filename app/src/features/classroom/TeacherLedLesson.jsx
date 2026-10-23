@@ -123,7 +123,10 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const screenFlow=isOG1 && move.type==='teach';
  const sceneScreen=!screenFlow || lessonScreen===0;
  const teachingScreen=!screenFlow || lessonScreen===1;
- const sourceScreen=!screenFlow || lessonScreen===2;
+ const hasWatchScreen=screenFlow && move.id==='shema-show' && Boolean(shemaVideo);
+ const watchScreen=hasWatchScreen && lessonScreen===2;
+ const sourceScreen=!screenFlow || lessonScreen===(hasWatchScreen?3:2);
+ const screenLabels=hasWatchScreen?['READ / NOTICE','DISCOVER','WATCH','CONNECT']:['READ / NOTICE','DISCOVER','EXPLORE'];
  const letters=['A','B','C'];
  useEffect(()=>()=>abortRef.current?.abort(),[]);
  useEffect(()=>{
@@ -184,7 +187,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
    <div className="tl-step"><span>{complete?'Lesson reflection':move.progressOptional?'A closer look':`${String(currentIndex+1).padStart(2,'0')} / ${String(mainMoves.length).padStart(2,'0')}`}</span><span>{move.phase || move.eyebrow || (move.progressOptional?'Let’s approach it another way':written?'Put the reasoning into words':'Build your understanding')}</span></div>
    <LessonPath content={content} move={move} state={state} compact={isOG1} />
    {screenFlow && lessonScreen>0 && <button type="button" className="tl-screen-back" onClick={()=>setLessonScreen(n=>Math.max(0,n-1))}>← Previous moment</button>}
-   {screenFlow && <div className="tl-screen-progress" aria-label={'Moment '+(lessonScreen+1)+' of 3'}><span>{['READ / NOTICE','DISCOVER','EXPLORE'][lessonScreen]}</span><small>{lessonScreen+1} / 3</small></div>}
+   {screenFlow && <div className="tl-screen-progress" aria-label={'Moment '+(lessonScreen+1)+' of '+screenLabels.length}><span>{screenLabels[lessonScreen]}</span><small>{lessonScreen+1} / {screenLabels.length}</small></div>}
    <h1 className={isOG1Visual?"tl-chapter-heading-sr":undefined} ref={headingRef} tabIndex={-1}>{move.title}</h1>
    {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">Your earlier written answers are saved while you work through this lesson. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:[state.experience.earlierLesson,...(state.experience.previousRuns || [])].flatMap(run=>Object.values(run.drafts || {})).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
@@ -202,7 +205,20 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     {sourceScreen && move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {sceneScreen && move.illustration && !isOG1Visual && <LessonIllustration key={move.id} kind={move.illustration}/>}
     {sourceScreen && showAfterReveal && !written && move.scripture?.length>0 && (isOG1Visual ? <details className="tl-og1-passages"><summary>Explore the supporting Scriptures · {move.scripture.length} passages</summary><section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read in context →</button></article>)}</section></details> : <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>)}
-    {sourceScreen && showAfterReveal && move.id==='shema-show' && shemaVideo && <section className="tl-media" aria-label="Optional historical context video"><div><span className="tl-small">Historical lens · Jewish tradition</span><h2>{shemaVideo.title}</h2><p>{shemaVideo.purpose}</p><small>{shemaVideo.duration} · Optional viewing · Source: {shemaVideo.provider}</small></div><div className="tl-media-frame"><iframe src={shemaVideo.embedUrl} title={shemaVideo.videoTitle || shemaVideo.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowFullScreen sandbox="allow-scripts allow-same-origin allow-presentation" /></div><fieldset><legend>{shemaVideo.lessonCheck.title}</legend><p>{shemaVideo.lessonCheck.prompt}</p>{shemaVideo.lessonCheck.choices.map(choice=><label key={choice.id}><input type="radio" name="shema-video-check" value={choice.id} checked={mediaAnswer===choice.id} onChange={()=>setMediaAnswer(choice.id)} />{choice.label}</label>)}{mediaAnswer && <p className={mediaAnswer===shemaVideo.lessonCheck.answerId?'tl-media-feedback is-correct':'tl-media-feedback'} role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}</fieldset></section>}
+    {watchScreen && <section className="tl-watch-moment" aria-label="Watch the Shema video">
+     <span className="tl-small">WATCH · LISTEN FOR THE MEANING OF SHEMA</span>
+     <h2>Listen before you explain.</h2>
+     <p>As you watch, notice why the confession begins with a call to hear. This video provides historical and language context; Jeremiah will connect it to Apostolic teaching afterward.</p>
+     <div className="tl-media-frame"><iframe src={shemaVideo.embedUrl} title={shemaVideo.videoTitle || shemaVideo.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowFullScreen sandbox="allow-scripts allow-same-origin allow-presentation" /></div>
+     <small>{shemaVideo.duration} · Optional · {shemaVideo.provider}</small>
+     <button type="button" className="tl-primary" onClick={()=>setLessonScreen(3)}>Now connect what you noticed →</button>
+    </section>}
+    {sourceScreen && hasWatchScreen && <section className="tl-watch-notice" aria-label="Connect the video to Scripture">
+     <span className="tl-small">NOTICE · MAKE THE CONNECTION</span>
+     <h2>{shemaVideo.lessonCheck.prompt}</h2>
+     <fieldset><legend>{shemaVideo.lessonCheck.title}</legend>{shemaVideo.lessonCheck.choices.map(choice=><label key={choice.id}><input type="radio" name="shema-video-check" value={choice.id} checked={mediaAnswer===choice.id} onChange={()=>setMediaAnswer(choice.id)}/>{choice.label}</label>)}</fieldset>
+     {mediaAnswer && <p role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}
+    </section>}
     {sourceScreen && showAfterReveal && move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
     {screenFlow && lessonScreen===0 && <button type="button" className="tl-primary tl-screen-next" onClick={()=>setLessonScreen(1)}>Discover what this means →</button>}
     {move.prompt && isOG1 && <div className="tl-action-cue"><span>YOUR TURN</span><strong>{written?'EXPLAIN':matching?'MATCH':reasoning?'REASON':'ANSWER'}</strong><p>{written?'Explain the connection in your own words.':matching?'Touch a match to build the Scripture connection.':'Consider what Scripture teaches, then choose your answer.'}</p></div>}
