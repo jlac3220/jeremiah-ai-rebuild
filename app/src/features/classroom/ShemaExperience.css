@@ -102,3 +102,24 @@
  .shema-resolution-bridge{font-size:.58rem;gap:8px}
 }
 @media(prefers-reduced-motion:reduce){.shema-word-reveal,.shema-verse-five{animation:none}.shema-word{transition:none}}
+
+/* Guided reconstruction: one phrase and one decision per moment. */
+.shema-practice{margin:22px 0 0;max-width:930px}
+.shema-practice-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #c7cbbf;padding-bottom:13px;margin-bottom:16px;color:#8e714f;font-size:.68rem;letter-spacing:.17em;font-weight:850}
+.shema-practice-scene{min-height:205px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;text-align:center;padding:32px;background:linear-gradient(143deg,#102d3f,#183f4a);border-radius:18px;color:#fff;box-shadow:0 18px 38px #1b36402c}
+.shema-practice-scene:before{content:'';width:250px;height:250px;position:absolute;right:-80px;top:-90px;border:1px solid #edd5a02c;border-radius:50%;box-shadow:0 0 0 30px #edd5a00b}
+.shema-practice-kicker{font-size:.67rem;color:#e4c58a;letter-spacing:.19em;font-weight:850}
+.shema-practice-scene h3{font:500 clamp(1.7rem,4vw,2.65rem)/1.28 Georgia,serif;color:#fff;letter-spacing:-.03em;margin:20px 0 12px}
+.shema-practice-scene p{color:#ccdade;font-size:.88rem;line-height:1.5;margin:0}
+.shema-practice-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-top:18px}
+.shema-practice-options button{display:flex;align-items:center;gap:10px;min-height:89px;text-align:left;line-height:1.45;border:1px solid #d5d7cc;background:#fffcf6;color:#274554;border-radius:12px;padding:17px;cursor:pointer;transition:transform .18s,background .18s,border-color .18s;font-size:.85rem;font-weight:650}
+.shema-practice-options button:not(:disabled):hover{transform:translateY(-2px);border-color:#b99a66}
+.shema-practice-options button[aria-pressed=true]{border-color:#4e7777;background:#e8f1ea;box-shadow:inset 0 0 0 2px #4e7777}
+.shema-choice-indicator{font-size:1.22rem;color:#a88b59;flex-shrink:0}
+.shema-practice-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:23px}
+.shema-practice-footer button{border:0;border-radius:10px;padding:12px 18px;font-size:.83rem;font-weight:800;cursor:pointer}
+.shema-practice-back{background:transparent;color:#667b7b}
+.shema-practice-forward{background:#24576a;color:white}
+.shema-practice-forward:disabled{opacity:.35}
+.shema-practice-footer p{color:#62766b;line-height:1.65;font-size:.87rem}
+@media(max-width:750px){.shema-practice-options{grid-template-columns:1fr}.shema-practice-options button{min-height:66px}.shema-practice-scene{min-height:180px;padding:27px 17px}}
