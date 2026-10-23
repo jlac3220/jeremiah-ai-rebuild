@@ -2,9 +2,9 @@ import { useState } from 'react';
 import './ShemaExperience.css';
 
 const PHRASES = [
- {id:'hear',text:'Hear, O Israel',hebrew:'שְׁמַע',roman:'SHEMA · HEAR',title:'More than hearing a sound.',meaning:'The confession opens with a summons to listen and respond. The people are being addressed, not merely given information.'},
- {id:'belong',text:'The LORD our God',hebrew:'יְהוָה אֱלֹהֵינוּ',roman:'THE LORD · OUR GOD',title:'A people and their God.',meaning:'These words identify the LORD as Israel’s covenant God. The confession is personal and communal, not an abstract number.'},
- {id:'one',text:'is one LORD',hebrew:'יְהוָה אֶחָד',roman:'ONE LORD',title:'The heart of the confession.',meaning:'The LORD is confessed as one. Read that claim beside Isaiah’s declarations and Jesus’ repetition, rather than building everything on a dictionary definition.'}
+ {id:'hear',text:'Hear, O Israel',spoken:'Hear, O Israel.',hebrew:'שְׁמַע',roman:'SHEMA · HEAR',title:'More than hearing a sound.',meaning:'The confession opens with a summons to listen and respond. The people are being addressed, not merely given information.'},
+ {id:'belong',text:'The LORD our God',spoken:'The Lord our God.',hebrew:'יְהוָה אֱלֹהֵינוּ',roman:'THE LORD · OUR GOD',title:'A people and their God.',meaning:'These words identify the LORD as Israel’s covenant God. The confession is personal and communal, not an abstract number.'},
+ {id:'one',text:'is one LORD',spoken:'Is one Lord.',hebrew:'יְהוָה אֶחָד',roman:'ONE LORD',title:'The heart of the confession.',meaning:'The LORD is confessed as one. Read that claim beside Isaiah’s declarations and Jesus’ repetition, rather than building everything on a dictionary definition.'}
 ];
 
 function Landscape({chapter='shema'}) {
@@ -38,7 +38,7 @@ function Manuscript({active,onSelect,visited}) {
  </div>;
 }
 
-export default function ShemaExperience({kind,video,onOpenBible,onInteraction}) {
+export default function ShemaExperience({kind,video,onOpenBible,onInteraction,onSpeak,narrationEnabled=false}) {
  const [phrase,setPhrase]=useState(-1);
  const [visited,setVisited]=useState([]);
  const [verseRevealed,setVerseRevealed]=useState(false);
@@ -50,6 +50,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction}) 
   const next=visited.includes(i)?visited:[...visited,i];
   setVisited(next);
   onInteraction?.({visitedCount:next.length,phrase:i});
+  if(narrationEnabled) onSpeak?.(PHRASES[i].spoken);
  }
  if(kind==='shema-encounter')return <div className="shema-world">
   <div className="shema-world-art"><Landscape/></div>
@@ -67,7 +68,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction}) 
   <div className="shema-explore-top"><span className="shema-eyebrow">02 / INVESTIGATE</span><p>Three phrases. One confession. Touch the words themselves to discover what each contributes.</p></div>
   <Manuscript active={phrase} visited={visited} onSelect={selectPhrase}/>
   <div className="shema-word-reveal" aria-live="polite" key={selected?.id||'intro'}>
-   {selected?<><div className="shema-hebrew" lang="he" dir="rtl">{selected.hebrew}</div><div><span className="shema-kicker">{selected.roman}</span><h3>{selected.title}</h3><p>{selected.meaning}</p></div></>:<div className="shema-word-intro"><span>✦</span><p>Select any highlighted phrase above. The passage itself is your starting point.</p></div>}
+   {selected?<><div className="shema-hebrew" lang="he" dir="rtl">{selected.hebrew}</div><div><span className="shema-kicker">{selected.roman}</span><h3>{selected.title}</h3><p>{selected.meaning}</p><button className="shema-listen-phrase" type="button" onClick={()=>onSpeak?.(selected.spoken)} aria-label={'Hear the words '+selected.text}>▶ Hear these words</button></div></>:<div className="shema-word-intro"><span>✦</span><p>Select any highlighted phrase above. The passage itself is your starting point.</p></div>}
   </div>
   <p className="shema-explore-footer">{visited.length===3?'You have examined the whole confession. The words belong together.':visited.length>0?'Explore another phrase—or continue when you are ready.':'The words are waiting to be explored.'}</p>
  </div>;
@@ -83,10 +84,10 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction}) 
   <h2>One LORD. <em>Now what?</em></h2>
   <p>Deuteronomy doesn't stop with a statement about God. What would you expect the next verse to ask of Israel?</p>
   <div className="shema-turn-options" role="group" aria-label="What follows the confession">
-   {['Know the right definition','Love the LORD with all you are'].map((text,i)=><button type="button" key={text} aria-pressed={selectedReflection===String(i)} onClick={()=>{setSelectedReflection(String(i));setVerseRevealed(true);onInteraction?.({response:i})}}>{text}<span>{selectedReflection===String(i)?'●':'○'}</span></button>)}
+   {['Know the right definition','Love the LORD with all you are'].map((text,i)=><button type="button" key={text} aria-pressed={selectedReflection===String(i)} onClick={()=>{setSelectedReflection(String(i));setVerseRevealed(true);onInteraction?.({response:i});if(narrationEnabled) onSpeak?.('And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.')}}>{text}<span>{selectedReflection===String(i)?'●':'○'}</span></button>)}
   </div>
   {verseRevealed&&<div className="shema-verse-five" aria-live="polite">
-   <span className="shema-kicker">TURN THE PAGE · DEUTERONOMY 6:5</span>
+   <div className="shema-verse-voice-row"><span className="shema-kicker">TURN THE PAGE · DEUTERONOMY 6:5</span><button type="button" onClick={()=>onSpeak?.('And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.')}>▶ Hear the verse</button></div>
    <blockquote>“And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.”</blockquote>
    <p>{selectedReflection==='1'?'Exactly. The confession calls for a whole-life response, not only a correct definition.':'The text takes us further: knowledge matters, but the confession calls Israel to wholehearted love.'}</p>
   </div>}
