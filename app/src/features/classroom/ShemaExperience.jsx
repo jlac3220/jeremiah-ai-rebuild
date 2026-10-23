@@ -60,7 +60,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
    <blockquote>“Hear, O Israel: The LORD our God is one LORD:”</blockquote>
    <span className="shema-source">DEUTERONOMY 6:4 · KING JAMES VERSION</span>
    <p>These are the words Israel was called to hear. A confession that would echo into the teaching of Jesus.</p>
-   <button type="button" className="shema-artifact-link" onClick={()=>onOpenBible('Deuteronomy 6:4')}>Read the passage in context <span>↗</span></button>
+   <div className="shema-opening-actions"><button type="button" className="shema-opening-listen" onClick={()=>onSpeak?.('Hear, O Israel: The LORD our God is one LORD.')}>▶ Hear the confession</button><button type="button" className="shema-artifact-link" onClick={()=>onOpenBible('Deuteronomy 6:4')}>Read in context <span>↗</span></button></div>
   </div>
   <div className="shema-world-footer"><span>AN ENCOUNTER WITH SCRIPTURE</span><span aria-hidden="true">✦</span></div>
  </div>;
