@@ -128,3 +128,66 @@
 .ld-snapshot { background: #fff; border-color: #E5E7EB; }
 .ld-logo-mark,.ld-home .ld-primary { background: #1463E8; box-shadow: none; }
 .ld-home .ld-progress>span { background: #1463E8; }
+
+/* Home redesign: one focused next step, a small editorial illustration, quiet utility. */
+.ld-home .ld-header { padding-bottom: 12px; }
+.ld-home-intro { display:flex; position:relative; align-items:center; justify-content:space-between; gap:12px; padding: 14px 0 23px; overflow:hidden; }
+.ld-intro-copy { min-width:0; max-width:560px; position:relative; z-index:1; }
+.ld-home-intro h1 { max-width:540px; font-size:clamp(1.95rem,4.5vw,2.7rem); line-height:1.08; font-weight:800; margin:11px 0 8px; }
+.ld-home-intro p { color:#64748B; font-size:.95rem; }
+.ld-home-label { color:#1463E8; font-size:.7rem; letter-spacing:.105em; font-weight:850; }
+.ld-intro-art { position:relative; flex:0 0 148px; width:148px; height:132px; }
+.ld-orbit { position:absolute; display:block; border:2px solid #C7DBFA; border-radius:50%; }
+.ld-orbit-back { width:126px; height:126px; top:3px; left:13px; transform:rotate(-25deg) scaleY(.6); }
+.ld-orbit-front { width:104px; height:104px; top:13px; left:23px; transform:rotate(37deg) scaleX(.72); }
+.ld-art-book { display:grid; place-items:center; position:absolute; width:70px; height:70px; top:33px; left:43px; font-size:2.4rem; color:#fff; background:#1463E8; border:7px solid #E8F1FF; box-shadow:0 9px 20px rgba(20,99,232,.14); border-radius:20px; transform:rotate(-10deg); }
+.ld-art-small { position:absolute; top:22px; right:6px; font-size:1.45rem; color:#8FB9F6; }
+.ld-continue-card { border:1px solid #E5EAF3; border-radius:22px; padding:25px 27px 17px; box-shadow:0 9px 28px rgba(20,38,73,.055); }
+.ld-continue-card h2 { max-width:700px; font-size:clamp(1.45rem,3vw,2rem); line-height:1.2; margin:16px 0 17px; }
+.ld-next-step { display:flex; gap:11px; align-items:center; margin:0 0 20px; }
+.ld-step-icon { display:grid; place-items:center; width:39px; height:39px; background:#EFF6FF; color:#1463E8; border-radius:12px; font-size:1.1rem; flex-shrink:0; }
+.ld-next-step>span:last-child { display:grid; gap:2px; min-width:0; }
+.ld-next-step small { color:#64748B; font:800 .65rem/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.09em; }
+.ld-next-step strong { color:#334155; font-size:.88rem; font-weight:680; }
+.ld-home .ld-progress { margin:8px 0 18px; }
+.ld-home .ld-primary { min-height:50px; }
+.ld-overview { margin-top:7px; }
+.ld-overview summary { text-align:left; color:#64748B; }
+.ld-under-card { margin:19px 0 0; }
+.ld-bible-row { display:grid; width:100%; grid-template-columns:44px minmax(0,1fr) 22px; align-items:center; gap:12px; background:#F8FAFC; border:1px solid #E5E7EB; border-radius:16px; padding:13px 16px; text-align:left; color:#172033; cursor:pointer; }
+.ld-bible-row>.ld-tile-icon { width:44px; height:44px; background:#E8F1FF; border-radius:13px; color:#1463E8; }
+.ld-bible-row>span:nth-child(2) { display:grid; gap:3px; }
+.ld-bible-row strong { font-size:.92rem; font-weight:750; }
+.ld-bible-row small { font-size:.76rem; color:#64748B; }
+.ld-bible-arrow { color:#1463E8; font-size:1.3rem; }
+.ld-mini-stats { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; padding:17px 0 0; color:#64748B; font-size:.76rem; }
+.ld-mini-stats>span+span { padding-left:14px; border-left:1px solid #E2E8F0; }
+.ld-mini-stats strong { color:#172033; font-weight:850; font-variant-numeric:tabular-nums; }
+@media(max-width:640px) {
+ .ld-home { padding:calc(9px + env(safe-area-inset-top)) 17px 98px; }
+ .ld-home .ld-header { padding-bottom:7px; }
+ .ld-logo { font-size:1.1rem; }
+ .ld-home-intro { padding:9px 0 18px; min-height:156px; }
+ .ld-intro-copy { max-width:72%; }
+ .ld-home-intro h1 { font-size:clamp(1.7rem,7vw,2.16rem); letter-spacing:-.045em; }
+ .ld-home-intro p { font-size:.83rem; }
+ .ld-intro-art { flex-basis:104px; width:104px; height:114px; margin-right:-8px; }
+ .ld-orbit-back { width:100px; height:100px; top:8px; left:0; }
+ .ld-orbit-front { width:86px; height:86px; left:6px; }
+ .ld-art-book { width:60px; height:60px; top:32px; left:21px; border-width:6px; font-size:2rem; border-radius:18px; }
+ .ld-art-small { right:0; top:12px; }
+ .ld-continue-card { padding:19px 19px 12px; border-radius:21px; }
+ .ld-continue-card h2 { font-size:1.32rem; margin:13px 0 15px; }
+ .ld-home .ld-feature-heading { flex-direction:row; gap:5px; }
+ .ld-card-kicker { font-size:.69rem; max-width:72%; }
+ .ld-lesson-status { font-size:.68rem; }
+ .ld-next-step { margin-bottom:16px; }
+ .ld-home .ld-progress { margin-bottom:15px; }
+ .ld-home .ld-primary { min-height:48px; border-radius:13px; }
+ .ld-overview { margin-top:6px; }
+ .ld-overview summary { padding:7px 0; }
+ .ld-bible-row { padding:12px; }
+ .ld-mini-stats { gap:9px; font-size:.69rem; }
+ .ld-mini-stats>span+span { padding-left:9px; }
+}
+@media(max-width:370px) { .ld-intro-art { flex-basis:78px; transform:scale(.85); transform-origin:right center; } .ld-home-intro h1 { font-size:1.62rem; } }
