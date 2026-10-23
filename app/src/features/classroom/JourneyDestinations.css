@@ -47,3 +47,24 @@
  .ogj-card-arrow{right:18px;bottom:19px;font-size:1.3rem}
 }
 @media(prefers-reduced-motion:reduce){.ogj-art,.ogj-destination{transition:none!important}.ogj-reveal{animation:none}}
+
+/* Source-backed portraits now replace the synthetic landscapes. */
+.ogj-art{display:block;position:absolute;inset:0;overflow:hidden;background:linear-gradient(135deg,#283b43,#624e41)}
+.ogj-photo{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:1;filter:saturate(.9) contrast(1.08) brightness(.95);transition:transform .6s cubic-bezier(.16,.6,.25,1),filter .5s}
+.ogj-fallback{position:absolute;inset:0;display:grid;place-items:center;font:500 clamp(2rem,5vw,3.5rem) Georgia,serif;color:#e3c9a581;letter-spacing:.08em;background:radial-gradient(circle at 54% 35%,#866751,#152b3b)}
+.ogj-destination:hover .ogj-photo{transform:scale(1.065);filter:saturate(1) contrast(1.09) brightness(1.04)}
+.ogj-destination .ogj-card-shade{background:linear-gradient(180deg,#071d2d8a 0%,transparent 37%,#08192433 54%,#061523f7 100%)}
+.ogj-destination.is-selected .ogj-photo{filter:saturate(1.06) contrast(1.09) brightness(1)}
+.ogj-destination .ogj-era{z-index:2;text-shadow:0 1px 7px #071724cf}
+.ogj-destination .ogj-card-caption{z-index:2}
+.ogj-destination .ogj-card-caption strong{text-shadow:0 2px 18px #030e17d9}
+.ogj-destination .ogj-card-arrow{z-index:2}
+.ogj-reveal{align-items:center;gap:27px;background:#fffcf6;padding:26px 29px}
+.ogj-reveal-copy{min-width:0;max-width:680px}
+.ogj-reveal blockquote{border:0;margin:13px 0 14px;padding:0;color:#1b3e4c;font:500 clamp(1.35rem,2.8vw,2.1rem)/1.43 Georgia,serif;letter-spacing:-.024em}
+.ogj-reveal-actions{display:grid;gap:10px;flex:0 0 auto;justify-items:stretch}
+.ogj-reveal-actions button{border:1px solid #c4ad7d;border-radius:999px;padding:12px 19px;background:#183a4e;color:#fff;font-size:.8rem;font-weight:750;cursor:pointer;white-space:nowrap}
+.ogj-reveal-actions button.ogj-read-link{background:#f9f1e1;color:#71552d}
+.ogj-reveal-actions button:hover{transform:translateY(-1px)}
+@media(max-width:750px){.ogj-reveal{align-items:stretch}.ogj-reveal-actions{display:flex;flex-wrap:wrap;gap:8px}.ogj-reveal-actions button{font-size:.74rem}.ogj-destination .ogj-card-caption strong{font-size:clamp(1.1rem,4.2vw,1.8rem)}}
+@media(max-width:450px){.ogj-reveal{padding:23px 19px}.ogj-destination .ogj-card-caption strong{font-size:2rem}.ogj-destination .ogj-photo{object-position:center 31%}}
