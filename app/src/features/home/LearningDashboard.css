@@ -282,3 +282,107 @@
  .jh-art { margin-right:-79px; }
  .jh-status { order:0; }
 }
+
+
+/* Ignite learning hub — expressive learning panels, not a generic dashboard. */
+.jh-page { background:#F5F8FF; color:#18243A; }
+.jh-page .jh-shell { max-width:1070px; }
+.jh-ignite-hero { display:grid; grid-template-columns:1.15fr .85fr; min-height:365px; border-radius:30px; padding:42px 47px; overflow:hidden; position:relative; isolation:isolate; color:#fff; background:linear-gradient(128deg,#084BBE 0%,#1465E9 54%,#3E98FC 100%); }
+.jh-ignite-hero::before { content:""; position:absolute; inset:-60px -20px; background:radial-gradient(circle at 85% 24%,rgba(255,255,255,.23),transparent 28%),linear-gradient(155deg,transparent 43%,rgba(255,255,255,.08) 43%,transparent 45%); z-index:-1; }
+.jh-ignite-hero-copy { z-index:2; position:relative; align-self:center; max-width:530px; }
+.jh-ignite-tag { display:inline-flex; align-items:center; gap:9px; color:#F5FAFF; font-weight:850; letter-spacing:.115em; font-size:.67rem; line-height:1.5; }
+.jh-ignite-tag span { color:#FFDD54; font-size:1.3rem; }
+.jh-ignite-hero h1 { font:850 clamp(2.3rem,5vw,4.15rem)/1.04 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:-.06em; margin:15px 0 18px; max-width:600px; }
+.jh-ignite-hero h1 em { font-style:normal; color:#FFE36F; }
+.jh-ignite-hero p { margin:0; font-size:1.07rem; line-height:1.55; color:#E4F1FF; max-width:390px; }
+.jh-ignite-start { background:#FFDB57; color:#112954; border:0; display:inline-flex; align-items:center; justify-content:space-between; gap:30px; margin-top:27px; padding:15px 18px; border-radius:14px; font-size:.92rem; font-weight:850; cursor:pointer; box-shadow:0 8px 0 rgba(8,42,98,.16); }
+.jh-ignite-start span { font-size:1.2rem; }
+.jh-ignite-scene { width:100%; max-width:380px; aspect-ratio:1; align-self:center; position:relative; justify-self:center; }
+.jh-ignite-disc { position:absolute; inset:4% 3%; border-radius:50%; background:radial-gradient(circle at 44% 38%,#84D1FF,#2A88ED 65%,#1261CB); border:2px solid rgba(255,255,255,.26); box-shadow:inset 0 0 0 19px rgba(255,255,255,.055),0 25px 55px rgba(2,44,112,.28); }
+.jh-ignite-disc:before,.jh-ignite-disc:after { content:""; position:absolute; border:1px solid rgba(255,255,255,.35); inset:21px; border-radius:50%; }
+.jh-ignite-disc:after { inset:42px; }
+.jh-ignite-disc>span { display:block; text-align:center; padding-top:23%; font-size:5.8rem; line-height:1; color:#FFF0A1; text-shadow:0 8px 20px rgba(7,47,120,.2); }
+.jh-ignite-verse { position:absolute; left:8%; right:8%; bottom:13%; text-align:center; display:grid; justify-items:center; gap:5px; transform:rotate(-3deg); }
+.jh-ignite-verse span { font-size:.73rem; letter-spacing:.16em; font-weight:850; color:#FFF4C3; }
+.jh-ignite-verse strong { font-size:clamp(1.55rem,3.1vw,2.8rem); letter-spacing:-.045em; color:#fff; line-height:1.1; }
+.jh-ignite-verse small { font-size:.65rem; letter-spacing:.11em; color:#DEEEFF; font-weight:700; }
+.jh-ignite-spark { position:absolute; color:#FFDC5F; line-height:1; }
+.jh-ignite-spark-one { left:0; top:13%; font-size:1.5rem; }
+.jh-ignite-spark-two { right:0; bottom:18%; font-size:1.8rem; }
+.jh-ignite-section { margin-top:33px; }
+.jh-ignite-section-heading { display:flex; justify-content:space-between; align-items:end; gap:12px; margin:0 3px 15px; }
+.jh-ignite-eyebrow { color:#1463E8; font:.85em/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:.7rem; letter-spacing:.115em; font-weight:850; }
+.jh-ignite-section-heading h2 { margin:4px 0 0; font:850 clamp(1.55rem,3vw,2rem)/1.16 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:-.035em; }
+.jh-ignite-chapter { font-size:.74rem; font-weight:780; color:#52769E; background:#E2EFFF; border-radius:99px; padding:7px 12px; white-space:nowrap; }
+.jh-ignite-lesson { display:grid; grid-template-columns:minmax(185px,.38fr) minmax(0,.62fr); overflow:hidden; border-radius:25px; background:#fff; border:1px solid #DDE8F8; box-shadow:0 15px 30px rgba(25,76,140,.08); }
+.jh-ignite-lesson-art { position:relative; overflow:hidden; isolation:isolate; min-height:290px; background:linear-gradient(150deg,#113F8F 0%,#267BEC 100%); display:flex; align-items:center; justify-content:center; }
+.jh-ignite-lesson-art::before { content:""; position:absolute; width:280px; height:280px; border-radius:50%; left:-85px; top:-84px; background:#fff; opacity:.09; }
+.jh-ignite-arch { width:143px; height:198px; border:5px solid #8BC2FF; border-radius:75px 75px 12px 12px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:11px; color:white; background:linear-gradient(#3A94F8,#134AA4); box-shadow:0 15px 28px #08347A77; z-index:2; }
+.jh-ignite-arch span { font-size:2.5rem; color:#FFE474; }
+.jh-ignite-arch strong { font-size:3.8rem; line-height:1; letter-spacing:-.05em; }
+.jh-ignite-arch small { font-size:.46rem; font-weight:850; letter-spacing:.08em; color:#DEEEFF; }
+.jh-ignite-rings { position:absolute; width:270px; height:270px; border-radius:50%; border:1px solid #A2D1FF; opacity:.35; }
+.jh-ignite-lesson-art-label { position:absolute; bottom:16px; left:15px; right:15px; color:#E1F0FF; text-align:center; font-size:.68rem; font-weight:850; letter-spacing:.12em; z-index:2; }
+.jh-ignite-lesson-content { padding:25px 29px; display:flex; flex-direction:column; }
+.jh-ignite-meta { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.jh-ignite-meta span { color:#2464BD; font-weight:850; font-size:.73rem; }
+.jh-ignite-meta small { color:#65778F; font-size:.72rem; }
+.jh-ignite-lesson-content h3 { margin:14px 0 12px; color:#162841; font:820 clamp(1.5rem,2.9vw,2.15rem)/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:-.04em; }
+.jh-ignite-next { margin:0 0 20px; color:#546E8E; font-weight:650; font-size:.83rem; }
+.jh-ignite-next span { color:#1A71EA; font-size:1.07rem; margin-right:5px; }
+.jh-ignite-progress { display:flex; justify-content:space-between; gap:10px; font-size:.75rem; color:#64748B; font-weight:680; margin-top:auto; }
+.jh-ignite-progress strong { color:#1463E8; }
+.jh-ignite-bar { height:7px; background:#E8EFF8; border-radius:10px; margin:8px 0 18px; overflow:hidden; }
+.jh-ignite-bar i { display:block; height:100%; border-radius:10px; background:#1463E8; }
+.jh-ignite-continue { display:flex; align-items:center; justify-content:space-between; width:100%; padding:14px 18px; color:white; background:#1463E8; border:0; border-radius:13px; font-size:.91rem; font-weight:830; cursor:pointer; }
+.jh-ignite-continue span { font-size:1.25rem; }
+.jh-ignite-explore { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; margin-top:17px; }
+.jh-ignite-tile { display:flex; flex-direction:column; align-items:flex-start; gap:4px; padding:19px; min-height:155px; border-radius:20px; position:relative; text-align:left; cursor:pointer; border:1px solid transparent; }
+.jh-ignite-tile-bible { background:#E4F1FF; color:#12477F; }
+.jh-ignite-tile-study { background:#FFE89B; color:#5A3900; }
+.jh-ignite-tile-progress { background:#DCF3FF; color:#0B527F; }
+.jh-ignite-tile-graphic { width:44px; height:44px; display:grid; place-items:center; margin-bottom:auto; border-radius:12px; background:#FFFFFF80; font-size:1.75rem; }
+.jh-ignite-tile-graphic svg { width:29px; height:29px; }
+.jh-ignite-tile strong { font-size:.94rem; font-weight:850; }
+.jh-ignite-tile small { font-size:.74rem; opacity:.85; }
+.jh-ignite-tile-arrow { position:absolute; right:18px; top:18px; font-size:1.2rem; }
+.jh-ignite-progress-number { font-size:1.45rem; font-weight:850; }
+@media(max-width:750px) {
+ .jh-ignite-hero { min-height:262px; grid-template-columns:minmax(0,1fr) 100px; border-radius:23px; padding:25px 21px; }
+ .jh-ignite-tag { font-size:.55rem; letter-spacing:.055em; }
+ .jh-ignite-tag span { font-size:1.06rem; }
+ .jh-ignite-hero h1 { font-size:clamp(1.8rem,7vw,2.5rem); margin:11px 0 12px; line-height:1.07; }
+ .jh-ignite-hero p { font-size:.78rem; line-height:1.45; }
+ .jh-ignite-start { padding:12px 13px; font-size:.77rem; margin-top:17px; gap:14px; border-radius:11px; }
+ .jh-ignite-scene { width:170px; margin:0 -53px 0 -22px; }
+ .jh-ignite-disc>span { font-size:3.5rem; }
+ .jh-ignite-verse { gap:3px; bottom:10%; }
+ .jh-ignite-verse span { font-size:.46rem; }
+ .jh-ignite-verse strong { font-size:1.3rem; }
+ .jh-ignite-verse small { font-size:.42rem; }
+ .jh-ignite-section { margin-top:24px; }
+ .jh-ignite-section-heading h2 { font-size:1.48rem; }
+ .jh-ignite-lesson { grid-template-columns:100px minmax(0,1fr); border-radius:19px; }
+ .jh-ignite-lesson-art { min-height:285px; }
+ .jh-ignite-arch { width:70px; height:125px; border-width:3px; border-radius:40px 40px 9px 9px; gap:7px; }
+ .jh-ignite-arch span { font-size:1.5rem; }
+ .jh-ignite-arch strong { font-size:2.5rem; }
+ .jh-ignite-arch small { display:none; }
+ .jh-ignite-lesson-art-label { font-size:.48rem; bottom:13px; }
+ .jh-ignite-lesson-content { padding:17px 15px; }
+ .jh-ignite-meta { flex-wrap:wrap; }
+ .jh-ignite-meta span,.jh-ignite-meta small { font-size:.62rem; }
+ .jh-ignite-lesson-content h3 { font-size:1.18rem; margin:12px 0 10px; }
+ .jh-ignite-next { font-size:.73rem; line-height:1.35; margin-bottom:14px; }
+ .jh-ignite-bar { margin-bottom:13px; }
+ .jh-ignite-continue { font-size:.79rem; padding:12px; }
+ .jh-ignite-explore { gap:8px; }
+ .jh-ignite-tile { padding:12px 10px; border-radius:14px; min-height:129px; }
+ .jh-ignite-tile-graphic { width:34px; height:34px; font-size:1.4rem; }
+ .jh-ignite-tile-graphic svg { width:24px; height:24px; }
+ .jh-ignite-tile strong { font-size:.73rem; }
+ .jh-ignite-tile small { font-size:.61rem; line-height:1.3; }
+ .jh-ignite-tile-arrow { top:8px; right:9px; font-size:.85rem; }
+}
+@media(max-width:375px) { .jh-ignite-hero { grid-template-columns:minmax(0,1fr) 75px; } .jh-ignite-hero h1 { font-size:1.73rem; } .jh-ignite-scene { width:150px; margin-right:-60px; } .jh-ignite-lesson { grid-template-columns:84px minmax(0,1fr); } .jh-ignite-lesson-content { padding:14px 12px; } .jh-ignite-explore { gap:6px; } .jh-ignite-tile { padding:10px 7px; } }
+@media(prefers-reduced-motion:reduce) { .jh-ignite-hero * { scroll-behavior:auto; } }
