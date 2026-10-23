@@ -69,7 +69,7 @@ function GuidedReveal({paragraphs=[],onFinish}) {
  return <section aria-label="Guided discovery" style={{margin:'22px 0 18px',borderTop:'1px solid #dbe6f3',paddingTop:19}}>
   <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,marginBottom:13}}>
    <span style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',color:'#1659a8'}}>JEREMIAH GUIDES YOU</span>
-   <span style={{fontSize:12,color:'#64748b'}}>{Math.max(0,step+1)} of {paragraphs.length} ideas</span>
+   <span style={{fontSize:12,color:'#64748b'}}>{complete?paragraphs.length:Math.max(0,step+1)} of {paragraphs.length} ideas</span>
   </div>
   {step>=0 && <div key={step} aria-live="polite" style={{padding:'5px 0 16px'}}>
    <div style={{fontSize:12,fontWeight:850,letterSpacing:'.13em',color:'#1867c1',marginBottom:10}}>{complete?'READY TO RESPOND':actions[Math.min(step,actions.length-1)]}</div>
@@ -177,7 +177,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
    {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">Your earlier written answers are saved while you work through this lesson. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:[state.experience.earlierLesson,...(state.experience.previousRuns || [])].flatMap(run=>Object.values(run.drafts || {})).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
     {content.standardId==='OG.1.LESSON.18' && move.id==='learn' && <OG1OpeningEncounter onReadBible={()=>openBible({reference:'Deuteronomy 6'})} />}
-    {content.standardId==='OG.1.LESSON.18' && <OG1ChapterScene key={move.id} move={move} onReadBible={openBible} />}
+    {content.standardId==='OG.1.LESSON.18' && showAfterReveal && <OG1ChapterScene key={move.id} move={move} onReadBible={openBible} />}
     {!guidedReveal && <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>}
     {move.visual && !isOG1Visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     {isOG1Visual && !guidedReveal && <div className="tl-teaching-intro">JEREMIAH EXPLAINS</div>}
