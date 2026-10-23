@@ -9,6 +9,7 @@ import { getTeachingPlan } from '../src/data/curriculum/teachingPlans.js';
 import { classroomResources } from '../src/data/curriculum/classroomResources.js';
 import { getLessonExperience } from '../src/core/classroom/content/lessonExperience.js';
 import { getInteractiveActivities, evaluateInteractiveActivity } from '../src/data/curriculum/interactiveActivities.js';
+import {getLessonFrame, LESSON_PHASES} from '../src/core/classroom/lessonBlueprint.js';
 import { teachWithJeremiah } from '../server/teacherCore.mjs';
 const saved = new Map();
 globalThis.window = { localStorage: { getItem: key=>saved.get(key)||null, setItem:(key,value)=>saved.set(key,value) } };
@@ -29,6 +30,12 @@ for (const study of CURRICULUM_STUDIES) {
     assert.ok(standard.scope && standard.focus && standard.statement);
     const content=classroomContentRegistry[standard.id];
     if (!content.sourceStandard) continue; // Original curated Shema lesson has its own smoke test.
+    assert.equal(getLessonFrame(content,content.instructionalMoves[0],{}).chapterCount,1,standard.id+' curriculum chapter');
+    for(const [id,phase] of [['learn','Show me'],['scripture','Guide me'],['sources','Guide me'],['check','Let me try']]) {
+      const curr=content.instructionalMoves.find(m=>m.id===id);
+      if(curr) assert.equal(getLessonFrame(content,curr,{}).phase,phase,standard.id+' phase '+id);
+    }
+    assert.deepEqual(LESSON_PHASES,['Show me','Guide me','Let me try']);
     assert.ok(getTeachingPlan(content).encounter);
     assert.equal(getLessonExperience(content).witnesses.length,3);
     assert.equal(getLessonExperience(content).vocabulary.length,3);
