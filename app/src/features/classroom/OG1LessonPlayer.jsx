@@ -46,6 +46,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [draft,setDraft]=useState({});
  const [mediaChoice,setMediaChoice]=useState('');
  const [discoveryChoice,setDiscoveryChoice]=useState(null);
+ const [openingHeard,setOpeningHeard]=useState(false);
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
@@ -64,7 +65,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const current=moments[Math.min(moment,total-1)];
  const percent=getStandardProgress(content,state);
  const chapter=move.id.split('-')[0];
- useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setError('');}},[move.id]);
+ useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  function change(patch) {
   if(thinking||feedback)return;
@@ -78,7 +79,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  function advance(){if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
- function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
+ function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -92,7 +93,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   }
   onStateChange(old=>saveTeachingDecision(old,content,move,decision));
  }
- const buttonText=current?.kind==='watch'?'I watched / Continue':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':'Reveal the next idea';
+ const buttonText=current?.kind==='watch'?'I watched / Continue':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className="ogp-page">
   <header className="ogp-header"><button type="button" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>← <span>Classroom</span></button><strong>JEREMIAH <small>THE ONE TRUE GOD</small></strong><div className="ogp-header-tools"><button type="button" onClick={()=>setConfirmRestart(true)}>Start from beginning</button><button type="button" className="ogp-classic" onClick={onUseClassic}>Original view</button></div></header>
   <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
@@ -101,9 +102,19 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    <div className="ogp-context"><span>{CHAPTERS[chapter]||'The One True God'}</span><small>{finish?'FINISH':moment+1+' / '+total}</small></div>
    {finish?<section className="ogp-finish"><span className="ogp-verb">JOURNEY REVIEWED</span><h1>One Lord. One unfolding story.</h1><p>You've explored Israel's confession, Isaiah's declarations, the apostolic witness, and the call to love the Lord. Your responses remain saved for review.</p><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button></section>:<>
     <section className="ogp-stage" aria-label={current.verb+' learning moment'}>
-     <span className="ogp-verb">{current.verb}</span>
-     <h1>{current.title}</h1>
-     {current.kind==='read'&&<><blockquote className="ogp-verse">“{current.verse.text}”</blockquote><span className="ogp-reference">{current.verse.reference} · KJV</span><p className="ogp-prompt">Read it once, then notice what the passage actually says.</p><button type="button" className="ogp-link" onClick={()=>readVerse(current.verse.reference)}>Open in the Bible ↗</button></>}
+     {(move.id!=='learn'||current.kind!=='read')&&<><span className="ogp-verb">{current.verb}</span><h1>{current.title}</h1></>}
+     {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
+      <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
+      <div className="ogp-encounter-inner">
+       <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
+       <div className="ogp-encounter-symbol" aria-hidden="true">אחד</div>
+       <blockquote>“Hear, O Israel:<br/>The LORD our God is <em>one LORD.</em>”</blockquote>
+       <span className="ogp-encounter-reference">A declaration carried across generations.</span>
+       <button type="button" className="ogp-encounter-touch" onClick={()=>setOpeningHeard(value=>!value)} aria-expanded={openingHeard}>{openingHeard?'Hide the connection':'Touch the words ONE LORD'} <span>✦</span></button>
+       {openingHeard&&<div className="ogp-encounter-reveal" aria-live="polite"><strong>ONE LORD</strong><p>Now the question begins: does this confession change when Jesus and the apostles speak?</p></div>}
+      </div>
+     </div>}
+     {current.kind==='read'&&move.id!=='learn'&&<><blockquote className="ogp-verse">“{current.verse.text}”</blockquote><span className="ogp-reference">{current.verse.reference} · KJV</span><p className="ogp-prompt">What does this passage establish?</p><button type="button" className="ogp-link" onClick={()=>readVerse(current.verse.reference)}>Read in context ↗</button></>}
      {current.kind==='intro'&&<p className="ogp-thought">Let's follow the confession from Moses through the prophets and into the apostolic witness.</p>}
      {current.kind==='teach'&&<p className="ogp-thought">{current.text}</p>}
      {current.kind==='discovery'&&<div className="ogp-discovery"><p className="ogp-prompt">Choose what to investigate. Every path reveals a piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label,detail],i)=><button type="button" key={label} aria-pressed={discoveryChoice===i} onClick={()=>setDiscoveryChoice(i)}>{label}<span aria-hidden="true">↗</span></button>)}</div>{discoveryChoice!==null&&<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[discoveryChoice][0]}</strong><p>{current.discovery.options[discoveryChoice][1]}</p><small>{current.discovery.closer}</small></div>}</div>}
