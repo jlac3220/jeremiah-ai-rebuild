@@ -30,12 +30,18 @@ export default function LessonActivity({move,draft,feedback,onChange}){
  const results=feedback?.itemResults || [];
  const trail=move.id==='continuity-guide';
  const clinic=move.id==='distinction-guide';
+ const guided=Boolean(move.standardIds?.some(id=>id.startsWith('OG.1.')) || move.id.endsWith('-guide'));
+ const answered=items.filter(item=>Boolean(draft.placements?.[item.id])).length;
+ const activeIndex=Math.min(answered,items.length-1);
+ const visibleItems=guided&&!feedback?[items[activeIndex]]:items;
  return <div className={`la-activity ${trail?'la-trail':clinic?'la-clinic':'la-matching'}`}>
   <p className="la-kicker">{move.activityLabel || 'Phrase workshop'} · {items.filter(i=>draft.placements?.[i.id]).length}/{items.length} connected</p>
-  {items.map((item,i)=>{const result=results.find(r=>r.id===item.id);return <fieldset key={item.id} disabled={Boolean(feedback)}><legend>{trail?'Witness':clinic?'Claim':`Evidence ${i+1}`}</legend><p>{item.label}</p>
+  {guided && !feedback && <div className="la-guided-counter" role="status"><strong>CONNECT</strong><span>Phrase {Math.min(answered+1,items.length)} of {items.length}</span></div>}
+  {visibleItems.map((item,i)=>{const result=results.find(r=>r.id===item.id);return <fieldset key={item.id} disabled={Boolean(feedback)}><legend>{trail?'Witness':clinic?'Claim':`Evidence ${guided?items.indexOf(item)+1:i+1}`}</legend><p>{item.label}</p>
    {clinic?<div className="la-verdicts">{options.map(option=><button type="button" key={option.id} aria-pressed={draft.placements?.[item.id]===option.id} onClick={()=>onChange({placements:{...draft.placements,[item.id]:option.id}})}>{option.label}</button>)}</div>:<label>{trail?'Position in the argument':'Connect to'}<select value={draft.placements?.[item.id] || ''} onChange={e=>onChange({placements:{...draft.placements,[item.id]:e.target.value}})}><option value="">Choose a connection…</option>{options.map(o=><option key={o.id} value={o.id}>{o.label}</option>)}</select></label>}
    {result && <p className={result.correct?'la-correct':'la-rethink'}><strong>{result.correct?'Connected: ':'Reconsider: '}</strong>{result.message}</p>}
   </fieldset>;})}
+  {guided && answered===items.length && !feedback && <p className="la-guided-ready">All connections selected. Discuss your answer to check the reasoning.</p>}
  </div>;
 }
 
