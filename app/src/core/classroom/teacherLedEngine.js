@@ -75,3 +75,12 @@ export function restartTeaching(content, state) {
   milestones:{...fresh.milestones,mastery:state.presetId==='review' && Boolean(state.milestones?.complete || state.milestones?.mastery)},
   experience:{...fresh.experience,restartAt:Date.now(),earlierLesson:archived,previousRuns:[...(state.experience?.previousRuns || []),...(state.experience?.earlierLesson?[state.experience.earlierLesson]:[])]}};
 }
+
+// Preview navigation: advance beyond discussion checks without awarding evidence or mastery.
+export function skipTeachingMove(state, content) {
+ const move=content.instructionalMoves.find(item=>item.id===state.currentMoveId);
+ if(!move || move.type==='teach' || move.type==='complete') return state;
+ const nextId=resolveNextMoveId(move,'strong','affirm_and_deepen');
+ if(!nextId || nextId===move.id) return state;
+ return updateLearningExperience({...state,currentMoveId:nextId},{teachingDecision:null,skippedMoveIds:[...new Set([...(state.experience?.skippedMoveIds || []),move.id])]});
+}
