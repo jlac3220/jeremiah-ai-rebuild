@@ -108,10 +108,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       <div className="ogp-encounter-inner">
        <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
        <div className="ogp-encounter-symbol" aria-hidden="true">אחד</div>
-       <blockquote>“Hear, O Israel:<br/>The LORD our God is <em>one LORD.</em>”</blockquote>
+       <blockquote>“Hear, O Israel:<br/>The LORD our God is <button type="button" className="ogp-encounter-word" onClick={()=>setOpeningHeard(true)} aria-expanded={openingHeard}>one LORD.<span aria-hidden="true"> ✦</span></button>”</blockquote>
        <span className="ogp-encounter-reference">A declaration carried across generations.</span>
-       <button type="button" className="ogp-encounter-touch" onClick={()=>setOpeningHeard(value=>!value)} aria-expanded={openingHeard}>{openingHeard?'Hide the connection':'Touch the words ONE LORD'} <span>✦</span></button>
-       {openingHeard&&<div className="ogp-encounter-reveal" aria-live="polite"><strong>ONE LORD</strong><p>Now the question begins: does this confession change when Jesus and the apostles speak?</p></div>}
+       <button type="button" className="ogp-encounter-touch" onClick={()=>setOpeningHeard(true)} aria-expanded={openingHeard}>{openingHeard?'Connection revealed ✓':'Tap ONE LORD above to discover why it matters'} <span>✦</span></button>
+       {openingHeard&&<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
       </div>
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<><blockquote className="ogp-verse">“{current.verse.text}”</blockquote><span className="ogp-reference">{current.verse.reference} · KJV</span><p className="ogp-prompt">What does this passage establish?</p><button type="button" className="ogp-link" onClick={()=>readVerse(current.verse.reference)}>Read in context ↗</button></>}
