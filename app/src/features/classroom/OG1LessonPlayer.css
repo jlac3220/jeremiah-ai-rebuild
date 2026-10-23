@@ -42,6 +42,7 @@
 
 /* Each destination enters as its own moment. */
 .ogp-stage{padding:48px 0 20px;min-height:380px;animation:ogp-arrive .48s cubic-bezier(.17,.67,.34,1) both}
+.ogp-stage:focus{outline:none}
 .ogp-verb{display:flex;align-items:center;gap:12px;color:var(--og-accent);font-size:.69rem;font-weight:850;letter-spacing:.23em}
 .ogp-verb-dash{width:33px;height:1px;background:var(--og-brass);display:inline-block}
 .ogp-stage h1,.ogp-finish h1{max-width:850px;margin:19px 0 28px;font:500 clamp(2.15rem,5.1vw,4.1rem)/1.09 Georgia,"Palatino Linotype",serif;letter-spacing:-.045em;color:var(--og-ink)}
@@ -70,9 +71,7 @@
 .ogp-encounter-word[aria-expanded=true]{border-bottom-style:solid;color:#fff}.ogp-encounter-word:hover{color:#fff}
 .ogp-encounter-word span{font-size:.45em;vertical-align:super}
 .ogp-encounter-reference{display:block;color:#c9d7e8;font-size:.78rem;margin:21px 0 19px}
-.ogp-encounter-touch{border:1px solid #ebcd8e7f;background:#ffffff0e;color:#f2d093;border-radius:999px;padding:12px 21px;cursor:pointer;font-size:.83rem;font-weight:740;transition:background .2s}
-.ogp-encounter-touch:hover{background:#fff2d01e}
-.ogp-encounter-touch span{padding-left:7px}
+.ogp-encounter-hint{font-size:.84rem;letter-spacing:.02em;color:#e3cfac;margin:14px 0 0}
 .ogp-encounter-reveal{border-top:1px solid #ebcc8555;padding-top:18px;margin:23px auto 0;max-width:470px;animation:ogp-arrive .4s ease}
 .ogp-encounter-reveal strong{color:#f5d99c;letter-spacing:.13em;font-size:.76rem}
 .ogp-encounter-reveal p{line-height:1.65;color:#ecf5fc;font-size:1rem}
@@ -145,7 +144,7 @@
 .ogp-compare-ring{width:168px;height:168px;margin:10px auto 30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#ffe2a2;background:radial-gradient(circle at 50% 35%,#37637b,#0d243a 74%);border:1px solid #d3ac68;box-shadow:0 0 0 10px #cba96a16,0 20px 40px #142f4732}
 .ogp-compare-ring span{font:600 1.45rem Georgia,serif}.ogp-compare-ring small{color:#d5e0e7;font-size:.74rem;margin-top:8px}
 .ogp-compare-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.ogp-compare-columns section{background:#e6ebed;border:1px solid #cad5d9;border-radius:18px;padding:28px;opacity:.55;min-height:220px;transition:opacity .3s,box-shadow .3s,background .3s}
+.ogp-compare-columns section{animation:ogp-arrive .35s ease;background:#e6ebed;border:1px solid #cad5d9;border-radius:18px;padding:28px;opacity:.55;min-height:220px;transition:opacity .3s,box-shadow .3s,background .3s}
 .ogp-compare-columns section.is-revealed{background:#fff;opacity:1;box-shadow:0 16px 36px #1e3b4c16;border-color:#b9ced5}
 .ogp-compare-columns section>span{font-size:.7rem;letter-spacing:.15em;font-weight:850;color:#4f7a8b}
 .ogp-compare-columns h2{font:500 1.65rem/1.27 Georgia,serif;letter-spacing:-.025em;color:#1e3e52;margin:19px 0}
