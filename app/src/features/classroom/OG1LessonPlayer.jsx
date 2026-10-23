@@ -171,7 +171,14 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      <span>{narration.enabled?'Voice on':'Voice off'}</span>
     </button>
     {narration.enabled&&narrationText&&<button type="button" className="ogp-voice-replay" aria-label={narration.speaking?'Stop narration':'Replay narration'} title={narration.speaking?'Stop speaking':'Hear again'} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}>{narration.speaking?'■ Stop':'↻ Replay'}</button>}
-    <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button></div></details>
+    <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button>
+     {narration.supported&&narration.voiceOptions.length>1&&<label className="ogp-voice-picker">Narration voice
+      <select aria-label="Choose American narration voice" value={narration.voiceName} onChange={e=>narration.chooseVoice(e.target.value)}>
+       <option value="auto">Recommended deep voice</option>
+       {narration.voiceOptions.map(voice=><option key={voice.name} value={voice.name}>{voice.label}</option>)}
+      </select>
+     </label>}
+    </div></details>
    </div>
   </header>
   <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
