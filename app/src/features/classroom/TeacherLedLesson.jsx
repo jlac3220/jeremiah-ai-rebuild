@@ -76,7 +76,7 @@ function GuidedReveal({paragraphs=[],onFinish}) {
    <span style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',color:'#1659a8'}}>JEREMIAH GUIDES YOU</span>
    <span style={{fontSize:12,color:'#64748b'}}>{complete?paragraphs.length:Math.min(paragraphs.length,step+1)} of {paragraphs.length} ideas</span>
   </div>
-  {<div key={step} aria-live="polite" style={{padding:'5px 0 16px'}}>
+  <div key={step} aria-live="polite" style={{padding:'5px 0 16px'}}>
    <div style={{fontSize:12,fontWeight:850,letterSpacing:'.13em',color:'#1867c1',marginBottom:10}}>{complete?'READY TO RESPOND':actions[Math.min(step,actions.length-1)]}</div>
    {complete?<p style={{fontSize:19,lineHeight:1.6,color:'#223653',margin:0}}>Now explore the Scripture, then try the next challenge.</p>:<p style={{fontSize:19,lineHeight:1.7,color:'#223653',margin:0}}>{paragraphs[step]}</p>}
   </div>
