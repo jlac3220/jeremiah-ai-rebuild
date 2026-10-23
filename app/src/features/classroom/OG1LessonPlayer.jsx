@@ -8,10 +8,6 @@ import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import LessonActivity from './LessonActivity';
 import './OG1LessonPlayer.css';
 
-const CHAPTERS = {
- shema: 'Hear the confession', isaiah: 'Test the witnesses', continuity: 'Follow the same Lord',
- distinction: 'Understand the difference', devotion: 'Live the confession'
-};
 const CHAPTER_NAMES = ['The Shema','Isaiah’s Witness','The Apostolic Witness','The Difference','Living the Confession'];
 const CHAPTER_SLUGS = ['shema','isaiah','continuity','distinction','devotion'];
 const SCENE_DESCRIPTIONS = {
@@ -66,12 +62,12 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [openingHeard,setOpeningHeard]=useState(false);
  const [showDepth,setShowDepth]=useState(false);
  const [evidenceIndex,setEvidenceIndex]=useState(0);
- const [visitedMoments,setVisitedMoments]=useState([]);
  const [caseChoice,setCaseChoice]=useState(null);
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
  const abort=useRef(null);
+ const stageRef=useRef(null);
  const priorMove=useRef(move.id);
  const finish=move.type==='complete';
  const assessment=move.type!=='teach'&&!finish;
@@ -88,8 +84,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const chapter=move.id.split('-')[0];
  const chapterNumber=CHAPTER_SLUGS.indexOf(chapter)+1;
  const sceneClass=current?.kind||'complete';
- useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setVisitedMoments([]);setCaseChoice(null);setError('');}},[move.id]);
+ useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
+ useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
  function change(patch) {
   if(thinking||feedback)return;
   setDraft(old=>({...old,...patch}));
@@ -99,10 +96,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   setBibleReaderIntent(reference,{translation:'kjv',returnRoute:ROUTES.CLASSROOM_LESSON,source:'classroom'});
   onNavigate(ROUTES.BIBLE_SUPPORT);
  }
- function advance(){if(current?.kind==='mission'&&caseChoice===null)return;if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison'||current?.kind==='mission')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);setCaseChoice(null);return;}if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setVisitedMoments([]);setCaseChoice(null);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
+ function advance(){if(current?.kind==='mission'&&caseChoice===null)return;if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison'||current?.kind==='mission')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);setCaseChoice(null);return;}if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
- function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setVisitedMoments([]);setCaseChoice(null);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
+ function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -116,7 +113,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   }
   onStateChange(old=>saveTeachingDecision(old,content,move,decision));
  }
- const buttonText=current?.kind==='insight'?'Put this understanding to work':current?.kind==='watch'?'I watched / Continue':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
+ const buttonText=current?.kind==='insight'?'Put this understanding to work':current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className={`ogp-page ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
   <header className="ogp-header">
    <button type="button" className="ogp-exit" aria-label="Return to classroom" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>← <span>CLASSROOM</span></button>
@@ -134,7 +131,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      </div>
    </div>
    {finish?<section className="ogp-finish"><span className="ogp-verb">JOURNEY REVIEWED</span><h1>One Lord. One unfolding story.</h1><p>You've explored Israel's confession, Isaiah's declarations, the apostolic witness, and the call to love the Lord. Your responses remain saved for review.</p><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button></section>:<>
-    <section key={move.id+':'+moment} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
+    <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
      {(move.id!=='learn'||current.kind!=='read')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
       <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
@@ -143,7 +140,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
        <div className="ogp-encounter-symbol" aria-hidden="true">אחד</div>
        <blockquote>“Hear, O Israel:<br/>The LORD our God is <button type="button" className="ogp-encounter-word" onClick={()=>setOpeningHeard(true)} aria-expanded={openingHeard}>one LORD.<span aria-hidden="true"> ✦</span></button>”</blockquote>
        <span className="ogp-encounter-reference">A declaration carried across generations.</span>
-       <button type="button" className="ogp-encounter-touch" onClick={()=>setOpeningHeard(true)} aria-expanded={openingHeard}>{openingHeard?'Connection revealed ✓':'Tap ONE LORD above to discover why it matters'} <span>✦</span></button>
+       {!openingHeard&&<p className="ogp-encounter-hint">Touch the highlighted words to discover where the story goes.</p>}
        {openingHeard&&<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
       </div>
      </div>}
@@ -177,10 +174,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='comparison'&&<div className="ogp-compare">
       <p className="ogp-prompt">Start with common ground. Then uncover the actual theological disagreement instead of assuming the other view believes in three gods.</p>
       <div className="ogp-compare-ring"><span>ONE GOD</span><small>Shared confession</small></div>
-      <div className="ogp-compare-columns">
-       <section className={evidenceIndex>=1?'is-revealed':''}><span>TRINITARIAN TEACHING</span><h2>{evidenceIndex>=1?'Three eternal persons':'First perspective'}</h2>{evidenceIndex>=1&&<p>One divine essence in three coequal, coeternal persons. This view does not claim there are three gods.</p>}</section>
-       <section className={evidenceIndex>=2?'is-revealed':''}><span>APOSTOLIC ONENESS</span><h2>{evidenceIndex>=2?'One undivided God':'Second perspective'}</h2>{evidenceIndex>=2&&<p>The Father, Son through true incarnation, and Holy Spirit are understood without eternal distinctions of divine persons.</p>}</section>
-      </div>
+      {evidenceIndex>0&&<div className="ogp-compare-columns">
+       {evidenceIndex>=1&&<section className="is-revealed"><span>TRINITARIAN TEACHING</span><h2>Three eternal persons</h2><p>One divine essence in three coequal, coeternal persons. This view does not claim there are three gods.</p></section>}
+       {evidenceIndex>=2&&<section className="is-revealed"><span>APOSTOLIC ONENESS</span><h2>One undivided God</h2><p>The Father, Son through true incarnation, and Holy Spirit are understood without eternal distinctions of divine persons.</p></section>}
+      </div>}
       {evidenceIndex===2&&<p className="ogp-compare-conclusion">The difference is not whether God is one. The difference concerns eternal personal distinctions and the understanding of Jesus Christ.</p>}
      </div>}
      {current.kind==='mission'&&<div className="ogp-mission">
@@ -202,7 +199,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>)
-     :<button type="button" className="ogp-action" onClick={advance} disabled={(current?.kind==='discovery'&&discoveryChoice===null)||(current?.kind==='mission'&&caseChoice===null)||(current?.kind==='videoCheck'&&!mediaChoice)}>{current?.kind==='witness'&&evidenceIndex<2?'Unseal the next witness':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Try the next situation':current?.kind==='mission'?'Reflect on your choices':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='discovery'?'Continue the discovery':buttonText} →</button>}
+     :<button type="button" className="ogp-action" onClick={advance} disabled={(current?.kind==='discovery'&&discoveryChoice===null)||(current?.kind==='mission'&&caseChoice===null)}>{current?.kind==='witness'&&evidenceIndex<2?'Unseal the next witness':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Try the next situation':current?.kind==='mission'?'Reflect on your choices':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='discovery'?'Continue the discovery':buttonText} →</button>}
      {!assessment&&moment>0&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      {assessment&&<button type="button" className="ogp-back" onClick={skip}>Skip for now (no mastery)</button>}
     </nav>
