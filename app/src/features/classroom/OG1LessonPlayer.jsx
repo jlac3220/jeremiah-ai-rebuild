@@ -8,6 +8,7 @@ import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
 import useLessonNarration from './useLessonNarration';
+import JourneyDestinations from './JourneyDestinations';
 import './OG1LessonPlayer.css';
 
 const CHAPTER_NAMES = ['The Shema','Isaiah’s Witness','The Apostolic Witness','The Difference','Living the Confession'];
@@ -105,10 +106,12 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    ? ['Before me there was no God formed, neither shall there be after me.','Beside me there is no God.','Neither shall there be after me.'][evidenceIndex]
   : current?.kind==='timeline'
    ? ['The LORD our God is one LORD.','The Lord our God is one Lord.','There is none other God but one.'][evidenceIndex]
+  : current?.kind==='discovery'&&move.id==='learn'&&discoveryChoice!==null
+   ? ['Hear, O Israel: The LORD our God is one LORD. In the wilderness Moses gives the confession to Israel.','I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six.','Jesus repeats the Shema. The apostles declare, there is none other God but one.'][discoveryChoice]
   : current?.kind==='read'&&current?.verse?.text
    ? current.verse.text
   : null;
- const narration=useLessonNarration({text:narrationText,key:move.id+':'+moment+':'+evidenceIndex});
+ const narration=useLessonNarration({text:narrationText,key:move.id+':'+moment+':'+evidenceIndex+':'+discoveryChoice});
  useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setPracticeStep(0);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
@@ -220,7 +223,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       <div className="ogp-mission-options">{(evidenceIndex===0?['Keep worship separate from daily priorities','Let the one Lord shape every allegiance']:evidenceIndex===1?['Hide the mistake to protect your reputation','Tell the truth and take responsibility']:['Assume the message is only for people like you','Share the good news with humility and care']).map((choice,i)=><button key={choice} type="button" aria-pressed={caseChoice===i} onClick={()=>setCaseChoice(i)}>{choice}</button>)}</div>
       {caseChoice!==null&&<p className="ogp-mission-response">{caseChoice===1?['Wholehearted love involves undivided worship and allegiance.','Faithfulness extends to honest conduct, even when difficult.','The witness to one God calls believers to care about others.'][evidenceIndex]:'Consider whether that choice reflects wholehearted love for the LORD in Deuteronomy 6:5.'}</p>}
      </div>}
-     {current.kind==='discovery'&&<div className="ogp-discovery"><p className="ogp-prompt">Choose what to investigate. Every path reveals a piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label,detail],i)=><button type="button" key={label} aria-pressed={discoveryChoice===i} onClick={()=>setDiscoveryChoice(i)}>{label}<span aria-hidden="true">↗</span></button>)}</div>{discoveryChoice!==null&&<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[discoveryChoice][0]}</strong><p>{current.discovery.options[discoveryChoice][1]}</p><small>{current.discovery.closer}</small></div>}</div>}
+     {current.kind==='discovery'&&(move.id==='learn'
+      ?<JourneyDestinations options={current.discovery.options} selected={discoveryChoice} onSelect={setDiscoveryChoice} onSpeak={narration.speak}/>
+      :<div className="ogp-discovery"><p className="ogp-prompt">Choose what to investigate. Every path reveals a piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label,detail],i)=><button type="button" key={label} aria-pressed={discoveryChoice===i} onClick={()=>setDiscoveryChoice(i)}>{label}<span aria-hidden="true">↗</span></button>)}</div>{discoveryChoice!==null&&<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[discoveryChoice][0]}</strong><p>{current.discovery.options[discoveryChoice][1]}</p><small>{current.discovery.closer}</small></div>}</div>)}
      {current.kind==='watch'&&<><p className="ogp-prompt">Watch for the meaning of <em>shema</em>. This is historical and language context; Jeremiah will connect it to Apostolic teaching.</p><div className="ogp-video"><iframe src={current.video.embedUrl} title={current.video.videoTitle||current.video.title} loading="lazy" allow="encrypted-media; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div><small>Optional · {current.video.provider} · {current.video.duration}</small></>}
      {current.kind==='videoCheck'&&<><p className="ogp-prompt">{current.check.prompt}</p><div className="ogp-options">{current.check.choices.map(c=><button type="button" key={c.id} aria-pressed={mediaChoice===c.id} onClick={()=>setMediaChoice(c.id)}>{c.label}</button>)}</div>{mediaChoice&&<p className="ogp-feedback">{mediaChoice===current.check.answerId?current.check.correctFeedback:current.check.incorrectFeedback}</p>}</>}
      {current.kind==='task'&&<>{move.id!=='shema-try'&&<p className="ogp-prompt">{move.prompt}</p>}
