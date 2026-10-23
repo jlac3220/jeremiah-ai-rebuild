@@ -154,3 +154,10 @@
 .shema-verse-voice-row button{padding:9px 13px;white-space:nowrap;border:1px solid #779984;border-radius:999px;color:#365e48;background:#fcfff9;font-size:.76rem;font-weight:770;cursor:pointer}
 .shema-verse-voice-row button:hover{background:#e1ede0}
 @media(max-width:500px){.shema-verse-voice-row{align-items:flex-start;flex-direction:column;gap:8px}}
+
+/* The opening is an invitation to hear, not a mandatory autoplay. */
+.shema-opening-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px 24px;margin-top:18px}
+.shema-opening-listen{border:1px solid #eac78caa;border-radius:999px;background:#e9c68d20;color:#ffe1a7;padding:13px 18px;font-size:.82rem;font-weight:800;cursor:pointer;transition:background .2s,transform .2s}
+.shema-opening-listen:hover{background:#e9c68d44;transform:translateY(-2px)}
+.shema-opening-actions .shema-artifact-link{padding:9px 0}
+@media(max-width:600px){.shema-opening-actions{gap:11px 18px}.shema-opening-listen{width:100%;max-width:270px}}
