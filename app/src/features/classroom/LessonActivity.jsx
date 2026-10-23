@@ -61,11 +61,13 @@ const scenes = [
 function SceneImage({ scene }) {
   const [failed, setFailed] = useState(false);
   useEffect(() => setFailed(false), [scene.id]);
-  return <div className="la-scene-media">
-    {failed
-      ? <div className="la-scene-fallback" role="img" aria-label={scene.alt}>An image of this scene could not load.</div>
-      : <img key={scene.id} src={scene.image} alt={scene.alt} loading="lazy" decoding="async" onError={() => setFailed(true)} />}
-    <span className="la-scene-media-label">{scene.kicker}</span>
+  return <div className="la-scene-visual-shell">
+    <div className={`la-scene-media la-scene-media-${scene.id}`}>
+      {failed
+        ? <div className="la-scene-fallback" role="img" aria-label={scene.alt}>An image of this scene could not load.</div>
+        : <img key={scene.id} src={scene.image} alt={scene.alt} loading="lazy" decoding="async" onError={() => setFailed(true)} />}
+      <span className="la-scene-media-label">{scene.kicker}</span>
+    </div>
     <small className="la-scene-credit">{scene.credit}</small>
   </div>;
 }
@@ -92,10 +94,10 @@ export function LessonVisual({kind}) {
        <strong>{scene.reference} · KJV {scene.id==='today'?'excerpt':''}</strong>
        <p>{scene.detail}</p>
        <div className="la-controls la-story-controls" aria-label="Choose a moment in the journey">
-         <button type="button" onClick={()=>{if(index===scenes.length-1)setIndex(0);setPlaying(value=>!value);}}>{playing?'Pause journey':'Play journey'} <span aria-hidden="true">▶</span></button>
+         <button type="button" onClick={()=>{if(index===scenes.length-1)setIndex(0);setPlaying(value=>!value);}}>{playing?'Pause scenes':'Auto-play scenes'} <span aria-hidden="true">▶</span></button>
          {scenes.map((s,i)=><button type="button" key={s.id} aria-label={'Show '+s.tab} aria-pressed={index===i} onClick={()=>{setIndex(i);setPlaying(false);}}>{s.tab}</button>)}
        </div>
-       <small className="la-art-notice">Historical scenes are artists’ interpretations, not photographs. Each screen uses a different image.</small>
+       <small className="la-art-notice">Biblical scenes are artistic interpretations. Explore any moment at your own pace.</small>
      </figcaption>
    </figure>;
  }
