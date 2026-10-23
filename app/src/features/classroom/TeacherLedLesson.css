@@ -101,3 +101,56 @@
 .tl-vocabulary dt { font-weight:650; margin:18px 0 6px; }
 .tl-vocabulary dd { margin:0; color:#64756f; line-height:1.8; }
 .tl-header-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.tl-header-actions button{font-size:.8rem}.tl-restart{padding:22px;border:1px solid #a5bbaf;border-radius:16px;background:#edf3ec;margin-bottom:28px}.tl-restart h2{margin-top:0}.tl-restart p{line-height:1.6}.tl-restart .tl-text-button{margin-left:14px}@media(max-width:600px){.tl-header-actions{max-width:150px}.tl-restart .tl-text-button{margin-left:0;display:block}}
+
+
+/* The opening encounter is a visual experience, not a narrow reading column. */
+.tl-main.tl-main-opening{
+  width:100%;
+  max-width:1180px;
+  padding:clamp(30px,4vw,56px) clamp(18px,4vw,50px) 110px;
+}
+.tl-main-opening>.tl-step{font-size:.82rem;letter-spacing:.13em}
+.tl-main-opening>h1{
+  max-width:960px;
+  margin:15px 0 34px;
+  font-size:clamp(2.7rem,4.8vw,4.8rem);
+  line-height:1.06;
+  letter-spacing:-.035em;
+}
+.tl-main-opening .tl-teacher{margin:25px 0 18px}
+.tl-main-opening .tl-saved-note{max-width:760px;font-size:.83rem}
+.tl-main-opening .la-film-cinematic{margin:18px 0 28px}
+.tl-opening-mission{
+  max-width:830px;
+  margin:32px 0 30px;
+  padding:26px 30px 26px 28px;
+  border-left:4px solid #b48a56;
+  background:#f5f2eb;
+  border-radius:0 15px 15px 0;
+}
+.tl-opening-mission h2{
+  max-width:760px;
+  margin:10px 0;
+  color:#183f43;
+  font:500 clamp(1.45rem,2.6vw,2.2rem)/1.3 var(--font-display);
+  letter-spacing:-.015em;
+}
+.tl-opening-mission>p{margin:8px 0 14px;color:#415951;font:1rem/1.7 var(--font-body)}
+.tl-opening-mission details{border-top:1px solid #dddcd1;padding-top:15px;margin-top:20px}
+.tl-opening-mission summary{
+  cursor:pointer;
+  color:#224f53;
+  font:.87rem/1.6 var(--font-body);
+  font-weight:700;
+}
+.tl-opening-mission-details{padding:6px 0 0}
+.tl-opening-mission-details p{color:#4d615d;font:.95rem/1.7 var(--font-body);margin:14px 0}
+.tl-main-opening .tl-scripture{max-width:830px;margin:24px 0}
+.tl-main-opening .tl-scripture article{padding:24px 30px;border-radius:0 14px 14px 0}
+.tl-main-opening>.tl-primary{margin-top:6px;min-height:48px;padding:13px 22px}
+@media(max-width:600px){
+  .tl-main.tl-main-opening{padding:30px 18px 100px}
+  .tl-main-opening>h1{font-size:clamp(2.4rem,10vw,3rem);line-height:1.12}
+  .tl-opening-mission{padding:21px 20px}
+  .tl-main-opening .tl-scripture article{padding:20px}
+}
