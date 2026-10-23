@@ -89,7 +89,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  return <div className="tl-page">
   <header className="tl-header"><button type="button" aria-label="Leave lesson" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>←</button><span>JEREMIAH <small>{content.studyTitle}</small></span><div className="tl-header-actions"><button type="button" onClick={showNotes}>Lesson notes</button><button type="button" aria-expanded={showRestart} onClick={()=>setShowRestart(value=>!value)}>Start from the beginning</button></div></header>
   <div className="tl-progress" role="progressbar" aria-label="Lesson progress" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}><span style={{width:`${percent}%`}}/></div>
-  <main className="tl-main">
+  <main className={`tl-main${move.id==='learn' ? ' tl-main-opening' : ''}`}>
    {showRestart && <section className="tl-restart" role="group" aria-label="Restart lesson" tabIndex={-1} ref={restartRef}><h2>Start this lesson again?</h2><p>You’ll return to the opening in a fresh review. Your earlier answers and earned completion will be kept.</p><button type="button" className="tl-primary" onClick={restart}>Start from the beginning →</button><button type="button" className="tl-text-button" onClick={()=>setShowRestart(false)}>Keep my place</button></section>}
    <div className="tl-step"><span>{complete?'Lesson reflection':move.progressOptional?'A closer look':`${String(currentIndex+1).padStart(2,'0')} / ${String(mainMoves.length).padStart(2,'0')}`}</span><span>{move.phase || move.eyebrow || (move.progressOptional?'Let’s approach it another way':written?'Put the reasoning into words':'Build your understanding')}</span></div>
    <h1 ref={headingRef} tabIndex={-1}>{move.title}</h1>
@@ -97,7 +97,17 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
    {!complete && <>
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
     {move.visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
-    {move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}
+    {move.id==='learn' ? <section className="tl-opening-mission" aria-label="Your mission">
+      <span className="tl-small">YOUR MISSION</span>
+      <h2>Does the confession change as the story unfolds?</h2>
+      <p>From Moses to Jesus, to the apostles, and to your own life: discover the truth that carries through every generation.</p>
+      <details>
+       <summary>What you’ll discover in this lesson</summary>
+       <div className="tl-opening-mission-details">
+        {move.teaching?.map((paragraph,i)=><p key={i}>{paragraph}</p>)}
+       </div>
+      </details>
+     </section> : move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}
     {move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
     {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {move.illustration && <LessonIllustration key={move.id} kind={move.illustration}/>}
