@@ -23,3 +23,5 @@
 @keyframes ogp-appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:600px){.ogp-encounter{min-height:380px;border-radius:17px}.ogp-encounter-inner{padding:38px 19px}.ogp-encounter-symbol{font-size:2.4rem}.ogp-encounter blockquote{font-size:1.85rem}.ogp-encounter-tag{letter-spacing:.13em}}
 @media(prefers-reduced-motion:reduce){.ogp-encounter-reveal{animation:none}}
+
+.ogp-encounter .ogp-encounter-word{font:inherit;color:#ffda82;background:transparent;border:0;border-bottom:2px dotted #fbd17d;padding:0 2px 3px;cursor:pointer;line-height:inherit;transition:color .2s,background .2s;border-radius:3px}.ogp-encounter .ogp-encounter-word:hover,.ogp-encounter .ogp-encounter-word:focus-visible{color:#fff;background:rgba(241,197,100,.22);outline:2px solid #f5d58d;outline-offset:4px}.ogp-encounter-word span{font-size:.48em;vertical-align:super}.ogp-encounter .ogp-encounter-word[aria-expanded=true]{border-bottom-style:solid;color:#fff}.ogp-encounter-touch{margin-top:8px}
