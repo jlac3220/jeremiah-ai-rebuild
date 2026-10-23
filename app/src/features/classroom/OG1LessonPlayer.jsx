@@ -71,6 +71,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [showDepth,setShowDepth]=useState(false);
  const [evidenceIndex,setEvidenceIndex]=useState(0);
  const [caseChoice,setCaseChoice]=useState(null);
+ const [practiceStep,setPracticeStep]=useState(0);
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
@@ -92,7 +93,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const chapter=move.id.split('-')[0];
  const chapterNumber=CHAPTER_SLUGS.indexOf(chapter)+1;
  const sceneClass=current?.kind||'complete';
- useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setError('');}},[move.id]);
+ useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setPracticeStep(0);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
  function change(patch) {
@@ -107,7 +108,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  function advance(){if(current?.kind==='mission'&&caseChoice===null)return;if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison'||current?.kind==='mission')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);setCaseChoice(null);return;}if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
- function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
+ function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setCaseChoice(null);setPracticeStep(0);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -199,7 +200,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='watch'&&<><p className="ogp-prompt">Watch for the meaning of <em>shema</em>. This is historical and language context; Jeremiah will connect it to Apostolic teaching.</p><div className="ogp-video"><iframe src={current.video.embedUrl} title={current.video.videoTitle||current.video.title} loading="lazy" allow="encrypted-media; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div><small>Optional · {current.video.provider} · {current.video.duration}</small></>}
      {current.kind==='videoCheck'&&<><p className="ogp-prompt">{current.check.prompt}</p><div className="ogp-options">{current.check.choices.map(c=><button type="button" key={c.id} aria-pressed={mediaChoice===c.id} onClick={()=>setMediaChoice(c.id)}>{c.label}</button>)}</div>{mediaChoice&&<p className="ogp-feedback">{mediaChoice===current.check.answerId?current.check.correctFeedback:current.check.incorrectFeedback}</p>}</>}
      {current.kind==='task'&&<><p className="ogp-prompt">{move.prompt}</p>
-      {move.id==='shema-guide'?<ShemaPhrasePractice key={move.id} move={move} draft={form} feedback={feedback} onChange={change}/>:((matching||reasoning)&&<LessonActivity key={move.id} move={move} draft={form} feedback={feedback} onChange={change}/>)}}
+      {move.id==='shema-guide'?<ShemaPhrasePractice key={move.id} move={move} draft={form} feedback={feedback} onChange={change} onStepChange={setPracticeStep}/>:((matching||reasoning)&&<LessonActivity key={move.id} move={move} draft={form} feedback={feedback} onChange={change}/>)}}
       {!written&&!matching&&!reasoning&&<div className="ogp-options">{(move.choices||[]).map(c=><button key={c.id} type="button" disabled={Boolean(feedback)} aria-pressed={form.selectedChoiceId===c.id} onClick={()=>change({selectedChoiceId:c.id})}>{c.label}</button>)}</div>}
       {written&&<><textarea aria-label="Your explanation" rows={5} placeholder="Explain what the Scripture teaches in your own words." value={form.responseText||''} disabled={Boolean(feedback)||thinking} onChange={e=>change({responseText:e.target.value})}/><details className="ogp-help"><summary>Need a hint?</summary><p>Begin with the Scripture's main claim, then explain how the surrounding passages support it. Use your own words.</p></details></>}
       {feedback&&<div className="ogp-feedback" role="status"><strong>Jeremiah responds</strong><p>{feedback.teacherMessage}</p></div>}
@@ -207,7 +208,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      </>}
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
-     {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>)
+     {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
      :<button type="button" className="ogp-action" onClick={advance} disabled={(current?.kind==='discovery'&&discoveryChoice===null)||(current?.kind==='mission'&&caseChoice===null)}>{current?.kind==='witness'&&evidenceIndex<2?'Unseal the next witness':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Try the next situation':current?.kind==='mission'?'Reflect on your choices':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'?'Follow the story further':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'?'Continue the discovery':buttonText} →</button>}
      {!assessment&&moment>0&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      {assessment&&<button type="button" className="ogp-back" onClick={skip}>Skip for now (no mastery)</button>}
