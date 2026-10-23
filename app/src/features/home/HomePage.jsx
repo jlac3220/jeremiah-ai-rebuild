@@ -41,31 +41,40 @@ export default function HomePage({ onNavigate }) {
     <div className="ld-logo"><span className="ld-logo-mark">J</span><span>Jeremiah</span></div>
     <button type="button" className="ld-profile-shortcut" onClick={()=>onNavigate(ROUTES.PROFILE)} aria-label="Open profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/></svg></button>
    </header>
-   <section className="jh-hero" aria-label="Your next step in Scripture">
-    <div className="jh-hero-copy">
-     <div className="jh-overline"><span className="jh-overline-mark"/>A PLACE TO GROW</div>
-     <h1>Discover the <em>Word.</em><br/>Understand the truth.</h1>
-     <p>Explore Scripture, one meaningful lesson at a time.</p>
-     <button type="button" className="jh-hero-link" onClick={()=>onNavigate(ROUTES.CLASSROOM)}>Explore your classroom <span aria-hidden="true">↗</span></button>
+   <section className="jh-hero jh-ignite-hero" aria-label="Welcome to Jeremiah">
+    <div className="jh-ignite-hero-copy">
+     <div className="jh-ignite-tag"><span aria-hidden="true">✦</span> APOSTLES' DOCTRINE · PENTECOSTAL EXPERIENCE</div>
+     <h1>Let the Word <em>come alive.</em></h1>
+     <p>Real Scripture. Meaningful discoveries. A learning journey that grows with you.</p>
+     <button type="button" className="jh-ignite-start" onClick={openLesson}>{active.started?'Pick up your lesson':'Start learning'} <span aria-hidden="true">↗</span></button>
     </div>
-    <SacredArtwork/>
-   </section>
-   <div className="jh-section-top"><div><span className="jh-kicker">YOUR JOURNEY</span><h2>Continue learning</h2></div><span className="jh-count">{data.inProgress} in progress</span></div>
-   <section className="jh-feature" aria-label="Current lesson">
-    <div className="jh-feature-upper">
-     <div><span className="jh-study">{active.content.studyTitle}</span><h3>{active.content.standardTitle}</h3></div>
-     <span className="jh-status">{active.mastered?'Completed':active.started?'In progress':'Ready to begin'}</span>
-    </div>
-    <div className="jh-feature-foot">
-     <div className="jh-next"><span className="jh-next-symbol" aria-hidden="true">↗</span><span><small>YOUR NEXT STEP</small><strong>{active.move?.title || 'Start your journey'}</strong></span></div>
-     <div className="jh-progress"><div><span>Progress</span><strong>{active.percent}%</strong></div><div className="jh-progress-track" role="progressbar" aria-label="Lesson progress" aria-valuenow={active.percent} aria-valuemin={0} aria-valuemax={100}><i style={{width:active.percent+'%'}}/></div></div>
-     <button type="button" className="jh-continue" onClick={openLesson}>{action}<span aria-hidden="true">→</span></button>
+    <div className="jh-ignite-scene" aria-hidden="true">
+     <div className="jh-ignite-disc"><span>✦</span></div>
+     <div className="jh-ignite-verse"><span>HEAR, O ISRAEL</span><strong>ONE LORD</strong><small>DEUTERONOMY 6:4</small></div>
+     <div className="jh-ignite-spark jh-ignite-spark-one">✦</div><div className="jh-ignite-spark jh-ignite-spark-two">✳</div>
     </div>
    </section>
-   <div className="jh-explore">
-    <button type="button" className="jh-tool" onClick={()=>onNavigate(ROUTES.BIBLE_SUPPORT)}><span className="jh-tool-visual"><BookIcon/></span><span className="jh-tool-body"><strong>Open the Bible</strong><small>Read. Reflect. Discover.</small></span><span aria-hidden="true" className="jh-tool-arrow">↗</span></button>
-    <button type="button" className="jh-tool jh-tool-classroom" onClick={()=>onNavigate(ROUTES.CLASSROOM)}><span className="jh-tool-visual jh-tool-visual-path" aria-hidden="true"><span>01</span></span><span className="jh-tool-body"><strong>Explore lessons</strong><small>Follow your learning path</small></span><span aria-hidden="true" className="jh-tool-arrow">↗</span></button>
-   </div>
+
+   <section className="jh-ignite-section" aria-label="Your learning journey">
+    <div className="jh-ignite-section-heading"><div><span className="jh-ignite-eyebrow">YOUR NEXT DISCOVERY</span><h2>Continue your journey</h2></div><span className="jh-ignite-chapter">{active.started?'In progress':'Ready to begin'}</span></div>
+    <div className="jh-ignite-lesson">
+     <div className="jh-ignite-lesson-art" aria-hidden="true"><div className="jh-ignite-arch"><span>✦</span><strong>01</strong><small>LEARN · GROW · LIVE</small></div><div className="jh-ignite-rings"/><div className="jh-ignite-lesson-art-label">{active.content.studyId==='OG'?'THE ONE TRUE GOD':'THE NEW BIRTH'}</div></div>
+     <div className="jh-ignite-lesson-content">
+      <div className="jh-ignite-meta"><span>{active.content.studyTitle}</span><small>{active.mastered?'Completed':active.started?'Continuing':'New lesson'}</small></div>
+      <h3>{active.content.standardTitle}</h3>
+      <p className="jh-ignite-next"><span aria-hidden="true">↗</span> {active.move?.title || 'Discover the lesson'}</p>
+      <div className="jh-ignite-progress"><span>Lesson progress</span><strong>{active.percent}%</strong></div>
+      <div className="jh-ignite-bar" role="progressbar" aria-label="Lesson progress" aria-valuenow={active.percent} aria-valuemin={0} aria-valuemax={100}><i style={{width:active.percent+'%'}}/></div>
+      <button type="button" className="jh-ignite-continue" onClick={openLesson}>{action} <span aria-hidden="true">→</span></button>
+     </div>
+    </div>
+   </section>
+
+   <section className="jh-ignite-explore" aria-label="More ways to explore">
+    <button type="button" className="jh-ignite-tile jh-ignite-tile-bible" onClick={()=>onNavigate(ROUTES.BIBLE_SUPPORT)}><span className="jh-ignite-tile-graphic"><BookIcon/></span><strong>Read Scripture</strong><small>Open your Bible</small><span className="jh-ignite-tile-arrow" aria-hidden="true">↗</span></button>
+    <button type="button" className="jh-ignite-tile jh-ignite-tile-study" onClick={()=>onNavigate(ROUTES.CLASSROOM)}><span className="jh-ignite-tile-graphic">✦</span><strong>Enter Classroom</strong><small>Explore the standards</small><span className="jh-ignite-tile-arrow" aria-hidden="true">↗</span></button>
+    <button type="button" className="jh-ignite-tile jh-ignite-tile-progress" onClick={()=>onNavigate(ROUTES.PROGRESS)}><span className="jh-ignite-tile-graphic"><span className="jh-ignite-progress-number">{data.mastered}</span></span><strong>Your Growth</strong><small>See what you've learned</small><span className="jh-ignite-tile-arrow" aria-hidden="true">↗</span></button>
+   </section>
    <div className="jh-footnote"><span><strong>{data.mastered}</strong> mastered</span><span aria-hidden="true">·</span><span><strong>{data.reviewNeeded}</strong> to revisit</span></div>
   </div>
  </div>;
