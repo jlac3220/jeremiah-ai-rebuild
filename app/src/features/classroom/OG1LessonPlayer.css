@@ -250,3 +250,15 @@
 .ogp-voice-replay{padding:8px 9px!important;white-space:nowrap;color:#e5c78f!important;font-size:.75rem!important;background:transparent!important;border:0!important}
 .ogp-voice-replay:hover{color:#fff!important}
 @media(max-width:720px){.ogp-header-actions{gap:4px}.ogp-voice-toggle{padding:10px!important;width:40px;height:40px}.ogp-voice-toggle span{display:none}.ogp-voice-replay{font-size:.7rem!important;padding:5px!important}.ogp-menu summary{width:36px;height:38px}}
+
+/* Biblical scene paintings carry through from the illustrated chapter destinations. */
+.ogp-scripture-ornament:has(.ogj-art){isolation:isolate;overflow:hidden;background:#1b3445}
+.ogp-scripture-ornament:has(.ogj-art)::after{display:none}
+.ogp-scripture-ornament .ogj-art{position:absolute;inset:0;height:100%;width:100%;opacity:.94;transform:none!important}
+.ogp-scripture-ornament:has(.ogj-art)::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,#101e2b04,#071e2a34)}
+.ogp-trail-quote{position:relative;isolation:isolate;overflow:hidden}
+.ogp-trail-scene{position:absolute;inset:0 0 0 auto;width:43%;height:100%;z-index:-1;opacity:.55;pointer-events:none}
+.ogp-trail-scene::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#102d40 0%,#102d4065 33%,#071f3b11 100%)}
+.ogp-trail-scene .ogj-art{position:absolute;inset:0;width:100%;height:100%}
+.ogp-trail-quote>blockquote,.ogp-trail-quote>p,.ogp-trail-quote>span{position:relative;z-index:1}
+@media(max-width:720px){.ogp-scripture-ornament:has(.ogj-art){height:130px}.ogp-trail-scene{width:55%;opacity:.28}}
