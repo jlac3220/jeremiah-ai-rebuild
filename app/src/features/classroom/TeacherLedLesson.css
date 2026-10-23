@@ -144,3 +144,27 @@
 .tl-teacher-mark { background: #EFF6FF; color: #1463E8; }
 .tl-primary { background: #1463E8; }
 @media(max-width:640px){.tl-page { background: #fff; }.tl-mobile-teaching { border-color: #E5E7EB; }}
+
+
+/* OG.1: Scripture-first Pentecostal/Apostolic encounter. */
+.og1-encounter{margin:20px 0 30px;background:#fff;border:1px solid #d8e5f6;border-radius:23px;overflow:hidden;box-shadow:0 12px 32px rgba(25,57,113,.08);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.og1-encounter-top{display:flex;justify-content:space-between;gap:10px;background:#153c79;color:#e8f2ff;padding:12px 22px;font-size:.7rem;font-weight:850;letter-spacing:.12em}
+.og1-encounter-scripture{padding:32px 26px 27px;text-align:center;background:radial-gradient(ellipse at center top,#287bea 0%,#144b9a 58%,#102d61 100%);color:#fff}
+.og1-encounter-glyph{color:#ffd967;font-size:2rem;display:block}
+.og1-encounter-call{margin:9px auto 16px;max-width:430px;color:#dcecff;font-size:.91rem;line-height:1.5}
+.og1-encounter-scripture blockquote{border:0;padding:0;margin:0 auto;max-width:560px;font:600 clamp(1.55rem,3.5vw,2.3rem)/1.4 Georgia,serif;letter-spacing:-.02em;color:white}
+.og1-encounter-reference{font-weight:830;letter-spacing:.15em;font-size:.68rem;margin-top:18px;color:#ffe38c}
+.og1-encounter-bible{display:flex;width:100%;justify-content:center;align-items:center;gap:12px;background:#f1f6fe;color:#1453aa;border:0;border-bottom:1px solid #dce8f7;padding:13px 15px;font-size:.84rem;font-weight:780;cursor:pointer}
+.og1-encounter-question{padding:24px 26px 19px}
+.og1-encounter-question>span{font-size:.71rem;font-weight:850;letter-spacing:.12em;color:#1463e8}
+.og1-encounter-question h2{margin:8px 0 17px;color:#1c2b43;font-size:1.32rem;line-height:1.3}
+.og1-encounter-choices{display:grid;gap:9px}
+.og1-encounter-choices button{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;border-radius:12px;border:1px solid #dce6f3;background:#fbfdff;color:#273c5b;padding:13px 15px;font-size:.89rem;line-height:1.45;cursor:pointer}
+.og1-encounter-choices button span{color:#1b67c8;font-size:1.13rem;flex:none}
+.og1-encounter-choices button[aria-pressed=true]{background:#e7f1ff;border-color:#287beb;color:#123d80}
+.og1-encounter-feedback{margin:15px 0 0;padding:15px 16px;background:#eaf4ff;border-left:3px solid #1b72df;color:#1e426e;font-size:.9rem;line-height:1.6;border-radius:0 11px 11px 0}
+.og1-encounter-journey{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;background:#f6f9fe;padding:16px 20px;border-top:1px solid #e3ebf6}
+.og1-encounter-journey span{display:flex;align-items:center;gap:7px;color:#516b8c;font-size:.74rem;font-weight:760;line-height:1.35}
+.og1-encounter-journey b{display:grid;place-items:center;width:25px;height:25px;flex:0 0 25px;border-radius:50%;background:#dbeaff;color:#1653ad;font-size:.65rem}
+.og1-encounter button:focus-visible{outline:3px solid #ffdb68;outline-offset:2px}
+@media(max-width:640px){.og1-encounter{margin:17px 0 22px;border-radius:18px}.og1-encounter-top{padding:11px 15px;font-size:.58rem}.og1-encounter-scripture{padding:28px 20px 23px}.og1-encounter-scripture blockquote{font-size:1.65rem}.og1-encounter-question{padding:20px 17px}.og1-encounter-question h2{font-size:1.17rem}.og1-encounter-choices button{font-size:.83rem}.og1-encounter-journey{padding:14px 12px;gap:5px}.og1-encounter-journey span{flex-direction:column;text-align:center;font-size:.63rem}.og1-encounter-journey b{width:24px;height:24px;flex-basis:24px}}
