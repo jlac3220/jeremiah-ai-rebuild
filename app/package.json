@@ -16,7 +16,15 @@
     "test:dashboard": "node scripts/test-learning-dashboard.mjs",
     "test:curriculum": "node scripts/test-curriculum.mjs",
     "test:teacher-led": "node scripts/test-teacher-led.mjs",
-    "test:grouped": "node scripts/test-grouped-lesson.mjs"
+    "test:grouped": "node scripts/test-grouped-lesson.mjs",
+    "test:media": "node --test scripts/test-media-research.mjs scripts/test-media-discovery.mjs scripts/test-youtube-extraction.mjs scripts/test-authorized-sermon.mjs",
+    "research:media": "node scripts/research-media.mjs",
+    "discover:media": "node scripts/discover-media.mjs",
+    "extract:youtube": "node scripts/extract-youtube.mjs",
+    "transcribe:sermon": "node scripts/transcribe-authorized-sermon.mjs",
+    "crawl:site": "python3 server/websiteCrawler.py",
+    "test:crawler": "python3 scripts/test-website-crawler.py -v",
+    "test:content-scan": "node scripts/test-educational-scan.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

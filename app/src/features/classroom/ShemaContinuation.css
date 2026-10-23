@@ -324,7 +324,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #16a34a;
+  background: #1463e8;
   color: #fff;
   font-size: 1.4rem;
   font-weight: 900;
@@ -465,11 +465,11 @@
   padding: 20px 22px;
   border-left: 4px solid var(--color-accent);
   border-radius: 0 14px 14px 0;
-  background: #fff7ed;
+  background: #f8fafc;
 }
 
 .scl-witness-built small {
-  color: #9a3412;
+  color: #1d4ed8;
   font-size: .7rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -486,7 +486,7 @@
 .scl-witness-built > span {
   display: block;
   margin-top: 9px;
-  color: #78716c;
+  color: #475569;
   font-size: .78rem;
 }
 
@@ -572,8 +572,8 @@
 }
 
 .scl-retrieval-options button.is-correct {
-  border-color: #16a34a;
-  background: #f0fdf4;
+  border-color: #1463e8;
+  background: #eff6ff;
 }
 
 .scl-retrieval-options button.is-wrong {
@@ -599,7 +599,7 @@
 }
 
 .scl-retrieval-options button.is-correct i {
-  background: #16a34a;
+  background: #1463e8;
 }
 
 .scl-retrieval-options button.is-wrong i {
@@ -633,13 +633,13 @@
 }
 
 .scl-retrieval-result.is-pass {
-  border: 1px solid #bbf7d0;
-  background: #f0fdf4;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
 }
 
 .scl-retrieval-result.is-retry {
-  border: 1px solid #fed7aa;
-  background: #fff7ed;
+  border: 1px solid #dbeafe;
+  background: #f8fafc;
 }
 
 .scl-retrieval-result > strong {
@@ -691,3 +691,10 @@
     width: 100%;
   }
 }
+
+/* Keep assessment feedback readable without green or parchment cards. */
+.scl-complete>div,.scl-retrieval-options button.is-correct i { background: #1463E8; }
+.scl-witness-built,.scl-retrieval-result.is-pass,.scl-retrieval-result.is-retry { background: #F8FAFC; border-color: #BFDBFE; }
+.scl-witness-built { border-left-color: #1463E8; }
+.scl-witness-built small { color: #1D4ED8; }
+.scl-retrieval-options button.is-correct { background: #EFF6FF; border-color: #1463E8; }

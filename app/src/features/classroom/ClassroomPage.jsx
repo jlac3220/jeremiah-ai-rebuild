@@ -22,6 +22,7 @@ import { setBibleReaderIntent } from "../../core/bible/bibleReaderIntent";
 import { askJeremiahTeacher } from "../../services/jeremiahTeacher";
 import CurriculumLesson from "./CurriculumLesson";
 import TeacherLedLesson from "./TeacherLedLesson";
+import OG1LessonPlayer from "./OG1LessonPlayer";
 import ShemaClassroom from "./ShemaClassroom";
 import ShemaContinuation from "./ShemaContinuation";
 import "./ClassroomPage.css";
@@ -1582,6 +1583,10 @@ export default function ClassroomPage({ onNavigate }) {
         </button>
       </div>
     );
+  }
+
+  if (content.standardId === "OG.1.LESSON.18" && !sessionStorage.getItem("jeremiah-og1-classic")) {
+    return <OG1LessonPlayer content={content} state={learningState} onStateChange={setLearningState} onNavigate={onNavigate} onUseClassic={()=>{sessionStorage.setItem("jeremiah-og1-classic","1");window.location.reload();}} />;
   }
 
   if (content.lessonFormat === "teacher-led") {

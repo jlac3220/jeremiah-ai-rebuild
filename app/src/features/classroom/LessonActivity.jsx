@@ -8,10 +8,10 @@ const scenes=[
 ];
 function Landscape({scene=0}){
  return <svg viewBox="0 0 720 240" role="img" aria-label={['An illustrated gathering in a desert landscape','An illustrated open courtyard with people gathered to listen','An illustrated writing table looking toward a city'][scene]}>
-  <defs><linearGradient id={`sky-${scene}`} x2="0" y2="1"><stop stopColor="#133c4a"/><stop offset="1" stopColor="#839b96"/></linearGradient></defs>
-  <path fill={`url(#sky-${scene})`} d="M0 0h720v240H0z"/><circle cx="586" cy="60" r="28" fill="#edc785"/>
-  <path d="M0 167L105 76 204 165 307 101 436 190 564 120 720 173V240H0Z" fill="#758679"/><path d="M0 208Q200 142 383 208T720 184V240H0Z" fill="#b4936e"/>
-  {scene===0?<g fill="#e7d4af" stroke="#5c6356" strokeWidth="3"><path d="M65 201l49-76 55 76zM495 207l49-65 53 65z"/><path d="M114 125v76M544 142v65"/>{[230,275,321,370,420].map((x,i)=><g key={x} transform={`translate(${x} ${173+i%2*12})`}><circle r="9" cy="-22" fill="#503e30"/><path d="M-13 14l5-26h16l7 26z"/></g>)}</g>:scene===1?<g fill="#d2bc94"><path d="M52 58h24v167H52zM178 58h24v167h-24zM40 44h177v20H40zM509 62h25v160h-25zM650 62h25v160h-25zM497 47h190v22H497z"/>{[255,310,365,420,463].map(x=><g key={x}><circle cx={x} cy="176" r="9" fill="#503e30"/><path d={`M${x-12} 213l4-26h16l5 26z`} fill="#f0dec1"/></g>)}</g>:<g><path d="M84 104h36V64h35v40h45v85H84zM225 113h34V80h29v33h27v77h-90zM510 90h40V55h28v35h54v99H510z" fill="#d1bb98"/><path d="M123 212h474v28H123z" fill="#543d2f"/><path d="M220 160q70-22 140 0v68q-70-20-140 0zM360 160q70-22 140 0v68q-70-20-140 0z" fill="#f3dfb8"/><path d="M360 161v65M240 179h99m-99 13h99m-99 13h99m41-26h95m-95 13h95" stroke="#9c835e" strokeWidth="3"/></g>}
+  <defs><linearGradient id={`sky-${scene}`} x2="0" y2="1"><stop stopColor="#17315A"/><stop offset="1" stopColor="#A9C8EC"/></linearGradient></defs>
+  <path fill={`url(#sky-${scene})`} d="M0 0h720v240H0z"/><circle cx="586" cy="60" r="28" fill="#DCEAFE"/>
+  <path d="M0 167L105 76 204 165 307 101 436 190 564 120 720 173V240H0Z" fill="#7185A1"/><path d="M0 208Q200 142 383 208T720 184V240H0Z" fill="#94A3B8"/>
+  {scene===0?<g fill="#E2E8F0" stroke="#475569" strokeWidth="3"><path d="M65 201l49-76 55 76zM495 207l49-65 53 65z"/><path d="M114 125v76M544 142v65"/>{[230,275,321,370,420].map((x,i)=><g key={x} transform={`translate(${x} ${173+i%2*12})`}><circle r="9" cy="-22" fill="#1F2937"/><path d="M-13 14l5-26h16l7 26z"/></g>)}</g>:scene===1?<g fill="#CBD5E1"><path d="M52 58h24v167H52zM178 58h24v167h-24zM40 44h177v20H40zM509 62h25v160h-25zM650 62h25v160h-25zM497 47h190v22H497z"/>{[255,310,365,420,463].map(x=><g key={x}><circle cx={x} cy="176" r="9" fill="#1F2937"/><path d={`M${x-12} 213l4-26h16l5 26z`} fill="#E2E8F0"/></g>)}</g>:<g><path d="M84 104h36V64h35v40h45v85H84zM225 113h34V80h29v33h27v77h-90zM510 90h40V55h28v35h54v99H510z" fill="#CBD5E1"/><path d="M123 212h474v28H123z" fill="#334155"/><path d="M220 160q70-22 140 0v68q-70-20-140 0zM360 160q70-22 140 0v68q-70-20-140 0z" fill="#E2E8F0"/><path d="M360 161v65M240 179h99m-99 13h99m-99 13h99m41-26h95m-95 13h95" stroke="#64748B" strokeWidth="3"/></g>}
  </svg>;
 }
 export function LessonVisual({kind}){
@@ -25,17 +25,24 @@ export function LessonVisual({kind}){
  return <figure className="la-comparison"><span className="la-kicker">Locate the actual disagreement</span><h2>Both say “one God.”</h2><div><section><h3>Trinitarian confession</h3><p>One divine essence</p><strong>Three eternal persons</strong></section><section><h3>Oneness confession</h3><p>One undivided God</p><strong>No eternal division into persons</strong></section></div><figcaption>Now explain the incarnation. A fair comparison must preserve both the actual disagreement and Jesus’ real humanity.</figcaption></figure>;
 }
 export default function LessonActivity({move,draft,feedback,onChange}){
+ const [guidedStep,setGuidedStep]=useState(0);
  if(move.interaction.type==='reasoning')return <div className="la-reasoning">{[['claim','claimId','claims','claimPrompt'],['reason','reasonId','reasons','reasonPrompt']].map(([id,field,options,prompt])=>{const result=feedback?.itemResults?.find(r=>r.id===id);return <fieldset key={id} disabled={Boolean(feedback)}><legend>{move.interaction[prompt]}</legend>{move.interaction[options].map(option=><button type="button" key={option.id} aria-pressed={draft[field]===option.id} onClick={()=>onChange({[field]:option.id})}>{option.label}</button>)}{result && <p className={result.correct?'la-correct':'la-rethink'}>{result.message}</p>}</fieldset>;})}</div>;
  const {items,options}=move.interaction;
  const results=feedback?.itemResults || [];
  const trail=move.id==='continuity-guide';
  const clinic=move.id==='distinction-guide';
+ const guided=Boolean(move.standardIds?.some(id=>id.startsWith('OG.1.')) || move.id.endsWith('-guide'));
+ const answered=items.filter(item=>Boolean(draft.placements?.[item.id])).length;
+ const activeIndex=Math.min(guidedStep,items.length-1);
+ const visibleItems=guided&&!feedback?[items[activeIndex]]:items;
  return <div className={`la-activity ${trail?'la-trail':clinic?'la-clinic':'la-matching'}`}>
   <p className="la-kicker">{move.activityLabel || 'Phrase workshop'} · {items.filter(i=>draft.placements?.[i.id]).length}/{items.length} connected</p>
-  {items.map((item,i)=>{const result=results.find(r=>r.id===item.id);return <fieldset key={item.id} disabled={Boolean(feedback)}><legend>{trail?'Witness':clinic?'Claim':`Evidence ${i+1}`}</legend><p>{item.label}</p>
+  {guided && !feedback && <div className="la-guided-counter" role="status"><strong>CONNECT</strong><span>Phrase {activeIndex+1} of {items.length}</span></div>}
+  {visibleItems.map((item,i)=>{const result=results.find(r=>r.id===item.id);return <fieldset key={item.id} disabled={Boolean(feedback)}><legend>{trail?'Witness':clinic?'Claim':`Evidence ${guided?items.indexOf(item)+1:i+1}`}</legend><p>{item.label}</p>
    {clinic?<div className="la-verdicts">{options.map(option=><button type="button" key={option.id} aria-pressed={draft.placements?.[item.id]===option.id} onClick={()=>onChange({placements:{...draft.placements,[item.id]:option.id}})}>{option.label}</button>)}</div>:<label>{trail?'Position in the argument':'Connect to'}<select value={draft.placements?.[item.id] || ''} onChange={e=>onChange({placements:{...draft.placements,[item.id]:e.target.value}})}><option value="">Choose a connection…</option>{options.map(o=><option key={o.id} value={o.id}>{o.label}</option>)}</select></label>}
    {result && <p className={result.correct?'la-correct':'la-rethink'}><strong>{result.correct?'Connected: ':'Reconsider: '}</strong>{result.message}</p>}
   </fieldset>;})}
+  {guided && !feedback && <div className="la-guided-navigation">{activeIndex>0&&<button type="button" onClick={()=>setGuidedStep(i=>Math.max(0,i-1))}>← Previous phrase</button>}{activeIndex<items.length-1&&<button type="button" disabled={!draft.placements?.[items[activeIndex].id]} onClick={()=>setGuidedStep(i=>Math.min(items.length-1,i+1))}>Reveal next phrase →</button>}{activeIndex===items.length-1&&draft.placements?.[items[activeIndex].id]&&<p>All three phrases explored. Discuss your answer when you are ready.</p>}</div>}
  </div>;
 }
 

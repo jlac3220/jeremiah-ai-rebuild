@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "description": "Publisher archive video links selected from official BibleProject pages. Standard alignment tags are research hypotheses, not doctrinal approval.",
+  "entries": [
+    {
+      "id": "bibleproject-yhwh-lord",
+      "title": "YHWH / LORD",
+      "description": "The divine name rendered LORD in English translations; directly discusses Deuteronomy 6:4-5.",
+      "publisher": "BibleProject",
+      "url": "https://bibleproject.com/videos/yhwh-lord/",
+      "catalogUrl": "https://bibleproject.com/videos/collections/shema/",
+      "standardIds": [
+        "OG.1.1.18"
+      ],
+      "knowledgeIds": [
+        "one-lord"
+      ],
+      "reviewNote": "Investigate vocabulary and manuscript context; do not treat outside teaching as doctrinal authority."
+    },
+    {
+      "id": "bibleproject-first-commandment",
+      "title": "1st Commandment: No Other Gods",
+      "description": "Israel's command concerning other elohim and exclusive allegiance, as presented by BibleProject; compare carefully with the standard's explicit monotheism.",
+      "publisher": "BibleProject",
+      "url": "https://bibleproject.com/videos/1st-commandment-no-other-gods/",
+      "catalogUrl": "https://bibleproject.com/videos/all/",
+      "standardIds": [
+        "OG.1.1.18"
+      ],
+      "knowledgeIds": [
+        "no-other"
+      ],
+      "reviewNote": "Contains spiritual-being/elohim discussion; doctrinal review required before excerpting or assigning."
+    }
+  ]
+}

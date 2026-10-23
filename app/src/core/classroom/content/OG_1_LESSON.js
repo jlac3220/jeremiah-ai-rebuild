@@ -37,7 +37,7 @@ const moves=[
   {id:'our',label:'The LORD our God',answer:'identity',explanation:'This identifies Israel’s God and the covenant relationship.'},
   {id:'one',label:'is one LORD',answer:'confession',explanation:'The confession concerns who God is, not just agreement within a group.'}
  ],[{id:'confession',label:'Confesses God’s oneness'},{id:'summons',label:'Calls Israel to listen'},{id:'identity',label:'Identifies the covenant God'}],'shema-try',standards[0].id),
- attempt('shema-try','Explain the anchor', 'State Deuteronomy 6:4 from memory and explain its phrases in ordinary language. Why does it remain the framework when Jesus and the apostles speak? A friend points to “one flesh” in Genesis 2:24: explain why context, including Isaiah, must decide the meaning rather than that comparison alone. Connect Mark 12:29, 1 Corinthians 8:4–6, and Ephesians 4:5–6.',standards[0],'isaiah-show',[shema,mark,...isaiah.slice(0,2),...nt.slice(0,2)]),
+ attempt('shema-try','Explain the anchor', 'State Deuteronomy 6:4 from memory. Explain what shema (hear) and echad (one) mean here, and why the confession calls Israel to wholehearted love in verse 5. A friend points to “one flesh” in Genesis 2:24: explain why a word’s other uses do not decide this passage. Use Isaiah 44:6 and Jesus’ repetition in Mark 12:29 to show why the Shema remains foundational.',standards[0],'isaiah-show',[shema,mark,...isaiah.slice(0,2),...nt.slice(0,2)]),
  show('isaiah-show','The witness stand',[
   'Isaiah 43 calls for witnesses. The issue is not which rival deity deserves first place. The LORD declares that no God was formed before him and none will follow. The later declarations add “beside me” and “none else.” Together they exclude rivals across time and alongside God.',
   'Watch the three directions in the visual: before, beside, after. These are a way to organize the words, not a picture of God. Isaiah 45 also connects the one God to salvation for all the earth.',
@@ -48,7 +48,7 @@ const moves=[
   {id:'alongside',label:'“Another God could exist alongside him.”',answer:'beside',explanation:'Isaiah 44:6 directly rules out a God beside him.'},
   {id:'local',label:'“This God can only call Israel to salvation.”',answer:'earth',explanation:'Isaiah 45:22 calls all the ends of the earth to the one God.'}
  ],[{id:'earth',label:'Isaiah 45:22 · all the ends of the earth'},{id:'before',label:'Isaiah 43:10 · no God before me'},{id:'beside',label:'Isaiah 44:6 · no God beside me'}],'isaiah-try',standards[1].id,{activityLabel:'Evidence challenge'}),
- attempt('isaiah-try','Make the cumulative case','Quote four of Isaiah’s declarations from memory and explain what each contributes. Connect their combined claim to New Testament monotheism. Someone argues, “Isaiah excludes other gods but says nothing against eternal divine persons within one God.” Explain the Apostolic response to that actual argument, using the wording and context rather than calling the other person a polytheist.',standards[1],'continuity-show',isaiah),
+ attempt('isaiah-try','Make the cumulative case','Quote at least four of Isaiah’s declarations and explain what each contributes: none before, beside, or after, and no other Savior. Someone argues, “These verses rule out rival gods, but do not by themselves settle every question about divine persons.” State that position fairly, then explain the Apostolic reading of the passages’ absolute exclusivity. Do not misrepresent the other person as believing in three gods.',standards[1],'continuity-show',isaiah),
  show('continuity-show','Follow the same thread',[
   'Jesus answers with the Shema. Paul then says there is no other God but one before addressing “one God, the Father” and “one Lord Jesus Christ.” Read the surrounding contrast with so-called gods: the confession is not introduced as permission to add deities.',
   'Ephesians places one God in the church’s shared confession. First Timothy joins one God to a real human mediator. James affirms one God while warning that recognition without a faithful response is insufficient.',
@@ -89,15 +89,38 @@ const moves=[
 for(const [index,prefix] of ['shema','isaiah','continuity','distinction','devotion'].entries()) {
  moves.find(m=>m.id===`${prefix}-show`).standardIds=[standards[index].id];
 }
-// Work through all connected concepts before asking for their independent synthesis.
-const guidedRoute={'shema-guide':'isaiah-show','isaiah-guide':'continuity-show','continuity-guide':'distinction-show','distinction-guide':'devotion-show','devotion-guide':'shema-try','shema-try':'isaiah-try','isaiah-try':'continuity-try','continuity-try':'distinction-try','distinction-try':'devotion-try'};
-for(const [id,next] of Object.entries(guidedRoute))moves.find(m=>m.id===id).next.strong=next;
+// Complete one goal at a time: Show me -> Guide me -> Let me try.
+// The optional reasoning challenges remain part of their own chapters.
+// This order is easier to learn from, resume, and review on a phone.
+const guidedRoute={
+ 'shema-guide':'context-challenge',
+ 'context-challenge':'shema-try',
+ 'shema-try':'isaiah-show',
+ 'isaiah-guide':'isaiah-try',
+ 'isaiah-try':'continuity-show',
+ 'continuity-guide':'continuity-try',
+ 'continuity-try':'distinction-show',
+ 'prayer-challenge':'distinction-guide',
+ 'distinction-guide':'distinction-try',
+ 'distinction-try':'devotion-show',
+ 'devotion-guide':'devotion-try',
+ 'devotion-try':'complete'
+};
 deepenOG1(moves);
+for(const [id,next] of Object.entries(guidedRoute))moves.find(m=>m.id===id).next.strong=next;
+
+const lessonChapters=[
+ {standardId:standards[0].id,title:'The Shema',question:'What does Deuteronomy 6:4 actually confess?',anchor:'Deuteronomy 6:4–5'},
+ {standardId:standards[1].id,title:'Isaiah’s witness',question:'How does God exclude every rival claim?',anchor:'Isaiah 43:10; 44:6; 45:5'},
+ {standardId:standards[2].id,title:'The same confession',question:'Do Jesus and the apostles change the confession?',anchor:'Mark 12:29; 1 Corinthians 8:4–6'},
+ {standardId:standards[3].id,title:'Explain the difference',question:'Where do Oneness and Trinitarian readings differ?',anchor:'John 1:1, 14; 1 Timothy 2:5'},
+ {standardId:standards[4].id,title:'Love the one Lord',question:'How does the confession shape everyday allegiance?',anchor:'Deuteronomy 6:4–5; James 2:19'}
+];
 const orderedMoves=[];
 let cursor='learn';
 while(cursor){const move=moves.find(m=>m.id===cursor);orderedMoves.push(move);cursor=move.next?.continue || move.next?.strong;}
 const knowledge=standards.flatMap(s=>s.evidence.map(e=>({id:`${s.id}:evidence-${e.level}`,title:`${s.title}: ${e.label}`,description:e.text})));
-export default {...base,standardId:'OG.1.LESSON.18',standardTitle:'One God: the confession through Scripture',lessonFormat:'teacher-led',coveredStandards:standards,instructionalMoves:orderedMoves,curriculumVersion:1,
+export default {...base,standardId:'OG.1.LESSON.18',standardTitle:'One God: the confession through Scripture',lessonFormat:'teacher-led',coveredStandards:standards,lessonChapters,instructionalMoves:orderedMoves,curriculumVersion:1,
  sourceDomain:{...base.sourceDomain,vocabulary:[{term:'Shema',definition:'Hebrew for hear; the opening word used to name Israel’s confession in Deuteronomy 6:4.'},{term:'Echad',definition:'Hebrew for one. Interpret the word in the setting of the passage; this lesson develops its Apostolic interpretation alongside Isaiah’s declarations.'},{term:'Monotheism',definition:'Belief in one God.'},{term:'Incarnation',definition:'God becoming truly human in Jesus Christ; his humanity is genuine.'},{term:'Essence and person',definition:'In trinitarian theology, essence identifies the one divine being and person identifies the three eternal distinctions. Oneness rejects those eternal personal distinctions.'},{term:'Doxology',definition:'Praise directed to God; this lesson connects confession to worship.'}]},
  completionSummary:'You investigated the confession, weighed Isaiah’s witnesses, traced New Testament continuity, explained the doctrinal distinction fairly, and connected the confession to life.',
  takeaways:['Read the Shema within its covenant and scriptural context.','Let Isaiah’s declarations accumulate into an argument.','Trace the confession through Jesus and the apostles.','Represent another position accurately before explaining the Apostolic response.','Connect the confession to worship, ethics, and mission.'],

@@ -1,0 +1,70 @@
+/* A visual journey through three environments, not generic selection cards. */
+.ogj-journey{margin:4px 0 12px}
+.ogj-introduction{display:flex;gap:18px;align-items:center;justify-content:space-between;margin-bottom:22px}
+.ogj-eyebrow{font:800 .68rem/1.5 system-ui,sans-serif;letter-spacing:.17em;color:#967445;white-space:nowrap}
+.ogj-introduction p{max-width:430px;color:#68747b;font-size:.95rem;line-height:1.55;margin:0}
+.ogj-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ogj-destination{position:relative;isolation:isolate;overflow:hidden;min-height:345px;border:2px solid transparent;border-radius:18px;background:#172f42;padding:0;color:white;text-align:left;cursor:pointer;box-shadow:0 17px 31px #112b402a;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.ogj-destination:hover{transform:translateY(-5px);box-shadow:0 25px 40px #112b4040}
+.ogj-destination.is-selected{border-color:#dbba7b;box-shadow:0 0 0 3px #f5d99b48,0 24px 40px #112b4040}
+.ogj-destination:focus-visible{outline:3px solid #d7b772;outline-offset:4px}
+.ogj-art{display:block;position:absolute;inset:0;width:100%;height:100%;transition:transform .4s ease}
+.ogj-destination:hover .ogj-art{transform:scale(1.04)}
+.ogj-card-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#0c1e2d4d 3%,transparent 38%,#091a2aee 98%)}
+.ogj-era{position:absolute;left:18px;top:20px;color:#fbdfb1;font-size:.62rem;letter-spacing:.13em;font-weight:800;line-height:1.5}
+.ogj-card-caption{position:absolute;bottom:24px;left:20px;right:32px;display:grid;gap:7px}
+.ogj-card-caption>span{font-size:.62rem;color:#e8d8c4;letter-spacing:.11em;font-weight:700}
+.ogj-card-caption strong{font:500 clamp(1.65rem,2.8vw,2.5rem)/1.05 Georgia,serif;letter-spacing:-.035em;color:#fff}
+.ogj-card-arrow{position:absolute;right:17px;bottom:24px;color:#f7dba8;font-size:1.4rem;font-weight:500}
+.ogj-reveal{animation:ogj-reveal .35s ease;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin:21px 0 0;background:#fffdf8;border:1px solid #e4d8bd;border-left:3px solid #b18a50;border-radius:0 15px 15px 0;padding:23px 27px;box-shadow:0 11px 26px #283d3910}
+.ogj-reveal-kicker{color:#95784d;letter-spacing:.15em;font-size:.64rem;font-weight:800}
+.ogj-reveal h2{font:500 1.7rem/1.2 Georgia,serif!important;letter-spacing:-.035em;margin:9px 0!important;color:#1b3947}
+.ogj-reveal p{margin:0;color:#526777;font-size:1rem;line-height:1.6}
+.ogj-reveal small{display:block;color:#7e8a87;margin-top:9px;line-height:1.5}
+.ogj-reveal button{flex-shrink:0;border:1px solid #c4ad7d;border-radius:999px;padding:12px 16px;background:#fef8e9;color:#735327;font-size:.79rem;font-weight:750;cursor:pointer;white-space:nowrap}
+.ogj-reveal button:hover{background:#f4e9cf}
+.ogj-reveal button span{margin-right:5px}
+@keyframes ogj-reveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:750px){
+ .ogj-introduction{display:block}.ogj-introduction p{margin:10px 0 0}
+ .ogj-gallery{gap:9px}
+ .ogj-destination{min-height:255px;border-radius:13px}
+ .ogj-era{left:10px;top:13px;font-size:.5rem}
+ .ogj-card-caption{left:11px;bottom:16px;right:6px}
+ .ogj-card-caption>span{font-size:.49rem;letter-spacing:.03em}
+ .ogj-card-caption strong{font-size:clamp(1.12rem,4.4vw,1.7rem)}
+ .ogj-card-arrow{right:7px;bottom:15px;font-size:1rem}
+ .ogj-reveal{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:450px){
+ .ogj-gallery{grid-template-columns:1fr;gap:11px}
+ .ogj-destination{min-height:185px}
+ .ogj-art{object-fit:cover}
+ .ogj-card-caption{left:20px;bottom:18px}
+ .ogj-era{left:20px;top:17px;font-size:.62rem}
+ .ogj-card-caption>span{font-size:.65rem}
+ .ogj-card-caption strong{font-size:2rem}
+ .ogj-card-arrow{right:18px;bottom:19px;font-size:1.3rem}
+}
+@media(prefers-reduced-motion:reduce){.ogj-art,.ogj-destination{transition:none!important}.ogj-reveal{animation:none}}
+
+/* Source-backed portraits now replace the synthetic landscapes. */
+.ogj-art{display:block;position:absolute;inset:0;overflow:hidden;background:linear-gradient(135deg,#283b43,#624e41)}
+.ogj-photo{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:1;filter:saturate(.9) contrast(1.08) brightness(.95);transition:transform .6s cubic-bezier(.16,.6,.25,1),filter .5s}
+.ogj-fallback{position:absolute;inset:0;display:grid;place-items:center;font:500 clamp(2rem,5vw,3.5rem) Georgia,serif;color:#e3c9a581;letter-spacing:.08em;background:radial-gradient(circle at 54% 35%,#866751,#152b3b)}
+.ogj-destination:hover .ogj-photo{transform:scale(1.065);filter:saturate(1) contrast(1.09) brightness(1.04)}
+.ogj-destination .ogj-card-shade{background:linear-gradient(180deg,#071d2d8a 0%,transparent 37%,#08192433 54%,#061523f7 100%)}
+.ogj-destination.is-selected .ogj-photo{filter:saturate(1.06) contrast(1.09) brightness(1)}
+.ogj-destination .ogj-era{z-index:2;text-shadow:0 1px 7px #071724cf}
+.ogj-destination .ogj-card-caption{z-index:2}
+.ogj-destination .ogj-card-caption strong{text-shadow:0 2px 18px #030e17d9}
+.ogj-destination .ogj-card-arrow{z-index:2}
+.ogj-reveal{align-items:center;gap:27px;background:#fffcf6;padding:26px 29px}
+.ogj-reveal-copy{min-width:0;max-width:680px}
+.ogj-reveal blockquote{border:0;margin:13px 0 14px;padding:0;color:#1b3e4c;font:500 clamp(1.35rem,2.8vw,2.1rem)/1.43 Georgia,serif;letter-spacing:-.024em}
+.ogj-reveal-actions{display:grid;gap:10px;flex:0 0 auto;justify-items:stretch}
+.ogj-reveal-actions button{border:1px solid #c4ad7d;border-radius:999px;padding:12px 19px;background:#183a4e;color:#fff;font-size:.8rem;font-weight:750;cursor:pointer;white-space:nowrap}
+.ogj-reveal-actions button.ogj-read-link{background:#f9f1e1;color:#71552d}
+.ogj-reveal-actions button:hover{transform:translateY(-1px)}
+@media(max-width:750px){.ogj-reveal{align-items:stretch}.ogj-reveal-actions{display:flex;flex-wrap:wrap;gap:8px}.ogj-reveal-actions button{font-size:.74rem}.ogj-destination .ogj-card-caption strong{font-size:clamp(1.1rem,4.2vw,1.8rem)}}
+@media(max-width:450px){.ogj-reveal{padding:23px 19px}.ogj-destination .ogj-card-caption strong{font-size:2rem}.ogj-destination .ogj-photo{object-position:center 31%}}

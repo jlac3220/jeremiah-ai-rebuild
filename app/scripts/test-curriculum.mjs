@@ -8,6 +8,8 @@ import { createLearningState, saveLearningState, loadLearningState, advanceLearn
 import { getTeachingPlan } from '../src/data/curriculum/teachingPlans.js';
 import { classroomResources } from '../src/data/curriculum/classroomResources.js';
 import { getLessonExperience } from '../src/core/classroom/content/lessonExperience.js';
+import { getInteractiveActivities, evaluateInteractiveActivity } from '../src/data/curriculum/interactiveActivities.js';
+import {getLessonFrame, LESSON_PHASES} from '../src/core/classroom/lessonBlueprint.js';
 import { teachWithJeremiah } from '../server/teacherCore.mjs';
 const saved = new Map();
 globalThis.window = { localStorage: { getItem: key=>saved.get(key)||null, setItem:(key,value)=>saved.set(key,value) } };
@@ -28,9 +30,47 @@ for (const study of CURRICULUM_STUDIES) {
     assert.ok(standard.scope && standard.focus && standard.statement);
     const content=classroomContentRegistry[standard.id];
     if (!content.sourceStandard) continue; // Original curated Shema lesson has its own smoke test.
+    assert.equal(getLessonFrame(content,content.instructionalMoves[0],{}).chapterCount,1,standard.id+' curriculum chapter');
+    for(const [id,phase] of [['learn','Show me'],['scripture','Guide me'],['sources','Guide me'],['check','Let me try']]) {
+      const curr=content.instructionalMoves.find(m=>m.id===id);
+      if(curr) assert.equal(getLessonFrame(content,curr,{}).phase,phase,standard.id+' phase '+id);
+    }
+    assert.deepEqual(LESSON_PHASES,['Show me','Guide me','Let me try']);
     assert.ok(getTeachingPlan(content).encounter);
     assert.equal(getLessonExperience(content).witnesses.length,3);
     assert.equal(getLessonExperience(content).vocabulary.length,3);
+    if(content.sourceStandard) {
+      const exercises=getInteractiveActivities(content);
+      assert.ok(exercises.length>=1,standard.id+': missing formative practice');
+      for(const activity of exercises) {
+        assert.ok(['match','sort','order','blank'].includes(activity.kind),standard.id+': unknown activity');
+        assert.ok(activity.id && activity.title && activity.instruction,standard.id+': missing activity instructions');
+        let correct;
+        let wrong;
+        if(activity.kind==='match') {
+          assert.ok(activity.pairs.length>=2,standard.id+': too few matches');
+          assert.equal(new Set(activity.pairs.map(p=>p.id)).size,activity.pairs.length);
+          correct=Object.fromEntries(activity.pairs.map(p=>[p.id,p.id]));
+          wrong={...correct,[activity.pairs[0].id]:'incorrect'};
+        } else if(activity.kind==='sort') {
+          assert.ok(activity.groups.length>=2 && activity.items.length>=3);
+          correct=Object.fromEntries(activity.items.map(p=>[p.id,p.group]));
+          wrong={...correct,[activity.items[0].id]:activity.groups.find(g=>g.id!==activity.items[0].group).id};
+        } else if(activity.kind==='order') {
+          assert.ok(activity.items.length>=3);
+          correct={order:activity.items.map(p=>p.id)};
+          wrong={order:[...correct.order].reverse()};
+        } else {
+          assert.ok(activity.before && Array.isArray(activity.options) && activity.options.includes(activity.answer));
+          correct={choice:activity.answer};
+          wrong={choice:activity.options.find(x=>x!==activity.answer)};
+        }
+        assert.equal(evaluateInteractiveActivity(activity,correct),true,standard.id+' '+activity.id+': correct answer');
+        assert.equal(evaluateInteractiveActivity(activity,wrong),false,standard.id+' '+activity.id+': wrong answer');
+        assert.equal(evaluateInteractiveActivity(activity,{}),false,standard.id+' '+activity.id+': unanswered must not pass');
+      }
+    }
+
     assert.ok(getLessonMedia(content).every(s=>s.review.status==='approved'),standard.id+' reviewed reinforcement');
     if (content.lessonFormat === 'teacher-led') continue; // Full branching and rubric tests live in test-teacher-led.mjs.
     let state=createLearningState(content);
@@ -58,6 +98,11 @@ for(const resource of classroomResources) {
  assert.ok(resource.standards.length<=2,'Resources need intentional, limited placement');
  for(const id of resource.standards) assert.ok(classroomContentRegistry[id]);
 }
+for(const specialId of ['OG.1.LESSON.18','NB.1.1.18']) {
+ const special=classroomContentRegistry[specialId];
+ assert.equal(special.lessonFormat,'teacher-led');
+ assert.ok(getInteractiveActivities(special).length>0,specialId+': teacher-led practice missing');
+}
 const shemaMedia=getLessonMedia(classroomContentRegistry['OG.1.LESSON.18']);
 assert.deepEqual(shemaMedia.map(item=>item.id),['unpacked-shema'],'The Shema context video is placed in the combined lesson learners open from the OG.1 room');
 assert.equal(shemaMedia[0].review.doctrinalAlignment,'context-only','Context video must not be treated as the doctrinal authority');
@@ -75,4 +120,4 @@ try {
  assert.equal(decision.evidenceObserved.length,0,'Unavailable assessment must not grant mastery');
  assert.match(decision.teacherMessage,/not been marked as mastered/);
 } finally {if(previousKey) process.env.OPENAI_API_KEY=previousKey;}
-console.log('Curriculum: 126 standards, 31 domains, Scripture ranges, vocabulary, reinforcement, independent saves and assessment retries passed.');
+console.log('Curriculum: 126 standards, 31 domains, reusable interactive practice, Scripture, independent saves and assessment retries passed.');

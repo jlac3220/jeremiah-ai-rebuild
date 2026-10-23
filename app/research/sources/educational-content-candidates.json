@@ -1,0 +1,636 @@
+{
+  "version": 1,
+  "preparedAt": "2026-10-22",
+  "purpose": "Research leads for matching contextual media/objects to the remaining OG/NB standards. Not publication approval or proof that a particular timestamp/extract is doctrinally suitable.",
+  "rightsNotice": "BibleProject allows full unaltered streams/links in eligible free noncommercial contexts with attribution, subject to terms; not downloadable/rehostable/edited clips. Check applicability to Jeremiah's business model. Met objects are labelled public domain on their cited collection pages.",
+  "publisherTermsUrl": "https://bibleproject.com/terms/",
+  "reviewGate": {
+    "sourceIdentity": "publisher page reviewed",
+    "claims": "not full-video-reviewed",
+    "doctrine": "not reviewed for Apostolic alignment",
+    "clipTiming": "not determined",
+    "reuse": "not approved for app placement",
+    "lessonApproved": false
+  },
+  "sources": [
+    {
+      "id": "bp-sin",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Khata / Sin",
+      "url": "https://bibleproject.com/videos/khata-sin/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Hebrew word study on human moral failure",
+      "standardIds": [
+        "NB.1.1.18",
+        "NB.1.2.18",
+        "NB.1.3.18",
+        "NB.4.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-transgression",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Pesha / Transgression",
+      "url": "https://bibleproject.com/videos/pesha-transgression/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Hebrew word study of rebellious transgression",
+      "standardIds": [
+        "NB.1.1.18",
+        "NB.4.1.18",
+        "NB.4.5.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-image-of-god",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Image of God",
+      "url": "https://bibleproject.com/videos/image-of-god/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Genesis human vocation, rebellion, and restored humanity",
+      "standardIds": [
+        "OG.3.2.18",
+        "NB.1.2.18",
+        "NB.14.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-covenants",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Covenants",
+      "url": "https://bibleproject.com/videos/covenants/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Biblical covenant progression and the relationship of prior promises to Jesus",
+      "standardIds": [
+        "OG.3.3.18",
+        "OG.6.1.18",
+        "NB.2.1.18",
+        "NB.2.4.18",
+        "NB.13.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-passover",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "What Is Passover?",
+      "url": "https://bibleproject.com/videos/what-is-passover/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Brief language and Passover-historical background",
+      "standardIds": [
+        "NB.2.2.18",
+        "NB.3.3.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-atonement",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Sacrifice and Atonement",
+      "url": "https://bibleproject.com/videos/sacrifice-and-atonement/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Temple sacrifice imagery and Jesus as fulfillment of sacrificial themes",
+      "standardIds": [
+        "OG.4.4.18",
+        "NB.2.2.18",
+        "NB.3.1.18",
+        "NB.11.1.18",
+        "NB.11.2.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-temple",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Temple",
+      "url": "https://bibleproject.com/videos/temple/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Tabernacle/temple dwelling motif and New Testament fulfillment",
+      "standardIds": [
+        "OG.4.2.18",
+        "OG.4.3.18",
+        "NB.2.3.18",
+        "NB.13.2.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-exodus-part2",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Exodus 19-40",
+      "url": "https://bibleproject.com/explore/video/exodus-19-40/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Narrative of Sinai, tabernacle building, and glory filling the tent",
+      "standardIds": [
+        "OG.4.1.18",
+        "OG.4.2.18",
+        "OG.4.3.18",
+        "NB.2.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-spirit",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Spirit of God",
+      "url": "https://bibleproject.com/videos/holy-spirit/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Ruakh, Spirit in creation, prophets, Jesus and followers",
+      "standardIds": [
+        "OG.11.1.18",
+        "OG.11.2.18",
+        "NB.6.2.18",
+        "NB.6.3.18",
+        "NB.7.2.18",
+        "NB.12.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-pentecost",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Pentecost: Acts 1-7",
+      "url": "https://bibleproject.com/videos/gospel-acts-1/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Pentecost within Luke-Acts narrative",
+      "standardIds": [
+        "OG.12.1.18",
+        "OG.12.4.18",
+        "NB.7.1.18",
+        "NB.7.2.18",
+        "NB.7.3.18",
+        "NB.7.4.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-acts1",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Acts 1-12",
+      "url": "https://bibleproject.com/videos/acts-1-12/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Early church Pentecost, apostolic preaching, and multinational expansion",
+      "standardIds": [
+        "OG.13.1.18",
+        "NB.8.1.18",
+        "NB.8.2.18",
+        "NB.8.3.18",
+        "NB.13.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-acts2",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Acts 13-28",
+      "url": "https://bibleproject.com/videos/acts-13-28/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Apostolic expansion, witness and perseverance in the Roman world",
+      "standardIds": [
+        "OG.13.1.18",
+        "NB.8.1.18",
+        "NB.8.3.18",
+        "NB.16.4.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-gospel",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Gospel of the Kingdom",
+      "url": "https://bibleproject.com/videos/gospel-kingdom/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "The good news as an announcement of Jesus' kingdom",
+      "standardIds": [
+        "NB.3.1.18",
+        "NB.3.2.18",
+        "NB.9.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-gospel-word",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Euangelion / Gospel",
+      "url": "https://bibleproject.com/videos/euangelion-gospel/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Greek word study on gospel as royal news",
+      "standardIds": [
+        "NB.3.2.18",
+        "NB.3.4.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-messiah",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "The Messiah",
+      "url": "https://bibleproject.com/videos/messiah/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Messianic expectation, Isaiah/Genesis promise trajectory and fulfillment",
+      "standardIds": [
+        "OG.6.2.18",
+        "OG.8.1.18",
+        "NB.3.1.18",
+        "NB.3.3.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-holiness",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Holiness",
+      "url": "https://bibleproject.com/videos/holiness/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Holiness in Exodus, Leviticus, Isaiah and Jesus",
+      "standardIds": [
+        "OG.2.3.18",
+        "NB.11.2.18",
+        "NB.14.2.18",
+        "NB.14.4.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-justice",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Justice",
+      "url": "https://bibleproject.com/videos/justice/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Biblical justice and God's moral character",
+      "standardIds": [
+        "OG.2.3.18",
+        "OG.3.4.18",
+        "NB.14.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-law",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "The Law",
+      "url": "https://bibleproject.com/videos/law/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Law, covenant responsibility, and fulfilled obedience",
+      "standardIds": [
+        "OG.15.2.18",
+        "NB.9.2.18",
+        "NB.14.3.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-witness",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Martus / Witness",
+      "url": "https://bibleproject.com/videos/martus-witness/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Witness concept and gospel testimony in Bible language",
+      "standardIds": [
+        "OG.13.1.18",
+        "OG.15.2.18",
+        "NB.16.2.18",
+        "NB.16.4.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-day",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Day of the Lord",
+      "url": "https://bibleproject.com/videos/day-of-the-lord/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Divine response to evil and judgment as context",
+      "standardIds": [
+        "OG.3.4.18",
+        "NB.1.3.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-compassion",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Rakhamim / Compassion",
+      "url": "https://bibleproject.com/videos/character-of-god-compassion/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Exodus 34:6 and God's compassionate character",
+      "standardIds": [
+        "OG.2.3.18",
+        "NB.14.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-yhwh",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "YHWH / LORD",
+      "url": "https://bibleproject.com/videos/yhwh-lord/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Divine name and Shema language; historical lexical context",
+      "standardIds": [
+        "OG.4.1.18",
+        "OG.5.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-first-commandment",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "1st Commandment: No Other Gods",
+      "url": "https://bibleproject.com/videos/1st-commandment-no-other-gods/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Covenant allegiance and the first commandment; interpret carefully",
+      "standardIds": [
+        "OG.1.5.18",
+        "OG.15.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "bp-creation",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Genesis 1",
+      "url": "https://bibleproject.com/videos/genesis-1/",
+      "sourceValidation": "official publisher page or official video listing checked 2026-10-22",
+      "teachingContext": "Literary context for creation and Genesis 1:26",
+      "standardIds": [
+        "OG.3.1.18",
+        "OG.3.2.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Do not claim doctrinal endorsement, quote accuracy, clip timestamps or suitability for a particular standard from publisher synopsis alone."
+    },
+    {
+      "id": "met-cylinder",
+      "type": "historical-object",
+      "publisher": "The Metropolitan Museum of Art",
+      "title": "Old Babylonian cylinder seal",
+      "url": "https://www.metmuseum.org/art/collection/search/327634",
+      "sourceValidation": "official collection page reviewed 2026-10-22",
+      "teachingContext": "Public-domain historical object showing a cylinder seal and modern impression",
+      "standardIds": [
+        "OG.3.3.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Only verified public-domain collection image if chosen; preserve object identification and museum credit",
+      "transcriptMayBeAvailable": false,
+      "limits": "Historical context only. Object is not proof of Biblical narrative and should not be represented as from Biblical Israel."
+    },
+    {
+      "id": "met-lamp",
+      "type": "historical-object",
+      "publisher": "The Metropolitan Museum of Art",
+      "title": "Roman terracotta oil lamp",
+      "url": "https://www.metmuseum.org/art/collection/search/241646",
+      "sourceValidation": "official collection page reviewed 2026-10-22",
+      "teachingContext": "Public-domain first-century BCE–CE everyday-life object; Roman context, not an identified New Testament artifact",
+      "standardIds": [
+        "NB.8.1.18",
+        "NB.13.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Only verified public-domain collection image if chosen; preserve object identification and museum credit",
+      "transcriptMayBeAvailable": false,
+      "limits": "Historical context only. Object is not proof of Biblical narrative and should not be represented as from Biblical Israel."
+    },
+    {
+      "id": "met-tablet",
+      "type": "historical-object",
+      "publisher": "The Metropolitan Museum of Art",
+      "title": "Old Babylonian cuneiform tablet with seal",
+      "url": "https://www.metmuseum.org/art/collection/search/322006",
+      "sourceValidation": "official collection page reviewed 2026-10-22",
+      "teachingContext": "Public-domain ancient recordkeeping example; not a biblical manuscript or proof of a biblical event",
+      "standardIds": [
+        "OG.3.3.18",
+        "NB.2.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Only verified public-domain collection image if chosen; preserve object identification and museum credit",
+      "transcriptMayBeAvailable": false,
+      "limits": "Historical context only. Object is not proof of Biblical narrative and should not be represented as from Biblical Israel."
+    },
+    {
+      "id": "bp-john1",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "John 1",
+      "url": "https://bibleproject.com/videos/john-1/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Genesis creation by God's Word and the Word becoming flesh",
+      "standardIds": [
+        "OG.3.1.18",
+        "OG.8.2.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-colossians",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Colossians",
+      "url": "https://bibleproject.com/videos/colossians/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Literary overview of Colossians' high Christology and transformed life",
+      "standardIds": [
+        "OG.3.1.18",
+        "OG.7.1.18",
+        "OG.7.4.18",
+        "NB.14.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-john-overview",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "John 1-12",
+      "url": "https://bibleproject.com/videos/john-1-12/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Narrative overview: Jesus' identity, I AM language and John 3 new birth",
+      "standardIds": [
+        "OG.7.3.18",
+        "OG.8.1.18",
+        "NB.6.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-ephesians",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Ephesians",
+      "url": "https://bibleproject.com/videos/ephesians/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Church unity, covenant community and Spirit-empowered life in Ephesians",
+      "standardIds": [
+        "OG.1.3.18",
+        "NB.13.2.18",
+        "NB.14.4.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-1timothy",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "1 Timothy",
+      "url": "https://bibleproject.com/videos/1-timothy/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Discernment around false teaching and the relation of doctrine and conduct",
+      "standardIds": [
+        "OG.15.3.18",
+        "NB.15.1.18",
+        "NB.16.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-anointing",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Anointing",
+      "url": "https://bibleproject.com/videos/anointing/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "Background for priestly anointing, the Spirit and Acts 2",
+      "standardIds": [
+        "OG.4.4.18",
+        "NB.6.2.18",
+        "NB.7.2.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    },
+    {
+      "id": "bp-faithful",
+      "type": "video",
+      "publisher": "BibleProject",
+      "title": "Emet / Faithfulness",
+      "url": "https://bibleproject.com/videos/faithful/",
+      "sourceValidation": "official publisher page checked 2026-10-22",
+      "teachingContext": "God's faithfulness and covenant reliability",
+      "standardIds": [
+        "OG.2.3.18",
+        "NB.9.1.18"
+      ],
+      "reviewStatus": "candidate_not_approved",
+      "delivery": "Full external-player embed only if terms and publisher attribution are satisfied",
+      "transcriptMayBeAvailable": true,
+      "limits": "Publisher synopsis only; verify the video or available transcript, precise relevance, doctrinal alignment and permissions before lesson placement."
+    }
+  ]
+}

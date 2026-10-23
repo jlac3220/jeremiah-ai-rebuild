@@ -26,3 +26,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Generated media research proposals (never publish raw transcripts by accident)
+.jeremiah-research/
