@@ -98,6 +98,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const [showRestart,setShowRestart]=useState(false);
  const [mediaAnswer,setMediaAnswer]=useState('');
  const [revealDone,setRevealDone]=useState(false);
+ const [lessonScreen,setLessonScreen]=useState(0);
  const restartRef=useRef(null);
  useEffect(()=>{if(showRestart)restartRef.current?.focus();},[showRestart]);
  const abortRef=useRef(null);
@@ -119,10 +120,14 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const isOG1Visual=isOG1 && (move.id==='learn' || Boolean(OG1_CHAPTER_SCENES[move.id]));
  const guidedReveal=isOG1 && move.type==='teach' && (move.teaching?.length||0)>0;
  const showAfterReveal=!guidedReveal || revealDone;
+ const screenFlow=isOG1 && move.type==='teach';
+ const sceneScreen=!screenFlow || lessonScreen===0;
+ const teachingScreen=!screenFlow || lessonScreen===1;
+ const sourceScreen=!screenFlow || lessonScreen===2;
  const letters=['A','B','C'];
  useEffect(()=>()=>abortRef.current?.abort(),[]);
  useEffect(()=>{
-  if(previousMove.current!==move.id){headingRef.current?.focus();previousMove.current=move.id;setRevealDone(false);}
+  if(previousMove.current!==move.id){headingRef.current?.focus();previousMove.current=move.id;setRevealDone(false);setLessonScreen(0);}
  },[move.id]);
  useEffect(()=>{if(feedback)feedbackRef.current?.focus();},[feedback]);
  function changeDraft(patch){
@@ -178,24 +183,26 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
    {showRestart && <section className="tl-restart" role="group" aria-label="Restart lesson" tabIndex={-1} ref={restartRef}><h2>Start this lesson again?</h2><p>You’ll return to the opening in a fresh review. Your earlier answers and earned completion will be kept.</p><button type="button" className="tl-primary" onClick={restart}>Start from the beginning →</button><button type="button" className="tl-text-button" onClick={()=>setShowRestart(false)}>Keep my place</button></section>}
    <div className="tl-step"><span>{complete?'Lesson reflection':move.progressOptional?'A closer look':`${String(currentIndex+1).padStart(2,'0')} / ${String(mainMoves.length).padStart(2,'0')}`}</span><span>{move.phase || move.eyebrow || (move.progressOptional?'Let’s approach it another way':written?'Put the reasoning into words':'Build your understanding')}</span></div>
    <LessonPath content={content} move={move} state={state} compact={isOG1} />
+   {screenFlow && <div className="tl-screen-progress" aria-label={'Moment '+(lessonScreen+1)+' of 3'}><span>{['READ / NOTICE','DISCOVER','EXPLORE'][lessonScreen]}</span><small>{lessonScreen+1} / 3</small></div>}
    <h1 className={isOG1Visual?"tl-chapter-heading-sr":undefined} ref={headingRef} tabIndex={-1}>{move.title}</h1>
    {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">Your earlier written answers are saved while you work through this lesson. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:[state.experience.earlierLesson,...(state.experience.previousRuns || [])].flatMap(run=>Object.values(run.drafts || {})).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
-    {content.standardId==='OG.1.LESSON.18' && move.id==='learn' && <OG1OpeningEncounter onReadBible={()=>openBible({reference:'Deuteronomy 6'})} />}
-    {content.standardId==='OG.1.LESSON.18' && showAfterReveal && <OG1ChapterScene key={move.id} move={move} onReadBible={openBible} />}
-    {!guidedReveal && <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>}
-    {move.visual && !isOG1Visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
-    {isOG1Visual && !guidedReveal && <div className="tl-teaching-intro">JEREMIAH EXPLAINS</div>}
-    <div className="tl-desktop-teaching" style={guidedReveal?{display:"none"}:undefined}>{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
-    {!guidedReveal && <MobileTeachingCards key={move.id} paragraphs={move.teaching || []} />}
-    {guidedReveal && <GuidedReveal key={move.id} paragraphs={move.teaching||[]} onFinish={()=>setRevealDone(true)} />}
+    {content.standardId==='OG.1.LESSON.18' && move.id==='learn' && sceneScreen && <OG1OpeningEncounter onReadBible={()=>openBible({reference:'Deuteronomy 6'})} />}
+    {content.standardId==='OG.1.LESSON.18' && sceneScreen && <OG1ChapterScene key={move.id} move={move} onReadBible={openBible} />}
+    {teachingScreen && !guidedReveal && <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>}
+    {sceneScreen && move.visual && !isOG1Visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
+    {teachingScreen && isOG1Visual && !guidedReveal && <div className="tl-teaching-intro">JEREMIAH EXPLAINS</div>}
+    {teachingScreen && <div className="tl-desktop-teaching" style={guidedReveal?{display:"none"}:undefined}>{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>}
+    {teachingScreen && !guidedReveal && <MobileTeachingCards key={move.id} paragraphs={move.teaching || []} />}
+    {teachingScreen && guidedReveal && <GuidedReveal key={move.id} paragraphs={move.teaching||[]} onFinish={()=>{setRevealDone(true);setLessonScreen(2)}} />}
     {move.id==='learn' && !content.coveredStandards && <InteractivePractice content={content} state={state} onProgress={(patch)=>onStateChange(current=>updateLearningExperience(current,patch))} />}
-    {showAfterReveal && move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
-    {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
-    {move.illustration && !isOG1Visual && <LessonIllustration key={move.id} kind={move.illustration}/>}
-    {showAfterReveal && !written && move.scripture?.length>0 && (isOG1Visual ? <details className="tl-og1-passages"><summary>Explore the supporting Scriptures · {move.scripture.length} passages</summary><section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read in context →</button></article>)}</section></details> : <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>)}
-    {showAfterReveal && move.id==='shema-show' && shemaVideo && <section className="tl-media" aria-label="Optional historical context video"><div><span className="tl-small">Historical lens · Jewish tradition</span><h2>{shemaVideo.title}</h2><p>{shemaVideo.purpose}</p><small>{shemaVideo.duration} · Optional viewing · Source: {shemaVideo.provider}</small></div><div className="tl-media-frame"><iframe src={shemaVideo.embedUrl} title={shemaVideo.videoTitle || shemaVideo.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowFullScreen sandbox="allow-scripts allow-same-origin allow-presentation" /></div><fieldset><legend>{shemaVideo.lessonCheck.title}</legend><p>{shemaVideo.lessonCheck.prompt}</p>{shemaVideo.lessonCheck.choices.map(choice=><label key={choice.id}><input type="radio" name="shema-video-check" value={choice.id} checked={mediaAnswer===choice.id} onChange={()=>setMediaAnswer(choice.id)} />{choice.label}</label>)}{mediaAnswer && <p className={mediaAnswer===shemaVideo.lessonCheck.answerId?'tl-media-feedback is-correct':'tl-media-feedback'} role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}</fieldset></section>}
-    {showAfterReveal && move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
+    {sourceScreen && showAfterReveal && move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
+    {sourceScreen && move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
+    {sceneScreen && move.illustration && !isOG1Visual && <LessonIllustration key={move.id} kind={move.illustration}/>}
+    {sourceScreen && showAfterReveal && !written && move.scripture?.length>0 && (isOG1Visual ? <details className="tl-og1-passages"><summary>Explore the supporting Scriptures · {move.scripture.length} passages</summary><section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read in context →</button></article>)}</section></details> : <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>)}
+    {sourceScreen && showAfterReveal && move.id==='shema-show' && shemaVideo && <section className="tl-media" aria-label="Optional historical context video"><div><span className="tl-small">Historical lens · Jewish tradition</span><h2>{shemaVideo.title}</h2><p>{shemaVideo.purpose}</p><small>{shemaVideo.duration} · Optional viewing · Source: {shemaVideo.provider}</small></div><div className="tl-media-frame"><iframe src={shemaVideo.embedUrl} title={shemaVideo.videoTitle || shemaVideo.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowFullScreen sandbox="allow-scripts allow-same-origin allow-presentation" /></div><fieldset><legend>{shemaVideo.lessonCheck.title}</legend><p>{shemaVideo.lessonCheck.prompt}</p>{shemaVideo.lessonCheck.choices.map(choice=><label key={choice.id}><input type="radio" name="shema-video-check" value={choice.id} checked={mediaAnswer===choice.id} onChange={()=>setMediaAnswer(choice.id)} />{choice.label}</label>)}{mediaAnswer && <p className={mediaAnswer===shemaVideo.lessonCheck.answerId?'tl-media-feedback is-correct':'tl-media-feedback'} role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}</fieldset></section>}
+    {sourceScreen && showAfterReveal && move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
+    {screenFlow && lessonScreen===0 && <button type="button" className="tl-primary tl-screen-next" onClick={()=>setLessonScreen(1)}>Discover what this means →</button>}
     {move.prompt && isOG1 && <div className="tl-action-cue"><span>YOUR TURN</span><strong>{written?'EXPLAIN':matching?'MATCH':reasoning?'REASON':'ANSWER'}</strong><p>{written?'Explain the connection in your own words.':matching?'Touch a match to build the Scripture connection.':'Consider what Scripture teaches, then choose your answer.'}</p></div>}
     {move.prompt && <section className="tl-question" aria-label="Check your understanding"><p className="tl-small">{written?'Your explanation':move.id==='check'?'A fresh situation':'Let me check your understanding'}</p><h2>{move.prompt}</h2>
      {(matching || reasoning) && <LessonActivity move={move} draft={draft} feedback={feedback} onChange={changeDraft}/>}
@@ -227,8 +234,8 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     </details>
     <button type="button" className="tl-text-button" onClick={restart}>Revisit this journey</button>
    </section> : <section className="tl-complete"><p className="tl-teaching">{state.experience?.earlierCompletion?'Your completion from the earlier version is saved. You can revisit this lesson through the new teaching sequence.':content.completionSummary || 'You have completed this lesson.'}</p><h2>Keep these connections with you</h2><ul>{(content.takeaways || []).map(text=><li key={text}>{text}</li>)}</ul><h2>Your explanations</h2>{content.instructionalMoves.filter(m=>['free_response','mastery_response'].includes(m.type)).map(m=>m.id).map(id=>{const answer=state.experience?.drafts?.[id]?.responseText;return answer?<details key={id}><summary>{getInstructionalMove(content,id).title}</summary><p>{answer}</p></details>:null;})}<button type="button" className="tl-primary" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Return to the {content.studyTitle} room →</button><button type="button" className="tl-text-button" onClick={restart}>Review this lesson</button></section>)}
-   {!complete && <details className="tl-vocabulary"><summary>Keep the key words close</summary><dl>{content.sourceDomain.vocabulary.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.definition}</dd></div>)}</dl></details>}
-   {content.coveredStandards && <details className="tl-vocabulary"><summary>Your learning goals · {Object.keys(state.experience?.standardEvidence || {}).length} established</summary><ul>{content.coveredStandards.map(s=><li key={s.id}><strong>{s.title}</strong><p>{state.experience?.standardEvidence?.[s.id]?'Independent understanding established':'Still developing'} · {s.id}</p></li>)}</ul></details>}
+   {!complete && (!screenFlow || sourceScreen) && <details className="tl-vocabulary"><summary>Keep the key words close</summary><dl>{content.sourceDomain.vocabulary.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.definition}</dd></div>)}</dl></details>}
+   {content.coveredStandards && (!screenFlow || sourceScreen) && <details className="tl-vocabulary"><summary>Your learning goals · {Object.keys(state.experience?.standardEvidence || {}).length} established</summary><ul>{content.coveredStandards.map(s=><li key={s.id}><strong>{s.title}</strong><p>{state.experience?.standardEvidence?.[s.id]?'Independent understanding established':'Still developing'} · {s.id}</p></li>)}</ul></details>}
    <footer className="tl-footer">{content.standardId} · Your answers and place are saved in this browser.</footer>
   </main>
   <DeepDiveSheet item={detail} onClose={()=>setDetail(null)} onOpenBible={openBible}/>
