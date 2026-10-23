@@ -19,7 +19,7 @@ function MobileTeachingCards({ paragraphs = [], guided = false, onReadyChange })
  const finished=active===paragraphs.length-1;
  useEffect(()=>{if(guided)onReadyChange?.(finished);},[guided,finished,onReadyChange]);
  if(!paragraphs.length)return null;
- return <div className={'tl-mobile-teaching'+(guided?' tl-guided-teaching':'')} aria-label="Jeremiah's teaching">
+ return <div className={'tl-mobile-teaching'+(guided?' tl-guided-teaching':'')} style={guided?{display:'block',background:'#f3f8ff',border:'1px solid #d5e6fc',borderLeft:'4px solid #1c66c7',borderRadius:15,padding:20,margin:'14px 0'}:undefined} aria-label="Jeremiah's teaching">
   {guided&&<div className="tl-guided-counter"><span>JEREMIAH TEACHES</span><strong>{active+1} / {paragraphs.length}</strong></div>}
   <p className="tl-teaching" key={active}>{paragraphs[active]}</p>
   {paragraphs.length>1&&<div className="tl-teaching-controls"><span>{guided?(finished?'Ready to explore':'One thought at a time'):`Thought ${active+1} of ${paragraphs.length}`}</span><div>
@@ -162,7 +162,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
     {move.visual && !isOG1Visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     {isOG1Visual && <div className="tl-teaching-intro">JEREMIAH EXPLAINS</div>}
-    <div className={guidedTeaching?"tl-desktop-teaching tl-guided-desktop-hide":"tl-desktop-teaching"}>{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
+    <div className="tl-desktop-teaching" style={guidedTeaching?{display:"none"}:undefined}>{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
     <MobileTeachingCards key={move.id} paragraphs={move.teaching || []} guided={guidedTeaching} onReadyChange={setTeachingReady} />
     {guidedTeaching && !revealActivity && <button type="button" className="tl-guided-skip" onClick={()=>setExploreEarly(true)}>Jump to the activity ↓</button>}
     {guidedTeaching && revealActivity && <div className="tl-guided-transition">NOW, EXPLORE THE SCRIPTURE <span aria-hidden="true">↓</span></div>}
