@@ -233,3 +233,9 @@
 @media(prefers-reduced-motion:reduce){
  .ogp-page *,.ogp-page *:before,.ogp-page *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* Keep the stage focused; bespoke chapter-one scenes own their headlines. */
+.ogp-scene-counter{display:inline-block;margin-left:18px;padding-left:16px;border-left:1px solid #baa47c;color:#99846c;font:800 .59rem/1.6 system-ui,sans-serif;letter-spacing:.13em;vertical-align:middle}
+.ogp-stage:has(.shema-teachback)>.ogp-verb,.ogp-stage:has(.shema-teachback)>h1{display:none}
+.ogp-stage:has(.shema-teachback){padding-top:25px}
+@media(max-width:720px){.ogp-scene-counter{display:block;margin:7px 0 0;padding:0;border:0;font-size:.54rem}}
