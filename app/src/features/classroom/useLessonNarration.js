@@ -3,11 +3,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // Browser-native narration keeps Scripture reading available without network calls,
 // credentials, or an external audio service. Narration is always opt-in.
 function chooseVoice(synth) {
- const voices = synth.getVoices().filter(voice => /^en(-|_)/i.test(voice.lang));
- return voices.find(voice => /natural|neural/i.test(voice.name))
-  || voices.find(voice => /Microsoft (Aria|Guy|Jenny|Ryan|Sonia)|Google US English|Samantha/i.test(voice.name))
-  || voices.find(voice => /^en-US$/i.test(voice.lang))
-  || voices[0] || null;
+ // Strictly choose United States English first. "Natural"/"Neural" alone
+ // previously selected en-AU voices before checking locale.
+ const voices = synth.getVoices();
+ const american = voices.filter(voice => /^en[-_]US$/i.test(voice.lang));
+ return american.find(voice => /natural|neural/i.test(voice.name))
+  || american.find(voice => /Microsoft (David|Guy|Jenny|Aria|Mark|Zira)|Google US English|Samantha/i.test(voice.name))
+  || american.find(voice => voice.default)
+  || american[0]
+  || null;
 }
 
 export default function useLessonNarration({ text, key: sceneKey }) {
@@ -38,7 +42,9 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   const utterance = new window.SpeechSynthesisUtterance(words);
   const voice = chooseVoice(synth);
   if (voice) utterance.voice = voice;
-  utterance.lang = voice?.lang || 'en-US';
+  // Force en-US synthesis when no explicit US voice is installed.
+  // Never deliberately substitute an Australian or British voice.
+  utterance.lang = 'en-US';
   utterance.rate = 0.87;
   utterance.pitch = 0.94;
   utterance.volume = 1;
