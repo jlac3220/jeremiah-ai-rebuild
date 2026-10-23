@@ -11,3 +11,5 @@
 .la-worked { background: #172033; color: #fff; }
 .la-worked-tabs button[aria-pressed=true] { background: #EFF6FF; color: #1D4ED8; }
 .la-phrase strong { border-color: #1463E8; }
+
+.la-guided-counter{display:flex;justify-content:space-between;gap:12px;margin:12px 0 17px;border-bottom:1px solid #dce7f5;padding-bottom:11px;font-size:.78rem;color:#476b98}.la-guided-counter strong{color:#1463e8;letter-spacing:.11em}.la-guided-navigation{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0 6px}.la-guided-navigation button{min-height:44px;padding:11px 15px;border-radius:11px;border:1px solid #b9d1f1;background:#edf5ff;color:#1654aa;font-size:.86rem;font-weight:750;cursor:pointer}.la-guided-navigation button:disabled{opacity:.4;cursor:default}.la-guided-navigation p{font-size:.85rem;color:#315e91;line-height:1.5}
