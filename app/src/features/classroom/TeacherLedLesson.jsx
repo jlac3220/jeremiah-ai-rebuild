@@ -56,9 +56,14 @@ function OG1ChapterScene({move,onReadBible}) {
  const scene=OG1_CHAPTER_SCENES[move.id];
  const [selected,setSelected]=useState(0);
  if(!scene)return null;
- return <section className={'og1-scene og1-scene-'+scene.theme} aria-label={scene.label}>
-  <div className="og1-scene-art"><div className="og1-scene-rays" aria-hidden="true"/><span className="og1-scene-eyebrow">{scene.label}</span><div className="og1-scene-emblem" aria-hidden="true">{scene.theme==='witness'?'✦':scene.theme==='continuity'?'∞':scene.theme==='distinction'?'✳':'♥'}</div><h2>{scene.heading}</h2><blockquote>“{scene.verse}”</blockquote><span className="og1-scene-reference">{scene.reference} · KJV</span></div>
-  <div className="og1-scene-body"><p>{scene.prompt}</p><div className="og1-scene-tabs" role="group" aria-label="Explore the Scripture connections">{scene.options.map((option,i)=><button type="button" key={option.name} aria-pressed={selected===i} onClick={()=>setSelected(i)}>{option.name}</button>)}</div><div className="og1-scene-insight" role="status" key={selected}><span className="og1-scene-insight-number">{String(selected+1).padStart(2,'0')}</span><strong>{scene.options[selected].name}</strong><p>{scene.options[selected].detail}</p></div><button type="button" className="og1-scene-read" onClick={()=>onReadBible({reference:scene.reference.split(' · ')[0]})}>Explore {scene.reference.toLowerCase()} in the Bible ↗</button></div>
+ return <section className="og1-scene-lite" aria-label={scene.label}>
+  <div className="og1-scene-lite-head"><span>{scene.label}</span><strong>{scene.reference} · KJV</strong></div>
+  <h2>{scene.heading}</h2>
+  <blockquote>“{scene.verse}”</blockquote>
+  <p>{scene.prompt}</p>
+  <div className="og1-scene-lite-tabs" role="group" aria-label="Explore the Scripture connections">{scene.options.map((option,i)=><button type="button" key={option.name} aria-pressed={selected===i} onClick={()=>setSelected(i)}>{option.name}</button>)}</div>
+  <div className="og1-scene-lite-insight" role="status"><strong>{scene.options[selected].name}</strong><p>{scene.options[selected].detail}</p></div>
+  <button type="button" className="og1-scene-lite-read" onClick={()=>onReadBible({reference:scene.reference})}>Read this passage in context →</button>
  </section>;
 }
 
