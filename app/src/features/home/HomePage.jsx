@@ -39,9 +39,12 @@ export default function HomePage({ onNavigate }) {
         </header>
 
         <section className="ld-home-intro">
-          <span className="ld-home-label">YOUR CLASSROOM</span>
-          <h1>Keep your momentum.</h1>
-          <p>One step closer to understanding.</p>
+          <div className="ld-intro-copy">
+            <span className="ld-home-label">YOUR LEARNING SPACE</span>
+            <h1>Pick up where you left off.</h1>
+            <p>One meaningful step at a time.</p>
+          </div>
+          <div className="ld-intro-art" aria-hidden="true"><span className="ld-orbit ld-orbit-back"/><span className="ld-orbit ld-orbit-front"/><span className="ld-art-book">✦</span><span className="ld-art-small">●</span></div>
         </section>
 
         <section className="ld-continue-card" aria-label="Continue your lesson">
@@ -50,35 +53,26 @@ export default function HomePage({ onNavigate }) {
             <span className="ld-lesson-status">{active.mastered ? 'Completed' : active.started ? 'In progress' : 'Up next'}</span>
           </div>
           <h2>{active.content.standardTitle}</h2>
-          <div className="ld-move-chip"><span aria-hidden="true">↗</span>{active.move?.title || 'Your next lesson'}</div>
-          <div className="ld-progress-label"><span>Your progress</span><strong>{active.percent}%</strong></div>
+          <p className="ld-next-step"><span className="ld-step-icon" aria-hidden="true">↗</span><span><small>UP NEXT</small><strong>{active.move?.title || 'Begin your lesson'}</strong></span></p>
+          <div className="ld-progress-label"><span>Lesson progress</span><strong>{active.percent}%</strong></div>
           <div className="ld-progress" role="progressbar" aria-label="Lesson progress" aria-valuenow={active.percent} aria-valuemin={0} aria-valuemax={100}>
             <span style={{ width: active.percent + '%' }} />
           </div>
           <button type="button" className="ld-primary" onClick={openLesson}>{action}<span aria-hidden="true">→</span></button>
-          <details className="ld-overview"><summary>What's this lesson about?</summary><p>{active.content.truthStatement}</p></details>
+          <details className="ld-overview"><summary>What will I learn?</summary><p>{active.content.truthStatement}</p></details>
         </section>
 
-        <section className="ld-quick-section" aria-label="Quick access">
-          <div className="ld-section-heading"><h2>Your space</h2><span>Explore</span></div>
-          <div className="ld-quick-grid">
-            <button type="button" className="ld-quick-tile ld-quick-bible" onClick={() => onNavigate(ROUTES.BIBLE_SUPPORT)}>
-              <span className="ld-tile-icon"><TileIcon kind="bible"/></span>
-              <span className="ld-quick-copy"><strong>Read the Bible</strong><small>KJV · ASV · WEB</small></span>
-              <span className="ld-tile-arrow" aria-hidden="true">↗</span>
-            </button>
-            <button type="button" className="ld-quick-tile ld-quick-progress" onClick={() => onNavigate(ROUTES.PROGRESS)}>
-              <span className="ld-tile-icon"><TileIcon kind="progress"/></span>
-              <span className="ld-quick-copy"><strong>My progress</strong><small>Track your journey</small></span>
-              <span className="ld-tile-arrow" aria-hidden="true">↗</span>
-            </button>
+        <section className="ld-under-card" aria-label="More ways to learn">
+          <button type="button" className="ld-bible-row" onClick={() => onNavigate(ROUTES.BIBLE_SUPPORT)}>
+            <span className="ld-tile-icon"><TileIcon kind="bible"/></span>
+            <span><strong>Open the Bible</strong><small>Read and explore Scripture</small></span>
+            <span className="ld-bible-arrow" aria-hidden="true">→</span>
+          </button>
+          <div className="ld-mini-stats" aria-label="Your learning at a glance">
+            <span><strong>{data.mastered}</strong> mastered</span>
+            <span><strong>{data.inProgress}</strong> in progress</span>
+            <span><strong>{data.reviewNeeded}</strong> to revisit</span>
           </div>
-        </section>
-
-        <section className="ld-snapshot" aria-label="Your learning at a glance">
-          <div><strong>{data.mastered}</strong><span>Mastered</span></div>
-          <div><strong>{data.inProgress}</strong><span>In progress</span></div>
-          <div><strong>{data.reviewNeeded}</strong><span>To revisit</span></div>
         </section>
       </div>
     </div>
