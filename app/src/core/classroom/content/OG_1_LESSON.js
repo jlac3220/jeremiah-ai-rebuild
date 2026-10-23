@@ -89,15 +89,38 @@ const moves=[
 for(const [index,prefix] of ['shema','isaiah','continuity','distinction','devotion'].entries()) {
  moves.find(m=>m.id===`${prefix}-show`).standardIds=[standards[index].id];
 }
-// Work through all connected concepts before asking for their independent synthesis.
-const guidedRoute={'shema-guide':'isaiah-show','isaiah-guide':'continuity-show','continuity-guide':'distinction-show','distinction-guide':'devotion-show','devotion-guide':'shema-try','shema-try':'isaiah-try','isaiah-try':'continuity-try','continuity-try':'distinction-try','distinction-try':'devotion-try'};
-for(const [id,next] of Object.entries(guidedRoute))moves.find(m=>m.id===id).next.strong=next;
+// Complete one goal at a time: Show me -> Guide me -> Let me try.
+// The optional reasoning challenges remain part of their own chapters.
+// This order is easier to learn from, resume, and review on a phone.
+const guidedRoute={
+ 'shema-guide':'context-challenge',
+ 'context-challenge':'shema-try',
+ 'shema-try':'isaiah-show',
+ 'isaiah-guide':'isaiah-try',
+ 'isaiah-try':'continuity-show',
+ 'continuity-guide':'continuity-try',
+ 'continuity-try':'distinction-show',
+ 'prayer-challenge':'distinction-guide',
+ 'distinction-guide':'distinction-try',
+ 'distinction-try':'devotion-show',
+ 'devotion-guide':'devotion-try',
+ 'devotion-try':'complete'
+};
 deepenOG1(moves);
+for(const [id,next] of Object.entries(guidedRoute))moves.find(m=>m.id===id).next.strong=next;
+
+const lessonChapters=[
+ {standardId:standards[0].id,title:'The Shema',question:'What does Deuteronomy 6:4 actually confess?',anchor:'Deuteronomy 6:4–5'},
+ {standardId:standards[1].id,title:'Isaiah’s witness',question:'How does God exclude every rival claim?',anchor:'Isaiah 43:10; 44:6; 45:5'},
+ {standardId:standards[2].id,title:'The same confession',question:'Do Jesus and the apostles change the confession?',anchor:'Mark 12:29; 1 Corinthians 8:4–6'},
+ {standardId:standards[3].id,title:'Explain the difference',question:'Where do Oneness and Trinitarian readings differ?',anchor:'John 1:1, 14; 1 Timothy 2:5'},
+ {standardId:standards[4].id,title:'Love the one Lord',question:'How does the confession shape everyday allegiance?',anchor:'Deuteronomy 6:4–5; James 2:19'}
+];
 const orderedMoves=[];
 let cursor='learn';
 while(cursor){const move=moves.find(m=>m.id===cursor);orderedMoves.push(move);cursor=move.next?.continue || move.next?.strong;}
 const knowledge=standards.flatMap(s=>s.evidence.map(e=>({id:`${s.id}:evidence-${e.level}`,title:`${s.title}: ${e.label}`,description:e.text})));
-export default {...base,standardId:'OG.1.LESSON.18',standardTitle:'One God: the confession through Scripture',lessonFormat:'teacher-led',coveredStandards:standards,instructionalMoves:orderedMoves,curriculumVersion:1,
+export default {...base,standardId:'OG.1.LESSON.18',standardTitle:'One God: the confession through Scripture',lessonFormat:'teacher-led',coveredStandards:standards,lessonChapters,instructionalMoves:orderedMoves,curriculumVersion:1,
  sourceDomain:{...base.sourceDomain,vocabulary:[{term:'Shema',definition:'Hebrew for hear; the opening word used to name Israel’s confession in Deuteronomy 6:4.'},{term:'Echad',definition:'Hebrew for one. Interpret the word in the setting of the passage; this lesson develops its Apostolic interpretation alongside Isaiah’s declarations.'},{term:'Monotheism',definition:'Belief in one God.'},{term:'Incarnation',definition:'God becoming truly human in Jesus Christ; his humanity is genuine.'},{term:'Essence and person',definition:'In trinitarian theology, essence identifies the one divine being and person identifies the three eternal distinctions. Oneness rejects those eternal personal distinctions.'},{term:'Doxology',definition:'Praise directed to God; this lesson connects confession to worship.'}]},
  completionSummary:'You investigated the confession, weighed Isaiah’s witnesses, traced New Testament continuity, explained the doctrinal distinction fairly, and connected the confession to life.',
  takeaways:['Read the Shema within its covenant and scriptural context.','Let Isaiah’s declarations accumulate into an argument.','Trace the confession through Jesus and the apostles.','Represent another position accurately before explaining the Apostolic response.','Connect the confession to worship, ethics, and mission.'],
