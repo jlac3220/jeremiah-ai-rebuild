@@ -126,7 +126,23 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const hasWatchScreen=screenFlow && move.id==='shema-show' && Boolean(shemaVideo);
  const watchScreen=hasWatchScreen && lessonScreen===2;
  const sourceScreen=!screenFlow || lessonScreen===(hasWatchScreen?3:2);
- const screenLabels=hasWatchScreen?['READ / NOTICE','DISCOVER','WATCH','CONNECT']:['READ / NOTICE','DISCOVER','EXPLORE'];
+ const chapterActions={
+  'learn':['ENCOUNTER','UNDERSTAND','OPEN SCRIPTURE'],
+  'shema-show':['READ','DISCOVER','WATCH','NOTICE'],
+  'isaiah-show':['EXAMINE','REASON','VERIFY'],
+  'continuity-show':['CONNECT','DISCOVER','TRACE'],
+  'distinction-show':['COMPARE','UNDERSTAND','INVESTIGATE'],
+  'devotion-show':['REFLECT','CONSIDER','APPLY']
+ };
+ const screenLabels=chapterActions[move.id]||['READ','DISCOVER','EXPLORE'];
+ const continuePrompt={
+  'learn':'Find out what the confession means',
+  'shema-show':'Discover what the words mean',
+  'isaiah-show':'Reason from the evidence',
+  'continuity-show':'Discover the connection',
+  'distinction-show':'Understand the distinction',
+  'devotion-show':'Consider your response'
+ };
  const letters=['A','B','C'];
  useEffect(()=>()=>abortRef.current?.abort(),[]);
  useEffect(()=>{
@@ -220,7 +236,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
      {mediaAnswer && <p role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}
     </section>}
     {sourceScreen && showAfterReveal && move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
-    {screenFlow && lessonScreen===0 && <button type="button" className="tl-primary tl-screen-next" onClick={()=>setLessonScreen(1)}>Discover what this means →</button>}
+    {screenFlow && lessonScreen===0 && <button type="button" className="tl-primary tl-screen-next" onClick={()=>setLessonScreen(1)}>{continuePrompt[move.id]||"Discover the next idea"} →</button>}
     {move.prompt && isOG1 && <div className="tl-action-cue"><span>YOUR TURN</span><strong>{written?'EXPLAIN':matching?'MATCH':reasoning?'REASON':'ANSWER'}</strong><p>{written?'Explain the connection in your own words.':matching?'Touch a match to build the Scripture connection.':'Consider what Scripture teaches, then choose your answer.'}</p></div>}
     {move.prompt && <section className="tl-question" aria-label="Check your understanding"><p className="tl-small">{written?'Your explanation':move.id==='check'?'A fresh situation':'Let me check your understanding'}</p><h2>{move.prompt}</h2>
      {(matching || reasoning) && <LessonActivity move={move} draft={draft} feedback={feedback} onChange={changeDraft}/>}
