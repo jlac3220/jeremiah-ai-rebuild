@@ -102,3 +102,30 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction}) 
  </div>;
  return null;
 }
+
+export function ShemaPhrasePractice({move,draft,feedback,onChange,onStepChange}) {
+ const [step,setStep]=useState(0);
+ const items=move.interaction.items;
+ const answers=move.interaction.options;
+ const current=items[step];
+ const choice=draft.placements?.[current.id]||'';
+ const completed=items.filter(item=>draft.placements?.[item.id]).length;
+ function moveTo(next){setStep(next);onStepChange?.(next)}
+ function choose(id){if(feedback)return;onChange({placements:{...draft.placements,[current.id]:id}})}
+ return <div className="shema-practice">
+  <div className="shema-practice-head"><span>RECONSTRUCT THE CONFESSION</span><span>{step+1} / {items.length}</span></div>
+  <div className="shema-practice-scene">
+   <span className="shema-practice-kicker">THE WORDS</span>
+   <h3>“{current.label}”</h3>
+   <p>What does this phrase contribute to the confession?</p>
+  </div>
+  <div className="shema-practice-options" role="group" aria-label={'Meaning of '+current.label}>
+   {answers.map(answer=><button type="button" key={answer.id} disabled={Boolean(feedback)} aria-pressed={choice===answer.id} onClick={()=>choose(answer.id)}><span className="shema-choice-indicator" aria-hidden="true">{choice===answer.id?'✓':'○'}</span>{answer.label}</button>)}
+  </div>
+  {!feedback&&<div className="shema-practice-footer">
+   {step>0&&<button type="button" className="shema-practice-back" onClick={()=>moveTo(step-1)}>← Previous phrase</button>}
+   {step<items.length-1&&<button type="button" className="shema-practice-forward" disabled={!choice} onClick={()=>moveTo(step+1)}>Continue to the next phrase →</button>}
+   {step===items.length-1&&choice&&<p>{completed===items.length?'The three connections are ready. Check your reasoning with Jeremiah below.':'Review any unfinished connections before checking.'}</p>}
+  </div>}
+ </div>;
+}
