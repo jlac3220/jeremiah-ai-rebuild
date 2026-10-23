@@ -62,6 +62,26 @@ function OG1ChapterScene({move,onReadBible}) {
  </section>;
 }
 
+function GuidedReveal({paragraphs=[],onFinish}) {
+ const [step,setStep]=useState(-1);
+ const actions=['NOTICE','DISCOVER','CONNECT','REFLECT'];
+ const complete=step>=paragraphs.length;
+ return <section aria-label="Guided discovery" style={{margin:'22px 0 18px',borderTop:'1px solid #dbe6f3',paddingTop:19}}>
+  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,marginBottom:13}}>
+   <span style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',color:'#1659a8'}}>JEREMIAH GUIDES YOU</span>
+   <span style={{fontSize:12,color:'#64748b'}}>{Math.max(0,step+1)} of {paragraphs.length} ideas</span>
+  </div>
+  {step>=0 && <div key={step} aria-live="polite" style={{padding:'5px 0 16px'}}>
+   <div style={{fontSize:12,fontWeight:850,letterSpacing:'.13em',color:'#1867c1',marginBottom:10}}>{complete?'READY TO RESPOND':actions[Math.min(step,actions.length-1)]}</div>
+   {complete?<p style={{fontSize:19,lineHeight:1.6,color:'#223653',margin:0}}>Now put what you've discovered into practice.</p>:<p style={{fontSize:19,lineHeight:1.7,color:'#223653',margin:0}}>{paragraphs[step]}</p>}
+  </div>}
+  {step<0 && <p style={{fontSize:19,lineHeight:1.6,color:'#223653',margin:'0 0 18px'}}>Let's explore this truth one idea at a time.</p>}
+  {!complete?<button type="button" onClick={()=>{const next=step+1;setStep(next);if(next>=paragraphs.length)onFinish();}} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:25,width:'100%',maxWidth:390,minHeight:51,border:0,borderRadius:12,background:'#1765dc',color:'white',padding:'12px 18px',fontSize:15,fontWeight:800,cursor:'pointer'}}>{step<0?'Reveal the first idea':step===paragraphs.length-1?'Let me try':'Reveal the next idea'}<span aria-hidden="true">→</span></button>:null}
+  {step>=0&&!complete&&<button type="button" onClick={()=>setStep(i=>Math.max(-1,i-1))} style={{border:0,background:'none',color:'#52677f',padding:'12px 0',fontSize:13,cursor:'pointer'}}>← Previous idea</button>}
+  {!complete&&<button type="button" onClick={()=>{setStep(paragraphs.length);onFinish();}} style={{display:'block',border:0,background:'none',color:'#52677f',padding:'10px 0',fontSize:13,cursor:'pointer'}}>Go straight to the activity ↓</button>}
+ </section>;
+}
+
 export default function TeacherLedLesson({ content, state, onStateChange, onNavigate }) {
  const move=getInstructionalMove(content,state.currentMoveId);
  const draft=state.experience?.drafts?.[move.id] || {};
@@ -72,6 +92,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const [showGuide,setShowGuide]=useState(false);
  const [showRestart,setShowRestart]=useState(false);
  const [mediaAnswer,setMediaAnswer]=useState('');
+ const [revealDone,setRevealDone]=useState(false);
  const restartRef=useRef(null);
  useEffect(()=>{if(showRestart)restartRef.current?.focus();},[showRestart]);
  const abortRef=useRef(null);
@@ -91,10 +112,12 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
  const currentIndex=mainMoves.findIndex(m=>m.id===move.id);
  const isOG1=content.standardId==='OG.1.LESSON.18';
  const isOG1Visual=isOG1 && (move.id==='learn' || Boolean(OG1_CHAPTER_SCENES[move.id]));
+ const guidedReveal=isOG1 && move.type==='teach' && (move.teaching?.length||0)>0;
+ const showAfterReveal=!guidedReveal || revealDone;
  const letters=['A','B','C'];
  useEffect(()=>()=>abortRef.current?.abort(),[]);
  useEffect(()=>{
-  if(previousMove.current!==move.id){headingRef.current?.focus();previousMove.current=move.id;}
+  if(previousMove.current!==move.id){headingRef.current?.focus();previousMove.current=move.id;setRevealDone(false);}
  },[move.id]);
  useEffect(()=>{if(feedback)feedbackRef.current?.focus();},[feedback]);
  function changeDraft(patch){
@@ -158,15 +181,16 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
     {move.visual && !isOG1Visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     {isOG1Visual && <div className="tl-teaching-intro">JEREMIAH EXPLAINS</div>}
-    <div className="tl-desktop-teaching">{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
-    <MobileTeachingCards key={move.id} paragraphs={move.teaching || []} />
+    <div className="tl-desktop-teaching" style={guidedReveal?{display:"none"}:undefined}>{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
+    {!guidedReveal && <MobileTeachingCards key={move.id} paragraphs={move.teaching || []} />}
+    {guidedReveal && <GuidedReveal key={move.id} paragraphs={move.teaching||[]} onFinish={()=>setRevealDone(true)} />}
     {move.id==='learn' && !content.coveredStandards && <InteractivePractice content={content} state={state} onProgress={(patch)=>onStateChange(current=>updateLearningExperience(current,patch))} />}
-    {move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
+    {showAfterReveal && move.workedExample && <WorkedExample move={move} draft={draft} onChange={changeDraft}/>}
     {move.sourceCredit && <p className="tl-saved-note">{move.sourceCredit}</p>}
     {move.illustration && !isOG1Visual && <LessonIllustration key={move.id} kind={move.illustration}/>}
-    {!written && move.scripture?.length>0 && (isOG1Visual ? <details className="tl-og1-passages"><summary>Explore the supporting Scriptures · {move.scripture.length} passages</summary><section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read in context →</button></article>)}</section></details> : <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>)}
-    {move.id==='shema-show' && shemaVideo && <section className="tl-media" aria-label="Optional historical context video"><div><span className="tl-small">Historical lens · Jewish tradition</span><h2>{shemaVideo.title}</h2><p>{shemaVideo.purpose}</p><small>{shemaVideo.duration} · Optional viewing · Source: {shemaVideo.provider}</small></div><div className="tl-media-frame"><iframe src={shemaVideo.embedUrl} title={shemaVideo.videoTitle || shemaVideo.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowFullScreen sandbox="allow-scripts allow-same-origin allow-presentation" /></div><fieldset><legend>{shemaVideo.lessonCheck.title}</legend><p>{shemaVideo.lessonCheck.prompt}</p>{shemaVideo.lessonCheck.choices.map(choice=><label key={choice.id}><input type="radio" name="shema-video-check" value={choice.id} checked={mediaAnswer===choice.id} onChange={()=>setMediaAnswer(choice.id)} />{choice.label}</label>)}{mediaAnswer && <p className={mediaAnswer===shemaVideo.lessonCheck.answerId?'tl-media-feedback is-correct':'tl-media-feedback'} role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}</fieldset></section>}
-    {move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
+    {showAfterReveal && !written && move.scripture?.length>0 && (isOG1Visual ? <details className="tl-og1-passages"><summary>Explore the supporting Scriptures · {move.scripture.length} passages</summary><section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read in context →</button></article>)}</section></details> : <section className="tl-scripture" aria-label="Scripture we are working through">{move.scripture.map(item=><article key={item.reference}><span className="tl-small">{item.reference}</span><blockquote>{item.text}</blockquote><p>{item.note}</p><button type="button" onClick={()=>openScripture(item)}>Read the passage in context →</button></article>)}</section>)}
+    {showAfterReveal && move.id==='shema-show' && shemaVideo && <section className="tl-media" aria-label="Optional historical context video"><div><span className="tl-small">Historical lens · Jewish tradition</span><h2>{shemaVideo.title}</h2><p>{shemaVideo.purpose}</p><small>{shemaVideo.duration} · Optional viewing · Source: {shemaVideo.provider}</small></div><div className="tl-media-frame"><iframe src={shemaVideo.embedUrl} title={shemaVideo.videoTitle || shemaVideo.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowFullScreen sandbox="allow-scripts allow-same-origin allow-presentation" /></div><fieldset><legend>{shemaVideo.lessonCheck.title}</legend><p>{shemaVideo.lessonCheck.prompt}</p>{shemaVideo.lessonCheck.choices.map(choice=><label key={choice.id}><input type="radio" name="shema-video-check" value={choice.id} checked={mediaAnswer===choice.id} onChange={()=>setMediaAnswer(choice.id)} />{choice.label}</label>)}{mediaAnswer && <p className={mediaAnswer===shemaVideo.lessonCheck.answerId?'tl-media-feedback is-correct':'tl-media-feedback'} role="status">{mediaAnswer===shemaVideo.lessonCheck.answerId?shemaVideo.lessonCheck.correctFeedback:shemaVideo.lessonCheck.incorrectFeedback}</p>}</fieldset></section>}
+    {showAfterReveal && move.type==='teach' && <button type="button" className="tl-primary" onClick={next}>{move.cta || 'Continue'} →</button>}
     {move.prompt && <section className="tl-question" aria-label="Check your understanding"><p className="tl-small">{written?'Your explanation':move.id==='check'?'A fresh situation':'Let me check your understanding'}</p><h2>{move.prompt}</h2>
      {(matching || reasoning) && <LessonActivity move={move} draft={draft} feedback={feedback} onChange={changeDraft}/>}
      {!written && !matching && !reasoning && <div className="tl-choices" role="group" aria-label="Choose an explanation">{move.choices.map((choice,i)=><button type="button" key={choice.id} disabled={Boolean(feedback)} aria-pressed={draft.selectedChoiceId===choice.id} onClick={()=>changeDraft({selectedChoiceId:choice.id})}><span>{letters[i]}</span><span>{choice.label}</span></button>)}</div>}
