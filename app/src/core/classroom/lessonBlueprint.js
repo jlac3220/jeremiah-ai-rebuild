@@ -21,8 +21,9 @@ export function getLessonFrame(content, move, state={}) {
   const chapter=chapters[index];
   const phase=LESSON_PHASES.includes(move?.phase)
     ?move.phase
-    :(['learn','scripture','sources'].includes(move?.id)||move?.type==='teach'?'Show me':
-      move?.type==='complete'?'Complete':'Let me try');
+    :move?.type==='complete'?'Complete'
+      :['scripture','sources'].includes(move?.id)?'Guide me'
+      :move?.id==='learn'||move?.type==='teach'?'Show me':'Let me try';
   const completed=chapters.filter(ch=>Boolean(state.experience?.standardEvidence?.[ch.standardId])).length;
   return {
     chapter,chapterIndex:index,chapterNumber:index+1,chapterCount:chapters.length,
