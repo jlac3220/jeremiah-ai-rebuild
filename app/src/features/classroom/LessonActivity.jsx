@@ -25,6 +25,7 @@ export function LessonVisual({kind}){
  return <figure className="la-comparison"><span className="la-kicker">Locate the actual disagreement</span><h2>Both say “one God.”</h2><div><section><h3>Trinitarian confession</h3><p>One divine essence</p><strong>Three eternal persons</strong></section><section><h3>Oneness confession</h3><p>One undivided God</p><strong>No eternal division into persons</strong></section></div><figcaption>Now explain the incarnation. A fair comparison must preserve both the actual disagreement and Jesus’ real humanity.</figcaption></figure>;
 }
 export default function LessonActivity({move,draft,feedback,onChange}){
+ const [guidedStep,setGuidedStep]=useState(0);
  if(move.interaction.type==='reasoning')return <div className="la-reasoning">{[['claim','claimId','claims','claimPrompt'],['reason','reasonId','reasons','reasonPrompt']].map(([id,field,options,prompt])=>{const result=feedback?.itemResults?.find(r=>r.id===id);return <fieldset key={id} disabled={Boolean(feedback)}><legend>{move.interaction[prompt]}</legend>{move.interaction[options].map(option=><button type="button" key={option.id} aria-pressed={draft[field]===option.id} onClick={()=>onChange({[field]:option.id})}>{option.label}</button>)}{result && <p className={result.correct?'la-correct':'la-rethink'}>{result.message}</p>}</fieldset>;})}</div>;
  const {items,options}=move.interaction;
  const results=feedback?.itemResults || [];
@@ -32,16 +33,16 @@ export default function LessonActivity({move,draft,feedback,onChange}){
  const clinic=move.id==='distinction-guide';
  const guided=Boolean(move.standardIds?.some(id=>id.startsWith('OG.1.')) || move.id.endsWith('-guide'));
  const answered=items.filter(item=>Boolean(draft.placements?.[item.id])).length;
- const activeIndex=Math.min(answered,items.length-1);
+ const activeIndex=Math.min(guidedStep,items.length-1);
  const visibleItems=guided&&!feedback?[items[activeIndex]]:items;
  return <div className={`la-activity ${trail?'la-trail':clinic?'la-clinic':'la-matching'}`}>
   <p className="la-kicker">{move.activityLabel || 'Phrase workshop'} · {items.filter(i=>draft.placements?.[i.id]).length}/{items.length} connected</p>
-  {guided && !feedback && <div className="la-guided-counter" role="status"><strong>CONNECT</strong><span>Phrase {Math.min(answered+1,items.length)} of {items.length}</span></div>}
+  {guided && !feedback && <div className="la-guided-counter" role="status"><strong>CONNECT</strong><span>Phrase {activeIndex+1} of {items.length}</span></div>}
   {visibleItems.map((item,i)=>{const result=results.find(r=>r.id===item.id);return <fieldset key={item.id} disabled={Boolean(feedback)}><legend>{trail?'Witness':clinic?'Claim':`Evidence ${guided?items.indexOf(item)+1:i+1}`}</legend><p>{item.label}</p>
    {clinic?<div className="la-verdicts">{options.map(option=><button type="button" key={option.id} aria-pressed={draft.placements?.[item.id]===option.id} onClick={()=>onChange({placements:{...draft.placements,[item.id]:option.id}})}>{option.label}</button>)}</div>:<label>{trail?'Position in the argument':'Connect to'}<select value={draft.placements?.[item.id] || ''} onChange={e=>onChange({placements:{...draft.placements,[item.id]:e.target.value}})}><option value="">Choose a connection…</option>{options.map(o=><option key={o.id} value={o.id}>{o.label}</option>)}</select></label>}
    {result && <p className={result.correct?'la-correct':'la-rethink'}><strong>{result.correct?'Connected: ':'Reconsider: '}</strong>{result.message}</p>}
   </fieldset>;})}
-  {guided && answered===items.length && !feedback && <p className="la-guided-ready">All connections selected. Discuss your answer to check the reasoning.</p>}
+  {guided && !feedback && <div className="la-guided-navigation">{activeIndex>0&&<button type="button" onClick={()=>setGuidedStep(i=>Math.max(0,i-1))}>← Previous phrase</button>}{activeIndex<items.length-1&&<button type="button" disabled={!draft.placements?.[items[activeIndex].id]} onClick={()=>setGuidedStep(i=>Math.min(items.length-1,i+1))}>Reveal next phrase →</button>}{activeIndex===items.length-1&&draft.placements?.[items[activeIndex].id]&&<p>All three phrases explored. Discuss your answer when you are ready.</p>}</div>}
  </div>;
 }
 
