@@ -191,3 +191,94 @@
  .ld-mini-stats>span+span { padding-left:9px; }
 }
 @media(max-width:370px) { .ld-intro-art { flex-basis:78px; transform:scale(.85); transform-origin:right center; } .ld-home-intro h1 { font-size:1.62rem; } }
+
+
+/* Jeremiah Home v3 — immersive editorial design, scoped to .jh-page. */
+.jh-page { background:#F8FAFD; color:#15243B; padding:20px 24px 100px; min-height:100svh; }
+.jh-page .jh-shell { max-width:1040px; }
+.jh-page .jh-header { padding:4px 0 21px; }
+.jh-page .ld-logo-mark { background:#1463E8; border-radius:11px; }
+.jh-hero { min-height:305px; position:relative; display:grid; grid-template-columns:minmax(0,1fr) 305px; align-items:center; overflow:hidden; isolation:isolate; color:#fff; background:radial-gradient(ellipse at 85% 0%,#254A81 0%,transparent 48%),linear-gradient(120deg,#101F39 0%,#142F58 100%); border-radius:26px; padding:42px 50px; }
+.jh-hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.23; background-image:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.06) 35.2%,transparent 35.6%),radial-gradient(circle at 32% 110%,#2F76CE,transparent 42%); z-index:-1; }
+.jh-hero-copy { position:relative; z-index:2; }
+.jh-overline { display:flex; align-items:center; gap:9px; color:#B8D8FF; font-size:.72rem; font-weight:850; letter-spacing:.16em; }
+.jh-overline-mark { width:19px; height:2px; background:#8EBBFA; }
+.jh-hero h1 { margin:19px 0 15px; font:750 clamp(2.1rem,4.5vw,3.45rem)/1.09 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:-.045em; max-width:650px; }
+.jh-hero h1 em { color:#A9CEFF; font-style:normal; }
+.jh-hero p { margin:0; color:#D5E0F1; max-width:410px; font-size:1.03rem; line-height:1.6; }
+.jh-hero-link { display:inline-flex; align-items:center; gap:25px; margin-top:25px; padding:0 0 6px; border:0; border-bottom:1px solid #78A9F0; background:transparent; color:#fff; font:730 .91rem/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; cursor:pointer; }
+.jh-hero-link span { color:#9BC8FF; font-size:1.1rem; }
+.jh-art { position:relative; width:300px; height:310px; justify-self:end; margin:-34px -5px -35px 0; }
+.jh-art-halo { position:absolute; border-radius:50%; width:210px; height:210px; left:45px; top:49px; background:radial-gradient(circle,#3181E9 0%,rgba(58,132,229,.18) 40%,transparent 70%); filter:blur(18px); }
+.jh-art-svg { position:relative; width:100%; height:100%; filter:drop-shadow(0 8px 12px rgba(2,10,32,.27)); }
+.jh-art-caption { position:absolute; bottom:31px; left:0; right:0; text-align:center; letter-spacing:.15em; font:750 .65rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:#B8D8FF; }
+.jh-section-top { display:flex; justify-content:space-between; gap:12px; align-items:end; margin:35px 0 15px; }
+.jh-kicker { color:#1463E8; font:850 .72rem/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.13em; }
+.jh-section-top h2 { margin:3px 0 0; color:#16253B; font:800 clamp(1.45rem,3vw,1.83rem)/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:-.035em; }
+.jh-count { font:650 .76rem/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:#64748B; white-space:nowrap; }
+.jh-feature { border:1px solid #E2E8F1; border-radius:22px; background:#fff; box-shadow:0 10px 28px rgba(26,48,84,.035); overflow:hidden; }
+.jh-feature-upper { display:flex; gap:16px; align-items:start; justify-content:space-between; padding:24px 26px 19px; }
+.jh-study { display:inline-flex; align-items:center; gap:8px; color:#1766D3; font:820 .73rem/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.025em; }
+.jh-study::before { content:""; height:8px; width:8px; border-radius:3px; background:#1463E8; }
+.jh-feature h3 { margin:9px 0 0; max-width:680px; font:790 clamp(1.35rem,3vw,1.9rem)/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:-.035em; }
+.jh-status { white-space:nowrap; background:#EDF4FF; color:#24599E; padding:6px 10px; border-radius:99px; font-size:.72rem; font-weight:760; }
+.jh-feature-foot { display:grid; grid-template-columns:minmax(0,1fr) 185px 190px; align-items:center; gap:22px; background:#F4F7FC; border-top:1px solid #E7ECF4; padding:17px 24px; }
+.jh-next { display:flex; align-items:center; gap:10px; min-width:0; }
+.jh-next-symbol { display:grid; place-items:center; width:40px; height:40px; flex-shrink:0; border-radius:12px; background:#E3EEFF; color:#1463E8; font-size:1.2rem; }
+.jh-next>span:last-child { display:grid; gap:4px; min-width:0; }
+.jh-next small { font-size:.62rem; font-weight:850; letter-spacing:.085em; color:#64748B; }
+.jh-next strong { font-size:.87rem; line-height:1.25; color:#253751; overflow-wrap:anywhere; }
+.jh-progress>div:first-child { display:flex; justify-content:space-between; gap:6px; color:#64748B; font:650 .72rem/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+.jh-progress strong { color:#1463E8; }
+.jh-progress-track { height:6px; background:#DDE7F4; border-radius:20px; margin-top:8px; overflow:hidden; }
+.jh-progress-track i { height:100%; display:block; border-radius:20px; background:#1463E8; }
+.jh-continue { min-height:49px; border:0; border-radius:13px; background:#1463E8; color:#fff; display:flex; justify-content:space-between; align-items:center; gap:15px; padding:12px 16px; font:780 .87rem/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; cursor:pointer; }
+.jh-continue:hover { background:#0B50C4; }
+.jh-continue span { font-size:1.25rem; }
+.jh-explore { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:17px; }
+.jh-tool { display:flex; gap:13px; align-items:center; padding:17px 19px; min-height:84px; background:#fff; border:1px solid #E2E8F1; border-radius:18px; color:#17263F; text-align:left; cursor:pointer; }
+.jh-tool-visual { display:grid; place-items:center; width:48px; height:48px; flex:0 0 48px; border-radius:14px; background:#EAF2FF; color:#1463E8; }
+.jh-tool-visual svg { width:29px; height:29px; }
+.jh-tool-visual-path { color:#fff; background:#163C70; font:800 1.05rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+.jh-tool-body { display:grid; gap:3px; min-width:0; }
+.jh-tool-body strong { font-size:.91rem; }
+.jh-tool-body small { color:#697B93; font-size:.76rem; }
+.jh-tool-arrow { color:#1463E8; font-size:1.2rem; margin-left:auto; }
+.jh-footnote { display:flex; justify-content:center; gap:9px; align-items:center; padding:19px 0 0; color:#7B879A; font-size:.76rem; }
+.jh-footnote strong { color:#22354F; }
+.jh-page button:focus-visible { outline:3px solid #78B5FF; outline-offset:3px; }
+@media(max-width:760px){
+ .jh-page { padding:calc(10px + env(safe-area-inset-top)) 16px 103px; }
+ .jh-page .jh-header { padding:0 0 15px; }
+ .jh-hero { min-height:294px; grid-template-columns:minmax(0,1fr) 120px; padding:27px 23px; border-radius:21px; }
+ .jh-hero h1 { font-size:clamp(1.85rem,7vw,2.45rem); max-width:335px; margin:16px 0 11px; }
+ .jh-hero p { font-size:.85rem; line-height:1.55; max-width:260px; }
+ .jh-hero-link { margin-top:23px; font-size:.81rem; gap:9px; }
+ .jh-art { width:205px; height:212px; margin:0 -58px 0 -40px; transform:translateY(21px); opacity:.85; }
+ .jh-art-caption { bottom:8px; font-size:.5rem; }
+ .jh-art-halo { width:160px; height:160px; left:15px; top:25px; }
+ .jh-section-top { margin:25px 1px 13px; }
+ .jh-section-top h2 { font-size:1.45rem; }
+ .jh-feature-upper { padding:20px 18px 18px; gap:8px; flex-wrap:wrap; }
+ .jh-feature h3 { font-size:1.34rem; max-width:400px; }
+ .jh-status { font-size:.65rem; padding:5px 8px; }
+ .jh-feature-foot { grid-template-columns:minmax(0,1fr) 80px; gap:13px; padding:14px 16px 16px; }
+ .jh-next { grid-column:1; }
+ .jh-progress { grid-column:2; }
+ .jh-continue { grid-column:1/-1; }
+ .jh-next-symbol { width:34px; height:34px; border-radius:10px; }
+ .jh-next strong { font-size:.78rem; }
+ .jh-explore { gap:10px; }
+ .jh-tool { padding:12px 11px; min-height:95px; gap:9px; flex-direction:column; align-items:flex-start; position:relative; }
+ .jh-tool-visual { width:38px; height:38px; flex-basis:38px; border-radius:11px; }
+ .jh-tool-visual svg { width:25px; height:25px; }
+ .jh-tool-body strong { font-size:.81rem; }
+ .jh-tool-body small { font-size:.69rem; }
+ .jh-tool-arrow { position:absolute; top:14px; right:12px; }
+}
+@media(max-width:370px){
+ .jh-hero { padding:22px 18px; }
+ .jh-hero h1 { font-size:1.72rem; }
+ .jh-art { margin-right:-79px; }
+ .jh-status { order:0; }
+}
