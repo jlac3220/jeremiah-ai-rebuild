@@ -4,7 +4,27 @@ import {createLearningState,saveLearningState,loadLearningState} from '../src/co
 import {evaluateTeachingChoice,saveTeachingDecision,continueTeaching,restartTeaching} from '../src/core/classroom/teacherLedEngine.js';
 import {getLearningDashboard} from '../src/core/classroom/learningDashboard.js';
 import {teachWithJeremiah} from '../server/teacherCore.mjs';
+import {LESSON_BLUEPRINT, LESSON_PHASES, getLessonFrame, validateGroupedLessonBlueprint} from '../src/core/classroom/lessonBlueprint.js';
 const saved=new Map();globalThis.window={localStorage:{getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value)}};
+assert.equal(LESSON_BLUEPRINT.length,6);
+assert.deepEqual(LESSON_PHASES,['Show me','Guide me','Let me try']);
+const audit=validateGroupedLessonBlueprint(content);
+assert.equal(audit.valid,true,'Blueprint check: '+audit.issues.join('; '));
+assert.deepEqual(content.lessonChapters.map(c=>c.standardId),content.coveredStandards.map(c=>c.id));
+const path=content.instructionalMoves.filter(m=>m.phase && LESSON_PHASES.includes(m.phase)).map(m=>m.standardIds?.[0]);
+const distinctChapters=path.filter((id,i)=>i===0 || path[i-1]!==id);
+assert.deepEqual(distinctChapters,content.coveredStandards.map(s=>s.id),'Finish each chapter before the next one begins');
+for(const [i,chapter] of content.lessonChapters.entries()){
+ const chapterMoves=content.instructionalMoves.filter(m=>m.standardIds?.includes(chapter.standardId));
+ const phases=chapterMoves.map(m=>m.phase).filter(phase=>LESSON_PHASES.includes(phase));
+ assert.equal(phases[0],'Show me',chapter.standardId+' must open with teaching');
+ assert.equal(phases.at(-1),'Let me try',chapter.standardId+' must end with independent explanation');
+ assert.equal(getLessonFrame(content,chapterMoves[0],{}).chapterNumber,i+1);
+ assert.equal(getLessonFrame(content,chapterMoves[0],{}).phase,'Show me');
+ assert.equal(getLessonFrame(content,chapterMoves.at(-1),{}).phase,'Let me try');
+ assert.ok(chapter.anchor && chapter.question,chapter.standardId+' needs an anchored question');
+}
+// A previous completion state and a started draft are intentionally unaffected.
 for(const standard of content.coveredStandards){
  for(const phase of ['Show me','Guide me','Let me try'])assert.ok(content.instructionalMoves.some(m=>m.phase===phase && m.standardIds?.includes(standard.id)),`${standard.id}: missing ${phase}`);
  const assessed=content.instructionalMoves.filter(m=>m.phase==='Let me try' && m.standardIds.includes(standard.id)).flatMap(m=>m.evidenceIds);
