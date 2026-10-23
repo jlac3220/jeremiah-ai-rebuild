@@ -68,21 +68,20 @@ function OG1ChapterScene({move,onReadBible}) {
 }
 
 function GuidedReveal({paragraphs=[],onFinish}) {
- const [step,setStep]=useState(-1);
+ const [step,setStep]=useState(0);
  const actions=['NOTICE','DISCOVER','CONNECT','REFLECT'];
  const complete=step>=paragraphs.length;
  return <section aria-label="Guided discovery" style={{margin:'22px 0 18px',borderTop:'1px solid #dbe6f3',paddingTop:19}}>
   <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,marginBottom:13}}>
    <span style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',color:'#1659a8'}}>JEREMIAH GUIDES YOU</span>
-   <span style={{fontSize:12,color:'#64748b'}}>{complete?paragraphs.length:Math.max(0,step+1)} of {paragraphs.length} ideas</span>
+   <span style={{fontSize:12,color:'#64748b'}}>{complete?paragraphs.length:Math.min(paragraphs.length,step+1)} of {paragraphs.length} ideas</span>
   </div>
-  {step>=0 && <div key={step} aria-live="polite" style={{padding:'5px 0 16px'}}>
+  {<div key={step} aria-live="polite" style={{padding:'5px 0 16px'}}>
    <div style={{fontSize:12,fontWeight:850,letterSpacing:'.13em',color:'#1867c1',marginBottom:10}}>{complete?'READY TO RESPOND':actions[Math.min(step,actions.length-1)]}</div>
    {complete?<p style={{fontSize:19,lineHeight:1.6,color:'#223653',margin:0}}>Now explore the Scripture, then try the next challenge.</p>:<p style={{fontSize:19,lineHeight:1.7,color:'#223653',margin:0}}>{paragraphs[step]}</p>}
-  </div>}
-  {step<0 && <p style={{fontSize:19,lineHeight:1.6,color:'#223653',margin:'0 0 18px'}}>Let's explore this truth one idea at a time.</p>}
-  {!complete?<button type="button" onClick={()=>{const next=step+1;setStep(next);if(next>=paragraphs.length)onFinish();}} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:25,width:'100%',maxWidth:390,minHeight:51,border:0,borderRadius:12,background:'#1765dc',color:'white',padding:'12px 18px',fontSize:15,fontWeight:800,cursor:'pointer'}}>{step<0?'Reveal the first idea':step===paragraphs.length-1?'Explore the next step':'Reveal the next idea'}<span aria-hidden="true">→</span></button>:null}
-  {step>=0&&!complete&&<button type="button" onClick={()=>setStep(i=>Math.max(-1,i-1))} style={{border:0,background:'none',color:'#52677f',padding:'12px 0',fontSize:13,cursor:'pointer'}}>← Previous idea</button>}
+  </div>
+  {!complete?<button type="button" onClick={()=>{const next=step+1;setStep(next);if(next>=paragraphs.length)onFinish();}} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:25,width:'100%',maxWidth:390,minHeight:51,border:0,borderRadius:12,background:'#1765dc',color:'white',padding:'12px 18px',fontSize:15,fontWeight:800,cursor:'pointer'}}>{step===paragraphs.length-1?'Explore the next step':'Reveal the next idea'}<span aria-hidden="true">→</span></button>:null}
+  {step>0&&!complete&&<button type="button" onClick={()=>setStep(i=>Math.max(0,i-1))} style={{border:0,background:'none',color:'#52677f',padding:'12px 0',fontSize:13,cursor:'pointer'}}>← Previous idea</button>}
   {!complete&&<button type="button" onClick={()=>{setStep(paragraphs.length);onFinish();}} style={{display:'block',border:0,background:'none',color:'#52677f',padding:'10px 0',fontSize:13,cursor:'pointer'}}>Go straight to the activity ↓</button>}
  </section>;
 }
