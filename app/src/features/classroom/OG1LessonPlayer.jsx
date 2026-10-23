@@ -32,7 +32,7 @@ function createMoments(move,video) {
  else moments.push({kind:'intro',verb:'ENCOUNTER',title:TITLES[move.id]||move.title});
  const discovery=DISCOVERIES[move.id];
  if(discovery)moments.push({kind:'discovery',verb:'INVESTIGATE',title:discovery.question,discovery});
- (move.teaching||[]).forEach((text,i)=>moments.push({kind:'teach',verb:['UNDERSTAND','CONSIDER','REVEAL'][i%3],title:['Why it matters','Look beneath the surface','The deeper connection'][i%3],text}));
+ if(move.teaching?.length)moments.push({kind:'insight',verb:'THE CONNECTION',title:move.id==='shema-show'?'Hear—and respond.':move.id==='isaiah-show'?'The witnesses agree.':move.id==='continuity-show'?'The confession continues.':move.id==='distinction-show'?'The disagreement has a precise meaning.':move.id==='devotion-show'?'Belief becomes allegiance.':'Carry this question forward.',text:move.teaching[0],deeper:move.teaching.slice(1)});
  if(move.id==='shema-show'&&video)moments.push({kind:'watch',verb:'WATCH',title:'Listen to the meaning of Shema',video});
  if(move.id==='shema-show'&&video?.lessonCheck)moments.push({kind:'videoCheck',verb:'NOTICE',title:'What did you notice?',check:video.lessonCheck});
  return moments;
@@ -47,6 +47,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [mediaChoice,setMediaChoice]=useState('');
  const [discoveryChoice,setDiscoveryChoice]=useState(null);
  const [openingHeard,setOpeningHeard]=useState(false);
+ const [showDepth,setShowDepth]=useState(false);
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
@@ -65,7 +66,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const current=moments[Math.min(moment,total-1)];
  const percent=getStandardProgress(content,state);
  const chapter=move.id.split('-')[0];
- useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setError('');}},[move.id]);
+ useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  function change(patch) {
   if(thinking||feedback)return;
@@ -76,10 +77,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   setBibleReaderIntent(reference,{translation:'kjv',returnRoute:ROUTES.CLASSROOM_LESSON,source:'classroom'});
   onNavigate(ROUTES.BIBLE_SUPPORT);
  }
- function advance(){if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
+ function advance(){if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
- function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
+ function restart(){abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -93,7 +94,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   }
   onStateChange(old=>saveTeachingDecision(old,content,move,decision));
  }
- const buttonText=current?.kind==='watch'?'I watched / Continue':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
+ const buttonText=current?.kind==='insight'?'Put this understanding to work':current?.kind==='watch'?'I watched / Continue':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className="ogp-page">
   <header className="ogp-header"><button type="button" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>← <span>Classroom</span></button><strong>JEREMIAH <small>THE ONE TRUE GOD</small></strong><div className="ogp-header-tools"><button type="button" onClick={()=>setConfirmRestart(true)}>Start from beginning</button><button type="button" className="ogp-classic" onClick={onUseClassic}>Original view</button></div></header>
   <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
@@ -116,7 +117,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<><blockquote className="ogp-verse">“{current.verse.text}”</blockquote><span className="ogp-reference">{current.verse.reference} · KJV</span><p className="ogp-prompt">What does this passage establish?</p><button type="button" className="ogp-link" onClick={()=>readVerse(current.verse.reference)}>Read in context ↗</button></>}
      {current.kind==='intro'&&<p className="ogp-thought">Let's follow the confession from Moses through the prophets and into the apostolic witness.</p>}
-     {current.kind==='teach'&&<p className="ogp-thought">{current.text}</p>}
+     {current.kind==='insight'&&<div className="ogp-insight"><span className="ogp-insight-mark" aria-hidden="true">✦</span><p className="ogp-thought">{current.text}</p>{current.deeper.length>0&&<><button type="button" className="ogp-depth-button" aria-expanded={showDepth} onClick={()=>setShowDepth(v=>!v)}>{showDepth?'Close the deeper explanation':'Explore the reasoning further'} →</button>{showDepth&&<div className="ogp-depth">{current.deeper.map((text,i)=><p key={i}>{text}</p>)}</div>}</>}</div>}
      {current.kind==='discovery'&&<div className="ogp-discovery"><p className="ogp-prompt">Choose what to investigate. Every path reveals a piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label,detail],i)=><button type="button" key={label} aria-pressed={discoveryChoice===i} onClick={()=>setDiscoveryChoice(i)}>{label}<span aria-hidden="true">↗</span></button>)}</div>{discoveryChoice!==null&&<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[discoveryChoice][0]}</strong><p>{current.discovery.options[discoveryChoice][1]}</p><small>{current.discovery.closer}</small></div>}</div>}
      {current.kind==='watch'&&<><p className="ogp-prompt">Watch for the meaning of <em>shema</em>. This is historical and language context; Jeremiah will connect it to Apostolic teaching.</p><div className="ogp-video"><iframe src={current.video.embedUrl} title={current.video.videoTitle||current.video.title} loading="lazy" allow="encrypted-media; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div><small>Optional · {current.video.provider} · {current.video.duration}</small></>}
      {current.kind==='videoCheck'&&<><p className="ogp-prompt">{current.check.prompt}</p><div className="ogp-options">{current.check.choices.map(c=><button type="button" key={c.id} aria-pressed={mediaChoice===c.id} onClick={()=>setMediaChoice(c.id)}>{c.label}</button>)}</div>{mediaChoice&&<p className="ogp-feedback">{mediaChoice===current.check.answerId?current.check.correctFeedback:current.check.incorrectFeedback}</p>}</>}
