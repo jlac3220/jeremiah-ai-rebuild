@@ -6,6 +6,7 @@ import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import DeepDiveSheet from './DeepDiveSheet';
 import GuidedWitnesses from './GuidedWitnesses';
 import InteractivePractice from './InteractivePractice';
+import LessonPath from './LessonPath';
 import { getLessonExperience } from '../../core/classroom/content/lessonExperience';
 import { getTeachingPlan } from '../../data/curriculum/teachingPlans';
 import { getClassroomResources } from '../../data/curriculum/classroomResources';
@@ -52,7 +53,7 @@ export default function CurriculumLesson({ content, move, state, onProgress, per
   return <div className="cl-page">
     <header className="cl-topbar"><button type="button" aria-label="Leave lesson" onClick={() => onNavigate(ROUTES.CLASSROOM_STUDY)}>←</button><span>{content.studyTitle}</span><span className="cl-percent">{percent}%</span></header>
     <div className="cl-progress" role="progressbar" aria-label="Lesson progress" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}><span style={{width:percent+'%'}} /></div>
-    <main className="cl-shell"><p className="ld-eyebrow">Domain {String(domain.number).padStart(2,'0')} · {labels[move.id]}</p><h1>{move.title}</h1>
+    <main className="cl-shell"><p className="ld-eyebrow">Domain {String(domain.number).padStart(2,'0')} · {labels[move.id]}</p><h1>{move.title}</h1><LessonPath content={content} move={move} state={state} compact />
       {!complete && <p className="cl-breadcrumb">{domain.title} · {content.standardId}</p>}
       {move.id === 'learn' && <><div className="cl-target"><span className="ld-eyebrow">The truth you are learning</span><p>{content.sourceStandard.statement.replace(/^The (?:student can|learner demonstrates that)\s+/,'')}</p></div><div className="cl-desktop-reading">{paragraphs(experience.teaching).map((p,i)=><p className="cl-prose" key={i}>{p}</p>)}</div><MobileReadingCards key={content.standardId} items={paragraphs(experience.teaching)} /><div className="cl-keywords">{experience.vocabulary.map(v=><button type="button" key={v.term} onClick={()=>setPassage({kind:"dictionary",title:v.term,provider:"Classroom vocabulary",summary:v.definition,purpose:v.relevance})}>{v.term} <span>+</span></button>)}</div><details className="cl-vocabulary"><summary>Words that matter in this domain</summary><dl>{domain.vocabulary.map((v)=><div key={v.term}><dt>{v.term}</dt><dd>{v.definition}</dd></div>)}</dl></details></>}
       {move.id === 'scripture' && <><GuidedWitnesses content={content} state={state} onProgress={onProgress} onOpen={openReference} /><details className="cl-vocabulary"><summary>All core Scripture in this domain</summary><div className="cl-scripture-list">{domain.scripture.map((v)=><button type="button" key={v.reference} onClick={()=>openReference(v)}><strong>{v.reference} <span>↗</span></strong><span>{v.function}</span></button>)}</div></details><details className="cl-vocabulary"><summary>Keep the thread</summary><p className="cl-prose">{plan.connection}</p></details></>}
