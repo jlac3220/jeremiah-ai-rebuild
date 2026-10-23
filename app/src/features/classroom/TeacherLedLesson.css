@@ -168,3 +168,29 @@
 .og1-encounter-journey b{display:grid;place-items:center;width:25px;height:25px;flex:0 0 25px;border-radius:50%;background:#dbeaff;color:#1653ad;font-size:.65rem}
 .og1-encounter button:focus-visible{outline:3px solid #ffdb68;outline-offset:2px}
 @media(max-width:640px){.og1-encounter{margin:17px 0 22px;border-radius:18px}.og1-encounter-top{padding:11px 15px;font-size:.58rem}.og1-encounter-scripture{padding:28px 20px 23px}.og1-encounter-scripture blockquote{font-size:1.65rem}.og1-encounter-question{padding:20px 17px}.og1-encounter-question h2{font-size:1.17rem}.og1-encounter-choices button{font-size:.83rem}.og1-encounter-journey{padding:14px 12px;gap:5px}.og1-encounter-journey span{flex-direction:column;text-align:center;font-size:.63rem}.og1-encounter-journey b{width:24px;height:24px;flex-basis:24px}}
+
+
+/* OG.1 chapters: interactive Scripture scenes with visual storytelling. */
+.og1-scene{margin:20px 0 31px;overflow:hidden;border:1px solid #dbe6f5;border-radius:23px;background:#fff;box-shadow:0 13px 33px rgba(18,51,108,.07);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.og1-scene-art{position:relative;isolation:isolate;overflow:hidden;text-align:center;display:flex;align-items:center;flex-direction:column;min-height:255px;padding:24px 26px 29px;color:#fff;background:linear-gradient(145deg,#112b63,#1b63bc)}
+.og1-scene-continuity .og1-scene-art{background:linear-gradient(145deg,#123b73,#1687bc)}
+.og1-scene-distinction .og1-scene-art{background:linear-gradient(145deg,#142450,#4759a5)}
+.og1-scene-devotion .og1-scene-art{background:linear-gradient(145deg,#173d73,#235e98)}
+.og1-scene-rays{position:absolute;z-index:-1;inset:-100px;opacity:.25;background:repeating-conic-gradient(from 12deg at 50% 48%,transparent 0deg 17deg,#9ed2ff 18deg 18.4deg,transparent 19deg 36deg)}
+.og1-scene-eyebrow{font-size:.67rem;font-weight:850;letter-spacing:.16em;color:#c6e6ff}
+.og1-scene-emblem{display:grid;place-items:center;width:72px;height:72px;margin:19px 0 12px;border:1px solid #9bcbff99;border-radius:50%;color:#ffe18b;font-size:2.9rem;box-shadow:0 0 0 15px #9bcbff1a,0 0 0 30px #9bcbff12}
+.og1-scene-art h2{color:#fff;margin:9px 0;font-size:clamp(1.48rem,3vw,2.04rem);line-height:1.2;font-weight:820;letter-spacing:-.035em}
+.og1-scene-art blockquote{border:0;padding:0;margin:5px auto 0;max-width:600px;color:#f8fbff;font:500 clamp(1.05rem,2vw,1.32rem)/1.5 Georgia,serif}
+.og1-scene-reference{margin-top:12px;color:#ffe39a;letter-spacing:.13em;font-size:.65rem;font-weight:840}
+.og1-scene-body{padding:23px 25px 24px}
+.og1-scene-body>p{margin:0 0 18px;color:#2a3d5b;font-size:.96rem;line-height:1.55}
+.og1-scene-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.og1-scene-tabs button{border:1px solid #d5e4f8;background:#f4f8ff;color:#28568e;border-radius:11px;padding:10px 13px;font-size:.8rem;font-weight:780;cursor:pointer}
+.og1-scene-tabs button[aria-pressed=true]{background:#165bb5;color:#fff;border-color:#165bb5}
+.og1-scene-insight{display:grid;grid-template-columns:33px minmax(0,1fr);gap:1px 10px;margin-top:14px;padding:16px;border-radius:12px;background:#edf5ff;color:#23466f}
+.og1-scene-insight-number{grid-row:span 2;color:#1763be;font-size:.95rem;font-weight:860}
+.og1-scene-insight strong{font-size:.9rem}
+.og1-scene-insight p{margin:4px 0 0;font-size:.88rem;line-height:1.6}
+.og1-scene-read{display:inline-block;margin-top:16px;border:0;background:transparent;color:#145bb5;font-size:.81rem;font-weight:800;text-align:left;cursor:pointer;padding:7px 0}
+.og1-scene button:focus-visible{outline:3px solid #f9d86a;outline-offset:2px}
+@media(max-width:640px){.og1-scene{margin:16px 0 24px;border-radius:17px}.og1-scene-art{min-height:225px;padding:23px 17px}.og1-scene-emblem{width:59px;height:59px;font-size:2.3rem}.og1-scene-art h2{font-size:1.55rem}.og1-scene-art blockquote{font-size:1.04rem}.og1-scene-body{padding:19px 16px}.og1-scene-body>p{font-size:.88rem}.og1-scene-tabs{gap:6px}.og1-scene-tabs button{font-size:.72rem;padding:9px}.og1-scene-insight{padding:13px}.og1-scene-insight p{font-size:.81rem}}
