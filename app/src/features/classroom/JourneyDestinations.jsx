@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import './JourneyDestinations.css';
 
 // Public-domain representations of biblical figures. These are paintings,
@@ -25,6 +25,16 @@ export const BIBLICAL_ART = {
   reference:'Isaiah 44:6',
   quote:'“I am the first, and I am the last; and beside me there is no God.”'
  },
+ jesus: {
+  src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Brooklyn_Museum_-_The_Scribe_Stood_to_Tempt_Jesus_%28Le_scribe_se_leva_pour_tenter_J%C3%A9sus%29_-_James_Tissot_-_overall.jpg',
+  alt:'James Tissot watercolor showing Jesus speaking with a scribe and a gathered crowd',
+  artist:'James Tissot',
+  work:'The Scribe Stood to Tempt Jesus (1886–1894)',
+  source:'https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Scribe_Stood_to_Tempt_Jesus_(Le_scribe_se_leva_pour_tenter_J%C3%A9sus)_-_James_Tissot_-_overall.jpg',
+  focal:'42% 44%',
+  reference:'Mark 12:29',
+  quote:'“The Lord our God is one Lord.”'
+ },
  apostles: {
   src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Jan_Lievens_-_St._Paul_writing_to_the_Thessalonians.jpg',
   alt:'Jan Lievens painting portraying the apostle Paul writing a letter at his desk',
@@ -45,10 +55,11 @@ const STOPS = [
 
 export function DestinationArt({tone}) {
  const [failed,setFailed]=useState(false);
+ useEffect(()=>setFailed(false),[tone]);
  const art=BIBLICAL_ART[tone]||BIBLICAL_ART.moses;
  return <span className={'ogj-art ogj-art--'+tone} role="img" aria-label={art.alt}>
-  {!failed&&<img className="ogj-photo" src={art.src} alt="" loading="lazy" decoding="async" style={{objectPosition:art.focal}} onError={()=>setFailed(true)}/>}
-  <span aria-hidden="true" className="ogj-fallback">{tone==='moses'?'מֹשֶׁה':tone==='prophets'?'יְשַׁעְיָהוּ':'ΠΑΥΛΟΣ'}</span>
+  {!failed&&<img key={tone} className="ogj-photo" src={art.src} alt="" loading="lazy" decoding="async" style={{objectPosition:art.focal}} onError={()=>setFailed(true)}/>}
+  <span aria-hidden="true" className="ogj-fallback">{tone==='moses'?'מֹשֶׁה':tone==='prophets'?'יְשַׁעְיָהוּ':tone==='jesus'?'ΙΗΣΟΥΣ':'ΠΑΥΛΟΣ'}</span>
  </span>;
 }
 
