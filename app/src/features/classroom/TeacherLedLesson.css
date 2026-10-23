@@ -200,3 +200,37 @@
 .tl-skip-discussion button:hover{background:#eaf3ff}
 .tl-skip-discussion small{color:#677a94;font-size:.74rem;line-height:1.5}
 .tl-skip-discussion button:focus-visible{outline:3px solid #f9d86a;outline-offset:2px}
+
+
+/* OG1: one visual focal point per step instead of stacked banners. */
+.tl-og1-flow .tl-main { max-width:790px; padding-top:30px; }
+.tl-og1-flow .tl-step { margin-bottom:10px; }
+.tl-og1-flow .lp-panel { border:0; background:transparent; border-radius:0; box-shadow:none; padding:5px 0 15px; margin:4px 0 13px; border-bottom:1px solid #e5edf6; }
+.tl-og1-flow .lp-chapter { font-size:.95rem; }
+.tl-og1-flow .lp-question { display:none; }
+.tl-og1-flow .lp-phases { margin-top:11px; }
+.tl-og1-flow .lp-phases span { font-size:.68rem; }
+.tl-og1-flow .lp-phases i { width:19px; height:19px; flex-basis:19px; }
+.tl-og1-flow .tl-chapter-heading-sr { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+.tl-og1-flow .og1-scene,.tl-og1-flow .og1-encounter { margin:12px 0 23px; }
+.tl-og1-flow .tl-teacher { margin:20px 0 7px; }
+.tl-og1-flow .tl-teaching-intro { color:#245a9e; font-weight:830; font-size:.69rem; letter-spacing:.13em; margin:18px 0 3px; }
+.tl-og1-flow .tl-desktop-teaching .tl-teaching { margin:12px 0; line-height:1.7; }
+.tl-og1-flow .tl-og1-passages { margin:17px 0 23px; border-top:1px solid #e2ebf6; border-bottom:1px solid #e2ebf6; padding:13px 0; }
+.tl-og1-passages>summary { list-style-position:inside; color:#195da8; cursor:pointer; font-weight:760; font-size:.84rem; }
+.tl-og1-passages .tl-scripture { margin:16px 0 0; }
+.tl-og1-flow .og1-scene-art { min-height:0; padding:24px 23px 26px; }
+.tl-og1-flow .og1-scene-emblem { width:55px; height:55px; margin:10px 0 8px; font-size:2.1rem; box-shadow:0 0 0 10px #9bcbff18; }
+.tl-og1-flow .og1-scene-art h2 { margin:7px 0; }
+.tl-og1-flow .og1-scene-rays { opacity:.12; }
+.tl-og1-flow .og1-encounter-journey { display:none; }
+@media(max-width:640px){
+ .tl-og1-flow .tl-main { padding:18px 16px 72px; }
+ .tl-og1-flow .lp-panel { margin:4px 0 10px; padding-bottom:10px; }
+ .tl-og1-flow .lp-phases { overflow-x:auto; padding-bottom:2px; }
+ .tl-og1-flow .lp-phases span { font-size:.61rem; gap:4px; }
+ .tl-og1-flow .og1-scene-art { padding:21px 16px; }
+ .tl-og1-flow .og1-scene-emblem { width:49px; height:49px; font-size:1.8rem; margin:8px 0; }
+ .tl-og1-flow .tl-mobile-teaching { border:0; border-left:3px solid #6b9ee6; border-radius:0; box-shadow:none; padding:11px 0 11px 16px; }
+ .tl-og1-flow .tl-teacher { margin:15px 0 6px; }
+}
