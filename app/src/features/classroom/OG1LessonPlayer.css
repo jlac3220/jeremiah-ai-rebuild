@@ -262,3 +262,65 @@
 .ogp-trail-scene .ogj-art{position:absolute;inset:0;width:100%;height:100%}
 .ogp-trail-quote>blockquote,.ogp-trail-quote>p,.ogp-trail-quote>span{position:relative;z-index:1}
 @media(max-width:720px){.ogp-scripture-ornament:has(.ogj-art){height:130px}.ogp-trail-scene{width:55%;opacity:.28}}
+
+
+/* Modern life photography makes the application scenes tangible. */
+.ogp-mission-scene.ogp-mission-scene--photo{
+  display:grid;
+  grid-template-columns:minmax(0,44%) minmax(0,56%);
+  align-items:stretch;
+  min-height:360px;
+  padding:0;
+  background:#173d38;
+}
+.ogp-mission-scene--photo::after{display:none}
+.ogp-mission-photo{
+  position:relative;
+  min-height:360px;
+  background:radial-gradient(circle at 50% 40%,#527c72,#173b3a);
+  overflow:hidden;
+}
+.ogp-mission-photo img{
+  display:block;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  filter:saturate(.92) contrast(1.03);
+}
+.ogp-mission-photo::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,#0d292c55 0%,transparent 44%,#071d2377 100%);
+}
+.ogp-mission-photo>span,.ogp-mission-photo>small{
+  position:absolute;
+  z-index:1;
+  left:22px;
+  color:#fff;
+  text-shadow:0 1px 6px #0008;
+}
+.ogp-mission-photo>span{top:23px;font-size:.69rem;font-weight:850;letter-spacing:.15em}
+.ogp-mission-photo>small{bottom:16px;font-size:.69rem}
+.ogp-mission-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:38px clamp(25px,4.2vw,50px);
+  min-width:0;
+  background:linear-gradient(130deg,#235248,#142f34);
+}
+.ogp-mission-copy>span{color:#e5c895;font-size:.72rem;font-weight:850;letter-spacing:.18em}
+.ogp-mission-copy h2{font:500 clamp(1.8rem,3vw,2.5rem)/1.22 Georgia,serif;margin:19px 0 13px}
+.ogp-mission-copy p{font-size:1rem;line-height:1.75;margin:0;color:#deeee6}
+@media(max-width:750px){
+ .ogp-mission-scene.ogp-mission-scene--photo{grid-template-columns:1fr}
+ .ogp-mission-photo{min-height:270px;height:270px}
+ .ogp-mission-copy{padding:28px 25px 32px}
+ .ogp-mission-copy h2{font-size:1.9rem}
+}
+@media(prefers-reduced-motion:reduce){.ogp-mission-photo img{transition:none!important}}
