@@ -324,3 +324,30 @@
  .ogp-mission-copy h2{font-size:1.9rem}
 }
 @media(prefers-reduced-motion:reduce){.ogp-mission-photo img{transition:none!important}}
+
+
+/* Narrator voice choice lives in the existing lesson options menu. */
+.ogp-menu-panel .ogp-voice-picker{
+ display:grid;
+ gap:8px;
+ margin:7px 5px 5px;
+ padding:12px 8px 8px;
+ border-top:1px solid #e1e6e5;
+ color:#355263;
+ font-size:.75rem;
+ font-weight:750;
+ letter-spacing:.02em;
+}
+.ogp-voice-picker select{
+ width:100%;
+ min-height:43px;
+ padding:9px 8px;
+ border:1px solid #bacbd0;
+ border-radius:9px;
+ background:#f9fbfa;
+ color:#183948;
+ font-size:.82rem;
+ font-weight:500;
+ letter-spacing:0;
+ white-space:normal;
+}
