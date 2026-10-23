@@ -29,6 +29,23 @@ function MobileTeachingCards({ paragraphs = [] }) {
  </div>;
 }
 
+function OG1OpeningEncounter({onReadBible}) {
+ const [response,setResponse]=useState(null);
+ const choices=[
+  {id:'many',label:'Israel is being told to choose the LORD above other gods.',feedback:'Israel must certainly worship the LORD alone. But notice that the confession says more: “the LORD our God is one LORD.” Keep both the command to worship and the statement of who God is in view.'},
+  {id:'one',label:'The LORD is one, and Israel is called to hear and respond.',feedback:'Yes. The Shema begins with a call to listen and confesses the one LORD. Now watch how Jesus and the apostles carry that confession forward.'},
+  {id:'history',label:'This is only a historical saying, with no claim for believers today.',feedback:'Jesus repeats this confession in Mark 12:29. We will examine why it remains central to the New Testament witness.'},
+ ];
+ return <section className="og1-encounter" aria-label="Opening encounter: Hear, O Israel">
+  <div className="og1-encounter-top"><span>THE ONE TRUE GOD</span><span>ENCOUNTER · 01</span></div>
+  <div className="og1-encounter-scripture"><span className="og1-encounter-glyph" aria-hidden="true">✦</span><p className="og1-encounter-call">Before we explain the doctrine, hear the Scripture.</p><blockquote>“Hear, O Israel: The LORD our God is one LORD:”</blockquote><div className="og1-encounter-reference">DEUTERONOMY 6:4 · KJV</div></div>
+  <button type="button" className="og1-encounter-bible" onClick={onReadBible}>Read Deuteronomy 6 in the Bible <span aria-hidden="true">↗</span></button>
+  <div className="og1-encounter-question"><span>THINK ABOUT THE WORD</span><h2>What is Israel being called to recognize?</h2><div className="og1-encounter-choices">{choices.map(choice=><button key={choice.id} type="button" aria-pressed={response===choice.id} onClick={()=>setResponse(choice.id)}>{choice.label}<span aria-hidden="true">{response===choice.id?'✓':'→'}</span></button>)}</div>
+  {response && <p className="og1-encounter-feedback" role="status"><strong>Jeremiah:</strong> {choices.find(choice=>choice.id===response).feedback}</p>}</div>
+  <div className="og1-encounter-journey"><span><b>01</b> Hear the confession</span><span><b>02</b> Trace the witness</span><span><b>03</b> Explain the truth</span></div>
+ </section>;
+}
+
 export default function TeacherLedLesson({ content, state, onStateChange, onNavigate }) {
  const move=getInstructionalMove(content,state.currentMoveId);
  const draft=state.experience?.drafts?.[move.id] || {};
@@ -114,6 +131,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
    <h1 ref={headingRef} tabIndex={-1}>{move.title}</h1>
    {state.experience?.earlierLesson && move.id==='learn' && <p className="tl-saved-note">Your earlier written answers are saved while you work through this lesson. <button type="button" onClick={()=>setDetail({kind:'notes',provider:'Earlier lesson',title:'Your earlier answers',summary:[state.experience.earlierLesson,...(state.experience.previousRuns || [])].flatMap(run=>Object.values(run.drafts || {})).map(d=>d.responseText).filter(Boolean).join('\n\n') || 'No written answers were recorded in the earlier sequence.'})}>View earlier answers</button></p>}
    {!complete && <>
+    {content.standardId==='OG.1.LESSON.18' && move.id==='learn' && <OG1OpeningEncounter onReadBible={()=>openBible({reference:'Deuteronomy 6'})} />}
     <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>
     {move.visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     <div className="tl-desktop-teaching">{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>
