@@ -234,3 +234,5 @@
  .tl-og1-flow .tl-mobile-teaching { border:0; border-left:3px solid #6b9ee6; border-radius:0; box-shadow:none; padding:11px 0 11px 16px; }
  .tl-og1-flow .tl-teacher { margin:15px 0 6px; }
 }
+
+.tl-og1-flow .tl-action-cue{border-top:1px solid #dbe6f4;padding:20px 0 0;margin:26px 0 8px;display:grid;gap:4px}.tl-og1-flow .tl-action-cue span{font-size:.7rem;letter-spacing:.12em;color:#57708d;font-weight:760}.tl-og1-flow .tl-action-cue strong{font-size:1.38rem;letter-spacing:-.02em;color:#1855a6}.tl-og1-flow .tl-action-cue p{font-size:.88rem;color:#536780;margin:3px 0 0;line-height:1.5}
