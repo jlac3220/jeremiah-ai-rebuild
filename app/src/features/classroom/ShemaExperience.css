@@ -146,3 +146,11 @@
 .shema-full-rubric p{max-width:760px;font-size:.92rem;line-height:1.72;color:#546962}
 @media(max-width:750px){.shema-teachback-layout{grid-template-columns:1fr;gap:18px}.shema-teachback-brief{padding:23px}.shema-teachback-brief ol{display:grid;grid-template-columns:1fr 1fr;column-gap:12px}.shema-teachback-response textarea{min-height:280px}.shema-response-footer{font-size:.64rem}}
 @media(max-width:430px){.shema-teachback-brief ol{grid-template-columns:1fr}}
+
+/* Small replay affordances sit beside the discovery instead of competing with it. */
+.shema-listen-phrase{display:inline-flex;align-items:center;gap:7px;margin:17px 0 0;padding:9px 0;background:transparent;border:0;border-bottom:1px solid #ae8e60;color:#806133;font-size:.81rem;font-weight:800;cursor:pointer;letter-spacing:.025em}
+.shema-listen-phrase:hover{color:#244d5b;border-color:#244d5b}
+.shema-verse-voice-row{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.shema-verse-voice-row button{padding:9px 13px;white-space:nowrap;border:1px solid #779984;border-radius:999px;color:#365e48;background:#fcfff9;font-size:.76rem;font-weight:770;cursor:pointer}
+.shema-verse-voice-row button:hover{background:#e1ede0}
+@media(max-width:500px){.shema-verse-voice-row{align-items:flex-start;flex-direction:column;gap:8px}}
