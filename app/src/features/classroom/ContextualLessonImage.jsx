@@ -1,11 +1,12 @@
 import {useEffect,useState} from 'react';
-import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
+import {createVisualBrief,chooseLessonVisual,inferVisualPlacement} from '../../core/classroom/visualIntelligence';
 import {VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
 
 // Shared classroom visual outlet for OG, NB and future approved standards.
 // No matched, reviewed asset means no picture, not a random fallback.
 export default function ContextualLessonImage({content,move,placement,className=''}) {
- const brief=placement?createVisualBrief({content,move,placement}):null;
+ const resolvedPlacement=placement||inferVisualPlacement({content,move});
+ const brief=resolvedPlacement?createVisualBrief({content,move,placement:resolvedPlacement}):null;
  const decision=brief?chooseLessonVisual(brief,VISUAL_ASSETS):null;
  const visual=decision?.asset;
  const [failed,setFailed]=useState(false);
