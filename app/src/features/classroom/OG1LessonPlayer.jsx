@@ -18,30 +18,65 @@ import './OG1LessonPlayer.css';
 // passage/subject. A missing or broken image is never replaced by Moses.
 const APPLICATION_MOMENTS = [
  {intent:'general',topic:'worship',learningGoal:'Undivided worship of the one LORD',label:'UNDIVIDED WORSHIP'},
- {intent:'artifact',reference:'Deuteronomy 6:4',learningGoal:'Study an ancient witness to the Shema',label:'WHOLEHEARTED LOVE'},
- {intent:'historical',subject:'Paul',reference:'1 Corinthians 8:4',learningGoal:'Paul teaches the early church about the one God',label:'ONE GOSPEL'}
+ {intent:'concept',topic:'wholehearted love',reference:'Deuteronomy 6:5',
+  learningGoal:'Loving the LORD with heart, soul and might',label:'WHOLEHEARTED LOVE'},
+ {intent:'historical',subject:'Paul',reference:'1 Corinthians 8:4',
+  learningGoal:'Paul teaches the early church about the one God',label:'ONE GOSPEL'}
 ];
 function BiblicalApplicationArt({index,content,move}) {
- const [failed,setFailed]=useState(false);
+ const [failedIds,setFailedIds]=useState([]);
  const placement=APPLICATION_MOMENTS[index];
  const brief=placement?createVisualBrief({content,move,placement}):null;
- const visual=brief?chooseLessonVisual(brief,VISUAL_ASSETS).asset:null;
- useEffect(()=>setFailed(false),[visual?.id]);
+ const visual=brief?chooseLessonVisual(brief,VISUAL_ASSETS,{failedIds}).asset:null;
+ useEffect(()=>setFailedIds([]),[index]);
  return <div className="ogp-mission-photo">
-  {visual&&!failed&&<img src={visual.src} alt={visual.alt} style={{objectPosition:visual.focal||'50% 40%'}} loading="lazy" decoding="async" onError={()=>setFailed(true)}/>}
+  {visual?<img key={visual.id} src={visual.src} alt={visual.alt}
+    style={{objectPosition:visual.focal||'50% 40%'}} loading="lazy" decoding="async"
+    onError={()=>setFailedIds(ids=>[...ids,visual.id])}/>:<div className="ogp-mission-graphic" role="img"
+    aria-label={placement?.learningGoal||'Scripture teaching'}>
+    <strong>{placement?.label}</strong><span>ONE LORD</span>
+    <small>{placement?.reference||'SCRIPTURE & LIFE'}</small>
+   </div>}
   <span>{placement?.label||'THE LESSON'}</span>
-  {visual&&!failed&&<small>{visual.credit}{visual.rightsStatus!=='cleared'?' · rights review pending':''}</small>}
+  {visual&&<small>{visual.credit||'Supporting illustration'}</small>}
  </div>;
 }
 
-// Verse readings have an image and the Scripture reference. Authored notes
-// are shown only when a real commentary exists; bare passages stay uncluttered.
-function readingArtTone(reference='') {
- if (/^Isaiah\b/i.test(reference)) return 'prophets';
- if (/^(Mark|Matthew|Luke|John)\b/i.test(reference)) return 'jesus';
- if (/^(?:[12] Corinthians|Ephesians|[12] Timothy|James|Acts)\b/i.test(reference)) return 'apostles';
- return null;
+// A specific named scene requires matching evidence. A broadly applicable
+// command (like Deut. 6:5) may use an everyday, purpose-matched photograph.
+// This accepts authored visualPlacement metadata from *any* standard.
+function readingVisualPlacement(verse) {
+ if(verse.visualPlacement)return verse.visualPlacement;
+ const reference=String(verse.reference||'').trim();
+ if(/^Deuteronomy 6:5\b/i.test(reference))return {
+  intent:'concept',topic:'heart soul might',reference:'Deuteronomy 6:5',
+  learningGoal:'Deuteronomy 6:5 calls for wholehearted love for the LORD'};
+ if(/^Exodus 20:3(?:-|–|—|$)/i.test(reference))return {
+  intent:'concept',topic:'exclusive worship',reference:'Exodus 20:3-5',
+  learningGoal:'Exclusive worship means no rival gods or idols'};
+ return {intent:'scripture',reference,learningGoal:'Understand '+reference+' in context'};
 }
+function ScriptureArt({verse,content,move}) {
+ const placement=readingVisualPlacement(verse);
+ const brief=createVisualBrief({content,move,placement});
+ const [failedIds,setFailedIds]=useState([]);
+ const visual=chooseLessonVisual(brief,VISUAL_ASSETS,{failedIds}).asset;
+ useEffect(()=>setFailedIds([]),[verse.reference]);
+ if(visual)return <img key={visual.id} className="ogp-verse-photo" src={visual.src}
+  alt={visual.alt} loading="lazy" decoding="async"
+  style={{objectPosition:visual.focal||'50% 45%'}}
+  onError={()=>setFailedIds(ids=>[...ids,visual.id])}/>;
+ // Unsupported passages still get a deliberate text-based Scripture design
+ // rather than a blank panel or a misleading image of a biblical character.
+ const parts=String(verse.reference||'').split(/\s+(?=\d)/);
+ return <div className="ogp-verse-graphic" role="img"
+  aria-label={'Scripture graphic for '+verse.reference}>
+  <span>THE WORD</span><strong>{parts.slice(-1)[0]||'SCRIPTURE'}</strong>
+  <small>{parts.slice(0,-1).join(' ')||verse.reference}</small><i aria-hidden="true">✦</i>
+ </div>;
+}
+
+// Reading notes are shown only when real commentary exists.
 function readingCommentary(note='') {
  const cleaned=String(note).replace(/^KJV(?:\s+excerpt(?:\s+from\s+verse\s+\d+)?)?\.\s*/i,'').trim();
  return cleaned || null;
@@ -225,7 +260,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       </div>
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
-      <div className="ogp-scripture-ornament" aria-hidden="true"><DestinationArt content={content} move={move} tone={readingArtTone(current.verse.reference)} placement={{intent:"scripture",reference:current.verse.reference,learningGoal:"Read "+current.verse.reference+" in context"}}/></div>
+      <div className="ogp-scripture-ornament" aria-hidden="true"><ScriptureArt content={content} move={move} verse={current.verse}/></div>
       <div className="ogp-scripture-content">
        <span className="ogp-scripture-index">{current.verse.reference.toUpperCase()} · KJV</span>
        <blockquote className="ogp-verse">“{current.verse.text}”</blockquote>
