@@ -591,3 +591,97 @@
 }
 .ogp-menu-panel .ogp-audition-link:hover{background:#dfe6ff}
 .ogp-menu-panel .ogp-audition-link:focus-visible{outline:3px solid #8894fa;outline-offset:2px}
+
+
+/* Scripture reading contract: image + reference + text; authored commentary only. */
+.ogp-stage--read .ogp-scripture-scene{
+ grid-template-columns:minmax(0,39%) minmax(0,61%);
+ min-height:420px;
+ border:1px solid #253c57;
+ background:#11233b;
+}
+.ogp-scripture-ornament:has(.ogj-art){
+ position:relative;
+ height:auto;
+ min-height:420px;
+ padding:0;
+ overflow:hidden;
+ background:#1b3046;
+ border-right:1px solid #ffffff22;
+}
+.ogp-scripture-ornament:has(.ogj-art)::before{
+ background:linear-gradient(180deg,rgba(8,19,33,.05),rgba(9,20,35,.27));
+ z-index:2;
+}
+.ogp-scripture-ornament .ogj-art{
+ position:absolute;inset:0;width:100%;height:100%;
+}
+.ogp-scripture-ornament .ogj-photo{
+ object-fit:cover;
+ width:100%;height:100%;
+}
+.ogp-scripture-content{
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ padding:clamp(30px,4vw,54px) clamp(28px,4.6vw,55px);
+}
+.ogp-scripture-index{
+ font:800 .78rem/1.5 Inter,system-ui,sans-serif;
+ letter-spacing:.115em;
+ color:#c0cbff;
+}
+.ogp-scripture-scene .ogp-verse{
+ margin:26px 0 19px;
+ font-size:clamp(1.6rem,2.7vw,2.35rem);
+ line-height:1.45;
+ color:#ffffff;
+}
+.ogp-scripture-commentary{
+ max-width:580px;
+ margin:4px 0 22px;
+ padding-left:17px;
+ border-left:2px solid #8e9ef3;
+ color:#d0ddec;
+ font:500 .98rem/1.72 Inter,system-ui,sans-serif;
+}
+.ogp-scripture-footer{
+ justify-content:flex-start;
+ margin-top:19px;
+ padding-top:17px;
+ border-top:1px solid #ffffff35;
+}
+.ogp-scripture-scene .ogp-link{color:#c2cdff}
+.ogp-encounter{background:#10253d}
+.ogp-encounter-art{
+ position:absolute;
+ inset:0;
+ z-index:-1;
+ overflow:hidden;
+ pointer-events:none;
+}
+.ogp-encounter-art .ogj-art{
+ position:absolute;
+ inset:0;
+ height:100%;
+ width:100%;
+ opacity:.43;
+}
+.ogp-encounter-art .ogj-photo{object-position:50% 28%;filter:grayscale(.2) saturate(.75)}
+.ogp-encounter-art::after{
+ content:'';
+ position:absolute;
+ inset:0;
+ z-index:2;
+ background:linear-gradient(90deg,rgba(9,21,40,.86),rgba(9,24,45,.52)),
+ linear-gradient(0deg,rgba(9,21,40,.68),transparent 68%);
+}
+@media(max-width:720px){
+ .ogp-stage--read .ogp-scripture-scene{grid-template-columns:1fr;min-height:0}
+ .ogp-scripture-ornament:has(.ogj-art){height:240px;min-height:240px;border-right:0;border-bottom:1px solid #ffffff22}
+ .ogp-scripture-content{padding:27px 25px 30px}
+ .ogp-scripture-scene .ogp-verse{margin:20px 0 18px;font-size:clamp(1.52rem,5.4vw,2.05rem)}
+ .ogp-scripture-commentary{font-size:.94rem}
+ .ogp-scripture-footer{padding-top:15px}
+ .ogp-encounter-art .ogj-art{opacity:.33}
+}
