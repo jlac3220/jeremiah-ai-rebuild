@@ -28,7 +28,7 @@ function BiblicalApplicationArt({index,content,move}) {
  const visual=brief?chooseLessonVisual(brief,VISUAL_ASSETS).asset:null;
  useEffect(()=>setFailed(false),[visual?.id]);
  return <div className="ogp-mission-photo">
-  {visual&&!failed&&<img src={visual.src} alt={visual.alt} style={{objectPosition:visual.focal||'50% 40%'}} loading="lazy" decoding="async" onError={()=>setFailed(true}/>}
+  {visual&&!failed&&<img src={visual.src} alt={visual.alt} style={{objectPosition:visual.focal||'50% 40%'}} loading="lazy" decoding="async" onError={()=>setFailed(true)}/>}
   <span>{placement?.label||'THE LESSON'}</span>
   {visual&&!failed&&<small>{visual.credit}{visual.rightsStatus!=='cleared'?' · rights review pending':''}</small>}
  </div>;
