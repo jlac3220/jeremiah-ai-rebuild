@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { BIBLICAL_ART } from './JourneyDestinations';
+import {VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
+import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
 import './ShemaExperience.css';
 
 const PHRASES = [
@@ -18,13 +19,15 @@ function Manuscript({active,onSelect,visited}) {
  </div>;
 }
 
-export default function ShemaExperience({kind,video,onOpenBible,onInteraction,onSpeak,narrationEnabled=false}) {
+export default function ShemaExperience({kind,video,onOpenBible,onInteraction,onSpeak,narrationEnabled=false,content,move}) {
  const [phrase,setPhrase]=useState(-1);
  const [visited,setVisited]=useState([]);
  const [verseRevealed,setVerseRevealed]=useState(false);
  const [seenVideo,setSeenVideo]=useState(false);
  const [selectedReflection,setSelectedReflection]=useState('');
  const [openingImageFailed,setOpeningImageFailed]=useState(false);
+ const openingBrief=createVisualBrief({content,move,placement:{intent:'historical',subject:'Moses',reference:'Deuteronomy 6:4',learningGoal:'Israel receives the confession in Deuteronomy 6:4'}});
+ const openingImage=chooseLessonVisual(openingBrief,VISUAL_ASSETS).asset;
  const selected=phrase>=0?PHRASES[phrase]:null;
  function selectPhrase(i) {
   setPhrase(i);
@@ -35,10 +38,10 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  }
  if(kind==='shema-encounter')return <div className="shema-world">
   <div className="shema-world-art">
-   {!openingImageFailed&&<img className="shema-world-photo"
-     src={BIBLICAL_ART.shema.src}
+   {openingImage&&!openingImageFailed&&<img className="shema-world-photo"
+     src={openingImage.src}
      alt="Illustrative reconstruction: Moses addresses the gathered people of Israel"
-     style={{objectPosition:BIBLICAL_ART.shema.focal}}
+     style={{objectPosition:openingImage.focal||'50% 38%'}}
      onError={()=>setOpeningImageFailed(true)}
      loading="eager" decoding="async"/>}
   </div>
