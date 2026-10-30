@@ -33,6 +33,7 @@ const AUTHORED_LINES = [
   "Hear, O Israel: The LORD our God is one LORD. In the wilderness Moses gives the confession to Israel.",
   "I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six.",
   "Jesus repeats the Shema. The apostles declare, there is none other God but one.",
+  "Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine.",
   "Hear, O Israel.",
   "The Lord our God.",
   "Is one Lord.",
