@@ -23,8 +23,9 @@ export function planVisualDiscovery(brief={}) {
  // demands a reading image, not a guessed person standing in a desert.
  if(intent==='historical' && subject) return {
   kind:'person',subject,reference,
-  queries:[subject+' biblical figure illustration painting',
-   subject+' bible scene religious art'],
+  queries:[subject+' Bible illustration',
+   subject+' biblical digital painting',
+   subject+' religious art scene'],
   required:tokens(subject),
   avoid:['music','concert','football','politician','singer','movie','cosplay'],
  };
@@ -69,6 +70,13 @@ export function scoreVisualCandidate(raw,plan,{excluded=[]}={}) {
  // Never call a generic man in robes "Isaiah": the candidate must actually
  // identify the biblical person in title or metadata.
  if(plan.kind==='person' && !plan.required.every(has))return -1;
+ // A matching name is not enough: distinguish "Moses the musician" from a
+ // depiction of Moses in biblical context, even if search returns it first.
+ const biblicalContext=['bible','biblical','scripture','christian','christ','jesus',
+  'prophet','apostle','religious','saint','pharaoh','israel','israelites',
+  'testament','disciples','gospel','ten commandments','red sea','hebrew',
+  'christianity','judah','torah','aaron','church'];
+ if(plan.kind==='person'&&!biblicalContext.some(has))return -1;
  if(plan.kind!=='person' && !plan.required.some(has))return -1;
  if(plan.avoid.some(has))return -1;
  const looksReligious=['bible','biblical','christian','jesus','moses','apostle','prophet','religious','scripture','holy','saint','church'];
@@ -77,6 +85,8 @@ export function scoreVisualCandidate(raw,plan,{excluded=[]}={}) {
  if(plan.kind==='person'){
   if(looksReligious.some(has))score+=4;
   if(mediums.some(has))score+=4;
+  if(['digital','cinematic','modern','realistic','illustration','illustrated'].some(has))score+=6;
+  if(['engraving','woodcut','icon','fresco'].some(has))score-=3;
   if(['statue','sculpture','church window','stained glass'].some(has))score-=4;
  }else if(plan.kind==='people'){
   if(['photograph','photo','people','family'].some(has))score+=4;
