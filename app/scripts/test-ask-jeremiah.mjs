@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import {allAskStandards,selectAskStandards,answerAskJeremiah,OUT_OF_SCOPE} from '../server/askJeremiahCore.mjs';
 import {CURRICULUM_STUDIES} from '../src/core/classroom/content/curriculumContent.js';
+import {JEREMIAH_PERSONA} from '../server/askJeremiahPersona.mjs';
+// Ensure every role the product owner asked for reaches the live AI prompt.
+for (const role of ['PREACHER','TEACHER','THEOLOGIAN','FRIEND','PASTOR','FAITHFUL SAINT','WITNESS']) {
+ assert.match(JEREMIAH_PERSONA,new RegExp(role+':'),'Missing Jeremiah character role: '+role);
+}
+assert.match(JEREMIAH_PERSONA,/not a literal human being/i,'Jeremiah must not claim human identity');
+assert.match(JEREMIAH_PERSONA,/CURRICULUM BOUNDARY:/,'Persona must remain accountable to approved studies');
 const standards=allAskStandards();
 assert.ok(standards.some(s=>s.id.startsWith('OG.')),'Use approved OG standards');
 assert.ok(standards.some(s=>s.id.startsWith('NB.')),'Use approved NB standards');
@@ -21,6 +28,7 @@ const fetcher=async(_url,options)=>{
  assert.match(sent.instructions,/ONLY factual\/doctrinal authority/);
  assert.doesNotMatch(sent.instructions,/take the conversation beyond OG\/NB/,'New studies must not require instruction edits');
  assert.match(sent.instructions,/Apostolic Bible teacher|Apostolic\/Oneness teacher/);
+ for(const role of ['PREACHER','TEACHER','THEOLOGIAN','FRIEND','PASTOR','FAITHFUL SAINT','WITNESS']) assert.ok(sent.instructions.includes(role+':'),'Role missing in model request: '+role);
  assert.match(sent.instructions,/Do not introduce denominations/);
  assert.match(sent.instructions,/do NOT start with 'according to the standard'|Do NOT start with 'according to the standard'/i);
  assert.ok(sent.input[0].content[0].text.includes('approvedStandards'));
