@@ -40,6 +40,14 @@ const media = (id,art,options) => Object.freeze({
 // The inventory is shared by OG, NB, and every subsequent study. Asset
 // metadata describes the subject/passage, not a screen number or lesson name.
 export const VISUAL_ASSETS = Object.freeze([
+ // Neutral Bible-photo fallback ONLY when the verse has no authentic
+ // named subject/artifact scene. Never claim the pictured page is the cited text.
+ Object.freeze({id:'reading-scripture-open-bible',
+  src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/Reading_Scripture_%28Unsplash%29.jpg/960px-Reading_Scripture_%28Unsplash%29.jpg',
+  alt:'An open Bible on a table beside a lamp, illustrating Scripture reading',
+  credit:'Aaron Burden · Wikimedia Commons CC0',
+  sourceUrl:'https://commons.wikimedia.org/wiki/File:Reading_Scripture_(Unsplash).jpg',
+  intent:'reading',topics:['scripture'],references:[],previewApproved:true,rightsStatus:'cleared',priority:1}),
  media('moses-addresses-israel',GALLERY_ART.shema,{intent:'scripture',
   subjects:['Moses'],references:['Deuteronomy 6:4'],topics:['the shema'],priority:10}),
  media('isaiah-proclaims',GALLERY_ART.prophets,{intent:'scripture',
