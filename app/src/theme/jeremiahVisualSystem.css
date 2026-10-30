@@ -1,0 +1,359 @@
+/* Jeremiah visual system · 2026-10-30
+   Presentation-only overrides. Do not move lesson text, alter curriculum data,
+   change routing, progress, narration, or assessment behavior here. */
+:root {
+  --font-display: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-ink: #152235;
+  --color-muted: #64748b;
+  --color-blue: #4f5fe5;
+  --color-blue-dark: #3d4dce;
+  --color-accent: #4f5fe5;
+  --color-accent-dark: #3d4dce;
+  --j-canvas: #f4f7fc;
+  --j-surface: #ffffff;
+  --j-line: #e0e7f1;
+  --j-shadow: 0 12px 34px rgba(24, 40, 74, .075);
+  --j-blue: #4f5fe5;
+  --j-ink: #152235;
+}
+html, body, .app-shell { background: var(--j-canvas); }
+.app-main { min-width: 0; }
+.app-nav {
+  background: rgba(255,255,255,.95);
+  border-top: 1px solid var(--j-line);
+  box-shadow: 0 -10px 34px rgba(24,40,74,.045);
+}
+.app-nav button { border-radius: 12px; color: #687891; }
+.app-nav button[aria-current] { color: var(--j-blue); background: #edf0ff; }
+.app-nav button[aria-current] svg { stroke-width: 2.2; }
+@media(min-width: 961px) {
+  .app-nav-rail { max-width: 1120px; }
+}
+
+/* Shared editorial page layout: applies to home, progress, profile and classroom. */
+.ld-page, .ld-page.ce-page, .ld-home.jh-page {
+  background: var(--j-canvas);
+  color: var(--j-ink);
+  font-family: var(--font-body);
+}
+.ld-content { max-width: 1080px; }
+.ld-header { padding-bottom: 25px; border-bottom: 1px solid var(--j-line); }
+.ld-brand { color: #172a48; font: 850 .92rem/1.2 var(--font-body); letter-spacing: .15em; }
+.ld-header-note { color: #697890; font-weight: 700; }
+.ld-eyebrow, .ld-page .jh-ignite-eyebrow {
+  color: var(--j-blue);
+  font: 850 .71rem/1.55 var(--font-body);
+  letter-spacing: .105em;
+}
+.ld-hero { max-width: 850px; padding: 43px 0 39px; }
+.ld-hero h1 {
+  color: var(--j-ink);
+  font: 860 clamp(2.4rem,5vw,4rem)/1.06 var(--font-display);
+  letter-spacing: -.055em;
+  margin: 12px 0 16px;
+}
+.ld-hero > p:last-child { max-width: 630px; font: 1.02rem/1.65 var(--font-body); color: #61748b; }
+.ld-feature {
+  border: 1px solid var(--j-line);
+  border-radius: 20px;
+  background: var(--j-surface);
+  box-shadow: var(--j-shadow);
+}
+.ld-feature h2, .ld-section h2, .ld-bible h3, .ce-catalog-heading h2 {
+  font-family: var(--font-display);
+  font-weight: 830;
+  letter-spacing: -.035em;
+  color: var(--j-ink);
+}
+.ld-primary, .ce-page .ld-primary {
+  background: var(--j-blue);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(79,95,229,.16);
+  font: 780 .96rem/1.3 var(--font-body);
+  min-height: 51px;
+}
+.ld-primary:hover, .ce-page .ld-primary:hover { background: #3e4eca; }
+.ld-link { color: var(--j-blue); font-family: var(--font-body); font-weight: 780; }
+.ld-stats { gap: 12px; flex-wrap: wrap; }
+.ld-stats > div {
+  min-width: 125px;
+  flex: 1 1 0;
+  padding: 21px 18px;
+  background: #fff;
+  border: 1px solid var(--j-line);
+  border-radius: 16px;
+}
+.ld-stats strong {
+  font: 860 clamp(1.8rem, 3vw, 2.6rem)/1.05 var(--font-display);
+  letter-spacing: -.06em;
+  color: var(--j-blue);
+}
+.ld-stats span { color: #697a92; font-weight: 670; }
+.ld-record {
+  align-items: center;
+  padding: 23px 26px;
+  margin: 11px 0;
+  border: 1px solid var(--j-line);
+  border-left: 4px solid var(--j-blue);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(24,40,74,.045);
+}
+.ld-record h3 { font-size: 1.08rem; font-weight: 800; letter-spacing: -.015em; }
+.ld-record .ld-link {
+  flex: none;
+  background: #eef0ff;
+  border-radius: 10px;
+  padding: 11px 15px;
+}
+.ld-bottom { gap: 24px; }
+.ld-bottom > div { min-width: 0; }
+.ld-bible {
+  background: #fff; border: 1px solid var(--j-line);
+  border-radius: 19px; padding: 25px;
+}
+.ld-page button:focus-visible, .ce-page summary:focus-visible,
+.br-page button:focus-visible { outline: 3px solid #8995ff; outline-offset: 3px; }
+
+/* Home: documentary art instead of a synthetic circular illustration. */
+.jh-page .jh-shell { max-width: 1080px; }
+.jh-page .jh-header { border-bottom: 1px solid var(--j-line); padding-bottom: 20px; margin-bottom: 20px; }
+.jh-page .ld-logo-mark { background: var(--j-blue); border-radius: 10px; }
+.jh-ignite-hero {
+  background: linear-gradient(115deg, #142b4e, #1e4384 70%, #3464b9);
+  border-radius: 23px;
+  border: 1px solid #2c4c79;
+  box-shadow: 0 15px 38px rgba(24,48,92,.13);
+}
+.jh-ignite-hero::before { background: radial-gradient(circle at 84% 25%,rgba(168,188,255,.16),transparent 28%); }
+.jh-ignite-hero h1 { font-weight: 870; letter-spacing: -.055em; }
+.jh-ignite-hero h1 em { color: #c5d2ff; }
+.jh-ignite-tag span { color: #b8c7ff; }
+.jh-ignite-start { color: #fff; background: var(--j-blue); box-shadow: 0 8px 22px #0e204e4d; }
+.jh-ignite-start:hover { background: #6977f1; }
+.jh-ignite-scene {
+  min-height: 275px; max-width: 370px; aspect-ratio: 4 / 5;
+  border-radius: 19px; overflow: hidden;
+  background: linear-gradient(0deg,#0c1c36c9,#18365a12 65%),
+    url('https://upload.wikimedia.org/wikipedia/commons/d/db/Moses_Pleading_with_Israel_%28crop%29.jpg') center 35% / cover;
+  box-shadow: 0 16px 32px rgba(4,13,31,.3);
+  border: 1px solid rgba(255,255,255,.2);
+}
+.jh-ignite-disc, .jh-ignite-spark { display: none; }
+.jh-ignite-verse { left: 15px; right: 15px; bottom: 18px; transform: none; }
+.jh-ignite-verse span { color: #dbe5ff; }
+.jh-ignite-verse strong { color: #fff; }
+.jh-ignite-chapter { background: #e9edff; color: #4e5dcb; }
+.jh-ignite-lesson {
+  border-color: var(--j-line);
+  box-shadow: var(--j-shadow);
+  border-radius: 20px;
+}
+.jh-ignite-lesson-art {
+  background: linear-gradient(0deg,#081e3be3,#0e23473d 65%),
+    url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg/960px-Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg') center 35% / cover;
+}
+.jh-ignite-lesson-art::before, .jh-ignite-rings { display: none; }
+.jh-ignite-arch { background: none; border: 0; box-shadow: none; height: auto; }
+.jh-ignite-arch span, .jh-ignite-arch small { display: none; }
+.jh-ignite-arch strong { font-size: clamp(4rem,8vw,6.4rem); color: #fff; text-shadow: 0 4px 25px #081329c7; }
+.jh-ignite-meta span, .jh-ignite-eyebrow { color: var(--j-blue); }
+.jh-ignite-continue { background: var(--j-blue); }
+.jh-ignite-continue:hover { background: #3d4dce; }
+.jh-ignite-tile { border-color: var(--j-line); border-radius: 17px; box-shadow: 0 7px 21px rgba(24,40,74,.04); }
+.jh-ignite-tile:focus-visible { outline: 3px solid #8995ff; }
+
+/* Classroom destinations: responsive art-led choices, with content unchanged. */
+.ce-page .ld-hero { padding-bottom: 32px; }
+.ce-doors { gap: 17px; }
+.ce-door, .ce-door.ce-door-active {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 382px; border: 1px solid #cad5e5;
+  border-radius: 19px; background: #142942;
+  color: #fff; padding: 25px 24px;
+  box-shadow: var(--j-shadow);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.ce-door::before, .ce-door::after { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; }
+.ce-door::before { background-size: cover; background-position:center 33%; }
+.ce-door::after { background: linear-gradient(180deg,rgba(11,25,47,.09),rgba(11,25,47,.5) 45%,#0b182f 100%); }
+.ce-door:nth-child(1)::before { background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg/960px-Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg'); }
+.ce-door:nth-child(2)::before { background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/27/Brooklyn_Museum_-_The_Scribe_Stood_to_Tempt_Jesus_%28Le_scribe_se_leva_pour_tenter_J%C3%A9sus%29_-_James_Tissot_-_overall.jpg'); }
+.ce-door:nth-child(3)::before { background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/27/Jan_Lievens_-_St._Paul_writing_to_the_Thessalonians.jpg'); }
+.ce-door-number { margin-bottom: auto; font: 820 .9rem/1 var(--font-body); color: #fff; letter-spacing: .1em; }
+.ce-door .ld-eyebrow { margin-top: 86px; color: #dbe4ff; }
+.ce-door h2 { font: 840 clamp(1.45rem,2.2vw,1.85rem)/1.13 var(--font-display); color: #fff; }
+.ce-door p { color: #e1e8f7; line-height: 1.6; }
+.ce-door-status { color: #d7e1f2; }
+.ce-door-action { color: #fff; font-weight: 800; }
+.ce-door:hover, .ce-door.ce-door-active:hover {
+  background-color: #142942; transform: translateY(-4px);
+  border-color: #99a8ff; box-shadow: 0 17px 38px rgba(26,45,79,.17);
+}
+.ce-door:focus-visible { outline: 3px solid #7787ff; outline-offset: 3px; }
+.ce-feature { background: #fff; border-left: 4px solid var(--j-blue); }
+.ce-feature h2 { font-weight: 840; }
+.ce-catalog-heading input {
+  border: 1px solid var(--j-line); border-radius: 12px;
+  background: #fff; color: var(--j-ink);
+}
+.ce-domain {
+  margin: 12px 0; padding: 0 20px;
+  border: 1px solid var(--j-line); border-radius: 15px;
+  background: #fff; overflow: hidden;
+}
+.ce-domain > summary { padding: 19px 0; }
+.ce-domain summary > span { color: var(--j-blue); font-family: var(--font-display); font-weight: 850; }
+.ce-domain summary strong { color: var(--j-ink); font-weight: 800; }
+.ce-domain-lessons { padding-bottom: 20px; padding-left: 0; }
+.ce-domain-lessons button { border: 1px solid #e7edf5; border-radius: 12px; background: #f6f8fc; }
+.ce-domain-lessons button:hover { background: #edf0ff; border-color: #cdd5ff; }
+.ce-domain-lessons em { color: var(--j-blue); }
+
+/* Progress and profile editorial panels, without adding any new copy. */
+.ld-page:not(.jh-page):not(.ce-page) > .ld-content > .ld-hero {
+  max-width: none;
+  padding: 33px clamp(22px,4vw,44px);
+  margin: 16px 0 25px;
+  border: 1px solid #dce3f4; border-radius: 20px;
+  background: linear-gradient(112deg, #fff 0%, #fff 62%, #e7edff 100%);
+}
+.ld-page:not(.jh-page):not(.ce-page) .ld-section h2 { font-size: 1.6rem; }
+.ld-page:not(.jh-page):not(.ce-page) .ld-feature { padding: 32px; }
+.ld-page:not(.jh-page):not(.ce-page) .ld-feature .ld-primary { margin-top: 12px; }
+
+/* Bible reader remains text-first; controls match the rest of Jeremiah. */
+.br-page { background: var(--j-canvas); color: var(--j-ink); }
+.br-topbar { border-bottom-color: var(--j-line); box-shadow: 0 3px 14px rgba(20,40,77,.03); }
+.br-shell { max-width: 860px; }
+.br-heading > span { color: var(--j-blue); }
+.br-heading h1 { font-family: var(--font-display); font-weight: 860; color: var(--j-ink); }
+.br-version-strip > button, .br-controls > button {
+  background: #fff; border: 1px solid var(--j-line);
+  border-radius: 15px; box-shadow: 0 5px 20px rgba(24,40,74,.045);
+}
+.br-version-strip > button > span { background: var(--j-blue); }
+.br-scripture {
+  padding: clamp(19px,3vw,36px);
+  border: 1px solid var(--j-line); border-radius: 20px;
+  background: #fff; box-shadow: 0 9px 27px rgba(24,40,74,.035);
+}
+.br-scripture p.is-highlighted { background: #edf0ff; box-shadow: inset 4px 0 0 var(--j-blue); }
+.br-scripture sup, .br-version-strip i, .br-chapter-nav button > span { color: var(--j-blue); }
+.br-chapter-grid button.is-current { background: var(--j-blue); border-color: var(--j-blue); }
+.br-translation-list > button.is-current { background: #edf0ff; border-color: #bbc6ff; }
+.br-sheet { border-color: var(--j-line); }
+.br-font-controls button { border-color: var(--j-line); }
+
+/* Classroom variants outside OG.1 receive the same modern shell and hierarchy. */
+.jc-page, .jc-handoff-page, .jc-encounter-page, .jc-reading-page,
+.tl-page, .sc-page, .scl-page { color: var(--j-ink); }
+.jc-page, .jc-handoff-page, .jc-encounter-page, .jc-reading-page,
+.tl-page { background: var(--j-canvas) !important; }
+.jc-move-head h1, .tl-main h1 { font-family: var(--font-display); font-weight: 850; letter-spacing: -.045em; }
+.jc-reading-shell, .tl-main { max-width: 850px; }
+.jc-reading-scripture, .jc-lesson, .jc-story-panel,
+.tl-illustration, .tl-story-scene {
+  border-radius: 17px;
+  border-color: var(--j-line) !important;
+  box-shadow: 0 7px 24px rgba(24,40,74,.045);
+}
+.jc-reading-continue, .jc-handoff-continue, .jc-primary,
+.tl-primary, .jc-pattern-trigger { background: var(--j-blue) !important; }
+.lp-panel { border-color: var(--j-line); border-radius: 15px; background: #fff; }
+.lp-kicker, .lp-phases .is-active { color: var(--j-blue); }
+.lp-chapter-track span.is-current, .lp-phases .is-active i { background: var(--j-blue); }
+
+/* The OG.1 lesson is the visual reference: align its chrome, not its content. */
+.ogp-page {
+  --og-paper: #f4f7fc;
+  --og-line: #dfe6f1;
+  --og-tint: #e9edfb;
+  --og-accent: #4f5fe5;
+  --og-brass: #4f5fe5;
+  --og-ink: #152235;
+  background: var(--j-canvas);
+  color: var(--j-ink);
+}
+.ogp-theme-isaiah, .ogp-theme-continuity,
+.ogp-theme-distinction, .ogp-theme-devotion {
+  --og-paper: #f4f7fc; --og-tint: #e9edfb;
+  --og-accent: #4f5fe5; --og-brass: #4f5fe5;
+}
+.ogp-header { background: #142841; border-bottom-color: #394965; }
+.ogp-brand { font-family: var(--font-display); letter-spacing: -.035em; }
+.ogp-brand small { color: #b8c7ff; }
+.ogp-monogram { color: #cdd5ff; border-color: #8496ca; font-family: var(--font-display); }
+.ogp-progress span { background: var(--j-blue); }
+.ogp-stage h1, .ogp-finish h1 { font-family: var(--font-display); font-weight: 870; letter-spacing: -.055em; }
+.ogp-context-name { font-family: var(--font-display); font-weight: 770; }
+.ogp-context-meta, .ogp-verb, .ogp-link { color: var(--j-blue); }
+.ogp-action { background: var(--j-blue); border-color: var(--j-blue); }
+.ogp-action:not(:disabled):hover { background: #3d4dce; }
+.ogp-page button:focus-visible { outline-color: #8995ff; }
+
+/* Narrow screens keep legible touch targets and the photo-first rhythm. */
+@media(max-width: 760px) {
+  .ld-page:not(.jh-page) { padding: 17px 16px 100px; }
+  .ld-header { padding-bottom: 16px; }
+  .ld-hero { padding: 27px 0 24px; }
+  .ld-hero h1 { font-size: clamp(2rem,8.8vw,2.7rem); }
+  .ld-record { padding: 17px 18px; }
+  .ld-stats > div { padding: 15px 12px; min-width: 88px; }
+  .ld-bottom { grid-template-columns: 1fr; }
+  .jh-ignite-hero { grid-template-columns: 1fr 128px; gap: 10px; min-height: 310px; padding: 27px 23px; }
+  .jh-ignite-scene { min-height: 0; width: 100%; aspect-ratio: 3/5; }
+  .jh-ignite-verse strong { font-size: 1.35rem; }
+  .jh-ignite-verse span { font-size: .5rem; }
+  .jh-ignite-verse small { font-size: .48rem; }
+  .jh-ignite-lesson-art { min-height: 190px; }
+  .jh-ignite-arch strong { font-size: 4rem; }
+  .ce-door, .ce-door.ce-door-active {
+    min-height: 110px; display: grid;
+    grid-template-columns: 80px minmax(0,1fr) 20px;
+    grid-template-rows: auto auto; gap: 5px 12px;
+    padding: 13px 14px; background: #fff; color: var(--j-ink);
+    border: 1px solid var(--j-line); border-radius: 17px;
+    box-shadow: 0 5px 18px rgba(24,40,74,.055);
+  }
+  .ce-door::before { inset: 8px auto 8px 8px; width: 80px; border-radius: 11px; background-position:center; }
+  .ce-door::after { display: none; }
+  .ce-door-number {
+    grid-column: 1; grid-row: 1 / span 2; display: grid; place-items: center;
+    width: 39px; height: 39px; margin: 0; color: #fff;
+    background: rgba(11,28,50,.72) !important; border-radius: 11px;
+    font: 820 .8rem/1 var(--font-body);
+  }
+  .ce-door .ld-eyebrow, .ce-door p { display: none; }
+  .ce-door h2 {
+    grid-column: 2; grid-row: 1; margin: 0;
+    color: var(--j-ink); font: 830 1.08rem/1.2 var(--font-display);
+  }
+  .ce-door-status { grid-column: 2; grid-row: 2; color: #667990; font-size: .72rem; }
+  .ce-door-action {
+    grid-column: 3; grid-row: 1 / span 2; color: var(--j-blue);
+    font-size: 0; align-self: center; margin: 0;
+  }
+  .ce-door-action::after { color: var(--j-blue); }
+  .ce-door:hover, .ce-door.ce-door-active:hover { background: #fff; transform: none; }
+  .ce-catalog-heading { gap: 10px; }
+  .ce-domain { margin: 10px 0; padding: 0 13px; }
+  .ce-feature { padding: 20px; }
+  .ld-page:not(.jh-page):not(.ce-page) > .ld-content > .ld-hero {
+    padding: 24px; margin: 10px 0 22px;
+  }
+  .br-scripture { padding: 14px 11px; }
+  .br-heading { margin-top: 32px; }
+}
+@media(max-width: 410px) {
+  .jh-ignite-hero { grid-template-columns: 1fr 100px; padding: 22px 17px; }
+  .jh-ignite-hero h1 { font-size: 1.85rem; }
+  .jh-ignite-scene { aspect-ratio: 2/5; }
+  .ld-stats { gap: 6px; }
+  .ld-stats > div { padding: 13px 9px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ce-door { transition: none; }
+}
