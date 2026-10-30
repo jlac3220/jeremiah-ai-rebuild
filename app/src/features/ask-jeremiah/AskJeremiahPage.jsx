@@ -65,17 +65,17 @@ export default function AskJeremiahPage({onNavigate}){
      <span className="aj-overline">A DIFFERENT WAY TO LEARN</span>
      <h1>Ask <em>Jeremiah.</em></h1>
      <p>Bring your questions to the Word. Explore clear, Scripture-grounded answers connected to what you’re learning.</p>
-     <div className="aj-scope"><div className="aj-scope-top"><span className="aj-scope-dot"/> CURRENT KNOWLEDGE</div><strong>One True God <span>OG</span></strong><strong>New Birth <span>NB</span></strong><p>Answers are limited to the approved standards. More subjects will appear as the curriculum grows.</p></div>
+     <div className="aj-scope"><div className="aj-scope-top"><span className="aj-scope-dot"/> SCRIPTURE-GROUNDED TEACHING</div><strong>The Word comes first <span>J</span></strong><p>Questions are answered from Jeremiah’s current teaching material. As new studies are added, Jeremiah’s knowledge grows with them.</p></div>
      <div className="aj-aside-note"><span>✦</span><span>The standards guide every answer. Jeremiah will tell you when a subject is not covered yet.</span></div>
     </aside>
     <section className="aj-chat" aria-label="Ask Jeremiah conversation">
-     <div className="aj-chat-heading"><div className="aj-identity"><span className="aj-avatar">J</span><div><strong>Ask Jeremiah</strong><small>Scripture · OG &amp; NB standards</small></div></div><span className="aj-status"><i/> Standards grounded</span></div>
+     <div className="aj-chat-heading"><div className="aj-identity"><span className="aj-avatar">J</span><div><strong>Ask Jeremiah</strong><small>Scripture · Current teaching</small></div></div><span className="aj-status"><i/> Standards grounded</span></div>
      <div className="aj-thread" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions">
       {messages.length===0&&<div className="aj-welcome">
        <div className="aj-welcome-icon"><CompassIcon/></div>
        <span className="aj-overline">YOUR QUESTIONS BELONG HERE</span>
        <h2>What would you like to understand?</h2>
-       <p>Ask naturally. Jeremiah will stay within the One True God and New Birth standards, using Scripture to explain the answer.</p>
+       <p>Ask naturally. Jeremiah will answer from the teaching he has, using Scripture to explain the truth.</p>
        <div className="aj-starters" aria-label="Suggested questions">{STARTERS.map(s=><button type="button" key={s.label} onClick={()=>send(s.question)} disabled={busy}><span>{s.label}</span><span aria-hidden="true">↗</span></button>)}</div>
       </div>}
       {messages.map(message=><article className={'aj-message aj-message--'+message.role} key={message.id}>
@@ -96,7 +96,7 @@ export default function AskJeremiahPage({onNavigate}){
        <textarea id="aj-question" ref={input} rows={2} maxLength={1600} value={draft} placeholder="Ask about Scripture, God’s oneness, or the New Birth…" onChange={e=>setDraft(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();send(draft)}}} disabled={busy}/>
        <button type="submit" disabled={busy||!draft.trim()} aria-label="Send question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7M12 5v14"/></svg></button>
       </form>
-      <p>Only approved OG &amp; NB standards · No answers outside the curriculum</p>
+      <p>Scripture-grounded · Within Jeremiah’s current teaching</p>
      </div>
     </section>
    </div>
