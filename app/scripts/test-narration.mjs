@@ -25,7 +25,7 @@ async function request(method, text, audition = null) {
   return res;
 }
 
-assert.equal(NARRATOR.voice, "onyx");
+assert.equal(NARRATOR.voice, "ash");
 assert.equal(NARRATOR.model, "gpt-4o-mini-tts");
 assert.match(NARRATOR.instructions, /American/);
 assert.equal((await request("POST", "Hear, O Israel.")).status, 405);
