@@ -40,7 +40,7 @@ const fetcher=async(_url,options)=>{
  assert.match(sent.instructions,/Apostolic Bible teacher|Apostolic\/Oneness teacher/);
  for(const role of ['PREACHER','TEACHER','THEOLOGIAN','FRIEND','PASTOR','FAITHFUL SAINT','WITNESS']) assert.ok(sent.instructions.includes(role+':'),'Role missing in model request: '+role);
  assert.match(sent.instructions,/Do not introduce denominations/);
- assert.match(sent.instructions,/do NOT start with 'according to the standard'|Do NOT start with 'according to the standard'/i);
+ assert.match(sent.instructions,/Never describe your own evidence-processing/);
  assert.ok(sent.input[0].content[0].text.includes('approvedStandards'));
  return fakeResponse({status:'answered',answer:'Deuteronomy 6:4 confesses the LORD as one.',standardIds:['OG.1.1.18']});
 };
@@ -81,6 +81,26 @@ assert.ok(topicalRequests[0].request.primaryScripture.some(v=>/Deut\\.?\\s*6:4/i
  'Deuteronomy 6:4 must be offered as primary evidence');
 assert.match(topicalRequests[0].instructions,/Oneness theology affirms/,'Tell the model not to sound like a doctrinal index');
 assert.match(topicalRequests[0].instructions,/Do not cite verses about studying Scripture/);
+let correctionCalls=0;
+const corrected=await answerAskJeremiah({question:'how many gods is there?'},{
+ apiKey:'fake-key',
+ fetcher:async(_url,options)=>{
+  correctionCalls++;
+  const sent=JSON.parse(options.body);
+  if(correctionCalls===1)return fakeResponse({status:'answered',
+   answer:'There is one God. Oneness theology affirms this. The supplied Scripture evidence says to search the Scriptures (Acts 17:11).',
+   standardIds:['OG.1.1.18']});
+  assert.match(sent.instructions,/REVISE THIS ANSWER FOR DIRECTNESS/,'Unrelated or robotic evidence must trigger a rewrite');
+  return fakeResponse({status:'answered',
+   answer:'There is one God, and Scripture could not be clearer. Deuteronomy 6:4 declares: The LORD our God is one LORD. Isaiah 45:5 says there is none else. That is why we hold firmly to one God.',
+   standardIds:['OG.1.1.18']});
+ }
+});
+assert.equal(correctionCalls,2,'Model must get one chance to correct a robotic, wrongly cited answer');
+assert.equal(corrected.status,'answered');
+assert.match(corrected.answer,/Deuteronomy 6:4/);
+assert.doesNotMatch(corrected.answer,/Oneness theology affirms|supplied Scripture/);
+
 
 const unknown=await answerAskJeremiah({question:'What does Deuteronomy 6:4 teach?'},{
  apiKey:'fake-key',
