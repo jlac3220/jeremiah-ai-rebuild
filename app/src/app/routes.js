@@ -9,6 +9,7 @@ export const ROUTES = {
   PROGRESS: "progress",
   PROFILE: "profile",
   BIBLE_SUPPORT: "bibleSupport",
+  ASK_JEREMIAH: "askJeremiah",
 };
 
 export const MAIN_NAV_ROUTES = [
@@ -17,4 +18,5 @@ export const MAIN_NAV_ROUTES = [
   ROUTES.PROGRESS,
   ROUTES.PROFILE,
   ROUTES.BIBLE_SUPPORT,
+  ROUTES.ASK_JEREMIAH,
 ];
