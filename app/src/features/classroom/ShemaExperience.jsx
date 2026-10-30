@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
 import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
+import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 import './ShemaExperience.css';
 
 const PHRASES = [
@@ -25,9 +26,10 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  const [verseRevealed,setVerseRevealed]=useState(false);
  const [seenVideo,setSeenVideo]=useState(false);
  const [selectedReflection,setSelectedReflection]=useState('');
- const [openingImageFailed,setOpeningImageFailed]=useState(false);
+
  const openingBrief=createVisualBrief({content,move,placement:{intent:'historical',subject:'Moses',reference:'Deuteronomy 6:4',learningGoal:'Israel receives the confession in Deuteronomy 6:4'}});
- const openingImage=chooseLessonVisual(openingBrief,VISUAL_ASSETS).asset;
+ const knownOpening=chooseLessonVisual(openingBrief,VISUAL_ASSETS).asset;
+ const {asset:openingImage,onError:openingImageError}=useDiscoveredLessonVisual(openingBrief,knownOpening);
  const selected=phrase>=0?PHRASES[phrase]:null;
  function selectPhrase(i) {
   setPhrase(i);
@@ -38,11 +40,11 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  }
  if(kind==='shema-encounter')return <div className="shema-world">
   <div className="shema-world-art">
-   {openingImage&&!openingImageFailed&&<img className="shema-world-photo"
+   {openingImage&&<img key={openingImage.id} className="shema-world-photo"
      src={openingImage.src}
      alt="Illustrative reconstruction: Moses addresses the gathered people of Israel"
      style={{objectPosition:openingImage.focal||'50% 38%'}}
-     onError={()=>setOpeningImageFailed(true)}
+     onError={openingImageError}
      loading="eager" decoding="async"/>}
   </div>
   <div className="shema-world-copy">
