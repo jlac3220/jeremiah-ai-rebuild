@@ -28,7 +28,8 @@
     "transcribe:sermon": "node scripts/transcribe-authorized-sermon.mjs",
     "crawl:site": "python3 server/websiteCrawler.py",
     "test:crawler": "python3 scripts/test-website-crawler.py -v",
-    "test:content-scan": "node scripts/test-educational-scan.mjs"
+    "test:content-scan": "node scripts/test-educational-scan.mjs",
+    "test:visual-framework": "node scripts/test-visual-framework.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
