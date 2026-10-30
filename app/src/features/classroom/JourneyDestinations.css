@@ -68,3 +68,48 @@
 .ogj-reveal-actions button:hover{transform:translateY(-1px)}
 @media(max-width:750px){.ogj-reveal{align-items:stretch}.ogj-reveal-actions{display:flex;flex-wrap:wrap;gap:8px}.ogj-reveal-actions button{font-size:.74rem}.ogj-destination .ogj-card-caption strong{font-size:clamp(1.1rem,4.2vw,1.8rem)}}
 @media(max-width:450px){.ogj-reveal{padding:23px 19px}.ogj-destination .ogj-card-caption strong{font-size:2rem}.ogj-destination .ogj-photo{object-position:center 31%}}
+
+
+/* Modern witness gallery · retain distinct biblical art with clean contemporary framing. */
+.ogj-introduction{margin-bottom:24px}
+.ogj-eyebrow{color:#5264d6;font:800 .71rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.08em}
+.ogj-introduction p{color:#56677a;font-size:1.03rem;max-width:560px}
+.ogj-gallery{gap:16px}
+.ogj-destination{
+ border:1px solid #1d2d4380;
+ border-radius:18px;
+ background:#16253a;
+ min-height:360px;
+ box-shadow:0 14px 30px #1b30441c;
+}
+.ogj-destination:hover{box-shadow:0 20px 37px #132b3a30}
+.ogj-destination.is-selected{border-color:#7b8dff;box-shadow:0 0 0 3px #7e8cff44,0 18px 34px #172c3a20}
+.ogj-destination:focus-visible{outline-color:#6172f2}
+.ogj-destination .ogj-card-shade{background:linear-gradient(180deg,#071a3155 0%,transparent 35%,#0a152945 58%,#081428f0 100%)}
+.ogj-era{font:800 .68rem/1.4 Inter,system-ui,sans-serif;color:#d1dbff;letter-spacing:.07em}
+.ogj-card-caption>span{font:.72rem/1.4 Inter,system-ui,sans-serif;color:#e0e8ff;letter-spacing:.045em}
+.ogj-card-caption strong{font:800 clamp(1.75rem,3vw,2.55rem)/1.12 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:-.048em}
+.ogj-card-arrow{color:#dce3ff}
+.ogj-reveal{
+ border:1px solid #e2e8f1;
+ border-left:4px solid #6374eb;
+ border-radius:15px;
+ background:#fff;
+ box-shadow:0 11px 30px #16324a12;
+}
+.ogj-reveal-kicker{color:#5061dc;font:.72rem/1.4 Inter,system-ui,sans-serif;font-weight:800;letter-spacing:.07em}
+.ogj-reveal blockquote{color:#183147;font-family:Georgia,"Times New Roman",serif}
+.ogj-reveal p{color:#55677c}
+.ogj-reveal small{color:#68798d}
+.ogj-reveal-actions button{border:1px solid #4f60dd;background:#4c5cdb;border-radius:12px;font-size:.85rem;min-height:46px}
+.ogj-reveal-actions button.ogj-read-link{background:#eef1ff;color:#3b4ecc;border-color:#d3dafc}
+.ogj-reveal-actions button:hover{transform:translateY(-1px);background:#394bca}
+.ogj-reveal-actions button.ogj-read-link:hover{background:#dfe6ff}
+@media(max-width:750px){
+ .ogj-destination{min-height:280px}
+ .ogj-destination .ogj-card-caption strong{font-size:clamp(1.27rem,4.3vw,1.85rem)}
+}
+@media(max-width:450px){
+ .ogj-destination{min-height:215px}
+ .ogj-destination .ogj-card-caption strong{font-size:2rem}
+}
