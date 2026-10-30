@@ -15,9 +15,9 @@ function responseRecorder() {
     end(body) { this.body = body; },
   };
 }
-async function request(method, text) {
+async function request(method, text, audition = null) {
   const res = responseRecorder();
-  const url = "/api/jeremiah/narration?text=" + encodeURIComponent(text);
+  const url = "/api/jeremiah/narration?text=" + encodeURIComponent(text) + (audition ? "&audition=" + encodeURIComponent(audition) : "");
   await handleNarrationApi({
     method, url,
     headers: { host: "localhost:5173" },
@@ -31,4 +31,8 @@ assert.match(NARRATOR.instructions, /American/);
 assert.equal((await request("POST", "Hear, O Israel.")).status, 405);
 assert.equal((await request("GET", "Unauthorised arbitrary speech input.")).status, 400);
 assert.equal((await request("GET", "x".repeat(1500))).status, 400);
+assert.equal((await request("GET", "Hear, O Israel: The LORD our God is one LORD.", "unknown")).status, 400);
+assert.equal((await request("GET", "Unauthorised arbitrary speech input.", "cedar")).status, 400);
+assert.equal((await request("GET", "The LORD our God is one LORD.", "cedar")).status, 400);
+
 console.log("PASS: Jeremiah narrator is fixed and narration accepts only authored lesson text.");
