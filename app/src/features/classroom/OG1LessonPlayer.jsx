@@ -14,7 +14,7 @@ import './OG1LessonPlayer.css';
 
 // Christian-appropriate, globally varied scenes. One selection per lesson visit;
 // never reshuffle mid-answer or repeat the same screen-heavy stock photograph.
-const TODAY_SCENE_LABELS = ['YOUR WORSHIP', 'YOUR EVERYDAY CHOICES', 'YOUR CONVERSATIONS'];
+const TODAY_SCENE_LABELS = ['UNDIVIDED WORSHIP', 'WHOLEHEARTED LOVE', 'ONE GOSPEL'];
 function EverydayScenePhoto({index,photoSeed}) {
  const [failedOffset,setFailedOffset]=useState(0);
  const category=EVERYDAY_PHOTO_CATEGORIES[index]||'conduct';
@@ -56,7 +56,7 @@ const DISCOVERIES={
  'isaiah-show':{question:'Could another god exist in any direction?',options:[['BEFORE','Isaiah 43:10: no God was formed before him.'],['BESIDE','Isaiah 44:6: no God exists beside him.'],['AFTER','Isaiah 43:10: none shall be after him.']],closer:'Isaiah excludes rivals across time and alongside the LORD.'},
  'continuity-show':{question:'Follow the confession through Scripture.',options:[['MOSES','Deuteronomy 6:4: the LORD our God is one LORD.'],['JESUS','Mark 12:29: Jesus begins with the same confession.'],['PAUL','1 Corinthians 8:4: there is none other God but one.']],closer:'The witness advances in history without replacing the confession.'},
  'distinction-show':{question:'Touch each position to see where the disagreement really is.',options:[['SHARED','Both Oneness and trinitarian theology confess one God.'],['TRINITARIAN','One divine essence in three coequal, coeternal persons.'],['ONENESS','The one God is revealed as Father, in the incarnate Son, and as Holy Spirit; no eternal plurality of divine persons.']],closer:'A fair explanation starts with what is shared, then identifies the precise difference.'},
- 'devotion-show':{question:'Where does love for the one LORD become visible?',options:[['WORSHIP','The LORD receives undivided devotion.'],['CONDUCT','Honesty and care reflect allegiance beyond words.'],['MISSION','The confession shapes how believers share the gospel.']],closer:'The confession reaches beyond a correct answer into the life of the whole person.'}
+ 'devotion-show':{question:'What response follows the confession?',options:[['WORSHIP','The LORD alone receives worship; no rival god shares devotion.'],['LOVE','Deuteronomy 6:5 commands love with all heart, soul and might.'],['WITNESS','The one Lord is proclaimed in one gospel to all people.']],closer:'This chapter applies OG.1.5: exclusive devotion, covenantal faithfulness and the witness of the one gospel.'}
 };
 
 function createMoments(move,video) {
@@ -76,7 +76,7 @@ function createMoments(move,video) {
  if(move.id==='isaiah-show')moments.push({kind:'witness',verb:'EXAMINE THE EVIDENCE',title:'Three declarations. One conclusion.'});
  else if(move.id==='continuity-show')moments.push({kind:'timeline',verb:'FOLLOW THE THREAD',title:'Does the confession change?'});
  else if(move.id==='distinction-show')moments.push({kind:'comparison',verb:'COMPARE THE CLAIMS',title:'Both confess one God. What differs?'});
- else if(move.id==='devotion-show')moments.push({kind:'mission',verb:'MAKE A DECISION',title:'One confession. Three everyday choices.'});
+ else if(move.id==='devotion-show')moments.push({kind:'mission',verb:'MAKE A DECISION',title:'One Lord. An undivided response.'});
  else if(discovery)moments.push({kind:'discovery',verb:'INVESTIGATE',title:discovery.question,discovery});
  if(move.teaching?.length)moments.push({kind:'insight',verb:'THE CONNECTION',title:move.id==='shema-show'?'Hear—and respond.':move.id==='isaiah-show'?'The witnesses agree.':move.id==='continuity-show'?'The confession continues.':move.id==='distinction-show'?'The disagreement has a precise meaning.':move.id==='devotion-show'?'Belief becomes allegiance.':'Carry this question forward.',text:move.teaching[0],deeper:move.teaching.slice(1)});
  if(move.id==='shema-show'&&video) {
@@ -266,17 +266,17 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       {evidenceIndex===2&&<p className="ogp-compare-conclusion">The difference is not whether God is one. The difference concerns eternal personal distinctions and the understanding of Jesus Christ.</p>}
      </div>}
      {current.kind==='mission'&&<div className="ogp-mission">
-      <p className="ogp-prompt">The Shema continues into Deuteronomy 6:5. What would wholehearted love look like beyond a spoken confession?</p>
+      <p className="ogp-prompt">Deuteronomy 6:5 follows the Shema with a command to love the one LORD wholly. Explore the connection between confession, worship and the apostolic witness.</p>
       <div className="ogp-mission-scene ogp-mission-scene--photo">
        <EverydayScenePhoto index={evidenceIndex} photoSeed={photoSeed}/>
        <div className="ogp-mission-copy">
-        <span>{['SCENE 1 · WORSHIP','SCENE 2 · CONDUCT','SCENE 3 · MISSION'][evidenceIndex]}</span>
-        <h2>{['Who receives your devotion?','What happens when honesty costs you?','Who should hear this confession?'][evidenceIndex]}</h2>
-        <p>{['A person offers God an hour of worship, but gives competing loyalties ultimate control of life.','A person knows that admitting a mistake will bring consequences.','A believer meets someone unfamiliar with Scripture and with a very different background.'][evidenceIndex]}</p>
+        <span>{['THE CONFESSION · WORSHIP','THE COMMAND · LOVE','THE WITNESS · ONE GOSPEL'][evidenceIndex]}</span>
+        <h2>{['Who alone receives worship?','What does verse 5 command?','How does the confession reach others?'][evidenceIndex]}</h2>
+        <p>{['The one LORD is not one option among several objects of worship. The first commandment excludes rival gods.','Israel is called to love the LORD with the whole heart, soul and might. Confession asks for undivided allegiance.','Jesus reaffirms the one LORD, and the apostles proclaim one Lord and one gospel beyond Israel.'][evidenceIndex]}</p>
        </div>
       </div>
-      <div className="ogp-mission-options">{(evidenceIndex===0?['Keep worship separate from daily priorities','Let the one Lord shape every allegiance']:evidenceIndex===1?['Hide the mistake to protect your reputation','Tell the truth and take responsibility']:['Assume the message is only for people like you','Share the good news with humility and care']).map((choice,i)=><button key={choice} type="button" aria-pressed={caseChoice===i} onClick={()=>setCaseChoice(i)}>{choice}</button>)}</div>
-      {caseChoice!==null&&<p className="ogp-mission-response">{caseChoice===1?['Wholehearted love involves undivided worship and allegiance.','Faithfulness extends to honest conduct, even when difficult.','The witness to one God calls believers to care about others.'][evidenceIndex]:'Consider whether that choice reflects wholehearted love for the LORD in Deuteronomy 6:5.'}</p>}
+      <div className="ogp-mission-options">{(evidenceIndex===0?['Offer devotion to the LORD alongside other gods','Worship the one LORD exclusively']:evidenceIndex===1?['Treat the confession as knowledge alone','Love the LORD with all heart, soul and might']:['Treat the confession as Israel’s abandoned belief','Trace the same confession through Jesus and the apostles']).map((choice,i)=><button key={choice} type="button" aria-pressed={caseChoice===i} onClick={()=>setCaseChoice(i)}>{choice}</button>)}</div>
+      {caseChoice!==null&&<p className="ogp-mission-response">{caseChoice===1?['Exactly: the first commandment excludes rival worship.','Exactly: the confession leads into the command of wholehearted love.','Exactly: the New Testament witness continues rather than replaces the confession.'][evidenceIndex]:'Return to the Scripture connected to this part of OG.1.5 and consider what it requires.'}</p>}
      </div>}
      {current.kind==='discovery'&&(move.id==='learn'
       ?<JourneyDestinations options={current.discovery.options} selected={discoveryChoice} onSelect={setDiscoveryChoice} onSpeak={narration.speak} onOpenBible={readVerse}/>
