@@ -405,3 +405,15 @@
  .shema-teachback-response{padding:18px}
  .shema-teachback-response textarea{min-height:280px}
 }
+
+/* Authentic manuscript encounter: the artifact is real; the interactive phrase study stays modern. */
+.shema-artifact { display:grid; grid-template-columns:minmax(170px,.39fr) minmax(0,.61fr); overflow:hidden; align-items:center; gap:0; margin:26px 0; background:#fff; border:1px solid #dbe4ef; border-radius:19px; box-shadow:0 12px 32px #172f5410; }
+.shema-artifact-image { background:#f1ece2; min-height:278px; display:flex; justify-content:center; align-items:center; padding:22px; }
+.shema-artifact-image img { width:auto; max-width:100%; max-height:284px; object-fit:contain; filter:contrast(1.04); }
+.shema-artifact-copy { padding:28px clamp(22px,3vw,36px); }
+.shema-artifact-copy h3 { margin:8px 0 10px; font:830 clamp(1.35rem,2vw,1.85rem)/1.2 Inter,system-ui,sans-serif; letter-spacing:-.03em; color:#172235; }
+.shema-artifact-copy p { margin:0 0 13px; color:#45576b; font-size:.96rem; line-height:1.65; }
+.shema-artifact-copy a { color:#4254cb; font-weight:750; font-size:.85rem; text-decoration:underline; text-underline-offset:3px; }
+.shema-artifact-copy a:focus-visible { outline:3px solid #7f8cff; outline-offset:4px; }
+.shema-artifact-copy small { display:block; margin-top:15px; font-size:.67rem; color:#718096; line-height:1.45; }
+@media(max-width:670px){.shema-artifact { grid-template-columns:1fr; }.shema-artifact-image { min-height:180px; padding:16px; }.shema-artifact-image img { max-height:210px; }.shema-artifact-copy { padding:22px 19px; }}
