@@ -75,9 +75,9 @@ const creationAnswer=await answerAskJeremiah({question:'how did the world start?
 assert.equal(creationAnswer.status,'answered','A new simple question is not a follow-up to the previous oneness question');
 assert.equal(creationAnswer.sources[0].id,'OG.3.1.18');
 assert.equal(topicalRequests[1].request.approvedStandards[0].id,'OG.3.1.18');
-assert.ok(topicalRequests[1].request.primaryScripture.some(v=>/Gen\\.?\\s*1:1/i.test(v.reference)),
+assert.ok(topicalRequests[1].request.primaryScripture.some(v=>/Gen\.?\s*1:1/i.test(v.reference)),
  'Genesis 1:1 must be offered as primary evidence');
-assert.ok(topicalRequests[0].request.primaryScripture.some(v=>/Deut\\.?\\s*6:4/i.test(v.reference)),
+assert.ok(topicalRequests[0].request.primaryScripture.some(v=>/Deut\.?\s*6:4/i.test(v.reference)),
  'Deuteronomy 6:4 must be offered as primary evidence');
 assert.match(topicalRequests[0].instructions,/Oneness theology affirms/,'Tell the model not to sound like a doctrinal index');
 assert.match(topicalRequests[0].instructions,/Do not cite verses about studying Scripture/);
