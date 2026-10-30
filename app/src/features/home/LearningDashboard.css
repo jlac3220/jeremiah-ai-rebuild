@@ -386,3 +386,8 @@
 }
 @media(max-width:375px) { .jh-ignite-hero { grid-template-columns:minmax(0,1fr) 75px; } .jh-ignite-hero h1 { font-size:1.73rem; } .jh-ignite-scene { width:150px; margin-right:-60px; } .jh-ignite-lesson { grid-template-columns:84px minmax(0,1fr); } .jh-ignite-lesson-content { padding:14px 12px; } .jh-ignite-explore { gap:6px; } .jh-ignite-tile { padding:10px 7px; } }
 @media(prefers-reduced-motion:reduce) { .jh-ignite-hero * { scroll-behavior:auto; } }
+
+/* Ask Jeremiah is a fourth home destination, not a lesson shortcut. */
+.jh-ignite-explore{grid-template-columns:repeat(4,minmax(0,1fr))}
+.jh-ignite-tile-ask{background:#E9E7FF;color:#353278}
+@media(max-width:640px){.jh-ignite-explore{grid-template-columns:repeat(2,minmax(0,1fr))}.jh-ignite-tile{min-height:123px}}
