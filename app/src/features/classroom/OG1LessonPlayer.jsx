@@ -5,31 +5,32 @@ import { getInstructionalMove, getStandardProgress, updateLearningExperience } f
 import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, skipTeachingMove, restartTeaching } from '../../core/classroom/teacherLedEngine';
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
+import { VISUAL_ASSETS } from '../../data/curriculum/visualCatalog';
+import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
 import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
 import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import './OG1LessonPlayer.css';
 
-// OG.1.5 must picture the actual point being taught. General volunteering or
-// family socializing must never stand in for proclaiming the one gospel.
-const APPLICATION_VISUALS = [
- {type:'worship',src:'https://images.pexels.com/photos/35555152/pexels-photo-35555152.jpeg?auto=compress&cs=tinysrgb&w=1600',
-  alt:'Congregation in a Christian worship gathering',credit:'Caleb Oquendo · Pexels',label:'UNDIVIDED WORSHIP',focal:'50% 42%'},
- {type:'manuscript',src:'https://upload.wikimedia.org/wikipedia/commons/9/93/Papyrus_Nash.jpg',
-  alt:'The Nash Papyrus, an actual ancient Hebrew witness preserving the Shema',credit:'The Nash Papyrus · ancient manuscript',label:'WHOLEHEARTED LOVE',focal:'50% 48%'},
- {type:'apostles',label:'ONE GOSPEL',credit:'Paul teaching the early church · illustrative reconstruction'}
+// These are instructional purposes, not image IDs or keyword searches.
+// Broad worship may use broad imagery; specific evidence must match the
+// passage/subject. A missing or broken image is never replaced by Moses.
+const APPLICATION_MOMENTS = [
+ {intent:'general',topic:'worship',learningGoal:'Undivided worship of the one LORD',label:'UNDIVIDED WORSHIP'},
+ {intent:'artifact',reference:'Deuteronomy 6:4',learningGoal:'Study an ancient witness to the Shema',label:'WHOLEHEARTED LOVE'},
+ {intent:'historical',subject:'Paul',reference:'1 Corinthians 8:4',learningGoal:'Paul teaches the early church about the one God',label:'ONE GOSPEL'}
 ];
-function BiblicalApplicationArt({index}) {
+function BiblicalApplicationArt({index,content,move}) {
  const [failed,setFailed]=useState(false);
- useEffect(()=>setFailed(false),[index]);
- const scene=APPLICATION_VISUALS[index]||APPLICATION_VISUALS[0];
+ const placement=APPLICATION_MOMENTS[index];
+ const brief=placement?createVisualBrief({content,move,placement}):null;
+ const visual=brief?chooseLessonVisual(brief,VISUAL_ASSETS).asset:null;
+ useEffect(()=>setFailed(false),[visual?.id]);
  return <div className="ogp-mission-photo">
-  {scene.type==='apostles'||failed
-   ?<DestinationArt tone={index===2?'apostles':'shema'}/>
-   :<img src={scene.src} alt={scene.alt} style={{objectPosition:scene.focal}} loading="lazy" decoding="async" onError={()=>setFailed(true)}/>}
-  <span>{scene.label}</span>
-  <small>{scene.credit}</small>
+  {visual&&!failed&&<img src={visual.src} alt={visual.alt} style={{objectPosition:visual.focal||'50% 40%'}} loading="lazy" decoding="async" onError={()=>setFailed(true}/>}
+  <span>{placement?.label||'THE LESSON'}</span>
+  {visual&&!failed&&<small>{visual.credit}{visual.rightsStatus!=='cleared'?' · rights review pending':''}</small>}
  </div>;
 }
 
@@ -39,7 +40,7 @@ function readingArtTone(reference='') {
  if (/^Isaiah\b/i.test(reference)) return 'prophets';
  if (/^(Mark|Matthew|Luke|John)\b/i.test(reference)) return 'jesus';
  if (/^(?:[12] Corinthians|Ephesians|[12] Timothy|James|Acts)\b/i.test(reference)) return 'apostles';
- return 'moses';
+ return null;
 }
 function readingCommentary(note='') {
  const cleaned=String(note).replace(/^KJV(?:\s+excerpt(?:\s+from\s+verse\s+\d+)?)?\.\s*/i,'').trim();
@@ -210,9 +211,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    {finish?<section className="ogp-finish"><span className="ogp-verb">JOURNEY REVIEWED</span><h1>One Lord. One unfolding story.</h1><p>You've explored Israel's confession, Isaiah's declarations, the apostolic witness, and the call to love the Lord. Your responses remain saved for review.</p><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button></section>:<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
      {(move.id!=='learn'||current.kind!=='read')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
-     {current.kind?.startsWith('shema-')&&<ShemaExperience kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
+     {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
-      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter"/></div>
+      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></div>
       <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
       <div className="ogp-encounter-inner">
        <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
@@ -224,7 +225,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       </div>
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
-      <div className="ogp-scripture-ornament" aria-hidden="true"><DestinationArt tone={readingArtTone(current.verse.reference)+"-reading"}/></div>
+      <div className="ogp-scripture-ornament" aria-hidden="true"><DestinationArt content={content} move={move} tone={readingArtTone(current.verse.reference)} placement={{intent:"scripture",reference:current.verse.reference,learningGoal:"Read "+current.verse.reference+" in context"}}/></div>
       <div className="ogp-scripture-content">
        <span className="ogp-scripture-index">{current.verse.reference.toUpperCase()} · KJV</span>
        <blockquote className="ogp-verse">“{current.verse.text}”</blockquote>
@@ -243,7 +244,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
        </button>)}
       </div>
       <div className="ogp-witness-scroll" key={evidenceIndex}>
-       <div className="ogp-witness-art" aria-hidden="true"><DestinationArt tone="prophets-witness"/></div>
+       <div className="ogp-witness-art" aria-hidden="true"><DestinationArt tone="prophets-witness" content={content} move={move}/></div>
        <div className="ogp-witness-copy">
         <span>ISAIAH'S TESTIMONY · {String(evidenceIndex+1).padStart(2,'0')} / 03</span>
         <blockquote>{['“before me there was no God formed”','“beside me there is no God”','“neither shall there be after me”'][evidenceIndex]}</blockquote>
@@ -256,10 +257,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='timeline'&&<div className="ogp-trail">
       <p className="ogp-prompt">Trace the confession from Moses to Jesus to Paul. Each witness adds to the story.</p>
       <div className="ogp-trail-track" role="group" aria-label="Scripture witnesses">{[['MOSES','Deuteronomy 6:4','moses'],['JESUS','Mark 12:29','jesus'],['PAUL','1 Corinthians 8:4','apostles']].map(([name,ref,tone],i)=><button type="button" key={name} aria-pressed={evidenceIndex===i} onClick={()=>setEvidenceIndex(i)} disabled={i>evidenceIndex}>
-       <span className="ogp-trail-thumb"><DestinationArt tone={tone}/><span className="ogp-trail-order">0{i+1}</span></span>
+       <span className="ogp-trail-thumb"><DestinationArt tone={tone} content={content} move={move}/><span className="ogp-trail-order">0{i+1}</span></span>
        <strong>{name}</strong><small>{ref}</small>
       </button>)}</div>
-      <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses-trail':evidenceIndex===1?'jesus-trail':'apostles-trail'}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
+      <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses-trail':evidenceIndex===1?'jesus-trail':'apostles-trail'} content={content} move={move}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
      </div>}
      {current.kind==='comparison'&&<div className="ogp-compare">
       <p className="ogp-prompt">Start with common ground. Then uncover the actual theological disagreement instead of assuming the other view believes in three gods.</p>
@@ -273,7 +274,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='mission'&&<div className="ogp-mission">
       <p className="ogp-prompt">Deuteronomy 6:5 follows the Shema with a command to love the one LORD wholly. Explore the connection between confession, worship and the apostolic witness.</p>
       <div className="ogp-mission-scene ogp-mission-scene--photo">
-       <BiblicalApplicationArt index={evidenceIndex}/>
+       <BiblicalApplicationArt index={evidenceIndex} content={content} move={move}/>
        <div className="ogp-mission-copy">
         <span>{['THE CONFESSION · WORSHIP','THE COMMAND · LOVE','THE WITNESS · ONE GOSPEL'][evidenceIndex]}</span>
         <h2>{['Who alone receives worship?','What does verse 5 command?','How does the confession reach others?'][evidenceIndex]}</h2>
