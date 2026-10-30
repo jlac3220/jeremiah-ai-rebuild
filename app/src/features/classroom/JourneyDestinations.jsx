@@ -1,61 +1,37 @@
 import {useEffect,useState} from 'react';
 import './JourneyDestinations.css';
 
-// Public-domain representations of biblical figures. These are paintings,
-// not photographs or assertions about the subjects' historical appearance.
-// Source pages and artist details are displayed in the experience.
-export const BIBLICAL_ART = {
- shema: {
-  src:'https://upload.wikimedia.org/wikipedia/commons/d/db/Moses_Pleading_with_Israel_%28crop%29.jpg',
-  alt:'1907 biblical illustration showing Moses addressing an assembly of Israelites',
-  artist:'Providence Lithograph Company',
-  work:'Moses Pleading with Israel (1907)',
-  source:'https://commons.wikimedia.org/wiki/File:Moses_Pleading_with_Israel_(crop).jpg',
-  focal:'50% 32%',
-  reference:'Deuteronomy 6:4',
-  quote:'“Hear, O Israel: The LORD our God is one LORD.”'
- },
- moses: {
-  src:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg/960px-Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg',
-  alt:'Rembrandt painting showing Moses holding the tablets of the Law',
-  artist:'Rembrandt van Rijn',
-  work:'Moses with the Tablets of the Law (1659)',
-  source:'https://commons.wikimedia.org/wiki/File:Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg',
-  focal:'50% 38%',
-  reference:'Deuteronomy 6:4',
-  quote:'“Hear, O Israel: The LORD our God is one LORD.”'
- },
- prophets: {
-  src:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Michelangelo%2C_profeti%2C_Isaiah_01.jpg/500px-Michelangelo%2C_profeti%2C_Isaiah_01.jpg',
-  alt:'Michelangelo fresco portraying the prophet Isaiah holding a book',
-  artist:'Michelangelo',
-  work:'The Prophet Isaiah (1509)',
-  source:'https://commons.wikimedia.org/wiki/File:Michelangelo,_profeti,_Isaiah_01.jpg',
-  focal:'50% 32%',
-  reference:'Isaiah 44:6',
-  quote:'“I am the first, and I am the last; and beside me there is no God.”'
- },
- jesus: {
-  src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Brooklyn_Museum_-_The_Scribe_Stood_to_Tempt_Jesus_%28Le_scribe_se_leva_pour_tenter_J%C3%A9sus%29_-_James_Tissot_-_overall.jpg',
-  alt:'James Tissot watercolor showing Jesus speaking with a scribe and a gathered crowd',
-  artist:'James Tissot',
-  work:'The Scribe Stood to Tempt Jesus (1886–1894)',
-  source:'https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_-_The_Scribe_Stood_to_Tempt_Jesus_(Le_scribe_se_leva_pour_tenter_J%C3%A9sus)_-_James_Tissot_-_overall.jpg',
-  focal:'42% 44%',
-  reference:'Mark 12:29',
-  quote:'“The Lord our God is one Lord.”'
- },
- apostles: {
-  src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Jan_Lievens_-_St._Paul_writing_to_the_Thessalonians.jpg',
-  alt:'Jan Lievens painting portraying the apostle Paul writing a letter at his desk',
-  artist:'Jan Lievens',
-  work:'St Paul Writing to the Thessalonians (c. 1629)',
-  source:'https://commons.wikimedia.org/wiki/File:Jan_Lievens_-_St._Paul_writing_to_the_Thessalonians.jpg',
-  focal:'50% 34%',
-  reference:'1 Corinthians 8:4',
-  quote:'“There is none other God but one.”'
- }
-};
+// Purpose-led image library for modern OG.1 teaching.
+// Each scene is a contemporary photograph of a setting or illustrative activity,
+// NOT a portrait of a biblical figure or an original ancient artifact.
+// Original artifacts (such as the Nash Papyrus) appear separately with provenance.
+// Different lesson contexts use different scenes to avoid repeating the same image.
+const photo = (id, alt, credit, reference, quote, focal='center') => ({
+ src:`https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1600`,
+ alt,artist:credit,work:'Context photography',source:`https://www.pexels.com/photo/${id}/`,
+ focal,reference,quote,
+});
+const SHEMA_QUOTE='“Hear, O Israel: The LORD our God is one LORD.”';
+const ISAIAH_QUOTE='“I am the first, and I am the last; and beside me there is no God.”';
+const JESUS_QUOTE='“The Lord our God is one Lord.”';
+const PAUL_QUOTE='“There is none other God but one.”';
+
+export const BIBLICAL_ART = Object.freeze({
+ shema: photo(28086996, 'Sunset over the mountains and desert in Wadi Rum, Jordan', 'Nikola Čedíková · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE, '50% 38%'),
+ moses: photo(32279575, 'Person in traditional Middle Eastern attire seen in a desert setting; contextual modern photograph, not Moses', 'Dajana Reçi · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE, '50% 40%'),
+ prophets: photo(7386039, 'Photographed decorative parchment inscriptions; illustrative setting, not an authentic Isaiah manuscript', 'Photography Maghradze PH · Pexels', 'Isaiah 44:6', ISAIAH_QUOTE, '50% 47%'),
+ jesus: photo(17690070, 'Historic stone street in present-day Jerusalem; contextual photograph, not a depiction of Jesus', 'Thắng-Nhật Trần · Pexels', 'Mark 12:29', JESUS_QUOTE, '50% 37%'),
+ apostles: photo(1650203, 'Close-up of a person writing with a quill; modern re-creation of writing, not the apostle Paul', 'Vika Glitter · Pexels', '1 Corinthians 8:4', PAUL_QUOTE, '50% 45%'),
+ 'moses-reading': photo(28718329, 'Desert dunes under warm sunlight, illustrating the landscape of a wilderness journey', 'Eslam Mohammed Abdelmaksoud · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE),
+ 'prophets-reading': photo(12187158, 'Rugged desert path at sunset, landscape contextualizing the biblical world', 'Raziuddin Farooqi · Pexels', 'Isaiah 44:6', ISAIAH_QUOTE),
+ 'jesus-reading': photo(1659291, 'Stone architecture in present-day Jerusalem, contextual background for the Gospel scene', 'BECCA SIEGEL · Pexels', 'Mark 12:29', JESUS_QUOTE),
+ 'apostles-reading': photo(36516078, 'Warmly lit writing desk and papers, a modern re-creation of historical correspondence', 'Muhtelifane · Pexels', '1 Corinthians 8:4', PAUL_QUOTE),
+ 'moses-trail': photo(11042744, 'Camels in the rocky desert in Jordan at sunset, contextual landscape', 'Elias Strale · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE),
+ 'jesus-trail': photo(18717576, 'Roman-era stone columns at Jerash, Jordan, contextual architecture of the ancient region', 'AXP Photography · Pexels', 'Mark 12:29', JESUS_QUOTE),
+ 'apostles-trail': photo(6980533, 'Person writing by hand on parchment-like paper; illustrative correspondence', 'KoolShooters · Pexels', '1 Corinthians 8:4', PAUL_QUOTE),
+ 'prophets-witness': photo(39811859, 'Desert mountains at sunset near Dahab, Egypt, landscape illustration', 'Mohamed Elshiekh · Pexels', 'Isaiah 44:6', ISAIAH_QUOTE),
+ 'shema-encounter': photo(2867771, 'Desert dunes at sunset, a scene evoking the ancient wilderness', 'Yasin Gündogdu · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE),
+});
 
 const STOPS = [
  {title:'Moses',name:'MOSES',era:'THE FOUNDATION',place:'ISRAEL · DEUTERONOMY 6',tone:'moses',narration:'Hear, O Israel: The LORD our God is one LORD. Moses gives the confession to Israel.'},
@@ -68,7 +44,7 @@ export function DestinationArt({tone}) {
  const [failed,setFailed]=useState(false);
  useEffect(()=>setFailed(false),[tone]);
  const art=BIBLICAL_ART[tone]||BIBLICAL_ART.moses;
- return <span className={'ogj-art ogj-art--'+tone} role="img" aria-label={art.alt}>
+ return <span className={'ogj-art ogj-art--'+tone.replace(/[^a-z0-9-]/gi,'')} role="img" aria-label={art.alt}>
   {!failed&&<img key={tone} className="ogj-photo" src={art.src} alt="" loading="lazy" decoding="async" style={{objectPosition:art.focal}} onError={()=>setFailed(true)}/>}
   <span aria-hidden="true" className="ogj-fallback">{tone==='moses'||tone==='shema'?'מֹשֶׁה':tone==='prophets'?'יְשַׁעְיָהוּ':tone==='jesus'?'ΙΗΣΟΥΣ':'ΠΑΥΛΟΣ'}</span>
  </span>;
@@ -93,7 +69,7 @@ export default function JourneyDestinations({options,selected,onSelect,onSpeak,o
      <span className="ogj-reveal-kicker">{stop.name} · {art.reference.toUpperCase()}</span>
      <blockquote>{art.quote}</blockquote>
      <p>{options[selected][1]}</p>
-     <small>Artwork: {art.work} — {art.artist}. Artistic depiction, not a historical photograph.</small>
+     <small>Visual context: {art.artist}. Modern illustrative photograph, not a portrait or eyewitness image of a biblical figure.</small>
     </div>
     <div className="ogj-reveal-actions">
      <button type="button" onClick={()=>onSpeak?.(stop.narration)}>▶ Hear Scripture</button>
