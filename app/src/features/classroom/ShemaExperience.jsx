@@ -42,7 +42,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
   <div className="shema-world-art">
    {openingImage&&<img key={openingImage.id} className="shema-world-photo"
      src={openingImage.src}
-     alt="Illustrative reconstruction: Moses addresses the gathered people of Israel"
+     alt="Moses addresses the gathered people of Israel"
      style={{objectPosition:openingImage.focal||'50% 38%'}}
      onError={openingImageError}
      loading="eager" decoding="async"/>}
