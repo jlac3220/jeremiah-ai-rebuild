@@ -8,6 +8,7 @@ import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import DeepDiveSheet from './DeepDiveSheet';
 import LessonIllustration from './LessonIllustration';
+import ContextualLessonImage from './ContextualLessonImage';
 import LessonActivity, { LessonVisual, WorkedExample } from './LessonActivity';
 import InteractivePractice from './InteractivePractice';
 import LessonPath from './LessonPath';
@@ -210,6 +211,7 @@ export default function TeacherLedLesson({ content, state, onStateChange, onNavi
     {content.standardId==='OG.1.LESSON.18' && move.id==='learn' && sceneScreen && <OG1OpeningEncounter onReadBible={()=>openBible({reference:'Deuteronomy 6'})} />}
     {content.standardId==='OG.1.LESSON.18' && sceneScreen && <OG1ChapterScene key={move.id} move={move} onReadBible={openBible} />}
     {teachingScreen && !guidedReveal && <div className="tl-teacher"><span className="tl-teacher-mark" aria-hidden="true">J</span><span>Jeremiah <small>Your teacher</small></span></div>}
+    {sceneScreen && move.visualPlacement && <ContextualLessonImage content={content} move={move} placement={move.visualPlacement}/>}
     {sceneScreen && move.visual && !isOG1Visual && <LessonVisual key={`${move.id}:${state.experience?.restartAt || 0}`} kind={move.visual}/>}
     {teachingScreen && isOG1Visual && !guidedReveal && <div className="tl-teaching-intro">JEREMIAH EXPLAINS</div>}
     {teachingScreen && <div className="tl-desktop-teaching" style={guidedReveal?{display:"none"}:undefined}>{move.teaching?.map((paragraph,i)=><p className="tl-teaching" key={i}>{paragraph}</p>)}</div>}
