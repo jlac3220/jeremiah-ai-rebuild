@@ -7,27 +7,6 @@ const PHRASES = [
  {id:'one',text:'is one LORD',spoken:'Is one Lord.',hebrew:'יְהוָה אֶחָד',roman:'ONE LORD',title:'The heart of the confession.',meaning:'The LORD is confessed as one. Read that claim beside Isaiah’s declarations and Jesus’ repetition, rather than building everything on a dictionary definition.'}
 ];
 
-function Landscape({chapter='shema'}) {
- return <svg className="shema-landscape" viewBox="0 0 1200 550" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylized night sky above a layered desert landscape; an artistic illustration, not a historical reconstruction">
-  <defs>
-   <linearGradient id="shema-sky" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#071627"/><stop offset=".58" stopColor="#213c55"/><stop offset="1" stopColor="#a27d60"/></linearGradient>
-   <radialGradient id="shema-glow" cx=".5" cy=".3" r=".5"><stop stopColor="#edd49e" stopOpacity=".45"/><stop offset="1" stopColor="#eac38b" stopOpacity="0"/></radialGradient>
-   <linearGradient id="shema-ridge" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#605b5d"/><stop offset="1" stopColor="#233648"/></linearGradient>
-  </defs>
-  <rect width="1200" height="550" fill="url(#shema-sky)"/>
-  <ellipse cx="600" cy="175" rx="485" ry="280" fill="url(#shema-glow)"/>
-  <circle cx="601" cy="170" r="42" fill="#f4ddb3" opacity=".88"/>
-  <circle cx="601" cy="170" r="81" fill="none" stroke="#ebd7ab" strokeOpacity=".18"/>
-  <circle cx="601" cy="170" r="145" fill="none" stroke="#ebd7ab" strokeOpacity=".1"/>
-  <g fill="#f3e2c1">{[[92,80,1.5],[189,166,1.1],[303,65,1.6],[424,130,1.1],[715,82,1.3],[880,107,1.7],[1070,66,1.2],[1129,177,1],[968,210,1],[356,213,1.2]].map(([x,y,r],i)=><circle key={i} cx={x} cy={y} r={r} opacity=".55"/>)}</g>
-  <path d="M0 325 138 272 270 332 383 265 490 322 626 258 755 344 875 267 975 322 1103 276 1200 322V550H0Z" fill="#65717b" opacity=".42"/>
-  <path d="M0 415 130 350 256 382 366 319 492 387 609 331 727 372 863 313 978 375 1125 336 1200 375V550H0Z" fill="url(#shema-ridge)"/>
-  <path d="M0 480Q160 400 314 443T632 429T963 451T1200 411V550H0Z" fill="#1d3241"/>
-  <path d="M0 513Q260 473 497 492T931 485T1200 470V550H0Z" fill="#102636"/>
-  <path d="M0 541Q300 502 600 526T1200 516V550H0Z" fill="#091e2c"/>
- </svg>;
-}
-
 function Manuscript({active,onSelect,visited}) {
  return <div className="shema-manuscript">
   <div className="shema-manuscript-head"><span>THE WORDS ON THE PAGE</span><span>DEUTERONOMY 6:4</span></div>
@@ -53,7 +32,12 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
   if(narrationEnabled) onSpeak?.(PHRASES[i].spoken);
  }
  if(kind==='shema-encounter')return <div className="shema-world">
-  <div className="shema-world-art"><Landscape/></div>
+  <div className="shema-world-art">
+   <img className="shema-world-photo"
+     src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=86"
+     alt="Young adults gathered together in real conversation, listening and connecting"
+     loading="eager" decoding="async"/>
+  </div>
   <div className="shema-world-copy">
    <span className="shema-eyebrow">01 / THE INVITATION</span>
    <h2>Before you explain it, <em>hear it.</em></h2>
