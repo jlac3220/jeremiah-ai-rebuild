@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111b2b">
+  <title>Jeremiah | Voice Audition</title>
+  <style>
+    :root{color-scheme:light;--ink:#152338;--muted:#66778a;--line:#dde5ee;--accent:#4c60df;--paper:#f5f7fb;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at 90% 6%,#e7edff,transparent 52%),var(--paper);color:var(--ink)}
+    header{height:68px;padding:0 max(22px,calc((100vw - 1120px)/2));background:#101d30;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{font-weight:800;font-size:.95rem;letter-spacing:.13em}
+    .brand span{color:#9dacff;font-weight:650;font-size:.72rem;letter-spacing:.075em;margin-left:10px}
+    header a{color:#d9e2ff;text-decoration:none;font-size:.83rem;font-weight:700}
+    main{max-width:1080px;margin:0 auto;padding:52px 24px 90px}
+    .eyebrow{color:#4e62d8;font-size:.75rem;text-transform:uppercase;letter-spacing:.13em;font-weight:800}
+    h1{font-size:clamp(2.6rem,5vw,4.3rem);font-weight:850;letter-spacing:-.055em;line-height:1.07;margin:14px 0 17px}
+    .intro{font-size:1.05rem;line-height:1.75;color:#53677a;max-width:730px;margin:0 0 32px}
+    .verse{border:1px solid #354961;background:linear-gradient(125deg,#162b46,#111e32);color:#fff;border-radius:20px;padding:30px clamp(25px,4vw,47px);margin-bottom:26px}
+    .verse blockquote{margin:6px 0 10px;font:500 clamp(1.45rem,3vw,2.25rem)/1.45 Georgia,"Times New Roman",serif;letter-spacing:-.015em}
+    .verse span{font-size:.75rem;color:#bac6dd;letter-spacing:.09em;font-weight:750}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+    .voice{padding:24px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 9px 25px #1a30420b;transition:border-color .18s,box-shadow .18s}
+    .voice.is-selected{border:2px solid var(--accent);padding:23px;box-shadow:0 0 0 3px #697af222,0 12px 26px #1b358c17}
+    .voice-head{display:flex;align-items:center;gap:14px;margin:0 0 13px}
+    .letter{width:45px;height:45px;flex:0 0 45px;border-radius:13px;background:#eaf0ff;display:grid;place-items:center;color:#344cca;font-size:1.15rem;font-weight:850}
+    h2{margin:0;font-size:1.22rem;line-height:1.3;letter-spacing:-.025em}
+    .voice-head small{color:#728093;font-size:.75rem;display:block;margin-top:4px}
+    .desc{color:#526578;font-size:.92rem;line-height:1.6;margin:0 0 18px}
+    audio{display:block;width:100%;height:50px;accent-color:var(--accent)}
+    button{cursor:pointer;background:#eaf0ff;border:1px solid #d2dcff;color:#3449c4;border-radius:12px;font:750 .89rem/1.2 inherit;padding:12px 18px;margin-top:16px;min-height:44px}
+    button:hover{background:#dce6ff}
+    button:focus-visible,a:focus-visible,audio:focus-visible{outline:3px solid #8795fc;outline-offset:3px}
+    .voice.is-selected button{background:#4c60df;border-color:#4c60df;color:white}
+    .message{min-height:19px;color:#a2473d;font-size:.82rem;margin:8px 0 0}
+    .choice{margin-top:28px;padding:25px 28px;background:#fff;border:1px solid var(--line);border-radius:18px}
+    .choice strong{display:block;font-size:1.12rem;margin-bottom:7px}
+    .choice p{line-height:1.6;margin:0;color:#526578}
+    .choice button{background:#182e4c;color:#fff;border-color:#182e4c;margin-top:17px}
+    .choice button:disabled{opacity:.5;cursor:not-allowed}
+    .disclosure{font-size:.79rem;line-height:1.65;color:#6b7c8c;margin:26px 0}
+    @media(max-width:720px){
+      header{padding:0 18px}.brand span{display:none}
+      main{padding:37px 18px 65px}
+      .grid{grid-template-columns:1fr}
+      .voice{padding:22px}.voice.is-selected{padding:21px}
+      h1{font-size:2.55rem}
+      .verse{padding:22px}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">JEREMIAH <span>THE VOICE LAB</span></div>
+  <a href="/">← Return to classroom</a>
+</header>
+<main>
+  <div class="eyebrow">VOICE AUDITION · SAME SCRIPTURE, FIVE VOICES</div>
+  <h1>Find Jeremiah's voice.</h1>
+  <p class="intro">Listen to five AI-generated American English narrators reading the same words, at the same pace. These are fixed recordings produced by the app server, so an iPhone and a computer hear the same voice. Your selection here is a preview; it won't change the app's narrator until we make that final decision.</p>
+  <section class="verse" aria-label="Audition Scripture text">
+    <span>DEUTERONOMY 6:4 · KJV</span>
+    <blockquote>“Hear, O Israel: The LORD our God is one LORD.”</blockquote>
+  </section>
+  <div class="grid" id="voices"></div>
+  <section class="choice" aria-live="polite">
+    <strong id="selection">Which feels like Jeremiah?</strong>
+    <p id="selection-help">Listen to each example, choose the one you like, and tell ChatGPT the letter. Your main app is still using Onyx until you decide.</p>
+    <button type="button" id="copy" disabled>Copy my choice</button>
+  </section>
+  <p class="disclosure">All samples are AI-generated, not human recordings. The first play may need a few moments to generate and cache the MP3. If a clip won't play, make sure Jeremiah's server has a working OPENAI_API_KEY. The iPhone may require you to tap Play manually.</p>
+</main>
+<script>
+  const sample = 'Hear, O Israel: The LORD our God is one LORD.';
+  const candidates = [
+    {letter:'A',voice:'cedar',title:'Cedar',tag:'Fresh alternative',description:'A promising newer narrator option—judge its presence and warmth for yourself.'},
+    {letter:'B',voice:'onyx',title:'Onyx',tag:'Current Jeremiah voice',description:'The existing narrator, included as a baseline for a fair comparison.'},
+    {letter:'C',voice:'echo',title:'Echo',tag:'Alternative reading',description:'A different voice identity reading exactly the same passage.'},
+    {letter:'D',voice:'ash',title:'Ash',tag:'Alternative reading',description:'Another voice identity. Listen for pacing, clarity, and emotional weight.'},
+    {letter:'E',voice:'marin',title:'Marin',tag:'Fresh alternative',description:'A newer voice option. Compare its natural delivery against the others.'}
+  ];
+  const el = document.getElementById('voices');
+  let winner = null;
+  for (const item of candidates) {
+    const section = document.createElement('section');
+    section.className='voice';
+    section.innerHTML = '<div class="voice-head"><span class="letter"></span><div><h2></h2><small></small></div></div><p class="desc"></p><audio controls preload="none"></audio><p class="message" role="status"></p><button type="button">Choose this voice</button>';
+    section.querySelector('.letter').textContent=item.letter;
+    section.querySelector('h2').textContent=item.title;
+    section.querySelector('small').textContent=item.tag;
+    section.querySelector('.desc').textContent=item.description;
+    const audio=section.querySelector('audio');
+    const message=section.querySelector('.message');
+    audio.src='/api/jeremiah/narration?text='+encodeURIComponent(sample)+'&audition='+encodeURIComponent(item.voice);
+    audio.addEventListener('waiting',()=>{message.textContent='Preparing audio…'});
+    audio.addEventListener('canplay',()=>{message.textContent=''});
+    audio.addEventListener('error',()=>{message.textContent='Could not load this sample. Check the narration service.'});
+    audio.addEventListener('play',()=>{for(const other of el.querySelectorAll('audio'))if(other!==audio)other.pause()});
+    section.querySelector('button').addEventListener('click',()=>{
+      winner=item;
+      for(const card of el.querySelectorAll('.voice'))card.classList.remove('is-selected');
+      section.classList.add('is-selected');
+      document.getElementById('selection').textContent='Your choice: '+item.letter+' · '+item.title;
+      document.getElementById('selection-help').textContent='Tell ChatGPT: "Use voice '+item.letter+' ('+item.title+') as Jeremiah’s permanent narrator."';
+      document.getElementById('copy').disabled=false;
+    });
+    el.append(section);
+  }
+  document.getElementById('copy').addEventListener('click',async()=>{
+    if(!winner)return;
+    const sentence='Use voice '+winner.letter+' ('+winner.title+') as Jeremiah’s permanent narrator.';
+    try {
+      await navigator.clipboard.writeText(sentence);
+      document.getElementById('copy').textContent='Copied ✓';
+    }catch{
+      document.getElementById('selection-help').textContent=sentence;
+      document.getElementById('copy').textContent='Copy the choice shown above';
+    }
+  });
+</script>
+</body>
+</html>
