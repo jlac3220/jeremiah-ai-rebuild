@@ -279,9 +279,11 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
        </button>)}
       </div>
       <div className="ogp-witness-scroll" key={evidenceIndex}>
-       <div className="ogp-witness-art" aria-hidden="true"><DestinationArt tone="prophets-witness" content={content} move={move}/></div>
+       <div className="ogp-witness-art" aria-hidden="true"><DestinationArt tone="isaiah-manuscript"
+          content={content} move={move} placement={{intent:'artifact',reference:'Isaiah 44:6',
+           learningGoal:'Inspect the later ancient manuscript witness to Isaiah’s declarations'}}/></div>
        <div className="ogp-witness-copy">
-        <span>ISAIAH'S TESTIMONY · {String(evidenceIndex+1).padStart(2,'0')} / 03</span>
+        <span>ISAIAH'S TESTIMONY · {String(evidenceIndex+1).padStart(2,'0')} / 03</span><small className="ogp-manuscript-context">The Great Isaiah Scroll is a later ancient witness to the book, not Isaiah’s original writing.</small>
         <blockquote>{['“before me there was no God formed”','“beside me there is no God”','“neither shall there be after me”'][evidenceIndex]}</blockquote>
         <strong>{evidenceIndex===1?'ISAIAH 44:6':'ISAIAH 43:10'} · KJV</strong>
         <p>{['No earlier god produced the LORD.','No rival god stands alongside the LORD.','No later god can replace the LORD.'][evidenceIndex]}</p>
