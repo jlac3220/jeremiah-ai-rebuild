@@ -285,3 +285,123 @@
  .shema-hebrew{border:0;border-bottom:1px solid #dfe4ef;padding:12px 0 24px}
  .shema-turn h2,.shema-resolution h2{font-size:clamp(2rem,8vw,3rem)}
 }
+
+
+/* Benchmark consistency: intentional, spacious practice and teach-back surfaces. */
+.shema-practice{max-width:1020px;margin:20px auto 0}
+.shema-practice-head{
+ border-bottom:1px solid #dfe6f0;
+ color:#5262d9;
+ letter-spacing:.095em;
+ padding-bottom:16px;
+ margin-bottom:19px;
+ font-size:.73rem;
+}
+.shema-practice-scene{
+ min-height:220px;
+ padding:38px 27px;
+ border:1px solid #2b4365;
+ border-radius:19px;
+ background:radial-gradient(circle at 84% 0%,#39557b,#162e4b 42%,#111e33 90%);
+ box-shadow:0 17px 35px #14264425;
+}
+.shema-practice-scene:before{
+ width:310px;height:310px;
+ top:-130px;right:-95px;
+ border:1px solid #a7b8ff3b;
+ box-shadow:0 0 0 36px #a7b8ff0b;
+}
+.shema-practice-kicker{color:#b7c5ff;letter-spacing:.12em;font-size:.72rem}
+.shema-practice-scene h3{
+ font:800 clamp(1.9rem,4vw,2.7rem)/1.22 Inter,"Segoe UI",system-ui,sans-serif;
+ letter-spacing:-.04em;
+ margin:18px 0 11px;
+}
+.shema-practice-scene p{color:#d4def0;font-size:.97rem}
+.shema-practice-options{gap:15px;margin-top:20px}
+.shema-practice-options button{
+ min-height:112px;
+ border:1px solid #dce5f0;
+ border-radius:16px;
+ background:#fff;
+ color:#293d53;
+ padding:20px;
+ font-size:.96rem;
+ font-weight:670;
+ box-shadow:0 8px 19px #14273b0c;
+}
+.shema-practice-options button:not(:disabled):hover{
+ border-color:#8290ec;
+ box-shadow:0 13px 23px #172f5317;
+}
+.shema-practice-options button[aria-pressed=true]{
+ border-color:#5364e4;
+ background:#edf0ff;
+ color:#2d41b6;
+ box-shadow:inset 0 0 0 2px #6573ea;
+}
+.shema-choice-indicator{color:#6b7ae5;font-size:1.4rem}
+.shema-practice-forward{
+ border-radius:12px;
+ background:#4c5de0;
+ color:white;
+ min-height:50px;
+ padding:13px 22px;
+}
+.shema-practice-forward:not(:disabled):hover{background:#384aca}
+.shema-practice-back{color:#52647a}
+.shema-practice-footer p{color:#617487}
+.shema-teachback-intro .shema-eyebrow{color:#4b60de}
+.shema-teachback-intro h2{
+ font:800 clamp(2.3rem,5vw,3.9rem)/1.1 Inter,"Segoe UI",system-ui,sans-serif;
+ color:#13283e;
+ letter-spacing:-.052em;
+}
+.shema-teachback-intro>p{
+ font:500 clamp(1.02rem,2.1vw,1.18rem)/1.65 Inter,system-ui,sans-serif;
+ color:#52677e;
+}
+.shema-teachback-layout{gap:18px}
+.shema-teachback-brief{
+ border:1px solid #253a54;
+ border-radius:18px;
+ padding:27px;
+ background:linear-gradient(148deg,#1c3656,#12233a);
+ box-shadow:0 10px 26px #162f431b;
+}
+.shema-teachback-brief .shema-kicker{color:#b9c7ff}
+.shema-teachback-brief li:before{color:#a8b8ff}
+.shema-teachback-brief li strong{font-size:.9rem}
+.shema-teachback-brief li span{color:#d2dcec;font-size:.85rem}
+.shema-teachback-response{
+ border:1px solid #dce5ef;
+ border-radius:18px;
+ background:#fff;
+ padding:25px;
+ box-shadow:0 9px 26px #1931490d;
+}
+.shema-teachback-response label{color:#4a5e75;letter-spacing:.08em}
+.shema-teachback-response textarea{
+ background:#f9fbfe;
+ color:#193149;
+ border:1px solid #dce5ef;
+ box-shadow:none;
+ border-radius:13px;
+ min-height:325px;
+ padding:21px;
+}
+.shema-teachback-response textarea:focus{
+ outline:3px solid #b3bdfc;
+ border-color:#6978eb;
+}
+.shema-response-footer{color:#6b7e91;font-size:.77rem}
+.shema-full-rubric{border-color:#dce4ee}
+.shema-full-rubric summary{color:#4c60db}
+.shema-full-rubric p{color:#536c80}
+@media(max-width:750px){
+ .shema-practice-scene{min-height:200px}
+ .shema-practice-options{gap:11px}
+ .shema-practice-options button{min-height:76px;padding:17px}
+ .shema-teachback-response{padding:18px}
+ .shema-teachback-response textarea{min-height:280px}
+}
