@@ -166,22 +166,20 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    <button type="button" className="ogp-exit" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}>← <span>CLASSROOM</span></button>
    <div className="ogp-brand"><span className="ogp-monogram" aria-hidden="true">J</span><span>JEREMIAH <small>THE ONE TRUE GOD</small></span></div>
    <div className="ogp-header-actions">
-    <button type="button" className="ogp-voice-toggle" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn narration off':'Turn narration on'} disabled={!narration.supported} title={narration.supported?'Narrate selected Scripture scenes':'Narration not available in this browser'} onClick={narration.toggle}>
+    <button type="button" className="ogp-voice-toggle" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn AI narration off':'Turn AI narration on'} disabled={!narration.supported} title={narration.supported?'Play fixed AI-generated Jeremiah narrator':'Audio playback unavailable in this browser'} onClick={narration.toggle}>
      <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/>{narration.enabled?<><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8 8 0 0 1 0 12"/></>:<path d="m16 9 5 6m0-6-5 6"/>}</svg>
-     <span>{narration.enabled?'Voice on':'Voice off'}</span>
+     <span>{narration.enabled?'AI voice on':'AI voice off'}</span>
     </button>
     {narration.enabled&&narrationText&&<button type="button" className="ogp-voice-replay" aria-label={narration.speaking?'Stop narration':'Replay narration'} title={narration.speaking?'Stop speaking':'Hear again'} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}>{narration.speaking?'■ Stop':'↻ Replay'}</button>}
     <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button>
-     {narration.supported&&narration.voiceOptions.length>1&&<label className="ogp-voice-picker">Narration voice
-      <select aria-label="Choose American narration voice" value={narration.voiceName} onChange={e=>narration.chooseVoice(e.target.value)}>
-       <option value="auto">Recommended deep voice</option>
-       {narration.voiceOptions.map(voice=><option key={voice.name} value={voice.name}>{voice.label}</option>)}
-      </select>
-     </label>}
+     <p className="ogp-voice-note">Jeremiah uses one AI-generated narrator on every device. Audio is streamed from the app, not your phone’s voices.</p>
+
     </div></details>
    </div>
   </header>
   <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
+  {narration.enabled&&!narration.error&&<p className="ogp-narration-disclosure">AI-generated narration · The same voice on every device</p>}
+  {narration.error&&<div className="ogp-voice-error" role="status"><span>{narration.error}</span>{narrationText&&<button type="button" onClick={()=>narration.speak(narrationText)}>Replay narration</button>}</div>}
   {confirmRestart && <div className="ogp-restart-overlay" role="presentation"><section className="ogp-restart-dialog" role="dialog" aria-modal="true" aria-labelledby="ogp-restart-title"><h2 id="ogp-restart-title">Start OG.1 from the beginning?</h2><p>You'll return to the first lesson moment. Your earlier answers and learning history will be kept for review.</p><div className="ogp-restart-actions"><button type="button" className="ogp-action" onClick={restart}>Start from beginning →</button><button type="button" className="ogp-back" onClick={()=>setConfirmRestart(false)}>Keep my place</button></div></section></div>}
   <main className="ogp-shell" key={move.id}>
    <div className="ogp-context">
