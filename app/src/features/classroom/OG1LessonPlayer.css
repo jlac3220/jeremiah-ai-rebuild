@@ -897,3 +897,14 @@
  .ogp-compare-ring small{font-size:.76rem}
  .ogp-compare-columns{gap:12px}
 }
+
+/* Subject-led OG.1.5 image slots: make biblical illustration and actual papyrus fill the panel. */
+.ogp-mission-photo>.ogj-art{
+ display:block;
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+}
+.ogp-mission-photo>.ogj-art>.ogj-photo{width:100%;height:100%;object-fit:cover;object-position:50% 35%}
+.ogp-mission-photo>img{object-fit:cover}
