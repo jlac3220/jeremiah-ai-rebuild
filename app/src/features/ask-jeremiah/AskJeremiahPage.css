@@ -65,3 +65,12 @@
 @media(max-width:940px){.aj-layout{grid-template-columns:minmax(215px,.68fr) minmax(0,1.4fr);gap:14px}.aj-shell{padding:0 16px 18px}.aj-intro{padding:25px 4px}.aj-scope{padding:18px}}
 @media(max-width:720px){.aj-shell{padding:0}.aj-header{height:62px;padding:0 17px}.aj-layout{display:block;padding:0}.aj-intro{display:none}.aj-chat{border:0;box-shadow:none;border-radius:0;min-height:0;height:calc(100dvh - 62px - 78px - env(safe-area-inset-bottom))}.aj-chat-heading{padding:13px 16px}.aj-thread{padding:23px 17px}.aj-welcome{margin:12px auto}.aj-welcome-icon{width:60px;height:60px;border-radius:20px;margin-bottom:14px}.aj-welcome-icon svg{width:30px}.aj-welcome h2{font-size:1.75rem}.aj-welcome p{font-size:.85rem}.aj-starters{margin-top:24px}.aj-starters button{font-size:.75rem}.aj-composer{padding:11px 12px 14px}.aj-composer>p{font-size:.6rem}.aj-status{font-size:.59rem}.aj-message{max-width:97%}}
 @media(max-width:380px){.aj-starters{grid-template-columns:1fr}.aj-chat-heading{padding:11px}.aj-status{display:none}.aj-wordmark{font-size:.65rem}}
+
+/* Keep teaching-source provenance available without making classroom IDs
+   the first thing a learner sees after hearing Scripture. */
+.aj-sources{display:block;flex:none}
+.aj-sources summary{font-size:.72rem;font-weight:700;color:#4a6e98;cursor:pointer;list-style:revert}
+.aj-sources summary:hover{color:#205aa0}
+.aj-sources[open] summary{margin-bottom:10px}
+.aj-source-list{display:flex;flex-wrap:wrap;gap:7px}
+.aj-source-list .aj-source{font-size:.7rem;line-height:1.5}
