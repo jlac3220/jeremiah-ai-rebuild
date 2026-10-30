@@ -117,7 +117,7 @@ html, body, .app-shell { background: var(--j-canvas); }
 .ld-page button:focus-visible, .ce-page summary:focus-visible,
 .br-page button:focus-visible { outline: 3px solid #8995ff; outline-offset: 3px; }
 
-/* Home: documentary art instead of a synthetic circular illustration. */
+/* Home: cinematic contemporary photography instead of recycled historical paintings. */
 .jh-page .jh-shell { max-width: 1080px; }
 .jh-page .jh-header { border-bottom: 1px solid var(--j-line); padding-bottom: 20px; margin-bottom: 20px; }
 .jh-page .ld-logo-mark { background: var(--j-blue); border-radius: 10px; }
@@ -137,7 +137,7 @@ html, body, .app-shell { background: var(--j-canvas); }
   min-height: 275px; max-width: 370px; aspect-ratio: 4 / 5;
   border-radius: 19px; overflow: hidden;
   background: linear-gradient(0deg,#0c1c36c9,#18365a12 65%),
-    url('https://upload.wikimedia.org/wikipedia/commons/d/db/Moses_Pleading_with_Israel_%28crop%29.jpg') center 35% / cover;
+    url('https://images.pexels.com/photos/28718329/pexels-photo-28718329.jpeg?auto=compress&cs=tinysrgb&w=1600') center 35% / cover;
   box-shadow: 0 16px 32px rgba(4,13,31,.3);
   border: 1px solid rgba(255,255,255,.2);
 }
@@ -153,7 +153,7 @@ html, body, .app-shell { background: var(--j-canvas); }
 }
 .jh-ignite-lesson-art {
   background: linear-gradient(0deg,#081e3be3,#0e23473d 65%),
-    url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg/960px-Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg') center 35% / cover;
+    url('https://images.pexels.com/photos/5206084/pexels-photo-5206084.jpeg?auto=compress&cs=tinysrgb&w=1600') center 35% / cover;
 }
 .jh-ignite-lesson-art::before, .jh-ignite-rings { display: none; }
 .jh-ignite-arch { background: none; border: 0; box-shadow: none; height: auto; }
@@ -165,7 +165,7 @@ html, body, .app-shell { background: var(--j-canvas); }
 .jh-ignite-tile { border-color: var(--j-line); border-radius: 17px; box-shadow: 0 7px 21px rgba(24,40,74,.04); }
 .jh-ignite-tile:focus-visible { outline: 3px solid #8995ff; }
 
-/* Classroom destinations: responsive art-led choices, with content unchanged. */
+/* Classroom destinations: purpose-matched photo choices, with content unchanged. */
 .ce-page .ld-hero { padding-bottom: 32px; }
 .ce-doors { gap: 17px; }
 .ce-door, .ce-door.ce-door-active {
@@ -179,9 +179,9 @@ html, body, .app-shell { background: var(--j-canvas); }
 .ce-door::before, .ce-door::after { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; }
 .ce-door::before { background-size: cover; background-position:center 33%; }
 .ce-door::after { background: linear-gradient(180deg,rgba(11,25,47,.09),rgba(11,25,47,.5) 45%,#0b182f 100%); }
-.ce-door:nth-child(1)::before { background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg/960px-Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg'); }
-.ce-door:nth-child(2)::before { background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/27/Brooklyn_Museum_-_The_Scribe_Stood_to_Tempt_Jesus_%28Le_scribe_se_leva_pour_tenter_J%C3%A9sus%29_-_James_Tissot_-_overall.jpg'); }
-.ce-door:nth-child(3)::before { background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/27/Jan_Lievens_-_St._Paul_writing_to_the_Thessalonians.jpg'); }
+.ce-door:nth-child(1)::before { background-image:url('https://images.pexels.com/photos/39811859/pexels-photo-39811859.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
+.ce-door:nth-child(2)::before { background-image:url('https://images.pexels.com/photos/10402149/pexels-photo-10402149.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
+.ce-door:nth-child(3)::before { background-image:url('https://images.pexels.com/photos/22711047/pexels-photo-22711047.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
 .ce-door-number { margin-bottom: auto; font: 820 .9rem/1 var(--font-body); color: #fff; letter-spacing: .1em; }
 .ce-door .ld-eyebrow { margin-top: 86px; color: #dbe4ff; }
 .ce-door h2 { font: 840 clamp(1.45rem,2.2vw,1.85rem)/1.13 var(--font-display); color: #fff; }
