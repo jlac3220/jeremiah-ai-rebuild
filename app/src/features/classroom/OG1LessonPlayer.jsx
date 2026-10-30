@@ -231,19 +231,30 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='intro'&&<p className="ogp-thought">Let's follow the confession from Moses through the prophets and into the apostolic witness.</p>}
      {current.kind==='insight'&&<div className="ogp-insight"><span className="ogp-insight-mark" aria-hidden="true">✦</span><p className="ogp-thought">{current.text}</p>{current.deeper.length>0&&<><button type="button" className="ogp-depth-button" aria-expanded={showDepth} onClick={()=>setShowDepth(v=>!v)}>{showDepth?'Close the deeper explanation':'Explore the reasoning further'} →</button>{showDepth&&<div className="ogp-depth">{current.deeper.map((text,i)=><p key={i}>{text}</p>)}</div>}</>}</div>}
      {current.kind==='witness'&&<div className="ogp-witness">
-      <p className="ogp-prompt">Isaiah's declarations rule out rival gods. Unseal the witnesses one at a time.</p>
-      <div className="ogp-witness-timeline"><span className={evidenceIndex>=0?'active':''}>BEFORE</span><span className={evidenceIndex>=1?'active':''}>BESIDE</span><span className={evidenceIndex>=2?'active':''}>AFTER</span></div>
+      <p className="ogp-prompt">Isaiah makes three connected claims. Reveal each one and see how the evidence fits together.</p>
+      <div className="ogp-witness-timeline" role="group" aria-label="Isaiah's three declarations">
+       {['BEFORE','BESIDE','AFTER'].map((label,i)=><button type="button" key={label} className={evidenceIndex===i?'active':''} aria-pressed={evidenceIndex===i} disabled={i>evidenceIndex} onClick={()=>setEvidenceIndex(i)}>
+        <span className="ogp-witness-number">0{i+1}</span><strong>{label}</strong>
+        <small>{i<evidenceIndex?'Review':i===evidenceIndex?'Now exploring':'Next'}</small>
+       </button>)}
+      </div>
       <div className="ogp-witness-scroll" key={evidenceIndex}>
-       <span>WITNESS {evidenceIndex+1} OF 3</span>
-       <blockquote>{['“before me there was no God formed”','“beside me there is no God”','“neither shall there be after me”'][evidenceIndex]}</blockquote>
-       <strong>{evidenceIndex===1?'ISAIAH 44:6':'ISAIAH 43:10'} · KJV</strong>
-       <p>{['No earlier god produced the LORD.','No rival god stands alongside the LORD.','No later god can replace the LORD.'][evidenceIndex]}</p>
+       <div className="ogp-witness-art" aria-hidden="true"><DestinationArt tone="prophets"/></div>
+       <div className="ogp-witness-copy">
+        <span>ISAIAH'S TESTIMONY · {String(evidenceIndex+1).padStart(2,'0')} / 03</span>
+        <blockquote>{['“before me there was no God formed”','“beside me there is no God”','“neither shall there be after me”'][evidenceIndex]}</blockquote>
+        <strong>{evidenceIndex===1?'ISAIAH 44:6':'ISAIAH 43:10'} · KJV</strong>
+        <p>{['No earlier god produced the LORD.','No rival god stands alongside the LORD.','No later god can replace the LORD.'][evidenceIndex]}</p>
+       </div>
       </div>
       {evidenceIndex===2&&<p className="ogp-witness-conclusion">Three directions. One testimony: the LORD declares that there is no other God.</p>}
      </div>}
      {current.kind==='timeline'&&<div className="ogp-trail">
       <p className="ogp-prompt">Trace the confession from Moses to Jesus to Paul. Each witness adds to the story.</p>
-      <div className="ogp-trail-track" role="group" aria-label="Scripture witnesses">{[['MOSES','Deuteronomy 6:4'],['JESUS','Mark 12:29'],['PAUL','1 Corinthians 8:4']].map(([name,ref],i)=><button type="button" key={name} aria-pressed={evidenceIndex===i} onClick={()=>setEvidenceIndex(i)} disabled={i>evidenceIndex}><span>{i+1}</span><strong>{name}</strong><small>{ref}</small></button>)}</div>
+      <div className="ogp-trail-track" role="group" aria-label="Scripture witnesses">{[['MOSES','Deuteronomy 6:4','moses'],['JESUS','Mark 12:29','jesus'],['PAUL','1 Corinthians 8:4','apostles']].map(([name,ref,tone],i)=><button type="button" key={name} aria-pressed={evidenceIndex===i} onClick={()=>setEvidenceIndex(i)} disabled={i>evidenceIndex}>
+       <span className="ogp-trail-thumb"><DestinationArt tone={tone}/><span className="ogp-trail-order">0{i+1}</span></span>
+       <strong>{name}</strong><small>{ref}</small>
+      </button>)}</div>
       <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses':evidenceIndex===1?'jesus':'apostles'}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
      </div>}
      {current.kind==='comparison'&&<div className="ogp-compare">
@@ -283,7 +294,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
-     :<button type="button" className="ogp-action" onClick={advance} disabled={(current?.kind==='discovery'&&discoveryChoice===null)||(current?.kind==='mission'&&caseChoice===null)}>{current?.kind==='witness'&&evidenceIndex<2?'Unseal the next witness':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Try the next situation':current?.kind==='mission'?'Reflect on your choices':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'?'Follow the story further':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'?'Continue the discovery':buttonText} →</button>}
+     :<button type="button" className="ogp-action" onClick={advance} disabled={(current?.kind==='discovery'&&discoveryChoice===null)||(current?.kind==='mission'&&caseChoice===null)}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Try the next situation':current?.kind==='mission'?'Reflect on your choices':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'?'Follow the story further':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'?'Continue the discovery':buttonText} →</button>}
      {!assessment&&moment>0&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      {assessment&&<button type="button" className="ogp-back" onClick={skip}>Skip for now (no mastery)</button>}
     </nav>
