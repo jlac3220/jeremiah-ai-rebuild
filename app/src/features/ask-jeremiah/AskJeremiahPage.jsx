@@ -83,10 +83,10 @@ export default function AskJeremiahPage({onNavigate}){
        <div className="aj-message-body">
         {message.role==='assistant'&&<div className="aj-message-byline">JEREMIAH</div>}
         <p>{message.text}</p>
-        {message.role==='assistant'&&message.sources?.length>0&&<div className="aj-sources" aria-label="Referenced standards"><span>BASED ON</span>{message.sources.map(source=><span key={source.id} className="aj-source" title={source.title}>{source.id} · {source.studyId}</span>)}</div>}
+        {message.role==='assistant'&&message.sources?.length>0&&<details className="aj-sources" aria-label="Teaching sources"><summary>Explore the teaching sources</summary><div className="aj-source-list">{message.sources.map(source=><span key={source.id} className="aj-source" title={source.title}>{source.title} · {source.id}</span>)}</div></details>}
        </div>
       </article>)}
-      {busy&&<div className="aj-typing" role="status"><span className="aj-message-mark">J</span><span>Jeremiah is checking the standards<span className="aj-typing-dots">···</span></span></div>}
+      {busy&&<div className="aj-typing" role="status"><span className="aj-message-mark">J</span><span>Jeremiah is considering your question<span className="aj-typing-dots">···</span></span></div>}
       {error&&<div className="aj-error" role="alert"><p>{error}</p><button type="button" disabled={busy} onClick={()=>{setMessages(prev=>prev.slice(0,-1));send(lastQuestion)}}>Try again</button></div>}
       <div ref={bottom}/>
      </div>
