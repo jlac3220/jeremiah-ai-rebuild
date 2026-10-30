@@ -27,5 +27,8 @@ dist-ssr
 .env.*
 !.env.example
 
+# Generated MP3 narration cache: voices are server-side, never device-dependent.
+.cache/
+
 # Generated media research proposals (never publish raw transcripts by accident)
 .jeremiah-research/
