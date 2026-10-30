@@ -4,11 +4,10 @@ import { JEREMIAH_PERSONA } from "./askJeremiahPersona.mjs";
 // Curriculum files are the only knowledge source. Adding a reviewed study to
 // the curriculum registry automatically makes it eligible for retrieval.
 const studies = CURRICULUM_STUDIES;
-const STOP_WORDS = new Set("a an and are as at be been but by can could do does for from had has have how i in into is it its me my of on or our please should so some tell than that the their them there these they this to us was were what when where which who why will with would you your about explain describe give say".split(" "));
-// Broad everyday terms cannot establish doctrinal relevance on their own.
+const STOP_WORDS = new Set("a an and are as at be been but by can could do does for from had has have how i in into is it its me my of on or our please should so some tell than that the their them there these they this to us was were what when where which who why will with would you your about explain describe give say many any".split(" "));
+// Broad everyday terms must not establish doctrinal relevance by themselves.
 for (const generic of ['world','series','today','tomorrow','yesterday','latest','current','game','games','news']) STOP_WORDS.add(generic);
-// Consistent, respectful refusal. Do not mention or discuss the excluded topic.
-export const OUT_OF_SCOPE = "That subject isn\'t part of my teaching right now. Feel free to ask another question.";
+export const OUT_OF_SCOPE = "That subject isn't part of my teaching right now. Feel free to ask another question.";
 const NO_SERVICE = "Ask Jeremiah is temporarily unavailable. Your question was not answered; please try again when the connection is restored.";
 
 export function normalizeQuery(text) {
@@ -18,11 +17,31 @@ export function normalizeQuery(text) {
   .replace(/\brepentance\b|\brepented\b/g,"repent")
   .replace(/\bsalvation\b|\bsaved\b/g,"salva")
   .replace(/\btrinitarianism\b|\btrinity\b/g,"trinitarian")
-  .replace(/\bechad\b/g,"echad")
+  .replace(/\bgods\b/g,"god")
+  .replace(/\b(created|creating|creates)\b/g,"create")
+  .replace(/\bcreator\b/g,"creator")
   .replace(/[^a-z0-9]+/g," ").trim();
 }
 function tokens(text) {
  return [...new Set(normalizeQuery(text).split(/\s+/).filter(w=>w.length>2&&!STOP_WORDS.has(w)))];
+}
+
+// The initial lexical-only ranker selected doctrinal-comparison standards
+// for "How many gods are there?" and rejected "How did the world start?".
+// Interpret *ordinary language* as a subject before searching the approved
+// catalog. These are routing concepts, NEVER canned doctrinal answers or fixed
+// standard IDs. Any new approved curriculum can match the same concepts.
+export function inferQuestionTheme(question) {
+ const q=normalizeQuery(question);
+ if(/\b(god|deity|gods)\b/.test(q)&&
+  (/\b(one|only|single|number|many|how many|other|plural)\b/.test(q)||
+   /\b(there is|there are)\b/.test(q)))
+  return {name:'divine-oneness',terms:['monotheism','shema','oneness','one lord','deuteronomy 6 4','isaiah'],boost:8};
+ if(/\b(world|earth|universe|heavens|everything|all things|creation)\b/.test(q)&&
+  /\b(begin|beginning|start|started|origins?|come from|made|make|create|created|formed|exist|happen)\b/.test(q)||
+  /\b(who created|who made|genesis 1|creation of the world)\b/.test(q))
+  return {name:'creation',terms:['creator','creation','genesis','beginning','heaven and earth','all things created'],boost:8};
+ return null;
 }
 
 export function allAskStandards() {
@@ -38,21 +57,38 @@ export function allAskStandards() {
 
 export function selectAskStandards(question,{limit=5}={}) {
  const query=tokens(question);
- if(!query.length)return [];
- const ranked=allAskStandards().map(standard=>{
-  const title=new Set(tokens([standard.title,standard.statement,standard.domainTitle].join(" ")));
+ const theme=inferQuestionTheme(question);
+ if(!query.length&&!theme)return [];
+ const candidates=allAskStandards().map(standard=>{
+  const headline=normalizeQuery([standard.title,standard.statement].join(' '));
+  const title=new Set(tokens(headline));
+  const domain=new Set(tokens([standard.domainTitle,standard.anchor].join(' ')));
   const detail=new Set(tokens([
-   standard.scope,standard.focus,standard.anchor,
+   standard.scope,standard.focus,
    ...standard.scripture.flatMap(v=>[v.reference,v.excerpt,v.function]),
    ...standard.vocabulary.flatMap(v=>[v.term,v.definition,v.relevance])
   ].join(" ")));
-  const matches=query.filter(t=>title.has(t)||detail.has(t));
-  const score=matches.reduce((n,t)=>n+(title.has(t)?3:1),0);
-  return {standard,score,matches};
- }).filter(item=>item.score>=2 && item.matches.length>0)
+  const matches=query.filter(t=>title.has(t)||domain.has(t)||detail.has(t));
+  let score=matches.reduce((n,t)=>n+(title.has(t)?6:domain.has(t)?2:1),0);
+  let themeMatches=0;
+  if(theme) {
+   const label=normalizeQuery([standard.title,standard.statement,standard.domainTitle].join(' '));
+   themeMatches=theme.terms.filter(t=>label.includes(normalizeQuery(t))).length;
+   // Concentrate on the lesson whose main teaching target matches the intent.
+   // A passing mention in a comparison/defense scope does not establish relevance.
+   const titleMatches=theme.terms.filter(t=>headline.includes(normalizeQuery(t))).length;
+   score+=titleMatches*theme.boost+Math.min(2,themeMatches-titleMatches)*2;
+   if(theme.name==='divine-oneness'&&/alternative|trinitarianism|distinguishing|opponent|critique|controversy/i.test(standard.title))
+    score-=30;
+   if(theme.name==='creation'&&/judgment|covenant|revelation|plural of genesis/i.test(standard.title))
+    score-=12;
+  }
+  return {standard,score,matches,themeMatches};
+ }).filter(item=>item.score>=3&&(item.matches.length>0||item.themeMatches>0))
   .sort((a,b)=>b.score-a.score || a.standard.id.localeCompare(b.standard.id));
- // A generic word shared by many standards should not crowd out specific matches.
- return ranked.slice(0,limit).map(item=>item.standard);
+ const ranked=candidates.slice(0,limit).map(item=>item.standard);
+ // No match means no source support; never guess a result from unrelated terms.
+ return ranked;
 }
 
 const responseSchema={
