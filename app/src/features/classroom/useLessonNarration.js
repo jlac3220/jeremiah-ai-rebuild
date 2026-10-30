@@ -7,6 +7,7 @@ export default function useLessonNarration({ text, key: sceneKey }) {
  const [enabled, setEnabled] = useState(false);
  const [supported, setSupported] = useState(() => typeof window !== 'undefined' && typeof window.Audio === 'function');
  const [speaking, setSpeaking] = useState(false);
+ const [loading, setLoading] = useState(false);
  const [error, setError] = useState('');
  const audioRef = useRef(null);
  const lastSceneRef = useRef(null);
@@ -22,6 +23,7 @@ export default function useLessonNarration({ text, key: sceneKey }) {
    audio.removeAttribute('src');
   }
   setSpeaking(false);
+  setLoading(false);
  }, []);
 
  const speak = useCallback((words) => {
@@ -31,20 +33,23 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   }
   stop();
   setError('');
+  setLoading(true);
   const audio = new window.Audio(urlFor(words));
   audio.preload = 'auto';
   audioRef.current = audio;
-  audio.onplaying = () => { if (audioRef.current === audio) setSpeaking(true); };
+  audio.onplaying = () => { if (audioRef.current === audio) { setLoading(false); setSpeaking(true); } };
   audio.onended = () => {
    if (audioRef.current === audio) {
     audioRef.current = null;
     setSpeaking(false);
+    setLoading(false);
    }
   };
   audio.onerror = () => {
    if (audioRef.current === audio) {
     audioRef.current = null;
     setSpeaking(false);
+    setLoading(false);
     setError('Jeremiah narration is unavailable. Check the server voice service.');
    }
   };
@@ -53,6 +58,7 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   audio.play()?.catch(e => {
    if (audioRef.current !== audio) return;
    setSpeaking(false);
+   setLoading(false);
    if (e?.name === 'NotAllowedError') setError('Tap Replay to hear this moment on your device.');
    else if (e?.name !== 'AbortError') setError('Jeremiah narration could not play. Try Replay.');
   });
@@ -106,5 +112,5 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   };
  }, [stop]);
 
- return { enabled, supported, speaking, error, toggle, speak, stop };
+ return { enabled, supported, speaking, loading, error, toggle, speak, stop };
 }
