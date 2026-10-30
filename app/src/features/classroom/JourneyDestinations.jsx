@@ -5,6 +5,16 @@ import './JourneyDestinations.css';
 // not photographs or assertions about the subjects' historical appearance.
 // Source pages and artist details are displayed in the experience.
 export const BIBLICAL_ART = {
+ shema: {
+  src:'https://upload.wikimedia.org/wikipedia/commons/d/db/Moses_Pleading_with_Israel_%28crop%29.jpg',
+  alt:'1907 biblical illustration showing Moses addressing an assembly of Israelites',
+  artist:'Providence Lithograph Company',
+  work:'Moses Pleading with Israel (1907)',
+  source:'https://commons.wikimedia.org/wiki/File:Moses_Pleading_with_Israel_(crop).jpg',
+  focal:'50% 32%',
+  reference:'Deuteronomy 6:4',
+  quote:'“Hear, O Israel: The LORD our God is one LORD.”'
+ },
  moses: {
   src:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg/960px-Rembrandt_-_Moses_with_the_Ten_Commandments_-_Google_Art_Project.jpg',
   alt:'Rembrandt painting showing Moses holding the tablets of the Law',
@@ -60,7 +70,7 @@ export function DestinationArt({tone}) {
  const art=BIBLICAL_ART[tone]||BIBLICAL_ART.moses;
  return <span className={'ogj-art ogj-art--'+tone} role="img" aria-label={art.alt}>
   {!failed&&<img key={tone} className="ogj-photo" src={art.src} alt="" loading="lazy" decoding="async" style={{objectPosition:art.focal}} onError={()=>setFailed(true)}/>}
-  <span aria-hidden="true" className="ogj-fallback">{tone==='moses'?'מֹשֶׁה':tone==='prophets'?'יְשַׁעְיָהוּ':tone==='jesus'?'ΙΗΣΟΥΣ':'ΠΑΥΛΟΣ'}</span>
+  <span aria-hidden="true" className="ogj-fallback">{tone==='moses'||tone==='shema'?'מֹשֶׁה':tone==='prophets'?'יְשַׁעְיָהוּ':tone==='jesus'?'ΙΗΣΟΥΣ':'ΠΑΥΛΟΣ'}</span>
  </span>;
 }
 
