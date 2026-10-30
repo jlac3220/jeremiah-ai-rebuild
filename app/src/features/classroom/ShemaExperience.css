@@ -161,3 +161,127 @@
 .shema-opening-listen:hover{background:#e9c68d44;transform:translateY(-2px)}
 .shema-opening-actions .shema-artifact-link{padding:9px 0}
 @media(max-width:600px){.shema-opening-actions{gap:11px 18px}.shema-opening-listen{width:100%;max-width:270px}}
+
+
+/* Contemporary Shema experience · real people, clear language, intentional Scripture. */
+.shema-eyebrow,.shema-explore .shema-eyebrow,
+.shema-turn .shema-eyebrow,.shema-resolution .shema-eyebrow{
+ color:#4d62db;
+ font:800 .74rem/1.4 Inter,"Segoe UI",system-ui,sans-serif;
+ letter-spacing:.085em;
+}
+.shema-world{
+ background:#101d30;
+ border:1px solid #253a55;
+ border-radius:22px;
+ min-height:565px;
+ box-shadow:0 24px 50px #12243628;
+}
+.shema-world-art{position:absolute;inset:0;z-index:-1}
+.shema-world-photo{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:58% 40%;filter:saturate(.86) contrast(1.06)}
+.shema-world-art:after{
+ background:linear-gradient(90deg,#0d1b2cf5 0%,#101e2ce8 34%,#13253a99 64%,#0b192c37 100%),
+ linear-gradient(0deg,#101b2ec0,transparent 56%);
+}
+.shema-world-copy{max-width:760px;padding:75px 0 72px 64px}
+.shema-world .shema-eyebrow{color:#b3c1ff}
+.shema-world h2{
+ max-width:650px;
+ font:800 clamp(2.9rem,5.5vw,5.1rem)/1.05 Inter,"Segoe UI",system-ui,sans-serif;
+ letter-spacing:-.06em;
+ margin:22px 0 29px;
+}
+.shema-world h2 em{font-style:normal;color:#a7bcff}
+.shema-world blockquote{max-width:580px;font:500 clamp(1.35rem,2.35vw,1.85rem)/1.48 Georgia,serif;color:white}
+.shema-source{font-size:.72rem;letter-spacing:.085em;color:#b7c4f2}
+.shema-world-copy>p{font-size:1.05rem;line-height:1.74;color:#e1e7f1;margin:29px 0 22px}
+.shema-artifact-link{color:#d8e1ff;border-color:#96a8ff77}
+.shema-opening-listen{background:#5868ec!important;color:#fff!important;border-color:#5868ec!important;border-radius:12px!important;box-shadow:0 8px 20px #07172e44}
+.shema-world-footer{border-color:#ffffff23;color:#d3dced;letter-spacing:.08em}
+.shema-world-footer span:last-child{color:#b7c5ff}
+.shema-explore-top p{font-size:1.04rem;color:#56687d}
+.shema-manuscript{
+ background:#fff;
+ border:1px solid #dfe6f1;
+ border-radius:20px;
+ box-shadow:0 14px 32px #142b4b11;
+ padding:32px clamp(25px,5vw,54px) 27px;
+}
+.shema-manuscript:before,.shema-manuscript:after{display:none}
+.shema-manuscript-head,.shema-manuscript-bottom{color:#637188;font-weight:760;letter-spacing:.08em}
+.shema-ink-line{gap:13px 19px;min-height:170px}
+.shema-word{
+ border:1px solid #d9e1ed;
+ background:#f7f9fc;
+ padding:15px 19px;
+ border-radius:13px;
+ font:750 clamp(1.1rem,2.35vw,1.7rem)/1.26 Inter,system-ui,sans-serif;
+ letter-spacing:-.025em;
+ color:#243a50;
+ transition:background .2s,border-color .2s,transform .2s;
+}
+.shema-word span{font:650 .72em Inter,system-ui,sans-serif;color:#8090b5;margin-left:8px}
+.shema-word:hover{color:#283b9a;border-color:#93a1fa;transform:translateY(-2px)}
+.shema-word.selected{background:#e9edff;color:#3449cf;border:2px solid #5266e9}
+.shema-word.visited:not(.selected){border-color:#8d9cf0}
+.shema-manuscript-bottom span{color:#5c6cde}
+.shema-word-reveal{grid-template-columns:minmax(105px,180px) minmax(0,1fr);gap:28px}
+.shema-hebrew{color:#5868da;border-color:#d5dce8;font-family:Georgia,serif}
+.shema-kicker{color:#4b60d7;letter-spacing:.095em}
+.shema-word-reveal h3{font:780 clamp(1.65rem,3vw,2.3rem)/1.18 Inter,system-ui,sans-serif;letter-spacing:-.04em;color:#172c42}
+.shema-word-reveal p{color:#52657a}
+.shema-word-intro{font:550 1.08rem/1.65 Inter,system-ui,sans-serif;color:#5a6b81}
+.shema-word-intro span{color:#6474e8}
+.shema-explore-footer{border-color:#dde4ee;color:#67758a}
+.shema-cinema{background:linear-gradient(125deg,#172a43,#0c1728);box-shadow:0 20px 45px #14243c25;border-radius:20px}
+.shema-cinema .shema-eyebrow{color:#b8c4ff}
+.shema-cinema h2{font:800 clamp(2rem,4.3vw,3.55rem)/1.12 Inter,system-ui,sans-serif;letter-spacing:-.05em}
+.shema-cinema h2 em{font-style:normal;color:#bdc6ff}
+.shema-cinema>p{color:#c9d5e7}
+.shema-cinema-frame{border:1px solid #7585a85b;border-radius:16px;box-shadow:0 14px 29px #030b1745}
+.shema-no-film{color:#e3e9fc}
+.shema-film-footer>span{color:#c7d3e0}
+.shema-film-footer button{border-color:#96a7e955;background:#5363ea22;color:#dbe2ff}
+.shema-turn{
+ background:#fff;border:1px solid #dfe6ef;border-radius:20px;
+ box-shadow:0 14px 32px #1228440b;
+}
+.shema-turn h2{font:800 clamp(2.35rem,5vw,4rem)/1.1 Inter,system-ui,sans-serif;letter-spacing:-.055em;color:#172d44}
+.shema-turn h2 em{font-style:normal;color:#5362e5}
+.shema-turn>p{color:#55667a}
+.shema-turn-options button{background:#f7f9fc;color:#243c51;border:1px solid #dde5ee;border-radius:14px;font-weight:650;min-height:94px}
+.shema-turn-options button[aria-pressed=true]{background:#eaf0ff;border-color:#596ce7;box-shadow:inset 0 0 0 2px #596ce7;color:#283cb5}
+.shema-turn-options button span{color:#6175d5}
+.shema-verse-five{border-color:#dce5ed}
+.shema-verse-five blockquote{color:#1e3951}
+.shema-verse-five p{color:#52677c}
+.shema-resolution{
+ background:#fff;border:1px solid #dee6ef;border-radius:20px;
+ color:#1b3046;box-shadow:0 16px 36px #172d470f;
+ min-height:0;
+}
+.shema-resolution-star{color:#5b6ae4}
+.shema-resolution h2{font:800 clamp(2.3rem,4.5vw,3.75rem)/1.12 Inter,system-ui,sans-serif;letter-spacing:-.05em;color:#152b41}
+.shema-resolution-hero{font:570 clamp(1.2rem,2.6vw,1.54rem)/1.75 Inter,system-ui,sans-serif;color:#3b5369}
+.shema-resolution-bridge{color:#4b60dc;letter-spacing:.085em}
+.shema-resolution-bridge div{border-color:#8c9bf4}
+.shema-resolution>p:not(.shema-resolution-hero){color:#5d7183}
+.shema-deeper{border-color:#e0e7ee;color:#445c70}
+.shema-deeper p{color:#52677b}
+.shema-practice-scene{border-radius:18px}
+.shema-practice-scene h3,.shema-teachback-intro h2{font-family:Inter,"Segoe UI",system-ui,sans-serif;font-weight:800;letter-spacing:-.045em}
+.shema-teachback-intro>p{font-family:Inter,system-ui,sans-serif}
+@media(max-width:750px){
+ .shema-world{min-height:600px}
+ .shema-world-copy{padding:40px 25px 92px;max-width:none}
+ .shema-world-art:after{background:linear-gradient(180deg,#0c1c2ad4 0%,#132438cb 70%,#0b1a2cf0 100%)}
+ .shema-world-photo{object-position:56% center}
+ .shema-world h2{font-size:clamp(2.7rem,9.5vw,4.2rem)}
+ .shema-word{font-size:1.12rem;padding:13px}
+ .shema-manuscript{padding:22px}
+ .shema-ink-line{justify-content:stretch}
+ .shema-word{flex:1 1 100%}
+ .shema-word-reveal{grid-template-columns:1fr}
+ .shema-hebrew{border:0;border-bottom:1px solid #dfe4ef;padding:12px 0 24px}
+ .shema-turn h2,.shema-resolution h2{font-size:clamp(2rem,8vw,3rem)}
+}
