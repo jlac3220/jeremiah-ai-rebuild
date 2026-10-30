@@ -59,7 +59,8 @@ export function chooseLessonVisual(brief,assets=[],{recentIds=[],failedIds=[]}={
   if(!asset?.id || !asset.src || !asset.alt || asset.previewApproved!==true || failedIds.includes(asset.id))return false;
   if(brief.intent==='general') return asset.intent==='general' && normalizedIncludes(asset.topics,brief.topic);
   if(brief.intent==='artifact') return asset.intent==='artifact' && normalizedIncludes(asset.references,brief.reference);
-  if(brief.intent==='scripture') return ['scripture','artifact'].includes(asset.intent) && normalizedIncludes(asset.references,brief.reference);
+  if(brief.intent==='scripture') return (['scripture','artifact'].includes(asset.intent) && normalizedIncludes(asset.references,brief.reference))
+   || (asset.intent==='reading' && (!asset.references?.length || normalizedIncludes(asset.references,brief.reference)));
   if(brief.intent==='historical') {
    // Historical scenes must depict the specified subject; if a passage is also
    // specified, it must be an approved reference for the actual illustration.
