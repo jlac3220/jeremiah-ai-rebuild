@@ -33,8 +33,8 @@ export function DestinationArt({tone,content,move,placement}) {
 export default function JourneyDestinations({options,selected,onSelect,onSpeak,onOpenBible}) {
  const stop=selected===null?null:STOPS[selected];
  const art=stop?BIBLICAL_ART[stop.tone]:null;
- return <div className="ogj-journey">
-  <div className="ogj-introduction"><span className="ogj-eyebrow">FOUR WITNESSES · ONE CONFESSION</span><p>Follow the confession from Moses to Isaiah, Jesus, and Paul. Choose a witness to explore the Scripture.</p></div>
+ return <div className="ogj-journey" data-visual-revision="2026-10-30-curated-scenes">
+  <div className="ogj-introduction"><span className="ogj-eyebrow">FOUR WITNESSES · ONE CONFESSION</span><p>Follow the confession from Moses to Isaiah, Jesus, and Paul. Choose a witness to explore the Scripture.</p>{import.meta.env.DEV&&<small className="ogj-preview-revision">Updated visual set · Oct 30</small>}</div>
   <div className="ogj-gallery" role="group" aria-label="Biblical voices">
    {STOPS.map((item,i)=><button key={item.tone} type="button" className={'ogj-destination'+(selected===i?' is-selected':'')} aria-pressed={selected===i} onClick={()=>onSelect(i)}>
     <DestinationArt tone={item.tone}/>
