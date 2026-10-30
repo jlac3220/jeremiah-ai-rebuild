@@ -55,7 +55,7 @@ export const VISUAL_ASSETS = Object.freeze([
   credit:'Great Isaiah Scroll · Wikimedia Commons, public domain',
   sourceUrl:'https://commons.wikimedia.org/wiki/File:Great_Isaiah_Scroll.jpg',
   intent:'artifact',references:['Isaiah 43:10','Isaiah 44:6','Isaiah 45:5'],
-  topics:['Isaiah witness'],previewApproved:true,rightsStatus:'cleared',priority:20}),
+  topics:['Isaiah witness'],previewApproved:true,rightsStatus:'cleared',priority:8}),
  Object.freeze({id:'nash-papyrus',src:'https://upload.wikimedia.org/wikipedia/commons/9/93/Papyrus_Nash.jpg',
   alt:'The Nash Papyrus, an ancient manuscript fragment containing the Shema',
   credit:'Cambridge University Library · MS Or.233',
