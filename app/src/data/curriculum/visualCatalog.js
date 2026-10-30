@@ -12,11 +12,11 @@ const PAUL='“There is none other God but one.”';
 // A duplicate relevant witness is preferable to an unrelated camel, street, or desk.
 // Unique, rights-cleared renderings can replace these slots without changing lesson content.
 export const GALLERY_ART = Object.freeze({
- shema: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Modern illustration of Moses addressing the gathered Israelites in a wilderness encampment','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA),
- moses: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Moses addressing the Israelites, not an anonymous modern traveler','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA,'50% 35%'),
- prophets: illustrated('https://cdn.bibleworld.ai/bible-world/generations/6813b465-dfad-4cc5-aeee-39208585be77.png?format=webp&quality=80','Illustrative depiction of Isaiah holding scarlet wool while speaking to three listeners in Judea','BibleWorld · public gallery CC0','https://bibleworld.ai/image/05eb3480-fc03-457b-8c5f-9e34a54fff9a','Isaiah 44:6',ISAIAH,'35% 38%'),
- jesus: illustrated('https://static.wixstatic.com/media/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg/v1/fill/w_1000%2Ch_667%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg','Jesus teaching a Jewish scribe about the greatest commandment, with other listeners present','Caminho de Fé','https://www.caminhodefe.com/post/o-cora%C3%A7%C3%A3o-da-lei-%C3%A9-o-amor','Mark 12:29',JESUS,'40% 35%'),
- apostles: illustrated('https://cdn.bibleworld.ai/bible-world/generations/59d63be9-2ab7-486f-a84a-24ea14b6fd6d.png?format=webp&quality=80','Illustrative depiction of Paul and Barnabas teaching a gathering of believers in Antioch','BibleWorld · public gallery CC0','https://bibleworld.ai/image/9c480671-271b-4810-a197-63bcfdc1b184','1 Corinthians 8:4',PAUL,'52% 34%'),
+ shema: illustrated("/images/og1/og1-moses-shema.webp","Moses addresses the people of Israel as they hear the Shema","Jeremiah image library","","Deuteronomy 6:4",SHEMA,"50% 38%"),
+ moses: illustrated("/images/og1/og1-moses-shema.webp","Moses delivers the confession to Israel in the wilderness","Jeremiah image library","","Deuteronomy 6:4",SHEMA,"50% 38%"),
+ prophets: illustrated("/images/og1/og1-isaiah-declaration.webp","A prophet explains the message of the one LORD to craftsmen surrounded by carved idols","Jeremiah image library","","Isaiah 44:6",ISAIAH,"50% 35%"),
+ jesus: illustrated("/images/og1/og1-jesus-scribe.webp","Jesus answers a scribe about the greatest commandment","Jeremiah image library","","Mark 12:29",JESUS,"50% 38%"),
+ apostles: illustrated("/images/og1/og1-paul-writing.webp","Paul composes his message to the Corinthian believers","Jeremiah image library","","1 Corinthians 8:4",PAUL,"50% 40%"),
 });
 export const BIBLICAL_ART = Object.freeze({
  ...GALLERY_ART,
