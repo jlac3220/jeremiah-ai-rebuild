@@ -172,6 +172,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
     </button>
     {narration.enabled&&narrationText&&<button type="button" className="ogp-voice-replay" aria-label={narration.loading?'Preparing narration':narration.speaking?'Stop narration':'Replay narration'} title={narration.loading?'Preparing audio':narration.speaking?'Stop speaking':'Hear again'} disabled={narration.loading} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}>{narration.loading?'Preparing audio…':narration.speaking?'■ Stop':'↻ Replay'}</button>}
     <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button>
+     <a className="ogp-audition-link" href="/voice-audition.html" target="_blank" rel="noopener noreferrer">Compare five narrator voices ↗</a>
      <p className="ogp-voice-note">Jeremiah uses one AI-generated narrator on every device. Audio is streamed from the app, not your phone’s voices.</p>
 
     </div></details>
