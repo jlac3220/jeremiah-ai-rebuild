@@ -1,22 +1,20 @@
-import {useEffect,useState} from 'react';
 import {createVisualBrief,chooseLessonVisual,inferVisualPlacement} from '../../core/classroom/visualIntelligence';
 import {VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
+import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 
-// Shared classroom visual outlet for OG, NB and future approved standards.
-// No matched, reviewed asset means no picture, not a random fallback.
+// Every approved study asks for art the same way; no per-study URL mapping.
 export default function ContextualLessonImage({content,move,placement,className=''}) {
  const resolvedPlacement=placement||inferVisualPlacement({content,move});
  const brief=resolvedPlacement?createVisualBrief({content,move,placement:resolvedPlacement}):null;
- const decision=brief?chooseLessonVisual(brief,VISUAL_ASSETS):null;
- const visual=decision?.asset;
- const [failed,setFailed]=useState(false);
- useEffect(()=>setFailed(false),[visual?.id]);
- if(!visual||failed)return null;
+ const approved=brief?chooseLessonVisual(brief,VISUAL_ASSETS).asset:null;
+ const {asset:visual,onError}=useDiscoveredLessonVisual(brief,approved);
+ if(!visual)return null;
  return <figure className={'jeremiah-context-image '+className} style={{margin:'20px 0',position:'relative'}}>
-  <img src={visual.src} alt={visual.alt} loading="lazy" decoding="async"
-   onError={()=>setFailed(true)} style={{width:'100%',maxHeight:420,objectFit:'cover',borderRadius:14,display:'block'}}/>
+  <img key={visual.id} src={visual.src} alt={visual.alt} loading="lazy" decoding="async"
+   onError={onError} style={{width:'100%',maxHeight:420,objectFit:'cover',borderRadius:14,display:'block'}}/>
   <figcaption style={{fontSize:12,marginTop:8,opacity:.76}}>
-   {visual.credit||'Supporting illustration'}{decision.reviewRequired?' · Editorial/rights review required':''}
+   {visual.sourceUrl?<a href={visual.sourceUrl} target="_blank" rel="noreferrer">{visual.credit||'Supporting illustration'}</a>:visual.credit||'Supporting illustration'}
+   {' · Visual rights and subject require review before release'}
   </figcaption>
  </figure>;
 }
