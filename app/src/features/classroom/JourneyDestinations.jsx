@@ -1,39 +1,9 @@
 import {useEffect,useState} from 'react';
 import './JourneyDestinations.css';
+import {BIBLICAL_ART,WITNESS_PLACEMENTS,VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
+import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
+export {BIBLICAL_ART} from '../../data/curriculum/visualCatalog';
 
-// The artwork on these four witness cards must depict the named biblical person
-// in a relevant scene. Images are *modern artistic interpretations* — not photographs
-// of the historical individuals. Verify image reuse/hosting rights before release.
-// The separate Nash Papyrus section is the authenticated ancient artifact.
-const illustrated = (src,alt,artist,source,reference,quote,focal='50% 38%')=>({
- src,alt,artist,work:'Modern illustrative reconstruction',source,focal,reference,quote
-});
-const SHEMA='“Hear, O Israel: The LORD our God is one LORD.”';
-const ISAIAH='“I am the first, and I am the last; and beside me there is no God.”';
-const JESUS='“The Lord our God is one Lord.”';
-const PAUL='“There is none other God but one.”';
-// Image assignments are editorially tied to the passage, not random stock scenery.
-// A duplicate relevant witness is preferable to an unrelated camel, street, or desk.
-// Unique, rights-cleared renderings can replace these slots without changing lesson content.
-const GALLERY_ART = Object.freeze({
- shema: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Modern illustration of Moses addressing the gathered Israelites in a wilderness encampment','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA),
- moses: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Moses addressing the Israelites, not an anonymous modern traveler','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA,'50% 35%'),
- prophets: illustrated('https://www.heroisdabiblia.com.br/storage/posts/featured/MfCGF7Wa09bQZDGlh8d2A0MgpSycbjG0e6xhjA4u.webp','Modern depiction of Isaiah proclaiming his message from a rocky hillside above ancient Judah','Heróis da Bíblia','https://www.heroisdabiblia.com.br/en-us/artigos/isaiah-the-classical-prophet-of-judah-and-his-messianic-visions','Isaiah 44:6',ISAIAH,'62% 36%'),
- jesus: illustrated('https://static.wixstatic.com/media/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg/v1/fill/w_1000%2Ch_667%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg','Jesus teaching a Jewish scribe about the greatest commandment, with other listeners present','Caminho de Fé','https://www.caminhodefe.com/post/o-cora%C3%A7%C3%A3o-da-lei-%C3%A9-o-amor','Mark 12:29',JESUS,'40% 35%'),
- apostles: illustrated('https://cdn.bibleworld.ai/bible-world/generations/e8158347-eb99-404f-9a7e-48445c96d610.png?format=jpeg&quality=85&width=1200','The apostle Paul preaching to a gathered early Christian community','BibleWorld · public gallery CC0','https://bibleworld.ai/image/db18cba8-835c-4785-8710-e7772a439bd2','1 Corinthians 8:4',PAUL,'59% 33%'),
-});
-export const BIBLICAL_ART = Object.freeze({
- ...GALLERY_ART,
- 'shema-encounter':GALLERY_ART.shema,
- 'moses-reading':GALLERY_ART.moses,
- 'prophets-reading':GALLERY_ART.prophets,
- 'jesus-reading':GALLERY_ART.jesus,
- 'apostles-reading':GALLERY_ART.apostles,
- 'moses-trail':GALLERY_ART.shema,
- 'jesus-trail':GALLERY_ART.jesus,
- 'apostles-trail':GALLERY_ART.apostles,
- 'prophets-witness':GALLERY_ART.prophets
-});
 const STOPS = [
  {title:'Moses',name:'MOSES',era:'THE FOUNDATION',place:'ISRAEL · DEUTERONOMY 6',tone:'moses',narration:'Hear, O Israel: The LORD our God is one LORD. Moses gives the confession to Israel.'},
  {title:'Isaiah',name:'ISAIAH',era:'THE PROPHETIC WITNESS',place:'ISAIAH · THE LORD ALONE',tone:'prophets',narration:'I am the first, and I am the last; and beside me there is no God. Isaiah, chapter forty four, verse six.'},
@@ -41,13 +11,20 @@ const STOPS = [
  {title:'The Apostles',name:'PAUL',era:'THE CONTINUATION',place:'PAUL · THE EARLY CHURCH',tone:'apostles',narration:'There is none other God but one. First Corinthians, chapter eight, verse four.'}
 ];
 
-export function DestinationArt({tone}) {
+// A named teaching placement is evaluated using the same engine as all other
+// classroom images. Unknown/unsupported placements intentionally show no art.
+export function DestinationArt({tone,content,move,placement}) {
+ const target=placement || WITNESS_PLACEMENTS[tone];
+ const brief=target?createVisualBrief({content,move,placement:target}):null;
+ const choice=brief?chooseLessonVisual(brief,VISUAL_ASSETS):null;
+ const art=choice?.asset;
  const [failed,setFailed]=useState(false);
- useEffect(()=>setFailed(false),[tone]);
- const art=BIBLICAL_ART[tone]||BIBLICAL_ART.moses;
- return <span className={'ogj-art ogj-art--'+tone.replace(/[^a-z0-9-]/gi,'')} role="img" aria-label={art.alt}>
-  {!failed&&<img key={tone} className="ogj-photo" src={art.src} alt="" loading="lazy" decoding="async" style={{objectPosition:art.focal}} onError={()=>setFailed(true)}/>}
-  <span aria-hidden="true" className="ogj-fallback">{tone==='moses'||tone==='shema'?'מֹשֶׁה':tone==='prophets'?'יְשַׁעְיָהוּ':tone==='jesus'?'ΙΗΣΟΥΣ':'ΠΑΥΛΟΣ'}</span>
+ useEffect(()=>setFailed(false),[art?.id]);
+ if(!art)return null;
+ const label=target.subject || 'Biblical illustration';
+ return <span className={'ogj-art ogj-art--'+String(tone||'context').replace(/[^a-z0-9-]/gi,'')} role="img" aria-label={art.alt}>
+  {!failed&&<img key={art.id} className="ogj-photo" src={art.src} alt="" loading="lazy" decoding="async" style={{objectPosition:art.focal||'50% 38%'}} onError={()=>setFailed(true)}/>}
+  <span aria-hidden="true" className="ogj-fallback">{label}</span>
  </span>;
 }
 
