@@ -55,6 +55,16 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  </div>;
  if(kind==='shema-manuscript')return <div className="shema-explore">
   <div className="shema-explore-top"><span className="shema-eyebrow">02 / INVESTIGATE</span><p>Three phrases. One confession. Touch the words themselves to discover what each contributes.</p></div>
+  <aside className="shema-artifact" aria-label="Authentic ancient manuscript example">
+   <div className="shema-artifact-image"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Papyrus_Nash.jpg" alt="The Nash Papyrus, an ancient Hebrew manuscript fragment containing the Ten Commandments and the Shema" loading="lazy"/></div>
+   <div className="shema-artifact-copy">
+    <span className="shema-kicker">REAL ARTIFACT · SECOND CENTURY BCE</span>
+    <h3>The Nash Papyrus</h3>
+    <p>This Hebrew papyrus preserves the Ten Commandments followed by the Shema. It is a later ancient witness to the confession, not Moses’ original writing.</p>
+    <a href="https://cudl.lib.cam.ac.uk/view/MS-OR-00233/1" target="_blank" rel="noopener noreferrer">Examine the manuscript at Cambridge University Library ↗</a>
+    <small>Public-domain reproduction · Cambridge University Library, MS Or.233.</small>
+   </div>
+  </aside>
   <Manuscript active={phrase} visited={visited} onSelect={selectPhrase}/>
   <div className="shema-word-reveal" aria-live="polite" key={selected?.id||'intro'}>
    {selected?<><div className="shema-hebrew" lang="he" dir="rtl">{selected.hebrew}</div><div><span className="shema-kicker">{selected.roman}</span><h3>{selected.title}</h3><p>{selected.meaning}</p><button className="shema-listen-phrase" type="button" onClick={()=>onSpeak?.(selected.spoken)} aria-label={'Hear the words '+selected.text}>▶ Hear these words</button></div></>:<div className="shema-word-intro"><span>✦</span><p>Select any highlighted phrase above. The passage itself is your starting point.</p></div>}
@@ -88,7 +98,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
   <p className="shema-resolution-hero">“Hear” opens a summons. “Our God” identifies the LORD. “One LORD” anchors the confession. And the very next verse calls for wholehearted love.</p>
   <div className="shema-resolution-bridge"><span>DEUTERONOMY 6:4</span><div aria-hidden="true">→</div><span>DEUTERONOMY 6:5</span></div>
   <p>Now you're ready to build the meaning of the words yourself, before meeting Isaiah and the New Testament witnesses.</p>
-  <details className="shema-deeper"><summary>Go deeper · What about the Hebrew word for one?</summary><p><em>Echad</em> means “one.” In some contexts a word can refer to unity, as in “one flesh” in Genesis 2:24. That other context does not by itself decide the meaning of the Shema. This lesson reads it alongside Isaiah’s declarations and Jesus’ reaffirmation in Mark 12:29.</p></details>
+  <details className="shema-deeper"><summary>Go deeper · What about the Hebrew word for one?</summary><p><em>Echad</em> means “one.” It can describe a single thing or a union, as in the “one flesh” of Genesis 2:24. That flexibility does not prove God consists of multiple divine persons. In Deuteronomy 6:4, the subject is the LORD, and Israel is confessing exclusive devotion to him. The Apostolic understanding reads this with Isaiah 43:10 and 44:6, which deny another God before or beside him, and with Jesus’ reaffirmation in Mark 12:29. The context, not a single dictionary word, carries the doctrinal argument.</p></details>
  </div>;
  return null;
 }
