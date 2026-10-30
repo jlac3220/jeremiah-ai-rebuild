@@ -208,7 +208,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {(move.id!=='learn'||current.kind!=='read')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind?.startsWith('shema-')&&<ShemaExperience kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
-      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="moses"/></div>
+      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema"/></div>
       <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
       <div className="ogp-encounter-inner">
        <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
