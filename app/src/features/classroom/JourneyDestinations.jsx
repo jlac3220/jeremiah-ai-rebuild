@@ -1,7 +1,8 @@
-import {useEffect,useState} from 'react';
+import React from 'react';
 import './JourneyDestinations.css';
 import {BIBLICAL_ART,WITNESS_PLACEMENTS,VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
 import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
+import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 export {BIBLICAL_ART} from '../../data/curriculum/visualCatalog';
 
 const STOPS = [
@@ -14,16 +15,17 @@ const STOPS = [
 // A named teaching placement is evaluated using the same engine as all other
 // classroom images. Unknown/unsupported placements intentionally show no art.
 export function DestinationArt({tone,content,move,placement}) {
- const target=placement || WITNESS_PLACEMENTS[tone];
+ const target=placement||WITNESS_PLACEMENTS[tone];
  const brief=target?createVisualBrief({content,move,placement:target}):null;
- const choice=brief?chooseLessonVisual(brief,VISUAL_ASSETS):null;
- const art=choice?.asset;
- const [failed,setFailed]=useState(false);
- useEffect(()=>setFailed(false),[art?.id]);
- if(!art)return null;
- const label=target.subject || 'Biblical illustration';
- return <span className={'ogj-art ogj-art--'+String(tone||'context').replace(/[^a-z0-9-]/gi,'')} role="img" aria-label={art.alt}>
-  {!failed&&<img key={art.id} className="ogj-photo" src={art.src} alt="" loading="lazy" decoding="async" style={{objectPosition:art.focal||'50% 38%'}} onError={()=>setFailed(true)}/>}
+ const approved=brief?chooseLessonVisual(brief,VISUAL_ASSETS).asset:null;
+ const {asset:art,onError}=useDiscoveredLessonVisual(brief,approved);
+ const label=target?.subject||target?.reference||'Bible teaching';
+ if(!target)return null;
+ return <span className={'ogj-art ogj-art--'+String(tone||'context').replace(/[^a-z0-9-]/gi,'')}
+   role="img" aria-label={art?.alt||label}>
+  {art&&<img key={art.id} className="ogj-photo" src={art.src} alt=""
+   loading="lazy" decoding="async" style={{objectPosition:art.focal||'50% 38%'}}
+   onError={onError}/>}
   <span aria-hidden="true" className="ogj-fallback">{label}</span>
  </span>;
 }
