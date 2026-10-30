@@ -29,6 +29,19 @@ function EverydayScenePhoto({index}) {
  </div>;
 }
 
+// Verse readings have an image and the Scripture reference. Authored notes
+// are shown only when a real commentary exists; bare passages stay uncluttered.
+function readingArtTone(reference='') {
+ if (/^Isaiah\b/i.test(reference)) return 'prophets';
+ if (/^(Mark|Matthew|Luke|John)\b/i.test(reference)) return 'jesus';
+ if (/^(?:[12] Corinthians|Ephesians|[12] Timothy|James|Acts)\b/i.test(reference)) return 'apostles';
+ return 'moses';
+}
+function readingCommentary(note='') {
+ const cleaned=String(note).replace(/^KJV(?:\s+excerpt(?:\s+from\s+verse\s+\d+)?)?\.\s*/i,'').trim();
+ return cleaned || null;
+}
+
 const CHAPTER_NAMES = ['The Shema','Isaiah’s Witness','The Apostolic Witness','The Difference','Living the Confession'];
 const CHAPTER_SLUGS = ['shema','isaiah','continuity','distinction','devotion'];
 const SCENE_DESCRIPTIONS = {
@@ -40,7 +53,7 @@ const VERBS = { learn:'BEGIN', 'shema-show':'READ', 'isaiah-show':'EXAMINE', 'co
 const TITLES = {learn:'One confession. One story.', 'shema-show':'Hear, O Israel.', 'isaiah-show':'No God before, beside, or after.', 'continuity-show':'Jesus repeats the confession.', 'distinction-show':'What is the actual disagreement?', 'devotion-show':'The confession shapes your life.'};
 
 const DISCOVERIES={
- 'learn':{question:'Where will this confession lead?',options:[['Moses','Israel hears the confession in Deuteronomy 6.'],['Prophets','Isaiah tests whether any other God exists.'],['Apostles','Jesus and the apostles carry the confession forward.']],closer:'One confession travels across the whole biblical story.'},
+ 'learn':{question:'Where will this confession lead?',options:[['Moses','Moses calls Israel to hear that the LORD our God is one LORD.'],['Isaiah','Isaiah declares there is no God before, beside, or after the LORD.'],['Jesus','Jesus repeats the Shema as the first commandment in Mark 12:29.'],['Paul','Paul teaches the church that there is none other God but one.']],closer:'From Moses to Isaiah, Jesus, and Paul, the confession remains one.'},
  'shema-show':{question:'Touch a phrase to discover its role.',options:[['HEAR','Shema is a call to listen and respond.'],['OUR GOD','The LORD is the God to whom Israel belongs.'],['ONE LORD','The confession identifies the one LORD, leading into wholehearted love.']],closer:'These are not disconnected vocabulary words. Together, they form a confession and a response.'},
  'isaiah-show':{question:'Could another god exist in any direction?',options:[['BEFORE','Isaiah 43:10: no God was formed before him.'],['BESIDE','Isaiah 44:6: no God exists beside him.'],['AFTER','Isaiah 43:10: none shall be after him.']],closer:'Isaiah excludes rivals across time and alongside the LORD.'},
  'continuity-show':{question:'Follow the confession through Scripture.',options:[['MOSES','Deuteronomy 6:4: the LORD our God is one LORD.'],['JESUS','Mark 12:29: Jesus begins with the same confession.'],['PAUL','1 Corinthians 8:4: there is none other God but one.']],closer:'The witness advances in history without replacing the confession.'},
@@ -125,7 +138,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   : current?.kind==='timeline'
    ? ['The LORD our God is one LORD.','The Lord our God is one Lord.','There is none other God but one.'][evidenceIndex]
   : current?.kind==='discovery'&&move.id==='learn'&&discoveryChoice!==null
-   ? ['Hear, O Israel: The LORD our God is one LORD. In the wilderness Moses gives the confession to Israel.','I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six.','Jesus repeats the Shema. The apostles declare, there is none other God but one.'][discoveryChoice]
+   ? ['Hear, O Israel: The LORD our God is one LORD. In the wilderness Moses gives the confession to Israel.','I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six.','Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine.','There is none other God but one. First Corinthians, chapter eight, verse four.'][discoveryChoice]
   : current?.kind==='read'&&current?.verse?.text
    ? current.verse.text
   : null;
@@ -195,6 +208,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {(move.id!=='learn'||current.kind!=='read')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind?.startsWith('shema-')&&<ShemaExperience kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
+      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="moses"/></div>
       <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
       <div className="ogp-encounter-inner">
        <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
@@ -206,12 +220,12 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       </div>
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
-      <span className="ogp-scripture-ornament" aria-hidden="true">{chapter==='isaiah'||chapter==='continuity'?<DestinationArt tone={chapter==='isaiah'?'prophets':'jesus'}/>:chapter==='devotion'?'♡':'✦'}</span>
+      <div className="ogp-scripture-ornament" aria-hidden="true"><DestinationArt tone={readingArtTone(current.verse.reference)}/></div>
       <div className="ogp-scripture-content">
-       <span className="ogp-scripture-index">SCRIPTURE · {current.verse.reference.toUpperCase()}</span>
+       <span className="ogp-scripture-index">{current.verse.reference.toUpperCase()} · KJV</span>
        <blockquote className="ogp-verse">“{current.verse.text}”</blockquote>
-       <span className="ogp-reference">KING JAMES VERSION</span>
-       <div className="ogp-scripture-footer"><p>Read slowly. Which words carry the meaning?</p><button type="button" className="ogp-link" onClick={()=>readVerse(current.verse.reference)}>Read the full passage ↗</button></div>
+       {readingCommentary(current.verse.note)&&<p className="ogp-scripture-commentary">{readingCommentary(current.verse.note)}</p>}
+       <div className="ogp-scripture-footer"><button type="button" className="ogp-link" onClick={()=>readVerse(current.verse.reference)}>Read in context ↗</button></div>
       </div>
      </div>}
      {current.kind==='intro'&&<p className="ogp-thought">Let's follow the confession from Moses through the prophets and into the apostolic witness.</p>}
