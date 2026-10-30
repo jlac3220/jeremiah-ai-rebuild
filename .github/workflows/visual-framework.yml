@@ -8,6 +8,8 @@ on:
       - 'app/src/core/classroom/**'
       - 'app/src/features/classroom/**'
       - 'app/src/data/curriculum/**'
+      - 'app/src/features/ask-jeremiah/**'
+      - 'app/server/askJeremiah*.mjs'
       - 'app/scripts/test-*visual*.mjs'
       - 'app/package.json'
 jobs:
@@ -27,4 +29,5 @@ jobs:
       - run: npm run test:visual-framework
       - run: npm run test:biblical-visuals
       - run: npm run test:grouped
+      - run: npm run test:ask-jeremiah
       - run: npm run build
