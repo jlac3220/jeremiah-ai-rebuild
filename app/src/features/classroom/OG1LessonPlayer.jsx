@@ -9,21 +9,27 @@ import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
 import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
-import { chooseEverydayPhoto, EVERYDAY_PHOTO_CATEGORIES } from './everydayPhotoLibrary';
 import './OG1LessonPlayer.css';
 
-// Christian-appropriate, globally varied scenes. One selection per lesson visit;
-// never reshuffle mid-answer or repeat the same screen-heavy stock photograph.
-const TODAY_SCENE_LABELS = ['UNDIVIDED WORSHIP', 'WHOLEHEARTED LOVE', 'ONE GOSPEL'];
-function EverydayScenePhoto({index,photoSeed}) {
- const [failedOffset,setFailedOffset]=useState(0);
- const category=EVERYDAY_PHOTO_CATEGORIES[index]||'conduct';
- useEffect(()=>setFailedOffset(0),[category,photoSeed]);
- const scene=chooseEverydayPhoto(category,photoSeed,failedOffset);
+// OG.1.5 must picture the actual point being taught. General volunteering or
+// family socializing must never stand in for proclaiming the one gospel.
+const APPLICATION_VISUALS = [
+ {type:'worship',src:'https://images.pexels.com/photos/35555152/pexels-photo-35555152.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  alt:'Congregation in a Christian worship gathering',credit:'Caleb Oquendo · Pexels',label:'UNDIVIDED WORSHIP',focal:'50% 42%'},
+ {type:'manuscript',src:'https://upload.wikimedia.org/wikipedia/commons/9/93/Papyrus_Nash.jpg',
+  alt:'The Nash Papyrus, an actual ancient Hebrew witness preserving the Shema',credit:'The Nash Papyrus · ancient manuscript',label:'WHOLEHEARTED LOVE',focal:'50% 48%'},
+ {type:'apostles',label:'ONE GOSPEL',credit:'Paul teaching the early church · illustrative reconstruction'}
+];
+function BiblicalApplicationArt({index}) {
+ const [failed,setFailed]=useState(false);
+ useEffect(()=>setFailed(false),[index]);
+ const scene=APPLICATION_VISUALS[index]||APPLICATION_VISUALS[0];
  return <div className="ogp-mission-photo">
-  {failedOffset<4&&<img key={scene.src} src={scene.src} alt={scene.alt} style={{objectPosition:scene.focal}} loading="lazy" decoding="async" onError={()=>setFailedOffset(i=>i+1)}/>}
-  <span>{TODAY_SCENE_LABELS[index]||'YOUR EVERYDAY LIFE'}</span>
-  {failedOffset<4&&<small>{scene.credit}</small>}
+  {scene.type==='apostles'||failed
+   ?<DestinationArt tone={index===2?'apostles':'shema'}/>
+   :<img src={scene.src} alt={scene.alt} style={{objectPosition:scene.focal}} loading="lazy" decoding="async" onError={()=>setFailed(true)}/>}
+  <span>{scene.label}</span>
+  <small>{scene.credit}</small>
  </div>;
 }
 
@@ -106,7 +112,6 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
- const [photoSeed]=useState(()=>Math.floor(Math.random()*100000));
  const abort=useRef(null);
  const stageRef=useRef(null);
  const priorMove=useRef(move.id);
@@ -268,7 +273,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='mission'&&<div className="ogp-mission">
       <p className="ogp-prompt">Deuteronomy 6:5 follows the Shema with a command to love the one LORD wholly. Explore the connection between confession, worship and the apostolic witness.</p>
       <div className="ogp-mission-scene ogp-mission-scene--photo">
-       <EverydayScenePhoto index={evidenceIndex} photoSeed={photoSeed}/>
+       <BiblicalApplicationArt index={evidenceIndex}/>
        <div className="ogp-mission-copy">
         <span>{['THE CONFESSION · WORSHIP','THE COMMAND · LOVE','THE WITNESS · ONE GOSPEL'][evidenceIndex]}</span>
         <h2>{['Who alone receives worship?','What does verse 5 command?','How does the confession reach others?'][evidenceIndex]}</h2>
