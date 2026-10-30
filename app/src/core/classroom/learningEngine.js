@@ -20,6 +20,7 @@ export function createLearningState(content, presetId = "direct") {
   return {
     standardId: content.standardId,
     curriculumVersion: content.curriculumVersion || 1,
+    sourceRevision: content.sourceRevision || "",
     presetId,
     currentMoveId: getInitialMoveId(content, presetId),
     completedMoveIds: [],
@@ -59,14 +60,29 @@ export function loadLearningState(content, presetId = "direct") {
 
   try {
     let parsed = JSON.parse(raw);
-    if (content.curriculumVersion && (parsed.curriculumVersion || 1) < content.curriculumVersion) {
-      const archived = { currentMoveId:parsed.currentMoveId, drafts:parsed.experience?.drafts || {}, milestones:parsed.milestones || {} };
+    const versionChanged = Boolean(content.curriculumVersion && (parsed.curriculumVersion || 1) < content.curriculumVersion);
+    // A revision to approved standards invalidates earlier mastery, even when the
+    // numeric curriculum version remains the same. Archive—not erase—old work.
+    const standardsChanged = Boolean(content.isStandardsGenerated && parsed.sourceRevision !== content.sourceRevision);
+    if (versionChanged || standardsChanged) {
+      const archived = {
+        sourceRevision: parsed.sourceRevision || '',
+        currentMoveId:parsed.currentMoveId,
+        drafts:parsed.experience?.drafts || {},
+        standardEvidence:parsed.experience?.standardEvidence || {},
+        milestones:parsed.milestones || {},
+      };
       const base = createLearningState(content,presetId);
       const previouslyComplete = Boolean(parsed.milestones?.complete);
+      const needsNewEvidence = Boolean(content.isStandardsGenerated);
       parsed = {
         ...base,
-        currentMoveId:previouslyComplete?'complete':(content.legacyMoveMap?.[parsed.currentMoveId] || base.currentMoveId),
-        milestones:previouslyComplete?parsed.milestones:{...base.milestones,started:Boolean(parsed.milestones?.started)},
+        currentMoveId:needsNewEvidence
+          ? base.currentMoveId
+          : previouslyComplete?'complete':(content.legacyMoveMap?.[parsed.currentMoveId] || base.currentMoveId),
+        milestones:needsNewEvidence
+          ? {...base.milestones,started:Boolean(parsed.milestones?.started)}
+          : previouslyComplete?parsed.milestones:{...base.milestones,started:Boolean(parsed.milestones?.started)},
         experience:{...base.experience,earlierLesson:archived,earlierCompletion:previouslyComplete},
         lastUpdatedAt:parsed.lastUpdatedAt || base.lastUpdatedAt,
       };
