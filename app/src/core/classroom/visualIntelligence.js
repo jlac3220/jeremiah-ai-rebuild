@@ -11,6 +11,24 @@ function fingerprint(value) {
  return hash.toString(16).padStart(8,'0');
 }
 
+// Inference is intentionally conservative: only an explicitly cited passage
+// can suggest a specific scene automatically. Keywords like 'desert' or 'life'
+// are NOT permission to show an unrelated picture.
+export function inferVisualPlacement({content={},move={}}={}) {
+ if(move.visualPlacement)return move.visualPlacement;
+ if(move.type!=='teach')return null;
+ const standard=content.sourceStandard || content.coveredStandards?.find(s=>move.standardIds?.includes(s.id)) || {};
+ const teaching=[standard.statement,standard.scope,standard.focus,move.title,...(move.teaching||[])].filter(Boolean).join(' ');
+ const normalized=normalize(teaching);
+ const explicit=(move.scripture||[]).find(verse=>{
+  const ref=normalize(verse.reference);
+  return ref && normalized.includes(ref);
+ });
+ if(!explicit)return null;
+ return {intent:'scripture',reference:explicit.reference,
+  learningGoal:standard.statement||move.title||'Understand the Scripture in context'};
+}
+
 // Placement is explicit. A verse or historical claim requires subject- or
 // passage-grounded media; a broad life application may use a broad life image.
 // Without either kind of meaningful placement, we don't force an illustration.
@@ -22,7 +40,7 @@ export function createVisualBrief({content={},move={},placement={}}={}) {
  const goal = placement.learningGoal || move.title || standard.statement || content.brain?.masteryTarget || '';
  const revision = fingerprint({
   id:standard.id || content.standardId,statement:standard.statement,scope:standard.scope,
-  focus:standard.focus,evidence:standard.evidence,scripture:move.scripture,
+  focus:standard.focus,evidence:standard.evidence,sourceRevision:content.sourceRevision,scripture:move.scripture,
   goal,reference,intent,topic:placement.topic,subject:placement.subject
  });
  return {
