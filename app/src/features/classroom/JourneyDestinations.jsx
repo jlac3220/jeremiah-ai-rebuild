@@ -34,7 +34,7 @@ export default function JourneyDestinations({options,selected,onSelect,onSpeak,o
  const stop=selected===null?null:STOPS[selected];
  const art=stop?BIBLICAL_ART[stop.tone]:null;
  return <div className="ogj-journey" data-visual-revision="2026-10-30-curated-scenes">
-  <div className="ogj-introduction"><span className="ogj-eyebrow">FOUR WITNESSES · ONE CONFESSION</span><p>Follow the confession from Moses to Isaiah, Jesus, and Paul. Choose a witness to explore the Scripture.</p>{import.meta.env.DEV&&<small className="ogj-preview-revision">Updated visual set · Oct 30</small>}</div>
+  <div className="ogj-introduction"><span className="ogj-eyebrow">FOUR WITNESSES · ONE CONFESSION</span><p>Follow the confession from Moses to Isaiah, Jesus, and Paul. Choose a witness to explore the Scripture.</p></div>
   <div className="ogj-gallery" role="group" aria-label="Biblical voices">
    {STOPS.map((item,i)=><button key={item.tone} type="button" className={'ogj-destination'+(selected===i?' is-selected':'')} aria-pressed={selected===i} onClick={()=>onSelect(i)}>
     <DestinationArt tone={item.tone}/>
@@ -49,7 +49,8 @@ export default function JourneyDestinations({options,selected,onSelect,onSpeak,o
      <span className="ogj-reveal-kicker">{stop.name} · {art.reference.toUpperCase()}</span>
      <blockquote>{art.quote}</blockquote>
      <p>{options[selected][1]}</p>
-     <small>Illustrative reconstruction · {art.artist}. The appearance of the biblical witness is imagined, not historically documented.</small>
+
+
     </div>
     <div className="ogj-reveal-actions">
      <button type="button" onClick={()=>onSpeak?.(stop.narration)}>▶ Hear Scripture</button>
