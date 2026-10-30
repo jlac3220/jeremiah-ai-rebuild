@@ -1,112 +1,78 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-// Browser-native narration keeps Scripture reading available without network calls,
-// credentials, or an external audio service. Narration is always opt-in.
-function getAmericanVoices(synth) {
- return synth.getVoices().filter(voice => /^en[-_]US$/i.test(voice.lang));
-}
-function chooseVoice(synth, preferredName) {
- const american = getAmericanVoices(synth);
- if (preferredName && preferredName !== 'auto') {
-  const selected = american.find(voice => voice.name === preferredName);
-  if (selected) return selected;
- }
- // Prefer a resonant, American English male narrator if installed.
- // Browser/OS voices differ, so a particular sound cannot be guaranteed.
- const score = voice => {
-  const name = voice.name;
-  return (/(?:^|\b)(guy|david|andrew|christopher|mark|eric|aaron|josh|fred|alex)(?:\b|$)/i.test(name) ? 30 : 0)
-   + (/\bmale\b/i.test(name) ? 20 : 0)
-   + (/natural|neural|premium|enhanced/i.test(name) ? 8 : 0)
-   + (voice.localService ? 1 : 0);
- };
- return american.slice().sort((a,b) => score(b)-score(a))[0] || null;
-}
+// A fixed, server-produced MP3. No OS or device speech voices.
+const urlFor = words => '/api/jeremiah/narration?text=' + encodeURIComponent(words);
 
 export default function useLessonNarration({ text, key: sceneKey }) {
  const [enabled, setEnabled] = useState(false);
- const [supported, setSupported] = useState(() =>
-  typeof window !== 'undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
- );
+ const [supported, setSupported] = useState(() => typeof window !== 'undefined' && typeof window.Audio === 'function');
  const [speaking, setSpeaking] = useState(false);
- const [voiceName, setVoiceName] = useState('auto');
- const [voiceOptions, setVoiceOptions] = useState([]);
- useEffect(() => {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-  const synth = window.speechSynthesis;
-  const syncVoices = () => setVoiceOptions(getAmericanVoices(synth).map(voice=>({name:voice.name,label:voice.name})));
-  syncVoices();
-  synth.addEventListener?.('voiceschanged',syncVoices);
-  return () => synth.removeEventListener?.('voiceschanged',syncVoices);
- }, []);
- const activeRef = useRef(null);
- const lastAutoSceneRef = useRef(null);
+ const [error, setError] = useState('');
+ const audioRef = useRef(null);
+ const lastSceneRef = useRef(null);
 
  const stop = useCallback(() => {
-  activeRef.current = null;
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-   window.speechSynthesis.cancel();
+  const audio = audioRef.current;
+  audioRef.current = null;
+  if (audio) {
+   audio.onplaying = null;
+   audio.onended = null;
+   audio.onerror = null;
+   audio.pause();
+   audio.removeAttribute('src');
   }
   setSpeaking(false);
  }, []);
 
  const speak = useCallback((words) => {
-  if (!words || typeof window === 'undefined' || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+  if (!words || typeof window === 'undefined' || typeof window.Audio !== 'function') {
    setSupported(false);
    return false;
   }
-  const synth = window.speechSynthesis;
-  activeRef.current = null;
-  synth.cancel();
-  const utterance = new window.SpeechSynthesisUtterance(words);
-  const voice = chooseVoice(synth, voiceName);
-  if (voice) utterance.voice = voice;
-  // Force en-US synthesis when no explicit US voice is installed.
-  // Never deliberately substitute an Australian or British voice.
-  utterance.lang = 'en-US';
-  utterance.rate = 0.88;
-  utterance.pitch = 0.85;
-  utterance.volume = 1;
-  activeRef.current = utterance;
-  utterance.onstart = () => {
-   if (activeRef.current === utterance) setSpeaking(true);
-  };
-  utterance.onend = () => {
-   if (activeRef.current === utterance) {
-    activeRef.current = null;
+  stop();
+  setError('');
+  const audio = new window.Audio(urlFor(words));
+  audio.preload = 'auto';
+  audioRef.current = audio;
+  audio.onplaying = () => { if (audioRef.current === audio) setSpeaking(true); };
+  audio.onended = () => {
+   if (audioRef.current === audio) {
+    audioRef.current = null;
     setSpeaking(false);
    }
   };
-  utterance.onerror = () => {
-   if (activeRef.current === utterance) {
-    activeRef.current = null;
+  audio.onerror = () => {
+   if (audioRef.current === audio) {
+    audioRef.current = null;
     setSpeaking(false);
+    setError('Jeremiah narration is unavailable. Check the server voice service.');
    }
   };
-  try {
-   synth.speak(utterance);
-   return true;
-  } catch {
-   activeRef.current = null;
+  // A direct user tap can start playback on iPhone; autoplay on scene
+  // transitions may be blocked until the user taps Replay.
+  audio.play()?.catch(e => {
+   if (audioRef.current !== audio) return;
    setSpeaking(false);
-   return false;
-  }
- }, [voiceName]);
+   if (e?.name === 'NotAllowedError') setError('Tap Replay to hear this moment on your device.');
+   else if (e?.name !== 'AbortError') setError('Jeremiah narration could not play. Try Replay.');
+  });
+  return true;
+ }, [stop]);
 
  const toggle = useCallback(() => {
   if (enabled) {
    stop();
    setEnabled(false);
-   lastAutoSceneRef.current = null;
+   setError('');
+   lastSceneRef.current = null;
   } else {
-   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+   if (typeof window === 'undefined' || typeof window.Audio !== 'function') {
     setSupported(false);
     return;
    }
    setEnabled(true);
    if (text) {
-    // Start directly from the user's click: browsers may block non-gesture speech.
-    lastAutoSceneRef.current = sceneKey;
+    lastSceneRef.current = sceneKey;
     speak(text);
    }
   }
@@ -117,23 +83,28 @@ export default function useLessonNarration({ text, key: sceneKey }) {
    stop();
    return;
   }
-  if (lastAutoSceneRef.current !== sceneKey) {
-   lastAutoSceneRef.current = sceneKey;
+  if (lastSceneRef.current !== sceneKey) {
+   lastSceneRef.current = sceneKey;
    speak(text);
   }
  }, [enabled, text, sceneKey, speak, stop]);
 
  useEffect(() => {
-  const pauseWhenHidden = () => {
-   if (document.hidden) stop();
-  };
+  const pauseWhenHidden = () => { if (document.hidden) stop(); };
   if (typeof document !== 'undefined') document.addEventListener('visibilitychange', pauseWhenHidden);
   return () => {
    if (typeof document !== 'undefined') document.removeEventListener('visibilitychange', pauseWhenHidden);
-   if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel();
-   activeRef.current = null;
+   const audio = audioRef.current;
+   audioRef.current = null;
+   if (audio) {
+    audio.onplaying = null;
+    audio.onended = null;
+    audio.onerror = null;
+    audio.pause();
+    audio.removeAttribute('src');
+   }
   };
  }, [stop]);
 
- return { enabled, supported, speaking, toggle, speak, stop, voiceName, voiceOptions, chooseVoice: setVoiceName };
+ return { enabled, supported, speaking, error, toggle, speak, stop };
 }
