@@ -4,6 +4,8 @@ import { CURRICULUM_STUDIES } from "../src/core/classroom/content/curriculumCont
 // OG/NB standards automatically updates Ask Jeremiah's scope and evidence.
 const studies = CURRICULUM_STUDIES.filter(study => ["OG","NB"].includes(study.id));
 const STOP_WORDS = new Set("a an and are as at be been but by can could do does for from had has have how i in into is it its me my of on or our please should so some tell than that the their them there these they this to us was were what when where which who why will with would you your about explain describe give say".split(" "));
+// Broad everyday terms cannot establish doctrinal relevance on their own.
+for (const generic of ['world','series','today','tomorrow','yesterday','latest','current','game','games','news']) STOP_WORDS.add(generic);
 const OUT_OF_SCOPE = "I don't have that information in the approved One True God or New Birth standards yet. You can ask me about a topic those standards cover.";
 const NO_SERVICE = "Ask Jeremiah is temporarily unavailable. Your question was not answered; please try again when the connection is restored.";
 
