@@ -526,3 +526,52 @@
  .ogp-controls{gap:10px}
 }
 @media(prefers-reduced-motion:reduce){.ogp-stage{animation:none}}
+
+
+/* Fixed AI narrator: playback feedback and required voice disclosure. */
+.ogp-menu-panel .ogp-voice-note{
+ margin:4px 6px 6px;
+ padding:12px 10px 7px;
+ color:#56677a;
+ font-size:.75rem;
+ font-weight:500;
+ line-height:1.55;
+ border-top:1px solid #e5e9f0;
+}
+.ogp-narration-disclosure{
+ margin:0;
+ padding:5px 18px 3px;
+ background:#f4f7ff;
+ color:#52617c;
+ font-size:.72rem;
+ line-height:1.45;
+ text-align:center;
+}
+.ogp-voice-error{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:12px;
+ padding:10px 18px;
+ border-bottom:1px solid #f0dccb;
+ background:#fff7ef;
+ color:#70492f;
+ font-size:.84rem;
+ line-height:1.5;
+ text-align:center;
+}
+.ogp-voice-error button{
+ padding:7px 12px;
+ border:1px solid #b98c64;
+ border-radius:9px;
+ background:#fff;
+ color:#664024;
+ font-weight:700;
+ cursor:pointer;
+}
+.ogp-voice-error button:hover{background:#fbe5d2}
+@media(max-width:720px){
+ .ogp-voice-error{font-size:.79rem}
+ .ogp-narration-disclosure{font-size:.69rem}
+}
