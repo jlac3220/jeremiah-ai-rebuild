@@ -179,7 +179,7 @@ html, body, .app-shell { background: var(--j-canvas); }
 .ce-door::before, .ce-door::after { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; }
 .ce-door::before { background-size: cover; background-position:center 33%; }
 .ce-door::after { background: linear-gradient(180deg,rgba(11,25,47,.09),rgba(11,25,47,.5) 45%,#0b182f 100%); }
-.ce-door:nth-child(1)::before { background-image:url('https://images.pexels.com/photos/39811859/pexels-photo-39811859.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
+.ce-door:nth-child(1)::before { background-image:url('https://images.pexels.com/photos/36722264/pexels-photo-36722264.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
 .ce-door:nth-child(2)::before { background-image:url('https://images.pexels.com/photos/10402149/pexels-photo-10402149.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
 .ce-door:nth-child(3)::before { background-image:url('https://images.pexels.com/photos/22711047/pexels-photo-22711047.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
 .ce-door-number { margin-bottom: auto; font: 820 .9rem/1 var(--font-body); color: #fff; letter-spacing: .1em; }
