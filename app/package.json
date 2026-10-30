@@ -29,7 +29,8 @@
     "crawl:site": "python3 server/websiteCrawler.py",
     "test:crawler": "python3 scripts/test-website-crawler.py -v",
     "test:content-scan": "node scripts/test-educational-scan.mjs",
-    "test:visual-framework": "node scripts/test-visual-framework.mjs"
+    "test:visual-framework": "node scripts/test-visual-framework.mjs",
+    "test:ask-jeremiah": "node scripts/test-ask-jeremiah.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
