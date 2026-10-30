@@ -9,23 +9,21 @@ import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
 import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
+import { chooseEverydayPhoto, EVERYDAY_PHOTO_CATEGORIES } from './everydayPhotoLibrary';
 import './OG1LessonPlayer.css';
 
-// Distinct contemporary people and settings for three lived-faith decisions.
-// Photographs are illustrative, not depictions of the user's circumstances.
-const TODAY_SCENES = [
- {src:'https://images.unsplash.com/photo-1770097286875-0cbf4ca2f8c1?auto=format&fit=crop&w=1400&q=82',alt:'Modern congregation gathered in worship',credit:'AMONWAT DUMKRUT · Unsplash',label:'YOUR WORSHIP'},
- {src:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1400&q=82',alt:'Real people collaborating at a work table',credit:'Rawpixel · Unsplash',label:'YOUR EVERYDAY CHOICES'},
- {src:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=82',alt:'Young adults gathered around a table learning and talking together',credit:'Unsplash · Everyday conversation',label:'YOUR CONVERSATIONS'}
-];
-function EverydayScenePhoto({index}) {
- const [failed,setFailed]=useState(false);
- useEffect(()=>setFailed(false),[index]);
- const scene=TODAY_SCENES[index]||TODAY_SCENES[0];
+// Christian-appropriate, globally varied scenes. One selection per lesson visit;
+// never reshuffle mid-answer or repeat the same screen-heavy stock photograph.
+const TODAY_SCENE_LABELS = ['YOUR WORSHIP', 'YOUR EVERYDAY CHOICES', 'YOUR CONVERSATIONS'];
+function EverydayScenePhoto({index,photoSeed}) {
+ const [failedOffset,setFailedOffset]=useState(0);
+ const category=EVERYDAY_PHOTO_CATEGORIES[index]||'conduct';
+ useEffect(()=>setFailedOffset(0),[category,photoSeed]);
+ const scene=chooseEverydayPhoto(category,photoSeed,failedOffset);
  return <div className="ogp-mission-photo">
-  {!failed&&<img key={scene.src} src={scene.src} alt={scene.alt} loading="lazy" decoding="async" onError={()=>setFailed(true)}/>}
-  <span>{scene.label}</span>
-  {!failed&&<small>{scene.credit}</small>}
+  {failedOffset<4&&<img key={scene.src} src={scene.src} alt={scene.alt} style={{objectPosition:scene.focal}} loading="lazy" decoding="async" onError={()=>setFailedOffset(i=>i+1)}/>}
+  <span>{TODAY_SCENE_LABELS[index]||'YOUR EVERYDAY LIFE'}</span>
+  {failedOffset<4&&<small>{scene.credit}</small>}
  </div>;
 }
 
@@ -108,6 +106,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
+ const [photoSeed]=useState(()=>Math.floor(Math.random()*100000));
  const abort=useRef(null);
  const stageRef=useRef(null);
  const priorMove=useRef(move.id);
@@ -269,7 +268,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {current.kind==='mission'&&<div className="ogp-mission">
       <p className="ogp-prompt">The Shema continues into Deuteronomy 6:5. What would wholehearted love look like beyond a spoken confession?</p>
       <div className="ogp-mission-scene ogp-mission-scene--photo">
-       <EverydayScenePhoto index={evidenceIndex}/>
+       <EverydayScenePhoto index={evidenceIndex} photoSeed={photoSeed}/>
        <div className="ogp-mission-copy">
         <span>{['SCENE 1 · WORSHIP','SCENE 2 · CONDUCT','SCENE 3 · MISSION'][evidenceIndex]}</span>
         <h2>{['Who receives your devotion?','What happens when honesty costs you?','Who should hear this confession?'][evidenceIndex]}</h2>
