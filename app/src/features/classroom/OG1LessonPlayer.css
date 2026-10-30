@@ -575,3 +575,19 @@
  .ogp-voice-error{font-size:.79rem}
  .ogp-narration-disclosure{font-size:.69rem}
 }
+
+
+/* The narrator audition is a real route, not a device voice selector. */
+.ogp-menu-panel .ogp-audition-link{
+ display:block;
+ text-decoration:none;
+ color:#344bcc;
+ background:#eef2ff;
+ border-radius:9px;
+ padding:12px 11px;
+ font-size:.86rem;
+ font-weight:750;
+ line-height:1.4;
+}
+.ogp-menu-panel .ogp-audition-link:hover{background:#dfe6ff}
+.ogp-menu-panel .ogp-audition-link:focus-visible{outline:3px solid #8894fa;outline-offset:2px}
