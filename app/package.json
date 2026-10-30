@@ -13,6 +13,7 @@
     "test:brain": "node scripts/validate-standards.mjs && node scripts/test-standards-driven.mjs && node scripts/smoke-learning-engine.mjs",
     "test:narration": "node scripts/test-narration.mjs",
     "test:everyday-photos": "node scripts/test-everyday-photos.mjs",
+    "test:biblical-visuals": "node scripts/test-biblical-visuals.mjs",
     "test:bible-source": "node scripts/smoke-ebible-source.mjs",
     "test:bible": "node scripts/test-bible-parser.mjs",
     "test:dashboard": "node scripts/test-learning-dashboard.mjs",
