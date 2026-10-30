@@ -1585,7 +1585,9 @@ export default function ClassroomPage({ onNavigate }) {
     );
   }
 
-  if (content.standardId === "OG.1.LESSON.18" && !sessionStorage.getItem("jeremiah-og1-classic")) {
+  // The cinematic OG.1 player is authored for the approved five-standard version.
+  // On a standards revision, teach the regenerated source-based sequence instead.
+  if (content.standardId === "OG.1.LESSON.18" && !content.isStandardsGenerated && !sessionStorage.getItem("jeremiah-og1-classic")) {
     return <OG1LessonPlayer content={content} state={learningState} onStateChange={setLearningState} onNavigate={onNavigate} onUseClassic={()=>{sessionStorage.setItem("jeremiah-og1-classic","1");window.location.reload();}} />;
   }
 
