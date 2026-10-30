@@ -14,9 +14,9 @@ const PAUL='“There is none other God but one.”';
 export const GALLERY_ART = Object.freeze({
  shema: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Modern illustration of Moses addressing the gathered Israelites in a wilderness encampment','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA),
  moses: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Moses addressing the Israelites, not an anonymous modern traveler','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA,'50% 35%'),
- prophets: illustrated('https://www.heroisdabiblia.com.br/storage/posts/featured/MfCGF7Wa09bQZDGlh8d2A0MgpSycbjG0e6xhjA4u.webp','Modern depiction of Isaiah proclaiming his message from a rocky hillside above ancient Judah','Heróis da Bíblia','https://www.heroisdabiblia.com.br/en-us/artigos/isaiah-the-classical-prophet-of-judah-and-his-messianic-visions','Isaiah 44:6',ISAIAH,'62% 36%'),
+ prophets: illustrated('https://cdn.bibleworld.ai/bible-world/generations/6813b465-dfad-4cc5-aeee-39208585be77.png?format=webp&quality=80','Illustrative depiction of Isaiah holding scarlet wool while speaking to three listeners in Judea','BibleWorld · public gallery CC0','https://bibleworld.ai/image/05eb3480-fc03-457b-8c5f-9e34a54fff9a','Isaiah 44:6',ISAIAH,'35% 38%'),
  jesus: illustrated('https://static.wixstatic.com/media/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg/v1/fill/w_1000%2Ch_667%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg','Jesus teaching a Jewish scribe about the greatest commandment, with other listeners present','Caminho de Fé','https://www.caminhodefe.com/post/o-cora%C3%A7%C3%A3o-da-lei-%C3%A9-o-amor','Mark 12:29',JESUS,'40% 35%'),
- apostles: illustrated('https://cdn.bibleworld.ai/bible-world/generations/e8158347-eb99-404f-9a7e-48445c96d610.png?format=jpeg&quality=85&width=1200','The apostle Paul preaching to a gathered early Christian community','BibleWorld · public gallery CC0','https://bibleworld.ai/image/db18cba8-835c-4785-8710-e7772a439bd2','1 Corinthians 8:4',PAUL,'59% 33%'),
+ apostles: illustrated('https://cdn.bibleworld.ai/bible-world/generations/59d63be9-2ab7-486f-a84a-24ea14b6fd6d.png?format=webp&quality=80','Illustrative depiction of Paul and Barnabas teaching a gathering of believers in Antioch','BibleWorld · public gallery CC0','https://bibleworld.ai/image/9c480671-271b-4810-a197-63bcfdc1b184','1 Corinthians 8:4',PAUL,'52% 34%'),
 });
 export const BIBLICAL_ART = Object.freeze({
  ...GALLERY_ART,
@@ -43,11 +43,11 @@ export const VISUAL_ASSETS = Object.freeze([
  media('moses-addresses-israel',GALLERY_ART.shema,{intent:'scripture',
   subjects:['Moses'],references:['Deuteronomy 6:4'],topics:['the shema'],priority:10}),
  media('isaiah-proclaims',GALLERY_ART.prophets,{intent:'scripture',
-  subjects:['Isaiah'],references:['Isaiah 43:10','Isaiah 44:6','Isaiah 45:5'],topics:['prophetic witness'],priority:10}),
+  subjects:['Isaiah'],references:['Isaiah 43:10','Isaiah 44:6','Isaiah 45:5'],topics:['prophetic witness'],priority:10,rightsStatus:'cleared'}),
  media('jesus-teaches-scribe',GALLERY_ART.jesus,{intent:'scripture',
   subjects:['Jesus'],references:['Mark 12:29'],topics:['the greatest commandment'],priority:10}),
  media('paul-teaches-church',GALLERY_ART.apostles,{intent:'scripture',
-  subjects:['Paul'],references:['1 Corinthians 8:4','1 Corinthians 8:4-6'],topics:['apostolic witness'],priority:10}),
+  subjects:['Paul'],references:['1 Corinthians 8:4','1 Corinthians 8:4-6'],topics:['apostolic witness'],priority:10,rightsStatus:'cleared'}),
  // Later manuscript witness to Isaiah, NOT Isaiah's autograph.
  Object.freeze({id:'great-isaiah-scroll',
   src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Great_Isaiah_Scroll.jpg/960px-Great_Isaiah_Scroll.jpg',
