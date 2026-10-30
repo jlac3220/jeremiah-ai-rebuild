@@ -207,7 +207,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {(move.id!=='learn'||current.kind!=='read')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind?.startsWith('shema-')&&<ShemaExperience kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
-      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema"/></div>
+      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter"/></div>
       <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
       <div className="ogp-encounter-inner">
        <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
@@ -219,7 +219,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       </div>
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
-      <div className="ogp-scripture-ornament" aria-hidden="true"><DestinationArt tone={readingArtTone(current.verse.reference)}/></div>
+      <div className="ogp-scripture-ornament" aria-hidden="true"><DestinationArt tone={readingArtTone(current.verse.reference)+"-reading"}/></div>
       <div className="ogp-scripture-content">
        <span className="ogp-scripture-index">{current.verse.reference.toUpperCase()} · KJV</span>
        <blockquote className="ogp-verse">“{current.verse.text}”</blockquote>
@@ -238,7 +238,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
        </button>)}
       </div>
       <div className="ogp-witness-scroll" key={evidenceIndex}>
-       <div className="ogp-witness-art" aria-hidden="true"><DestinationArt tone="prophets"/></div>
+       <div className="ogp-witness-art" aria-hidden="true"><DestinationArt tone="prophets-witness"/></div>
        <div className="ogp-witness-copy">
         <span>ISAIAH'S TESTIMONY · {String(evidenceIndex+1).padStart(2,'0')} / 03</span>
         <blockquote>{['“before me there was no God formed”','“beside me there is no God”','“neither shall there be after me”'][evidenceIndex]}</blockquote>
@@ -254,7 +254,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
        <span className="ogp-trail-thumb"><DestinationArt tone={tone}/><span className="ogp-trail-order">0{i+1}</span></span>
        <strong>{name}</strong><small>{ref}</small>
       </button>)}</div>
-      <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses':evidenceIndex===1?'jesus':'apostles'}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
+      <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses-trail':evidenceIndex===1?'jesus-trail':'apostles-trail'}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
      </div>}
      {current.kind==='comparison'&&<div className="ogp-compare">
       <p className="ogp-prompt">Start with common ground. Then uncover the actual theological disagreement instead of assuming the other view believes in three gods.</p>
