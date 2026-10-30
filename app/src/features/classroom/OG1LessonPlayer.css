@@ -351,3 +351,178 @@
  letter-spacing:0;
  white-space:normal;
 }
+
+
+/* JEREMIAH 2026 · Contemporary documentary design system
+   Premium and modern for older teens through midlife learners.
+   Editorial sans for interface, serif reserved for actual Scripture quotations.
+   Scoped exclusively to the OG.1 experience. */
+.ogp-page{
+ --og-ink:#111c2b;
+ --og-muted:#637083;
+ --og-brass:#5966ec;
+ --og-deep:#111e31;
+ --og-paper:#f5f7fa;
+ --og-line:#e2e7ed;
+ --og-tint:#edf1fa;
+ --og-accent:#4758df;
+ --og-accent-strong:#4658e6;
+ --og-radius:18px;
+ background:radial-gradient(ellipse 75% 55% at 100% 8%,#e9edff 0%,transparent 70%),#f5f7fa;
+ color:#111c2b;
+ font:400 16px/1.6 Inter,"Segoe UI",system-ui,-apple-system,sans-serif;
+}
+.ogp-theme-isaiah,.ogp-theme-continuity,.ogp-theme-distinction,.ogp-theme-devotion{
+ --og-paper:#f5f7fa;--og-tint:#edf1fa;--og-accent:#4758df;--og-brass:#5966ec;
+}
+.ogp-header{
+ background:#111b2b;
+ border-bottom:1px solid #ffffff18;
+ box-shadow:0 5px 20px #0a192016;
+}
+.ogp-brand{font:800 1.02rem/1.05 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:.105em}
+.ogp-brand small{color:#abb6ca;font:.65rem/1.45 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:.1em;margin-top:4px}
+.ogp-monogram{border:1px solid #a2adff66;background:#5363e620;color:#c5cbff;font:800 1.1rem Inter,system-ui,sans-serif}
+.ogp-header button{color:#eef1fc}
+.ogp-menu summary{color:#edf0fb;border-color:#ffffff30}
+.ogp-menu-panel{box-shadow:0 20px 45px #0c163c36;border:1px solid #e5e9f0}
+.ogp-page button:focus-visible,.ogp-page summary:focus-visible,.ogp-page textarea:focus-visible,.ogp-page select:focus-visible{outline:3px solid #7986ff;outline-offset:3px}
+.ogp-progress{height:4px;background:#202a42}
+.ogp-progress span{background:linear-gradient(90deg,#5564eb,#5ab8c9)}
+.ogp-shell{width:min(100%,1100px);padding-top:32px}
+.ogp-context{padding-bottom:24px}
+.ogp-context-meta,.ogp-context-name{color:#627085}
+.ogp-context-meta{font-size:.7rem;letter-spacing:.08em;font-weight:700}
+.ogp-context-line{background:#b9c2d0}
+.ogp-context-name{font:700 1.1rem/1.3 Inter,system-ui,sans-serif;letter-spacing:-.017em;color:#1d3045}
+.ogp-chapter-track span{height:5px;background:#dfe4ee}
+.ogp-chapter-track .is-reached{background:#5564eb}
+.ogp-stage{padding-top:40px}
+.ogp-verb{font-size:.73rem;letter-spacing:.105em;color:#485fe5;font-weight:800}
+.ogp-verb-dash{background:#5e6bec}
+.ogp-stage h1,.ogp-finish h1{
+ font:800 clamp(2.15rem,5.1vw,4.15rem)/1.08 Inter,"Segoe UI",system-ui,sans-serif;
+ letter-spacing:-.052em;color:#101e2f;
+ max-width:950px;
+}
+.ogp-prompt{max-width:740px;font-size:1.065rem;line-height:1.75;color:#526174}
+.ogp-thought{font:550 clamp(1.24rem,2.6vw,1.72rem)/1.66 Inter,system-ui,sans-serif;color:#263a50}
+.ogp-controls{border-top:1px solid #dfe5ec;margin-top:26px}
+.ogp-action{
+ border:1px solid #4a56d7;
+ background:#4c5be4;
+ border-radius:13px;
+ min-height:52px;
+ padding:13px 23px;
+ font-weight:750;
+ font-size:.94rem;
+ box-shadow:0 7px 18px #4b5bca26;
+}
+.ogp-action:not(:disabled):hover{background:#3545c9;box-shadow:0 10px 22px #3449c534}
+.ogp-back{color:#607086;font-weight:600}
+.ogp-link,.ogp-scripture-scene .ogp-link{color:#c1c8ff;font-weight:700}
+.ogp-link:hover{color:white}
+.ogp-encounter{
+ background:radial-gradient(circle at 75% 15%,#1e406b 0%,#14243a 54%,#0c1729 100%);
+ border:1px solid #ffffff12;
+ box-shadow:0 22px 48px #081c2e2e;
+}
+.ogp-encounter:before{opacity:.18}
+.ogp-encounter-light span{border-color:#8599eb24}
+.ogp-encounter-tag{color:#b8c4ff;letter-spacing:.1em}
+.ogp-encounter-symbol{color:#aebaff}
+.ogp-encounter blockquote{font-family:Georgia,"Times New Roman",serif;color:white}
+.ogp-encounter-word{color:#d8dfff;border-color:#a5b1ff}
+.ogp-encounter-hint{color:#cdd6ef}
+.ogp-encounter-reveal{border-color:#7c90d45c}
+.ogp-encounter-reveal strong{color:#b7c3ff}
+.ogp-stage--read .ogp-scripture-scene,
+.ogp-theme-isaiah .ogp-scripture-scene,
+.ogp-theme-continuity .ogp-scripture-scene,
+.ogp-theme-distinction .ogp-scripture-scene,
+.ogp-theme-devotion .ogp-scripture-scene{
+ background:linear-gradient(125deg,#1a3048,#0f1b2b 78%);
+ border-radius:20px;
+ box-shadow:0 18px 40px #121e2e25;
+}
+.ogp-scripture-ornament{border-color:#ffffff12;background:#152b42}
+.ogp-scripture-ornament:after{border-color:#7989cb22}
+.ogp-scripture-index{color:#aab8ff;letter-spacing:.09em}
+.ogp-scripture-scene .ogp-verse{font-family:Georgia,"Times New Roman",serif}
+.ogp-scripture-scene .ogp-reference{color:#aab7c9;letter-spacing:.09em}
+.ogp-scripture-footer p{color:#b3c1d2}
+.ogp-discovery-choices button{
+ background:#fff;
+ border:1px solid #e1e7ef;
+ border-radius:17px;
+ font:750 clamp(1rem,1.7vw,1.2rem)/1.35 Inter,system-ui,sans-serif;
+ letter-spacing:-.017em;
+ box-shadow:0 7px 20px #17294a0b;
+}
+.ogp-discovery-choices button:hover{border-color:#8794ff;box-shadow:0 12px 25px #273b8720}
+.ogp-discovery-choices button[aria-pressed=true]{border-color:#5264e6;background:#263856;color:#fff}
+.ogp-discovery-answer{background:#fff;border:1px solid #e2e8f1;border-left:4px solid #5968eb;border-radius:14px;box-shadow:0 10px 25px #1a2c400b}
+.ogp-discovery-answer strong{color:#485ade;letter-spacing:.08em}
+.ogp-discovery-answer p{font:600 clamp(1.12rem,2vw,1.36rem)/1.55 Inter,system-ui,sans-serif;color:#25374c}
+.ogp-insight-mark{font:700 1.65rem Inter,system-ui,sans-serif;color:#5664e8}
+.ogp-insight .ogp-thought{font:560 clamp(1.35rem,3vw,1.92rem)/1.65 Inter,system-ui,sans-serif;color:#24384b}
+.ogp-depth-button{color:#4c5dde;border-color:#9ca9f0}
+.ogp-depth{background:#fff;border:1px solid #e2e8f1;border-radius:17px;box-shadow:0 12px 29px #2034470f}
+.ogp-witness-timeline span{border-color:#cfd6e3;color:#697b8e;letter-spacing:.09em}
+.ogp-witness-timeline span.active{border-color:#5161e4;color:#384dd2}
+.ogp-witness-scroll{
+ background:linear-gradient(140deg,#fff,#eff3fc);
+ border:1px solid #dfe6f2;
+ border-radius:20px;
+ box-shadow:0 16px 38px #152a4a12;
+}
+.ogp-witness-scroll:after{display:none}
+.ogp-witness-scroll>span,.ogp-witness-scroll strong{color:#495bd2;letter-spacing:.09em}
+.ogp-witness-scroll blockquote{color:#12283d;font-family:Georgia,"Times New Roman",serif}
+.ogp-witness-scroll p,.ogp-witness-conclusion{color:#4e6277}
+.ogp-witness-conclusion{font:600 1.18rem/1.62 Inter,system-ui,sans-serif;border-left:3px solid #5364dc}
+.ogp-trail-track:before{background:linear-gradient(90deg,#5364e5,#59abbc)}
+.ogp-trail-track button{color:#43526d}
+.ogp-trail-track button>span{font:750 1.1rem Inter,system-ui,sans-serif;border-color:#9faae9;background:#f5f7fa;box-shadow:0 0 0 7px #f5f7fa}
+.ogp-trail-track button[aria-pressed=true]>span{border-color:#7787f5;background:#4c5dde}
+.ogp-trail-track button strong{letter-spacing:.06em}
+.ogp-trail-quote{background:linear-gradient(130deg,#162f47,#0d1d31);border:1px solid #364e6d66;border-radius:20px;box-shadow:0 17px 39px #142b3b25}
+.ogp-trail-quote span{color:#b5c0ff;letter-spacing:.095em}
+.ogp-trail-quote blockquote{font-family:Georgia,"Times New Roman",serif}
+.ogp-compare-ring{background:linear-gradient(135deg,#263c60,#141e38);border:1px solid #8290ff;color:#f3f5ff;box-shadow:0 0 0 9px #6978f214,0 18px 35px #17243928}
+.ogp-compare-ring span{font:800 1.3rem Inter,system-ui,sans-serif}
+.ogp-compare-columns section,.ogp-compare-columns section.is-revealed{border-radius:17px}
+.ogp-compare-columns section.is-revealed{border-color:#dce4f1;box-shadow:0 12px 30px #1e304a13}
+.ogp-compare-columns section>span{color:#5263cf;letter-spacing:.08em}
+.ogp-compare-columns h2{font:750 1.58rem/1.25 Inter,system-ui,sans-serif;color:#1e3349}
+.ogp-compare-conclusion{background:#edf1ff;border-left:3px solid #6573e8;color:#293954;font:600 1.06rem/1.62 Inter,system-ui,sans-serif}
+.ogp-mission-scene--photo,.ogp-mission-scene.ogp-mission-scene--photo{border-radius:20px;background:#172b43}
+.ogp-mission-copy{background:linear-gradient(135deg,#213d5c,#111f33)}
+.ogp-mission-copy>span{color:#bdc7ff;letter-spacing:.1em}
+.ogp-mission-copy h2{font:750 clamp(1.8rem,3vw,2.55rem)/1.18 Inter,system-ui,sans-serif;letter-spacing:-.04em}
+.ogp-mission-copy p{color:#d9e4ef}
+.ogp-mission-options button{border:1px solid #e0e7ee;background:white;border-radius:15px;color:#24384c;font-weight:600}
+.ogp-mission-options button[aria-pressed=true]{background:#e9edff;border-color:#5065eb;box-shadow:inset 0 0 0 2px #5065eb;color:#2639a9}
+.ogp-mission-response{border-left:3px solid #5264e6;background:#eff2ff;color:#334967}
+.ogp-options button{background:#fff;border:1px solid #dfe6ef;border-radius:14px;font-size:1rem}
+.ogp-options button[aria-pressed=true]{background:#edf0ff;border-color:#5967e7;box-shadow:inset 0 0 0 2px #5967e7}
+.ogp-stage--task .ogp-prompt{font:600 clamp(1.13rem,2.1vw,1.37rem)/1.55 Inter,system-ui,sans-serif}
+.ogp-stage textarea{border:1px solid #d9e2ec;border-radius:15px;background:#fff;color:#192e42}
+.ogp-help{color:#566680}
+.ogp-feedback{background:#eef4f5;color:#2c5159;border-left-color:#489ca8}
+.ogp-stage--task .la-activity fieldset{background:#fff;border-color:#dee5ee}
+.ogp-finish:before{color:#5364e6}
+.ogp-finish p{font:500 1.19rem/1.75 Inter,system-ui,sans-serif;color:#52647a}
+.ogp-restart-dialog{border-radius:19px;border:1px solid #dce3ed}
+.ogp-restart-dialog h2{font:750 1.75rem/1.3 Inter,system-ui,sans-serif}
+.ogp-page .ogp-voice-picker select{background:#fff;color:#1c3045}
+@media(max-width:720px){
+ .ogp-shell{padding:25px 19px 100px}
+ .ogp-stage{padding-top:33px}
+ .ogp-stage h1,.ogp-finish h1{font-size:clamp(2.2rem,9vw,3.2rem)}
+ .ogp-stage--read .ogp-scripture-scene{border-radius:17px}
+ .ogp-witness-scroll{padding:31px 26px}
+ .ogp-action{width:auto;max-width:100%}
+ .ogp-controls{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){.ogp-stage{animation:none}}
