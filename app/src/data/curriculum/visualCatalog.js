@@ -1,4 +1,5 @@
 // Curated illustrations are educational depictions, not historical photographs.
+import {EVERYDAY_PHOTO_LIBRARY} from '../../features/classroom/everydayPhotoLibrary.js';
 // External imagery still requires rights review before publication.
 const illustrated = (src,alt,artist,source,reference,quote,focal='50% 38%')=>({
  src,alt,artist,work:'Modern illustrative reconstruction',source,focal,reference,quote
@@ -53,6 +54,17 @@ export const VISUAL_ASSETS = Object.freeze([
   sourceUrl:'https://cudl.lib.cam.ac.uk/view/MS-OR-00233/1',
   intent:'artifact',references:['Deuteronomy 6:4'],topics:['the shema'],
   previewApproved:true,rightsStatus:'needs-review',priority:30}),
+ // Distinct contemporary scenes for broad life application, not fabricated
+ // illustrations of a named biblical event. See Deuteronomy 6:5.
+ Object.freeze({id:'heart-soul-might-prayer',...EVERYDAY_PHOTO_LIBRARY.worship[2],
+  intent:'concept',topics:['heart soul might','wholehearted devotion'],
+  references:['Deuteronomy 6:5'],previewApproved:true,rightsStatus:'needs-review',priority:30}),
+ Object.freeze({id:'wholehearted-love-community',...EVERYDAY_PHOTO_LIBRARY.worship[0],
+  intent:'concept',topics:['wholehearted love'],
+  references:['Deuteronomy 6:5'],previewApproved:true,rightsStatus:'needs-review',priority:30}),
+ Object.freeze({id:'exclusive-worship-congregation',...EVERYDAY_PHOTO_LIBRARY.worship[1],
+  intent:'concept',topics:['exclusive worship'],
+  references:['Exodus 20:3-5'],previewApproved:true,rightsStatus:'needs-review',priority:30}),
  Object.freeze({id:'congregation-worship',src:'https://images.pexels.com/photos/35555152/pexels-photo-35555152.jpeg?auto=compress&cs=tinysrgb&w=1600',
   alt:'Congregation gathered for Christian worship',
   credit:'Caleb Oquendo · Pexels',sourceUrl:'https://www.pexels.com',
