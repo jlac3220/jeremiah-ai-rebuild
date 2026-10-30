@@ -5,6 +5,7 @@ import ClassroomPage from "../features/classroom/ClassroomPage";
 import ProgressPage from "../features/progress/ProgressPage";
 import ProfilePage from "../features/profile/ProfilePage";
 import BibleSupportPage from "../features/bible-support/BibleSupportPage";
+import AskJeremiahPage from "../features/ask-jeremiah/AskJeremiahPage";
 
 function Placeholder({ title }) {
   return (
@@ -42,6 +43,9 @@ export default function AppRouter({ currentRoute, onNavigate }) {
 
     case ROUTES.BIBLE_SUPPORT:
       return <BibleSupportPage onNavigate={onNavigate} />;
+
+    case ROUTES.ASK_JEREMIAH:
+      return <AskJeremiahPage onNavigate={onNavigate} />;
 
     case ROUTES.HOME:
     default:
