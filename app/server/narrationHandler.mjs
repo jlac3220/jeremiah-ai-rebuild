@@ -9,14 +9,14 @@ import ogLesson from "../src/core/classroom/content/OG_1_LESSON.js";
 // cached as stable files so future voice-provider migrations do not change them.
 export const NARRATOR = Object.freeze({
   model: "gpt-4o-mini-tts",
-  voice: "onyx",
+  voice: "ash",
   speed: 0.93,
   instructions:
     "You are Jeremiah, a warm, mature American male Bible teacher. " +
     "Use a deep, resonant, unhurried documentary narration with calm authority, " +
     "natural pauses, clear American English and carefully articulated KJV Scripture. " +
     "Avoid theatrical imitation, caricature, dramatic yelling, and any non-American accent.",
-  version: "jeremiah-onyx-v1",
+  version: "jeremiah-ash-v1",
 });
 
 // Keep this endpoint limited to the authored curriculum, not a public
