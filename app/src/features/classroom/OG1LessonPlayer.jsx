@@ -38,7 +38,8 @@ function BiblicalApplicationArt({index,content,move}) {
     <small>{placement?.reference||'SCRIPTURE & LIFE'}</small>
    </div>}
   <span>{placement?.label||'THE LESSON'}</span>
-  {visual&&<small>{visual.credit||'Supporting illustration'}{visual.provider?' · Openverse preview':''}</small>}
+
+
  </div>;
 }
 

@@ -12,9 +12,7 @@ export default function ContextualLessonImage({content,move,placement,className=
  return <figure className={'jeremiah-context-image '+className} style={{margin:'20px 0',position:'relative'}}>
   <img key={visual.id} src={visual.src} alt={visual.alt} loading="lazy" decoding="async"
    onError={onError} style={{width:'100%',maxHeight:420,objectFit:'cover',borderRadius:14,display:'block'}}/>
-  <figcaption style={{fontSize:12,marginTop:8,opacity:.76}}>
-   {visual.sourceUrl?<a href={visual.sourceUrl} target="_blank" rel="noreferrer">{visual.credit||'Supporting illustration'}</a>:visual.credit||'Supporting illustration'}
-   {' · Visual rights and subject require review before release'}
-  </figcaption>
+
+
  </figure>;
 }
