@@ -45,11 +45,20 @@ export default function useDiscoveredLessonVisual(brief,fallback=null){
   // Retain a relevant known illustration during discovery; if no licensed,
   // relevant candidate exists, that illustration remains the fallback.
   setState({key,assets:[],active:null,failed:[]});
+  // Search metadata does not prove identity. Never replace an editorially
+  // chosen Isaiah/Moses/Jesus/Paul scene with an unreviewed stock result.
+  // Discovery remains available for future editorial review, but not as an
+  // automatic override of the classroom's selected art.
+  if(fallback)return ()=>{live=false};
   discover(JSON.parse(key),key).then(assets=>{
-   if(live)setState({key,assets,active:nextImage(assets),failed:[]});
+   // Unreviewed licensed results are candidates, not permission to assert
+   // that a random scene depicts the event. Future studies may promote them
+   // to the catalog once their subject, verse, and license are checked.
+   const approved=assets.filter(a=>a.editorialStatus==='approved'&&a.rightsStatus==='cleared');
+   if(live)setState({key,assets:approved,active:nextImage(approved),failed:[]});
   });
   return ()=>{live=false};
- },[key]);
+ },[key,fallback?.id]);
  const same=state.key===key;
  const asset=same?(state.active||fallback):fallback;
  function onError(){
