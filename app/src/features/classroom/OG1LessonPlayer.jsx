@@ -173,13 +173,13 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
     {narration.enabled&&narrationText&&<button type="button" className="ogp-voice-replay" aria-label={narration.loading?'Preparing narration':narration.speaking?'Stop narration':'Replay narration'} title={narration.loading?'Preparing audio':narration.speaking?'Stop speaking':'Hear again'} disabled={narration.loading} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}>{narration.loading?'Preparing audio…':narration.speaking?'■ Stop':'↻ Replay'}</button>}
     <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button>
      <a className="ogp-audition-link" href="/voice-audition.html" target="_blank" rel="noopener noreferrer">Compare five narrator voices ↗</a>
-     <p className="ogp-voice-note">Jeremiah uses one AI-generated narrator on every device. Audio is streamed from the app, not your phone’s voices.</p>
+     <p className="ogp-voice-note">Jeremiah uses Ash, a fixed AI-generated narrator. Every device plays the same MP3 audio rather than its own installed voices.</p>
 
     </div></details>
    </div>
   </header>
   <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
-  {narration.enabled&&!narration.error&&<p className="ogp-narration-disclosure">AI-generated narration · The same voice on every device</p>}
+  {narration.enabled&&!narration.error&&<p className="ogp-narration-disclosure">AI-generated narration · Ash on every device</p>}
   {narration.error&&<div className="ogp-voice-error" role="status"><span>{narration.error}</span>{narrationText&&<button type="button" onClick={()=>narration.speak(narrationText)}>Replay narration</button>}</div>}
   {confirmRestart && <div className="ogp-restart-overlay" role="presentation"><section className="ogp-restart-dialog" role="dialog" aria-modal="true" aria-labelledby="ogp-restart-title"><h2 id="ogp-restart-title">Start OG.1 from the beginning?</h2><p>You'll return to the first lesson moment. Your earlier answers and learning history will be kept for review.</p><div className="ogp-restart-actions"><button type="button" className="ogp-action" onClick={restart}>Start from beginning →</button><button type="button" className="ogp-back" onClick={()=>setConfirmRestart(false)}>Keep my place</button></div></section></div>}
   <main className="ogp-shell" key={move.id}>
