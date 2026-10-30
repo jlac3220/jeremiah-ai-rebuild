@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {allAskStandards,selectAskStandards,answerAskJeremiah,OUT_OF_SCOPE} from '../server/askJeremiahCore.mjs';
+import {allAskStandards,selectAskStandards,inferQuestionTheme,answerAskJeremiah,OUT_OF_SCOPE} from '../server/askJeremiahCore.mjs';
 import {CURRICULUM_STUDIES} from '../src/core/classroom/content/curriculumContent.js';
 import {JEREMIAH_PERSONA} from '../server/askJeremiahPersona.mjs';
 // Ensure every role the product owner asked for reaches the live AI prompt.
@@ -16,6 +16,16 @@ assert.ok(selectAskStandards('What does Deuteronomy 6:4 teach about the one God?
 assert.ok(selectAskStandards('What do the standards teach about repentance?').some(s=>s.studyId==='NB'));
 assert.deepEqual(selectAskStandards('Who won the World Series?'),[],'Sports are not in curriculum');
 assert.deepEqual(selectAskStandards('How do I bake sourdough bread?'),[],'Recipes are out of scope');
+assert.equal(inferQuestionTheme('how many gods is there?')?.name,'divine-oneness');
+assert.equal(inferQuestionTheme('how did the world start?')?.name,'creation');
+assert.equal(inferQuestionTheme('Who created Minecraft?'),null,'A named game is not biblical creation');
+const oneness=selectAskStandards('how many gods is there?',{limit:3});
+assert.equal(oneness[0]?.id,'OG.1.1.18','Simple number-of-gods questions begin with the Shema, not comparative theology');
+assert.ok(!oneness.some(s=>s.id==='OG.15.1.18'),'Never lead with doctrinal alternatives for this basic question');
+const creation=selectAskStandards('how did the world start?',{limit:3});
+assert.equal(creation[0]?.id,'OG.3.1.18','The creation question is explicitly covered by John 1 and Genesis 1');
+assert.ok(!selectAskStandards('Who created Minecraft?').some(s=>s.id==='OG.3.1.18'),
+ 'Unrelated game creation must not be routed into a Genesis lesson');
 
 let calls=0;
 const fakeResponse=json=>({ok:true,json:async()=>({
@@ -45,6 +55,32 @@ const answered=await answerAskJeremiah({question:'What does Deuteronomy 6:4 teac
 assert.equal(answered.status,'answered');
 assert.equal(answered.sources[0].id,'OG.1.1.18');
 assert.equal(calls,1);
+const topicalRequests=[];
+const topicalFetcher=async(_url,options)=>{
+ const sent=JSON.parse(options.body);
+ const request=JSON.parse(sent.input[0].content[0].text);
+ topicalRequests.push({request,instructions:sent.instructions});
+ const id=request.approvedStandards[0].id;
+ return fakeResponse({status:'answered',answer:id==='OG.3.1.18'
+  ? 'Genesis 1:1 says God created heaven and earth. The same Creator is revealed through Jesus Christ in John 1.'
+  : 'There is one God. Deuteronomy 6:4 declares that the LORD our God is one LORD.',standardIds:[id]});
+};
+const oneGodAnswer=await answerAskJeremiah({question:'how many gods is there?'},{apiKey:'fake-key',fetcher:topicalFetcher});
+assert.equal(oneGodAnswer.status,'answered');
+assert.equal(oneGodAnswer.sources[0].id,'OG.1.1.18');
+const creationAnswer=await answerAskJeremiah({question:'how did the world start?',history:[
+ {role:'user',text:'how many gods is there?'},
+ {role:'assistant',text:'There is one God.'}
+]},{apiKey:'fake-key',fetcher:topicalFetcher});
+assert.equal(creationAnswer.status,'answered','A new simple question is not a follow-up to the previous oneness question');
+assert.equal(creationAnswer.sources[0].id,'OG.3.1.18');
+assert.equal(topicalRequests[1].request.approvedStandards[0].id,'OG.3.1.18');
+assert.ok(topicalRequests[1].request.primaryScripture.some(v=>/Gen\\.?\\s*1:1/i.test(v.reference)),
+ 'Genesis 1:1 must be offered as primary evidence');
+assert.ok(topicalRequests[0].request.primaryScripture.some(v=>/Deut\\.?\\s*6:4/i.test(v.reference)),
+ 'Deuteronomy 6:4 must be offered as primary evidence');
+assert.match(topicalRequests[0].instructions,/Oneness theology affirms/,'Tell the model not to sound like a doctrinal index');
+assert.match(topicalRequests[0].instructions,/Do not cite verses about studying Scripture/);
 
 const unknown=await answerAskJeremiah({question:'What does Deuteronomy 6:4 teach?'},{
  apiKey:'fake-key',
