@@ -1,38 +1,34 @@
 import {useEffect,useState} from 'react';
 import './JourneyDestinations.css';
 
-// Purpose-led image library for modern OG.1 teaching.
-// Each scene is a contemporary photograph of a setting or illustrative activity,
-// NOT a portrait of a biblical figure or an original ancient artifact.
-// Original artifacts (such as the Nash Papyrus) appear separately with provenance.
-// Different lesson contexts use different scenes to avoid repeating the same image.
-const photo = (id, alt, credit, reference, quote, focal='center') => ({
- src:`https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1600`,
- alt,artist:credit,work:'Context photography',source:`https://www.pexels.com/photo/${id}/`,
- focal,reference,quote,
+// The artwork on these four witness cards must depict the named biblical person
+// in a relevant scene. Images are *modern artistic interpretations* — not photographs
+// of the historical individuals. Verify image reuse/hosting rights before release.
+// The separate Nash Papyrus section is the authenticated ancient artifact.
+const illustrated = (src,alt,artist,source,reference,quote,focal='50% 38%')=>({
+ src,alt,artist,work:'Modern illustrative reconstruction',source,focal,reference,quote
 });
-const SHEMA_QUOTE='“Hear, O Israel: The LORD our God is one LORD.”';
-const ISAIAH_QUOTE='“I am the first, and I am the last; and beside me there is no God.”';
-const JESUS_QUOTE='“The Lord our God is one Lord.”';
-const PAUL_QUOTE='“There is none other God but one.”';
-
+const SHEMA='“Hear, O Israel: The LORD our God is one LORD.”';
+const ISAIAH='“I am the first, and I am the last; and beside me there is no God.”';
+const JESUS='“The Lord our God is one Lord.”';
+const PAUL='“There is none other God but one.”';
 export const BIBLICAL_ART = Object.freeze({
- shema: photo(28086996, 'Sunset over the mountains and desert in Wadi Rum, Jordan', 'Nikola Čedíková · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE, '50% 38%'),
- moses: photo(32279575, 'Person in traditional Middle Eastern attire seen in a desert setting; contextual modern photograph, not Moses', 'Dajana Reçi · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE, '50% 40%'),
- prophets: photo(7386039, 'Photographed decorative parchment inscriptions; illustrative setting, not an authentic Isaiah manuscript', 'Photography Maghradze PH · Pexels', 'Isaiah 44:6', ISAIAH_QUOTE, '50% 47%'),
- jesus: photo(17690070, 'Historic stone street in present-day Jerusalem; contextual photograph, not a depiction of Jesus', 'Thắng-Nhật Trần · Pexels', 'Mark 12:29', JESUS_QUOTE, '50% 37%'),
- apostles: photo(1650203, 'Close-up of a person writing with a quill; modern re-creation of writing, not the apostle Paul', 'Vika Glitter · Pexels', '1 Corinthians 8:4', PAUL_QUOTE, '50% 45%'),
- 'moses-reading': photo(28718329, 'Desert dunes under warm sunlight, illustrating the landscape of a wilderness journey', 'Eslam Mohammed Abdelmaksoud · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE),
- 'prophets-reading': photo(12187158, 'Rugged desert path at sunset, landscape contextualizing the biblical world', 'Raziuddin Farooqi · Pexels', 'Isaiah 44:6', ISAIAH_QUOTE),
- 'jesus-reading': photo(1659291, 'Stone architecture in present-day Jerusalem, contextual background for the Gospel scene', 'BECCA SIEGEL · Pexels', 'Mark 12:29', JESUS_QUOTE),
- 'apostles-reading': photo(36516078, 'Warmly lit writing desk and papers, a modern re-creation of historical correspondence', 'Muhtelifane · Pexels', '1 Corinthians 8:4', PAUL_QUOTE),
- 'moses-trail': photo(11042744, 'Camels in the rocky desert in Jordan at sunset, contextual landscape', 'Elias Strale · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE),
- 'jesus-trail': photo(18717576, 'Roman-era stone columns at Jerash, Jordan, contextual architecture of the ancient region', 'AXP Photography · Pexels', 'Mark 12:29', JESUS_QUOTE),
- 'apostles-trail': photo(6980533, 'Person writing by hand on parchment-like paper; illustrative correspondence', 'KoolShooters · Pexels', '1 Corinthians 8:4', PAUL_QUOTE),
- 'prophets-witness': photo(39811859, 'Desert mountains at sunset near Dahab, Egypt, landscape illustration', 'Mohamed Elshiekh · Pexels', 'Isaiah 44:6', ISAIAH_QUOTE),
- 'shema-encounter': photo(2867771, 'Desert dunes at sunset, a scene evoking the ancient wilderness', 'Yasin Gündogdu · Pexels', 'Deuteronomy 6:4', SHEMA_QUOTE),
+ shema: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Modern illustration of Moses addressing the gathered Israelites in a wilderness encampment','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA),
+ moses: illustrated('https://cdn.prod.website-files.com/68864d00ea8f52f9e4d32cc2/69b0ad30a333e0c7acbccba5_Vayakhel%20Part%20I.webp','Moses addressing the Israelites, not an anonymous modern traveler','Mitzvah Minute','https://www.mitzvah-minute.com/divrei-torah/vayakhel----part-i----vay-aq-hel-mosheh-reassembling-a-broken-nation---1-2----the-nation-after-the-golden-calf','Deuteronomy 6:4',SHEMA,'50% 35%'),
+ prophets: illustrated('https://www.heroisdabiblia.com.br/storage/posts/featured/MfCGF7Wa09bQZDGlh8d2A0MgpSycbjG0e6xhjA4u.webp','Modern depiction of Isaiah proclaiming his message from a rocky hillside above ancient Judah','Heróis da Bíblia','https://www.heroisdabiblia.com.br/en-us/artigos/isaiah-the-classical-prophet-of-judah-and-his-messianic-visions','Isaiah 44:6',ISAIAH,'62% 36%'),
+ jesus: illustrated('https://static.wixstatic.com/media/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg/v1/fill/w_1000%2Ch_667%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/83aeb0_e0b90c140408418d8bb35f96267923c0~mv2.jpg','Jesus teaching a Jewish scribe about the greatest commandment, with other listeners present','Caminho de Fé','https://www.caminhodefe.com/post/o-cora%C3%A7%C3%A3o-da-lei-%C3%A9-o-amor','Mark 12:29',JESUS,'40% 35%'),
+ apostles: illustrated('https://cdn.bibleworld.ai/bible-world/generations/e8158347-eb99-404f-9a7e-48445c96d610.png?format=jpeg&quality=85&width=1200','The apostle Paul preaching to a gathered early Christian community','BibleWorld · public gallery CC0','https://bibleworld.ai/image/db18cba8-835c-4785-8710-e7772a439bd2','1 Corinthians 8:4',PAUL,'59% 33%'),
+ // Reading and continuity scenes use different compositions where available.
+ 'shema-encounter': illustrated('https://images.pexels.com/photos/2867771/pexels-photo-2867771.jpeg?auto=compress&cs=tinysrgb&w=1600','Wilderness dunes, a contemporary context photograph','Pexels','https://www.pexels.com/photo/2867771/','Deuteronomy 6:4',SHEMA),
+ 'moses-reading': illustrated('https://images.pexels.com/photos/28718329/pexels-photo-28718329.jpeg?auto=compress&cs=tinysrgb&w=1600','Desert landscape suggesting Israel’s wilderness setting','Pexels','https://www.pexels.com/photo/28718329/','Deuteronomy 6:4',SHEMA),
+ 'prophets-reading': illustrated('https://images.pexels.com/photos/12187158/pexels-photo-12187158.jpeg?auto=compress&cs=tinysrgb&w=1600','Rugged desert terrain for Isaiah reading','Pexels','https://www.pexels.com/photo/12187158/','Isaiah 44:6',ISAIAH),
+ 'jesus-reading': illustrated('https://images.pexels.com/photos/1659291/pexels-photo-1659291.jpeg?auto=compress&cs=tinysrgb&w=1600','Stone architecture of the biblical world','Pexels','https://www.pexels.com/photo/1659291/','Mark 12:29',JESUS),
+ 'apostles-reading': illustrated('https://images.pexels.com/photos/36516078/pexels-photo-36516078.jpeg?auto=compress&cs=tinysrgb&w=1600','Writing desk with papers as context for ancient correspondence','Pexels','https://www.pexels.com/photo/36516078/','1 Corinthians 8:4',PAUL),
+ 'moses-trail': illustrated('https://images.pexels.com/photos/11042744/pexels-photo-11042744.jpeg?auto=compress&cs=tinysrgb&w=1600','Wilderness landscape and desert travel','Pexels','https://www.pexels.com/photo/11042744/','Deuteronomy 6:4',SHEMA),
+ 'jesus-trail': illustrated('https://images.pexels.com/photos/18717576/pexels-photo-18717576.jpeg?auto=compress&cs=tinysrgb&w=1600','Ancient stone architecture as background context','Pexels','https://www.pexels.com/photo/18717576/','Mark 12:29',JESUS),
+ 'apostles-trail': illustrated('https://images.pexels.com/photos/6980533/pexels-photo-6980533.jpeg?auto=compress&cs=tinysrgb&w=1600','Writing scene illustrating correspondence','Pexels','https://www.pexels.com/photo/6980533/','1 Corinthians 8:4',PAUL),
+ 'prophets-witness': illustrated('https://images.pexels.com/photos/39811859/pexels-photo-39811859.jpeg?auto=compress&cs=tinysrgb&w=1600','Desert mountains for Isaiah’s prophetic witness','Pexels','https://www.pexels.com/photo/39811859/','Isaiah 44:6',ISAIAH)
 });
-
 const STOPS = [
  {title:'Moses',name:'MOSES',era:'THE FOUNDATION',place:'ISRAEL · DEUTERONOMY 6',tone:'moses',narration:'Hear, O Israel: The LORD our God is one LORD. Moses gives the confession to Israel.'},
  {title:'Isaiah',name:'ISAIAH',era:'THE PROPHETIC WITNESS',place:'ISAIAH · THE LORD ALONE',tone:'prophets',narration:'I am the first, and I am the last; and beside me there is no God. Isaiah, chapter forty four, verse six.'},
@@ -69,7 +65,7 @@ export default function JourneyDestinations({options,selected,onSelect,onSpeak,o
      <span className="ogj-reveal-kicker">{stop.name} · {art.reference.toUpperCase()}</span>
      <blockquote>{art.quote}</blockquote>
      <p>{options[selected][1]}</p>
-     <small>Visual context: {art.artist}. Modern illustrative photograph, not a portrait or eyewitness image of a biblical figure.</small>
+     <small>Illustrative reconstruction · {art.artist}. The appearance of the biblical witness is imagined, not historically documented.</small>
     </div>
     <div className="ogj-reveal-actions">
      <button type="button" onClick={()=>onSpeak?.(stop.narration)}>▶ Hear Scripture</button>
