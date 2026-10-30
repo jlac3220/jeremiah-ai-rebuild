@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { chooseEverydayPhoto } from './everydayPhotoLibrary';
 import './ShemaExperience.css';
 
 const PHRASES = [
@@ -23,6 +24,9 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  const [verseRevealed,setVerseRevealed]=useState(false);
  const [seenVideo,setSeenVideo]=useState(false);
  const [selectedReflection,setSelectedReflection]=useState('');
+ const [photoSeed]=useState(()=>Math.floor(Math.random()*100000));
+ const [photoFallback,setPhotoFallback]=useState(0);
+ const openingPhoto=chooseEverydayPhoto('opening',photoSeed,photoFallback);
  const selected=phrase>=0?PHRASES[phrase]:null;
  function selectPhrase(i) {
   setPhrase(i);
@@ -33,10 +37,11 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  }
  if(kind==='shema-encounter')return <div className="shema-world">
   <div className="shema-world-art">
-   <img className="shema-world-photo"
-     src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=86"
-     alt="Young adults gathered together in real conversation, listening and connecting"
-     loading="eager" decoding="async"/>
+   {photoFallback<4&&<img className="shema-world-photo" key={openingPhoto.src}
+     src={openingPhoto.src}
+     alt={openingPhoto.alt} style={{objectPosition:openingPhoto.focal}}
+     onError={()=>setPhotoFallback(i=>i+1)}
+     loading="eager" decoding="async"/>}
   </div>
   <div className="shema-world-copy">
    <span className="shema-eyebrow">01 / THE INVITATION</span>
