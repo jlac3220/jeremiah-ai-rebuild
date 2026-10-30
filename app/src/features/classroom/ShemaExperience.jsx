@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { chooseEverydayPhoto } from './everydayPhotoLibrary';
+import { BIBLICAL_ART } from './JourneyDestinations';
 import './ShemaExperience.css';
 
 const PHRASES = [
@@ -24,9 +24,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  const [verseRevealed,setVerseRevealed]=useState(false);
  const [seenVideo,setSeenVideo]=useState(false);
  const [selectedReflection,setSelectedReflection]=useState('');
- const [photoSeed]=useState(()=>Math.floor(Math.random()*100000));
- const [photoFallback,setPhotoFallback]=useState(0);
- const openingPhoto=chooseEverydayPhoto('opening',photoSeed,photoFallback);
+ const [openingImageFailed,setOpeningImageFailed]=useState(false);
  const selected=phrase>=0?PHRASES[phrase]:null;
  function selectPhrase(i) {
   setPhrase(i);
@@ -37,10 +35,11 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
  }
  if(kind==='shema-encounter')return <div className="shema-world">
   <div className="shema-world-art">
-   {photoFallback<4&&<img className="shema-world-photo" key={openingPhoto.src}
-     src={openingPhoto.src}
-     alt={openingPhoto.alt} style={{objectPosition:openingPhoto.focal}}
-     onError={()=>setPhotoFallback(i=>i+1)}
+   {!openingImageFailed&&<img className="shema-world-photo"
+     src={BIBLICAL_ART.shema.src}
+     alt="Illustrative reconstruction: Moses addresses the gathered people of Israel"
+     style={{objectPosition:BIBLICAL_ART.shema.focal}}
+     onError={()=>setOpeningImageFailed(true)}
      loading="eager" decoding="async"/>}
   </div>
   <div className="shema-world-copy">
