@@ -7,6 +7,7 @@ import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
 import { getLessonMedia } from '../../data/curriculum/mediaCatalog';
 import { VISUAL_ASSETS } from '../../data/curriculum/visualCatalog';
 import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
+import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
 import useLessonNarration from './useLessonNarration';
@@ -24,21 +25,20 @@ const APPLICATION_MOMENTS = [
   learningGoal:'Paul teaches the early church about the one God',label:'ONE GOSPEL'}
 ];
 function BiblicalApplicationArt({index,content,move}) {
- const [failedIds,setFailedIds]=useState([]);
  const placement=APPLICATION_MOMENTS[index];
  const brief=placement?createVisualBrief({content,move,placement}):null;
- const visual=brief?chooseLessonVisual(brief,VISUAL_ASSETS,{failedIds}).asset:null;
- useEffect(()=>setFailedIds([]),[index]);
+ const approved=brief?chooseLessonVisual(brief,VISUAL_ASSETS).asset:null;
+ const {asset:visual,onError}=useDiscoveredLessonVisual(brief,approved);
  return <div className="ogp-mission-photo">
   {visual?<img key={visual.id} src={visual.src} alt={visual.alt}
     style={{objectPosition:visual.focal||'50% 40%'}} loading="lazy" decoding="async"
-    onError={()=>setFailedIds(ids=>[...ids,visual.id])}/>:<div className="ogp-mission-graphic" role="img"
+    onError={onError}/>:<div className="ogp-mission-graphic" role="img"
     aria-label={placement?.learningGoal||'Scripture teaching'}>
     <strong>{placement?.label}</strong><span>ONE LORD</span>
     <small>{placement?.reference||'SCRIPTURE & LIFE'}</small>
    </div>}
   <span>{placement?.label||'THE LESSON'}</span>
-  {visual&&<small>{visual.credit||'Supporting illustration'}</small>}
+  {visual&&<small>{visual.credit||'Supporting illustration'}{visual.provider?' · Openverse preview':''}</small>}
  </div>;
 }
 
@@ -59,15 +59,13 @@ function readingVisualPlacement(verse) {
 function ScriptureArt({verse,content,move}) {
  const placement=readingVisualPlacement(verse);
  const brief=createVisualBrief({content,move,placement});
- const [failedIds,setFailedIds]=useState([]);
- const visual=chooseLessonVisual(brief,VISUAL_ASSETS,{failedIds}).asset;
- useEffect(()=>setFailedIds([]),[verse.reference]);
+ const approved=chooseLessonVisual(brief,VISUAL_ASSETS).asset;
+ const {asset:visual,onError}=useDiscoveredLessonVisual(brief,approved);
  if(visual)return <img key={visual.id} className="ogp-verse-photo" src={visual.src}
   alt={visual.alt} loading="lazy" decoding="async"
-  style={{objectPosition:visual.focal||'50% 45%'}}
-  onError={()=>setFailedIds(ids=>[...ids,visual.id])}/>;
- // Unsupported passages still get a deliberate text-based Scripture design
- // rather than a blank panel or a misleading image of a biblical character.
+  style={{objectPosition:visual.focal||'50% 45%'}} onError={onError}/>;
+ // Unsupported or temporarily unavailable imagery gets designed Scripture
+ // typography, never a misleading image of the wrong biblical figure.
  const parts=String(verse.reference||'').split(/\s+(?=\d)/);
  return <div className="ogp-verse-graphic" role="img"
   aria-label={'Scripture graphic for '+verse.reference}>
