@@ -53,10 +53,10 @@ export function createVisualBrief({content={},move={},placement={}}={}) {
 
 const normalizedIncludes=(arr,value)=>Boolean(value)&&Array.isArray(arr)&&arr.some(v=>normalize(v)===normalize(value));
 
-export function chooseLessonVisual(brief,assets=[],{recentIds=[]}={}) {
+export function chooseLessonVisual(brief,assets=[],{recentIds=[],failedIds=[]}={}) {
  if(!brief?.learningGoal || brief.intent==='none') return {asset:null,status:'not-needed',brief};
  const matches = assets.filter(asset=>{
-  if(!asset?.id || !asset.src || !asset.alt || asset.previewApproved!==true)return false;
+  if(!asset?.id || !asset.src || !asset.alt || asset.previewApproved!==true || failedIds.includes(asset.id))return false;
   if(brief.intent==='general') return asset.intent==='general' && normalizedIncludes(asset.topics,brief.topic);
   if(brief.intent==='artifact') return asset.intent==='artifact' && normalizedIncludes(asset.references,brief.reference);
   if(brief.intent==='scripture') return ['scripture','artifact'].includes(asset.intent) && normalizedIncludes(asset.references,brief.reference);
@@ -67,7 +67,8 @@ export function chooseLessonVisual(brief,assets=[],{recentIds=[]}={}) {
     && (!brief.reference || normalizedIncludes(asset.references,brief.reference))
     && (!brief.setting || normalizedIncludes(asset.settings,brief.setting));
   }
-  if(brief.intent==='concept') return asset.intent==='concept' && normalizedIncludes(asset.topics,brief.topic);
+  if(brief.intent==='concept') return asset.intent==='concept' && normalizedIncludes(asset.topics,brief.topic)
+   && (!asset.references?.length || normalizedIncludes(asset.references,brief.reference));
   return false;
  });
  const ranked=matches.sort((a,b)=>
