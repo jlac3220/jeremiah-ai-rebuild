@@ -1,7 +1,6 @@
 // OG.1 visual preview installer. Run in the app directory after the matching
 // images/og1 files have been placed in public/. Does NOT change a lesson or standard.
 import {existsSync,readFileSync,writeFileSync} from 'node:fs';
-import {join} from 'node:path';
 
 const catalog=new URL('../src/data/curriculum/visualCatalog.js',import.meta.url);
 const imageDir=new URL('../public/images/og1/',import.meta.url);
@@ -31,9 +30,8 @@ for(const [key,scene] of Object.entries(scenes)){
 }
 for(const [pattern,line] of replacements)source=source.replace(pattern,line);
 // These candidate scenes are NOT rights/quality/editorial cleared.
-source=source.replace(/(media\\('(?:isaiah-proclaims|paul-teaches-church)'[^\\n]+)rightsStatus:'cleared'/g,
- '$1rightsStatus:\'needs-review\'');
-source=source.replace('priority:10,rightsStatus:\'cleared\'}),','priority:10,rightsStatus:\'needs-review\'}),');
+source=source.replaceAll("priority:10,rightsStatus:'cleared'}),",
+ "priority:10,rightsStatus:'needs-review'}),");
 writeFileSync(catalog,source,'utf8');
 console.log('OG.1 visual candidates installed in catalog; 5 placements, 4 distinct images.');
 console.log('Editorial review remains required; do not release these crops as final artwork.');
