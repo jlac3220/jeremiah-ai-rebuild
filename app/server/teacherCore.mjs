@@ -97,7 +97,8 @@ function deterministicVerdict(move, learnerResponse) {
 }
 
 function fallbackDecision(move, learnerResponse, reason = "", content = null) {
-  if (content?.sourceStandard && ["free_response", "mastery_response"].includes(move.type)) {
+  // Never award new mastery through keyword heuristics when rubric assessment is offline.
+  if ((content?.sourceStandard || content?.coveredStandards?.length) && ["free_response", "mastery_response"].includes(move.type)) {
     return {
       verdict: "partial", strategy: "encourage_retry", source: "fallback", diagnostic: reason,
       teacherMessage: "Your explanation is saved. Meaning-based assessment is unavailable right now, so this answer has not been marked as mastered. Review the lesson’s Scripture and try again when assessment is available.",
