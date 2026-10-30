@@ -113,3 +113,27 @@
  .ogj-destination{min-height:215px}
  .ogj-destination .ogj-card-caption strong{font-size:2rem}
 }
+
+
+/* OG.1 now has four genuinely separate witnesses, including Jesus. */
+.ogj-gallery{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.ogj-destination{min-height:320px}
+.ogj-card-caption{bottom:21px;left:17px;right:24px}
+.ogj-card-caption strong{font-size:clamp(1.45rem,2.2vw,2.12rem)}
+.ogj-era{left:16px;right:12px;font-size:.63rem}
+.ogj-card-arrow{right:13px;bottom:21px}
+@media(max-width:880px){
+ .ogj-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .ogj-destination{min-height:290px}
+ .ogj-card-caption{left:19px;bottom:20px}
+ .ogj-card-caption strong{font-size:clamp(1.7rem,3.6vw,2.3rem)}
+}
+@media(max-width:450px){
+ .ogj-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .ogj-destination{min-height:240px;border-radius:14px}
+ .ogj-card-caption{left:12px;right:13px;bottom:17px}
+ .ogj-card-caption strong,.ogj-destination .ogj-card-caption strong{font-size:clamp(1.35rem,5.5vw,1.75rem)}
+ .ogj-card-caption>span{font-size:.56rem}
+ .ogj-era{top:13px;left:12px;right:11px;font-size:.54rem}
+ .ogj-card-arrow{right:12px;bottom:17px}
+}
