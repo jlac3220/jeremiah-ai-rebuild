@@ -57,17 +57,17 @@
 </header>
 <main>
   <div class="eyebrow">VOICE AUDITION · SAME SCRIPTURE, FIVE VOICES</div>
-  <h1>Find Jeremiah's voice.</h1>
-  <p class="intro">Listen to five AI-generated American English narrators reading the same words, at the same pace. These are fixed recordings produced by the app server, so an iPhone and a computer hear the same voice. Your selection here is a preview; it won't change the app's narrator until we make that final decision.</p>
+  <h1>Jeremiah's voice: Ash.</h1>
+  <p class="intro">Listen to five AI-generated American English narrators reading the same words, at the same pace. These are fixed recordings produced by the app server, so an iPhone and a computer hear the same voice. Ash is now Jeremiah's fixed narrator; this page remains available if you want to compare voices again.</p>
   <section class="verse" aria-label="Audition Scripture text">
     <span>DEUTERONOMY 6:4 · KJV</span>
     <blockquote>“Hear, O Israel: The LORD our God is one LORD.”</blockquote>
   </section>
   <div class="grid" id="voices"></div>
   <section class="choice" aria-live="polite">
-    <strong id="selection">Which feels like Jeremiah?</strong>
-    <p id="selection-help">Listen to each example, choose the one you like, and tell ChatGPT the letter. Your main app is still using Onyx until you decide.</p>
-    <button type="button" id="copy" disabled>Copy my choice</button>
+    <strong id="selection">Current voice: D · Ash</strong>
+    <p id="selection-help">Ash is the active narrator on all devices. You can audition other voices here without changing that setting.</p>
+    <button type="button" id="copy">Copy my choice</button>
   </section>
   <p class="disclosure">All samples are AI-generated, not human recordings. The first play may need a few moments to generate and cache the MP3. If a clip won't play, make sure Jeremiah's server has a working OPENAI_API_KEY. The iPhone may require you to tap Play manually.</p>
 </main>
@@ -75,13 +75,13 @@
   const sample = 'Hear, O Israel: The LORD our God is one LORD.';
   const candidates = [
     {letter:'A',voice:'cedar',title:'Cedar',tag:'Fresh alternative',description:'A promising newer narrator option—judge its presence and warmth for yourself.'},
-    {letter:'B',voice:'onyx',title:'Onyx',tag:'Current Jeremiah voice',description:'The existing narrator, included as a baseline for a fair comparison.'},
+    {letter:'B',voice:'onyx',title:'Onyx',tag:'Previous narrator',description:'The original voice, included as a baseline for comparison.'},
     {letter:'C',voice:'echo',title:'Echo',tag:'Alternative reading',description:'A different voice identity reading exactly the same passage.'},
-    {letter:'D',voice:'ash',title:'Ash',tag:'Alternative reading',description:'Another voice identity. Listen for pacing, clarity, and emotional weight.'},
+    {letter:'D',voice:'ash',title:'Ash',tag:'Current Jeremiah voice',description:'Your chosen narrator. The same Ash voice is used for every lesson on every device.'},
     {letter:'E',voice:'marin',title:'Marin',tag:'Fresh alternative',description:'A newer voice option. Compare its natural delivery against the others.'}
   ];
   const el = document.getElementById('voices');
-  let winner = null;
+  let winner = candidates[3];
   for (const item of candidates) {
     const section = document.createElement('section');
     section.className='voice';
@@ -106,6 +106,7 @@
       document.getElementById('copy').disabled=false;
     });
     el.append(section);
+    if(item.voice==='ash')section.classList.add('is-selected');
   }
   document.getElementById('copy').addEventListener('click',async()=>{
     if(!winner)return;
