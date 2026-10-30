@@ -49,6 +49,11 @@ const allowedText = new Set([
   ),
 ]);
 
+// Auditions use the very same KJV verse and reading directions for fair comparison.
+// The installed voice on the listener's device never affects the result.
+const AUDITION_TEXT = "Hear, O Israel: The LORD our God is one LORD.";
+const AUDITION_VOICES = new Set(["onyx", "cedar", "echo", "ash", "marin"]);
+
 const cacheDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", ".cache", "narration");
 const pending = new Map();
 const maxMemoryEntries = 100;
@@ -63,9 +68,9 @@ function replyJson(res, status, error) {
   res.end(JSON.stringify({ error }));
 }
 
-async function getAudio(text) {
+async function getAudio(text, voice = NARRATOR.voice) {
   const key = createHash("sha256").update(
-    JSON.stringify([NARRATOR.version, NARRATOR.model, NARRATOR.voice, NARRATOR.speed, NARRATOR.instructions, text])
+    JSON.stringify([NARRATOR.version, NARRATOR.model, voice, NARRATOR.speed, NARRATOR.instructions, text])
   ).digest("hex");
   if (memory.has(key)) return { bytes: memory.get(key), key };
 
@@ -95,7 +100,7 @@ async function getAudio(text) {
         },
         body: JSON.stringify({
           model: NARRATOR.model,
-          voice: NARRATOR.voice,
+          voice,
           input: text,
           instructions: NARRATOR.instructions,
           speed: NARRATOR.speed,
@@ -137,12 +142,19 @@ export async function handleNarrationApi(req, res) {
   }
   const url = new URL(req.url || "/", "http://" + (req.headers.host || "localhost"));
   const text = url.searchParams.get("text") || "";
+  const auditionVoice = url.searchParams.get("audition");
+  // Protect the voice selection: non-default voices are available ONLY for
+  // this single public-domain audition sentence, never arbitrary input.
+  if (auditionVoice !== null && (!AUDITION_VOICES.has(auditionVoice) || text !== AUDITION_TEXT)) {
+    replyJson(res, 400, "That narration audition is not available.");
+    return;
+  }
   if (text.length > 1200 || !allowedText.has(text)) {
     replyJson(res, 400, "This audio is not in the authored Jeremiah lesson.");
     return;
   }
   try {
-    const { bytes, key } = await getAudio(text);
+    const { bytes, key } = await getAudio(text, auditionVoice || NARRATOR.voice);
     // A single cached MP3 is sent to every device. Browsers do not synthesize it.
     res.writeHead(200, {
       "Content-Type": "audio/mpeg",
