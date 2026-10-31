@@ -72,7 +72,8 @@ export function rateOG1Lesson(content,state){
  const averageLevel=measured.length?rounded(mean(measured.map(x=>x.level))):1;
  const hasAdvanced=measured.some(x=>x.level>=3);
  const allExtensive=rows.length>0&&rows.every(x=>x.level===4);
- const level=allExtensive&&score>=85?4:hasAdvanced&&score>=70?Math.min(3,averageLevel):Math.min(2,averageLevel);
+ const preliminary=allExtensive&&score>=85?4:hasAdvanced&&score>=70?Math.min(3,averageLevel):Math.min(2,averageLevel);
+ const level=coverage<50?Math.min(2,preliminary):preliminary;
  return {level,score,coverage,standards:rows,label:OG1_RATING_LABELS[level],meaning:OG1_RATING_MEANINGS[level],
   note:'Weighted evidence: 50% independent explanation, 25% guided work, 25% exam when all three are available. Missing work is not counted as incorrect; coverage is shown separately. A high score alone cannot establish Level 3 or 4.'};
 }
