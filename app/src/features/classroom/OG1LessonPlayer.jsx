@@ -14,7 +14,10 @@ import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1EvidenceExperience from './OG1EvidenceExperience';
+import OG1ExitExam from './OG1ExitExam';
+import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
 import './OG1LessonPlayer.css';
+import './OG1ThemeConsistency.css';
 
 // These are instructional purposes, not image IDs or keyword searches.
 // Broad worship may use broad imagery; specific evidence must match the
@@ -150,6 +153,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
  const [evidenceOpen,setEvidenceOpen]=useState(false);
+ const [examReviewOpen,setExamReviewOpen]=useState(false);
  const abort=useRef(null);
  const stageRef=useRef(null);
  const priorMove=useRef(move.id);
@@ -165,6 +169,8 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const total=moments.length;
  const current=moments[Math.min(moment,total-1)];
  const percent=getStandardProgress(content,state);
+ const examPassed=Boolean(state.experience?.exitExam?.version===OG1_EXIT_EXAM_VERSION && state.experience?.exitExam?.passed);
+ const displayProgress=finish&&!examPassed?97:percent;
  const chapter=move.id.split('-')[0];
  const chapterNumber=CHAPTER_SLUGS.indexOf(chapter)+1;
  const sceneClass=current?.kind||'complete';
@@ -233,7 +239,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
     </div></details>
    </div>
   </header>
-  <div className="ogp-progress"><span style={{width:percent+'%'}}/></div>
+  <div className="ogp-progress" role="progressbar" aria-label="OG.1 learning journey" aria-valuemin={0} aria-valuemax={100} aria-valuenow={displayProgress}><span style={{width:displayProgress+'%'}}/></div>
   {narration.enabled&&!narration.error&&<p className="ogp-narration-disclosure">AI-generated narration · Ash on every device</p>}
   {narration.error&&<div className="ogp-voice-error" role="status"><span>{narration.error}</span>{narrationText&&<button type="button" onClick={()=>narration.speak(narrationText)}>Replay narration</button>}</div>}
   {confirmRestart && <div className="ogp-restart-overlay" role="presentation"><section className="ogp-restart-dialog" role="dialog" aria-modal="true" aria-labelledby="ogp-restart-title"><h2 id="ogp-restart-title">Start OG.1 from the beginning?</h2><p>You'll return to the first lesson moment. Your earlier answers and learning history will be kept for review.</p><div className="ogp-restart-actions"><button type="button" className="ogp-action" onClick={restart}>Start from beginning →</button><button type="button" className="ogp-back" onClick={()=>setConfirmRestart(false)}>Keep my place</button></div></section></div>}
@@ -246,7 +252,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={chapterNumber>i?'is-reached':''}/>)}
      </div>
    </div>
-   {finish?<section className="ogp-finish ogp-finish--synthesis"><OG1FinalSynthesis onOpenBible={readVerse}/><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button></section>:<>
+   {finish?(examPassed&&!examReviewOpen?<section className="ogp-finish ogp-finish--synthesis"><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button><button type="button" className="ogp-back" onClick={()=>setExamReviewOpen(true)}>Review exit exam ↗</button></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onSubmitted={()=>setExamReviewOpen(true)} onContinue={()=>setExamReviewOpen(false)}/>):<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
      {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission'].includes(current.kind)&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
