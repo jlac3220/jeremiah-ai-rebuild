@@ -58,7 +58,10 @@ assert.throws(()=>gradeOG1ExitExam({...correct,[OG1_EXIT_QUESTIONS[0].id]:'bad'}
 for(const required of ['<OG1ExitExam','examPassed','examReviewOpen','onSubmitted','displayProgress','OG1ThemeConsistency.css']){
  assert.ok(player.includes(required),'Missing OG.1 exit integration: '+required);
 }
-assert.ok(player.includes('finish&&!examPassed?97:percent'),'Exit exam should be visible in progress UI');
+assert.ok(player.includes('finish?100:percent'),'Lesson completion should not depend on exam score');
+assert.ok(player.includes('rateOG1Lesson(content,state)'),'Final rating must reflect collected evidence');
+assert.ok(component.includes('Finish lesson without taking the exam'),'Exam must not block completion');
+assert.ok(component.includes('View my learning-level report'),'Final report accessible despite a failed exam');
 assert.ok(player.includes("finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT')"),'Completion header should not say prologue');
 assert.ok(player.includes("finish||chapterNumber>i"),'All five chapter markers should be filled at exit');
 for(const required of ['gradeOG1ExitExam(answers)','patchExam','latest','attempts','bestScore','onContinue',
