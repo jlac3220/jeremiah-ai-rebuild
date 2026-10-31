@@ -33,6 +33,7 @@ jobs:
       - run: npm run test:og1-evidence
       - run: npm run test:og1-climax
       - run: npm run test:og1-exam
+      - run: npm run test:og1-rating
       - run: npm run test:og1-theme
       - run: npm run test:og1-journey
       - run: npm run test:og1-inline-bible

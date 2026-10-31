@@ -14,6 +14,7 @@ import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1ExitExam from './OG1ExitExam';
+import {rateOG1Lesson} from '../../core/classroom/og1LessonRating';
 import {OG1JourneyMap,OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
 import './OG1LessonPlayer.css';
@@ -156,6 +157,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [confirmRestart,setConfirmRestart]=useState(false);
  const [inlineBibleReference,setInlineBibleReference]=useState(null);
  const [examReviewOpen,setExamReviewOpen]=useState(false);
+ const [showFinalSummary,setShowFinalSummary]=useState(false);
  const [showJourneyMap,setShowJourneyMap]=useState(false);
  const abort=useRef(null);
  const stageRef=useRef(null);
@@ -173,7 +175,8 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const current=moments[Math.min(moment,total-1)];
  const percent=getStandardProgress(content,state);
  const examPassed=Boolean(state.experience?.exitExam?.version===OG1_EXIT_EXAM_VERSION && state.experience?.exitExam?.passed);
- const displayProgress=finish&&!examPassed?97:percent;
+ const finalRating=finish?rateOG1Lesson(content,state):null;
+ const displayProgress=finish?100:percent;
  const chapter=move.id.split('-')[0];
  const chapterNumber=CHAPTER_SLUGS.indexOf(chapter)+1;
  const activeJourneyChapter=finish?(examPassed?7:6):chapterNumber;
@@ -212,7 +215,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
  function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);setPracticeStep(0);setShowJourneyMap(false);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
-  if(!ready||thinking||feedback)return;
+  if(thinking||feedback)return;
+  const anyAnswer=written?Boolean(form.responseText?.trim()):matching?Object.values(form.placements||{}).some(Boolean):reasoning?Boolean(form.claimId||form.reasonId):Boolean(form.selectedChoiceId);
+  if(!anyAnswer){onStateChange(old=>skipTeachingMove(old,content));return;}
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
   let decision=evaluateTeachingChoice(move,answer);
   if(!decision){
@@ -256,7 +261,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      </div>
    </div>
    {(finish||move.id!=='learn'||moment>1)&&<div id="og1-journey-recap" className="og1-journey-map-recap" hidden={!showJourneyMap}><OG1JourneyMap activeChapter={activeJourneyChapter} compact/></div>}
-   {finish?(examPassed&&!examReviewOpen?<section className="ogp-finish ogp-finish--synthesis"><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button><button type="button" className="ogp-back" onClick={()=>setExamReviewOpen(true)}>Review exit exam ↗</button></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onSubmitted={()=>setExamReviewOpen(true)} onContinue={()=>setExamReviewOpen(false)}/>):<>
+   {finish?(showFinalSummary?<section className="ogp-finish ogp-finish--synthesis"><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-depth-report"><h2>Your understanding across OG.1</h2><p>Level {finalRating.level} · {finalRating.label}</p><p>{finalRating.note}</p><div className="ogp-depth-report-list">{finalRating.standards.map(item=><div key={item.standardId}><strong>{item.standardId}</strong><span>Level {item.level} · {item.label}</span><small>{item.evidence}</small></div>)}</div></div><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button><button type="button" className="ogp-back" onClick={()=>setShowFinalSummary(false)}>Review exit exam ↗</button></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onSubmitted={()=>setExamReviewOpen(true)} onContinue={()=>setShowFinalSummary(true)}/>):<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
      {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap'].includes(current.kind)&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind==='roadmap'&&<OG1JourneyMap activeChapter={0}/>}
@@ -339,10 +344,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      </>} 
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
-     {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
+     {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
      :<button type="button" className="ogp-action" onClick={advance} disabled={(current?.kind==='discovery'&&discoveryChoice===null)||(current?.kind==='mission'&&!consequenceRevealed)}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'?'Follow the story further':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'?'Continue the discovery':buttonText} →</button>}
      {!assessment&&moment>0&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
-     {assessment&&<button type="button" className="ogp-back" onClick={skip}>Skip for now (no mastery)</button>}
+     {assessment&&<button type="button" className="ogp-back" onClick={skip}>Continue without an answer →</button>}
     </nav>
    </>}
   </main>

@@ -44,7 +44,7 @@ while(state.currentMoveId!=='complete'){
    const attempted=saveTeachingDecision(state,content,move,response);
    saveLearningState(attempted);const restored=loadLearningState(content);
    assert.deepEqual(restored.experience.teachingDecision.decision.itemResults,response.itemResults);
-   assert.equal(continueTeaching(restored,content).currentMoveId,correct?move.next.strong:move.id);
+   assert.equal(continueTeaching(restored,content).currentMoveId,move.next.strong,'Any recorded reasoning result advances without awarding mastery');
   }
   assert.equal(evaluateTeachingChoice(move,{}).verdict,'weak');
   const learnerResponse={claimId:task.answer.claim,reasonId:task.answer.reason};
@@ -52,7 +52,7 @@ while(state.currentMoveId!=='complete'){
   state=saveTeachingDecision(state,content,move,api);
  }else if(move.interaction){
   const missing=evaluateTeachingChoice(move,{placements:{}});assert.equal(missing.verdict,'weak');
-  let wrong=saveTeachingDecision(state,content,move,missing);wrong=continueTeaching(wrong,content);assert.equal(wrong.currentMoveId,move.id);assert.equal(wrong.evidenceIds.length,state.evidenceIds.length);
+  let wrong=saveTeachingDecision(state,content,move,missing);wrong=continueTeaching(wrong,content);assert.equal(wrong.currentMoveId,move.next.strong,'Wrong matches advance to next activity');assert.equal(wrong.evidenceIds.length,state.evidenceIds.length);
   const placements=Object.fromEntries(move.interaction.items.map(i=>[i.id,i.answer]));
   const response=evaluateTeachingChoice(move,{placements});assert.equal(response.verdict,'strong');
   const api=await teachWithJeremiah({standardId:content.standardId,moveId:move.id,learnerResponse:{placements}});assert.equal(api.verdict,'strong');
@@ -66,7 +66,7 @@ while(state.currentMoveId!=='complete'){
   const incomplete=saveTeachingDecision(state,content,move,{...rubric,evidenceObserved:[]});assert.equal(incomplete.experience.teachingDecision.decision.verdict,'partial');
   const supported={...state,experience:{...state.experience,drafts:{[move.id]:{usedSupport:true,responseText:'Supported draft'}}}};
   const held=saveTeachingDecision(supported,content,move,rubric);assert.equal(held.experience.teachingDecision.decision.verdict,'partial');
-  const retry=continueTeaching(held,content);assert.equal(retry.currentMoveId,move.id);assert.equal(retry.experience.drafts[move.id].responseText,'');assert.equal(retry.experience.drafts[move.id].supportedResponse,'Supported draft');
+  const retry=continueTeaching(held,content);assert.equal(retry.currentMoveId,move.next.strong,'Supported attempts do not trap the learner');
   state=saveTeachingDecision(state,content,move,rubric);
   assert.ok(state.experience.standardEvidence[move.standardIds[0]]);
  }
