@@ -248,7 +248,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    </div>
    {finish?<section className="ogp-finish ogp-finish--synthesis"><OG1FinalSynthesis onOpenBible={readVerse}/><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button></section>:<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
-     {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission'].includes(current.kind)&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>
+     {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission'].includes(current.kind)&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
       <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></div>
@@ -313,7 +313,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       </div>}
       {evidenceIndex===2&&<p className="ogp-compare-conclusion">The difference is not whether God is one. The difference concerns eternal personal distinctions and the understanding of Jesus Christ.</p>}
      </div>}
-     {current.kind==='mission'&&<OG1ConsequenceJourney index={evidenceIndex} expanded={consequenceRevealed} onReveal={()=>setConsequenceRevealed(true)} art={<BiblicalApplicationArt index={evidenceIndex} content={content} move={move}/>} onOpenBible={readVerse}/>}
+     {current.kind==='mission'&&<><p className="ogp-prompt">The one LORD is not one option among several objects of worship. Knowing who He is shapes the devotion He calls for.</p><OG1ConsequenceJourney index={evidenceIndex} expanded={consequenceRevealed} onReveal={()=>setConsequenceRevealed(true)} art={<BiblicalApplicationArt index={evidenceIndex} content={content} move={move}/>} onOpenBible={readVerse}/></>}
      {current.kind==='discovery'&&(move.id==='learn'
       ?<JourneyDestinations options={current.discovery.options} selected={discoveryChoice} onSelect={setDiscoveryChoice} onSpeak={narration.speak} onOpenBible={readVerse}/>
       :<div className="ogp-discovery"><p className="ogp-prompt">Choose what to investigate. Every path reveals a piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label,detail],i)=><button type="button" key={label} aria-pressed={discoveryChoice===i} onClick={()=>setDiscoveryChoice(i)}>{label}<span aria-hidden="true">↗</span></button>)}</div>{discoveryChoice!==null&&<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[discoveryChoice][0]}</strong><p>{current.discovery.options[discoveryChoice][1]}</p><small>{current.discovery.closer}</small></div>}</div>)}
