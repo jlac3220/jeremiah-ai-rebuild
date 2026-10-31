@@ -23,10 +23,10 @@ export function OG1IdentityInvestigation({onOpenBible}) {
  const item=QUESTIONS[active];
  return <div className="og1-identity">
    <div className="og1-identity-hero">
-    <span>THE QUESTION HAS CHANGED</span>
+    <span>A DISTINCT DOCTRINAL INVESTIGATION</span>
     <p>Israel confessed one LORD. Isaiah excluded every rival. Jesus repeated the confession. Paul carried it into the church.</p>
-    <h2>Now Scripture brings us to Jesus himself.</h2>
-    <p>The disagreement is not over whether God is one. It is about how the Father, Son, and Holy Spirit are understood in the revelation of Jesus Christ.</p>
+    <h2>Two explanations. One biblical confession.</h2>
+    <p>This chapter investigates how two traditions explain Father, Son, and Holy Spirit in the revelation of Jesus Christ. Both confess one God. We will examine the actual texts and distinctions without making this debate the center of the whole lesson.</p>
    </div>
    <div className="og1-identity-deck" role="group" aria-label="Three Scripture questions about Jesus">
     {QUESTIONS.map((q,i)=><button type="button" key={q.id} onClick={()=>setActive(i)} aria-pressed={active===i}>
@@ -45,7 +45,33 @@ export function OG1IdentityInvestigation({onOpenBible}) {
      <button type="button" onClick={()=>onOpenBible?.(item.reference.split(' · ')[0].split(',')[0])}>Read in Jeremiah’s Bible ↗</button>
     </div>
    </section>
-   <p className="og1-identity-transition">Keep these three passages in view. Next, examine the two explanations without confusing either with belief in multiple gods.</p>
+   <p className="og1-identity-transition">This is a separate study of how the passages are interpreted. The central confession remains the same one Israel heard, Jesus repeated, and Paul taught.</p>
+ </div>;
+}
+
+
+export function OG1ReturnToShema({onOpenBible}) {
+ return <div className="og1-return">
+  <div className="og1-return-heading">
+   <span>RETURN TO THE BEGINNING</span>
+   <h2>One LORD. And then what?</h2>
+   <p>This final chapter doesn't depend on winning a theological comparison. It begins exactly where Moses began: with the confession and the command that follows it.</p>
+  </div>
+  <div className="og1-return-verses">
+   <section>
+    <span>DEUTERONOMY 6:4</span>
+    <blockquote>“Hear, O Israel: The LORD our God is one LORD:”</blockquote>
+    <small>THE CONFESSION</small>
+   </section>
+   <div className="og1-return-arrow" aria-hidden="true">→</div>
+   <section>
+    <span>DEUTERONOMY 6:5</span>
+    <blockquote>“And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.”</blockquote>
+    <small>THE RESPONSE</small>
+   </section>
+  </div>
+  <p className="og1-return-connection">Notice the order. Scripture does not merely ask Israel to define God correctly. It calls them to hear who he is—and respond with a whole life.</p>
+  <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:4-5')}>Read both verses together in the Bible ↗</button>
  </div>;
 }
 
@@ -72,7 +98,7 @@ const CONSEQUENCES=[
 export function OG1ConsequenceJourney({index,expanded,onReveal,art,onOpenBible}) {
  const item=CONSEQUENCES[index]||CONSEQUENCES[0];
  return <div className="og1-consequence">
-   <p className="og1-consequence-lead">The final chapter is not a new subject. It is what the entire journey has been leading toward.</p>
+   <p className="og1-consequence-lead">Return to Deuteronomy. The one LORD of verse 4 commands wholehearted love in verse 5. Everything that follows grows from those two verses together.</p>
    <div className="og1-consequence-progress" aria-label={'Consequence '+(index+1)+' of 3'}>
     {CONSEQUENCES.map((x,i)=><span key={x.step} className={i<=index?'is-current':''}>{x.step}</span>)}
    </div>
@@ -103,7 +129,7 @@ export function OG1FinalSynthesis({onOpenBible}) {
   <div className="og1-synthesis-head">
    <span>THE ENTIRE CASE · FIVE STANDARDS</span>
    <h2>One confession. Every witness. One response.</h2>
-   <p>It began with Israel listening. It moved through Isaiah, Jesus, and Paul. The identity question matters—but the confession also requires an answer from the person who hears it.</p>
+   <p>It began with Israel listening and continued through Isaiah, Jesus, and Paul. The confession is not just a claim to defend. Deuteronomy itself immediately tells us what the one LORD requires.</p>
   </div>
   <div className="og1-synthesis-witnesses">
    {WITNESSES.map((w,i)=><button type="button" onClick={()=>onOpenBible?.(w.reference)} key={w.who}>
