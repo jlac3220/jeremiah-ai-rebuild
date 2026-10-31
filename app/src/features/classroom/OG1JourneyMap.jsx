@@ -29,39 +29,28 @@ function progressStatus(position,activeChapter){
 }
 
 export function OG1JourneyMap({activeChapter=0,compact=false}){
- return <section className={'og1-journey'+(compact?' og1-journey--compact':'')}
+ return <section className={'og1-journey og1-journey--minimal'+(compact?' og1-journey--compact':'')}
   aria-label="OG.1 five-chapter learning map">
-  {!compact&&<div className="og1-journey-header">
-    <span className="og1-journey-overline">YOUR PATH THROUGH OG.1</span>
-    <h2>One confession.<em> Five connections.</em></h2>
-    <p>Begin with Moses. Follow the witness through Isaiah, Jesus, and Paul. Examine what Scripture reveals about God’s identity—then return to what knowing Him requires.</p>
-    <div className="og1-journey-guide">
-      <span><i aria-hidden="true"/>See the Scripture</span>
-      <span><i aria-hidden="true"/>Make the connection</span>
-      <span><i aria-hidden="true"/>Explain it yourself</span>
-    </div>
-   </div>}
-  <ol className="og1-journey-stops">
+  {!compact&&<header className="og1-journey-minimal-heading">
+    <span>OG.1 · YOUR JOURNEY</span>
+    <h2>One God. One unfolding story.</h2>
+    <p>Five chapters. One final examination.</p>
+   </header>}
+  <ol className="og1-journey-minimal-list">
    {OG1_JOURNEY_CHAPTERS.map((item,index)=>{
     const status=progressStatus(index+1,activeChapter);
-    return <li key={item.id} className={'og1-journey-stop '+(status==='YOU ARE HERE'||status==='START HERE'?'is-current':status==='COVERED'?'is-covered':'is-ahead')}
-      aria-current={status==='YOU ARE HERE'||status==='START HERE'?'step':undefined}>
-     <div className="og1-journey-step-icon"><span>{item.number}</span></div>
-     <div className="og1-journey-stop-body">
-      <div className="og1-journey-stop-top"><span>{item.eyebrow}</span><span className="og1-journey-stop-status">{status}</span></div>
-      <h3>{item.title}</h3>
-      <strong className="og1-journey-question">{item.question}</strong>
-      {!compact&&<p>{item.summary}</p>}
-      <small>{item.scripture}</small>
-     </div>
-    </li>;
+    return <li key={item.id} aria-current={status==='YOU ARE HERE'||status==='START HERE'?'step':undefined}
+      className={'og1-journey-minimal-item '+(status==='YOU ARE HERE'||status==='START HERE'?'is-current':status==='COVERED'?'is-covered':'is-ahead')}>
+      <span className="og1-journey-minimal-number">{item.number}</span>
+      <strong>{item.title}</strong>
+      <span className="og1-journey-minimal-status">{status==='YOU ARE HERE'||status==='START HERE'?'●':status==='COVERED'?'✓':'○'}</span>
+      <span className="og1-journey-sr-only">{status}</span>
+     </li>;
    })}
   </ol>
-  <div className={'og1-journey-exit'+(activeChapter>=6?' is-current':'')}>
-   <span className="og1-journey-exit-glyph" aria-hidden="true">✦</span>
-   <div><span className="og1-journey-exit-kicker">{activeChapter>=7?'COMPLETED':activeChapter===6?'FINAL STOP · YOU ARE HERE':'THE FINAL STOP'}</span>
-    <h3>Exit Exam</h3><p>Ten questions across all five standards, followed by the complete story.</p></div>
-   <strong>{activeChapter>=7?'DONE':'10 QUESTIONS'}</strong>
+  <div className={'og1-journey-minimal-exam'+(activeChapter>=6?' is-current':'')}>
+   <span aria-hidden="true">✦</span><span>Final · 10-question exit exam</span>
+   <strong>{activeChapter>=7?'Complete':activeChapter===6?'You are here':''}</strong>
   </div>
  </section>;
 }
