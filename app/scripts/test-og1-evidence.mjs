@@ -21,9 +21,10 @@ assert.match(OG1_EVIDENCE_BY_ID.isaiah.passage,/beside me there is no God/);
 assert.match(OG1_EVIDENCE_BY_ID.sinaiticus.passage,/Hear, O Israel/);
 assert.match(OG1_EVIDENCE_BY_ID.p46.passage,/none other God but one/);
 assert.match(OG1_EVIDENCE_BY_ID.p75.passage,/the Word was God/);
-assert.match(OG1_EVIDENCE_BY_ID.p46.imageNote,/NOT 1 Corinthians 8:4/);
-assert.match(OG1_EVIDENCE_BY_ID.isaiah.imageNote,/not a pinpointed image/);
-assert.match(OG1_EVIDENCE_BY_ID.sinaiticus.imageNote,/not a close-up/);
+assert.match(OG1_EVIDENCE_BY_ID.p46.imageNote,/from 2 Corinthians/);
+assert.match(OG1_EVIDENCE_BY_ID.isaiah.imageNote,/Great Isaiah Scroll/);
+assert.match(OG1_EVIDENCE_BY_ID.sinaiticus.imageNote,/Greek New Testament/);
+for(const art of OG1_EVIDENCE){assert.doesNotMatch(art.imageNote,/not (?:the|a|an)|NOT|original writing/i,'Captions should avoid gratuitous disclaimers')}
 const read=path=>readFileSync(new URL(path,import.meta.url),'utf8');
 const lesson=read('../src/features/classroom/OG1LessonPlayer.jsx');
 const simple=read('../src/features/classroom/OG1ManuscriptImage.jsx');
