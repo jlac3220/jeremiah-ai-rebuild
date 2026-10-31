@@ -1,10 +1,10 @@
 
 /* OG.1 doctrinal bridge: source-first and visually unlike the previous three-witness cards. */
-.og1-identity,.og1-consequence,.og1-synthesis{width:100%;max-width:1040px;margin:12px auto 22px;color:#213c52}
-.og1-identity-hero{border-radius:22px;background:linear-gradient(118deg,#132b42,#1e4854);color:#f8fbff;padding:clamp(24px,4.4vw,54px);box-shadow:0 24px 45px #102c4033}
-.og1-identity-hero>span,.og1-synthesis-head>span{font:800 .68rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.17em;color:#f0c98d}
+.og1-identity,.og1-consequence,.og1-synthesis{width:100%;max-width:1040px;margin:12px auto 22px;color:#253950}
+.og1-identity-hero{border-radius:22px;background:linear-gradient(118deg,#172a46,#303f76);color:#f8fbff;padding:clamp(24px,4.4vw,54px);box-shadow:0 24px 45px #102c4033}
+.og1-identity-hero>span,.og1-synthesis-head>span{font:800 .68rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.17em;color:#c3cdff}
 .og1-identity-hero h2{font:650 clamp(2rem,4vw,3.35rem)/1.15 Georgia,serif;max-width:750px;letter-spacing:-.03em;margin:20px 0;color:#fff}
-.og1-identity-hero p{max-width:760px;font:500 clamp(.93rem,1.5vw,1.05rem)/1.68 Inter,system-ui,sans-serif;color:#dce8ee;margin:14px 0 0}
+.og1-identity-hero p{max-width:760px;font:500 clamp(.93rem,1.5vw,1.05rem)/1.68 Inter,system-ui,sans-serif;color:#e2e9fc;margin:14px 0 0}
 .og1-identity-deck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
 .og1-identity-deck button{display:flex;flex-direction:column;justify-content:space-between;gap:11px;border:1px solid #d7dfeb;border-radius:14px;min-height:108px;padding:20px;text-align:left;background:#fff;color:#253f56;cursor:pointer}
 .og1-identity-deck button[aria-pressed="true"]{background:#ecf0ff;border-color:#5866d8;box-shadow:0 0 0 2px #5866d83b}
@@ -14,19 +14,19 @@
 .og1-identity-question>div:first-child{padding:clamp(25px,4vw,42px)}
 .og1-identity-question>div:first-child>span,.og1-identity-implication>span{font:850 .63rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#5263af}
 .og1-identity-question h3{font:650 clamp(1.3rem,2.25vw,1.85rem)/1.35 Georgia,serif;color:#183a50;margin:20px 0}
-.og1-identity-question blockquote{font:550 clamp(1.15rem,1.9vw,1.55rem)/1.55 Georgia,serif;margin:22px 0 8px;border-left:3px solid #bba079;padding-left:22px;color:#385268}
+.og1-identity-question blockquote{font:550 clamp(1.15rem,1.9vw,1.55rem)/1.55 Georgia,serif;margin:22px 0 8px;border-left:3px solid #7887e2;padding-left:22px;color:#3b5076}
 .og1-identity-question small{color:#677b89;font:700 .72rem/1.5 Inter,system-ui,sans-serif}
 .og1-identity-implication{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,36px);background:#f2f5f8}
 .og1-identity-implication p{font:500 .94rem/1.75 Inter,system-ui,sans-serif;color:#3a5065}
-.og1-identity-implication button{align-self:flex-start;border:0;background:#1e485d;color:#fff;padding:12px 17px;border-radius:9px;font:750 .78rem Inter,system-ui,sans-serif;cursor:pointer}
-.og1-identity-transition{border-left:3px solid #d2b48a;margin:22px 0 0;padding:10px 18px;color:#536373;font:550 1rem/1.65 Inter,system-ui,sans-serif}
+.og1-identity-implication button{align-self:flex-start;border:0;background:#4c5ed1;color:#fff;padding:12px 17px;border-radius:9px;font:750 .78rem Inter,system-ui,sans-serif;cursor:pointer}
+.og1-identity-transition{border-left:3px solid #7887e2;margin:22px 0 0;padding:10px 18px;color:#536373;font:550 1rem/1.65 Inter,system-ui,sans-serif}
 
-.og1-consequence-lead{max-width:790px;font:550 clamp(1.05rem,2vw,1.26rem)/1.65 Inter,system-ui,sans-serif;color:#435b69;margin:0 0 19px}
+.og1-consequence-lead{max-width:790px;font:550 clamp(1.05rem,2vw,1.26rem)/1.65 Inter,system-ui,sans-serif;color:#495d79;margin:0 0 19px}
 .og1-consequence-progress{display:flex;gap:5px;margin:0 0 17px}
 .og1-consequence-progress span{height:4px;flex:1;overflow:hidden;color:transparent;background:#d6dfea;border-radius:5px}
 .og1-consequence-progress span.is-current{background:#6473db}
-.og1-consequence-stage{display:grid;grid-template-columns:.83fr 1.17fr;min-height:455px;border-radius:22px;overflow:hidden;background:#142d46;box-shadow:0 20px 45px #18314b30}
-.og1-consequence-art{position:relative;min-height:280px;background:#213b53}
+.og1-consequence-stage{display:grid;grid-template-columns:.83fr 1.17fr;min-height:455px;border-radius:22px;overflow:hidden;background:#192e4d;box-shadow:0 20px 45px #1b285230}
+.og1-consequence-art{position:relative;min-height:280px;background:#283e68}
 .og1-consequence-art>.ogp-mission-photo{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;border-radius:0}
 .og1-consequence-art .ogp-mission-photo:after{display:none}
 .og1-consequence-art .ogp-mission-photo>span{display:none}
@@ -34,7 +34,7 @@
 .og1-consequence-copy{padding:clamp(26px,4vw,50px);color:#f4f8ff;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
 .og1-consequence-copy>span{font:800 .68rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.14em;color:#bdc9ff}
 .og1-consequence-copy h2{font:650 clamp(1.6rem,3vw,2.65rem)/1.17 Georgia,serif;letter-spacing:-.03em;margin:18px 0;color:#fff}
-.og1-consequence-copy blockquote{font:500 clamp(1.15rem,1.9vw,1.5rem)/1.5 Georgia,serif;margin:8px 0 8px;border-left:3px solid #dec18d;padding-left:18px;color:#fff}
+.og1-consequence-copy blockquote{font:500 clamp(1.15rem,1.9vw,1.5rem)/1.5 Georgia,serif;margin:8px 0 8px;border-left:3px solid #9ba9ff;padding-left:18px;color:#fff}
 .og1-consequence-copy small{font:750 .7rem/1.35 Inter,system-ui,sans-serif;letter-spacing:.07em;color:#c6d4e6}
 .og1-consequence-copy p{font:500 .91rem/1.72 Inter,system-ui,sans-serif;color:#dbe5ee;margin:24px 0 15px}
 .og1-consequence-copy button{border:1px solid #b5c0d0;border-radius:8px;padding:10px 15px;color:#fff;background:transparent;cursor:pointer;font:750 .78rem Inter,system-ui,sans-serif}
@@ -44,19 +44,19 @@
 .og1-consequence-revealed span{font:850 .65rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#5665bb}
 .og1-consequence-revealed p{font:550 1.07rem/1.72 Inter,system-ui,sans-serif;color:#2d405a;margin:9px 0 0}
 
-.og1-synthesis-head{background:linear-gradient(130deg,#10283a,#234e58);color:#fff;border-radius:20px 20px 0 0;padding:clamp(26px,4vw,48px)}
+.og1-synthesis-head{background:linear-gradient(130deg,#172b49,#313f73);color:#fff;border-radius:20px 20px 0 0;padding:clamp(26px,4vw,48px)}
 .og1-synthesis-head h2{font:580 clamp(2rem,4vw,3.2rem)/1.17 Georgia,serif;letter-spacing:-.03em;margin:16px 0;color:#fff}
-.og1-synthesis-head p{font:500 1.02rem/1.7 Inter,system-ui,sans-serif;max-width:750px;color:#dbe7e9}
+.og1-synthesis-head p{font:500 1.02rem/1.7 Inter,system-ui,sans-serif;max-width:750px;color:#dfe5fa}
 .og1-synthesis-witnesses{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#d6dfeb;border:1px solid #d6dfeb}
 .og1-synthesis-witnesses button{padding:clamp(16px,2.5vw,30px);border:0;text-align:left;display:flex;flex-direction:column;gap:17px;min-height:195px;background:#fff;cursor:pointer}
 .og1-synthesis-witnesses button:hover{background:#f2f5ff}
 .og1-synthesis-witnesses span{font:800 .65rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.08em;color:#536ac1}
 .og1-synthesis-witnesses strong{font:550 clamp(1rem,1.5vw,1.25rem)/1.45 Georgia,serif;color:#263c53;flex:1}
 .og1-synthesis-witnesses small{font:750 .72rem/1.4 Inter,system-ui,sans-serif;color:#5f7190}
-.og1-synthesis-verdict{padding:clamp(27px,5vw,52px);background:#f8f7f0;border:1px solid #d6dfeb;border-radius:0 0 20px 20px}
-.og1-synthesis-verdict>span{font:850 .68rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.16em;color:#7e643f}
+.og1-synthesis-verdict{padding:clamp(27px,5vw,52px);background:#f1f4fe;border:1px solid #d6dfeb;border-radius:0 0 20px 20px}
+.og1-synthesis-verdict>span{font:850 .68rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.16em;color:#5366c2}
 .og1-synthesis-verdict blockquote{font:550 clamp(1.6rem,3vw,2.4rem)/1.4 Georgia,serif;letter-spacing:-.02em;color:#263d53;margin:16px 0}
-.og1-synthesis-verdict small{font:750 .71rem Inter,system-ui,sans-serif;letter-spacing:.1em;color:#756c5d}
+.og1-synthesis-verdict small{font:750 .71rem Inter,system-ui,sans-serif;letter-spacing:.1em;color:#5b6f91}
 .og1-synthesis-verdict p{font:550 1.01rem/1.75 Inter,system-ui,sans-serif;margin:28px 0 0;max-width:750px;color:#4d6072}
 .og1-identity button:focus-visible,.og1-consequence button:focus-visible,.og1-synthesis button:focus-visible{outline:3px solid #5667cc;outline-offset:2px}
 @media(max-width:760px){
@@ -74,19 +74,19 @@
 
 /* The true narrative bridge: Deuteronomy 6:4 straight into 6:5. */
 .og1-return{max-width:1040px;margin:10px auto 24px}
-.og1-return-heading{border-radius:22px 22px 0 0;padding:clamp(28px,4.5vw,56px);background:linear-gradient(125deg,#152c42,#315764);color:#fff}
-.og1-return-heading span{font:850 .69rem/1.4 Inter,system-ui,sans-serif;color:#eac891;letter-spacing:.16em}
+.og1-return-heading{border-radius:22px 22px 0 0;padding:clamp(28px,4.5vw,56px);background:linear-gradient(125deg,#172b49,#364580);color:#fff}
+.og1-return-heading span{font:850 .69rem/1.4 Inter,system-ui,sans-serif;color:#c6d1ff;letter-spacing:.16em}
 .og1-return-heading h2{font:550 clamp(2.05rem,4.5vw,3.6rem)/1.16 Georgia,serif;color:#fff;letter-spacing:-.04em;margin:16px 0}
-.og1-return-heading p{max-width:710px;color:#e2edef;line-height:1.7;font-size:1rem}
+.og1-return-heading p{max-width:710px;color:#e2e8fb;line-height:1.7;font-size:1rem}
 .og1-return-verses{display:grid;grid-template-columns:minmax(0,1fr) 46px minmax(0,1fr);align-items:stretch;gap:0;background:#fff;border:1px solid #d8e0e5;border-top:0}
 .og1-return-verses section{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,38px);min-height:275px}
-.og1-return-verses section:first-child{background:#f4f2ea}
-.og1-return-verses section:last-child{background:#edf2f6}
+.og1-return-verses section:first-child{background:#eef1fc}
+.og1-return-verses section:last-child{background:#f7f9ff}
 .og1-return-verses span,.og1-return-verses small{font:800 .66rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#66758a}
 .og1-return-verses blockquote{margin:18px 0 20px;font:550 clamp(1.22rem,2vw,1.7rem)/1.42 Georgia,serif;color:#213b50}
 .og1-return-arrow{align-self:center;justify-self:center;color:#7181c3;font:700 2.2rem Georgia,serif}
 .og1-return-connection{border-left:4px solid #8594d5;background:#eff2ff;color:#344c6b;padding:20px 24px;margin:0;font:560 clamp(1rem,2vw,1.18rem)/1.7 Inter,system-ui,sans-serif}
-.og1-return>button{padding:13px 19px;margin-top:18px;background:#1f4859;border:1px solid #1f4859;color:#fff;border-radius:9px;font:750 .83rem Inter,system-ui,sans-serif;cursor:pointer}
+.og1-return>button{padding:13px 19px;margin-top:18px;background:#4c5ed1;border:1px solid #4c5ed1;color:#fff;border-radius:9px;font:750 .83rem Inter,system-ui,sans-serif;cursor:pointer}
 .og1-return button:focus-visible{outline:3px solid #7989de;outline-offset:3px}
 .ogp-finish--synthesis{max-width:1040px;padding-top:26px}
 .ogp-finish--synthesis:before{display:none}
