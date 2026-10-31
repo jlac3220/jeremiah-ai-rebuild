@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const urlFor = words => '/api/jeremiah/narration?text=' + encodeURIComponent(words);
 
 export default function useLessonNarration({ text, key: sceneKey }) {
- const [enabled, setEnabled] = useState(false);
+ const enabled = true;
  const [supported, setSupported] = useState(() => typeof window !== 'undefined' && typeof window.Audio === 'function');
  const [speaking, setSpeaking] = useState(false);
  const [loading, setLoading] = useState(false);
@@ -65,25 +65,6 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   return true;
  }, [stop]);
 
- const toggle = useCallback(() => {
-  if (enabled) {
-   stop();
-   setEnabled(false);
-   setError('');
-   lastSceneRef.current = null;
-  } else {
-   if (typeof window === 'undefined' || typeof window.Audio !== 'function') {
-    setSupported(false);
-    return;
-   }
-   setEnabled(true);
-   if (text) {
-    lastSceneRef.current = sceneKey;
-    speak(text);
-   }
-  }
- }, [enabled, sceneKey, speak, stop, text]);
-
  useEffect(() => {
   if (!enabled || !text) {
    stop();
@@ -112,5 +93,5 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   };
  }, [stop]);
 
- return { enabled, supported, speaking, loading, error, toggle, speak, stop };
+ return { enabled, supported, speaking, loading, error, speak, stop };
 }
