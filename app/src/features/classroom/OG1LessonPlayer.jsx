@@ -15,6 +15,7 @@ import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1EvidenceExperience from './OG1EvidenceExperience';
 import OG1ExitExam from './OG1ExitExam';
+import {OG1JourneyMap,OG1JourneyLocation,OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
 import './OG1LessonPlayer.css';
 import './OG1ThemeConsistency.css';
@@ -86,10 +87,10 @@ function readingCommentary(note='') {
  return cleaned || null;
 }
 
-const CHAPTER_NAMES = ['The Shema','Isaiah’s Witness','The Apostolic Witness','The Difference','Living the Confession'];
-const CHAPTER_SLUGS = ['shema','isaiah','continuity','distinction','devotion'];
+const CHAPTER_NAMES=OG1_JOURNEY_CHAPTERS.map(chapter=>chapter.title);
+const CHAPTER_SLUGS=OG1_JOURNEY_CHAPTERS.map(chapter=>chapter.id);
 const SCENE_DESCRIPTIONS = {
- 'shema-encounter':'THE INVITATION','shema-manuscript':'THE MANUSCRIPT','shema-cinema':'THE FILM','shema-connection':'THE NEXT VERSE','shema-resolution':'THE CONNECTION',read:'THE TEXT', intro:'THE QUESTION', discovery:'INTERACTIVE STUDY', witness:'THE EVIDENCE',
+ roadmap:'YOUR PATH', 'shema-encounter':'THE INVITATION','shema-manuscript':'THE MANUSCRIPT','shema-cinema':'THE FILM','shema-connection':'THE NEXT VERSE','shema-resolution':'THE CONNECTION',read:'THE TEXT', intro:'THE QUESTION', discovery:'INTERACTIVE STUDY', witness:'THE EVIDENCE',
  timeline:'THE THREAD', identity:'THE DOCTRINAL QUESTION', comparison:'THE DISTINCT EXPLANATIONS', return:'THE CONFESSION AND RESPONSE', mission:'THE CONSEQUENCES',
  insight:'THE INSIGHT', watch:'THE FILM', videoCheck:'LOOK CLOSER', task:'YOUR TURN'
 };
@@ -118,6 +119,8 @@ function createMoments(move,video) {
  const moments=[];
  if(move.scripture?.length)moments.push({kind:'read',verb:VERBS[move.id]||'READ',title:TITLES[move.id]||move.title,verse:move.scripture[0]});
  else moments.push({kind:'intro',verb:'ENCOUNTER',title:TITLES[move.id]||move.title});
+ // Exactly one roadmap moment follows the initial Scripture encounter.
+ if(move.id==='learn')moments.push({kind:'roadmap',verb:'YOUR JOURNEY',title:'Five chapters. One confession.'});
  const discovery=DISCOVERIES[move.id];
  if(move.id==='isaiah-show')moments.push({kind:'witness',verb:'EXAMINE THE EVIDENCE',title:'Three declarations. One conclusion.'});
  else if(move.id==='continuity-show')moments.push({kind:'timeline',verb:'FOLLOW THE THREAD',title:'Does the confession change?'});
@@ -154,6 +157,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [confirmRestart,setConfirmRestart]=useState(false);
  const [evidenceOpen,setEvidenceOpen]=useState(false);
  const [examReviewOpen,setExamReviewOpen]=useState(false);
+ const [showJourneyMap,setShowJourneyMap]=useState(false);
  const abort=useRef(null);
  const stageRef=useRef(null);
  const priorMove=useRef(move.id);
@@ -173,6 +177,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const displayProgress=finish&&!examPassed?97:percent;
  const chapter=move.id.split('-')[0];
  const chapterNumber=CHAPTER_SLUGS.indexOf(chapter)+1;
+ const activeJourneyChapter=finish?(examPassed?7:6):chapterNumber;
  const sceneClass=current?.kind||'complete';
  // Spoken moments are editorial choices, not narration of every button and quiz.
  // Reveals inside the Shema scene are voiced only when the student chooses them.
@@ -191,7 +196,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    ? current.verse.text
   : null;
  const narration=useLessonNarration({text:narrationText,key:move.id+':'+moment+':'+evidenceIndex+':'+discoveryChoice});
- useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);setPracticeStep(0);setError('');}},[move.id]);
+ useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);setPracticeStep(0);setShowJourneyMap(false);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
  function change(patch) {
@@ -207,7 +212,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  function advance(){if(current?.kind==='mission'&&!consequenceRevealed)return;if(current?.kind==='mission'&&evidenceIndex<2){setEvidenceIndex(i=>i+1);setConsequenceRevealed(false);return;}if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);return;}if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
- function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);setPracticeStep(0);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
+ function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);setPracticeStep(0);setShowJourneyMap(false);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(!ready||thinking||feedback)return;
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
@@ -221,7 +226,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   }
   onStateChange(old=>saveTeachingDecision(old,content,move,decision));
  }
- const buttonText=current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
+ const buttonText=current?.kind==='roadmap'?'Meet the four witnesses':current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'See your journey':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className={`ogp-page ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
   <header className="ogp-header">
    <button type="button" className="ogp-exit" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}>← <span>CLASSROOM</span></button>
@@ -252,9 +257,14 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={finish||chapterNumber>i?'is-reached':''}/>)}
      </div>
    </div>
+   {(finish||move.id!=='learn'||moment>1)&&<>
+    <OG1JourneyLocation activeChapter={activeJourneyChapter} expanded={showJourneyMap} onToggle={()=>setShowJourneyMap(v=>!v)}/>
+    <div id="og1-journey-recap" className="og1-journey-map-recap" hidden={!showJourneyMap}><OG1JourneyMap activeChapter={activeJourneyChapter} compact/></div>
+   </>}
    {finish?(examPassed&&!examReviewOpen?<section className="ogp-finish ogp-finish--synthesis"><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button><button type="button" className="ogp-back" onClick={()=>setExamReviewOpen(true)}>Review exit exam ↗</button></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onSubmitted={()=>setExamReviewOpen(true)} onContinue={()=>setExamReviewOpen(false)}/>):<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
-     {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission'].includes(current.kind)&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
+     {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap'].includes(current.kind)&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
+     {current.kind==='roadmap'&&<OG1JourneyMap activeChapter={0}/>}
      {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak} narrationEnabled={narration.enabled}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
       <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></div>

@@ -35,7 +35,8 @@
     "test:og1-evidence": "node scripts/test-og1-evidence.mjs",
     "test:og1-climax": "node scripts/test-og1-climax.mjs",
     "test:og1-exam": "node scripts/test-og1-exam.mjs",
-    "test:og1-theme": "node scripts/test-og1-theme-consistency.mjs"
+    "test:og1-theme": "node scripts/test-og1-theme-consistency.mjs",
+    "test:og1-journey": "node scripts/test-og1-journey-map.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
