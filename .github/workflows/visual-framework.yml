@@ -32,6 +32,7 @@ jobs:
       - run: npm run test:biblical-visuals
       - run: npm run test:og1-evidence
       - run: npm run test:og1-climax
+      - run: npm run test:og1-exam
       - run: npm run test:grouped
       - run: npm run test:ask-jeremiah
       - run: npm run build
