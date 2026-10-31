@@ -25,8 +25,8 @@ export function OG1IdentityInvestigation({onOpenBible}) {
    <div className="og1-identity-hero">
     <span>A DISTINCT DOCTRINAL INVESTIGATION</span>
     <p>Israel confessed one LORD. Isaiah excluded every rival. Jesus repeated the confession. Paul carried it into the church.</p>
-    <h2>Two explanations. One biblical confession.</h2>
-    <p>This chapter investigates how two traditions explain Father, Son, and Holy Spirit in the revelation of Jesus Christ. Both confess one God. We will examine the actual texts and distinctions without making this debate the center of the whole lesson.</p>
+    <h2>Who is the God we confess?</h2>
+    <p>Knowing who God is matters to worship. Scripture must shape our understanding of the One we love, not the other way around. This focused investigation compares how Trinitarian and Apostolic Oneness teaching explain Father, Son, and Holy Spirit. Both confess one God; the interpretations differ.</p>
    </div>
    <div className="og1-identity-deck" role="group" aria-label="Three Scripture questions about Jesus">
     {QUESTIONS.map((q,i)=><button type="button" key={q.id} onClick={()=>setActive(i)} aria-pressed={active===i}>
@@ -45,7 +45,7 @@ export function OG1IdentityInvestigation({onOpenBible}) {
      <button type="button" onClick={()=>onOpenBible?.(item.reference.split(' · ')[0].split(',')[0])}>Read in Jeremiah’s Bible ↗</button>
     </div>
    </section>
-   <p className="og1-identity-transition">This is a separate study of how the passages are interpreted. The central confession remains the same one Israel heard, Jesus repeated, and Paul taught.</p>
+   <p className="og1-identity-transition"><strong>Why study this?</strong> What we believe about God affects what we mean when we confess Jesus as Lord and how we understand the Father, Son, and Holy Spirit. But an accurate explanation is not, by itself, wholehearted devotion.</p>
  </div>;
 }
 
@@ -54,8 +54,8 @@ export function OG1ReturnToShema({onOpenBible}) {
  return <div className="og1-return">
   <div className="og1-return-heading">
    <span>RETURN TO THE BEGINNING</span>
-   <h2>One LORD. And then what?</h2>
-   <p>This final chapter doesn't depend on winning a theological comparison. It begins exactly where Moses began: with the confession and the command that follows it.</p>
+   <h2>Knowing who He is changes how we respond.</h2>
+   <p>The doctrinal investigation matters because we must know whom we worship. But this final chapter does not depend on winning a comparison. We return to Moses: the confession of who the LORD is, followed by the command to love Him.</p>
   </div>
   <div className="og1-return-verses">
    <section>
@@ -70,7 +70,7 @@ export function OG1ReturnToShema({onOpenBible}) {
     <small>THE RESPONSE</small>
    </section>
   </div>
-  <p className="og1-return-connection">Notice the order. Scripture does not merely ask Israel to define God correctly. It calls them to hear who he is—and respond with a whole life.</p>
+  <p className="og1-return-connection"><strong>Knowing Him gives direction to devotion.</strong> Verse 4 identifies the LORD to whom Israel belongs. Verse 5 commands love directed to that very LORD—with the whole heart, soul, and might. Accurate understanding is necessary; knowledge alone is not the response.</p>
   <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:4-5')}>Read both verses together in the Bible ↗</button>
  </div>;
 }
@@ -98,7 +98,7 @@ const CONSEQUENCES=[
 export function OG1ConsequenceJourney({index,expanded,onReveal,art,onOpenBible}) {
  const item=CONSEQUENCES[index]||CONSEQUENCES[0];
  return <div className="og1-consequence">
-   <p className="og1-consequence-lead">Return to Deuteronomy. The one LORD of verse 4 commands wholehearted love in verse 5. Everything that follows grows from those two verses together.</p>
+   <p className="og1-consequence-lead">The confession tells us <strong>who</strong> receives our devotion. The very next verse tells us <strong>how</strong> to respond. Knowing the one LORD shapes exclusive worship, wholehearted love, and faithful witness.</p>
    <div className="og1-consequence-progress" aria-label={'Consequence '+(index+1)+' of 3'}>
     {CONSEQUENCES.map((x,i)=><span key={x.step} className={i<=index?'is-current':''}>{x.step}</span>)}
    </div>
@@ -129,7 +129,7 @@ export function OG1FinalSynthesis({onOpenBible}) {
   <div className="og1-synthesis-head">
    <span>THE ENTIRE CASE · FIVE STANDARDS</span>
    <h2>One confession. Every witness. One response.</h2>
-   <p>It began with Israel listening and continued through Isaiah, Jesus, and Paul. The confession is not just a claim to defend. Deuteronomy itself immediately tells us what the one LORD requires.</p>
+   <p>From Moses and Isaiah through Jesus and Paul, Scripture identifies the one LORD. Knowing who He is is essential: it gives our worship its object, our allegiance its direction, and our love its meaning. Deuteronomy 6:5 then tells us what that knowledge calls for.</p>
   </div>
   <div className="og1-synthesis-witnesses">
    {WITNESSES.map((w,i)=><button type="button" onClick={()=>onOpenBible?.(w.reference)} key={w.who}>
@@ -142,7 +142,7 @@ export function OG1FinalSynthesis({onOpenBible}) {
    <span>THE COMMAND THAT FOLLOWS</span>
    <blockquote>“And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.”</blockquote>
    <small>DEUTERONOMY 6:5 · KJV</small>
-   <p>One LORD is the confession. Exclusive worship, wholehearted love, and faithful witness are its response. The next challenge is to explain that connection from Scripture in your own words.</p>
+   <p>Knowing the LORD is not an optional definition exercise. The revelation of who He is shapes the devotion He requires. But a correct confession is not the end: exclusive worship, wholehearted love, and faithful witness are its lived response.</p>
   </div>
  </div>;
 }
