@@ -4,7 +4,7 @@ import './OG1EvidenceExperience.css';
 
 // Every picture in this viewer is of an actual surviving artifact.
 // The adjacent KJV is a translation, not a transcription of Greek/Hebrew ink.
-export default function OG1EvidenceExperience({open,onClose,chapter='learn',onReadBible}) {
+export default function OG1EvidenceExperience({open,onClose,chapter='learn',selectedArtifactId=null,onReadBible}) {
  const [selectedId,setSelectedId]=useState('nash');
  const [zoom,setZoom]=useState(1);
  const [imageFailed,setImageFailed]=useState(false);
@@ -17,13 +17,13 @@ export default function OG1EvidenceExperience({open,onClose,chapter='learn',onRe
 
  useEffect(()=>{
   if(open&&!opened.current){
-   setSelectedId(OG1_EVIDENCE_DEFAULT[chapter]||'nash');
+   setSelectedId(selectedArtifactId||OG1_EVIDENCE_DEFAULT[chapter]||'nash');
    setZoom(1);
    setImageFailed(false);
    setRevealed(false);
   }
   opened.current=open;
- },[open,chapter]);
+ },[open,chapter,selectedArtifactId]);
 
  useEffect(()=>{
   if(!open)return;
