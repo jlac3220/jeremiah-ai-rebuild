@@ -47,9 +47,9 @@ export const OG1_EXIT_QUESTIONS=Object.freeze([
   [['a','The LORD’s unity is linked to Israel’s observance of the Sabbath.'],['b','The LORD’s covenant is linked to Israel’s sacrificial offerings.'],['c','The LORD’s holiness is linked to Israel’s dietary instructions.'],['d','The confession of one LORD is followed by a command to love him.']],
   'd','Verse 4 identifies the LORD; verse 5 calls Israel to love that LORD with heart, soul and might.'),
  question('exclusive-worship','OG.1.5.18','Exodus 20:3–5; James 2:19',
-  'What point does James 2:19 make about belief in one God?',
-  [['a','Belief in one God removes the need for obedience.'],['b','Belief in one God is good, but even demons believe and tremble.'],['c','Belief in one God is the same as loving one’s neighbor.'],['d','Belief in one God must be accompanied by ceremonial sacrifices.']],
-  'b','James 2:19 affirms belief in one God while noting that demons also believe and tremble; mere acknowledgment is not the full faithful response.')
+  'Which statement appears in James 2:19?',
+  [['a','Faith without works is dead.'],['b','Even the demons believe that God is one, and tremble.'],['c','The testing of faith produces patience.'],['d','A person should be swift to hear and slow to speak.']],
+  'b','James 2:19 notes that the demons also believe there is one God and tremble. The other statements come from different verses in James.')
 ]);
 
 export function gradeOG1ExitExam(answers){
