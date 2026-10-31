@@ -18,6 +18,9 @@ for(const standard of ['OG.1.1.18','OG.1.2.18','OG.1.3.18','OG.1.4.18','OG.1.5.1
 }
 for(const q of OG1_EXIT_QUESTIONS){
  assert.ok(q.prompt&&q.reference&&q.explanation,'Every question must be sourced and explained');
+ assert.ok(Number.isInteger(q.evidenceLevel)&&q.evidenceLevel>=1&&q.evidenceLevel<=4,'Evidence level must use standards scale');
+ assert.ok(typeof q.assessedSkill==='string'&&q.assessedSkill.length>3,'Question must declare assessed skill');
+ assert.ok(q.evidenceLevel<=2,'Recognition/selection items must not claim comprehensive or extensive understanding');
  assert.ok(['multiple_choice','true_false'].includes(q.type));
  assert.ok(q.choices.length===2||q.choices.length===4);
  assert.equal(new Set(q.choices.map(c=>c.id)).size,q.choices.length,'Answer identifiers unique');
@@ -42,6 +45,7 @@ assert.equal(perfect.score,100);
 assert.equal(perfect.passed,true);
 assert.equal(perfect.results.length,10);
 assert.ok(perfect.results.every(r=>r.correct));
+ assert.ok(perfect.results.every(r=>r.evidenceLevel&&r.assessedSkill),'Results retain question-level alignment');
 const wrongAnswers=Object.fromEntries(OG1_EXIT_QUESTIONS.map(q=>[q.id,q.choices.find(c=>c.id!==q.answerId).id]));
 assert.deepEqual([gradeOG1ExitExam(wrongAnswers).score,gradeOG1ExitExam(wrongAnswers).passed],[0,false]);
 const answers80={...correct};
