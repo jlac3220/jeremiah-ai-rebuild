@@ -34,7 +34,8 @@
     "test:visual-discovery": "node scripts/test-visual-discovery.mjs",
     "test:og1-evidence": "node scripts/test-og1-evidence.mjs",
     "test:og1-climax": "node scripts/test-og1-climax.mjs",
-    "test:og1-exam": "node scripts/test-og1-exam.mjs"
+    "test:og1-exam": "node scripts/test-og1-exam.mjs",
+    "test:og1-theme": "node scripts/test-og1-theme-consistency.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

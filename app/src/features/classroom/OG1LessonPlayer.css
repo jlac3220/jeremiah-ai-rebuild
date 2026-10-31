@@ -922,7 +922,7 @@
 .ogp-verse-graphic i{font:400 2rem/1 Georgia,serif;font-style:normal;color:#cfaa6c;margin-top:16px}
 .ogp-verse-graphic:after{content:'';position:absolute;inset:22px;border:1px solid #d7ba7757;border-radius:9px;pointer-events:none}
 .ogp-scripture-ornament:has(.ogp-verse-graphic):after{display:none}
-.ogp-mission-graphic{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;text-align:center;padding:20px;background:radial-gradient(circle at 46% 35%,#466e63,#132d35);color:#f5d7a0}
+.ogp-mission-graphic{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;text-align:center;padding:20px;background:radial-gradient(circle at 46% 35%,#465b91,#192743);color:#d6ddff}
 .ogp-mission-graphic strong{font:700 .72rem var(--font-body);letter-spacing:.12em}
 .ogp-mission-graphic>span{font:500 2.7rem Georgia,serif;color:#fff}
 .ogp-mission-graphic small{font-size:.72rem;letter-spacing:.14em}

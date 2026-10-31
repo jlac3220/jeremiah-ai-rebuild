@@ -6,7 +6,7 @@
  --og-deep:#132943;--og-paper:#f6f8fc;--og-line:#dce4ee;
  --og-tint:#ecf0f9;--og-accent:#5061d5;
  background:radial-gradient(ellipse 900px 460px at 12% 15%,#e4ebf9b5,transparent),
-   radial-gradient(ellipse 670px 530px at 96% 82%,#deedf057,transparent),#f6f8fc;
+   radial-gradient(ellipse 670px 530px at 96% 82%,#e3e7fa72,transparent),#f6f8fc;
  color:var(--og-ink);
 }
 .ogp-page.ogp-theme-isaiah,.ogp-page.ogp-theme-continuity,
@@ -15,7 +15,7 @@
 }
 .ogp-page .ogp-header{background:#132840;border-bottom:1px solid #4a5e82;min-height:76px}
 .ogp-page .ogp-progress{height:5px;background:#dbe3f0}
-.ogp-page .ogp-progress span{background:linear-gradient(90deg,#4c61da,#67a3c1)}
+.ogp-page .ogp-progress span{background:linear-gradient(90deg,#4c61da,#8998f0)}
 .ogp-page .ogp-context{border-bottom:1px solid #dbe3ef;align-items:center}
 .ogp-page .ogp-context-meta{color:#5a6881;letter-spacing:.1em}
 .ogp-page .ogp-context-name{color:#18324a;font-family:Inter,system-ui,sans-serif;font-weight:750}
@@ -38,7 +38,7 @@
 .ogp-page .ogp-compare-columns h2{color:#1d3952}
 .ogp-page .ogj-eyebrow,.ogp-page .shema-eyebrow{color:#5265c1}
 .ogp-page .ogj-destination:focus-visible,.ogp-page .ogj-destination.is-selected{outline-offset:3px}
-.ogp-page .og1-identity-hero,.ogp-page .og1-synthesis-head{background:linear-gradient(123deg,#152c44,#254669);box-shadow:0 17px 38px #19314a22}
+.ogp-page .og1-identity-hero,.ogp-page .og1-synthesis-head{background:linear-gradient(123deg,#172b49,#323f77);box-shadow:0 17px 38px #19314a22}
 .ogp-page .og1-identity-deck button,.ogp-page .og1-synthesis-witnesses button{border-color:#d7e0eb}
 .ogp-page .og1-identity-question,.ogp-page .og1-consequence-stage{box-shadow:0 14px 34px #19314a1e}
 .ogp-page .og1-return-connection,.ogp-page .og1-consequence-revealed{background:#edf1ff;border-left-color:#6577d9}
@@ -47,15 +47,15 @@
 .ogp-page .og1-exam-content{padding-top:23px}
 /* Treat museum evidence as a scholarly collection, but give its controls the
    same legibility, borders and focus styling as the rest of Jeremiah. */
-.oge-panel{background:#f7f9fc;border:1px solid #ced8e6}
-.oge-top{background:linear-gradient(123deg,#152c44,#254669)}
+.oge-panel{background:#f7f9ff;border:1px solid #ccd6ed}
+.oge-top{background:linear-gradient(123deg,#172b49,#323f77)}
 .oge-tabs{background:#eaf0f7;border-bottom:1px solid #d3deeb}
 .oge-tabs button{border-color:#d3deeb;background:#fff}
-.oge-tabs button.is-active{background:#263e6b;border-color:#263e6b}
+.oge-tabs button.is-active{background:#4356c7;border-color:#4356c7}
 .oge-reading h3{color:#17334e}
-.oge-scripture{background:#fff;border-left-color:#6f7dd6}
+.oge-scripture{background:#fff;border-left-color:#6878df}
 .oge-zoom-controls button,.oge-actions button{min-height:36px}
-.oge-actions button:first-child{background:#4659d0;border-color:#4659d0}
+.oge-actions button:first-child{background:#4c5ed1;border-color:#4c5ed1}
 .oge-launch{background:#eef1ff;border-color:#c6cff3;color:#364cb9}
 .oge-launch:hover{background:#e4e9ff}
 .oge-panel button:focus-visible,.oge-panel a:focus-visible{outline:3px solid #7a89f0;outline-offset:3px}
