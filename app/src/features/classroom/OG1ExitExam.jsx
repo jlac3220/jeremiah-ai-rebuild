@@ -6,7 +6,7 @@ import './OG1ExitExam.css';
 const STANDARD_LABELS=['The Shema','Isaiah','New Testament','Understanding the Difference','Devotion'];
 const letters=['A','B','C','D'];
 
-export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue}) {
+export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,onSubmitted}) {
  const [index,setIndex]=useState(0);
  const currentExam=state.experience?.exitExam?.version===OG1_EXIT_EXAM_VERSION?state.experience.exitExam:{};
  const answers=currentExam.answers||{};
@@ -37,6 +37,7 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue}
     bestScore:Math.max(previous.bestScore||0,result.score),passed:Boolean(previous.passed)||result.passed
    }});
   });
+  onSubmitted?.();
  }
  function retry(){patchExam({answers:{},latest:null});setIndex(0);}
  return <section className="og1-exam" aria-labelledby="og1-exam-title">
