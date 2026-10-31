@@ -250,21 +250,21 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
    </div>
   </header>
   <div className="ogp-progress" role="progressbar" aria-label="OG.1 learning journey" aria-valuemin={0} aria-valuemax={100} aria-valuenow={displayProgress}><span style={{width:displayProgress+'%'}}/></div>
-  {narration.enabled&&!narration.error&&<p className="ogp-narration-disclosure">AI-generated narration · Ash on every device</p>}
   {narration.error&&<div className="ogp-voice-error" role="status"><span>{narration.error}</span>{narrationText&&<button type="button" onClick={()=>narration.speak(narrationText)}>Replay narration</button>}</div>}
   {confirmRestart && <div className="ogp-restart-overlay" role="presentation"><section className="ogp-restart-dialog" role="dialog" aria-modal="true" aria-labelledby="ogp-restart-title"><h2 id="ogp-restart-title">Start OG.1 from the beginning?</h2><p>You'll return to the first lesson moment. Your earlier answers and learning history will be kept for review.</p><div className="ogp-restart-actions"><button type="button" className="ogp-action" onClick={restart}>Start from beginning →</button><button type="button" className="ogp-back" onClick={()=>setConfirmRestart(false)}>Keep my place</button></div></section></div>}
   <main className="ogp-shell" key={move.id}>
-   <div className="ogp-context">
-     <div className="ogp-context-meta"><span>{finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT'):chapterNumber===0?'PROLOGUE':`CHAPTER ${String(chapterNumber).padStart(2,'0')} / 05`}</span><span className="ogp-context-line"/><span>{finish?(examPassed?'COMPLETE':'EXIT EXAM'):SCENE_DESCRIPTIONS[sceneClass]||'THE JOURNEY'}</span></div>
-     <div className="ogp-context-name">{finish?(examPassed?'OG.1 · Completed':'OG.1 · Exit exam'):chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}{!finish&&<span className="ogp-scene-counter">MOMENT {String(moment+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>}</div>
+   <div className="ogp-compact-header">
+    <div className="ogp-compact-heading">
+     <span className="ogp-compact-eyebrow">{finish?'LESSON COMPLETE':chapterNumber===0?'THE OPENING':`CHAPTER ${String(chapterNumber).padStart(2,'0')} OF 05`}</span>
+     <h1>{finish?'The One True God':chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}</h1>
+    </div>
+    <nav className="ogp-mini-timeline" aria-label="Journey through five chapters">
+     <ol>{CHAPTER_NAMES.map((name,i)=><li key={name} className={finish||chapterNumber>i+1?'is-complete':chapterNumber===i+1?'is-current':'is-ahead'} aria-current={!finish&&chapterNumber===i+1?'step':undefined} title={`Chapter ${i+1}: ${name}`}>
+      <span className="ogp-mini-node" aria-hidden="true">{finish||chapterNumber>i+1?'✓':i+1}</span>
+      <span className="ogp-visually-hidden">{name}{chapterNumber===i+1?' — current':''}</span>
+     </li>)}</ol>
+    </nav>
    </div>
-   <nav className="ogp-journey-timeline" aria-label="Your journey through five standards">
-    <div className="ogp-journey-timeline-heading"><span>YOUR JOURNEY</span><strong>{finish?'All chapters explored':chapterNumber===0?'The opening':CHAPTER_NAMES[chapterNumber-1]}</strong></div>
-    <ol>{CHAPTER_NAMES.map((name,i)=><li key={name} className={finish||chapterNumber>i+1?'is-complete':chapterNumber===i+1?'is-current':'is-ahead'} aria-current={!finish&&chapterNumber===i+1?'step':undefined}>
-     <span className="ogp-journey-node">{finish||chapterNumber>i+1?'✓':String(i+1).padStart(2,'0')}</span>
-     <span className="ogp-journey-label">{name}</span>
-    </li>)}</ol>
-   </nav>
    {finish?(completionScreen==='understanding'?<section className="ogp-finish ogp-finish--understanding" aria-labelledby="ogp-understanding-title">
  <div className="ogp-depth-report"><span className="ogp-understanding-eyebrow">YOUR LEARNING · OG.1</span><h1 id="ogp-understanding-title">Your Understanding</h1><p className="ogp-understanding-level">Level {finalRating.level} · {finalRating.label}</p><p>Weighted performance: {finalRating.score===null?'Not assessed':finalRating.score+'%'} · Evidence coverage: {finalRating.coverage}%</p><p>{finalRating.meaning}</p><p>{finalRating.note}</p><div className="ogp-depth-report-list">{finalRating.standards.map(item=><div key={item.standardId}><strong>{item.standardId}</strong><span>Level {item.level} · {item.label}</span><small>Weighted performance: {item.score===null?'Not assessed':item.score+'%'} · Evidence coverage: {item.coverage}%</small><p>{item.meaning}</p><small><strong>What you demonstrated:</strong> {item.evidence}</small><small><strong>What to work on next:</strong> {item.nextStep}</small></div>)}</div></div>
  <div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('summary');window.scrollTo({top:0,behavior:'auto'})}}>Continue to final summary →</button><button type="button" className="ogp-back" onClick={()=>setCompletionScreen('exam')}>Review assessment ↗</button></div>
