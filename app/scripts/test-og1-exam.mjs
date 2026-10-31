@@ -43,6 +43,8 @@ for(const required of ['<OG1ExitExam','examPassed','examReviewOpen','onSubmitted
  assert.ok(player.includes(required),'Missing OG.1 exit integration: '+required);
 }
 assert.ok(player.includes('finish&&!examPassed?97:percent'),'Exit exam should be visible in progress UI');
+assert.ok(player.includes("finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT')"),'Completion header should not say prologue');
+assert.ok(player.includes("finish||chapterNumber>i"),'All five chapter markers should be filled at exit');
 for(const required of ['gradeOG1ExitExam(answers)','patchExam','latest','attempts','bestScore','onContinue',
    'onReadBible','aria-pressed','disabled={!allAnswered}','Retake all ten questions','Your selections save automatically']){
  assert.ok(component.includes(required),'Exam component missing '+required);
