@@ -61,7 +61,7 @@ export function continueTeaching(state, content) {
  if(move.type==='teach') return advanceUnscoredMove(state,move);
  const feedback=state.experience?.teachingDecision;
  if(!feedback || feedback.moveId!==move.id) return state;
- const nextId=resolveNextMoveId(move,feedback.decision.verdict,feedback.decision.strategy);
+ const nextId=content.standardId==='OG.1.LESSON.18' ? (move.next?.strong || move.next?.continue || move.id) : resolveNextMoveId(move,feedback.decision.verdict,feedback.decision.strategy);
  const retryDraft=state.experience?.drafts?.[move.id];
  const independentRetry=content.coveredStandards && nextId===move.id && retryDraft?.usedSupport && feedback.decision.supportedPass;
  const next=updateLearningExperience({...state,currentMoveId:nextId},{teachingDecision:null,...(independentRetry?{drafts:{[move.id]:{...retryDraft,supportedResponse:retryDraft.responseText,responseText:'',usedSupport:false}}}: {})});
