@@ -34,7 +34,7 @@ assert.ok(player.includes("finish||move.id!=='learn'||moment>1"),'Suppress locat
 for(const x of ['ogp-study-tools','showJourneyMap','<OG1JourneyMap activeChapter={activeJourneyChapter} compact','setShowJourneyMap(false)','activeJourneyChapter=finish?(examPassed?7:6):chapterNumber']){
  assert.ok(player.includes(x),'Missing progressive guidance '+x);
 }
-for(const x of ['aria-current','UP NEXT','10 QUESTIONS']){
+for(const x of ['aria-current','UP NEXT','10-question exit exam']){
  assert.ok(journey.includes(x),'Map missing accessible signpost '+x);
 }
 assert.ok(player.includes('aria-controls="og1-journey-recap"'),'Accessible map toggle remains');
