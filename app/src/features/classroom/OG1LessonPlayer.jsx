@@ -216,7 +216,8 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);setPracticeStep(0);setShowJourneyMap(false);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(thinking||feedback)return;
-  if(!ready){onStateChange(old=>skipTeachingMove(old,content));return;}
+  const anyAnswer=written?Boolean(form.responseText?.trim()):matching?Object.values(form.placements||{}).some(Boolean):reasoning?Boolean(form.claimId||form.reasonId):Boolean(form.selectedChoiceId);
+  if(!anyAnswer){onStateChange(old=>skipTeachingMove(old,content));return;}
   const answer=written?{text:form.responseText.trim()}:matching?{placements:form.placements}:reasoning?{claimId:form.claimId,reasonId:form.reasonId}:{choiceIds:[form.selectedChoiceId]};
   let decision=evaluateTeachingChoice(move,answer);
   if(!decision){
