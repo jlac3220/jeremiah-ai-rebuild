@@ -137,3 +137,18 @@
  .ogj-era{top:13px;left:12px;right:11px;font-size:.54rem}
  .ogj-card-arrow{right:12px;bottom:17px}
 }
+
+/* Phone experience: four witnesses in a compact, thumb-friendly gallery. */
+@media(max-width:600px){
+ .ogj-journey{min-width:0}
+ .ogj-introduction{margin-bottom:16px}
+ .ogj-introduction p{font-size:.95rem}
+ .ogj-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .ogj-destination{min-width:0;min-height:clamp(190px,55vw,240px);border-radius:14px}
+ .ogj-destination .ogj-card-caption strong{font-size:clamp(1.3rem,5vw,1.85rem)}
+ .ogj-era,.ogj-card-caption>span{overflow-wrap:anywhere}
+ .ogj-reveal{display:flex;flex-direction:column;align-items:stretch;padding:18px 15px;gap:15px;margin-top:15px}
+ .ogj-reveal blockquote{font-size:clamp(1.3rem,6vw,1.9rem);overflow-wrap:anywhere}
+ .ogj-reveal-actions{display:grid;grid-template-columns:1fr;gap:9px;width:100%}
+ .ogj-reveal-actions button{min-height:48px;width:100%;white-space:normal}
+}
