@@ -139,7 +139,7 @@ function createMoments(move,video) {
  return moments;
 }
 
-export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,onUseClassic}) {
+export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}) {
  const move=getInstructionalMove(content,state.currentMoveId);
  const video=getLessonMedia(content).find(item=>item.id==='unpacked-shema');
  const moments=createMoments(move,video);
@@ -194,7 +194,15 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    ? ['The LORD our God is one LORD.','The Lord our God is one Lord.','There is none other God but one.'][evidenceIndex]
   : current?.kind==='discovery'&&move.id==='learn'&&discoveryChoice!==null
    ? ['Hear, O Israel: The LORD our God is one LORD. In the wilderness Moses gives the confession to Israel.','I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six.','Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine.','There is none other God but one. First Corinthians, chapter eight, verse four.'][discoveryChoice]
-  : current?.kind==='read'&&current?.verse?.text
+  : current?.kind==='identity'&&moment===0
+   ? 'Jesus Christ stands at the center of this question. We will examine how the Scriptures speak about the one God and the incarnation.'
+  : current?.kind==='comparison'&&evidenceIndex===0
+   ? 'Two explanations now come into view. Listen closely to what each actually teaches before considering their differences.'
+  : current?.kind==='mission'&&evidenceIndex===0
+   ? 'The confession of one God is more than a statement to remember. It calls us to wholehearted devotion.'
+  : current?.kind==='return'&&moment===0
+   ? 'We return to the words of Moses. Hear, O Israel: the LORD our God is one LORD.'
+  : current?.kind==='read'&&move.id==='learn'&&current?.verse?.text
    ? current.verse.text
   : null;
  const narration=useLessonNarration({text:narrationText,key:move.id+':'+moment+':'+evidenceIndex+':'+discoveryChoice});
@@ -235,16 +243,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    <button type="button" className="ogp-exit" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}>← <span>CLASSROOM</span></button>
    <div className="ogp-brand"><span className="ogp-monogram" aria-hidden="true">J</span><span>JEREMIAH <small>THE ONE TRUE GOD</small></span></div>
    <div className="ogp-header-actions">
-    <button type="button" className="ogp-voice-toggle" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn AI narration off':'Turn AI narration on'} disabled={!narration.supported} title={narration.supported?'Play fixed AI-generated Jeremiah narrator':'Audio playback unavailable in this browser'} onClick={narration.toggle}>
-     <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/>{narration.enabled?<><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8 8 0 0 1 0 12"/></>:<path d="m16 9 5 6m0-6-5 6"/>}</svg>
-     <span>{narration.enabled?'AI voice on':'AI voice off'}</span>
-    </button>
+    <button type="button" className="ogp-start-over" onClick={()=>setConfirmRestart(true)}>↺ Start over</button>
+    <button type="button" className="ogp-narration-setting" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn narration off':'Turn narration on'} onClick={narration.toggle}>{narration.enabled?'Narration on':'Narration off'}</button>
     {narration.enabled&&narrationText&&<button type="button" className="ogp-voice-replay" aria-label={narration.loading?'Preparing narration':narration.speaking?'Stop narration':'Replay narration'} title={narration.loading?'Preparing audio':narration.speaking?'Stop speaking':'Hear again'} disabled={narration.loading} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}>{narration.loading?'Preparing audio…':narration.speaking?'■ Stop':'↻ Replay'}</button>}
-    <details className="ogp-menu"><summary aria-label="Lesson options"><span aria-hidden="true">•••</span></summary><div className="ogp-menu-panel"><button type="button" onClick={event=>{event.currentTarget.closest('details').open=false;setConfirmRestart(true)}}>↺ Start from beginning</button><button type="button" onClick={onUseClassic}>Original view</button>
-     <a className="ogp-audition-link" href="/voice-audition.html" target="_blank" rel="noopener noreferrer">Compare five narrator voices ↗</a>
-     <p className="ogp-voice-note">Jeremiah uses Ash, a fixed AI-generated narrator. Every device plays the same MP3 audio rather than its own installed voices.</p>
-
-    </div></details>
    </div>
   </header>
   <div className="ogp-progress" role="progressbar" aria-label="OG.1 learning journey" aria-valuemin={0} aria-valuemax={100} aria-valuenow={displayProgress}><span style={{width:displayProgress+'%'}}/></div>

@@ -948,3 +948,14 @@
 .ogp-understanding-eyebrow{font:800 .7rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#5365bf}
 .ogp-finish--understanding .ogp-depth-report h1{font:550 clamp(2rem,5vw,3.5rem)/1.1 Georgia,serif;color:#1b3353;margin:13px 0 16px}
 .ogp-finish--understanding .ogp-understanding-level{font:750 clamp(1.1rem,2vw,1.45rem)/1.4 Inter,system-ui,sans-serif;color:#4557bf}
+
+/* The chosen Jeremiah narrator is fixed. Make lesson restart discoverable. */
+.ogp-start-over{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 17px;border:1.5px solid #f2ce83;border-radius:999px;background:#f5d89b;color:#172b43;font:800 .79rem/1.2 Inter,system-ui,sans-serif;letter-spacing:.015em;cursor:pointer;white-space:nowrap;box-shadow:0 2px 9px #08162724}
+.ogp-start-over:hover{background:#fff0c3;border-color:#fff0c3;color:#13263c}
+.ogp-start-over:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:720px){.ogp-start-over{min-height:39px;padding:8px 11px;font-size:.74rem}}
+
+.ogp-narration-setting{min-height:40px;padding:8px 12px;border:1px solid #ffffff75;border-radius:999px;background:#172b43;color:#fff;font:700 .74rem/1.2 Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.ogp-narration-setting[aria-pressed=false]{background:#334257;color:#f1f3f8}
+.ogp-narration-setting:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:720px){.ogp-narration-setting{padding:7px 9px;font-size:.67rem}}
