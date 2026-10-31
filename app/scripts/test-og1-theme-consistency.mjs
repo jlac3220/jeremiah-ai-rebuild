@@ -25,4 +25,10 @@ assert.match(shared,/\.ogp-page \.og1-identity-hero,[^\n]*#172b49,#323f77/, 'Cro
 assert.match(lesson,/\.ogp-mission-graphic\{[^}]+#465b91,#192743/, 'Missing-art fallback remains navy/indigo');
 assert.ok(player.includes("import './OG1ThemeConsistency.css'"), 'Consistent theme remains included');
 assert.ok(player.includes('OG1IdentityInvestigation') && player.includes('tone="isaiah-manuscript"'),'Doctrine and built-in manuscript scene remain connected');
+const gallery=read('../src/features/classroom/JourneyDestinations.css');
+assert.match(lesson, /@media\(max-width:600px\)/, 'OG.1 includes phone-specific layout');
+assert.ok(lesson.includes('env(safe-area-inset-bottom)'), 'Phone layout respects home indicator');
+assert.ok(lesson.includes('.ogp-start-over'), 'Restart stays visible on phone');
+assert.ok(lesson.includes('min-height:48px'), 'Primary actions have touch-sized targets');
+assert.match(gallery, /@media\(max-width:600px\)/, 'Witness gallery supports phone widths');
 console.log('PASS OG.1 theme: Explore, doctrine, synthesis and fallback use the navy-indigo design language.');
