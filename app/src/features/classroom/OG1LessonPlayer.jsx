@@ -14,6 +14,7 @@ import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1EvidenceExperience from './OG1EvidenceExperience';
+import OG1ManuscriptMoment from './OG1ManuscriptMoment';
 import OG1ExitExam from './OG1ExitExam';
 import {OG1JourneyMap,OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
@@ -156,6 +157,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
  const [evidenceOpen,setEvidenceOpen]=useState(false);
+ const [artifactSelection,setArtifactSelection]=useState(null);
  const [inlineBibleReference,setInlineBibleReference]=useState(null);
  const [examReviewOpen,setExamReviewOpen]=useState(false);
  const [showJourneyMap,setShowJourneyMap]=useState(false);
@@ -205,6 +207,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   setDraft(old=>({...old,...patch}));
   onStateChange(old=>updateLearningExperience(old,{drafts:{[move.id]:{...(old.experience?.drafts?.[move.id]||{}),...patch}}}));
  }
+ function exploreArtifact(id){setArtifactSelection(id);setEvidenceOpen(true)}
  function readVerse(reference) {
   narration.stop();
   setInlineBibleReference(reference);
@@ -339,6 +342,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       {feedback&&<div className="ogp-feedback" role="status"><strong>Jeremiah responds</strong><p>{feedback.teacherMessage}</p></div>}
       {error&&<p role="alert" className="ogp-error">{error}</p>}
      </>}
+     {((current.kind==='shema-manuscript')||(current.kind==='witness')||(current.kind==='timeline'&&evidenceIndex>0)||(current.kind==='identity'))&&<OG1ManuscriptMoment
+       key={current.kind+':'+evidenceIndex}
+       artifactId={current.kind==='shema-manuscript'?'nash':current.kind==='witness'?'isaiah':current.kind==='identity'?'p75':evidenceIndex===1?'sinaiticus':'p46'}
+       onExplore={exploreArtifact}/>} 
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
@@ -349,7 +356,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    </>}
    <aside className="ogp-study-footnote" aria-label="Further historical study"><span>EXPLORE FURTHER</span><button type="button" onClick={()=>setEvidenceOpen(true)}>Examine the historical manuscripts <span aria-hidden="true">↗</span></button></aside>
   </main>
-  <OG1EvidenceExperience open={evidenceOpen} chapter={chapter} onClose={()=>setEvidenceOpen(false)} onReadBible={readVerse}/>
+  <OG1EvidenceExperience open={evidenceOpen} chapter={chapter} selectedArtifactId={artifactSelection} onClose={()=>{setEvidenceOpen(false);setArtifactSelection(null)}} onReadBible={readVerse}/>
   {inlineBibleReference&&<OG1InlineBible reference={inlineBibleReference} onClose={()=>setInlineBibleReference(null)}/>}
  </div>;
 }
