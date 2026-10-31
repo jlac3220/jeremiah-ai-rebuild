@@ -13,23 +13,23 @@ export function deepenOG1(moves) {
   {label:'Explain the Apostolic reading',text:'God became truly human in Jesus. In his real human life, Jesus prays to the Father. The Father is not another god, and God is not confined to the human body of Jesus.'},
   {label:'Name the limits of the answer',text:'“He was only acting” denies the reality of the prayer. “There must be two gods” abandons monotheism. The Oneness explanation holds genuine incarnation together with the confession of one God; it must explain both, not discard one.'}
  ]};
- const reason=(id,title,scenario,claimPrompt,claims,reasonPrompt,reasons,answer,next,standardId)=>({id,title,type:'scenario',stageId:'checkpoint',phase:'Guide me',standardIds:[standardId],teaching:[scenario],prompt:'Make a judgment, then choose the reason that supports it.',interaction:{type:'reasoning',claimPrompt,claims,reasonPrompt,reasons,answer},evidenceIds:[],next:{strong:next,partial:id,weak:id}});
+ const reason=(id,title,scenario,claimPrompt,claims,reasonPrompt,reasons,answer,next,standardId)=>({id,title,type:'scenario',stageId:'checkpoint',phase:'Guide me',standardIds:[standardId],teaching:[scenario],prompt:scenario+' First identify the strongest judgment of the claim, then choose the biblical or logical reason that supports it.',interaction:{type:'reasoning',claimPrompt,claims,reasonPrompt,reasons,answer},evidenceIds:[],next:{strong:next,partial:id,weak:id}});
  moves.push(reason('context-challenge','Can the same word settle the question?',
   'A fictional reader says: “A team is one team with many members. Therefore, when Scripture says God is one, it must mean a group of divine persons.” Test the inference rather than simply agreeing or disagreeing with the conclusion.',
-  '1 · Does this comparison establish the meaning of the Shema?',[
+  'Does comparing God’s oneness in Deuteronomy 6:4 with a team of many members establish what the Shema means?',[
    {id:'yes',label:'Yes. The same number always describes the same kind of unity.',feedback:'A number can describe different subjects. The analogy does not establish what the biblical passage means.'},
    {id:'no',label:'No. The comparison alone cannot establish that meaning.',feedback:'You identified the limit of the analogy. Now give the reason for that judgment.'}],
-  '2 · Which reason actually answers the argument?',[
+  'Which reason best explains why the team analogy cannot, by itself, determine the meaning of “one” in Deuteronomy 6:4?',[
    {id:'context',label:'The subject and scriptural context must govern the meaning; Isaiah excludes a God beside the LORD.',feedback:'This connects the conclusion to the relevant evidence instead of importing the structure of a team into God.'},
    {id:'dictionary',label:'The word one can never describe anything with multiple members.',feedback:'A team can be called one team. Denying ordinary usage is unnecessary; explain why that usage cannot decide this passage.'},
    {id:'preference',label:'The comparison sounds unfamiliar, so it must be wrong.',feedback:'Familiarity does not establish an interpretation. Test the claim against the actual wording and context.'}],
   {claim:'no',reason:'context'},'isaiah-show','OG.1.1.18'));
  moves.push(reason('prayer-challenge','A correct conclusion needs a sound explanation',
   'A learner says: “I believe God is one, so Jesus’ prayer must only have been a performance for the disciples.” They have kept the confession but explained away something the passage presents as real.',
-  '1 · What needs correcting?',[
+  'Given the claim that Jesus’ prayer in Luke 22:42 was only a performance, which part of that claim requires correction?',[
    {id:'prayer',label:'The claim that Jesus’ prayer was only a performance.',feedback:'Yes. The confession does not give us permission to erase the humanity or the prayer.'},
    {id:'oneness',label:'The confession of one God must be abandoned.',feedback:'First Timothy 2:5 affirms one God alongside Christ’s human mediation. The task is to hold the truths together.'}],
-  '2 · Which explanation repairs the mistake?',[
+  'Which explanation of Jesus’ real prayer best fits John 1:14, Luke 22:42, and 1 Timothy 2:5 within Apostolic Oneness theology?',[
    {id:'costume',label:'God wore a human appearance, so the human experience was not real.',feedback:'A human appearance alone is not genuine incarnation. The lesson affirms a real human life.'},
    {id:'incarnation',label:'The Word became flesh; Jesus’ genuine human life includes real prayer and submission to the Father.',feedback:'This preserves the reality of the prayer while explaining it within the Apostolic understanding of incarnation.'},
    {id:'two',label:'Prayer requires two gods who communicate.',feedback:'That inference contradicts the confession. Distinguish genuine human mediation from adding a second deity.'}],
