@@ -20,7 +20,7 @@ function Manuscript({active,onSelect,visited}) {
  </div>;
 }
 
-export default function ShemaExperience({kind,video,onOpenBible,onInteraction,onSpeak,narrationEnabled=false,content,move}) {
+export default function ShemaExperience({kind,sequenceIndex=0,video,onOpenBible,onInteraction,onSpeak,narrationEnabled=false,content,move}) {
  const [phrase,setPhrase]=useState(-1);
  const [visited,setVisited]=useState([]);
  const [verseRevealed,setVerseRevealed]=useState(false);
@@ -69,9 +69,9 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
     <small>Public-domain reproduction · Cambridge University Library, MS Or.233.</small>
    </div>
   </aside>
-  <Manuscript active={phrase} visited={visited} onSelect={selectPhrase}/>
-  <div className="shema-word-reveal" aria-live="polite" key={selected?.id||'intro'}>
-   {selected?<><div className="shema-hebrew" lang="he" dir="rtl">{selected.hebrew}</div><div><span className="shema-kicker">{selected.roman}</span><h3>{selected.title}</h3><p>{selected.meaning}</p><button className="shema-listen-phrase" type="button" onClick={()=>onSpeak?.(selected.spoken)} aria-label={'Hear the words '+selected.text}>▶ Hear these words</button></div></>:<div className="shema-word-intro"><span>✦</span><p>Select any highlighted phrase above. The passage itself is your starting point.</p></div>}
+  <div className="shema-sequential-status">PART {sequenceIndex+1} OF 3 · {PHRASES[sequenceIndex]?.text}</div>
+  <div className="shema-word-reveal" aria-live="polite" key={PHRASES[sequenceIndex]?.id||'intro'}>
+   {PHRASES[sequenceIndex]?<><div className="shema-hebrew" lang="he" dir="rtl">{PHRASES[sequenceIndex].hebrew}</div><div><span className="shema-kicker">{PHRASES[sequenceIndex].roman}</span><h3>{PHRASES[sequenceIndex].title}</h3><p>{PHRASES[sequenceIndex].meaning}</p><button className="shema-listen-phrase" type="button" onClick={()=>onSpeak?.(PHRASES[sequenceIndex].spoken)} aria-label={'Hear the words '+PHRASES[sequenceIndex].text}>▶ Hear these words</button></div></>:<div className="shema-word-intro"><span>✦</span><p>Continue to discover each phrase in order.</p></div>}
   </div>
   <p className="shema-explore-footer">{visited.length===3?'You have examined the whole confession. The words belong together.':visited.length>0?'Explore another phrase—or continue when you are ready.':'The words are waiting to be explored.'}</p>
  </div>;
@@ -95,6 +95,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
    <p>{selectedReflection==='1'?'Exactly. The confession calls for a whole-life response, not only a correct definition.':'The text takes us further: knowledge matters, but the confession calls Israel to wholehearted love.'}</p>
   </div>}
  </div>;
+ if(kind==='shema-echad')return <section className="shema-resolution"><span className="shema-eyebrow">THE HEBREW WORD</span><h2>What does <em>echad</em> mean?</h2><p><em>Echad</em> means “one.” It can describe a single thing or a union, as in the “one flesh” of Genesis 2:24. That flexibility does not prove God consists of multiple divine persons.</p><p>In Deuteronomy 6:4, Israel confesses the LORD as the one God worthy of exclusive devotion. Isaiah 43:10 and 44:6 deny another God before or beside him, and Jesus reaffirms the confession in Mark 12:29. Context—not a dictionary definition alone—carries the argument.</p></section>;
  if(kind==='shema-resolution')return <div className="shema-resolution">
   <span className="shema-eyebrow">05 / THE REVELATION</span>
   <span className="shema-resolution-star" aria-hidden="true">✦</span>
@@ -102,7 +103,7 @@ export default function ShemaExperience({kind,video,onOpenBible,onInteraction,on
   <p className="shema-resolution-hero">“Hear” opens a summons. “Our God” identifies the LORD. “One LORD” anchors the confession. And the very next verse calls for wholehearted love.</p>
   <div className="shema-resolution-bridge"><span>DEUTERONOMY 6:4</span><div aria-hidden="true">→</div><span>DEUTERONOMY 6:5</span></div>
   <p>Now you're ready to build the meaning of the words yourself, before meeting Isaiah and the New Testament witnesses.</p>
-  <details className="shema-deeper"><summary>Go deeper · What about the Hebrew word for one?</summary><p><em>Echad</em> means “one.” It can describe a single thing or a union, as in the “one flesh” of Genesis 2:24. That flexibility does not prove God consists of multiple divine persons. In Deuteronomy 6:4, the subject is the LORD, and Israel is confessing exclusive devotion to him. The Apostolic understanding reads this with Isaiah 43:10 and 44:6, which deny another God before or beside him, and with Jesus’ reaffirmation in Mark 12:29. The context, not a single dictionary word, carries the doctrinal argument.</p></details>
+  
  </div>;
  return null;
 }

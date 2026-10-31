@@ -97,7 +97,7 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
       aria-current={index===i?'step':undefined}
       onClick={()=>setIndex(i)}
       aria-label={'Question '+(i+1)+(answers[q.id]?', answered':'')}
-     >{String(i+1).padStart(2,'0')}</button>)}
+      disabled={i>index&&!answers[OG1_EXIT_QUESTIONS[i-1]?.id]}>{String(i+1).padStart(2,'0')}</button>)}
     </nav>
     <div className="og1-exam-question" key={question.id}>
      <div className="og1-exam-question-meta"><span>STANDARD {question.standardId}</span><span>{question.reference}</span></div>
@@ -111,10 +111,10 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
     <div className="og1-exam-nav">
      <button type="button" className="og1-exam-secondary" disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← Previous</button>
      {index<OG1_EXIT_QUESTIONS.length-1
-      ?<button type="button" className="og1-exam-primary" onClick={()=>setIndex(i=>Math.min(9,i+1))}>Next question →</button>
+      ?<button type="button" className="og1-exam-primary" disabled={!answers[question.id]} onClick={()=>setIndex(i=>Math.min(9,i+1))}>Next question →</button>
       :<button type="button" className="og1-exam-primary" disabled={!allAnswered} onClick={submit}>Submit exit exam →</button>}
     </div>
-    <button type="button" className="og1-exam-secondary" onClick={onContinue}>Finish lesson without taking the exam →</button>
+
     {index===9&&!allAnswered&&<p className="og1-exam-reminder" role="status">Answer all ten questions before submitting. You can jump to any unfinished number above.</p>}
    </div>}
  </section>;
