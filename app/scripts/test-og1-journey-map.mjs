@@ -5,6 +5,13 @@ const read=p=>readFileSync(new URL(p,import.meta.url),'utf8');
 const journey=read('../src/features/classroom/OG1JourneyMap.jsx');
 const player=read('../src/features/classroom/OG1LessonPlayer.jsx');
 const destinations=read('../src/features/classroom/JourneyDestinations.jsx');
+const narrator=read('../server/narrationHandler.mjs');
+for(const phrase of ['Moses calls Israel to hear','The LORD declares that no other God','Jesus reaffirms the confession','Paul carries the confession']){
+ assert.ok(destinations.includes(phrase),'Spoken witness lacks commentary: '+phrase);
+ assert.ok(narrator.includes(phrase),'Speech endpoint must authorize narrated commentary: '+phrase);
+ assert.ok(player.includes(phrase),'Automatic narrator must match the authored witness: '+phrase);
+}
+
 assert.equal((destinations.match(/commentary:'/g)||[]).length,4,'Every witness needs authored commentary');
 assert.ok(destinations.includes('ogj-witness-commentary'),'Commentary displayed beneath Scripture and reference');
 const css=read('../src/features/classroom/OG1JourneyMap.css');
