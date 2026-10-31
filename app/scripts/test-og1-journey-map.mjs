@@ -42,6 +42,10 @@ assert.ok(!player.includes('<OG1JourneyLocation'),'Large journey card should be 
 assert.ok(player.includes('className="ogp-study-footnote"'),'Artifacts should be offered as a footnote');
 assert.ok(player.indexOf('className="ogp-study-footnote"')>player.indexOf('aria-label="Lesson moment navigation"'),'Artifacts should be below lesson navigation');
 assert.ok(!player.includes('⌕ Artifacts'),'Artifact link should not dominate the header');
+assert.ok(journey.includes('og1-journey--minimal'),'Compact chapter map must render');
+assert.ok(journey.includes('og1-journey-minimal-list'),'Five-stop list required');
+assert.ok(!journey.includes('item.summary}'),'Avoid paragraphs inside chapter list');
+assert.ok(css.includes('.og1-journey-minimal-item'),'Compact spacing required');
 assert.ok(css.includes('@media(max-width:680px)'), 'Mobile roadmap required');
 assert.ok(css.includes('prefers-reduced-motion'), 'Reduced motion required');
 console.log('PASS OG.1 journey: intro-first roadmap, all chapters, context-aware current/next, exit exam and responsive layout.');
