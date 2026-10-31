@@ -40,14 +40,11 @@ const discovery=player.indexOf("const discovery=DISCOVERIES[move.id]");
 assert.ok(encounter>0&&encounter<discovery,'Intro → witness sequence');
 assert.ok(player.includes('ogp-journey-notice'),'Compact journey notice renders');
 assert.ok(player.includes("!['identity','return','mission','roadmap'].includes(current.kind)"),'Avoid duplicate headings');
-assert.ok(player.includes("finish||move.id!=='learn'||moment>1"),'Suppress location guide until after first map');
-for(const x of ['ogp-study-tools','showJourneyMap','<OG1JourneyMap activeChapter={activeJourneyChapter} compact','setShowJourneyMap(false)','activeJourneyChapter=finish?(examPassed?7:6):chapterNumber']){
- assert.ok(player.includes(x),'Missing progressive guidance '+x);
-}
+assert.ok(!player.includes('aria-controls="og1-journey-recap"'),'No optional journey toggle is required');
 for(const x of ['aria-current','UP NEXT','10-question exit exam']){
  assert.ok(journey.includes(x),'Map missing accessible signpost '+x);
 }
-assert.ok(player.includes('aria-controls="og1-journey-recap"'),'Accessible map toggle remains');
+assert.ok(player.includes('role="status" className="ogp-journey-notice"'),'Journey updates automatically');
 assert.ok(!player.includes('<OG1JourneyLocation'),'Large journey card should be removed');
 assert.ok(journey.includes('og1-journey--minimal'),'Compact chapter map must render');
 assert.ok(journey.includes('og1-journey-minimal-list'),'Five-stop list required');
