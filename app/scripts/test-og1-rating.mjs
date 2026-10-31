@@ -22,9 +22,16 @@ const written=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict
 assert.equal(written.standards[0].level,3);
 const advanced=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict:'strong'}],experience:{standardEvidence:{'OG.1.1.18':{evidenceIds:['OG.1.1.18:evidence-4']}}}});
 assert.equal(advanced.standards[0].level,4);
-assert.equal(advanced.level,1,'Overall conservative rating cannot hide an unassessed standard');
+assert.equal(advanced.level,2,'Overall level balances assessed standards without implying universal extensive understanding');
+assert.ok(advanced.coverage<100,'Unassessed work is transparently reflected in coverage');
 const withExam=rateOG1Lesson(content,{teacherHistory:[],experience:{exitExam:{latest:{results:[{standardId:'OG.1.2.18',correct:true},{standardId:'OG.1.2.18',correct:true}]}}}});
 assert.equal(withExam.standards[1].level,2,'Two correct recall questions support approaching but not comprehensive');
+assert.equal(withExam.standards[1].score,100);
+assert.equal(empty.standards[0].score,null,'Unassessed standards must not be treated as incorrect');
+const combined=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-guide',verdict:'strong'},{moveId:'shema-try',verdict:'weak'}],experience:{exitExam:{latest:{results:[{standardId:'OG.1.1.18',correct:true},{standardId:'OG.1.1.18',correct:false}]}}}});
+assert.equal(combined.standards[0].score,45,'50% written + 25% guided + 25% exam = 45%');
+assert.equal(combined.standards[0].level,1,'Low weighted score cannot be masked by one strong guided response');
+assert.equal(combined.standards[0].coverage,100);
 const player=readFileSync(new URL('../src/features/classroom/OG1LessonPlayer.jsx',import.meta.url),'utf8');
 const exam=readFileSync(new URL('../src/features/classroom/OG1ExitExam.jsx',import.meta.url),'utf8');
 assert.ok(player.includes('Continue without an answer'));
