@@ -39,6 +39,9 @@ for(const x of ['aria-current','UP NEXT','10 QUESTIONS']){
 }
 assert.ok(player.includes('aria-controls="og1-journey-recap"'),'Accessible map toggle remains');
 assert.ok(!player.includes('<OG1JourneyLocation'),'Large journey card should be removed');
+assert.ok(player.includes('className="ogp-study-footnote"'),'Artifacts should be offered as a footnote');
+assert.ok(player.indexOf('className="ogp-study-footnote"')>player.indexOf('aria-label="Lesson moment navigation"'),'Artifacts should be below lesson navigation');
+assert.ok(!player.includes('⌕ Artifacts'),'Artifact link should not dominate the header');
 assert.ok(css.includes('@media(max-width:680px)'), 'Mobile roadmap required');
 assert.ok(css.includes('prefers-reduced-motion'), 'Reduced motion required');
 console.log('PASS OG.1 journey: intro-first roadmap, all chapters, context-aware current/next, exit exam and responsive layout.');
