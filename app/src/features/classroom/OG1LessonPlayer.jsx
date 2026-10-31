@@ -15,7 +15,7 @@ import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1EvidenceExperience from './OG1EvidenceExperience';
 import OG1ExitExam from './OG1ExitExam';
-import {OG1JourneyMap,OG1JourneyLocation} from './OG1JourneyMap';
+import {OG1JourneyMap,OG1JourneyLocation,OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
 import './OG1LessonPlayer.css';
 import './OG1ThemeConsistency.css';
@@ -87,8 +87,8 @@ function readingCommentary(note='') {
  return cleaned || null;
 }
 
-const CHAPTER_NAMES = ['The Shema','Isaiah’s Witness','The Apostolic Witness','The Difference','Living the Confession'];
-const CHAPTER_SLUGS = ['shema','isaiah','continuity','distinction','devotion'];
+const CHAPTER_NAMES=OG1_JOURNEY_CHAPTERS.map(chapter=>chapter.title);
+const CHAPTER_SLUGS=OG1_JOURNEY_CHAPTERS.map(chapter=>chapter.id);
 const SCENE_DESCRIPTIONS = {
  roadmap:'YOUR PATH', 'shema-encounter':'THE INVITATION','shema-manuscript':'THE MANUSCRIPT','shema-cinema':'THE FILM','shema-connection':'THE NEXT VERSE','shema-resolution':'THE CONNECTION',read:'THE TEXT', intro:'THE QUESTION', discovery:'INTERACTIVE STUDY', witness:'THE EVIDENCE',
  timeline:'THE THREAD', identity:'THE DOCTRINAL QUESTION', comparison:'THE DISTINCT EXPLANATIONS', return:'THE CONFESSION AND RESPONSE', mission:'THE CONSEQUENCES',
@@ -226,7 +226,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
   }
   onStateChange(old=>saveTeachingDecision(old,content,move,decision));
  }
- const buttonText=current?.kind==='roadmap'?'Meet the four witnesses':current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Follow the confession':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
+ const buttonText=current?.kind==='roadmap'?'Meet the four witnesses':current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'See your journey':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className={`ogp-page ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
   <header className="ogp-header">
    <button type="button" className="ogp-exit" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}>← <span>CLASSROOM</span></button>
