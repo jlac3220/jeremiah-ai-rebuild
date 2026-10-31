@@ -11,6 +11,8 @@ export default function OG1EvidenceExperience({open,onClose,chapter='learn',onRe
  const [revealed,setRevealed]=useState(false);
  const dialog=useRef(null);
  const opened=useRef(false);
+ const closeRef=useRef(onClose);
+ closeRef.current=onClose;
  const selected=OG1_EVIDENCE.find(item=>item.id===selectedId)||OG1_EVIDENCE[0];
 
  useEffect(()=>{
@@ -30,7 +32,7 @@ export default function OG1EvidenceExperience({open,onClose,chapter='learn',onRe
   document.body.style.overflow='hidden';
   dialog.current?.focus();
   const onKey=(e)=>{
-   if(e.key==='Escape'){e.preventDefault();onClose();return;}
+   if(e.key==='Escape'){e.preventDefault();closeRef.current();return;}
    if(e.key!=='Tab')return;
    const controls=[...dialog.current.querySelectorAll('a[href],button:not([disabled])')];
    if(!controls.length)return;
@@ -44,7 +46,7 @@ export default function OG1EvidenceExperience({open,onClose,chapter='learn',onRe
    document.body.style.overflow=oldOverflow;
    previous?.focus?.();
   };
- },[open,onClose]);
+ },[open]);
 
  function choose(id){
   setSelectedId(id);
