@@ -30,13 +30,13 @@ export function DestinationArt({tone,content,move,placement}) {
  </span>;
 }
 
-export default function JourneyDestinations({options,selected,onSelect,onSpeak,onOpenBible}) {
+export default function JourneyDestinations({options,selected,onSelect,onSpeak,onOpenBible,guided=false}) {
  const stop=selected===null?null:STOPS[selected];
  const art=stop?BIBLICAL_ART[stop.tone]:null;
  return <div className="ogj-journey" data-visual-revision="2026-10-30-curated-scenes">
   <div className="ogj-introduction"><span className="ogj-eyebrow">FOUR WITNESSES · ONE CONFESSION</span><p>Follow the confession from Moses to Isaiah, Jesus, and Paul. Choose a witness to explore the Scripture.</p></div>
   <div className="ogj-gallery" role="group" aria-label="Biblical voices">
-   {STOPS.map((item,i)=><button key={item.tone} type="button" className={'ogj-destination'+(selected===i?' is-selected':'')} aria-pressed={selected===i} onClick={()=>onSelect(i)}>
+   {STOPS.map((item,i)=><button key={item.tone} type="button" className={'ogj-destination'+(selected===i?' is-selected':'')} aria-pressed={selected===i} disabled={guided} onClick={()=>onSelect(i)}>
     <DestinationArt tone={item.tone}/>
     <span className="ogj-card-shade" aria-hidden="true"/>
     <span className="ogj-era">{String(i+1).padStart(2,'0')} / {item.era}</span>
