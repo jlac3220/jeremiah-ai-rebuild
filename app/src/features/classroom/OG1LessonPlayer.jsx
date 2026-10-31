@@ -257,9 +257,6 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
    <div className="ogp-context">
      <div className="ogp-context-meta"><span>{finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT'):chapterNumber===0?'PROLOGUE':`CHAPTER ${String(chapterNumber).padStart(2,'0')} / 05`}</span><span className="ogp-context-line"/><span>{finish?(examPassed?'COMPLETE':'EXIT EXAM'):SCENE_DESCRIPTIONS[sceneClass]||'THE JOURNEY'}</span></div>
      <div className="ogp-context-name">{finish?(examPassed?'OG.1 · Completed':'OG.1 · Exit exam'):chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}{!finish&&<span className="ogp-scene-counter">MOMENT {String(moment+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>}</div>
-     
-      {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={finish||chapterNumber>i?'is-reached':''}/>)}
-     </div>
    </div>
    <nav className="ogp-journey-timeline" aria-label="Your journey through five standards">
     <div className="ogp-journey-timeline-heading"><span>YOUR JOURNEY</span><strong>{finish?'All chapters explored':chapterNumber===0?'The opening':CHAPTER_NAMES[chapterNumber-1]}</strong></div>
