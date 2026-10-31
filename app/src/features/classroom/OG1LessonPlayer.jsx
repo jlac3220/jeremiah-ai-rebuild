@@ -219,7 +219,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
   narration.stop();
   setInlineBibleReference(reference);
  }
- function advance(){if(current?.kind==='mission'&&!consequenceRevealed){setConsequenceRevealed(true);return;}if(current?.kind==='mission'&&evidenceIndex<2){setEvidenceIndex(i=>i+1);setConsequenceRevealed(false);return;}if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);return;}if(current?.kind==='videoCheck'&&!mediaChoice){setError('Choose an answer before continuing. It does not need to be correct.');return;}if(current?.kind==='shema-manuscript'&&evidenceIndex<2){setEvidenceIndex(i=>i+1);return;}if(current?.kind==='discovery'&&evidenceIndex<((move.id==='learn')?3:current.discovery.options.length-1)){setEvidenceIndex(i=>i+1);return;}if(moment<total-1){setError('');setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
+ function advance(){if(current?.kind==='mission'&&evidenceIndex<2){setEvidenceIndex(i=>i+1);return;}if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);return;}if(current?.kind==='videoCheck'&&!mediaChoice){setError('Choose an answer before continuing. It does not need to be correct.');return;}if(current?.kind==='shema-manuscript'&&evidenceIndex<2){setEvidenceIndex(i=>i+1);return;}if(current?.kind==='discovery'&&evidenceIndex<((move.id==='learn')?3:current.discovery.options.length-1)){setEvidenceIndex(i=>i+1);return;}if(moment<total-1){setError('');setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
  function skip(){abort.current?.abort();setThinking(false);onStateChange(old=>skipTeachingMove(old,content));}
  function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setDiscoveryChoice(null);setOpeningHeard(false);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);setPracticeStep(0);setShowJourneyMap(false);setConfirmRestart(false);onStateChange(old=>restartTeaching(content,old));}
@@ -277,10 +277,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       <div className="ogp-encounter-inner">
        <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
        <div className="ogp-encounter-symbol" aria-hidden="true">אחד</div>
-       <blockquote>“Hear, O Israel:<br/>The LORD our God is <button type="button" className="ogp-encounter-word" onClick={()=>setOpeningHeard(true)} aria-expanded={openingHeard}>one LORD.<span aria-hidden="true"> ✦</span></button>”</blockquote>
+       <blockquote>“Hear, O Israel:<br/>The LORD our God is <strong className="ogp-encounter-word">one LORD.</strong>”</blockquote>
        <span className="ogp-encounter-reference">A declaration carried across generations.</span>
-       {!openingHeard&&<p className="ogp-encounter-hint">Touch the highlighted words to discover where the story goes.</p>}
-       {openingHeard&&<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
+       
+       {<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
       </div>
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
@@ -334,7 +334,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       </div>}
       {evidenceIndex===2&&<p className="ogp-compare-conclusion">The difference is not whether God is one. The difference concerns eternal personal distinctions and the understanding of Jesus Christ.</p>}
      </div>}
-     {current.kind==='mission'&&<><p className="ogp-prompt">The one LORD is not one option among several objects of worship. Knowing who He is shapes the devotion He calls for.</p><OG1ConsequenceJourney index={evidenceIndex} expanded={consequenceRevealed} onReveal={()=>setConsequenceRevealed(true)} art={<BiblicalApplicationArt index={evidenceIndex} content={content} move={move}/>} onOpenBible={readVerse}/></>}
+     {current.kind==='mission'&&<><p className="ogp-prompt">The one LORD is not one option among several objects of worship. Knowing who He is shapes the devotion He calls for.</p><OG1ConsequenceJourney index={evidenceIndex} expanded={true} onReveal={()=>{}} art={<BiblicalApplicationArt index={evidenceIndex} content={content} move={move}/>} onOpenBible={readVerse}/></>}
      {current.kind==='discovery'&&(move.id==='learn'
       ?<JourneyDestinations options={current.discovery.options} selected={evidenceIndex} onSelect={()=>{}} guided onSpeak={narration.speak} onOpenBible={readVerse}/>
       :<div className="ogp-discovery"><p className="ogp-prompt">Follow each piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label],i)=><span className={evidenceIndex===i?'is-active':''} key={label}>{label}</span>)}</div>{<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[evidenceIndex][0]}</strong><p>{current.discovery.options[evidenceIndex][1]}</p><small>{current.discovery.closer}</small></div>}</div>)}
