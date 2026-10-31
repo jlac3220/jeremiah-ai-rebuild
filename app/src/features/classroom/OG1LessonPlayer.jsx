@@ -128,7 +128,7 @@ function createMoments(move,video) {
  else if(move.id==='distinction-show')moments.push({kind:'identity',verb:'EXAMINE THE QUESTIONS',title:'Three texts. Two explanations.'},{kind:'comparison',verb:'COMPARE THE CLAIMS',title:'Where the interpretations differ.'});
  else if(move.id==='devotion-show'){moments.unshift({kind:'return',verb:'RETURN TO THE BEGINNING',title:'Deuteronomy 6:4 leads to verse 5.'});moments.push({kind:'mission',verb:'FOLLOW THE CONSEQUENCES',title:'One Lord. An undivided response.'});}
  else if(discovery)moments.push({kind:'discovery',verb:'INVESTIGATE',title:discovery.question,discovery});
- if(move.teaching?.length)move.teaching.forEach((text,index)=>moments.push({kind:'insight',verb:'THE CONNECTION',title:index===0?'The connection':'Follow the reasoning',text,deeper:[]}));
+ if(move.teaching?.length)moments.push({kind:'insight',verb:'THE CONNECTION',title:'Bring the evidence together',text:move.teaching[0],deeper:move.teaching.slice(1)});
  if(move.id==='shema-show'&&video) {
   const film={kind:'watch',verb:'WATCH',title:'Listen to the meaning of Shema',video};
   const response=video.lessonCheck?{kind:'videoCheck',verb:'NOTICE',title:'What did you notice?',check:video.lessonCheck}:null;
@@ -257,11 +257,14 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
    <div className="ogp-context">
      <div className="ogp-context-meta"><span>{finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT'):chapterNumber===0?'PROLOGUE':`CHAPTER ${String(chapterNumber).padStart(2,'0')} / 05`}</span><span className="ogp-context-line"/><span>{finish?(examPassed?'COMPLETE':'EXIT EXAM'):SCENE_DESCRIPTIONS[sceneClass]||'THE JOURNEY'}</span></div>
      <div className="ogp-context-name">{finish?(examPassed?'OG.1 · Completed':'OG.1 · Exit exam'):chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}{!finish&&<span className="ogp-scene-counter">MOMENT {String(moment+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>}</div>
-     <div className="ogp-study-tools"><span role="status" className="ogp-journey-notice">{finish?"Journey complete":chapterNumber===0?"Your journey begins":`Chapter ${chapterNumber} of 5 · ${CHAPTER_NAMES[chapterNumber-1]}`}</span></div>
-     <div className="ogp-chapter-track" aria-label={finish?'All five lesson chapters completed':chapterNumber===0?'Opening':`Chapter ${chapterNumber} of five`}>
-      {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={finish||chapterNumber>i?'is-reached':''}/>)}
-     </div>
    </div>
+   <nav className="ogp-journey-timeline" aria-label="Your journey through five standards">
+    <div className="ogp-journey-timeline-heading"><span>YOUR JOURNEY</span><strong>{finish?'All chapters explored':chapterNumber===0?'The opening':CHAPTER_NAMES[chapterNumber-1]}</strong></div>
+    <ol>{CHAPTER_NAMES.map((name,i)=><li key={name} className={finish||chapterNumber>i+1?'is-complete':chapterNumber===i+1?'is-current':'is-ahead'} aria-current={!finish&&chapterNumber===i+1?'step':undefined}>
+     <span className="ogp-journey-node">{finish||chapterNumber>i+1?'✓':String(i+1).padStart(2,'0')}</span>
+     <span className="ogp-journey-label">{name}</span>
+    </li>)}</ol>
+   </nav>
    {finish?(completionScreen==='understanding'?<section className="ogp-finish ogp-finish--understanding" aria-labelledby="ogp-understanding-title">
  <div className="ogp-depth-report"><span className="ogp-understanding-eyebrow">YOUR LEARNING · OG.1</span><h1 id="ogp-understanding-title">Your Understanding</h1><p className="ogp-understanding-level">Level {finalRating.level} · {finalRating.label}</p><p>Weighted performance: {finalRating.score===null?'Not assessed':finalRating.score+'%'} · Evidence coverage: {finalRating.coverage}%</p><p>{finalRating.meaning}</p><p>{finalRating.note}</p><div className="ogp-depth-report-list">{finalRating.standards.map(item=><div key={item.standardId}><strong>{item.standardId}</strong><span>Level {item.level} · {item.label}</span><small>Weighted performance: {item.score===null?'Not assessed':item.score+'%'} · Evidence coverage: {item.coverage}%</small><p>{item.meaning}</p><small><strong>What you demonstrated:</strong> {item.evidence}</small><small><strong>What to work on next:</strong> {item.nextStep}</small></div>)}</div></div>
  <div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('summary');window.scrollTo({top:0,behavior:'auto'})}}>Continue to final summary →</button><button type="button" className="ogp-back" onClick={()=>setCompletionScreen('exam')}>Review assessment ↗</button></div>
@@ -292,7 +295,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       </div>
      </div>}
      {current.kind==='intro'&&<p className="ogp-thought">Let's follow the confession from Moses through the prophets and into the apostolic witness.</p>}
-     {current.kind==='insight'&&<div className="ogp-insight"><span className="ogp-insight-mark" aria-hidden="true">✦</span><p className="ogp-thought">{current.text}</p></div>}
+     {current.kind==='insight'&&<div className="ogp-insight"><span className="ogp-insight-mark" aria-hidden="true">✦</span><p className="ogp-thought">{current.text}</p>{current.deeper?.length>0&&<div className="ogp-insight-support">{current.deeper.map((line,i)=><p key={i}>{line}</p>)}</div>}</div>}
      {current.kind==='witness'&&<div className="ogp-witness">
       <p className="ogp-prompt">Isaiah makes three connected claims. Reveal each one and see how the evidence fits together.</p>
       <div className="ogp-witness-timeline" role="group" aria-label="Isaiah's three declarations">

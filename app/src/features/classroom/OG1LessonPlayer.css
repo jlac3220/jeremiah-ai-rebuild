@@ -994,3 +994,27 @@
  .ogp-header-actions{gap:5px}
  .ogp-start-over,.ogp-narration-setting{font-size:.68rem!important;padding:7px 9px!important}
 }
+
+/* Persistent, glanceable standards journey — never a reading slide or popover. */
+.ogp-journey-timeline{margin:18px 0 6px;padding:14px 16px;border:1px solid #dce3ef;border-radius:16px;background:#fff;box-shadow:0 5px 22px #1936550c}
+.ogp-journey-timeline-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;font:750 .68rem/1.35 Inter,system-ui,sans-serif;letter-spacing:.1em;color:#60708a}
+.ogp-journey-timeline-heading strong{font-size:.77rem;font-weight:740;letter-spacing:0;color:#364a70}
+.ogp-journey-timeline ol{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:0;padding:0}
+.ogp-journey-timeline li{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;text-align:center;color:#8993a4}
+.ogp-journey-timeline li:not(:last-child)::after{content:'';position:absolute;top:17px;left:calc(50% + 20px);right:calc(-50% + 20px);height:3px;border-radius:3px;background:#dce3ed}
+.ogp-journey-timeline li.is-complete:not(:last-child)::after{background:#6477c9}
+.ogp-journey-node{position:relative;z-index:1;display:grid;place-items:center;width:36px;height:36px;border:2px solid #dce3ed;border-radius:50%;background:#f5f6fa;color:#66738a;font:800 .72rem Inter,system-ui,sans-serif}
+.ogp-journey-timeline .is-complete .ogp-journey-node{background:#5065ac;color:#fff;border-color:#5065ac}
+.ogp-journey-timeline .is-current .ogp-journey-node{background:#f5d89b;color:#172b43;border-color:#a77935;box-shadow:0 0 0 4px #f5d89b4f}
+.ogp-journey-timeline .is-current .ogp-journey-label{color:#1e3355;font-weight:800}
+.ogp-journey-label{max-width:140px;font:650 .7rem/1.3 Inter,system-ui,sans-serif;overflow-wrap:break-word}
+.ogp-insight-support{display:grid;gap:9px;margin-top:16px;padding-top:14px;border-top:1px solid #dce3ed}
+.ogp-insight-support p{font-size:.95rem;line-height:1.6;margin:0}
+@media(max-width:600px){
+ .ogp-journey-timeline{position:sticky;top:0;z-index:12;margin:0 -8px 14px;padding:10px 10px 12px;border-radius:0 0 14px 14px;box-shadow:0 8px 16px #19365514}
+ .ogp-journey-timeline-heading{margin-bottom:9px;font-size:.6rem}
+ .ogp-journey-timeline-heading strong{font-size:.7rem;max-width:65%;text-align:right}
+ .ogp-journey-node{width:30px;height:30px;font-size:.68rem}
+ .ogp-journey-timeline li:not(:last-child)::after{top:14px;left:calc(50% + 17px);right:calc(-50% + 17px)}
+ .ogp-journey-label{font-size:.59rem;line-height:1.2}
+}
