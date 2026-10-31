@@ -6,7 +6,7 @@ const climax=read('../src/features/classroom/OG1StoryClimax.jsx');
 const css=read('../src/features/classroom/OG1StoryClimax.css');
 const doctrine=read('../src/core/classroom/content/OG_1_LESSON.js');
 assert.ok(player.includes("move.id==='distinction-show')moments.push({kind:'identity'"),'Doctrinal interpretation should have its own inquiry');
-assert.ok(player.includes("move.id==='devotion-show')moments.push({kind:'return'"),'Final chapter must reconnect directly to the Shema');
+assert.ok(player.includes("move.id==='devotion-show'){moments.unshift({kind:'return'"),'Final chapter must reconnect directly to the Shema');
 assert.ok(player.includes("current.kind==='mission'&&!consequenceRevealed"),'Students should encounter each consequence before advancing');
 assert.ok(player.includes('<OG1ConsequenceJourney'),'Final chapter must use immersive Scripture consequences');
 assert.ok(player.includes('<OG1FinalSynthesis'),'Final review should synthesize the whole witness');
@@ -14,7 +14,9 @@ assert.ok(climax.includes('export function OG1IdentityInvestigation'),'Identity 
 assert.ok(climax.includes('export function OG1ReturnToShema'),'Bridge must be Deuteronomy 6:4 and 6:5');
 assert.ok(climax.includes('export function OG1ConsequenceJourney'),'Final chapter must make the confession consequential');
 assert.ok(climax.includes('export function OG1FinalSynthesis'),'Final chapter must gather all four witnesses');
-assert.match(climax,/The final chapter doesn't depend on winning a theological comparison/,'Doctrine must not be narrative bridge');
+assert.match(climax,/this final chapter does not depend on winning a comparison/i,'Doctrine must not be narrative bridge');
+assert.match(climax,/Knowing Him gives direction to devotion/,'The finale must connect knowledge of God to response');
+assert.match(climax,/Accurate understanding is necessary/,'Knowledge is necessary but not sufficient');
 assert.match(climax,/THE CONFESSION/);
 assert.match(climax,/THE RESPONSE/);
 for(const ref of ['Deuteronomy 6:4','Deuteronomy 6:5','Exodus 20:3','1 Corinthians 8:4','John 1:1','Matthew 28:19','Acts 2:38','Luke 22:42'])
