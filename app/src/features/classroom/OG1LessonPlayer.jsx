@@ -15,7 +15,7 @@ import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1EvidenceExperience from './OG1EvidenceExperience';
 import OG1ExitExam from './OG1ExitExam';
-import {OG1JourneyMap,OG1JourneyLocation,OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
+import {OG1JourneyMap,OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
 import './OG1LessonPlayer.css';
 import './OG1ThemeConsistency.css';
@@ -252,15 +252,12 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    <div className="ogp-context">
      <div className="ogp-context-meta"><span>{finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT'):chapterNumber===0?'PROLOGUE':`CHAPTER ${String(chapterNumber).padStart(2,'0')} / 05`}</span><span className="ogp-context-line"/><span>{finish?(examPassed?'COMPLETE':'EXIT EXAM'):SCENE_DESCRIPTIONS[sceneClass]||'THE JOURNEY'}</span></div>
      <div className="ogp-context-name">{finish?(examPassed?'OG.1 · Completed':'OG.1 · Exit exam'):chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}{!finish&&<span className="ogp-scene-counter">MOMENT {String(moment+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>}</div>
-     <button type="button" className="oge-launch" onClick={()=>setEvidenceOpen(true)}>⌕ Explore the Evidence <span aria-hidden="true">↗</span></button>
+     <div className="ogp-study-tools"><button type="button" className="ogp-study-link" onClick={()=>setEvidenceOpen(true)}>⌕ Artifacts <span aria-hidden="true">↗</span></button>{(finish||move.id!=='learn'||moment>1)&&<button type="button" className="ogp-study-link" aria-expanded={showJourneyMap} aria-controls="og1-journey-recap" onClick={()=>setShowJourneyMap(v=>!v)}>◇ {showJourneyMap?'Hide journey':'Journey'} <span aria-hidden="true">{showJourneyMap?'−':'↗'}</span></button>}</div>
      <div className="ogp-chapter-track" aria-label={finish?'All five lesson chapters completed':chapterNumber===0?'Opening':`Chapter ${chapterNumber} of five`}>
       {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={finish||chapterNumber>i?'is-reached':''}/>)}
      </div>
    </div>
-   {(finish||move.id!=='learn'||moment>1)&&<>
-    <OG1JourneyLocation activeChapter={activeJourneyChapter} expanded={showJourneyMap} onToggle={()=>setShowJourneyMap(v=>!v)}/>
-    <div id="og1-journey-recap" className="og1-journey-map-recap" hidden={!showJourneyMap}><OG1JourneyMap activeChapter={activeJourneyChapter} compact/></div>
-   </>}
+   {(finish||move.id!=='learn'||moment>1)&&<div id="og1-journey-recap" className="og1-journey-map-recap" hidden={!showJourneyMap}><OG1JourneyMap activeChapter={activeJourneyChapter} compact/></div>}
    {finish?(examPassed&&!examReviewOpen?<section className="ogp-finish ogp-finish--synthesis"><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>onNavigate(ROUTES.CLASSROOM_STUDY)}>Explore another lesson →</button><button type="button" className="ogp-back" onClick={()=>setExamReviewOpen(true)}>Review exit exam ↗</button></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onSubmitted={()=>setExamReviewOpen(true)} onContinue={()=>setExamReviewOpen(false)}/>):<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
      {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap'].includes(current.kind)&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
