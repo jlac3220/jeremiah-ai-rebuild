@@ -71,3 +71,28 @@
  .og1-synthesis-witnesses button{min-height:180px}
 }
 @media(prefers-reduced-motion:reduce){.og1-consequence-revealed{animation:none}}
+
+/* The true narrative bridge: Deuteronomy 6:4 straight into 6:5. */
+.og1-return{max-width:1040px;margin:10px auto 24px}
+.og1-return-heading{border-radius:22px 22px 0 0;padding:clamp(28px,4.5vw,56px);background:linear-gradient(125deg,#152c42,#315764);color:#fff}
+.og1-return-heading span{font:850 .69rem/1.4 Inter,system-ui,sans-serif;color:#eac891;letter-spacing:.16em}
+.og1-return-heading h2{font:550 clamp(2.05rem,4.5vw,3.6rem)/1.16 Georgia,serif;color:#fff;letter-spacing:-.04em;margin:16px 0}
+.og1-return-heading p{max-width:710px;color:#e2edef;line-height:1.7;font-size:1rem}
+.og1-return-verses{display:grid;grid-template-columns:minmax(0,1fr) 46px minmax(0,1fr);align-items:stretch;gap:0;background:#fff;border:1px solid #d8e0e5;border-top:0}
+.og1-return-verses section{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,38px);min-height:275px}
+.og1-return-verses section:first-child{background:#f4f2ea}
+.og1-return-verses section:last-child{background:#edf2f6}
+.og1-return-verses span,.og1-return-verses small{font:800 .66rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#66758a}
+.og1-return-verses blockquote{margin:18px 0 20px;font:550 clamp(1.22rem,2vw,1.7rem)/1.42 Georgia,serif;color:#213b50}
+.og1-return-arrow{align-self:center;justify-self:center;color:#7181c3;font:700 2.2rem Georgia,serif}
+.og1-return-connection{border-left:4px solid #8594d5;background:#eff2ff;color:#344c6b;padding:20px 24px;margin:0;font:560 clamp(1rem,2vw,1.18rem)/1.7 Inter,system-ui,sans-serif}
+.og1-return>button{padding:13px 19px;margin-top:18px;background:#1f4859;border:1px solid #1f4859;color:#fff;border-radius:9px;font:750 .83rem Inter,system-ui,sans-serif;cursor:pointer}
+.og1-return button:focus-visible{outline:3px solid #7989de;outline-offset:3px}
+.ogp-finish--synthesis{max-width:1040px;padding-top:26px}
+.ogp-finish--synthesis:before{display:none}
+.ogp-finish--synthesis>.ogp-action{margin:25px 0 25px}
+@media(max-width:660px){
+ .og1-return-verses{grid-template-columns:1fr}
+ .og1-return-verses section{min-height:0;padding:27px}
+ .og1-return-arrow{transform:rotate(90deg);padding:3px 0}
+}
