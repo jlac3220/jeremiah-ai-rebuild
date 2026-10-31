@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ROUTES } from '../../app/routes';
-import { setBibleReaderIntent } from '../../core/bible/bibleReaderIntent';
+import OG1InlineBible from './OG1InlineBible';
 import { getInstructionalMove, getStandardProgress, updateLearningExperience } from '../../core/classroom/learningEngine';
 import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, skipTeachingMove, restartTeaching } from '../../core/classroom/teacherLedEngine';
 import { askJeremiahTeacher } from '../../services/jeremiahTeacher';
@@ -156,6 +156,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
  const [evidenceOpen,setEvidenceOpen]=useState(false);
+ const [inlineBibleReference,setInlineBibleReference]=useState(null);
  const [examReviewOpen,setExamReviewOpen]=useState(false);
  const [showJourneyMap,setShowJourneyMap]=useState(false);
  const abort=useRef(null);
@@ -206,8 +207,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  }
  function readVerse(reference) {
   narration.stop();
-  setBibleReaderIntent(reference,{translation:'kjv',returnRoute:ROUTES.CLASSROOM_LESSON,source:'classroom'});
-  onNavigate(ROUTES.BIBLE_SUPPORT);
+  setInlineBibleReference(reference);
  }
  function advance(){if(current?.kind==='mission'&&!consequenceRevealed)return;if(current?.kind==='mission'&&evidenceIndex<2){setEvidenceIndex(i=>i+1);setConsequenceRevealed(false);return;}if((current?.kind==='witness'||current?.kind==='timeline'||current?.kind==='comparison')&&evidenceIndex<2){setEvidenceIndex(i=>i+1);return;}if(current?.kind==='discovery'&&discoveryChoice===null)return;if(moment<total-1){setMoment(i=>i+1);setDiscoveryChoice(null);setShowDepth(false);setEvidenceIndex(0);setConsequenceRevealed(false);return;}if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));}
  function back(){setMoment(i=>Math.max(0,i-1));setDiscoveryChoice(null);}
@@ -350,5 +350,6 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    <aside className="ogp-study-footnote" aria-label="Further historical study"><span>EXPLORE FURTHER</span><button type="button" onClick={()=>setEvidenceOpen(true)}>Examine the historical manuscripts <span aria-hidden="true">↗</span></button></aside>
   </main>
   <OG1EvidenceExperience open={evidenceOpen} chapter={chapter} onClose={()=>setEvidenceOpen(false)} onReadBible={readVerse}/>
+  {inlineBibleReference&&<OG1InlineBible reference={inlineBibleReference} onClose={()=>setInlineBibleReference(null)}/>}
  </div>;
 }
