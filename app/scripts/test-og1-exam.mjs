@@ -22,6 +22,12 @@ for(const q of OG1_EXIT_QUESTIONS){
  assert.equal(new Set(q.choices.map(c=>c.id)).size,q.choices.length,'Answer identifiers unique');
  assert.ok(q.choices.some(c=>c.id===q.answerId),'Each question has a valid answer');
 }
+// Each stem is reusable without a lesson slide, a chapter heading, or prior question.
+for(const q of OG1_EXIT_QUESTIONS){
+ assert.ok(q.prompt.length>=105,q.id+' needs enough independent context for placement');
+ assert.match(q.prompt,/Deuteronomy|Isaiah|Mark|Corinthians|Trinitarian|Oneness|James|Exodus|Luke/,q.id+' must name the passage or doctrine');
+ assert.doesNotMatch(q.prompt,/\\b(this lesson|the slide|above|below|we just|previous question|as discussed)\\b/i,q.id+' depends on lesson context');
+}
 const correct=Object.fromEntries(OG1_EXIT_QUESTIONS.map(q=>[q.id,q.answerId]));
 const perfect=gradeOG1ExitExam(correct);
 assert.equal(perfect.correct,10);
