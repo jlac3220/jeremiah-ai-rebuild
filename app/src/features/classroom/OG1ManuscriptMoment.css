@@ -1,0 +1,13 @@
+.og1-manuscript-moment{display:grid;grid-template-columns:minmax(150px,.34fr) minmax(0,.66fr);gap:0;overflow:hidden;max-width:1020px;width:100%;margin:23px auto 14px;background:#fff;border:1px solid #d5dfef;border-radius:16px;box-shadow:0 10px 26px #142b5010}
+.og1-manuscript-moment-image{position:relative;display:grid;place-items:center;min-height:195px;background:#eef1f7;padding:18px}
+.og1-manuscript-moment-image img{max-width:100%;max-height:220px;object-fit:contain}
+.og1-manuscript-image-fallback{display:none;font-size:.8rem;color:#667692;text-align:center}
+.og1-manuscript-moment-image.is-unavailable .og1-manuscript-image-fallback{display:block}
+.og1-manuscript-moment-copy{padding:clamp(18px,3vw,29px)}
+.og1-manuscript-moment-copy>span{font:800 .65rem/1.5 Inter,system-ui,sans-serif;color:#5667c6;letter-spacing:.1em}
+.og1-manuscript-moment-copy h3{font:600 clamp(1.3rem,2vw,1.75rem)/1.25 Georgia,serif;color:#203751;margin:9px 0}
+.og1-manuscript-moment-copy p{font:500 .86rem/1.6 Inter,system-ui,sans-serif;color:#425876;margin:0 0 9px}
+.og1-manuscript-moment-copy small{display:block;color:#70829b;font:.72rem/1.5 Inter,system-ui,sans-serif}
+.og1-manuscript-moment-copy button{border:0;background:transparent;padding:13px 0 0;color:#4257bd;cursor:pointer;font:750 .81rem Inter,system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px}
+.og1-manuscript-moment-copy button:focus-visible{outline:3px solid #8692eb;outline-offset:3px}
+@media(max-width:690px){.og1-manuscript-moment{grid-template-columns:1fr}.og1-manuscript-moment-image{min-height:160px}.og1-manuscript-moment-image img{max-height:170px}.og1-manuscript-moment-copy{padding:18px}}
