@@ -193,7 +193,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
   : current?.kind==='timeline'
    ? ['The LORD our God is one LORD.','The Lord our God is one Lord.','There is none other God but one.'][evidenceIndex]
   : current?.kind==='discovery'&&move.id==='learn'&&discoveryChoice!==null
-   ? ['Hear, O Israel: The LORD our God is one LORD. In the wilderness Moses gives the confession to Israel.','I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six.','Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine.','There is none other God but one. First Corinthians, chapter eight, verse four.'][discoveryChoice]
+   ? ['Hear, O Israel: The LORD our God is one LORD. Deuteronomy chapter six, verse four. Moses calls Israel to hear and respond to the one LORD.','I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six. The LORD declares that no other God exists beside him.','Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine. Jesus reaffirms the confession when asked about the first commandment.','There is none other God but one. First Corinthians chapter eight, verse four. Paul carries the confession into his teaching about idols and the one God.'][discoveryChoice]
   : current?.kind==='identity'&&moment===0
    ? 'Jesus Christ stands at the center of this question. We will examine how the Scriptures speak about the one God and the incarnation.'
   : current?.kind==='comparison'&&evidenceIndex===0
