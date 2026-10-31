@@ -39,6 +39,8 @@ const roadmap=player.indexOf('const discovery=DISCOVERIES[move.id]');
 const discovery=player.indexOf("const discovery=DISCOVERIES[move.id]");
 assert.ok(encounter>0&&encounter<discovery,'Intro → witness sequence');
 assert.ok(player.includes('ogp-mini-timeline'),'Slim five-stop timeline is rendered');
+assert.ok(player.includes('LESSON JOURNEY · 5 CHAPTERS'),'The numbers have a visible meaning');
+assert.ok(player.includes('Opening · chapters ahead'),'Opening has a distinct introductory status');
 assert.ok(player.includes('aria-current={!finish&&chapterNumber===i+1'), 'Current chapter is accessible');
 assert.ok(player.includes("!['identity','return','mission','roadmap'].includes(current.kind)"),'Avoid duplicate headings');
 assert.ok(!player.includes('aria-controls="og1-journey-recap"'),'No optional journey toggle is required');

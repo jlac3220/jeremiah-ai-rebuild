@@ -1041,3 +1041,14 @@
  .ogp-mini-node{width:23px;height:23px;font-size:.57rem}
  .ogp-mini-timeline li:not(:last-child)::after{left:calc(50% + 12px);right:calc(-50% + 12px)}
 }
+
+/* Explain the timeline at a glance without restoring a bulky Journey card. */
+.ogp-mini-timeline{max-width:260px;flex-basis:260px}
+.ogp-mini-caption{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;color:#596b85;font:750 .61rem/1.3 Inter,system-ui,sans-serif;letter-spacing:.055em;white-space:nowrap}
+.ogp-mini-caption strong{color:#394b69;font-size:.61rem;letter-spacing:0;font-weight:700}
+@media(max-width:600px){
+ .ogp-compact-header{align-items:flex-start;flex-wrap:wrap}
+ .ogp-mini-timeline{flex:1 1 100%;min-width:0;max-width:100%}
+ .ogp-mini-caption{margin-bottom:7px}
+ .ogp-mini-timeline ol{max-width:230px}
+}
