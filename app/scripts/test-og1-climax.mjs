@@ -7,7 +7,7 @@ const css=read('../src/features/classroom/OG1StoryClimax.css');
 const doctrine=read('../src/core/classroom/content/OG_1_LESSON.js');
 assert.ok(player.includes("move.id==='distinction-show')moments.push({kind:'identity'"),'Doctrinal interpretation should have its own inquiry');
 assert.ok(player.includes("move.id==='devotion-show'){moments.unshift({kind:'return'"),'Final chapter must reconnect directly to the Shema');
-assert.ok(player.includes("current.kind==='mission'&&!consequenceRevealed"),'Students should encounter each consequence before advancing');
+assert.ok(player.includes("current?.kind==='mission'&&!consequenceRevealed"),'Students should encounter each consequence before advancing');
 assert.ok(player.includes('<OG1ConsequenceJourney'),'Final chapter must use immersive Scripture consequences');
 assert.ok(player.includes('<OG1FinalSynthesis'),'Final review should synthesize the whole witness');
 assert.ok(climax.includes('export function OG1IdentityInvestigation'),'Identity inquiry must stand alone');
