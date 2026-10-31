@@ -24,5 +24,5 @@ assert.match(shared,/\.oge-top\{[^}]+#172b49,#323f77/, 'Shared override cannot r
 assert.match(shared,/\.ogp-page \.og1-identity-hero,[^\n]*#172b49,#323f77/, 'Cross-module override matches inquiry');
 assert.match(lesson,/\.ogp-mission-graphic\{[^}]+#465b91,#192743/, 'Missing-art fallback remains navy/indigo');
 assert.ok(player.includes("import './OG1ThemeConsistency.css'"), 'Consistent theme remains included');
-assert.ok(player.includes('OG1IdentityInvestigation') && player.includes('OG1EvidenceExperience'),'Both add-ons remain connected');
+assert.ok(player.includes('OG1IdentityInvestigation') && player.includes('OG1ManuscriptImage'),'Doctrinal teaching and inline manuscript imagery remain connected');
 console.log('PASS OG.1 theme: Explore, doctrine, synthesis and fallback use the navy-indigo design language.');
