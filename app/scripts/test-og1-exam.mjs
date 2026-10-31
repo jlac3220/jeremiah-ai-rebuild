@@ -29,6 +29,10 @@ for(const q of OG1_EXIT_QUESTIONS){
  assert.doesNotMatch(q.prompt,/in the opening command|declares that no other|with all the heart|fully divine and truly human|the LORD speaks of being/i,q.id+' should not teach the answer in the stem');
  assert.doesNotMatch(q.prompt,/\\b(this lesson|the slide|above|below|we just|previous question|as discussed)\\b/i,q.id+' depends on lesson context');
 }
+// Distractors must be meaningful alternatives, not implausible strawmen.
+for(const phrase of ['different gods for different nations','every person defines God','commandments were all canceled','only acting as though','love unnecessary','each city should worship']){
+ assert.ok(!OG1_EXIT_QUESTIONS.some(q=>q.choices.some(c=>c.label.toLowerCase().includes(phrase))), 'Distractor too obvious: '+phrase);
+}
 const correct=Object.fromEntries(OG1_EXIT_QUESTIONS.map(q=>[q.id,q.answerId]));
 const perfect=gradeOG1ExitExam(correct);
 assert.equal(perfect.correct,10);
