@@ -1,0 +1,6 @@
+.og1-manuscript-image{max-width:510px;margin:22px auto 8px;display:flex;align-items:center;flex-direction:column;gap:8px}
+.og1-manuscript-image img{width:auto;max-width:100%;height:auto;max-height:220px;object-fit:contain;border-radius:6px}
+.og1-manuscript-image figcaption{display:flex;flex-wrap:wrap;justify-content:center;gap:3px 8px;color:#718096;text-align:center;font:450 .68rem/1.5 Inter,system-ui,sans-serif}
+.og1-manuscript-image figcaption strong{font-weight:700;color:#53617c}
+.og1-manuscript-image figcaption span{color:#718096}
+@media(max-width:690px){.og1-manuscript-image{margin:14px auto 5px}.og1-manuscript-image img{max-height:150px}.og1-manuscript-image figcaption{font-size:.63rem}}
