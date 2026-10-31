@@ -938,3 +938,7 @@
 .ogp-depth-report-list strong{min-width:105px;color:#1f3859}
 .ogp-depth-report-list span{font-weight:700;color:#4355b3}
 .ogp-depth-report-list small{flex-basis:100%;color:#66788e}
+
+.ogp-depth-report-list>div>p{flex-basis:100%;margin:3px 0;color:#53657e;font:.81rem/1.55 Inter,system-ui,sans-serif}
+.ogp-depth-report-list>div>small{display:block;flex-basis:100%;line-height:1.5}
+.ogp-depth-report-list>div>small strong{color:#30476c;font-weight:750}
