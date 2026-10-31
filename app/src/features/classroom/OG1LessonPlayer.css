@@ -1052,3 +1052,9 @@
  .ogp-mini-caption{margin-bottom:7px}
  .ogp-mini-timeline ol{max-width:230px}
 }
+
+/* Next-stop guidance replaces repetitive chapter numbers. */
+.ogp-mini-timeline{max-width:330px;flex-basis:330px}
+.ogp-mini-caption{white-space:normal;align-items:start}
+.ogp-mini-caption strong{text-align:right;max-width:220px;line-height:1.35}
+@media(max-width:600px){.ogp-mini-timeline{max-width:100%;flex-basis:100%}.ogp-mini-caption strong{max-width:68%}}

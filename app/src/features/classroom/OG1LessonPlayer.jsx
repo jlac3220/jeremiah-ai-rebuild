@@ -255,11 +255,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
   <main className="ogp-shell" key={move.id}>
    <div className="ogp-compact-header">
     <div className="ogp-compact-heading">
-     <span className="ogp-compact-eyebrow">{finish?'LESSON COMPLETE':chapterNumber===0?'THE OPENING':`CHAPTER ${String(chapterNumber).padStart(2,'0')} OF 05`}</span>
-     <h1>{finish?'The One True God':chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}</h1>
+     <h1>{finish?'The One True God':chapterNumber===0?'The opening · A confession begins':`Chapter ${chapterNumber} · ${CHAPTER_NAMES[chapterNumber-1]}`}</h1>
     </div>
     <nav className="ogp-mini-timeline" aria-label="Five lesson chapters">
-     <div className="ogp-mini-caption"><span>LESSON JOURNEY · 5 CHAPTERS</span><strong>{finish?'5 of 5 complete':chapterNumber===0?'Opening · chapters ahead':`Chapter ${chapterNumber} of 5`}</strong></div>
+     <div className="ogp-mini-caption"><span>YOUR JOURNEY</span><strong><span aria-hidden="true">→ </span>{finish?'Journey complete':chapterNumber===0?`Up next: Chapter 1 · ${CHAPTER_NAMES[0]}`:chapterNumber>=CHAPTER_NAMES.length?'Up next: Exit exam':`Up next: Chapter ${chapterNumber+1} · ${CHAPTER_NAMES[chapterNumber]}`}</strong></div>
      <ol>{CHAPTER_NAMES.map((name,i)=><li key={name} className={finish||chapterNumber>i+1?'is-complete':chapterNumber===i+1?'is-current':'is-ahead'} aria-current={!finish&&chapterNumber===i+1?'step':undefined} title={`Chapter ${i+1}: ${name}`}>
       <span className="ogp-mini-node" aria-hidden="true">{finish||chapterNumber>i+1?'✓':i+1}</span>
       <span className="ogp-visually-hidden">{name}{chapterNumber===i+1?' — current':''}</span>
