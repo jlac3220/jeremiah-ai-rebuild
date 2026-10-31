@@ -13,6 +13,7 @@ export default function OG1InlineBible({reference,onClose}){
  const [loading,setLoading]=useState(true);
  const [error,setError]=useState('');
  const [size,setSize]=useState(1);
+ const [reload,setReload]=useState(0);
  const dialogRef=useRef(null);
  const closeRef=useRef(onClose);
  closeRef.current=onClose;
@@ -25,7 +26,7 @@ export default function OG1InlineBible({reference,onClose}){
    .catch(err=>{if(!cancelled)setError(err?.message||'Unable to load Scripture.')})
    .finally(()=>{if(!cancelled)setLoading(false)});
   return ()=>{cancelled=true};
- },[book?.osis,chapter]);
+ },[book?.osis,chapter,reload]);
  useEffect(()=>{
   const previous=document.activeElement;
   const overflow=document.body.style.overflow;
@@ -60,7 +61,7 @@ export default function OG1InlineBible({reference,onClose}){
    </div>
    <div className="og1-bible-scripture" aria-live="polite">
     {loading?<p className="og1-bible-message">Loading KJV Scripture…</p>:
-     error?<div className="og1-bible-message" role="alert"><p>{error}</p><button type="button" onClick={()=>setChapter(c=>c)}>Try again</button></div>:
+     error?<div className="og1-bible-message" role="alert"><p>{error}</p><button type="button" onClick={()=>setReload(n=>n+1)}>Try again</button></div>:
      <article style={{fontSize:size+'rem'}} aria-label={book.name+' chapter '+chapter}>
       {verses.map(item=><p key={item.verse} className={focusStart&&item.verse>=focusStart&&item.verse<=(focusEnd||focusStart)?'is-highlighted':''}>
        <sup>{item.verse}</sup>{item.text}
