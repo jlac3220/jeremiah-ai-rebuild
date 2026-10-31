@@ -24,8 +24,9 @@ for(const q of OG1_EXIT_QUESTIONS){
 }
 // Each stem is reusable without a lesson slide, a chapter heading, or prior question.
 for(const q of OG1_EXIT_QUESTIONS){
- assert.ok(q.prompt.length>=105,q.id+' needs enough independent context for placement');
- assert.match(q.prompt,/Deuteronomy|Isaiah|Mark|Corinthians|Trinitarian|Oneness|James|Exodus|Luke/,q.id+' must name the passage or doctrine');
+ assert.ok(q.prompt.length>=35&&q.prompt.length<=160,q.id+' must be concise and understandable independently');
+ assert.match(q.prompt,/Deuteronomy|Isaiah|Mark|Corinthians|Trinitarian|Oneness|James|Exodus|Luke/,q.id+' must identify the passage or doctrine');
+ assert.doesNotMatch(q.prompt,/in the opening command|declares that no other|with all the heart|fully divine and truly human|the LORD speaks of being/i,q.id+' should not teach the answer in the stem');
  assert.doesNotMatch(q.prompt,/\\b(this lesson|the slide|above|below|we just|previous question|as discussed)\\b/i,q.id+' depends on lesson context');
 }
 const correct=Object.fromEntries(OG1_EXIT_QUESTIONS.map(q=>[q.id,q.answerId]));
