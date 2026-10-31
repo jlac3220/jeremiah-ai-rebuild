@@ -9,6 +9,7 @@ const css=read('../src/features/classroom/OG1ExitExam.css');
 assert.equal(OG1_EXIT_PASS_COUNT,8);
 assert.match(OG1_EXIT_EXAM_VERSION,/v1$/);
 assert.equal(OG1_EXIT_QUESTIONS.length,10);
+assert.ok(OG1_EXIT_QUESTIONS.every(q=>q.type==='multiple_choice'&&q.choices.length===4),'OG.1 exit exam requires four credible choices per question, not obvious true/false items');
 assert.equal(new Set(OG1_EXIT_QUESTIONS.map(q=>q.id)).size,10);
 assert.deepEqual([...new Set(OG1_EXIT_QUESTIONS.map(q=>q.standardId))],
  ['OG.1.1.18','OG.1.2.18','OG.1.3.18','OG.1.4.18','OG.1.5.18']);
