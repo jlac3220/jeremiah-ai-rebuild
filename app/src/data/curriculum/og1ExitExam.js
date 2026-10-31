@@ -23,9 +23,9 @@ export const OG1_EXIT_QUESTIONS=Object.freeze([
   [['a','He alone formed the heavens and the earth.'],['b','He will gather his people from the nations.'],['c','No God was formed before him or shall be after him.'],['d','He is the first and the last, Israel’s redeemer.']],
   'c','Isaiah explicitly excludes another God before or after the LORD.'),
  question('isaiah-beside','OG.1.2.18','Isaiah 44:6',
-  'True or false: Isaiah 44:6 declares that there is no God beside the LORD.',
-  [['t','True'],['f','False']],'t',
-  'The LORD declares: “beside me there is no God.”','true_false'),
+  'Which declaration appears in Isaiah 44:6?',
+  [['a','The LORD is my shepherd; I shall not want.'],['b','The just shall live by his faith.'],['c','I am the first, and I am the last; and beside me there is no God.'],['d','The LORD is longsuffering, and of great mercy.']],
+  'c','Isaiah 44:6 calls the LORD the first and the last and declares that there is no God beside him.'),
  question('jesus-shema','OG.1.3.18','Mark 12:28–29',
   'Which Old Testament confession does Jesus quote in Mark 12:29?',
   [['a','The LORD is my shepherd; I shall not want.'],['b','The just shall live by his faith.'],['c','Thou shalt love thy neighbour as thyself.'],['d','Hear, O Israel; The Lord our God is one Lord.']],
@@ -47,9 +47,9 @@ export const OG1_EXIT_QUESTIONS=Object.freeze([
   [['a','The LORD’s unity is linked to Israel’s observance of the Sabbath.'],['b','The LORD’s covenant is linked to Israel’s sacrificial offerings.'],['c','The LORD’s holiness is linked to Israel’s dietary instructions.'],['d','The confession of one LORD is followed by a command to love him.']],
   'd','Verse 4 identifies the LORD; verse 5 calls Israel to love that LORD with heart, soul and might.'),
  question('exclusive-worship','OG.1.5.18','Exodus 20:3–5; James 2:19',
-  'True or false: James 2:19 teaches that belief in one God alone is sufficient.',
-  [['t','True'],['f','False']],'f',
-  'James 2:19 warns that correct recognition alone is not enough, while the first commandments demand exclusive worship.','true_false')
+  'What point does James 2:19 make about belief in one God?',
+  [['a','Belief in one God removes the need for obedience.'],['b','Belief in one God is good, but even demons believe and tremble.'],['c','Belief in one God is the same as loving one’s neighbor.'],['d','Belief in one God must be accompanied by ceremonial sacrifices.']],
+  'b','James 2:19 affirms belief in one God while noting that demons also believe and tremble; mere acknowledgment is not the full faithful response.')
 ]);
 
 export function gradeOG1ExitExam(answers){
