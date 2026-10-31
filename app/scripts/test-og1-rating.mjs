@@ -36,7 +36,7 @@ const player=readFileSync(new URL('../src/features/classroom/OG1LessonPlayer.jsx
 const exam=readFileSync(new URL('../src/features/classroom/OG1ExitExam.jsx',import.meta.url),'utf8');
 assert.ok(!player.includes('Continue without an answer'));
 assert.ok(player.includes('Please answer this question before continuing'));
-assert.ok(player.includes('Object.values(form.placements||{}).some(Boolean)'),'Partial answer can be assessed');
+assert.ok(player.includes('const anyAnswer=ready;'),'Every required assessment response must be complete before submission');
 assert.ok(player.includes('finalRating.standards.map'));
 assert.ok(player.includes("completionScreen==='understanding'"),'Understanding has its own screen');
 assert.ok(player.includes("completionScreen==='summary'"),'Final summary is a subsequent screen');
