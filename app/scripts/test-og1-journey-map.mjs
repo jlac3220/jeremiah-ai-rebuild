@@ -4,6 +4,9 @@ import content from '../src/core/classroom/content/OG_1_LESSON.js';
 const read=p=>readFileSync(new URL(p,import.meta.url),'utf8');
 const journey=read('../src/features/classroom/OG1JourneyMap.jsx');
 const player=read('../src/features/classroom/OG1LessonPlayer.jsx');
+const destinations=read('../src/features/classroom/JourneyDestinations.jsx');
+assert.equal((destinations.match(/commentary:'/g)||[]).length,4,'Every witness needs authored commentary');
+assert.ok(destinations.includes('ogj-witness-commentary'),'Commentary displayed beneath Scripture and reference');
 const css=read('../src/features/classroom/OG1JourneyMap.css');
 const chapters=[
  ['shema','The Shema','DEUTERONOMY 6:4'],
