@@ -32,7 +32,8 @@
     "test:visual-framework": "node scripts/test-visual-framework.mjs",
     "test:ask-jeremiah": "node scripts/test-ask-jeremiah.mjs",
     "test:visual-discovery": "node scripts/test-visual-discovery.mjs",
-    "test:og1-evidence": "node scripts/test-og1-evidence.mjs"
+    "test:og1-evidence": "node scripts/test-og1-evidence.mjs",
+    "test:og1-climax": "node scripts/test-og1-climax.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
