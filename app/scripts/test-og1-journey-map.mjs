@@ -31,12 +31,14 @@ assert.ok(encounter>0&&encounter<roadmap&&roadmap<discovery,'Intro → map → w
 assert.ok(player.includes("current.kind==='roadmap'&&<OG1JourneyMap"),'New roadmap moment renders');
 assert.ok(player.includes("!['identity','return','mission','roadmap'].includes(current.kind)"),'Avoid duplicate headings');
 assert.ok(player.includes("finish||move.id!=='learn'||moment>1"),'Suppress location guide until after first map');
-for(const x of ['<OG1JourneyLocation','showJourneyMap','<OG1JourneyMap activeChapter={activeJourneyChapter} compact','setShowJourneyMap(false)','activeJourneyChapter=finish?(examPassed?7:6):chapterNumber']){
+for(const x of ['ogp-study-tools','showJourneyMap','<OG1JourneyMap activeChapter={activeJourneyChapter} compact','setShowJourneyMap(false)','activeJourneyChapter=finish?(examPassed?7:6):chapterNumber']){
  assert.ok(player.includes(x),'Missing progressive guidance '+x);
 }
-for(const x of ['aria-current','aria-expanded','aria-controls="og1-journey-recap"','UP NEXT','10 QUESTIONS']){
+for(const x of ['aria-current','UP NEXT','10 QUESTIONS']){
  assert.ok(journey.includes(x),'Map missing accessible signpost '+x);
 }
+assert.ok(player.includes('aria-controls="og1-journey-recap"'),'Accessible map toggle remains');
+assert.ok(!player.includes('<OG1JourneyLocation'),'Large journey card should be removed');
 assert.ok(css.includes('@media(max-width:680px)'), 'Mobile roadmap required');
 assert.ok(css.includes('prefers-reduced-motion'), 'Reduced motion required');
 console.log('PASS OG.1 journey: intro-first roadmap, all chapters, context-aware current/next, exit exam and responsive layout.');
