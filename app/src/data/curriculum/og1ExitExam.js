@@ -23,7 +23,7 @@ export const OG1_EXIT_QUESTIONS=Object.freeze([
   [['a','Another god existed before the LORD.'],['b','A new god will eventually replace the LORD.'],['c','No God was formed before him, and none shall be after him.'],['d','The LORD is one of many equally eternal gods.']],
   'c','Isaiah explicitly excludes another God before or after the LORD.'),
  question('isaiah-beside','OG.1.2.18','Isaiah 44:6',
-  'True or false: In Isaiah 44:6 (KJV), the LORD declares that there is no God beside him.',
+  'True or false: In Isaiah 44:6 (KJV), the LORD speaks of being the first and the last and declares that no other God exists beside him.',
   [['t','True'],['f','False']],'t',
   'The LORD declares: “beside me there is no God.”','true_false'),
  question('jesus-shema','OG.1.3.18','Mark 12:28–29',
