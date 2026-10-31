@@ -26,16 +26,7 @@ assert.match(OG1_EVIDENCE_BY_ID.isaiah.imageNote,/not a pinpointed image/);
 assert.match(OG1_EVIDENCE_BY_ID.sinaiticus.imageNote,/not a close-up/);
 const read=path=>readFileSync(new URL(path,import.meta.url),'utf8');
 const lesson=read('../src/features/classroom/OG1LessonPlayer.jsx');
-const simple=read('../src/features/classroom/OG1ManuscriptImage.jsx');
-const css=read('../src/features/classroom/OG1ManuscriptImage.css');
-assert.ok(lesson.includes('<OG1ManuscriptImage'),'Historical images should appear in relevant lesson moments');
-for(const id of ['nash','isaiah','sinaiticus','p46','p75']){
- assert.ok(lesson.includes("'"+id+"'"),id+' missing from its lesson scene');
-}
-assert.ok(simple.includes('item.imageNote'),'Honest image context is retained');
-assert.ok(!simple.includes('onExplore'),'Image must not open the discarded exploration interface');
-assert.ok(!lesson.includes('<OG1EvidenceExperience'),'Explore modal must be absent');
-assert.ok(!lesson.includes('ogp-study-footnote'),'Explore footnote must be absent');
-assert.ok(!lesson.includes('<OG1ManuscriptMoment'),'Busy manuscript cards must be absent');
-assert.ok(css.includes('@media(max-width:690px)'),'Small mobile image is required');
-console.log('PASS OG.1 evidence: five restrained contextual images, no Explorer or bulky artifact cards.');
+assert.ok(!lesson.includes('<OG1ManuscriptImage'),'No duplicated artifact below the main Scripture scene');
+assert.ok(!lesson.includes('not Isaiah’s original writing'),'No interruption of Isaiah Scripture testimony');
+assert.ok(lesson.includes('tone="isaiah-manuscript"'),'One primary manuscript visual remains in Isaiah testimony');
+console.log('PASS OG.1: genuine original scene art, without repeated artifact card or unnecessary disclaimer.');
