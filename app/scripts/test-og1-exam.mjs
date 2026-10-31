@@ -62,8 +62,8 @@ assert.ok(player.includes('finish?100:percent'),'Lesson completion should not de
 assert.ok(player.includes('rateOG1Lesson(content,state)'),'Final rating must reflect collected evidence');
 assert.ok(!component.includes('Finish lesson without taking the exam'),'Exam requires participation but not a passing grade');
 assert.ok(component.includes('View my learning-level report'),'Final report accessible despite a failed exam');
-assert.ok(player.includes("finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT')"),'Completion header should not say prologue');
-assert.ok(player.includes("finish||chapterNumber>i"),'All five chapter markers should be filled at exit');
+assert.ok(player.includes("finish?'LESSON COMPLETE'"),'Completion header should be explicit');
+assert.ok(player.includes("finish||chapterNumber>i+1"),'All five chapter markers should be filled at exit');
 for(const required of ['gradeOG1ExitExam(answers)','patchExam','latest','attempts','bestScore','onContinue',
    'onReadBible','aria-pressed','disabled={!allAnswered}','Retake all ten questions','Your selections save automatically']){
  assert.ok(component.includes(required),'Exam component missing '+required);

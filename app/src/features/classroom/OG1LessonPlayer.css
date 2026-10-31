@@ -1018,3 +1018,26 @@
  .ogp-journey-timeline li:not(:last-child)::after{top:14px;left:calc(50% + 17px);right:calc(-50% + 17px)}
  .ogp-journey-label{font-size:.59rem;line-height:1.2}
 }
+
+/* Quiet, mobile-first lesson heading: chapter identified exactly once. */
+.ogp-compact-header{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:6px 0 14px;border-bottom:1px solid #dfe5ee}
+.ogp-compact-heading{min-width:0}
+.ogp-compact-eyebrow{display:block;color:#66748c;font:750 .67rem/1.35 Inter,system-ui,sans-serif;letter-spacing:.12em;margin-bottom:5px}
+.ogp-compact-heading h1{color:#1d3045;font:750 clamp(1.25rem,2.5vw,1.85rem)/1.2 Inter,system-ui,sans-serif;letter-spacing:-.025em;margin:0}
+.ogp-mini-timeline{flex:0 1 230px;min-width:140px;max-width:230px}
+.ogp-mini-timeline ol{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:4px;margin:0;padding:0}
+.ogp-mini-timeline li{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-width:0}
+.ogp-mini-timeline li:not(:last-child)::after{content:'';position:absolute;left:calc(50% + 15px);right:calc(-50% + 15px);top:50%;height:2px;background:#dce2ec}
+.ogp-mini-timeline li.is-complete:not(:last-child)::after{background:#566bb6}
+.ogp-mini-node{display:grid;place-items:center;position:relative;z-index:1;width:29px;height:29px;border-radius:50%;background:#edf0f5;border:1px solid #d4dce9;color:#69768c;font:750 .7rem Inter,system-ui,sans-serif}
+.ogp-mini-timeline .is-complete .ogp-mini-node{background:#5065ac;border-color:#5065ac;color:#fff}
+.ogp-mini-timeline .is-current .ogp-mini-node{background:#f5d89b;border:2px solid #a77935;color:#172b43}
+.ogp-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:600px){
+ .ogp-compact-header{gap:12px;padding:2px 0 12px}
+ .ogp-compact-heading h1{font-size:1.22rem}
+ .ogp-compact-eyebrow{font-size:.57rem}
+ .ogp-mini-timeline{flex:0 0 125px;min-width:125px}
+ .ogp-mini-node{width:23px;height:23px;font-size:.57rem}
+ .ogp-mini-timeline li:not(:last-child)::after{left:calc(50% + 12px);right:calc(-50% + 12px)}
+}
