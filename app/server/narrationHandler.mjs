@@ -43,8 +43,16 @@ const AUTHORED_LINES = [
   "There is none other God but one. First Corinthians, chapter eight, verse four.",
 ];
 
+// Authored spoken witness cards: Scripture, reference, brief interpretation.
+const WITNESS_AUDIO_LINES = [
+  "Hear, O Israel: The LORD our God is one LORD. Deuteronomy chapter six, verse four. Moses calls Israel to hear and respond to the one LORD.",
+  "I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six. The LORD declares that no other God exists beside him.",
+  "Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine. Jesus reaffirms the confession when asked about the first commandment.",
+  "There is none other God but one. First Corinthians chapter eight, verse four. Paul carries the confession into his teaching about idols and the one God."
+];
 const allowedText = new Set([
   ...AUTHORED_LINES,
+  ...WITNESS_AUDIO_LINES,
   ...ogLesson.instructionalMoves.flatMap(move =>
     (move.scripture || []).map(verse => verse.text).filter(Boolean)
   ),
