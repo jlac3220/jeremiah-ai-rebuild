@@ -28,7 +28,7 @@ const read=path=>readFileSync(new URL(path,import.meta.url),'utf8');
 const lesson=read('../src/features/classroom/OG1LessonPlayer.jsx');
 const viewer=read('../src/features/classroom/OG1EvidenceExperience.jsx');
 const css=read('../src/features/classroom/OG1EvidenceExperience.css');
-assert.ok(lesson.includes('Explore the Evidence') && lesson.includes('<OG1EvidenceExperience'));
+assert.ok(lesson.includes('Examine the historical manuscripts') && lesson.includes('<OG1EvidenceExperience'),'Historic artifacts remain accessible as an optional supporting resource');
 for(const fragment of ['role="dialog"','aria-modal="true"','Zoom in','Zoom out',
   'Return to the lesson','Read the passage in Jeremiah','imageFailed','onError',
   'selected.imageNote','selected.imageSource','selected.source']){

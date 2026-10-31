@@ -74,3 +74,22 @@
  .ogp-page .og1-consequence-revealed{animation:none}
  .ogp-page .ogp-progress span,.ogp-page .ogp-action{transition:none}
 }
+
+/* Quiet supporting resources: lesson content remains the focal point. */
+.ogp-page .ogp-study-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;margin:7px 0 3px}
+.ogp-page .ogp-study-link{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:5px 0;background:none;border:0;border-radius:4px;color:#687b9b;font:650 .77rem/1.35 Inter,system-ui,sans-serif;cursor:pointer;text-decoration:underline;text-decoration-color:#c3cce1;text-underline-offset:4px}
+.ogp-page .ogp-study-link:hover{color:#4056b3;text-decoration-color:#5369c9}
+.ogp-page .ogp-study-link[aria-expanded=true]{color:#4056b3}
+.ogp-page .ogp-study-link span{font-size:.8rem}
+.ogp-page .ogp-context{padding-bottom:12px}
+.ogp-page .ogp-chapter-track{margin-top:7px}
+.ogp-page .og1-journey-map-recap{margin:8px 0 10px}
+.ogp-page .og1-journey-map-recap[hidden]{display:none}
+@media(max-width:680px){.ogp-page .ogp-study-tools{gap:7px 20px;margin:4px 0 0}.ogp-page .ogp-study-link{font-size:.74rem;min-height:34px}.ogp-page .ogp-context{padding-bottom:10px}}
+
+/* Manuscript study is a secondary resource, never part of the chapter heading. */
+.ogp-page .ogp-study-footnote{display:flex;align-items:center;flex-wrap:wrap;gap:5px 12px;margin:21px 0 30px;padding:15px 0 0;border-top:1px solid #dce3ef;color:#77849b}
+.ogp-page .ogp-study-footnote>span{font:800 .62rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;color:#7c89a2}
+.ogp-page .ogp-study-footnote button{display:inline-flex;gap:8px;align-items:center;border:0;background:transparent;padding:4px 0;color:#5368b1;font:650 .78rem/1.5 Inter,system-ui,sans-serif;text-decoration:underline;text-decoration-color:#c4ccea;text-underline-offset:3px;cursor:pointer}
+.ogp-page .ogp-study-footnote button:hover{color:#3049b5}
+@media(max-width:680px){.ogp-page .ogp-study-footnote{margin:17px 0 25px;padding-top:12px;gap:4px 9px}.ogp-page .ogp-study-footnote>span{font-size:.58rem}}
