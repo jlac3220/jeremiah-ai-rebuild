@@ -13,7 +13,6 @@ import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExp
 import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
-import OG1ManuscriptImage from './OG1ManuscriptImage';
 import OG1ExitExam from './OG1ExitExam';
 import {OG1JourneyMap,OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
@@ -298,7 +297,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
           content={content} move={move} placement={{intent:'artifact',reference:'Isaiah 44:6',
            learningGoal:'Inspect the later ancient manuscript witness to Isaiah’s declarations'}}/></div>
        <div className="ogp-witness-copy">
-        <span>ISAIAH'S TESTIMONY · {String(evidenceIndex+1).padStart(2,'0')} / 03</span><small className="ogp-manuscript-context">The Great Isaiah Scroll is a later ancient witness to the book, not Isaiah’s original writing.</small>
+        <span>ISAIAH'S TESTIMONY · {String(evidenceIndex+1).padStart(2,'0')} / 03</span>
         <blockquote>{['“before me there was no God formed”','“beside me there is no God”','“neither shall there be after me”'][evidenceIndex]}</blockquote>
         <strong>{evidenceIndex===1?'ISAIAH 44:6':'ISAIAH 43:10'} · KJV</strong>
         <p>{['No earlier god produced the LORD.','No rival god stands alongside the LORD.','No later god can replace the LORD.'][evidenceIndex]}</p>
@@ -337,9 +336,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
       {written&&(move.id==='shema-try'?<ShemaTeachBack move={move} value={form.responseText||''} disabled={Boolean(feedback)||thinking} onChange={value=>change({responseText:value})}/>:<><textarea aria-label="Your explanation" rows={5} placeholder="Explain what the Scripture teaches in your own words." value={form.responseText||''} disabled={Boolean(feedback)||thinking} onChange={e=>change({responseText:e.target.value})}/><details className="ogp-help"><summary>Need a hint?</summary><p>Begin with the Scripture's main claim, then explain how the surrounding passages support it. Use your own words.</p></details></>)}
       {feedback&&<div className="ogp-feedback" role="status"><strong>Jeremiah responds</strong><p>{feedback.teacherMessage}</p></div>}
       {error&&<p role="alert" className="ogp-error">{error}</p>}
-     </>}
-     {((current.kind==='shema-manuscript')||(current.kind==='witness')||(current.kind==='timeline'&&evidenceIndex>0)||(current.kind==='identity'))&&<OG1ManuscriptImage
-       artifactId={current.kind==='shema-manuscript'?'nash':current.kind==='witness'?'isaiah':current.kind==='identity'?'p75':evidenceIndex===1?'sinaiticus':'p46'}/>} 
+     </>} 
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={!ready||thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
