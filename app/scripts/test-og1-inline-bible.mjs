@@ -15,7 +15,7 @@ assert.ok(player.includes('setInlineBibleReference(reference)'), 'Links must ope
 assert.ok(!player.includes('setBibleReaderIntent('), 'No page-changing reader intent');
 assert.ok(!player.includes('onNavigate(ROUTES.BIBLE_SUPPORT)'), 'No page-changing Bible route');
 assert.ok(player.includes('<OG1InlineBible reference={inlineBibleReference}'),'Inline panel included');
-for(const term of ['loadBibleChapter(\\'kjv\\'','getChapterVerses(data)','parseBibleReference(reference','role="dialog"','aria-modal="true"','onClose','Return to lesson','is-highlighted','Previous chapter','Next chapter']){
+for(const term of ["loadBibleChapter('kjv'",'getChapterVerses(data)','parseBibleReference(reference','role="dialog"','aria-modal="true"','onClose','Return to lesson','is-highlighted','Previous chapter','Next chapter']){
  assert.ok(inline.includes(term),'Missing KJV reader feature: '+term);
 }
 assert.ok(css.includes('@media(max-width:650px)'), 'Mobile reader required');
