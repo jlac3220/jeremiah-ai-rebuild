@@ -1,0 +1,76 @@
+/* OG.1 visual audit: one shared design language across the Shema, witnesses,
+   doctrinal inquiry, historic artifacts, final synthesis and exit exam.
+   Keep scene images/Scripture typography distinctive; make UI chrome consistent. */
+.ogp-page{
+ --og-ink:#182f46;--og-muted:#5c7086;--og-brass:#b88b59;
+ --og-deep:#132943;--og-paper:#f6f8fc;--og-line:#dce4ee;
+ --og-tint:#ecf0f9;--og-accent:#5061d5;
+ background:radial-gradient(ellipse 900px 460px at 12% 15%,#e4ebf9b5,transparent),
+   radial-gradient(ellipse 670px 530px at 96% 82%,#deedf057,transparent),#f6f8fc;
+ color:var(--og-ink);
+}
+.ogp-page.ogp-theme-isaiah,.ogp-page.ogp-theme-continuity,
+.ogp-page.ogp-theme-distinction,.ogp-page.ogp-theme-devotion{
+ --og-paper:#f6f8fc;--og-line:#dce4ee;--og-accent:#5061d5;--og-brass:#b88b59;
+}
+.ogp-page .ogp-header{background:#132840;border-bottom:1px solid #4a5e82;min-height:76px}
+.ogp-page .ogp-progress{height:5px;background:#dbe3f0}
+.ogp-page .ogp-progress span{background:linear-gradient(90deg,#4c61da,#67a3c1)}
+.ogp-page .ogp-context{border-bottom:1px solid #dbe3ef;align-items:center}
+.ogp-page .ogp-context-meta{color:#5a6881;letter-spacing:.1em}
+.ogp-page .ogp-context-name{color:#18324a;font-family:Inter,system-ui,sans-serif;font-weight:750}
+.ogp-page .ogp-chapter-track span{background:#d5ddec}
+.ogp-page .ogp-chapter-track .is-reached{background:#5668da}
+.ogp-page .ogp-stage .ogp-verb{color:#4b5fd0;letter-spacing:.11em}
+.ogp-page .ogp-stage h1{color:#172b45;letter-spacing:-.047em}
+.ogp-page .ogp-prompt{color:#455e76;line-height:1.72}
+.ogp-page .ogp-insight .ogp-thought{color:#1d3852}
+.ogp-page .ogp-action,.ogp-page .ogp-exam-cta{background:#4b5cd6;color:#fff;border:1px solid #4b5cd6;border-radius:12px;min-height:48px}
+.ogp-page .ogp-action:not(:disabled):hover{background:#3448bf}
+.ogp-page .ogp-back{color:#516681}
+.ogp-page button:focus-visible,.ogp-page a:focus-visible,.ogp-page summary:focus-visible,
+.ogp-page .ogp-verse-photo:focus-visible{outline:3px solid #7a89f0;outline-offset:3px}
+.ogp-page .ogp-discovery-choices button,.ogp-page .ogp-compare-columns section,
+.ogp-page .ogp-mission-options button{border-radius:16px;border-color:#d6dfe9}
+.ogp-page .ogp-discovery-choices button[aria-pressed=true]{background:#263f70;border-color:#6576dc}
+.ogp-page .ogp-discovery-answer,.ogp-page .ogp-compare-conclusion{border-left:4px solid #5e70d7;background:#f0f3ff}
+.ogp-page .ogp-compare-ring{background:linear-gradient(125deg,#30456d,#18283f);border-color:#9cadf0}
+.ogp-page .ogp-compare-columns h2{color:#1d3952}
+.ogp-page .ogj-eyebrow,.ogp-page .shema-eyebrow{color:#5265c1}
+.ogp-page .ogj-destination:focus-visible,.ogp-page .ogj-destination.is-selected{outline-offset:3px}
+.ogp-page .og1-identity-hero,.ogp-page .og1-synthesis-head{background:linear-gradient(123deg,#152c44,#254669);box-shadow:0 17px 38px #19314a22}
+.ogp-page .og1-identity-deck button,.ogp-page .og1-synthesis-witnesses button{border-color:#d7e0eb}
+.ogp-page .og1-identity-question,.ogp-page .og1-consequence-stage{box-shadow:0 14px 34px #19314a1e}
+.ogp-page .og1-return-connection,.ogp-page .og1-consequence-revealed{background:#edf1ff;border-left-color:#6577d9}
+.ogp-page .og1-consequence-copy{background:transparent}
+.ogp-page .og1-exam-intro{background:linear-gradient(119deg,#172d48,#2a426a)}
+.ogp-page .og1-exam-content{padding-top:23px}
+/* Treat museum evidence as a scholarly collection, but give its controls the
+   same legibility, borders and focus styling as the rest of Jeremiah. */
+.oge-panel{background:#f7f9fc;border:1px solid #ced8e6}
+.oge-top{background:linear-gradient(123deg,#152c44,#254669)}
+.oge-tabs{background:#eaf0f7;border-bottom:1px solid #d3deeb}
+.oge-tabs button{border-color:#d3deeb;background:#fff}
+.oge-tabs button.is-active{background:#263e6b;border-color:#263e6b}
+.oge-reading h3{color:#17334e}
+.oge-scripture{background:#fff;border-left-color:#6f7dd6}
+.oge-zoom-controls button,.oge-actions button{min-height:36px}
+.oge-actions button:first-child{background:#4659d0;border-color:#4659d0}
+.oge-launch{background:#eef1ff;border-color:#c6cff3;color:#364cb9}
+.oge-launch:hover{background:#e4e9ff}
+.oge-panel button:focus-visible,.oge-panel a:focus-visible{outline:3px solid #7a89f0;outline-offset:3px}
+@media(max-width:750px){
+ .ogp-page .ogp-shell{padding:22px 18px 72px}
+ .ogp-page .ogp-context{gap:11px}
+ .ogp-page .ogp-context-name{font-size:1rem}
+ .ogp-page .ogp-stage h1{font-size:clamp(1.9rem,8vw,3rem)}
+ .ogp-page .ogp-prompt{font-size:.95rem}
+ .ogp-page .ogp-action{width:100%;justify-content:center}
+ .ogp-page .ogp-controls{gap:8px}
+ .ogp-page .ogp-back{min-height:42px}
+}
+@media(prefers-reduced-motion:reduce){
+ .ogp-page .ogp-stage,.ogp-page .ogp-discovery-answer,.ogp-page .ogp-witness-scroll,
+ .ogp-page .og1-consequence-revealed{animation:none}
+ .ogp-page .ogp-progress span,.ogp-page .ogp-action{transition:none}
+}
