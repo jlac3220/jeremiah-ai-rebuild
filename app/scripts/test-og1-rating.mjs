@@ -12,6 +12,10 @@ assert.equal(continueTeaching(state,content).currentMoveId,'shema-try','Wrong an
 assert.equal(continueTeaching(state,{...content,standardId:'OTHER'}).currentMoveId,'shema-guide','Other curricula retain original routing');
 const empty=rateOG1Lesson(content,{teacherHistory:[],experience:{}});
 assert.deepEqual(empty.standards.map(s=>s.level),[1,1]);
+assert.ok(empty.meaning.includes('recognize some important Scriptures'));
+assert.ok(empty.standards.every(s=>s.meaning&&s.nextStep),'Every standard must explain the rating and offer next instruction');
+assert.ok(empty.standards.find(s=>s.standardId==='OG.1.2.18').nextStep.includes('Isaiah 43:10'));
+
 const guided=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-guide',verdict:'strong'}],experience:{}});
 assert.equal(guided.standards[0].level,2);
 const written=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict:'strong'}],experience:{}});
