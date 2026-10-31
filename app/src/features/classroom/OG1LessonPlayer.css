@@ -954,3 +954,8 @@
 .ogp-start-over:hover{background:#fff0c3;border-color:#fff0c3;color:#13263c}
 .ogp-start-over:focus-visible{outline:3px solid #fff;outline-offset:3px}
 @media(max-width:720px){.ogp-start-over{min-height:39px;padding:8px 11px;font-size:.74rem}}
+
+.ogp-narration-setting{min-height:40px;padding:8px 12px;border:1px solid #ffffff75;border-radius:999px;background:#172b43;color:#fff;font:700 .74rem/1.2 Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.ogp-narration-setting[aria-pressed=false]{background:#334257;color:#f1f3f8}
+.ogp-narration-setting:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:720px){.ogp-narration-setting{padding:7px 9px;font-size:.67rem}}
