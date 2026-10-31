@@ -12,6 +12,7 @@ import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
 import useLessonNarration from './useLessonNarration';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
+import OG1EvidenceExperience from './OG1EvidenceExperience';
 import './OG1LessonPlayer.css';
 
 // These are instructional purposes, not image IDs or keyword searches.
@@ -147,6 +148,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
  const [confirmRestart,setConfirmRestart]=useState(false);
+ const [evidenceOpen,setEvidenceOpen]=useState(false);
  const abort=useRef(null);
  const stageRef=useRef(null);
  const priorMove=useRef(move.id);
@@ -238,6 +240,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    <div className="ogp-context">
      <div className="ogp-context-meta"><span>{chapterNumber===0?'PROLOGUE':`CHAPTER ${String(chapterNumber).padStart(2,'0')} / 05`}</span><span className="ogp-context-line"/><span>{finish?'COMPLETE':SCENE_DESCRIPTIONS[sceneClass]||'THE JOURNEY'}</span></div>
      <div className="ogp-context-name">{chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}{!finish&&<span className="ogp-scene-counter">MOMENT {String(moment+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>}</div>
+     <button type="button" className="oge-launch" onClick={()=>setEvidenceOpen(true)}>⌕ Explore the Evidence <span aria-hidden="true">↗</span></button>
      <div className="ogp-chapter-track" aria-label={chapterNumber===0?'Opening':`Chapter ${chapterNumber} of five`}>
       {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={chapterNumber>i?'is-reached':''}/>)}
      </div>
@@ -341,5 +344,6 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
     </nav>
    </>}
   </main>
+  <OG1EvidenceExperience open={evidenceOpen} chapter={chapter} onClose={()=>setEvidenceOpen(false)} onReadBible={readVerse}/>
  </div>;
 }
