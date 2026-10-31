@@ -1,0 +1,23 @@
+.og1-bible-backdrop{position:fixed;inset:0;z-index:9700;background:#0a1531c9;backdrop-filter:blur(7px);display:grid;place-items:center;padding:clamp(0px,3vw,26px)}
+.og1-bible-panel{outline:0;display:flex;flex-direction:column;width:min(840px,100%);height:min(92dvh,980px);background:#f8faff;border:1px solid #9caed4;border-radius:22px;overflow:hidden;box-shadow:0 36px 90px #08122b77;color:#1d3451}
+.og1-bible-header{flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:24px clamp(20px,4vw,38px);background:linear-gradient(120deg,#172b49,#34447e);color:#fff}
+.og1-bible-header span{font:800 .65rem/1.45 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#becaff}
+.og1-bible-header h2{font:550 clamp(1.65rem,3vw,2.5rem)/1.22 Georgia,serif;margin:9px 0 6px;color:#fff}
+.og1-bible-header p{font:450 .82rem/1.5 Inter,system-ui,sans-serif;margin:0;color:#dbe2f6}
+.og1-bible-header>button{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid #ffffff5a;color:#fff;background:#ffffff15;cursor:pointer}
+.og1-bible-toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:11px clamp(20px,4vw,38px);border-bottom:1px solid #dbe3f1;background:#eef2fb}
+.og1-bible-toolbar>span{font:800 .65rem/1.3 Inter,system-ui,sans-serif;letter-spacing:.1em;color:#53678f}
+.og1-bible-toolbar>div{display:flex;gap:8px}
+.og1-bible-toolbar button{border:1px solid #c5d0e7;background:#fff;color:#314d80;border-radius:8px;min-width:42px;min-height:35px;cursor:pointer}
+.og1-bible-scripture{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:20px clamp(19px,5vw,52px) 36px;scrollbar-width:thin}
+.og1-bible-scripture article{max-width:700px;margin:0 auto}
+.og1-bible-scripture article p{font:400 1.08em/1.85 Georgia,serif;color:#263d59;margin:0;padding:7px 10px;border-radius:7px}
+.og1-bible-scripture article p.is-highlighted{background:#e4e9ff;border-left:3px solid #596cdd;padding-left:7px}
+.og1-bible-scripture sup{display:inline-block;min-width:28px;vertical-align:top;font:800 .67rem/2 Inter,system-ui,sans-serif;color:#5a6ec9}
+.og1-bible-message{margin:40px auto;color:#5b6f88;text-align:center}
+.og1-bible-footer{flex:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px clamp(16px,4vw,30px);border-top:1px solid #d9e2f1;background:#fff}
+.og1-bible-footer button{padding:10px 13px;border:1px solid #c7d2e7;border-radius:9px;background:#fff;color:#314975;cursor:pointer;font:750 .76rem/1.45 Inter,system-ui,sans-serif}
+.og1-bible-footer .og1-bible-return{background:#4c5ed1;border-color:#4c5ed1;color:#fff}
+.og1-bible-panel button:disabled{opacity:.38;cursor:not-allowed}
+.og1-bible-panel button:focus-visible{outline:3px solid #8794ff;outline-offset:2px}
+@media(max-width:650px){.og1-bible-backdrop{padding:0}.og1-bible-panel{width:100%;height:100dvh;border-radius:0}.og1-bible-footer{gap:6px}.og1-bible-footer button{font-size:.68rem;padding:9px 7px}.og1-bible-scripture article p{line-height:1.72}}
