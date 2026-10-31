@@ -252,7 +252,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
    <div className="ogp-context">
      <div className="ogp-context-meta"><span>{finish?(examPassed?'LESSON COMPLETE':'FINAL ASSESSMENT'):chapterNumber===0?'PROLOGUE':`CHAPTER ${String(chapterNumber).padStart(2,'0')} / 05`}</span><span className="ogp-context-line"/><span>{finish?(examPassed?'COMPLETE':'EXIT EXAM'):SCENE_DESCRIPTIONS[sceneClass]||'THE JOURNEY'}</span></div>
      <div className="ogp-context-name">{finish?(examPassed?'OG.1 · Completed':'OG.1 · Exit exam'):chapterNumber===0?'A confession begins':CHAPTER_NAMES[chapterNumber-1]}{!finish&&<span className="ogp-scene-counter">MOMENT {String(moment+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>}</div>
-     <div className="ogp-study-tools"><button type="button" className="ogp-study-link" onClick={()=>setEvidenceOpen(true)}>⌕ Artifacts <span aria-hidden="true">↗</span></button>{(finish||move.id!=='learn'||moment>1)&&<button type="button" className="ogp-study-link" aria-expanded={showJourneyMap} aria-controls="og1-journey-recap" onClick={()=>setShowJourneyMap(v=>!v)}>◇ {showJourneyMap?'Hide journey':'Journey'} <span aria-hidden="true">{showJourneyMap?'−':'↗'}</span></button>}</div>
+     <div className="ogp-study-tools">{(finish||move.id!=='learn'||moment>1)&&<button type="button" className="ogp-study-link" aria-expanded={showJourneyMap} aria-controls="og1-journey-recap" onClick={()=>setShowJourneyMap(v=>!v)}>◇ {showJourneyMap?'Hide journey':'Journey'} <span aria-hidden="true">{showJourneyMap?'−':'↗'}</span></button>}</div>
      <div className="ogp-chapter-track" aria-label={finish?'All five lesson chapters completed':chapterNumber===0?'Opening':`Chapter ${chapterNumber} of five`}>
       {CHAPTER_SLUGS.map((slug,i)=><span key={slug} className={finish||chapterNumber>i?'is-reached':''}/>)}
      </div>
@@ -347,6 +347,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
      {assessment&&<button type="button" className="ogp-back" onClick={skip}>Skip for now (no mastery)</button>}
     </nav>
    </>}
+   <aside className="ogp-study-footnote" aria-label="Further historical study"><span>EXPLORE FURTHER</span><button type="button" onClick={()=>setEvidenceOpen(true)}>Examine the historical manuscripts <span aria-hidden="true">↗</span></button></aside>
   </main>
   <OG1EvidenceExperience open={evidenceOpen} chapter={chapter} onClose={()=>setEvidenceOpen(false)} onReadBible={readVerse}/>
  </div>;
