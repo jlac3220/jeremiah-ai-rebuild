@@ -237,7 +237,6 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
    <div className="ogp-header-actions">
     <button type="button" className="ogp-start-over" onClick={()=>setConfirmRestart(true)}>↺ Start over</button>
     {narration.enabled&&narrationText&&<button type="button" className="ogp-voice-replay" aria-label={narration.loading?'Preparing narration':narration.speaking?'Stop narration':'Replay narration'} title={narration.loading?'Preparing audio':narration.speaking?'Stop speaking':'Hear again'} disabled={narration.loading} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}>{narration.loading?'Preparing audio…':narration.speaking?'■ Stop':'↻ Replay'}</button>}
-   </div></details>
    </div>
   </header>
   <div className="ogp-progress" role="progressbar" aria-label="OG.1 learning journey" aria-valuemin={0} aria-valuemax={100} aria-valuenow={displayProgress}><span style={{width:displayProgress+'%'}}/></div>
