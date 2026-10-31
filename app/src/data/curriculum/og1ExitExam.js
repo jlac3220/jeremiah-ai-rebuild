@@ -3,8 +3,33 @@
 // the classroom actually teaches; they do not alter approved standards.
 export const OG1_EXIT_EXAM_VERSION = 'og1-exit-2026-10-v1';
 export const OG1_EXIT_PASS_COUNT = 8;
+// Matches the doctrinal standards' Evidence of Learning performance levels.
+// 1 recognition; 2 concept/Scripture connection; 3 explanation/context;
+// 4 synthesis, interpretation and defensible application.
+// These item-level ratings describe what the item measures, not learner mastery.
+export const OG1_DEPTH_LEVELS=Object.freeze({
+ 1:'Minimal Understanding',
+ 2:'Approaching Understanding',
+ 3:'Comprehensive Understanding',
+ 4:'Extensive Understanding'
+});
+const OG1_ITEM_ALIGNMENT=Object.freeze({
+ 'shema-confession':{level:1,skill:'recognize_scripture'},
+ 'shema-hearing':{level:2,skill:'interpret_key_term'},
+ 'isaiah-before-after':{level:1,skill:'recognize_scripture'},
+ 'isaiah-beside':{level:1,skill:'recognize_scripture'},
+ 'jesus-shema':{level:1,skill:'identify_biblical_witness'},
+ 'paul-idols':{level:1,skill:'recognize_scripture'},
+ 'fair-trinity':{level:2,skill:'distinguish_doctrinal_definition'},
+ 'apostolic-incarnation':{level:2,skill:'connect_doctrine_to_passage'},
+ 'love-command':{level:2,skill:'connect_adjacent_passages'},
+ 'exclusive-worship':{level:1,skill:'recognize_scripture'}
+});
 const question=(id,standardId,reference,prompt,choices,answerId,explanation,type='multiple_choice')=>Object.freeze({
  id,standardId,reference,prompt,type,
+ evidenceLevel:OG1_ITEM_ALIGNMENT[id].level,
+ evidenceLevelLabel:OG1_DEPTH_LEVELS[OG1_ITEM_ALIGNMENT[id].level],
+ assessedSkill:OG1_ITEM_ALIGNMENT[id].skill,
  choices:Object.freeze(choices.map(([value,label])=>Object.freeze({id:value,label}))),
  answerId,explanation
 });
@@ -57,7 +82,7 @@ export function gradeOG1ExitExam(answers){
  const rows=OG1_EXIT_QUESTIONS.map(q=>{
   const response=answers[q.id];
   if(!q.choices.some(choice=>choice.id===response))throw new Error('Complete all ten questions before submitting.');
-  return Object.freeze({id:q.id,standardId:q.standardId,reference:q.reference,selectedId:response,answerId:q.answerId,correct:response===q.answerId});
+  return Object.freeze({id:q.id,standardId:q.standardId,reference:q.reference,selectedId:response,answerId:q.answerId,correct:response===q.answerId,evidenceLevel:q.evidenceLevel,assessedSkill:q.assessedSkill});
  });
  const correct=rows.filter(row=>row.correct).length;
  return Object.freeze({
