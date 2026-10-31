@@ -83,7 +83,7 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
      })}
     </div>
     <div className="og1-exam-result-actions">
-     {currentExam.passed&&<button className="og1-exam-primary" type="button" onClick={onContinue}>Continue to your OG.1 summary →</button>}
+     <button className="og1-exam-primary" type="button" onClick={onContinue}>View my learning-level report →</button>
      <button type="button" className="og1-exam-secondary" onClick={retry}>{latest.passed?'Practice another attempt':'Retake all ten questions'} ↻</button>
     </div>
    </div>:<div className="og1-exam-content">
@@ -114,6 +114,7 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
       ?<button type="button" className="og1-exam-primary" onClick={()=>setIndex(i=>Math.min(9,i+1))}>Next question →</button>
       :<button type="button" className="og1-exam-primary" disabled={!allAnswered} onClick={submit}>Submit exit exam →</button>}
     </div>
+    <button type="button" className="og1-exam-secondary" onClick={onContinue}>Finish lesson without taking the exam →</button>
     {index===9&&!allAnswered&&<p className="og1-exam-reminder" role="status">Answer all ten questions before submitting. You can jump to any unfinished number above.</p>}
    </div>}
  </section>;
