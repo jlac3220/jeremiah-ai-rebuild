@@ -49,7 +49,8 @@ export function validatePilotFeedback(body){
  const incoming=body.ratings||{};
  if(Object.keys(incoming).some(id=>!ratingAreas.has(id)))throw new Error('Unknown rating category');
  const ratings=Object.fromEntries(PILOT_RATING_AREAS.map(area=>[area.id,rating(incoming[area.id])]));
- const result={version:OG1_PILOT_SURVEY_VERSION,submissionId:body.submissionId,lesson:'OG.1.LESSON.18',overall,ratings,
+ if(typeof body.completed!=='boolean')throw new Error('Invalid completion status');
+ const result={version:OG1_PILOT_SURVEY_VERSION,submissionId:body.submissionId,lesson:'OG.1.LESSON.18',overall,ratings,completed:body.completed,
   future:optionalEnum(body.future,futures,'future lesson interest'),
   priority:optionalEnum(body.priority,priorities,'improvement priority'),
   moment:optionalEnum(body.moment,moments,'favorite moment'),
