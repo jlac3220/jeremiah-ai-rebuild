@@ -18,7 +18,7 @@ export function evaluateTeachingChoice(move, learnerResponse) {
   const results=move.interaction.items.map(item=>({id:item.id,correct:placements[item.id]===item.answer,message:item.explanation}));
   const strong=results.every(item=>item.correct);
   return {verdict:strong?'strong':'weak',strategy:strong?'affirm_and_deepen':'clarify',source:'lesson',
-   teacherMessage:strong?'You connected every item to its evidence. Now carry the reasoning into a new situation.':'Some connections need another look. Compare the explanations below, then revise your choices.',
+   teacherMessage:strong?'You connected every item to its evidence. Now carry the reasoning into a new situation.':'Some connections do not match the Scripture evidence yet. Review the explanations and carry that insight into the next activity.',
    itemResults:results,evidenceObserved:strong?(move.evidenceIds || []):[],misconceptionIds:[]};
  }
  if (!move.authoredFeedback) return null;
