@@ -32,3 +32,6 @@ dist-ssr
 
 # Generated media research proposals (never publish raw transcripts by accident)
 .jeremiah-research/
+
+# Private pilot survey responses: never commit these files.
+.pilot-data/
