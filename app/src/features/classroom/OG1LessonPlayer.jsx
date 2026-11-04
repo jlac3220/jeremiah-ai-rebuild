@@ -339,6 +339,17 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       </div>}
       {evidenceIndex===2&&<p className="ogp-compare-conclusion">The difference is not whether God is one. The difference concerns eternal personal distinctions and the understanding of Jesus Christ.</p>}
      </div>}
+     {current.kind==='doctrine-summary'&&<section className="ogp-doctrine-summary">
+      <header><span>SCRIPTURE AND THE CLAIMS WE MAKE</span><h2>What is shared. <em>Where we differ.</em></h2><p>Make the distinction precisely, then test the interpretation in Scripture.</p></header>
+      <div className="ogp-doctrine-summary-grid">
+       <article><span>SHARED</span><h3>One God</h3><p>Neither view teaches three separate gods. Both begin by affirming monotheism.</p></article>
+       <article><span>TRINITARIAN</span><h3>Three eternal persons</h3><p>One divine essence, with Father, Son, and Holy Spirit understood as eternally distinct persons.</p></article>
+       <article><span>APOSTOLIC ONENESS</span><h3>One undivided God</h3><p>The Father, the Holy Spirit, and the Son as God's genuine incarnation are understood without three eternal divine persons. Jesus is truly human as well as fully divine.</p></article>
+      </div>
+      <div className="ogp-doctrine-sources"><span>READ THE TEXTS BEHIND THE QUESTION</span><div>
+       {['John 1:1','1 Timothy 2:5','Acts 2:38'].map(ref=><button type="button" key={ref} onClick={()=>readVerse(ref)}>{ref} ↗</button>)}
+      </div></div>
+     </section>}
      {current.kind==='mission'&&<><p className="ogp-prompt">The one LORD is not one option among several objects of worship. Knowing who He is shapes the devotion He calls for.</p><OG1ConsequenceJourney index={evidenceIndex} expanded={true} onReveal={()=>{}} art={<BiblicalApplicationArt index={evidenceIndex} content={content} move={move}/>} onOpenBible={readVerse}/></>}
      {current.kind==='discovery'&&(move.id==='learn'
       ?<JourneyDestinations options={current.discovery.options} selected={evidenceIndex} guided onSpeak={narration.speak} onOpenBible={readVerse}/>
@@ -355,8 +366,8 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
-     :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'?'Follow the story further':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='discovery'?'Reveal the next part':buttonText} →</button>}
-     {!assessment&&moment>0&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
+     :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'?'Reveal the next part':buttonText} →</button>}
+     {!assessment&&(moment>0||evidenceIndex>0)&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      
     </nav>
    </>}
