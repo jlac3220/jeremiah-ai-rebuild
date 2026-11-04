@@ -10,6 +10,8 @@ export const ROUTES = {
   PROFILE: "profile",
   BIBLE_SUPPORT: "bibleSupport",
   ASK_JEREMIAH: "askJeremiah",
+  PILOT: "pilot",
+  PILOT_FEEDBACK: "pilot-feedback",
 };
 
 export const MAIN_NAV_ROUTES = [
