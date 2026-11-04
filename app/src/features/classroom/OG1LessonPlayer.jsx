@@ -170,6 +170,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const ready=written?Boolean(form.responseText?.trim()):matching?move.interaction.items.every(i=>form.placements?.[i.id]):reasoning?Boolean(form.claimId&&form.reasonId):Boolean(form.selectedChoiceId);
  const total=moments.length;
  const current=moments[Math.min(moment,total-1)];
+ const hasMoreReveals=evidenceIndex+1<sceneRevealCount(current);
  const percent=getStandardProgress(content,state);
  const examPassed=Boolean(state.experience?.exitExam?.version===OG1_EXIT_EXAM_VERSION && state.experience?.exitExam?.passed);
  const finalRating=finish?rateOG1Lesson(content,state):null;
@@ -182,8 +183,6 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const narrationText =
   current?.kind==='shema-encounter'||(move.id==='learn'&&current?.kind==='read')
    ? 'Hear, O Israel: The LORD our God is one LORD.'
-  : current?.kind==='shema-resolution'
-   ? 'Hear, O Israel. The LORD our God is one LORD. And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.'
   : current?.kind==='witness'
    ? ['Before me there was no God formed, neither shall there be after me.','Beside me there is no God.','Neither shall there be after me.'][evidenceIndex]
   : current?.kind==='timeline'
@@ -204,7 +203,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const narration=useLessonNarration({text:narrationText,key:move.id+':'+moment+':'+evidenceIndex});
  useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setEvidenceIndex(0);setPracticeStep(0);setError('');}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
- useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
+ useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment,evidenceIndex]);
  function change(patch) {
   if(thinking||feedback)return;
   setDraft(old=>({...old,...patch}));
@@ -366,7 +365,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
     </section>
     <nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':written?'Discuss my explanation':'Check my connection'} →</button>))
-     :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'?'Reveal the next part':buttonText} →</button>}
+     :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'&&move.id==='learn'?(hasMoreReveals?`Meet ${['Isaiah','Jesus','Paul'][evidenceIndex]}`:'Begin Chapter 1 · The Shema'):current?.kind==='discovery'?(hasMoreReveals?'Reveal the next part':'Continue the lesson'):current?.kind==='shema-connection'?'Examine the meaning of one':current?.kind==='shema-echad'?'Test your understanding':current?.kind==='doctrine-summary'?'Apply what you learned':buttonText} →</button>}
      {!assessment&&(moment>0||evidenceIndex>0)&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      
     </nav>
