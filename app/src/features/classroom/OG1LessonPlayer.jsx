@@ -317,7 +317,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
         <p>{['No earlier god produced the LORD.','No rival god stands alongside the LORD.','No later god can replace the LORD.'][evidenceIndex]}</p>
        </div>
       </div>
-      {evidenceIndex===2&&<p className="ogp-witness-conclusion">Three directions. One testimony: the LORD declares that there is no other God.</p>}
+      {evidenceIndex===2&&<div className="ogp-evidence-close"><strong>THREE DIRECTIONS. ONE TESTIMONY.</strong><p>Isaiah excludes a god before, beside, or after the LORD. He then calls “all the ends of the earth” to look to the one God for salvation.</p><button type="button" onClick={()=>readVerse('Isaiah 45:22')}>Read Isaiah 45:22 ↗</button></div>}
      </div>}
      {current.kind==='timeline'&&<div className="ogp-trail">
       <p className="ogp-prompt">Trace the confession from Moses to Jesus to Paul. Each witness adds to the story.</p>
@@ -326,6 +326,11 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
        <strong>{name}</strong><small>{ref}</small>
       </button>)}</div>
       <div className="ogp-trail-quote" key={evidenceIndex}><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses-trail':evidenceIndex===1?'jesus-trail':'apostles-trail'} content={content} move={move}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
+      {evidenceIndex===2&&<div className="ogp-evidence-close"><strong>PAUL'S ARGUMENT HAS A CONTEXT.</strong><p>In 1 Corinthians 8:4–6, Paul contrasts so-called gods with one God and one Lord Jesus Christ. The Apostolic reading understands this in continuity with the Shema, not as a second deity.</p><div className="ogp-evidence-links">
+       <button type="button" onClick={()=>readVerse('1 Corinthians 8:4-6')}>Read 1 Corinthians 8:4–6 ↗</button>
+       <button type="button" onClick={()=>readVerse('1 Timothy 2:5')}>One God · One mediator ↗</button>
+       <button type="button" onClick={()=>readVerse('James 2:19')}>Belief and response ↗</button>
+      </div></div>}
      </div>}
      {current.kind==='identity'&&<OG1IdentityInvestigation onOpenBible={readVerse}/>}
      {current.kind==='return'&&<OG1ReturnToShema onOpenBible={readVerse}/>}
