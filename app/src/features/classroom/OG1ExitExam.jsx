@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {updateLearningExperience} from '../../core/classroom/learningEngine';
-import {OG1_EXIT_EXAM_VERSION,OG1_EXIT_PASS_COUNT,OG1_EXIT_QUESTIONS,gradeOG1ExitExam} from '../../data/curriculum/og1ExitExam';
+import {OG1_EXIT_EXAM_VERSION,OG1_EXIT_QUESTIONS,gradeOG1ExitExam} from '../../data/curriculum/og1ExitExam';
 import './OG1ExitExam.css';
 
 const STANDARD_LABELS=['The Shema','Isaiah','New Testament','Understanding the Difference','Devotion'];
@@ -46,16 +46,16 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
    <h1 id="og1-exam-title">{latest?'Your Exit Exam Results':'The Exit Exam'}</h1>
    <p>{latest?'Review the passages behind your answers. The goal is understanding, not guessing.':'Ten questions. Five standards. One connected understanding of the one LORD.'}</p>
    <div className="og1-exam-intro-meta">
-    <span>10 QUESTIONS</span><span>2 PER STANDARD</span><span>{OG1_EXIT_PASS_COUNT} OF 10 TO PASS</span>
+    <span>10 QUESTIONS</span><span>2 PER STANDARD</span><span>EVERY ANSWER COUNTS</span>
    </div>
   </div>
   {latest?<div className="og1-exam-results">
     <div className="og1-exam-score">
      <div className="og1-exam-score-dial" aria-label={'Score: '+latest.score+' percent'}><strong>{latest.correct}<small> / 10</small></strong><span>{latest.score}%</span></div>
      <div>
-      <span className="og1-exam-result-status">{latest.passed?'EXIT EXAM PASSED':'REVIEW AND TRY AGAIN'}</span>
-      <h2>{latest.passed?'You made the connections.':'A few connections need another look.'}</h2>
-      <p>{latest.passed?'You have demonstrated understanding across the five OG.1 standards.':'Review the explanations and Scripture references below, then take another attempt. Your earlier work is saved.'}</p>
+      <span className="og1-exam-result-status">{latest.passed?'STRONG EVIDENCE':'ASSESSMENT COMPLETE'}</span>
+      <h2>{latest.passed?'You made the connections.':'Your responses are recorded.'}</h2>
+      <p>{latest.passed?'Your answers show strong recognition of the passages. The learning-level report considers your deeper explanations too.':'Continue to your learning-level report now. Review any missed connections below; another attempt is optional.'}</p>
       <small>BEST SCORE: {currentExam.bestScore??latest.score}% · ATTEMPTS: {currentExam.attempts?.length||1}</small>
      </div>
     </div>
@@ -84,7 +84,7 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
     </div>
     <div className="og1-exam-result-actions">
      <button className="og1-exam-primary" type="button" onClick={onContinue}>View my learning-level report →</button>
-     <button type="button" className="og1-exam-secondary" onClick={retry}>{latest.passed?'Practice another attempt':'Retake all ten questions'} ↻</button>
+     <button type="button" className="og1-exam-secondary" onClick={retry}>Practice another attempt ↻</button>
     </div>
    </div>:<div className="og1-exam-content">
     <div className="og1-exam-progress" aria-label={answered+' of ten answers saved'}>
