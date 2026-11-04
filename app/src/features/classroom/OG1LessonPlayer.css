@@ -1077,3 +1077,11 @@
 .ogp-doctrine-sources>div{display:flex;gap:7px;flex-wrap:wrap}
 .ogp-doctrine-sources button{border:1px solid #cbd4ec;border-radius:10px;background:#fff;color:#4056a7;padding:9px 12px;min-height:42px;font:730 .79rem Inter,system-ui,sans-serif;cursor:pointer}
 @media(max-width:720px){.ogp-doctrine-summary-grid{grid-template-columns:1fr;gap:9px;padding:14px}.ogp-doctrine-summary-grid article{padding:17px}.ogp-doctrine-sources{padding:15px}}
+
+/* Short source-connected conclusions live inside their visual evidence scenes. */
+.ogp-evidence-close{display:flex;align-items:flex-start;flex-direction:column;gap:9px;padding:22px 24px;margin:19px 0 0;background:#eef2ff;border:1px solid #d6dff9;border-radius:14px;color:#2b4469}
+.ogp-evidence-close>strong{font:800 .71rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.09em;color:#435bb0}
+.ogp-evidence-close p{font:.89rem/1.6 Inter,system-ui,sans-serif;max-width:830px;margin:0;color:#435874}
+.ogp-evidence-links{display:flex;flex-wrap:wrap;gap:9px}
+.ogp-evidence-close button{min-height:42px;border:1px solid #bdc9ec;border-radius:9px;background:#fff;color:#435aaf;padding:9px 12px;font:750 .77rem Inter,system-ui,sans-serif;cursor:pointer}
+@media(max-width:600px){.ogp-evidence-close{padding:17px 15px}.ogp-evidence-links{flex-direction:column;align-items:stretch;width:100%}.ogp-evidence-links button{width:100%;text-align:left}}
