@@ -24,7 +24,7 @@ assert.throws(()=>validatePilotFeedback({...base,overall:0}),/required/);
 assert.throws(()=>validatePilotFeedback({...base,completed:'yes'}),/completion status/);
 assert.throws(()=>validatePilotFeedback({...base,ratings:{scripture:7}}),/Ratings/);
 assert.throws(()=>validatePilotFeedback({...base,priority:'anything'}),/priority/);
-assert.throws(()=>validatePilotFeedback({...base,improve:'x'.repeat(1600)}),/too long/);
+assert.throws(()=>validatePilotFeedback({...base,improve:'x'.repeat(1450)}),/too long/);
 assert.throws(()=>validatePilotFeedback({...base,submissionId:'bad'}),/identifier/);
 
 const dir=await mkdtemp(path.join(tmpdir(),'jeremiah-pilot-'));
