@@ -234,9 +234,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
   if(!decision){
    setThinking(true);const controller=new AbortController();abort.current=controller;
    try{decision=await askJeremiahTeacher({standardId:content.standardId,moveId:move.id,learnerResponse:answer,learnerState:{completedMoveIds:state.completedMoveIds,evidenceIds:state.evidenceIds,misconceptions:state.misconceptions,attemptsByMove:state.attemptsByMove}},controller.signal);}
-   catch(e){if(e.name!=='AbortError')setError('Jeremiah cannot check that response right now. Your answer is saved.');}
+   catch(e){if(e.name!=='AbortError')decision={verdict:'unscored',strategy:'continue_without_grade',source:'service-unavailable',teacherMessage:'Your answer was saved. Jeremiah could not assess it right now, so this response will not count toward your score. You can continue learning.',evidenceObserved:[],misconceptionIds:[]};}
    finally{if(!controller.signal.aborted)setThinking(false);}
-   if(controller.signal.aborted||!decision)return;
+   if(controller.signal.aborted)return;
+   if(!decision)decision={verdict:'unscored',strategy:'continue_without_grade',source:'service-unavailable',teacherMessage:'Your answer was saved. Jeremiah could not assess it right now, so this response will not count toward your score. You can continue learning.',evidenceObserved:[],misconceptionIds:[]};
   }
   onStateChange(old=>saveTeachingDecision(old,content,move,decision));
  }
