@@ -94,6 +94,26 @@ async function getAudio(text, voice = NARRATOR.voice) {
         if (error.code !== "ENOENT") throw error;
       }
 
+      // Across Vercel Function instances, keep narration stable in private Blob
+      // rather than regenerating every authored MP3 after each cold start.
+      let privateBlob=null;
+      const audioPath='jeremiah-audio/'+key+'.mp3';
+      if(process.env.VERCEL==='1' && (process.env.BLOB_READ_WRITE_TOKEN||process.env.VERCEL_OIDC_TOKEN)){
+        try {
+          privateBlob=await import('@vercel/blob');
+          const saved=await privateBlob.get(audioPath,{access:'private'});
+          if(saved?.stream) {
+            const bytes=Buffer.from(await new Response(saved.stream).arrayBuffer());
+            if(bytes.length) {
+              memory.set(key,bytes);
+              return bytes;
+            }
+          }
+        } catch(error) {
+          console.warn('Jeremiah narration cache read skipped:',error?.message||error);
+        }
+      }
+
       const apiKey = process.env.OPENAI_API_KEY;
       if (!apiKey) {
         const error = new Error("Server narration is not configured. Set OPENAI_API_KEY.");
@@ -134,6 +154,15 @@ async function getAudio(text, voice = NARRATOR.voice) {
         await writeFile(filename, bytes);
       } catch {
         // Read-only hosts can use the per-process cache instead.
+      }
+      if(privateBlob){
+        try {
+          await privateBlob.put(audioPath,bytes,{
+            access:'private',contentType:'audio/mpeg',addRandomSuffix:false,allowOverwrite:false
+          });
+        } catch {
+          // A parallel instance may have already stored this immutable clip.
+        }
       }
       memory.set(key, bytes);
       if (memory.size > maxMemoryEntries) memory.delete(memory.keys().next().value);
