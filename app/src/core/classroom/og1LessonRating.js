@@ -31,8 +31,9 @@ export function rateOG1Lesson(content,state){
  const rows=standards.map(standardId=>{
   const related=moves.filter(m=>(m.standardIds||[]).includes(standardId)&&m.type!=='teach');
   const responses=related.map(move=>({move,record:history.filter(h=>h.moveId===move.id).at(-1)})).filter(x=>x.record);
-  const written=responses.filter(x=>['free_response','mastery_response'].includes(x.move.type));
-  const guided=responses.filter(x=>x.move.type==='scenario');
+  const scoredResponses=responses.filter(x=>x.record.verdict!=='unscored');
+  const written=scoredResponses.filter(x=>['free_response','mastery_response'].includes(x.move.type));
+  const guided=scoredResponses.filter(x=>x.move.type==='scenario');
   const examResults=(exam?.results||[]).filter(x=>x.standardId===standardId);
   const correctExam=examResults.filter(x=>x.correct).length;
   const components=[
@@ -75,5 +76,5 @@ export function rateOG1Lesson(content,state){
  const preliminary=allExtensive&&score>=85?4:hasAdvanced&&score>=70?Math.min(3,averageLevel):Math.min(2,averageLevel);
  const level=coverage<50?Math.min(2,preliminary):preliminary;
  return {level,score,coverage,standards:rows,label:OG1_RATING_LABELS[level],meaning:OG1_RATING_MEANINGS[level],
-  note:'Weighted evidence: 50% independent explanation, 25% guided work, 25% exam when all three are available. Missing work is not counted as incorrect; coverage is shown separately. A high score alone cannot establish Level 3 or 4.'};
+  note:'Weighted evidence: 50% independent explanation, 25% guided work, 25% exam when all three are available. Missing or unscored work is not counted as incorrect; completed attempts still count toward evidence coverage. A high score alone cannot establish Level 3 or 4.'};
 }
