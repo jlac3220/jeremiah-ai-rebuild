@@ -417,3 +417,82 @@
 .shema-artifact-copy a:focus-visible { outline:3px solid #7f8cff; outline-offset:4px; }
 .shema-artifact-copy small { display:block; margin-top:15px; font-size:.67rem; color:#718096; line-height:1.45; }
 @media(max-width:670px){.shema-artifact { grid-template-columns:1fr; }.shema-artifact-image { min-height:180px; padding:16px; }.shema-artifact-image img { max-height:210px; }.shema-artifact-copy { padding:22px 19px; }}
+
+/* OG.1 flagship experience · visual narrative, not hidden panels or reading slides. */
+.ogp-page .ogp-stage--shema-echad>.ogp-verb,.ogp-page .ogp-stage--shema-echad>h1{display:none}
+.ogp-page .ogp-stage--shema-echad{min-height:0;padding-top:18px}
+.shema-phrase-story{overflow:hidden;border:1px solid #dbe1e9;border-radius:22px;background:#fff;box-shadow:0 20px 50px #21354813;color:#183247}
+.shema-phrase-overline{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:17px 27px;background:#f5f7fb;border-bottom:1px solid #e1e6f0;font:800 .67rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.09em;color:#5c6c86}
+.shema-phrase-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:18px 22px;border-bottom:1px solid #e4e9f0}
+.shema-phrase-track>div{min-width:0;display:flex;align-items:center;gap:9px;padding:4px 8px;opacity:.48}
+.shema-phrase-track>div:not(:last-child){border-right:1px solid #e1e5ef}
+.shema-phrase-track>div.is-active,.shema-phrase-track>div.is-complete{opacity:1}
+.shema-phrase-track>div>span{display:grid;place-items:center;flex:0 0 30px;height:30px;border:1px solid #c9d3e4;border-radius:50%;background:#f2f4f9;color:#52637f;font:800 .67rem Inter,system-ui,sans-serif}
+.shema-phrase-track>div.is-active>span{background:#f5d89b;color:#1f334d;border-color:#b28d4a}
+.shema-phrase-track>div.is-complete>span{background:#5065ac;color:#fff;border-color:#5065ac}
+.shema-phrase-track strong{font:700 .84rem/1.4 Inter,system-ui,sans-serif;color:#283d54}
+.shema-phrase-feature{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);min-height:335px;animation:shema-enter .35s ease both}
+.shema-phrase-language{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:radial-gradient(circle at 50% 40%,#334961,#122c43 75%);color:#fff;padding:36px 22px;text-align:center}
+.shema-phrase-language:after{content:'';position:absolute;inset:17px;border:1px solid #b9c9d339;border-radius:10px;pointer-events:none}
+.shema-phrase-language>span,.shema-phrase-language>small{font:750 .65rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;color:#e4c992}
+.shema-phrase-language strong{font:500 clamp(2.65rem,5.5vw,4.9rem)/1.25 Georgia,serif;color:#fff;overflow-wrap:anywhere}
+.shema-phrase-teaching{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(25px,4vw,45px);gap:15px}
+.shema-phrase-teaching>span{color:#5c6db6;font:800 .7rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.1em}
+.shema-phrase-teaching h2{font:650 clamp(1.75rem,3.3vw,2.7rem)/1.14 Georgia,serif;letter-spacing:-.03em;margin:0;color:#1b3247}
+.shema-phrase-teaching p{margin:0;color:#52677b;font:400 1rem/1.7 Inter,system-ui,sans-serif;max-width:410px}
+.shema-phrase-teaching button{min-height:44px;margin-top:10px;padding:10px 17px;border:1px solid #d7dfea;border-radius:11px;color:#344da0;background:#f0f3ff;font:750 .82rem Inter,system-ui,sans-serif;cursor:pointer}
+.shema-phrase-footer{padding:13px 26px;margin:0;background:#f8f9fc;border-top:1px solid #e8ebf1;color:#62738a;font-size:.75rem}
+.shema-verse-bridge{padding:clamp(23px,4vw,44px);background:linear-gradient(140deg,#f5f7fc,#eef3f9);border-radius:22px;border:1px solid #dce4ef;color:#20344b}
+.shema-bridge-heading>span{font:800 .7rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;color:#566bb1}
+.shema-bridge-heading h2{font:600 clamp(2.15rem,4.5vw,3.45rem)/1.15 Georgia,serif;margin:10px 0 9px;letter-spacing:-.035em}
+.shema-bridge-heading h2 em{color:#5369b0}
+.shema-bridge-heading p{margin:0 0 24px;color:#52667a;font-size:1rem}
+.shema-bridge-panels{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);gap:7px;align-items:stretch}
+.shema-bridge-panel{min-width:0;min-height:250px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:18px;padding:28px;border:1px solid #dbe2ef;border-radius:16px;background:#fff;box-shadow:0 12px 29px #1b34500d}
+.shema-bridge-panel--response{background:#163850;border-color:#163850;color:#fff}
+.shema-bridge-panel>span{font:800 .71rem/1.3 Inter,system-ui,sans-serif;letter-spacing:.11em;color:#586cac}
+.shema-bridge-panel--response>span{color:#e6ca98}
+.shema-bridge-panel blockquote{margin:0;padding:0;border:0;font:500 clamp(1.28rem,2.3vw,1.85rem)/1.47 Georgia,serif;letter-spacing:-.01em;color:inherit}
+.shema-bridge-panel button{padding:7px 0;border:0;border-bottom:1px solid #bdcae2;background:transparent;color:#4b5d9c;font:700 .77rem Inter,system-ui,sans-serif;cursor:pointer;text-align:left}
+.shema-bridge-panel--response button{color:#e6cb98;border-color:#b69c70}
+.shema-bridge-arrow{display:grid;place-items:center;font-size:2.2rem;color:#6173b7;z-index:1}
+.shema-bridge-takeaway{max-width:800px;margin:22px 0 0;color:#435d70;font:400 .96rem/1.65 Inter,system-ui,sans-serif}
+.shema-bridge-takeaway strong{color:#263f63}
+.shema-echad-scene{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);min-height:470px;border:1px solid #dce2eb;border-radius:23px;overflow:hidden;box-shadow:0 19px 42px #20364d16;background:#fff}
+.shema-echad-hero{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(26px,4vw,46px);background:radial-gradient(circle at 45% 28%,#35536b,#132d42 75%);color:#fff}
+.shema-echad-hero>span{font:750 .7rem Inter,system-ui,sans-serif;letter-spacing:.12em;color:#e6cb99}
+.shema-echad-hero>strong{font:400 clamp(4.6rem,8vw,7.2rem) Georgia,serif;line-height:1.25;color:#fff;margin:12px 0 2px}
+.shema-echad-hero h2{font:600 clamp(1.7rem,3vw,2.35rem)/1.15 Georgia,serif;letter-spacing:-.03em;margin:8px 0 18px;color:#fff}
+.shema-echad-hero h2 em{color:#e8c990}
+.shema-echad-hero p{font:.95rem/1.68 Inter,system-ui,sans-serif;margin:0;color:#d1e0ea}
+.shema-echad-evidence{display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4vw,38px);gap:19px}
+.shema-echad-evidence-intro>span{color:#5267ae;font:800 .68rem Inter,system-ui,sans-serif;letter-spacing:.1em}
+.shema-echad-evidence-intro p{font:.9rem/1.55 Inter,system-ui,sans-serif;color:#5b6f81;margin:8px 0 0}
+.shema-echad-evidence-grid{display:grid;gap:9px}
+.shema-echad-evidence-grid article{padding:12px 15px 12px 18px;border:1px solid #e2e8f1;border-left:3px solid #7284c0;border-radius:10px;background:#f8fafd}
+.shema-echad-evidence-grid article>span{font:750 .64rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.08em;color:#6174b4}
+.shema-echad-evidence-grid h3{font:650 1.03rem/1.3 Georgia,serif;color:#21374e;margin:5px 0}
+.shema-echad-evidence-grid p{font:.79rem/1.48 Inter,system-ui,sans-serif;color:#5a6b7f;margin:0}
+.shema-echad-conclusion{padding:14px 16px;background:#eff2ff;border-radius:11px;color:#344b7b;font:.87rem/1.6 Inter,system-ui,sans-serif;margin:0}
+@media(max-width:760px){
+ .shema-phrase-overline{padding:13px 16px;font-size:.61rem}
+ .shema-phrase-track{padding:10px 6px}
+ .shema-phrase-track>div{gap:5px;padding:4px 5px;flex-direction:column}
+ .shema-phrase-track>div>span{flex:0 0 27px;width:27px;height:27px}
+ .shema-phrase-track strong{font-size:.64rem;text-align:center;line-height:1.25}
+ .shema-phrase-feature{grid-template-columns:1fr}
+ .shema-phrase-language{min-height:176px;padding:23px 18px}
+ .shema-phrase-language strong{font-size:3.25rem}
+ .shema-phrase-teaching{padding:25px 20px;min-height:210px}
+ .shema-phrase-teaching h2{font-size:1.95rem}
+ .shema-phrase-footer{padding:12px 16px}
+ .shema-bridge-panels{grid-template-columns:1fr;gap:8px}
+ .shema-bridge-panel{min-height:0;padding:24px 19px}
+ .shema-bridge-arrow{font-size:1.7rem;transform:rotate(90deg);height:32px}
+ .shema-verse-bridge{padding:22px 16px}
+ .shema-echad-scene{grid-template-columns:1fr}
+ .shema-echad-hero{padding:27px 23px}
+ .shema-echad-hero>strong{font-size:4rem}
+ .shema-echad-evidence{padding:24px 17px}
+}
+@media(prefers-reduced-motion:reduce){.shema-phrase-feature{animation:none}}

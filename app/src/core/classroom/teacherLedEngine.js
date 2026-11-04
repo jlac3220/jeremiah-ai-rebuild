@@ -18,7 +18,7 @@ export function evaluateTeachingChoice(move, learnerResponse) {
   const results=move.interaction.items.map(item=>({id:item.id,correct:placements[item.id]===item.answer,message:item.explanation}));
   const strong=results.every(item=>item.correct);
   return {verdict:strong?'strong':'weak',strategy:strong?'affirm_and_deepen':'clarify',source:'lesson',
-   teacherMessage:strong?'You connected every item to its evidence. Now carry the reasoning into a new situation.':'Some connections need another look. Compare the explanations below, then revise your choices.',
+   teacherMessage:strong?'You connected every item to its evidence. Now carry the reasoning into a new situation.':'Some connections do not match the Scripture evidence yet. Review the explanations and carry that insight into the next activity.',
    itemResults:results,evidenceObserved:strong?(move.evidenceIds || []):[],misconceptionIds:[]};
  }
  if (!move.authoredFeedback) return null;
@@ -37,7 +37,7 @@ export function saveTeachingDecision(state, content, move, decision) {
  if (state.currentMoveId!==move.id || state.experience?.teachingDecision?.moveId===move.id) return state;
  // A reported strong answer without rubric evidence cannot mark a written task mastered.
  let checked=decision;
- if (!['strong','partial','weak'].includes(decision?.verdict) || typeof decision?.teacherMessage!=='string' || !decision.teacherMessage.trim()) {
+ if (!(['strong','partial','weak'].includes(decision?.verdict) || (content.standardId==='OG.1.LESSON.18' && decision?.verdict==='unscored')) || typeof decision?.teacherMessage!=='string' || !decision.teacherMessage.trim()) {
   checked={verdict:'partial',strategy:'encourage_retry',source:'fallback',teacherMessage:'Your explanation is saved, but the assessment response was incomplete. Please try again.',evidenceObserved:[],misconceptionIds:[]};
  }
 

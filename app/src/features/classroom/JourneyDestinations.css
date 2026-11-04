@@ -152,3 +152,42 @@
  .ogj-reveal-actions{display:grid;grid-template-columns:1fr;gap:9px;width:100%}
  .ogj-reveal-actions button{min-height:48px;width:100%;white-space:normal}
 }
+
+/* Flagship lesson: one Scripture witness at a time, not four inactive buttons. */
+.ogj-guided{max-width:1070px;margin:8px auto 0}
+.ogj-guided-scene{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);overflow:hidden;min-height:400px;border-radius:21px;background:#142e43;color:#fff;box-shadow:0 24px 58px #172b4240;animation:ogj-reveal .35s ease}
+.ogj-guided-art{position:relative;min-height:390px;overflow:hidden;background:#163244}
+.ogj-guided-art .ogj-art{inset:0}
+.ogj-guided-art .ogj-photo{filter:saturate(.92) contrast(1.07)}
+.ogj-guided-art-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#102b3440 30%,#142e43e6 100%)}
+.ogj-guided-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:15px;padding:clamp(26px,4.5vw,50px);position:relative}
+.ogj-guided-eyebrow{font:750 .69rem/1.3 Inter,system-ui,sans-serif;color:#e2c88e;letter-spacing:.11em}
+.ogj-guided-copy h2{font:650 clamp(2.2rem,4.4vw,3.5rem)/1.1 Georgia,serif;letter-spacing:-.04em;color:#fff;margin:0}
+.ogj-guided-copy blockquote{border:0;padding:0;margin:2px 0 0;font:500 clamp(1.32rem,2.6vw,2rem)/1.45 Georgia,serif;color:#f8f1e3}
+.ogj-guided-reference{font:750 .66rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#e1bf80}
+.ogj-guided-copy>p{font:.91rem/1.65 Inter,system-ui,sans-serif;color:#d4e0e7;margin:0;max-width:490px}
+.ogj-guided-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.ogj-guided-actions button{min-height:45px;padding:11px 17px;background:#f6d99b;color:#183044;border:1px solid #f6d99b;border-radius:10px;font:750 .78rem Inter,system-ui,sans-serif;cursor:pointer}
+.ogj-guided-actions .ogj-guided-read{background:transparent;color:#e6d5b1;border-color:#8b9bab}
+.ogj-guided-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;list-style:none;padding:0;margin:14px 0 0}
+.ogj-guided-track li{display:flex;align-items:center;gap:9px;min-width:0;border:1px solid #dce4ec;border-radius:11px;background:#f8fafd;padding:11px 12px;color:#76869a}
+.ogj-guided-track li>span{flex:0 0 29px;display:grid;place-items:center;height:29px;border-radius:50%;border:1px solid #dbe2ec;background:#edf1f7;font:800 .67rem Inter,system-ui,sans-serif}
+.ogj-guided-track li>strong{font:730 .78rem Inter,system-ui,sans-serif}
+.ogj-guided-track .is-complete{color:#3c568d}
+.ogj-guided-track .is-complete>span{color:#fff;background:#5065ac;border-color:#5065ac}
+.ogj-guided-track .is-current{border-color:#ad8c51;color:#243b54;background:#fff8e7}
+.ogj-guided-track .is-current>span{background:#f5d89b;color:#172b43;border-color:#ae8747}
+@media(max-width:760px){
+ .ogj-guided-scene{grid-template-columns:1fr;min-height:0}
+ .ogj-guided-art{min-height:215px}
+ .ogj-guided-art-shade{background:linear-gradient(0deg,#142e43d9 1%,#142e4311 90%)}
+ .ogj-guided-copy{padding:25px 22px 30px;gap:11px}
+ .ogj-guided-copy h2{font-size:2.35rem}
+ .ogj-guided-copy blockquote{font-size:1.45rem}
+ .ogj-guided-copy>p{font-size:.88rem}
+ .ogj-guided-track{gap:6px}
+ .ogj-guided-track li{flex-direction:column;justify-content:center;gap:5px;padding:9px 3px}
+ .ogj-guided-track li>span{flex:0 0 27px;width:27px;height:27px}
+ .ogj-guided-track li>strong{font-size:.67rem}
+}
+@media(prefers-reduced-motion:reduce){.ogj-guided-scene{animation:none}}

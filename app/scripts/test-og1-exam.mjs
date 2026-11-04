@@ -65,10 +65,10 @@ assert.ok(component.includes('View my learning-level report'),'Final report acce
 assert.ok(player.includes("finish?'The One True God'"),'Completion header should be explicit');
 assert.ok(player.includes("finish||chapterNumber>i+1"),'All five chapter markers should be filled at exit');
 for(const required of ['gradeOG1ExitExam(answers)','patchExam','latest','attempts','bestScore','onContinue',
-   'onReadBible','aria-pressed','disabled={!allAnswered}','Retake all ten questions','Your selections save automatically']){
+   'onReadBible','aria-pressed','disabled={!allAnswered}','Practice another attempt','Your selections save automatically']){
  assert.ok(component.includes(required),'Exam component missing '+required);
 }
 assert.ok(theme.includes('.oge-panel')&&theme.includes('.og1-identity-hero')&&theme.includes('.ogp-page .ogp-header'),'Theme should cover history, doctrine, and lesson shell');
 assert.match(css,/@media\(max-width:640px\)/,'Exam must work on phones');
 assert.match(theme,/prefers-reduced-motion/,'Motion accessibility required');
-console.log('PASS OG.1 exit: ten balanced items, pass/fail boundary, persistence hooks, responsive and consistent UI.');
+console.log('PASS OG.1 exit: ten answered items, informative score bands, optional practice, and nonblocking completion.');

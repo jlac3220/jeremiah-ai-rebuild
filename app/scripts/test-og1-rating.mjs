@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {rateOG1Lesson} from '../src/core/classroom/og1LessonRating.js';
-import {continueTeaching} from '../src/core/classroom/teacherLedEngine.js';
+import {continueTeaching,saveTeachingDecision} from '../src/core/classroom/teacherLedEngine.js';
 const content={standardId:'OG.1.LESSON.18',coveredStandards:[{id:'OG.1.1.18'},{id:'OG.1.2.18'}],instructionalMoves:[
  {id:'shema-guide',type:'scenario',standardIds:['OG.1.1.18'],next:{strong:'shema-try',weak:'shema-guide',partial:'shema-guide'}},
  {id:'shema-try',type:'free_response',standardIds:['OG.1.1.18'],next:{strong:'isaiah-guide',weak:'shema-try',partial:'shema-try'}},
@@ -28,6 +28,15 @@ const withExam=rateOG1Lesson(content,{teacherHistory:[],experience:{exitExam:{la
 assert.equal(withExam.standards[1].level,2,'Two correct recall questions support approaching but not comprehensive');
 assert.equal(withExam.standards[1].score,100);
 assert.equal(empty.standards[0].score,null,'Unassessed standards must not be treated as incorrect');
+const outage=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict:'unscored'}],experience:{}});
+assert.equal(outage.standards[0].score,null,'Teacher outage must not become a failing grade');
+assert.ok(outage.standards[0].coverage>0,'An answered question still counts as attempted');
+const fallbackMove=content.instructionalMoves[1];
+const savedOutage=saveTeachingDecision({currentMoveId:'shema-try',teacherHistory:[],attemptsByMove:{},completedMoveIds:[],evidenceIds:[],misconceptions:[],experience:{}},content,fallbackMove,{verdict:'unscored',strategy:'continue_without_grade',source:'service-unavailable',teacherMessage:'Answer saved; evaluation unavailable.',evidenceObserved:[],misconceptionIds:[]});
+assert.equal(savedOutage.teacherHistory.at(-1).verdict,'unscored');
+assert.ok(!savedOutage.completedMoveIds.includes('shema-try'),'Unscored work must not grant mastery');
+assert.equal(continueTeaching(savedOutage,content).currentMoveId,'isaiah-guide','An answer still permits moving forward');
+
 const combined=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-guide',verdict:'strong'},{moveId:'shema-try',verdict:'weak'}],experience:{exitExam:{latest:{results:[{standardId:'OG.1.1.18',correct:true},{standardId:'OG.1.1.18',correct:false}]}}}});
 assert.equal(combined.standards[0].score,45,'50% written + 25% guided + 25% exam = 45%');
 assert.equal(combined.standards[0].level,1,'Low weighted score cannot be masked by one strong guided response');
