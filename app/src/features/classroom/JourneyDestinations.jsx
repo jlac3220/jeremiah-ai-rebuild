@@ -33,8 +33,30 @@ export function DestinationArt({tone,content,move,placement}) {
 export default function JourneyDestinations({options,selected,onSelect,onSpeak,onOpenBible,guided=false}) {
  const stop=selected===null?null:STOPS[selected];
  const art=stop?BIBLICAL_ART[stop.tone]:null;
+ if(guided&&stop&&art)return <section className="ogj-guided" aria-label="Four biblical witnesses, shown in sequence">
+  <div className="ogj-guided-scene" key={stop.name} aria-live="polite">
+   <div className="ogj-guided-art" aria-hidden="true"><DestinationArt tone={stop.tone}/><div className="ogj-guided-art-shade"/></div>
+   <div className="ogj-guided-copy">
+    <span className="ogj-guided-eyebrow">WITNESS {selected+1} OF 4 · {stop.era}</span>
+    <h2>{stop.title}</h2>
+    <blockquote>“{art.quote.replace(/^[“"]|[”"]$/g,'')}”</blockquote>
+    <span className="ogj-guided-reference">{art.reference.toUpperCase()} · KJV</span>
+    <p>{stop.commentary}</p>
+    <div className="ogj-guided-actions">
+     <button type="button" onClick={()=>onSpeak?.(stop.narration)}>▶ Hear the witness</button>
+     {onOpenBible&&<button type="button" className="ogj-guided-read" onClick={()=>onOpenBible(art.reference)}>Read in Bible ↗</button>}
+    </div>
+   </div>
+  </div>
+  <ol className="ogj-guided-track" aria-label="Witness sequence">
+   {STOPS.map((item,i)=><li key={item.name} className={i<selected?'is-complete':i===selected?'is-current':'is-ahead'} aria-current={i===selected?'step':undefined}>
+    <span>{i<selected?'✓':String(i+1).padStart(2,'0')}</span><strong>{item.title}</strong>
+   </li>)}
+  </ol>
+ </section>;
+
  return <div className="ogj-journey" data-visual-revision="2026-10-30-curated-scenes">
-  <div className="ogj-introduction"><span className="ogj-eyebrow">FOUR WITNESSES · ONE CONFESSION</span><p>Follow the confession from Moses to Isaiah, Jesus, and Paul. Choose a witness to explore the Scripture.</p></div>
+  <div className="ogj-introduction"><span className="ogj-eyebrow">FOUR WITNESSES · ONE CONFESSION</span><p>Follow Moses, Isaiah, Jesus, and Paul as the lesson reveals each witness.</p></div>
   <div className="ogj-gallery" role="group" aria-label="Biblical voices">
    {STOPS.map((item,i)=><button key={item.tone} type="button" className={'ogj-destination'+(selected===i?' is-selected':'')} aria-pressed={selected===i} disabled={guided} onClick={()=>onSelect(i)}>
     <DestinationArt tone={item.tone}/>
