@@ -136,7 +136,7 @@ export function ShemaTeachBack({move,value,onChange,disabled}) {
   <div className="shema-teachback-intro">
    <span className="shema-eyebrow">FINAL CHALLENGE / CHAPTER ONE</span>
    <h2>Can you teach the confession?</h2>
-   <p>Imagine someone asks: “If two people can be <em>one flesh</em>, what does <em>one LORD</em> really mean?” Answer from Scripture, not just from a definition.</p>
+   <p>{move.prompt}</p>
   </div>
   <div className="shema-teachback-layout">
    <aside className="shema-teachback-brief" aria-label="Your evidence trail">
@@ -154,6 +154,5 @@ export function ShemaTeachBack({move,value,onChange,disabled}) {
     <div className="shema-response-footer"><span>{(value||'').trim()?value.trim().split(/\s+/).length+' words':'Your words. Your reasoning.'}</span><span>Autosaved as you write</span></div>
    </div>
   </div>
-  <details className="shema-full-rubric"><summary>Read the full challenge</summary><p>{move.prompt}</p></details>
  </div>;
 }
