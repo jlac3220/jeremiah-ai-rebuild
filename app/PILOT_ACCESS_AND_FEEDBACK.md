@@ -17,7 +17,7 @@ This URL is **not declared live** until Vercel deployment, DNS attachment and en
 - Six Node API functions inside app/api: Jeremiah teaching, Ask Jeremiah, narration, visual discovery, Bible chapter, and private pilot survey submission
 - Single-page fallback configured in app/vercel.json
 - Node.js runtime: Node 22 or newer; use the provider's supported version
-- Keep npm dependency installation enabled to load @vercel/blob; the lockfile should be regenerated and committed before broad production rollout
+- Reproducible npm dependency installation uses the committed lockfile and @vercel/blob private-storage SDK
 
 Codespaces uses app/server.mjs on port 4173; **Vercel does not run that permanent server**. The API functions use the same underlying handlers via Vercel's own serverless Node endpoints.
 
