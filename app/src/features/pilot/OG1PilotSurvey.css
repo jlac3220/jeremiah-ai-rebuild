@@ -1,0 +1,58 @@
+.ogsurvey-page{min-height:100dvh;background:#f5f7fb;padding:35px 16px 75px;color:#1c344d;font-family:Inter,system-ui,sans-serif}
+.ogsurvey-shell{max-width:1040px;margin:0 auto}
+.ogsurvey-heading{padding:39px clamp(24px,4vw,47px);border-radius:21px;background:linear-gradient(130deg,#172b46,#303f75);color:#fff}
+.ogsurvey-heading>span,.ogsurvey-section-heading>span,.ogsurvey-thanks>span{font-weight:800;font-size:.72rem;letter-spacing:.13em;color:#d9c28c}
+.ogsurvey-heading h1{font:600 clamp(2.15rem,4vw,3.5rem)/1.17 Georgia,serif;letter-spacing:-.035em;color:#fff;margin:14px 0}
+.ogsurvey-heading>p{max-width:760px;margin:0;color:#e2e9fa;line-height:1.65}
+.ogsurvey-privacy{display:inline-block;margin-top:22px;font-size:.73rem;color:#d7e2f6;border:1px solid #ffffff3f;padding:9px 12px;border-radius:10px}
+.ogsurvey-progress{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:23px 9px 19px}
+.ogsurvey-progress>span{font-size:.72rem;letter-spacing:.11em;font-weight:850;color:#5368b5}
+.ogsurvey-progress>div{display:flex;gap:5px;flex:1;max-width:370px}
+.ogsurvey-progress>div span{flex:1;height:5px;background:#dfe5f2;border-radius:8px}
+.ogsurvey-progress>div span.is-active{background:#6475d5}
+.ogsurvey-progress>strong{font-size:.82rem;color:#445970}
+.ogsurvey-section{padding:clamp(23px,4vw,40px);border:1px solid #dfe6ee;border-radius:19px;background:#fff;box-shadow:0 16px 35px #253b4e13}
+.ogsurvey-section-heading h2{font:600 clamp(1.9rem,3.5vw,2.8rem)/1.2 Georgia,serif;color:#1e354b;letter-spacing:-.03em;margin:12px 0}
+.ogsurvey-section-heading>span{color:#5365b5}
+.ogsurvey-section-heading p{font-size:.97rem;color:#62758a;margin:0 0 26px;line-height:1.65}
+.ogsurvey-overall,.ogsurvey-question,.ogsurvey-rating-row{border:0;padding:0;margin:0 0 27px;min-width:0}
+.ogsurvey-overall legend,.ogsurvey-question legend{font-size:.97rem;font-weight:750;color:#273f5a;margin-bottom:13px}
+.ogsurvey-overall legend em{font-style:normal;margin-left:8px;padding:4px 7px;border-radius:6px;background:#f1e4c9;color:#795a25;font-size:.68rem}
+.ogsurvey-rating-set{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.ogsurvey-rating-set button{min-height:64px;border:1px solid #d7dfe9;border-radius:12px;background:#f8fafd;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:#576b85}
+.ogsurvey-rating-set button strong{font:800 1.13rem Inter,system-ui,sans-serif}
+.ogsurvey-rating-set button span{font-size:.67rem;font-weight:650}
+.ogsurvey-rating-set button[aria-pressed=true]{border:2px solid #5567c8;background:#ecf0ff;color:#2c469f;box-shadow:0 0 0 3px #566bd51b}
+.ogsurvey-choice-set{display:flex;flex-wrap:wrap;gap:9px}
+.ogsurvey-choice-set button{min-height:44px;border:1px solid #d8e1ec;padding:11px 15px;border-radius:11px;color:#415a74;background:#f8fafc;font-weight:700;font-size:.85rem;cursor:pointer}
+.ogsurvey-choice-set button[aria-pressed=true]{border:2px solid #5368c4;background:#edf1ff;padding:10px 14px;color:#293e9b}
+.ogsurvey-ratings{display:grid;gap:0}
+.ogsurvey-rating-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.95fr);align-items:center;gap:25px;border-top:1px solid #ebeff4;margin:0;padding:21px 0}
+.ogsurvey-rating-row legend{float:left;width:100%;display:grid;gap:5px;margin:0}
+.ogsurvey-rating-row legend strong{font-size:.96rem;color:#253d55}
+.ogsurvey-rating-row legend small{font-size:.78rem;color:#718196;line-height:1.5}
+.ogsurvey-rating-row .ogsurvey-rating-set button{min-height:56px}
+.ogsurvey-rating-row .ogsurvey-rating-set button span{font-size:.55rem}
+.ogsurvey-open-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.ogsurvey-field{display:flex;flex-direction:column;gap:9px}
+.ogsurvey-field>span{font-weight:750;font-size:.92rem;color:#334c66}
+.ogsurvey-field textarea{width:100%;min-height:122px;padding:14px;border-radius:11px;border:1px solid #d3dfea;color:#243a53;background:#fbfcff;line-height:1.58;font-size:16px;resize:vertical}
+.ogsurvey-field small{align-self:flex-end;color:#8491a5;font-size:.67rem}
+.ogsurvey-optional-context{display:grid;grid-template-columns:1fr 1fr;gap:23px;margin-top:34px}
+.ogsurvey-optional-context legend small{font-weight:500;color:#8491a2}
+.ogsurvey-privacy-note{font-size:.77rem;color:#738196;line-height:1.6;margin:0}
+.ogsurvey-actions{display:flex;align-items:center;flex-wrap:wrap;gap:11px;padding:25px 4px}
+.ogsurvey-actions button{min-height:49px;border-radius:11px;padding:12px 20px;font-weight:800;font-size:.84rem;cursor:pointer}
+.ogsurvey-primary{background:#4c60b8;color:white;border:1px solid #4c60b8}
+.ogsurvey-primary:disabled{opacity:.6;cursor:progress}
+.ogsurvey-secondary{background:white;border:1px solid #ced8eb;color:#435b8f}
+.ogsurvey-skip{background:none;border:0;color:#64768d;margin-left:auto;text-decoration:underline;text-underline-offset:4px}
+.ogsurvey-error{padding:15px;background:#fff1ef;color:#922b2b;border:1px solid #ffc8bb;border-radius:10px;line-height:1.6}
+.ogsurvey-thanks{max-width:730px;margin:10vh auto 0;background:white;text-align:center;padding:55px 36px;border:1px solid #dce5f1;border-radius:22px;box-shadow:0 25px 65px #1b345025}
+.ogsurvey-thanks-mark{display:grid;place-items:center;margin:0 auto 23px;width:65px;height:65px;border-radius:50%;background:#e5edff;color:#425db6;font-size:2rem;font-weight:850}
+.ogsurvey-thanks>span{color:#576ab8}
+.ogsurvey-thanks h1{font:600 clamp(2rem,4vw,3.1rem)/1.17 Georgia,serif;color:#243c54;letter-spacing:-.035em;margin:14px 0}
+.ogsurvey-thanks p{line-height:1.75;color:#5c6f82}
+.ogsurvey-thanks .ogsurvey-actions{justify-content:center}
+@media(max-width:770px){.ogsurvey-page{padding:17px 12px 52px}.ogsurvey-heading{padding:29px 22px}.ogsurvey-progress{gap:9px}.ogsurvey-progress>strong{display:none}.ogsurvey-section{padding:24px 17px}.ogsurvey-rating-row{display:block;padding:19px 0}.ogsurvey-rating-row legend{float:none;margin-bottom:12px}.ogsurvey-rating-row .ogsurvey-rating-set button{min-height:52px}.ogsurvey-open-fields,.ogsurvey-optional-context{grid-template-columns:1fr;gap:22px}.ogsurvey-skip{margin-left:0}.ogsurvey-thanks{padding:36px 23px}}
+@media(max-width:375px){.ogsurvey-rating-set{gap:4px}.ogsurvey-rating-set button span{font-size:.55rem}.ogsurvey-rating-set button strong{font-size:1rem}.ogsurvey-choice-set button{font-size:.77rem;padding:9px 11px}}
