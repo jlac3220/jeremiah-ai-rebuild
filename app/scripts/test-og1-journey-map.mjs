@@ -44,7 +44,7 @@ assert.ok(player.includes('Up next: Chapter 1'),'Opening directs to first chapte
 assert.ok(player.includes('Up next: Chapter ${chapterNumber+1}'),'Next chapter and name update automatically');
 assert.ok(player.includes('Chapter ${chapterNumber} · ${CHAPTER_NAMES[chapterNumber-1]}'),'Current chapter is named in title');
 assert.ok(player.includes('aria-current={!finish&&chapterNumber===i+1'), 'Current chapter is accessible');
-assert.ok(player.includes("!['identity','return','mission','roadmap'].includes(current.kind)"),'Avoid duplicate headings');
+assert.ok(player.includes("!['identity','return','mission','roadmap','doctrine-summary'].includes(current.kind)&&!current.kind?.startsWith('shema-')"),'Special scenes own their headings; avoid duplicate chapter/scene titles');
 assert.ok(!player.includes('aria-controls="og1-journey-recap"'),'No optional journey toggle is required');
 for(const x of ['aria-current','UP NEXT','10-question exit exam']){
  assert.ok(journey.includes(x),'Map missing accessible signpost '+x);
