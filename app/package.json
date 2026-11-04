@@ -38,7 +38,9 @@
     "test:og1-theme": "node scripts/test-og1-theme-consistency.mjs",
     "test:og1-journey": "node scripts/test-og1-journey-map.mjs && node scripts/test-og1-scene-flow.mjs",
     "test:og1-inline-bible": "node scripts/test-og1-inline-bible.mjs",
-    "test:og1-rating": "node scripts/test-og1-rating.mjs"
+    "test:og1-rating": "node scripts/test-og1-rating.mjs",
+    "test:pilot": "node scripts/test-pilot-feedback.mjs",
+    "pilot:report": "node scripts/report-pilot-feedback.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
