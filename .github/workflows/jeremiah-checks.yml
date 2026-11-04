@@ -60,5 +60,8 @@ jobs:
       - name: Validate pilot feedback and lesson access
         run: npm run test:pilot
 
+      - name: Verify Vercel serverless pilot contract
+        run: npm run test:vercel
+
       - name: Build app
         run: npm run build

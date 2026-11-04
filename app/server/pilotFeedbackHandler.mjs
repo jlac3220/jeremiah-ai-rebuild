@@ -74,7 +74,41 @@ async function persistPilotFeedback(entry,file=pilotFeedbackFile()){
  await appendFile(file,JSON.stringify({...entry,submittedAt:new Date().toISOString()})+'\n',{encoding:'utf8',mode:0o600});
  return {accepted:true,duplicate:false};
 }
+// On Vercel, function disks are ephemeral: store each response as a private,
+// immutable Blob. A stable submission ID prevents duplicate browser retries.
+// Never expose blob URLs to survey participants or through unauthenticated APIs.
+export async function recordPrivateBlobFeedback(entry, sdk) {
+ const blob=sdk||await import('@vercel/blob');
+ const pathname='jeremiah-pilot/og1/'+entry.submissionId+'.json';
+ try {
+  await blob.head(pathname);
+  return {accepted:true,duplicate:true};
+ } catch(error) {
+  if(error?.name!=='BlobNotFoundError')throw error;
+ }
+ try {
+  await blob.put(pathname,JSON.stringify({...entry,submittedAt:new Date().toISOString()}),{
+   access:'private',contentType:'application/json',addRandomSuffix:false,allowOverwrite:false
+  });
+  return {accepted:true,duplicate:false};
+ } catch(error) {
+  // A concurrent retry may have created the same immutable object.
+  try {
+   await blob.head(pathname);
+   return {accepted:true,duplicate:true};
+  } catch {
+   throw error;
+  }
+ }
+}
 export function recordPilotFeedback(entry,file){
+ // The local file adapter remains for Codespaces. Vercel must use durable Blob.
+ if(!file && (process.env.VERCEL==='1'||process.env.PILOT_STORAGE==='vercel-blob')){
+  if(!process.env.BLOB_READ_WRITE_TOKEN && !process.env.VERCEL_OIDC_TOKEN) {
+   return Promise.reject(new Error('Private pilot Blob storage has not been connected to this deployment.'));
+  }
+  return recordPrivateBlobFeedback(entry);
+ }
  // Keep writes in order on a single app instance.
  const work=pending.then(()=>persistPilotFeedback(entry,file));
  pending=work.catch(()=>{});

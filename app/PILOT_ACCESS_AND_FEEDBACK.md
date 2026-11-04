@@ -1,53 +1,80 @@
-# Jeremiah OG.1 pilot: access, feedback, launch
+# Jeremiah.app on Vercel — production pilot handoff
 
-## Recommended public-facing address
+The domain owner has confirmed that **jeremiah.app** is already managed on Vercel and that its old unused app can be replaced. The intended public pilot link is:
 
-The owner controls **jeremiah.app**. For a limited pilot, deploy the current Node application under a **separate hostname**, such as:
+**https://jeremiah.app/#pilot**
 
-**https://pilot.jeremiah.app/#pilot** — a *planned* URL, not currently verified as deployed.
+This URL is **not declared live** until Vercel deployment, DNS attachment and end-to-end checks are complete.
 
-The current React app uses hash-based navigation. The pilot entry lives at the #pilot fragment and the early feedback screen at #pilot-feedback. A dedicated subdomain avoids overwriting an existing website at the primary domain.
+## Deployment architecture
 
-## Tester flow
+- GitHub: jlac3220/jeremiah-ai-rebuild
+- Production branch: feature/media-standards-research
+- Vercel Root Directory: app
+- Vercel Framework: Vite
+- Build Command: npm run build
+- Output Directory: dist
+- Six Node API functions inside app/api: Jeremiah teaching, Ask Jeremiah, narration, visual discovery, Bible chapter, and private pilot survey submission
+- Single-page fallback configured in app/vercel.json
+- Node.js runtime: Node 22 or newer; use the provider's supported version
+- Reproducible npm dependency installation uses the committed lockfile and @vercel/blob private-storage SDK
 
-1. Open the pilot link on mobile or desktop. Confirm that you are at least 18. Begin OG.1 without creating an account.
-2. Experience all five chapters, the ten-question exit assessment (responses are required but correctness does not gate progression), an understanding report, and the final synthesis.
-3. At the end, choose **Evaluate the experience** or **Finish without survey**. An overall rating of 1–5 is required only if the learner elects to submit feedback.
-4. Learners who cannot finish can submit feedback through the pilot entry page.
-5. Survey submissions are confirmed by the server. Draft survey answers are kept in local browser storage for retry on network failure.
+Codespaces uses app/server.mjs on port 4173; **Vercel does not run that permanent server**. The API functions use the same underlying handlers via Vercel's own serverless Node endpoints.
 
-The survey measures teaching clarity, structure, navigation, UI/theme, imagery, engagement, narration, assessment, pacing, interest in further lessons, strongest experience, improvement priority, and optional written feedback on successes, changes, confusion and other ideas. Device and participant perspective are optional.
+## Required Vercel integrations and settings
 
-## Hosting requirements before inviting others
+1. Create a **Private Vercel Blob store** from the Vercel project's Storage tab and connect it to the project's Preview and Production environments. Do not choose Public storage for user feedback. Confirm BLOB_READ_WRITE_TOKEN is available to the functions. The same private store caches authored narrator clips to avoid repeated voice-generation costs across cold starts.
+2. Set OPENAI_API_KEY as a **server-only environment variable** on the Vercel project. Check the project's API quota before invitations. Do not add API keys to GitHub commits, VITE_ prefixed variables, or browser code.
+3. Confirm the Project Settings -> Root Directory is **app**, not the repository root, and the Vercel Git source/production branch points to feature/media-standards-research.
+4. Set appropriate function execution time (app/vercel.json configures up to 60 seconds for the authored API functions) and configure a production region, billing alerts and provider-level rate limits. The survey's own limiter only applies per instance and is not protection against large-scale abuse.
+5. Turn off unnecessary Vercel Authentication and password protection only for the **public launch**, once privacy notices, user testing and access limits are reviewed. Before then, keep the preview protected.
+6. Publish a privacy notice and contact route before the first invited tester. The pilot is for adults 18+; ticking the age confirmation checkbox is not independent age verification. No names, email, scores, or Bible answer drafts are in the survey data; free text can contain information voluntarily entered by testers.
 
-- Use a Node 22 or later host for the existing Vite production build **and** Node API. This is not a static-only website. From app, run npm ci, npm run build, and npm run start. The server defaults to port 4173 and responds to the existing teaching, narration, Bible, visual discovery and new survey endpoints.
-- Configure HTTPS/TLS and pilot.jeremiah.app DNS at your current domain provider. **Do not replace existing jeremiah.app DNS until the current site and hosting are identified.**
-- Keep OPENAI_API_KEY server-side. Pilot usage will involve real third-party API processing and costs. Check quotas, latency, and server-side failure behavior.
-- Set PILOT_FEEDBACK_FILE to a **durable, backed-up private volume**, e.g. /var/lib/jeremiah/og1-feedback.jsonl. The default app/.pilot-data/og1-feedback.jsonl is Git-ignored but can disappear when a Codespace or ephemeral container is deleted. Never rely on ephemeral filesystem storage for a public cohort.
-- Configure host-level bot protection, a rate limit and optional access gate. The built-in transient limiter helps with duplicate requests but is not production authentication or sophisticated anti-spam. A link alone does not restrict users to invited adults.
-- Publish a privacy notice and retention/deletion policy before public access. Feedback submissions intentionally exclude usernames, IP addresses, grades and lesson answers; unstructured comments may still contain volunteered personal details. Lesson written answers are sent to the separate teaching service.
-- Pilot access is framed for adults 18+. Age confirmation on the page is not independent proof of age. Establish parental/age compliance before including minors.
-- Test one iPhone, one Android device and a computer with an actual hosted HTTPS link, especially audio, video, local resume, exam completion, survey retry and private persisted results.
+Vercel Functions have **ephemeral disks**. The Vercel survey handler must never fall back to a JSONL file on a function. When VERCEL=1, it uses only private Blob, returns a 503 if not configured, and never claims submission success without a confirmed Blob write. Locally, Codespaces can still use the private, Git-ignored app/.pilot-data folder.
 
-## Reviewing the feedback privately
+## Safely replacing the old Vercel app
 
-From the running app directory with the feedback volume available, run:
+There are two safe approaches:
 
-    npm run pilot:report
+- If the existing Vercel project's Git source can be switched to the Jeremiah repository: configure the Root Directory, secret variables and private storage, deploy a **preview**, validate everything, then promote to production on the same project/domain.
+- If the old project's Git source cannot be switched: create a **new** Vercel project from the Jeremiah GitHub repo, configure the same settings, test its preview deployment, then move the jeremiah.app custom domain from the unused project to the new one. Keep the old project available for rollback and never remove the domain before the new preview is verified.
 
-The script prints overall/category averages, improvement priorities, favorite moments and device counts and writes a private CSV beside the stored JSONL file. Never commit or publicly expose raw comments. Revisit recurring complaints and choose the next lesson improvements based on both quantified priorities and open-ended observations.
+If the project has a production domain, do not accidentally replace it with an unverified development build. Promoting the new application is the final step, not the first.
 
-## Codespaces-only smoke test
+## Acceptance test before sending the invitation
 
-Run:
+- Open the deployment preview in private/incognito on phone and desktop.
+- Open /#pilot, confirm the adult acknowledgement and enter OG.1 without any login.
+- Hear the authored narrator; confirm it uses the backend MP3 endpoint, not device speech.
+- Use Read in Bible, return to a lesson, and inspect contextual visuals.
+- Submit a learner response and verify the server evaluation or the unscored fallback without blocking progress.
+- Finish the ten-item assessment, view the understanding report, and choose Evaluate the experience.
+- Submit a **test survey** and verify its private JSON response exists in the Vercel Blob Storage browser and the Thank you screen is shown.
+- Test a browser refresh, retry the same submissionId, and the Leave without submitting flow. Confirm duplicate retries do not add extra records.
+- Confirm provider protection/quotas, data handling, and HTTPS before public invitations.
+
+## Private feedback review
+
+To analyze production feedback from an authenticated local environment:
+
+    cd /workspaces/jeremiah-ai-rebuild/app
+    vercel env pull .env.local
+    npm run pilot:report:vercel
+
+The report downloads private Blob records to app/.pilot-data/vercel-og1-feedback.jsonl (Git-ignored), prints category averages and top priorities, then generates a private CSV next to that file. Never expose the Blob token or the individual comments on a public page.
+
+## Codespaces update
+
+After the merged GitHub changes:
 
     cd /workspaces/jeremiah-ai-rebuild
     git pull --ff-only origin feature/media-standards-research
     cd app
+    npm install
     npm run build
 
-Open your existing forwarded port 4173 URL and add /#pilot. For development tests you can use npm run start or the existing running Node server. Restart Node after server-side changes. The Codespaces port is for testing, **not** a permanent 400-person public pilot endpoint.
+Your Codespaces port 4173 preview works for local testing. Restart node server.mjs after backend changes to pick them up. A Codespaces port is not a permanent hosted service.
 
-## Launch status
+## Status
 
-These code changes do not modify DNS or publish a live site. Confirm who manages DNS/hosting and select the pilot hostname, create durable backend storage, configure TLS and test an end-to-end external submission before distributing an invitation.
+Source code can be prepared and tested through GitHub, but **this PR does not deploy or deactivate any Vercel project**. Deployment/production promotion requires connecting the Vercel account and choosing the correct project; the private Blob integration must be provisioned before survey intake.
