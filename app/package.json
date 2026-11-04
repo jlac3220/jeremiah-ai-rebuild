@@ -40,11 +40,14 @@
     "test:og1-inline-bible": "node scripts/test-og1-inline-bible.mjs",
     "test:og1-rating": "node scripts/test-og1-rating.mjs",
     "test:pilot": "node scripts/test-pilot-feedback.mjs",
-    "pilot:report": "node scripts/report-pilot-feedback.mjs"
+    "pilot:report": "node scripts/report-pilot-feedback.mjs",
+    "pilot:report:vercel": "node scripts/report-vercel-pilot-feedback.mjs",
+    "test:vercel": "node scripts/test-vercel-pilot.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "@vercel/blob": "^2.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
