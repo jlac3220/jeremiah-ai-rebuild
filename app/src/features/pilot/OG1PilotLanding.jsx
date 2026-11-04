@@ -22,6 +22,8 @@ export default function OG1PilotLanding({onNavigate}){
   const content=getClassroomContentByStandardId(PILOT_STANDARD);
   if(!content)return;
   if(fresh){clearLearningState(content,'direct');setProgress(loadLearningState(content,'direct'));}
+  // The pilot always uses the new OG.1 player, never an old saved legacy-view flag.
+  window.sessionStorage.removeItem('jeremiah-og1-classic');
   setActiveClassroomStandardId(PILOT_STANDARD);
   setActiveClassroomSessionPreset('direct');
   setClassroomEntryIntent(CLASSROOM_ENTRY_INTENTS.DIRECT);
