@@ -37,7 +37,7 @@ export function saveTeachingDecision(state, content, move, decision) {
  if (state.currentMoveId!==move.id || state.experience?.teachingDecision?.moveId===move.id) return state;
  // A reported strong answer without rubric evidence cannot mark a written task mastered.
  let checked=decision;
- if (!['strong','partial','weak'].includes(decision?.verdict) || typeof decision?.teacherMessage!=='string' || !decision.teacherMessage.trim()) {
+ if (!(['strong','partial','weak'].includes(decision?.verdict) || (content.standardId==='OG.1.LESSON.18' && decision?.verdict==='unscored')) || typeof decision?.teacherMessage!=='string' || !decision.teacherMessage.trim()) {
   checked={verdict:'partial',strategy:'encourage_retry',source:'fallback',teacherMessage:'Your explanation is saved, but the assessment response was incomplete. Please try again.',evidenceObserved:[],misconceptionIds:[]};
  }
 
