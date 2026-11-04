@@ -31,6 +31,13 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Capture updated package lock for commit
+        run: |
+          echo JEREMIAH_LOCK_BEGIN
+          base64 -w 2000 package-lock.json
+          echo
+          echo JEREMIAH_LOCK_END
+
       - name: Validate Jeremiah brain
         run: npm run test:brain
 
