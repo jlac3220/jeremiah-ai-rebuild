@@ -1058,3 +1058,22 @@
 .ogp-mini-caption{white-space:normal;align-items:start}
 .ogp-mini-caption strong{text-align:right;max-width:220px;line-height:1.35}
 @media(max-width:600px){.ogp-mini-timeline{max-width:100%;flex-basis:100%}.ogp-mini-caption strong{max-width:68%}}
+
+/* OG.1 · one considered doctrinal synthesis, not another long lecture. */
+.ogp-doctrine-summary{overflow:hidden;border:1px solid #dfe5f0;border-radius:21px;background:#fff;box-shadow:0 20px 44px #1b355018}
+.ogp-doctrine-summary>header{padding:clamp(25px,4vw,43px);background:linear-gradient(125deg,#172b49,#34467d);color:#fff}
+.ogp-doctrine-summary>header>span{font:800 .7rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#e6cb98}
+.ogp-doctrine-summary>header h2{font:600 clamp(2rem,4vw,3rem)/1.15 Georgia,serif;color:#fff;letter-spacing:-.03em;margin:15px 0 13px}
+.ogp-doctrine-summary>header h2 em{color:#efd6aa}
+.ogp-doctrine-summary>header p{font:.95rem/1.6 Inter,system-ui,sans-serif;color:#d9e2f1;margin:0}
+.ogp-doctrine-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:23px}
+.ogp-doctrine-summary-grid article{min-width:0;padding:23px 18px;border:1px solid #dee5f1;border-radius:13px;background:#f8faff}
+.ogp-doctrine-summary-grid article:last-child{background:#eef1ff;border-color:#bdc9f2}
+.ogp-doctrine-summary-grid article>span{font:800 .65rem/1.4 Inter,system-ui,sans-serif;color:#536ac0;letter-spacing:.09em}
+.ogp-doctrine-summary-grid h3{font:650 1.32rem/1.25 Georgia,serif;color:#243a58;margin:11px 0}
+.ogp-doctrine-summary-grid p{font:.86rem/1.62 Inter,system-ui,sans-serif;color:#52657d;margin:0}
+.ogp-doctrine-sources{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;border-top:1px solid #e2e7f0;background:#f6f8fc;padding:15px 23px}
+.ogp-doctrine-sources>span{font:800 .65rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.08em;color:#536783}
+.ogp-doctrine-sources>div{display:flex;gap:7px;flex-wrap:wrap}
+.ogp-doctrine-sources button{border:1px solid #cbd4ec;border-radius:10px;background:#fff;color:#4056a7;padding:9px 12px;min-height:42px;font:730 .79rem Inter,system-ui,sans-serif;cursor:pointer}
+@media(max-width:720px){.ogp-doctrine-summary-grid{grid-template-columns:1fr;gap:9px;padding:14px}.ogp-doctrine-summary-grid article{padding:17px}.ogp-doctrine-sources{padding:15px}}
