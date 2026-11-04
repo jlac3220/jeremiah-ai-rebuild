@@ -2,6 +2,8 @@ import {writeFile,mkdir} from 'node:fs/promises';
 import path from 'node:path';
 import {loadLocalEnv} from '../server/loadEnv.mjs';
 
+// Vercel CLI writes secrets to .env.local by default. Never commit that file.
+await loadLocalEnv(path.resolve(process.cwd(),'.env.local'));
 await loadLocalEnv();
 if(!process.env.BLOB_READ_WRITE_TOKEN){
  console.error('Private Blob access is not configured. Connect a private Blob store, then set BLOB_READ_WRITE_TOKEN locally with vercel env pull.');
