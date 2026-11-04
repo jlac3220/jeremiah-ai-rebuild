@@ -5,6 +5,7 @@ import { handleAskJeremiah } from "./server/askJeremiahHandler.mjs";
 import { handleVisualDiscovery } from "./server/visualDiscoveryHandler.mjs";
 import { handleBibleApi } from "./server/bibleHandler.mjs";
 import { handleNarrationApi } from "./server/narrationHandler.mjs";
+import { handlePilotFeedback } from "./server/pilotFeedbackHandler.mjs";
 
 function jeremiahApiPlugin() {
   return {
@@ -21,6 +22,9 @@ function jeremiahApiPlugin() {
       });
       server.middlewares.use("/api/jeremiah/narration", (req, res) => {
         void handleNarrationApi(req, res);
+      });
+      server.middlewares.use("/api/pilot/feedback", (req, res) => {
+        void handlePilotFeedback(req, res);
       });
       server.middlewares.use("/api/bible/chapter", (req, res) => {
         void handleBibleApi(req, res);
