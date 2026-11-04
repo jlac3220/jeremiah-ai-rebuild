@@ -1,4 +1,12 @@
 export async function readJsonBody(req, maxBytes = 64_000) {
+  // Vercel's Node runtime may populate req.body before invoking our handler.
+  // Reading the consumed stream again would hang the request indefinitely.
+  if (req.body !== undefined && req.body !== null) {
+    const source = req.body;
+    const raw = typeof source === 'string' ? source : JSON.stringify(source);
+    if (Buffer.byteLength(raw, 'utf8') > maxBytes) throw new Error('Request too large');
+    return typeof source === 'string' ? JSON.parse(source) : source;
+  }
   return new Promise((resolve, reject) => {
     let body = "";
     req.on("data", (chunk) => {
