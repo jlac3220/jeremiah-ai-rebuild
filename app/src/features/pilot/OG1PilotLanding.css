@@ -1,0 +1,40 @@
+.ogpilot-page{min-height:100dvh;background:#f5f7fa;color:#19314a;font-family:Inter,system-ui,sans-serif}
+.ogpilot-top{display:flex;align-items:center;justify-content:space-between;gap:15px;min-height:77px;padding:14px max(20px,calc((100% - 1140px)/2));background:#172b46;color:#fff}
+.ogpilot-top strong{display:flex;align-items:center;gap:10px;letter-spacing:.14em;font-weight:800;font-size:.88rem}
+.ogpilot-top strong span{display:grid;place-items:center;width:31px;height:31px;background:#d2b57b;color:#182c42;border-radius:9px;font-family:Georgia,serif;font-size:1.4rem}
+.ogpilot-top>span{color:#c5d4ef;font-size:.68rem;letter-spacing:.14em;font-weight:750}
+.ogpilot-shell{max-width:1180px;margin:0 auto;padding:33px 25px 70px}
+.ogpilot-hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,.75fr);gap:34px;align-items:stretch;padding:44px 0}
+.ogpilot-hero>div:first-child{display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.ogpilot-eyebrow{display:block;color:#5b6bb5;font-size:.69rem;font-weight:800;letter-spacing:.115em;line-height:1.5}
+.ogpilot-hero h1{font:600 clamp(2.55rem,5vw,4.3rem)/1.12 Georgia,serif;letter-spacing:-.045em;color:#17304b;margin:17px 0 20px}
+.ogpilot-hero h1 em{color:#435b9a}
+.ogpilot-hero p{max-width:640px;color:#526680;line-height:1.78;font-size:1.06rem;margin:0}
+.ogpilot-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:27px}
+.ogpilot-meta span{border:1px solid #d9e1ec;border-radius:50px;padding:9px 12px;background:white;font-size:.73rem;font-weight:700;color:#4b5c76}
+.ogpilot-verse{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:19px;padding:39px;border-radius:22px;min-height:380px;color:#fff;background:radial-gradient(circle at 85% 10%,#445b73,#183247 65%,#102738);box-shadow:0 22px 48px #1a2e4935}
+.ogpilot-verse>span{font-size:.73rem;font-weight:800;letter-spacing:.14em;color:#e2c68f}
+.ogpilot-verse blockquote{font:500 clamp(1.7rem,2.5vw,2.5rem)/1.4 Georgia,serif;margin:0;color:#fff}
+.ogpilot-verse small{font-weight:800;letter-spacing:.12em;color:#e6cb92;font-size:.7rem}
+.ogpilot-verse>div{position:absolute;right:-7px;bottom:-27px;opacity:.12;font:500 9rem Georgia,serif;color:#fff;pointer-events:none}
+.ogpilot-start{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:stretch}
+.ogpilot-start>div,.ogpilot-feedback-invite{border:1px solid #e0e6ef;border-radius:18px;background:#fff;padding:clamp(24px,4vw,39px);box-shadow:0 10px 32px #23334c0e}
+.ogpilot-start h2{font:600 clamp(1.7rem,3vw,2.45rem)/1.2 Georgia,serif;color:#203854;margin:11px 0}
+.ogpilot-start p{line-height:1.7;color:#556b82}
+.ogpilot-consent{display:flex;align-items:flex-start;gap:13px;margin:22px 0;padding:16px;border:1px solid #dce5f0;border-radius:11px;background:#f8fafd;font-size:.88rem;line-height:1.55;color:#465d76}
+.ogpilot-consent input{width:20px;height:20px;flex-shrink:0;accent-color:#4b61bc;margin-top:2px}
+.ogpilot-actions{display:flex;gap:12px;flex-wrap:wrap}
+.ogpilot-actions button,.ogpilot-confirm button{min-height:49px;padding:12px 20px;border-radius:11px;font-weight:800;cursor:pointer}
+.ogpilot-primary{background:#4b61bc;color:#fff;border:1px solid #4b61bc}
+.ogpilot-primary:disabled,.ogpilot-confirm button:disabled{opacity:.45;cursor:not-allowed}
+.ogpilot-secondary,.ogpilot-confirm button{background:#fff;color:#344b74;border:1px solid #ced7e9}
+.ogpilot-confirm{margin-top:17px;padding:15px 18px;background:#f8f5ed;border:1px solid #e3d0a2;border-radius:12px}
+.ogpilot-confirm p{margin:0 0 11px}
+.ogpilot-confirm button{margin-right:9px;font-size:.8rem;min-height:40px}
+.ogpilot-feedback-invite{background:#eef2ff;border-color:#dce3ff}
+.ogpilot-feedback-invite h3{font:600 1.62rem/1.25 Georgia,serif;margin:14px 0;color:#253e6c}
+.ogpilot-feedback-invite p{font-size:.94rem}
+.ogpilot-feedback-invite button{margin-top:10px;min-height:44px;background:#fff;border:1px solid #becbf2;color:#354fa3;border-radius:10px;padding:11px 13px;font-size:.82rem;font-weight:750;cursor:pointer}
+.ogpilot-footnote{padding:22px 0;color:#728196;font-size:.76rem}
+@media(max-width:760px){.ogpilot-top{padding:13px 20px}.ogpilot-shell{padding:17px 17px 48px}.ogpilot-hero{grid-template-columns:1fr;gap:19px;padding:25px 0}.ogpilot-hero h1{font-size:2.55rem}.ogpilot-verse{min-height:250px;padding:28px}.ogpilot-start{grid-template-columns:1fr;gap:16px}.ogpilot-start>div,.ogpilot-feedback-invite{padding:24px 21px}}
+@media(max-width:380px){.ogpilot-top>span{font-size:.55rem;text-align:right}.ogpilot-hero h1{font-size:2.2rem}}

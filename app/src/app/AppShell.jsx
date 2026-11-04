@@ -8,7 +8,7 @@ import { setActiveClassroomStandardId, setActiveClassroomSessionPreset } from '.
 import { setClassroomEntryIntent, CLASSROOM_ENTRY_INTENTS } from '../core/classroom/classroomEntryIntent';
 function readRoute() {
   const route = window.location.hash.slice(1);
-  return [...MAIN_NAV_ROUTES, ROUTES.CLASSROOM_STUDY, ROUTES.CLASSROOM_LESSON].includes(route) ? route : ROUTES.HOME;
+  return [...MAIN_NAV_ROUTES, ROUTES.CLASSROOM_STUDY, ROUTES.CLASSROOM_LESSON, ROUTES.PILOT, ROUTES.PILOT_FEEDBACK].includes(route) ? route : ROUTES.HOME;
 }
 export default function AppShell() {
   const [currentRoute, setCurrentRoute] = useState(readRoute);

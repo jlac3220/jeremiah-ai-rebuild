@@ -6,6 +6,8 @@ import ProgressPage from "../features/progress/ProgressPage";
 import ProfilePage from "../features/profile/ProfilePage";
 import BibleSupportPage from "../features/bible-support/BibleSupportPage";
 import AskJeremiahPage from "../features/ask-jeremiah/AskJeremiahPage";
+import OG1PilotLanding from "../features/pilot/OG1PilotLanding";
+import OG1PilotSurvey from "../features/pilot/OG1PilotSurvey";
 
 function Placeholder({ title }) {
   return (
@@ -46,6 +48,12 @@ export default function AppRouter({ currentRoute, onNavigate }) {
 
     case ROUTES.ASK_JEREMIAH:
       return <AskJeremiahPage onNavigate={onNavigate} />;
+
+    case ROUTES.PILOT:
+      return <OG1PilotLanding onNavigate={onNavigate}/>;
+
+    case ROUTES.PILOT_FEEDBACK:
+      return <OG1PilotSurvey completed={false} onDone={()=>onNavigate(ROUTES.PILOT)}/>;
 
     case ROUTES.HOME:
     default:

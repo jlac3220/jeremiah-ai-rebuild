@@ -50,7 +50,7 @@ assert.ok(player.includes('finalRating.standards.map'));
 assert.ok(player.includes("completionScreen==='understanding'"),'Understanding has its own screen');
 assert.ok(player.includes("completionScreen==='summary'"),'Final summary is a subsequent screen');
 assert.ok(player.includes('Continue to final summary'),'Learner controls reveal-to-summary transition');
-assert.ok(player.includes('Review your understanding'),'Learner can revisit ratings');
+assert.ok(player.includes('Understanding report'),'Learner can revisit ratings from the final summary');
 assert.ok(!exam.includes('Finish lesson without taking the exam'));
 assert.ok(exam.includes('View my learning-level report'));
 console.log('PASS OG.1 open progression + per-standard evidence ratings 1–4.');

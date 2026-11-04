@@ -8,6 +8,7 @@ import { handleVisualDiscovery } from "./server/visualDiscoveryHandler.mjs";
 import { handleBibleApi } from "./server/bibleHandler.mjs";
 import { handleNarrationApi } from "./server/narrationHandler.mjs";
 import { loadLocalEnv } from "./server/loadEnv.mjs";
+import { handlePilotFeedback } from "./server/pilotFeedbackHandler.mjs";
 
 await loadLocalEnv();
 
@@ -55,6 +56,11 @@ const server = http.createServer(async (req, res) => {
 
   if (url.pathname === "/api/jeremiah/narration") {
     await handleNarrationApi(req, res);
+    return;
+  }
+
+  if (url.pathname === "/api/pilot/feedback") {
+    await handlePilotFeedback(req, res);
     return;
   }
 

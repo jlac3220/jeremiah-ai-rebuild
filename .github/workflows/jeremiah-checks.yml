@@ -57,5 +57,8 @@ jobs:
       - name: Validate standards content scan
         run: npm run test:content-scan
 
+      - name: Validate pilot feedback and lesson access
+        run: npm run test:pilot
+
       - name: Build app
         run: npm run build

@@ -1085,3 +1085,10 @@
 .ogp-evidence-links{display:flex;flex-wrap:wrap;gap:9px}
 .ogp-evidence-close button{min-height:42px;border:1px solid #bdc9ec;border-radius:9px;background:#fff;color:#435aaf;padding:9px 12px;font:750 .77rem Inter,system-ui,sans-serif;cursor:pointer}
 @media(max-width:600px){.ogp-evidence-close{padding:17px 15px}.ogp-evidence-links{flex-direction:column;align-items:stretch;width:100%}.ogp-evidence-links button{width:100%;text-align:left}}
+
+/* Survey invitation follows the final Scripture synthesis, never interrupts it. */
+.ogp-finish-survey-invite{margin:33px 0 15px;padding:clamp(26px,4vw,42px);border:1px solid #d9e1f3;border-radius:20px;background:linear-gradient(130deg,#f6f8ff,#eaf0fc);box-shadow:0 14px 32px #23385b13}
+.ogp-finish-survey-invite>span{font:800 .71rem/1.4 Inter,system-ui,sans-serif;color:#5468b9;letter-spacing:.1em}
+.ogp-finish-survey-invite h2{font:600 clamp(1.7rem,3.2vw,2.6rem)/1.22 Georgia,serif;letter-spacing:-.035em;color:#243b5a;margin:11px 0}
+.ogp-finish-survey-invite p{font:.96rem/1.65 Inter,system-ui,sans-serif;color:#53667d;max-width:760px;margin:0 0 20px}
+@media(max-width:600px){.ogp-finish-survey-invite{padding:23px 17px}.ogp-finish-survey-invite .ogp-finish-actions{flex-direction:column;align-items:stretch}}
