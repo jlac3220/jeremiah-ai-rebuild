@@ -5,45 +5,23 @@ import BottomNav from "../shared/layout/BottomNav";
 
 export default function AppShell() {
   const [currentRoute, setCurrentRoute] = useState(ROUTES.HOME);
-
   const showBottomNav = MAIN_NAV_ROUTES.includes(currentRoute);
-
   return (
-    <div style={shellStyle}>
-      <main style={{ ...mainStyle, paddingBottom: showBottomNav ? "88px" : "0px" }}>
-        <AppRouter
-          currentRoute={currentRoute}
-          onNavigate={setCurrentRoute}
-        />
-      </main>
-
-      {showBottomNav && (
-        <div style={bottomNavWrapStyle}>
-          <BottomNav
-            currentRoute={currentRoute}
-            onNavigate={setCurrentRoute}
-          />
+    <div className="app-shell">
+      <a className="skip-link" href="#main-content">Skip to main content</a>
+      <header className="brand-header">
+        <div className="brand-header-inner">
+          <button className="brand-home" onClick={() => setCurrentRoute(ROUTES.HOME)} aria-label="Jeremiah home">
+            <img src="/brand/jeremiah-flame.png" alt="" />
+            <span className="brand-wordmark">Jeremiah<span className="brand-caption">ROOTED IN THE WORD</span></span>
+          </button>
+          <span className="brand-header-note">Learn. Understand. Grow.</span>
         </div>
-      )}
+      </header>
+      <main id="main-content" tabIndex={-1} className={showBottomNav ? "app-main with-navigation" : "app-main"}>
+        <AppRouter currentRoute={currentRoute} onNavigate={setCurrentRoute} />
+      </main>
+      {showBottomNav && <BottomNav currentRoute={currentRoute} onNavigate={setCurrentRoute} />}
     </div>
   );
 }
-
-const shellStyle = {
-  minHeight: "100vh",
-  background: "#f8fafc",
-  display: "flex",
-  flexDirection: "column",
-};
-
-const mainStyle = {
-  flex: 1,
-};
-
-const bottomNavWrapStyle = {
-  position: "fixed",
-  left: 0,
-  right: 0,
-  bottom: 0,
-  background: "#ffffff",
-};

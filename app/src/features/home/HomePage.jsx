@@ -17,7 +17,8 @@ export default function HomePage({ onNavigate }) {
     <div style={pageStyle}>
       <div style={contentStyle}>
         <section style={heroStyle}>
-          <p style={eyebrowStyle}>JEREMIAH AI</p>
+          <img className="home-flame" src="/brand/jeremiah-flame.png" alt="" />
+          <p style={eyebrowStyle}>APOSTLES’ DOCTRINE · PENTECOSTAL EXPERIENCE</p>
           <h1 style={titleStyle}>{data.welcomeTitle}</h1>
           <p style={subtitleStyle}>{data.welcomeSubtitle}</p>
         </section>
@@ -121,14 +122,14 @@ export default function HomePage({ onNavigate }) {
 
 const pageStyle = {
   minHeight: "100%",
-  background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
+  background: "var(--page-gradient)",
 };
 
 const contentStyle = {
   width: "100%",
   maxWidth: "980px",
   margin: "0 auto",
-  padding: "32px 20px 120px",
+  padding: "32px 20px 40px",
   boxSizing: "border-box",
 };
 
@@ -148,10 +149,10 @@ const eyebrowStyle = {
 
 const titleStyle = {
   margin: "10px 0 0",
-  fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+  fontSize: "clamp(2rem, 5vw, 3.1rem)",
   lineHeight: 0.98,
   fontWeight: 900,
-  color: "#0f172a",
+  color: "var(--ink)",
 };
 
 const subtitleStyle = {
@@ -163,7 +164,7 @@ const subtitleStyle = {
 };
 
 const primaryCardStyle = {
-  background: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
+  background: "var(--brand-gradient)",
   color: "#ffffff",
   borderRadius: "32px",
   padding: "28px",
@@ -234,7 +235,7 @@ const stageValueStyle = {
 
 const cardBodyStyle = {
   display: "grid",
-  gridTemplateColumns: "1.5fr 1fr",
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
   gap: "18px",
   marginTop: "24px",
 };
@@ -335,7 +336,7 @@ const progressTrackStyle = {
 const progressFillStyle = {
   height: "100%",
   borderRadius: "999px",
-  background: "#ffffff",
+  background: "var(--flame-gradient)",
 };
 
 const cardFooterStyle = {
@@ -347,7 +348,7 @@ const cardFooterStyle = {
 const primaryButtonStyle = {
   border: "none",
   background: "#ffffff",
-  color: "#0f172a",
+  color: "var(--ink)",
   padding: "15px 20px",
   borderRadius: "18px",
   fontSize: "1rem",
@@ -372,7 +373,7 @@ const sectionTitleStyle = {
   margin: 0,
   fontSize: "1.18rem",
   fontWeight: 800,
-  color: "#0f172a",
+  color: "var(--ink)",
 };
 
 const sectionTextStyle = {
@@ -384,7 +385,7 @@ const sectionTextStyle = {
 
 const statsGridStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr))",
   gap: "14px",
 };
 
@@ -398,7 +399,7 @@ const statCardStyle = {
 const statValueStyle = {
   fontSize: "1.85rem",
   fontWeight: 900,
-  color: "#0f172a",
+  color: "var(--ink)",
 };
 
 const statLabelStyle = {

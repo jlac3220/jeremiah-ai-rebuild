@@ -261,7 +261,7 @@ export default function ClassroomPage({ onNavigate }) {
                   margin: "10px 0 0",
                   fontSize: "1.4rem",
                   lineHeight: 1.2,
-                  color: "#0f172a",
+                  color: "var(--ink)",
                   fontWeight: 900,
                   maxWidth: "720px",
                 }}
@@ -331,7 +331,7 @@ export default function ClassroomPage({ onNavigate }) {
                   margin: "8px 0 0",
                   fontSize: "0.98rem",
                   lineHeight: 1.7,
-                  color: "#0f172a",
+                  color: "var(--ink)",
                   fontWeight: 600,
                 }}
               >
@@ -364,7 +364,7 @@ export default function ClassroomPage({ onNavigate }) {
                   margin: "8px 0 0",
                   fontSize: "0.98rem",
                   lineHeight: 1.7,
-                  color: "#0f172a",
+                  color: "var(--ink)",
                   fontWeight: 600,
                 }}
               >
@@ -376,7 +376,7 @@ export default function ClassroomPage({ onNavigate }) {
               style={{
                 borderRadius: "18px",
                 padding: "16px",
-                background: "#0f172a",
+                background: "var(--brand-blue)",
                 color: "#ffffff",
               }}
             >
@@ -451,7 +451,7 @@ export default function ClassroomPage({ onNavigate }) {
                 margin: "8px 0 0",
                 fontSize: "1rem",
                 lineHeight: 1.5,
-                color: "#0f172a",
+                color: "var(--ink)",
                 fontWeight: 800,
               }}
             >
@@ -495,7 +495,7 @@ export default function ClassroomPage({ onNavigate }) {
                 margin: "8px 0 0",
                 fontSize: "1rem",
                 lineHeight: 1.5,
-                color: "#0f172a",
+                color: "var(--ink)",
                 fontWeight: 800,
               }}
             >
@@ -539,7 +539,7 @@ export default function ClassroomPage({ onNavigate }) {
                 margin: "8px 0 0",
                 fontSize: "1rem",
                 lineHeight: 1.5,
-                color: "#0f172a",
+                color: "var(--ink)",
                 fontWeight: 800,
               }}
             >
@@ -583,7 +583,7 @@ export default function ClassroomPage({ onNavigate }) {
                 margin: "8px 0 0",
                 fontSize: "1rem",
                 lineHeight: 1.5,
-                color: "#0f172a",
+                color: "var(--ink)",
                 fontWeight: 800,
               }}
             >
@@ -627,7 +627,7 @@ export default function ClassroomPage({ onNavigate }) {
                 margin: "8px 0 0",
                 fontSize: "1rem",
                 lineHeight: 1.5,
-                color: "#0f172a",
+                color: "var(--ink)",
                 fontWeight: 800,
               }}
             >
@@ -670,7 +670,7 @@ export default function ClassroomPage({ onNavigate }) {
                   marginTop: "14px",
                   border: "1px solid #cbd5e1",
                   background: "#ffffff",
-                  color: "#0f172a",
+                  color: "var(--ink)",
                   padding: "10px 14px",
                   borderRadius: "12px",
                   fontSize: "0.9rem",
@@ -863,7 +863,7 @@ export default function ClassroomPage({ onNavigate }) {
                         margin: "8px 0 0",
                         fontSize: "0.96rem",
                         lineHeight: 1.7,
-                        color: "#0f172a",
+                        color: "var(--ink)",
                       }}
                     >
                       {entryIntentDisplay.responseActionText}
@@ -928,7 +928,7 @@ export default function ClassroomPage({ onNavigate }) {
                             margin: "8px 0 0",
                             fontSize: "0.95rem",
                             lineHeight: 1.7,
-                            color: "#0f172a",
+                            color: "var(--ink)",
                           }}
                         >
                           {feedbackTone.text}
@@ -956,14 +956,14 @@ export default function ClassroomPage({ onNavigate }) {
 
 const pageStyle = {
   minHeight: "100%",
-  background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
+  background: "var(--page-gradient)",
 };
 
 const contentStyle = {
   width: "100%",
   maxWidth: "1040px",
   margin: "0 auto",
-  padding: "32px 20px 120px",
+  padding: "32px 20px 40px",
   boxSizing: "border-box",
 };
 
@@ -982,10 +982,10 @@ const eyebrowStyle = {
 
 const titleStyle = {
   margin: "8px 0 0",
-  fontSize: "clamp(2.3rem, 5vw, 3.8rem)",
+  fontSize: "clamp(2rem, 5vw, 3.1rem)",
   lineHeight: 1.02,
   fontWeight: 900,
-  color: "#0f172a",
+  color: "var(--ink)",
 };
 
 const subtitleStyle = {
@@ -997,7 +997,7 @@ const subtitleStyle = {
 };
 
 const sessionFrameStyle = {
-  background: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
+  background: "var(--brand-gradient)",
   color: "#ffffff",
   borderRadius: "30px",
   padding: "28px",
@@ -1043,7 +1043,7 @@ const statusPillStyle = {
 const metaGridStyle = {
   marginTop: "22px",
   display: "grid",
-  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr))",
   gap: "14px",
 };
 
@@ -1171,7 +1171,7 @@ const surfaceTitleStyle = {
   margin: "10px 0 0",
   fontSize: "1.5rem",
   lineHeight: 1.2,
-  color: "#0f172a",
+  color: "var(--ink)",
   fontWeight: 900,
 };
 
@@ -1201,7 +1201,7 @@ const transitionTextStyle = {
 
 const surfaceGridStyle = {
   display: "grid",
-  gridTemplateColumns: "1.1fr 0.9fr",
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
   gap: "18px",
   alignItems: "start",
 };
@@ -1246,7 +1246,7 @@ const sectionTitleStyle = {
   margin: "10px 0 0",
   fontSize: "1.5rem",
   lineHeight: 1.2,
-  color: "#0f172a",
+  color: "var(--ink)",
   fontWeight: 900,
 };
 
@@ -1254,7 +1254,7 @@ const columnTitleStyle = {
   margin: "10px 0 0",
   fontSize: "1.3rem",
   lineHeight: 1.2,
-  color: "#0f172a",
+  color: "var(--ink)",
   fontWeight: 900,
 };
 
@@ -1297,7 +1297,7 @@ const verseRefStyle = {
   margin: 0,
   fontSize: "0.95rem",
   fontWeight: 800,
-  color: "#0f172a",
+  color: "var(--ink)",
 };
 
 const verseTextStyle = {

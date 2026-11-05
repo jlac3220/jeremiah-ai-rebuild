@@ -130,14 +130,14 @@ export default function ProgressPage({ onNavigate }) {
 
 const pageStyle = {
   minHeight: "100%",
-  background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
+  background: "var(--page-gradient)",
 };
 
 const contentStyle = {
   width: "100%",
   maxWidth: "1040px",
   margin: "0 auto",
-  padding: "32px 20px 120px",
+  padding: "32px 20px 40px",
   boxSizing: "border-box",
 };
 
@@ -156,10 +156,10 @@ const eyebrowStyle = {
 
 const titleStyle = {
   margin: "8px 0 0",
-  fontSize: "clamp(2.3rem, 5vw, 3.8rem)",
+  fontSize: "clamp(2rem, 5vw, 3.1rem)",
   lineHeight: 1.02,
   fontWeight: 900,
-  color: "#0f172a",
+  color: "var(--ink)",
 };
 
 const subtitleStyle = {
@@ -200,7 +200,7 @@ const summaryTitleStyle = {
   margin: "10px 0 0",
   fontSize: "1.5rem",
   lineHeight: 1.2,
-  color: "#0f172a",
+  color: "var(--ink)",
   fontWeight: 900,
 };
 
@@ -217,7 +217,7 @@ const activeTrackPillStyle = {
 
 const statsGridStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr))",
   gap: "14px",
 };
 
@@ -232,7 +232,7 @@ const statValueStyle = {
   margin: 0,
   fontSize: "2rem",
   fontWeight: 900,
-  color: "#0f172a",
+  color: "var(--ink)",
 };
 
 const statLabelStyle = {
@@ -243,7 +243,7 @@ const statLabelStyle = {
 };
 
 const activeLearningCardStyle = {
-  background: "linear-gradient(135deg, #0b1228 0%, #16233b 55%, #1f2f4b 100%)",
+  background: "var(--brand-gradient)",
   color: "#ffffff",
   borderRadius: "28px",
   padding: "26px",
@@ -316,7 +316,7 @@ const continueButtonStyle = {
   marginTop: "20px",
   border: "none",
   background: "#ffffff",
-  color: "#0f172a",
+  color: "var(--ink)",
   padding: "14px 18px",
   borderRadius: "16px",
   fontSize: "0.98rem",
@@ -349,7 +349,7 @@ const sectionTitleStyle = {
   margin: "10px 0 0",
   fontSize: "1.35rem",
   lineHeight: 1.2,
-  color: "#0f172a",
+  color: "var(--ink)",
   fontWeight: 900,
 };
 
@@ -384,7 +384,7 @@ const itemTitleStyle = {
   margin: 0,
   fontSize: "1rem",
   lineHeight: 1.5,
-  color: "#0f172a",
+  color: "var(--ink)",
   fontWeight: 800,
 };
 
