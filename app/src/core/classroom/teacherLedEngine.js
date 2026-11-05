@@ -1,6 +1,25 @@
 import { createLearningState, advanceUnscoredMove, recordAttempt, resolveNextMoveId, updateLearningExperience, markLearningMilestones } from './learningEngine.js';
 
 export function evaluateTeachingChoice(move, learnerResponse) {
+ if (move.interaction?.type === 'scripture_recall') {
+  // Compare the KJV text for words only. Punctuation, case and whitespace do
+  // not indicate recall failure. No generative model or keyword shortcut is used.
+  const normalize = value => String(value ?? '').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+  const response=normalize(learnerResponse?.text);
+  const expected=normalize(move.interaction.expectedText);
+  const accurate=Boolean(response && expected && response===expected);
+  return {
+   verdict:accurate?'strong':'weak',
+   strategy:accurate?'affirm_and_deepen':'scripture_revisit',
+   source:'lesson',
+   teacherMessage:accurate
+    ? 'You recalled the KJV wording accurately. Next, explain what that confession means and how the Scriptures support it.'
+    : 'Your attempt is saved, but the wording is not yet the complete KJV verse. Review Deuteronomy 6:4 and practice the words before trying again. Your explanation can continue without calling this recall mastered.',
+   followUpPrompt:'Continue to explain the confession in its scriptural setting.',
+   evidenceObserved:accurate?(move.evidenceIds||[]):[],
+   misconceptionIds:[]
+  };
+ }
  if (move.interaction?.type === 'reasoning') {
   const task=move.interaction;
   const claim=task.claims.find(item=>item.id===learnerResponse?.claimId);
@@ -60,7 +79,15 @@ export function saveTeachingDecision(state, content, move, decision) {
  }
  let next=recordAttempt(state,move,checked);
  if(content.coveredStandards && checked.verdict==='strong' && move.evidenceIds?.length) {
-  next=updateLearningExperience(next,{standardEvidence:{...(next.experience?.standardEvidence || {}),...Object.fromEntries((move.standardIds || []).map(id=>[id,{evidenceIds:move.evidenceIds,moveId:move.id,establishedAt:Date.now()}]))}});
+  const established=next.experience?.standardEvidence || {};
+  next=updateLearningExperience(next,{standardEvidence:{
+   ...established,
+   ...Object.fromEntries((move.standardIds || []).map(id=>[id,{
+    ...established[id],
+    evidenceIds:[...new Set([...(established[id]?.evidenceIds||[]),...move.evidenceIds])],
+    moveId:move.id,establishedAt:Date.now()
+   }]))
+  }});
  }
  if(checked.verdict==='strong' && move.scripture?.length) next=markLearningMilestones(next,['scripture']);
  return updateLearningExperience(next,{teachingDecision:{moveId:move.id,decision:checked}});
