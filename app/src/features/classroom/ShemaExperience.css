@@ -571,7 +571,8 @@
 @media(max-width:700px){
  .shema-signature-establishes-head{flex-wrap:nowrap;align-items:baseline}
  .shema-signature-establishes-head>span{font-size:.59rem}
- .shema-signature-establishes-head>button{font-size:.61rem;white-space:nowrap;min-height:25px;padding:2px 0}
+ .shema-signature-establishes-head>button{font-size:.61rem;white-space:nowrap;min-height:44px;padding:7px 0}
+ .ogp-page.ogp-stage2 .shema-signature[data-phrase='3'] .shema-signature-scene{min-height:196px}
  .shema-signature-establishes-head>button span{width:15px;height:15px}
  .shema-signature-continuity{gap:7px;margin-top:11px;padding-top:11px}
 }
