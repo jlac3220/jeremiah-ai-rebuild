@@ -48,6 +48,7 @@ For a composite lesson such as **OG.1**, preserve a separate blueprint for each 
 | [OG.1.4.18.md](OG.1.4.18.md) | Oneness vs. Trinitarianism | **DRAFT** |
 | [OG.1.5.18.md](OG.1.5.18.md) | Unity of God and Undivided Devotion | **DRAFT** |
 | [OG.1.MASTER-LESSON.md](OG.1.MASTER-LESSON.md) | Five-standard composition, teaching flow and assessment architecture | **DRAFT** |
+| [OG.1.ALIGNMENT-REVIEW.md](OG.1.ALIGNMENT-REVIEW.md) | Existing 19-move pilot versus proposed blueprints; preserve/adjust gaps | **DRAFT** |
 
 These are **five distinct standard-level instructional blueprints**, not five separate apps. The composition map describes how to teach them as one flowing OG.1 experience without teaching redundancy.
 
