@@ -36,5 +36,5 @@ export default function AppShell() {
     navigate(route);
   }
   const showBottomNav = MAIN_NAV_ROUTES.includes(currentRoute) || currentRoute === ROUTES.CLASSROOM_STUDY;
-  return <div className="app-shell"><main className={showBottomNav ? 'app-main has-nav' : 'app-main'}><AppRouter currentRoute={currentRoute} onNavigate={navigate} /></main>{showBottomNav && <BottomNav currentRoute={currentRoute === ROUTES.CLASSROOM_STUDY ? ROUTES.CLASSROOM : currentRoute} onNavigate={navigateFromNav} />}</div>;
+  return <div className={showBottomNav ? "app-shell brand-surface" : "app-shell"}><a className="brand-skip" href="#main-content">Skip to main content</a><main id="main-content" tabIndex={-1} className={showBottomNav ? 'app-main has-nav' : 'app-main'}><AppRouter currentRoute={currentRoute} onNavigate={navigate} /></main>{showBottomNav && <BottomNav currentRoute={currentRoute === ROUTES.CLASSROOM_STUDY ? ROUTES.CLASSROOM : currentRoute} onNavigate={navigateFromNav} />}</div>;
 }

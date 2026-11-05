@@ -1,3 +1,4 @@
+import BrandLogo from '../../shared/brand/BrandLogo';
 import { ROUTES } from '../../app/routes';
 import { CLASSROOM_ENTRY_INTENTS, setClassroomEntryIntent } from '../../core/classroom/classroomEntryIntent';
 import { setActiveClassroomStandardId, setActiveClassroomSessionPreset } from '../../core/classroom/classroomSessionData';
@@ -38,12 +39,12 @@ export default function HomePage({ onNavigate }) {
  return <div className="ld-page ld-home jh-page">
   <div className="ld-content jh-shell">
    <header className="ld-header jh-header">
-    <div className="ld-logo"><span className="ld-logo-mark">J</span><span>Jeremiah</span></div>
+    <BrandLogo />
     <button type="button" className="ld-profile-shortcut" onClick={()=>onNavigate(ROUTES.PROFILE)} aria-label="Open profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/></svg></button>
    </header>
    <section className="jh-hero jh-ignite-hero" aria-label="Welcome to Jeremiah">
     <div className="jh-ignite-hero-copy">
-     <div className="jh-ignite-tag"><span aria-hidden="true">✦</span> APOSTLES' DOCTRINE · PENTECOSTAL EXPERIENCE</div>
+     <div className="jh-ignite-tag"><span aria-hidden="true">✦</span> Apostles’ Doctrine • Pentecostal Experience</div>
      <h1>Let the Word <em>come alive.</em></h1>
      <p>Real Scripture. Meaningful discoveries. A learning journey that grows with you.</p>
      <button type="button" className="jh-ignite-start" onClick={openLesson}>{active.started?'Pick up your lesson':'Start learning'} <span aria-hidden="true">↗</span></button>
