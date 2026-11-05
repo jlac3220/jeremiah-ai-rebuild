@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:visual-discovery
+> node scripts/test-visual-discovery.mjs
+
+PASS: visual search builds queries from subjects and scenes, rejects mismatches and bad rights, and supplies preview candidates for review.

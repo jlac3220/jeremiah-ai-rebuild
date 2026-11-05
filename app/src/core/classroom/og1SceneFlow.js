@@ -1,9 +1,10 @@
 // One source of truth for the scene-by-scene reveal sequence.
 // Reading is automatic; required learner answers are handled separately.
-const THREE_PART_SCENES=new Set(['shema-manuscript','witness','timeline','comparison','mission']);
+const THREE_PART_SCENES=new Set(['shema-manuscript','witness','timeline','comparison','mission','identity']);
 
 export function sceneRevealCount(scene) {
  if (!scene) return 1;
+ if (scene.kind==='shema-echad') return 5;
  if (scene.kind==='discovery') return Math.max(1,scene.discovery?.options?.length||1);
  return THREE_PART_SCENES.has(scene.kind)?3:1;
 }

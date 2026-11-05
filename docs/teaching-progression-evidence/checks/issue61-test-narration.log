@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:narration
+> node scripts/test-narration.mjs
+
+PASS: Jeremiah narrator is fixed and narration accepts only authored lesson text.

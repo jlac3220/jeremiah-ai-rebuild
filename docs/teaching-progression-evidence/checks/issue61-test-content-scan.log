@@ -1,0 +1,14 @@
+
+> app@0.0.0 test:content-scan
+> node scripts/test-educational-scan.mjs
+
+{
+  "scanned": 125,
+  "domains": 31,
+  "publisherVideoLeads": 31,
+  "historicObjectLeads": 3,
+  "standardsWithLeads": 65,
+  "standardsWithGaps": 60,
+  "approvedForPublication": 0,
+  "note": "Publisher descriptions and object metadata only; no claim of viewed/validated excerpts."
+}

@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:grouped
+> node scripts/test-grouped-lesson.mjs
+
+Grouped OG.1: five standards, all three teaching phases, twenty rubric criteria, wrong answers, supported attempts, per-standard evidence, resume and dashboard deduplication passed. AI grading used fixtures, not a live model.

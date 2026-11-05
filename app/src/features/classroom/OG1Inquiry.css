@@ -1,0 +1,39 @@
+/* Instructional reveals inside the approved image-led card language. */
+.ogp-page.ogp-stage2 .og1-inquiry{display:grid;grid-template-columns:.9fr 1.1fr;background:#fff;border:0;border-radius:22px;overflow:hidden;box-shadow:0 20px 55px #10283c18}
+.og1-inquiry-scene{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:510px;padding:32px;background:#10283c;color:#fff;overflow:hidden}
+.og1-inquiry-photo,.og1-inquiry-shade{position:absolute;inset:0;width:100%;height:100%;z-index:-2;object-fit:cover}.og1-inquiry-shade{z-index:-1;background:linear-gradient(180deg,#091e4355,#081b2cf2)}
+.og1-inquiry-kicker{font:750 .65rem/1.6 var(--font-body);letter-spacing:.09em;color:#526b80}
+.og1-inquiry-scene>.og1-inquiry-kicker{color:#ffdc9e;position:absolute;top:30px;left:32px;right:32px}
+.ogp-page.ogp-stage2 .og1-inquiry-scene blockquote{font:740 clamp(1.8rem,2.8vw,2.5rem)/1.25 var(--font-body);letter-spacing:-.035em;color:#fff;margin:0 0 24px;border:0;padding:0;text-align:left}
+.og1-inquiry-scene mark{background:#ffdc9e;color:#192f42;border-radius:4px;padding:0 5px;box-decoration-break:clone}
+.og1-inquiry-word{display:flex;align-items:center;gap:18px;padding-top:20px;border-top:1px solid #ffffff55}.og1-inquiry-word>strong{font:400 2.7rem/1.3 Georgia,serif;color:#ffdc9e}.og1-inquiry-word>span{font:650 1rem/1.4 var(--font-body)}.og1-inquiry-scene>small{color:#e1e8f2;font:.75rem/1.5 var(--font-body);margin-top:8px}
+.og1-inquiry-copy{padding:30px;align-self:center;min-width:0}.ogp-page.ogp-stage2 .og1-inquiry-copy h2{font:760 clamp(1.4rem,2.3vw,2rem)/1.2 var(--font-body);letter-spacing:-.035em;color:#172f43;margin:12px 0 18px}.og1-inquiry-copy p{font:400 .94rem/1.65 var(--font-body);color:#40586e;margin:10px 0 0}
+.og1-inquiry-claims{display:grid;gap:8px;margin:18px 0}.ogp-page.ogp-stage2 .og1-inquiry-claims button{display:grid;gap:4px;text-align:left;min-height:60px;padding:12px 14px;border:1px solid #cedceb;border-radius:8px;background:#f6f9fd;color:#233f56;cursor:pointer}.og1-inquiry-claims strong{font:750 .8rem/1.4 var(--font-body)}.og1-inquiry-claims span{font:400 .8rem/1.55 var(--font-body)}.ogp-page.ogp-stage2 .og1-inquiry-claims button[aria-pressed=true]{border-color:#174c9e;background:#eaf2fd;box-shadow:inset 3px 0 #174c9e}
+.og1-inquiry-limit{border-left:2px solid #b98a47;padding-left:14px;margin-top:20px}.og1-inquiry-limit strong,.og1-inquiry-reason>strong{font:750 .62rem/1.6 var(--font-body);letter-spacing:.06em;color:#6a512d}.og1-inquiry-reason{margin-top:20px}.og1-inquiry-note{display:block;font:600 .7rem/1.6 var(--font-body);color:#526b80;margin-top:18px}.og1-inquiry-evidence{padding:18px 0;border-bottom:1px solid #dce5ef}.ogp-page.ogp-stage2 .og1-inquiry-evidence blockquote{font:650 clamp(1.1rem,1.8vw,1.4rem)/1.5 var(--font-body);color:#172f43;margin:0;border:0;padding:0}.og1-inquiry-evidence>small{display:block;font:.65rem/1.5 var(--font-body);color:#526b80}
+.ogp-page.ogp-stage2 .og1-inquiry-read{display:inline-flex;gap:8px;align-items:center;min-height:44px;border:0;background:transparent;color:#174c9e;padding:8px 0;font:650 .75rem/1.5 var(--font-body);cursor:pointer}
+.og1-inquiry-next{padding-top:14px;border-top:1px solid #dce5ef}
+@media(max-width:700px){
+ .ogp-page.ogp-stage2 .og1-inquiry{grid-template-columns:1fr;border-radius:17px}.og1-inquiry-scene{min-height:215px;padding:48px 22px 18px}.og1-inquiry-scene>.og1-inquiry-kicker{top:16px;left:22px;font-size:.55rem}.ogp-page.ogp-stage2 .og1-inquiry-scene blockquote{font-size:1.3rem;margin-bottom:12px}.og1-inquiry-word{padding-top:10px;gap:14px}.og1-inquiry-word>strong{font-size:1.8rem}.og1-inquiry-word>span{font-size:.85rem}.og1-inquiry-scene>small{font-size:.65rem;margin-top:3px}.og1-inquiry-copy{padding:22px}.ogp-page.ogp-stage2 .og1-inquiry-copy h2{font-size:1.4rem;margin-bottom:12px}.og1-inquiry-copy p{font-size:.9rem;line-height:1.6}.og1-inquiry-claims{margin:14px 0}.og1-inquiry-limit,.og1-inquiry-reason{margin-top:14px}.og1-inquiry-note{margin-top:12px}
+}
+
+/* Keep the existing identity card treatment while making each pair readable. */
+.ogp-page.ogp-stage2 .og1-identity-passage{padding:8px 0;border-top:1px solid #dce5ef}
+.ogp-page.ogp-stage2 .og1-identity-passage blockquote{font-size:1.1rem;line-height:1.6;margin:8px 0;padding-left:14px}
+.og1-identity-passage>small{display:block}.ogp-page.ogp-stage2 .og1-identity-implication{justify-content:flex-start;gap:18px}.og1-identity-implication>div>strong{font:750 .8rem/1.5 var(--font-body);color:#243f56}.ogp-page.ogp-stage2 .og1-identity-implication>div>p{margin:7px 0 0;font-size:.9rem;line-height:1.7}.og1-identity-limit{border-top:1px solid #cdd9e5;padding-top:16px}
+.og1-identity-deck button:disabled{opacity:.55;cursor:default}.og1-inquiry-payoff{margin:24px 0;padding:20px 24px;border-left:2px solid #b98a47;background:#f6f9fd;color:#243f56}.og1-inquiry-payoff>strong{font:750 .65rem/1.5 var(--font-body);letter-spacing:.06em}.og1-inquiry-payoff p{font:.94rem/1.75 var(--font-body);margin:10px 0 0}
+@media(max-width:700px){
+ .ogp-page.ogp-stage2 .og1-identity-hero{padding:24px}
+ .ogp-page.ogp-stage2 .og1-identity-hero h2{font-size:1.5rem;line-height:1.25;margin:12px 0}
+ .ogp-page.ogp-stage2 .og1-identity-hero p{font-size:.88rem;line-height:1.65;margin:0}
+ .ogp-page.ogp-stage2 .og1-identity-deck{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0}
+ .ogp-page.ogp-stage2 .og1-identity-deck button{min-height:52px;padding:10px 6px;text-align:center}
+ .ogp-page.ogp-stage2 .og1-identity-deck button>strong{display:none}
+ .ogp-page.ogp-stage2 .og1-identity-deck button>span{font-size:.65rem;letter-spacing:.025em}
+ .ogp-page.ogp-stage2:has(.og1-inquiry,.og1-identity) .ogp-shell{padding-top:14px;padding-bottom:24px}
+ .ogp-page.ogp-stage2:has(.og1-inquiry,.og1-identity) .ogp-stage{padding-top:14px;padding-bottom:0}
+ .ogp-page.ogp-stage2:has(.og1-inquiry,.og1-identity) .ogp-compact-header{margin-bottom:0}
+ .ogp-page.ogp-stage2:has(.og1-inquiry,.og1-identity) .ogp-mini-timeline{display:grid;grid-template-columns:1fr auto;gap:4px 16px;max-width:none;flex-basis:auto;width:100%}
+ .ogp-page.ogp-stage2:has(.og1-inquiry,.og1-identity) .ogp-mini-caption{grid-column:1 / -1;margin:0}
+ .ogp-page.ogp-stage2:has(.og1-inquiry,.og1-identity) .og2-map-toggle{grid-column:2;grid-row:2;padding:0;font-size:.7rem}
+ .ogp-page.ogp-stage2:has(.og1-inquiry,.og1-identity) .ogp-mini-timeline ol{grid-column:1;grid-row:2;width:100%;max-width:180px;margin:0}
+}

@@ -1,0 +1,166 @@
+[
+  {
+    "width": 390,
+    "flow": [
+      {
+        "name": "phrase-3",
+        "primary": "Continue →",
+        "primaryBottom": 833.8125
+      },
+      {
+        "name": "connection",
+        "primary": "Why examine the word one? →",
+        "primaryBottom": 1282.703125
+      },
+      {
+        "name": "echad-intro",
+        "primary": "Follow the word in Scripture →",
+        "primaryBottom": 1056.453125
+      },
+      {
+        "name": "echad-genesis",
+        "primary": "Add Isaiah’s witness →",
+        "primaryBottom": 1017.59375
+      },
+      {
+        "name": "echad-isaiah",
+        "primary": "Hear Jesus repeat it →",
+        "primaryBottom": 1043.984375
+      },
+      {
+        "name": "echad-jesus",
+        "primary": "Gather what the texts establish →",
+        "primaryBottom": 1120.296875
+      },
+      {
+        "name": "echad-conclusion",
+        "primary": "Practice what the confession means →",
+        "primaryBottom": 992.90625
+      },
+      {
+        "name": "identity-word",
+        "primary": "Follow the baptism passages →",
+        "primaryBottom": 1897.515625
+      },
+      {
+        "name": "identity-name",
+        "primary": "Follow Jesus’ prayer →",
+        "primaryBottom": 1907.28125
+      },
+      {
+        "name": "identity-prayer",
+        "primary": "Now compare the interpretations →",
+        "primaryBottom": 1930.09375
+      },
+      {
+        "name": "comparison-0",
+        "primary": "Examine the Trinitarian reading →",
+        "primaryBottom": 790.484375
+      },
+      {
+        "name": "comparison-1",
+        "primary": "Examine the Apostolic reading →",
+        "primaryBottom": 1184.203125
+      },
+      {
+        "name": "comparison-2",
+        "primary": "Gather the answer to our question →",
+        "primaryBottom": 1678.921875
+      },
+      {
+        "name": "doctrinal-synthesis",
+        "primary": "Apply what you learned →",
+        "primaryBottom": 1994.578125
+      },
+      {
+        "name": "return-devotion",
+        "primary": "See what the confession requires →",
+        "primaryBottom": 1827.234375
+      }
+    ],
+    "steps": 54,
+    "seeded": false
+  },
+  {
+    "width": 1440,
+    "flow": [
+      {
+        "name": "phrase-3",
+        "primary": "Continue →",
+        "primaryBottom": 900.3125
+      },
+      {
+        "name": "connection",
+        "primary": "Why examine the word one? →",
+        "primaryBottom": 1018.46875
+      },
+      {
+        "name": "echad-intro",
+        "primary": "Follow the word in Scripture →",
+        "primaryBottom": 901.640625
+      },
+      {
+        "name": "echad-genesis",
+        "primary": "Add Isaiah’s witness →",
+        "primaryBottom": 905.359375
+      },
+      {
+        "name": "echad-isaiah",
+        "primary": "Hear Jesus repeat it →",
+        "primaryBottom": 938.96875
+      },
+      {
+        "name": "echad-jesus",
+        "primary": "Gather what the texts establish →",
+        "primaryBottom": 977.359375
+      },
+      {
+        "name": "echad-conclusion",
+        "primary": "Practice what the confession means →",
+        "primaryBottom": 884.796875
+      },
+      {
+        "name": "identity-word",
+        "primary": "Follow the baptism passages →",
+        "primaryBottom": 1572.1875
+      },
+      {
+        "name": "identity-name",
+        "primary": "Follow Jesus’ prayer →",
+        "primaryBottom": 1572.109375
+      },
+      {
+        "name": "identity-prayer",
+        "primary": "Now compare the interpretations →",
+        "primaryBottom": 1567.671875
+      },
+      {
+        "name": "comparison-0",
+        "primary": "Examine the Trinitarian reading →",
+        "primaryBottom": 783.46875
+      },
+      {
+        "name": "comparison-1",
+        "primary": "Examine the Apostolic reading →",
+        "primaryBottom": 1149.578125
+      },
+      {
+        "name": "comparison-2",
+        "primary": "Gather the answer to our question →",
+        "primaryBottom": 1260.578125
+      },
+      {
+        "name": "doctrinal-synthesis",
+        "primary": "Apply what you learned →",
+        "primaryBottom": 1332.859375
+      },
+      {
+        "name": "return-devotion",
+        "primary": "See what the confession requires →",
+        "primaryBottom": 1420.328125
+      }
+    ],
+    "steps": 54,
+    "seeded": false
+  }
+]

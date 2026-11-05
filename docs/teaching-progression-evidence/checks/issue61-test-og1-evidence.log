@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:og1-evidence
+> node scripts/test-og1-evidence.mjs
+
+PASS OG.1: genuine original scene art, without repeated artifact card or unnecessary disclaimer.

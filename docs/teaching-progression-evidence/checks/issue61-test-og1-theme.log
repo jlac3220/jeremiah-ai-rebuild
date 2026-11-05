@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:og1-theme
+> node scripts/test-og1-theme-consistency.mjs
+
+PASS OG.1 theme: Explore, doctrine, synthesis and fallback use the navy-indigo design language.

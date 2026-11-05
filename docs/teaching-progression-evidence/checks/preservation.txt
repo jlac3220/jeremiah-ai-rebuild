@@ -1,0 +1,5 @@
+PASS: approved ShemaPhraseStudy helper and ShemaExperience.css byte-identical to PR #60.
+PASS: approved opening and brand theme CSS unchanged.
+PASS: authored curriculum/content, assessment engine, standards/data, narrator manifest, survey, backend, public imagery, dependencies/lock and hosting config unchanged.
+PASS: all files reported by lint match PR #60 byte-for-byte (11 existing errors, 6 warnings).
+Only core navigation edit: counts for five echad and three identity reveals. No moment insertion or persisted-state schema edit.

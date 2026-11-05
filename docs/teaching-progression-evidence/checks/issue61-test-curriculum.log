@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:curriculum
+> node scripts/test-curriculum.mjs
+
+Curriculum: 126 standards, 31 domains, reusable interactive practice, Scripture, independent saves and assessment retries passed.

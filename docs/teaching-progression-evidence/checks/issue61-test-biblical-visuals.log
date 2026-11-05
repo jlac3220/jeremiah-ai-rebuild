@@ -1,0 +1,6 @@
+
+> app@0.0.0 test:biblical-visuals
+> node scripts/test-biblical-visuals.mjs
+
+PASS: shared visual framework keeps named historical images and neutral Bible imagery distinct across approved subjects.
+PASS: cross-standard image selection is used by OG, the teacher-led classroom, and curriculum lessons; unsupported images do not fall back to unrelated scenes.

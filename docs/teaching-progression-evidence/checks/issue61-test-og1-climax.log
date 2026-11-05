@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:og1-climax
+> node scripts/test-og1-climax.mjs
+
+PASS OG.1: doctrine independent; Shema-to-response bridge; responsive, cumulative ending.

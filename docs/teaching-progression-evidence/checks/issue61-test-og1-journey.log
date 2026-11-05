@@ -1,0 +1,7 @@
+
+> app@0.0.0 test:og1-journey
+> node scripts/test-og1-journey-map.mjs && node scripts/test-og1-scene-flow.mjs && node scripts/test-og1-stage1.mjs
+
+PASS OG.1 journey: intro-first roadmap, all chapters, context-aware current/next, exit exam and responsive layout.
+PASS OG.1 flow: progressive, reversible, no hidden lessons, purposeful Scripture scenes.
+PASS Stage 1: all 20 moves and exam/report/summary/survey destinations; no mastery claims or content mutation.

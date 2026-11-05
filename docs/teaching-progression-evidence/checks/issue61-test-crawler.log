@@ -1,0 +1,13 @@
+
+> app@0.0.0 test:crawler
+> python3 scripts/test-website-crawler.py -v
+
+test_html_content_scripture_and_embeds (__main__.WebsiteCrawlerTests.test_html_content_scripture_and_embeds) ... ok
+test_robots_blocks_and_sitemap_is_extracted (__main__.WebsiteCrawlerTests.test_robots_blocks_and_sitemap_is_extracted) ... ok
+test_unavailable_robots_stops_crawl (__main__.WebsiteCrawlerTests.test_unavailable_robots_stops_crawl) ... ok
+test_urls_no_external_crawl (__main__.WebsiteCrawlerTests.test_urls_no_external_crawl) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+OK
