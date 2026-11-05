@@ -13,6 +13,13 @@ on:
       - 'app/server/visualDiscovery*.mjs'
       - 'app/scripts/test-*visual*.mjs'
       - 'app/package.json'
+      - 'app/src/features/pilot/**'
+      - 'app/src/data/og1PilotSurvey.js'
+      - 'app/server/pilotFeedbackHandler.mjs'
+      - 'app/api/**'
+      - 'app/vercel.json'
+      - 'app/scripts/test-pilot-feedback.mjs'
+      - 'app/scripts/test-vercel-pilot.mjs'
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -39,4 +46,6 @@ jobs:
       - run: npm run test:og1-inline-bible
       - run: npm run test:grouped
       - run: npm run test:ask-jeremiah
+      - run: npm run test:pilot
+      - run: npm run test:vercel
       - run: npm run build
