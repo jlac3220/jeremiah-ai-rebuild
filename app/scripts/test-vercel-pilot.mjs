@@ -25,6 +25,7 @@ for(const [file,fn] of endpoints){
  assert.ok(entry.includes('export default async function handler'),file+' must deploy as a Vercel Node Function');
  assert.ok(entry.includes(fn+'(req, res)'),file+' must dispatch the existing API handler');
 }
+assert.equal(await readJsonBody({body:null},200),null,'Preparsed JSON null must not wait on an already-consumed serverless stream');
 const parsed=await readJsonBody({body:{hello:'Vercel',numbers:[1,2]}},200);
 assert.equal(parsed.hello,'Vercel');
 await assert.rejects(readJsonBody({body:{large:'x'.repeat(200)}},50),/too large/i);
