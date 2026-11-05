@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:pilot
+> node scripts/test-pilot-feedback.mjs
+
+PASS OG.1 pilot: direct entry, optional end survey, validated anonymous storage, idempotency and private feedback.

@@ -1,3 +1,6 @@
+import {handlePilotVerification} from './server/pilotVerificationHandler.mjs';
+import {handlePilotAccess} from './server/pilotSecurity.mjs';
+import {handlePilotReport} from './server/pilotReportHandler.mjs';
 import http from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
@@ -59,6 +62,9 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if(url.pathname==="/api/pilot/verify"){await handlePilotVerification(req,res);return;}
+  if(url.pathname==="/api/pilot/access"){await handlePilotAccess(req,res);return;}
+  if(url.pathname==="/api/pilot/report"){await handlePilotReport(req,res);return;}
   if (url.pathname === "/api/pilot/feedback") {
     await handlePilotFeedback(req, res);
     return;

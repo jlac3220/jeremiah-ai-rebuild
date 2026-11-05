@@ -1,3 +1,4 @@
+process.env.JEREMIAH_OPENAI_MODEL_FAST='test-model';
 import assert from 'node:assert/strict';
 import {allAskStandards,selectAskStandards,inferQuestionTheme,answerAskJeremiah,OUT_OF_SCOPE} from '../server/askJeremiahCore.mjs';
 import {CURRICULUM_STUDIES} from '../src/core/classroom/content/curriculumContent.js';

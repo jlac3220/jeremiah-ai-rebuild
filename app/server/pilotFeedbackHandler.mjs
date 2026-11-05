@@ -1,5 +1,7 @@
+import {withPilotService} from './pilotSecurity.mjs';
 import {appendFile, mkdir, readFile} from 'node:fs/promises';
 import path from 'node:path';
+import {BlobNotFoundError} from '@vercel/blob';
 import {readJsonBody, sendJson} from './httpUtils.mjs';
 import {
  OG1_PILOT_SURVEY_VERSION,PILOT_RATING_AREAS,PILOT_PRIORITY_OPTIONS,
@@ -81,20 +83,20 @@ export async function recordPrivateBlobFeedback(entry, sdk) {
  const blob=sdk||await import('@vercel/blob');
  const pathname='jeremiah-pilot/og1/'+entry.submissionId+'.json';
  try {
-  await blob.head(pathname);
+  await blob.head(pathname,{abortSignal:AbortSignal.timeout(8000)});
   return {accepted:true,duplicate:true};
  } catch(error) {
-  if(error?.name!=='BlobNotFoundError')throw error;
+  if(!(error instanceof BlobNotFoundError))throw error;
  }
  try {
   await blob.put(pathname,JSON.stringify({...entry,submittedAt:new Date().toISOString()}),{
-   access:'private',contentType:'application/json',addRandomSuffix:false,allowOverwrite:false
+   access:'private',contentType:'application/json',addRandomSuffix:false,allowOverwrite:false,abortSignal:AbortSignal.timeout(8000)
   });
   return {accepted:true,duplicate:false};
  } catch(error) {
   // A concurrent retry may have created the same immutable object.
   try {
-   await blob.head(pathname);
+   await blob.head(pathname,{abortSignal:AbortSignal.timeout(8000)});
    return {accepted:true,duplicate:true};
   } catch {
    throw error;
@@ -123,7 +125,7 @@ function throttle(req){
  throttles.set(ip,next);
  return next.count<=120; // transient rate control only; IP is never written to disk
 }
-export async function handlePilotFeedback(req,res){
+async function handlePilotFeedbackUnchecked(req,res){
  if(req.method!=='POST'){sendJson(res,405,{error:'Method not allowed'});return;}
  if(!throttle(req)){sendJson(res,429,{error:'Too many submissions. Please try again later.'});return;}
  try{
@@ -137,7 +139,9 @@ export async function handlePilotFeedback(req,res){
      error.message.includes('Survey version changed')){
     sendJson(res,400,{error:error.message});return;
   }
-  console.error('Pilot feedback could not be saved:',error.message);
+  console.error(JSON.stringify({event:'pilot_feedback_storage_failed',category:error instanceof BlobNotFoundError?'not_found':'storage_unavailable'}));
   sendJson(res,503,{error:'Feedback could not be saved right now. Your answers are still on this device—please retry.'});
  }
 }
+
+export async function handlePilotFeedback(req,res){return withPilotService(req,res,'feedback',()=>handlePilotFeedbackUnchecked(req,res));}

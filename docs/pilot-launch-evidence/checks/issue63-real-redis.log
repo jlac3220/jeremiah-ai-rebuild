@@ -1,0 +1,2 @@
+PASS real Redis: 40 concurrent clients, exact acceptance count, TTL, atomic multi-bucket denial and currency cap.
+PASS pilot gates: owner/server authentication, signed sessions, closed/fail-closed access, private reporting, conservative pricing, safe provider retries/errors and explicitly unscored outages.
