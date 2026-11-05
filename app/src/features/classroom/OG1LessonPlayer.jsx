@@ -30,6 +30,7 @@ import './OG1ThemeConsistency.css';
 import './OG1StageOne.css';
 import OG1ResponseWorkspace, {OG1TeacherFeedback} from './OG1ResponseWorkspace';
 import OG1ChapterGuide from './OG1ChapterGuide';
+import OG1OpeningExperience from './OG1OpeningExperience';
 import './OG1InteractiveExperience.css';
 import './JeremiahLessonTheme.css';
 
@@ -122,6 +123,8 @@ const DISCOVERIES={
 function createMoments(move,video) {
  if(move.type==='complete')return [];
  if(move.type!=='teach')return [{kind:'task',verb:move.assessmentRole==='memory_recall'?'RECALL':move.type==='free_response'?'EXPLAIN':move.interaction?.type==='match'?'CONNECT':'ANSWER',title:move.title}];
+ // The opening owns one guided, ungraded witness preview, not four screens.
+ if(move.id==='learn')return [{kind:'read',verb:'BEGIN',title:'One confession. One story.',verse:move.scripture?.[0]}];
  if(move.id==='shema-show')return [
   {kind:'shema-encounter',verb:'ENCOUNTER',title:'Before you explain it, hear it.'},
   {kind:'shema-manuscript',verb:'EXPLORE',title:'Three phrases. One confession.'},
@@ -198,7 +201,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  // Spoken moments are editorial choices, not narration of every button and quiz.
  // Reveals inside the Shema scene are voiced only when the student chooses them.
  const narrationText =
-  current?.kind==='shema-encounter'||(move.id==='learn'&&current?.kind==='read')
+  move.id==='learn'&&current?.kind==='read'
+   ? (evidenceIndex===0?OG1_SCENE_NARRATION.opening:OG1_SCENE_NARRATION.witnessCards[evidenceIndex])
+  : current?.kind==='shema-encounter'
    ? OG1_SCENE_NARRATION.opening
   : current?.kind==='witness'
    ? OG1_SCENE_NARRATION.isaiahWitness[evidenceIndex]
@@ -293,18 +298,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
      {!writingWorkspace&&(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap','doctrine-summary'].includes(current.kind)&&!current.kind?.startsWith('shema-')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind==='roadmap'&&null}
      {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} sequenceIndex={evidenceIndex} revealedThrough={revealLimit} onInspect={inspectReveal} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak}/>}
-     {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
-      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></div>
-      <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
-      <div className="ogp-encounter-inner">
-       <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
-       <div className="ogp-encounter-symbol" aria-hidden="true">אחד</div>
-       <blockquote>“Hear, O Israel:<br/>The LORD our God is <strong className="ogp-encounter-word">one LORD.</strong>”</blockquote>
-       <span className="ogp-encounter-reference">A declaration carried across generations.</span>
-       
-       {<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
-      </div>
-     </div>}
+     {current.kind==='read'&&move.id==='learn'&&<OG1OpeningExperience content={content} move={move} onOpenBible={readVerse} onContinue={advance} onWitnessChange={setEvidenceIndex}/>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
       <div className="ogp-scripture-ornament" aria-hidden="true"><ScriptureArt content={content} move={move} verse={current.verse}/></div>
       <div className="ogp-scripture-content">
@@ -391,7 +385,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       {error&&<p role="alert" className="ogp-error">{error}</p>}
      </>} 
     </section>
-    {!writingWorkspace&&<nav className="ogp-controls" aria-label="Lesson moment navigation">
+    {!writingWorkspace&&move.id!=='learn'&&<nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':move.assessmentRole==='memory_recall'?'Check my recitation':written?'Discuss my explanation':'Check my connection'} →</button>))
      :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'&&move.id==='learn'?(hasMoreReveals?`Meet ${['Isaiah','Jesus','Paul'][evidenceIndex]}`:'Begin Chapter 1 · The Shema'):current?.kind==='discovery'?(hasMoreReveals?'Reveal the next part':'Continue the lesson'):current?.kind==='shema-connection'?'Examine the meaning of one':current?.kind==='shema-echad'?'Test your understanding':current?.kind==='doctrine-summary'?'Apply what you learned':buttonText} →</button>}
      {!assessment&&(moment>0||evidenceIndex>0)&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}

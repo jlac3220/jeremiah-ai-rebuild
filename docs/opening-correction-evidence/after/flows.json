@@ -1,0 +1,52 @@
+[
+  {
+    "width": 390,
+    "journey": [
+      {
+        "name": "Moses",
+        "primary": "Meet Isaiah · 2 of 4 →",
+        "primaryBottom": 774.5
+      },
+      {
+        "name": "Isaiah",
+        "primary": "Meet Jesus · 3 of 4 →",
+        "primaryBottom": 797.359375
+      },
+      {
+        "name": "Jesus",
+        "primary": "Meet Paul · 4 of 4 →",
+        "primaryBottom": 797.359375
+      },
+      {
+        "name": "Paul",
+        "primary": "Begin Chapter 1 · The Shema →",
+        "primaryBottom": 797.359375
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "journey": [
+      {
+        "name": "Moses",
+        "primary": "Meet Isaiah · 2 of 4 →",
+        "primaryBottom": 738.015625
+      },
+      {
+        "name": "Isaiah",
+        "primary": "Meet Jesus · 3 of 4 →",
+        "primaryBottom": 738.015625
+      },
+      {
+        "name": "Jesus",
+        "primary": "Meet Paul · 4 of 4 →",
+        "primaryBottom": 738.015625
+      },
+      {
+        "name": "Paul",
+        "primary": "Begin Chapter 1 · The Shema →",
+        "primaryBottom": 772.484375
+      }
+    ]
+  }
+]

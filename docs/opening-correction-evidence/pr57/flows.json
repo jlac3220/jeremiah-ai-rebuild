@@ -1,0 +1,68 @@
+[
+  {
+    "width": 390,
+    "journey": [
+      {
+        "primary": "Meet the witnesses →",
+        "witness": []
+      },
+      {
+        "primary": "Meet Isaiah →",
+        "witness": [
+          "Moses"
+        ]
+      },
+      {
+        "primary": "Meet Jesus →",
+        "witness": [
+          "Isaiah"
+        ]
+      },
+      {
+        "primary": "Meet Paul →",
+        "witness": [
+          "Jesus"
+        ]
+      },
+      {
+        "primary": "Begin Chapter 1 · The Shema →",
+        "witness": [
+          "Paul"
+        ]
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "journey": [
+      {
+        "primary": "Meet the witnesses →",
+        "witness": []
+      },
+      {
+        "primary": "Meet Isaiah →",
+        "witness": [
+          "Moses"
+        ]
+      },
+      {
+        "primary": "Meet Jesus →",
+        "witness": [
+          "Isaiah"
+        ]
+      },
+      {
+        "primary": "Meet Paul →",
+        "witness": [
+          "Jesus"
+        ]
+      },
+      {
+        "primary": "Begin Chapter 1 · The Shema →",
+        "witness": [
+          "Paul"
+        ]
+      }
+    ]
+  }
+]
