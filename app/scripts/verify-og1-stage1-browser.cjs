@@ -48,6 +48,8 @@ const key='jeremiah-learning-state:OG.1.LESSON.18:direct';
 
  // Audio Off clears stale errors and leaves a complete, usable text experience.
  await seed('shema-show');
+ const enableNarration=page.getByRole('button',{name:'Turn narration on',exact:true});
+ if(await enableNarration.count())await enableNarration.click();
  await page.locator('.ogp-voice-error').waitFor();
  await quiet();
  assert.equal(await page.locator('.ogp-voice-error').count(),0);
@@ -71,8 +73,8 @@ const key='jeremiah-learning-state:OG.1.LESSON.18:direct';
  await seed('isaiah-show');await quiet();
  await page.locator('nav.ogp-controls button.ogp-action').click();
  for(const reference of ['Isaiah 43:10','Isaiah 44:6','Isaiah 43:10']){
-  assert.equal(await page.locator('.ogp-witness-art .ogj-fallback').textContent(),reference);
-  assert.equal(await page.locator('.ogp-witness-copy > strong').textContent(),reference.toUpperCase()+' · KJV');
+  assert.equal(await page.locator('.og2-evidence-art .ogj-fallback').textContent(),reference);
+  assert.equal(await page.locator('.og2-evidence-board li[data-active=true] > strong').textContent(),reference.toUpperCase()+' · KJV');
   await page.locator('nav.ogp-controls button.ogp-action').click();
  }
  await page.unroute('**/images/**');

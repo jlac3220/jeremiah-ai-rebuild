@@ -1,0 +1,94 @@
+
+> app@0.0.0 lint
+> eslint .
+
+
+/workspace/jeremiah-ai-rebuild/app/src/core/classroom/content/standardsDrivenLesson.js
+  86:35  error  'i' is defined but never used  no-unused-vars
+
+/workspace/jeremiah-ai-rebuild/app/src/features/bible-support/BibleSupportPage.jsx
+  100:6  warning  React Hook useEffect has a missing dependency: 'currentBook'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  136:5  warning  React Hook useMemo has an unnecessary dependency: 'chapter'. Either exclude it or remove the dependency array   react-hooks/exhaustive-deps
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/ClassroomPage.jsx
+  1375:6  warning  React Hook useEffect has missing dependencies: 'currentMove' and 'learningState'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/JourneyDestinations.jsx
+  34:46  error  'options' is defined but never used  no-unused-vars
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/LessonActivity.jsx
+  35:8  error  'answered' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/OG1EvidenceExperience.jsx
+  15:2  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  13 |  const opened=useRef(false);
+  14 |  const closeRef=useRef(onClose);
+> 15 |  closeRef.current=onClose;
+     |  ^^^^^^^^^^^^^^^^ Cannot update ref during render
+  16 |  const selected=OG1_EVIDENCE.find(item=>item.id===selectedId)||OG1_EVIDENCE[0];
+  17 |
+  18 |  useEffect(()=>{  react-hooks/refs
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/OG1InlineBible.jsx
+  19:2   error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  17 |  const dialogRef=useRef(null);
+  18 |  const closeRef=useRef(onClose);
+> 19 |  closeRef.current=onClose;
+     |  ^^^^^^^^^^^^^^^^ Cannot update ref during render
+  20 |  useEffect(()=>{setChapter(parsed?.chapter||1)},[reference]);
+  21 |  useEffect(()=>{
+  22 |   if(!book)return;  react-hooks/refs
+  20:49  warning  React Hook useEffect has a missing dependency: 'parsed?.chapter'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    react-hooks/exhaustive-deps
+  29:4   warning  React Hook useEffect has a missing dependency: 'book'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/OG1JourneyMap.jsx
+  4:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/ShemaContinuation.jsx
+  49:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  47 |
+  48 |   useEffect(() => {
+> 49 |     setWitnessSelections(draft?.witnessSelections || {});
+     |     ^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  50 |     setRetrievalState(draft?.retrievalState || emptyRetrievalState());
+  51 |   }, [move.id]);
+  52 |  react-hooks/set-state-in-effect
+  51:6  warning  React Hook useEffect has missing dependencies: 'draft?.retrievalState' and 'draft?.witnessSelections'. Either include them or remove the dependency array. If 'setWitnessSelections' needs the current value of 'draft.witnessSelections', you can also switch to useReducer instead of useState and read 'draft.witnessSelections' in the reducer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react-hooks/exhaustive-deps
+
+/workspace/jeremiah-ai-rebuild/app/src/features/classroom/useLessonNarration.js
+  74:4  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  72 |  useEffect(() => {
+  73 |   if (!enabled || !text) {
+> 74 |    stop();
+     |    ^^^^ Avoid calling setState() directly within an effect
+  75 |    return;
+  76 |   }
+  77 |   if (lastSceneRef.current !== sceneKey) {  react-hooks/set-state-in-effect
+
+/workspace/jeremiah-ai-rebuild/app/vite.config.js
+  37:29  error  'process' is not defined  no-undef
+  38:17  error  'process' is not defined  no-undef
+
+✖ 16 problems (10 errors, 6 warnings)
+
+

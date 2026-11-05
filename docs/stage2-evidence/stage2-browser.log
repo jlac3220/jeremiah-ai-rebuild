@@ -1,0 +1,5 @@
+Command: JEREMIAH_SCREENSHOT_DIR=/tmp/jeremiah-stage2/extra node scripts/verify-og1-stage2-browser.cjs
+Local built server: http://127.0.0.1:4184
+Exit status: 0
+PASS every written task: unchanged full prompt, accessible input, autosave and reload.
+PASS Stage 2: support provenance, independent recall, unscored continuation, map, reversible reveals, retained evidence/trail, audio preference, fair comparison, responsive writing, focus, reduced motion.

@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const urlFor = words => '/api/jeremiah/narration?text=' + encodeURIComponent(words);
 
 export default function useLessonNarration({ text, key: sceneKey }) {
- const [enabled,setEnabled] = useState(true);
+ const [enabled,setEnabled] = useState(()=>{try{return window.localStorage.getItem('jeremiah.lesson.narration.enabled')!=='false'}catch{return true}});
+ const [manualRequest,setManualRequest]=useState(null);
  const [supported, setSupported] = useState(() => typeof window !== 'undefined' && typeof window.Audio === 'function');
  const [speaking, setSpeaking] = useState(false);
  const [loading, setLoading] = useState(false);
@@ -26,7 +27,8 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   setLoading(false);
  }, []);
 
- const speak = useCallback((words) => {
+ const speak = useCallback((words,manual=true) => {
+  setManualRequest(manual?sceneKey:null);
   if (!words || typeof window === 'undefined' || typeof window.Audio !== 'function') {
    setSupported(false);
    return false;
@@ -63,9 +65,9 @@ export default function useLessonNarration({ text, key: sceneKey }) {
    else if (e?.name !== 'AbortError') setError('Jeremiah narration could not play. Try Replay.');
   });
   return true;
- }, [stop]);
+ }, [stop,sceneKey]);
 
- const toggle=useCallback(()=>{stop();setError('');lastSceneRef.current=null;setEnabled(previous=>!previous)},[stop]);
+ const toggle=useCallback(()=>{stop();setError('');setManualRequest(null);lastSceneRef.current=null;const next=!enabled;try{window.localStorage.setItem('jeremiah.lesson.narration.enabled',String(next))}catch{/* Preference storage is optional; playback still works. */}setEnabled(next)},[stop,enabled]);
 
  useEffect(() => {
   if (!enabled || !text) {
@@ -74,7 +76,7 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   }
   if (lastSceneRef.current !== sceneKey) {
    lastSceneRef.current = sceneKey;
-   speak(text);
+   speak(text,false);
   }
  }, [enabled, text, sceneKey, speak, stop]);
 
@@ -95,5 +97,5 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   };
  }, [stop]);
 
- return { enabled, supported, speaking, loading, error:enabled&&text?error:'', toggle, speak, stop };
+ return { enabled, supported, speaking, loading, error:(enabled&&text)||manualRequest===sceneKey?error:'', toggle, speak, stop };
 }

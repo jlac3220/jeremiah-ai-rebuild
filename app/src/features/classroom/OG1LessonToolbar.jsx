@@ -2,7 +2,7 @@ import {useEffect,useRef,useState} from 'react';
 import {ROUTES} from '../../app/routes';
 import LessonIcon from '../../shared/lesson/LessonIcon';
 
-export default function OG1LessonToolbar({narration,narrationText,onNavigate,onRestart,chapters,chapterNumber,finish}) {
+export default function OG1LessonToolbar({narration,narrationText,onNavigate,onRestart,onOpenMap}) {
  const [open,setOpen]=useState(false);
  const root=useRef(null);
  const trigger=useRef(null);
@@ -25,7 +25,7 @@ export default function OG1LessonToolbar({narration,narrationText,onNavigate,onR
   </div>
   {open&&<section id="ogp-lesson-options" className="ogp-options-panel" aria-label="Lesson contents and options">
    <h2>In this lesson</h2>
-   <ol>{chapters.map((chapter,i)=><li key={chapter.standardId} aria-current={!finish&&chapterNumber===i+1?'step':undefined}><span>{i+1}</span><strong>{chapter.title}</strong><small>{finish||chapterNumber>i+1?'Covered':chapterNumber===i+1?'Current':'Ahead'}</small></li>)}</ol>
+   <button type="button" onClick={()=>{setOpen(false);trigger.current?.focus();onOpenMap?.()}}><LessonIcon name="context"/>Open chapter map</button>
    <p>Chapter coverage records your place, not mastery.</p>
    <button type="button" onClick={()=>{setOpen(false);trigger.current?.focus();onRestart()}}><LessonIcon name="replay"/>Start over</button>
   </section>}
