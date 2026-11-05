@@ -3,7 +3,7 @@ if(process.env.JEREMIAH_TEST_FIXTURES!=='yes')throw new Error('Test preload requ
 const {appendFileSync}=await import('node:fs');
 globalThis.fetch=async(input,options={})=>{
  const url=String(input);
- if(url==='https://redis.invalid')return Response.json({result:0});
+ if(url==='https://redis.invalid')return Response.json({result:JSON.parse(options.body)[1].startsWith('return {')?['0','0','0','0']:0});
  if(url==='https://api.openai.com/v1/responses'){
   const request=JSON.parse(options.body),data=JSON.parse(request.input[0].content[0].text);
   if(data.learner?.response?.text?.includes('OUTAGE_FIXTURE'))return Response.json({error:{code:'rate_limit_exceeded'}},{status:503});

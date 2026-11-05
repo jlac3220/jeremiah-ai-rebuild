@@ -98,5 +98,6 @@ export async function handlePilotAccess(req,res){
 export async function usageSnapshot(){
  const day=new Date().toISOString().slice(0,10),prefix='{jeremiah-pilot-v1}:',month=day.slice(0,7);
  const values=await redisEval("return {redis.call('GET',KEYS[1]) or '0',redis.call('GET',KEYS[2]) or '0',redis.call('GET',KEYS[3]) or '0',redis.call('GET',KEYS[4]) or '0'}",[prefix+'paid:day:'+day,prefix+'paid:month:'+month,prefix+'spend:day:'+day,prefix+'spend:month:'+month],[]);
+ if(!Array.isArray(values)||values.length!==4||values.some(value=>!/^\d+$/.test(String(value))||!Number.isSafeInteger(Number(value))))throw new Error('Usage accounting unavailable');
  return {dayCalls:Number(values[0]),monthCalls:Number(values[1]),dayReservedUsd:Number(values[2])/1e6,monthReservedUsd:Number(values[3])/1e6,monthlyBudgetUsd:positive('PILOT_MONTHLY_BUDGET_CENTS',1000,1000)/100};
 }

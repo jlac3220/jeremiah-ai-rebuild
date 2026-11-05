@@ -10,7 +10,7 @@ The three review items on PR #66 are addressed without changing lesson content o
 2. The embedded standalone survey says **Up next: Return to welcome**. Creator hosts retain **Return to Jeremiah**.
 3. The existing witness art loads eagerly. During slow/failed loads, the hero no longer repeats the witness name over its label, and portraits show explicit sequence numerals instead of blank circles. Loaded portraits use the same approved illustrations; no art was replaced.
 
-The owner-only dashboard additionally lists the latest marked verification receipt IDs, times and completed/partial status. Test ratings/comments remain excluded from participant analysis and CSV. No lesson answers or grades are added to survey storage.
+The owner-only dashboard additionally lists the latest marked verification receipt IDs, times and completed/partial status. Test ratings/comments remain excluded from participant analysis and CSV. No lesson answers or grades are added to survey storage. Invalid usage-counter responses are rejected so the dashboard reports unavailable accounting instead of displaying `NaN`; the local Redis fixture now supplies the correct snapshot response shape.
 
 | Final review capture | Phone | Desktop |
 |---|---|---|

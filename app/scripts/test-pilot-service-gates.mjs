@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {promisify} from 'node:util';
 import {execFile} from 'node:child_process';
 import {openAIRequest,OpenAIServiceError,configuredModel} from '../server/openaiService.mjs';
-import {LIMIT_SCRIPT,redisEval,withPilotService,requireOwner,ownerAuthorized,issueSession,session,providerReservation,reserveProviderCall,handlePilotAccess} from '../server/pilotSecurity.mjs';
+import {LIMIT_SCRIPT,redisEval,withPilotService,requireOwner,ownerAuthorized,issueSession,session,providerReservation,reserveProviderCall,handlePilotAccess,usageSnapshot} from '../server/pilotSecurity.mjs';
 import {summarizeFeedback,reportCsv,redactComment,handlePilotReport} from '../server/pilotReportHandler.mjs';
 import {handlePilotVerification} from '../server/pilotVerificationHandler.mjs';
 import {teachWithJeremiah} from '../server/teacherCore.mjs';
@@ -34,6 +34,9 @@ try{
  const records=[{submissionId:'real-fixture',overall:4,completed:true,ratings:{flow:2},priority:'teaching',bestPart:'=HYPERLINK("bad") person@example.org +1 (555) 123-4567'},{submissionId:'issue63_test_fixture',overall:1}];
  assert.equal(summarizeFeedback([...records,{submissionId:'manual-test-fixture',bestPart:'[ISSUE63 TEST] manual phone test',overall:5}]).excludedTests,2);
  assert.equal(summarizeFeedback(records).responses,1);assert.equal(summarizeFeedback(records).excludedTests,1);assert.equal(summarizeFeedback(records).categories.find(a=>a.id==='flow').counts[2],1);assert.ok(reportCsv(records).includes("'=HYPERLINK"));assert.ok(!redactComment(records[0].bestPart).includes('example.org'));
+ process.env.UPSTASH_REDIS_REST_URL='https://redis.invalid';process.env.UPSTASH_REDIS_REST_TOKEN='unit-only';
+ for(const result of [0,[],['0','0','invalid','0'],['0','0','-1','0'],['0','0',null,'0']]){globalThis.fetch=async()=>Response.json({result});await assert.rejects(usageSnapshot(),/Usage accounting unavailable/);}
+ globalThis.fetch=async()=>Response.json({result:['1','2','100000','200000']});const snapshot=await usageSnapshot();assert.equal(snapshot.dayCalls,1);assert.equal(snapshot.monthCalls,2);assert.equal(snapshot.monthReservedUsd,.2);globalThis.fetch=realFetch;
  if(process.env.PILOT_REDIS_TEST_CONTAINER){
   const execute=promisify(execFile),env={...process.env};for(const k of ['DOCKER_HOST','DOCKER_CONTEXT','DOCKER_TLS','DOCKER_TLS_VERIFY','DOCKER_CERT_PATH'])delete env[k];
   const isolated=JSON.parse((await execute('docker',['--host=unix:///var/run/docker.sock','inspect',process.env.PILOT_REDIS_TEST_CONTAINER],{env,maxBuffer:200000})).stdout)[0];
