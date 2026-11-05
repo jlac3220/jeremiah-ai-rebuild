@@ -31,6 +31,7 @@ import './OG1StageOne.css';
 import OG1ResponseWorkspace, {OG1TeacherFeedback} from './OG1ResponseWorkspace';
 import OG1ChapterGuide from './OG1ChapterGuide';
 import './OG1InteractiveExperience.css';
+import './JeremiahLessonTheme.css';
 
 // These are instructional purposes, not image IDs or keyword searches.
 // Broad worship may use broad imagery; specific evidence must match the

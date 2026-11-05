@@ -1,0 +1,142 @@
+/* Bring the Jeremiah app identity into OG.1 without flattening biblical scenes.
+   Controls, explanations and navigation are modern; quoted Scripture retains
+   its editorial serif, and approved passage imagery is untouched. */
+.ogp-page.ogp-stage2{
+ --og-paper:#f7f9fc;
+ --og-ink:#17304f;
+ --og-muted:#52657e;
+ --og-tint:#eef3fa;
+ --og-line:#dbe5f2;
+ --og-accent:#003da5;
+ --og-brass:#c99551;
+ background:#f7f9fc;
+ color:var(--og-ink);
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.ogp-page.ogp-stage2[class*=ogp-theme-]{--og-paper:#f7f9fc;--og-tint:#eef3fa;--og-accent:#003da5;--og-brass:#c99551}
+.ogp-page.ogp-stage2 .ogp-toolbar{
+ background:#081f47;
+ border-bottom:1px solid #ffffff24;
+ color:#f7fbff;
+}
+.ogp-stage2 .ogp-toolbar-brand strong{font-weight:850;letter-spacing:.085em}
+.ogp-stage2 .ogp-toolbar-brand small{color:#c6d7f3;letter-spacing:.075em}
+.ogp-page.ogp-stage2 .ogp-progress{background:#d7e5f4}
+.ogp-page.ogp-stage2 .ogp-progress>span{background:linear-gradient(90deg,#003da5,#3975c8)}
+.ogp-page.ogp-stage2 .ogp-shell{max-width:1060px}
+.ogp-stage2 .ogp-compact-header{border-bottom:1px solid var(--og-line);padding-bottom:17px}
+.ogp-stage2 .ogp-compact-heading h1{
+ font:780 clamp(1.14rem,2.1vw,1.55rem)/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;
+ letter-spacing:-.035em;
+ color:var(--og-ink);
+}
+.ogp-stage2 .ogp-mini-caption,.ogp-stage2 .ogp-mini-caption strong{color:#49617d}
+.ogp-stage2 .ogp-mini-node{border-color:#cfdeee;background:#eff3f8;color:#486487}
+.ogp-stage2 .ogp-mini-timeline .is-current .ogp-mini-node{border-color:#003da5;background:#003da5;color:#fff}
+.ogp-stage2 .ogp-mini-timeline .is-complete .ogp-mini-node{background:#6082b8;border-color:#6082b8;color:#fff}
+.ogp-stage2 .og2-map-toggle,.ogp-stage2 .ogp-link{color:#00459e}
+.ogp-stage2 .og2-map-toggle:hover,.ogp-stage2 .ogp-link:hover{color:#002a6b}
+.ogp-page.ogp-stage2 .ogp-stage>h1,.ogp-page.ogp-stage2 .ogp-finish>h1{
+ font:760 clamp(1.95rem,4.3vw,3.45rem)/1.12 system-ui,-apple-system,"Segoe UI",sans-serif;
+ letter-spacing:-.045em;color:var(--og-ink);
+}
+.ogp-stage2 .ogp-verb{color:#24599b;font-size:.68rem;letter-spacing:.12em}
+.ogp-stage2 .ogp-verb-dash{background:#83a4d1;width:23px}
+.ogp-stage2 .ogp-prompt{color:#455b78;font-size:1rem;line-height:1.65}
+.ogp-page.ogp-stage2 .ogp-action{
+ border:1px solid #003da5;border-radius:11px;
+ background:#003da5;color:#fff;box-shadow:none;
+ min-height:48px;padding:12px 20px;
+ font:750 .9rem/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;
+ letter-spacing:0;
+}
+.ogp-page.ogp-stage2 .ogp-action:not(:disabled):hover{background:#002d7c;box-shadow:none;transform:none}
+.ogp-page.ogp-stage2 .ogp-back{color:#315b8f;font-weight:650}
+.ogp-page.ogp-stage2 .ogp-controls{border-color:var(--og-line)}
+.ogp-stage2 .ogp-options-panel{border-radius:12px;box-shadow:0 17px 40px #0a295129}
+.ogp-stage2 .og2-chapter-guide{
+ background:#fff;border:1px solid var(--og-line);
+ border-radius:15px;padding:22px 24px;margin:12px 0 28px;
+}
+.ogp-stage2 .og2-chapter-guide h2,.ogp-stage2 .og2-guide-focus h3{
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+ font-weight:760;letter-spacing:-.03em;
+}
+.ogp-stage2 .og2-guide-chapters button{border-radius:8px}
+.ogp-stage2 .og2-guide-chapters button[aria-pressed=true]{background:#eaf2ff;border-bottom-color:#003da5}
+.ogp-stage2 .og2-guide-chapters button>span{font:800 1rem/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;color:#52709b}
+.ogp-stage2 .og2-guide-focus>span{color:#1252a7}
+.ogp-stage2 .og2-workspace-heading h2{letter-spacing:-.04em}
+.ogp-stage2 .og2-workspace-heading>span,.ogp-stage2 .og2-task-label{color:#35649e}
+.ogp-stage2 .og2-task-brief{border-top-color:#245caa}
+.ogp-stage2 .og2-task-brief>p{color:#284a6e;font-size:1rem;line-height:1.68}
+.ogp-stage2 .og2-writing-desk{
+ border-radius:14px;
+ border:1px solid #d5e3f2;
+ background:#fff;
+ box-shadow:0 5px 22px #163c640c;
+}
+.ogp-page.ogp-stage2 .og2-writing-desk textarea{
+ background:#fbfcff;border:1px solid #c6d7eb;border-radius:10px;
+ color:#193452;line-height:1.65;
+}
+.ogp-page.ogp-stage2 .og2-writing-desk textarea:focus-visible{outline-color:#1460b8}
+.ogp-stage2 .og2-support>button,.ogp-stage2 .og2-teacher button{color:#004c9d}
+.ogp-stage2 .og2-teacher{border-top-color:#3471bc}
+.ogp-stage2 .og2-teacher-mark{background:#093b7f;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.ogp-stage2 .ogp-evidence-close{background:#edf4fd;border-color:#d6e4f5;border-radius:12px}
+.ogp-stage2 .ogp-evidence-close>strong{color:#245ca5}
+.ogp-stage2 .ogp-evidence-close button{border-color:#bed3ed;color:#004896;border-radius:9px}
+.ogp-stage2 .ogp-compare-ring{border-color:#c6d9f1;background:#f0f5fc}
+.ogp-stage2 .ogp-compare-columns section{border-color:#d4e1f0;border-top-color:#3a70b2;border-radius:12px}
+.ogp-stage2 .ogp-compare-columns h2,.ogp-stage2 .ogp-doctrine-summary-grid h3{
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+ font-weight:750;letter-spacing:-.03em;
+}
+.ogp-stage2 .og1-identity-hero,.ogp-stage2 .og1-return-heading,.ogp-stage2 .og1-synthesis-head,
+.ogp-stage2 .ogp-doctrine-summary>header{
+ background:linear-gradient(115deg,#091e43,#123f87);
+ box-shadow:none;border-radius:16px 16px 0 0;
+}
+.ogp-stage2 .og1-identity-hero h2,.ogp-stage2 .og1-return-heading h2,
+.ogp-stage2 .og1-synthesis-head h2,.ogp-stage2 .ogp-doctrine-summary>header h2{
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+ font-weight:740;letter-spacing:-.045em;
+}
+.ogp-stage2 .og1-return-heading{border-radius:15px}
+.ogp-stage2 .og1-return-verses section,.ogp-stage2 .ogp-doctrine-summary-grid article{
+ border-color:#dce7f4;background:#fff;border-radius:10px;
+}
+.ogp-stage2 .og1-identity-deck button{border-color:#d5e2f1;border-radius:11px;box-shadow:none}
+.ogp-stage2 .og1-identity-deck button[aria-pressed=true]{border-color:#3168ab;background:#eaf3ff}
+.ogp-stage2 .og1-identity-implication{background:#eff4fb}
+.ogp-stage2 .og1-identity-implication button,.ogp-stage2 .og1-return>button{
+ background:#003da5;border-color:#003da5;border-radius:10px;
+}
+.ogp-stage2 .og1-synthesis-verdict{background:#eef4fc;border-color:#d9e5f3}
+.ogp-stage2 .ogp-depth-report{background:#fff;border-color:#d7e4f3;box-shadow:none}
+.ogp-stage2 .ogp-finish-survey-invite{background:#edf4fc;border-color:#d5e5f5;box-shadow:none}
+.ogp-stage2 .ogp-finish-survey-invite h2,
+.ogp-stage2 .ogp-finish--understanding .ogp-depth-report h1{
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:750;letter-spacing:-.04em;
+}
+.ogp-stage2 button:focus-visible,.ogp-stage2 summary:focus-visible,.ogp-stage2 textarea:focus-visible{
+ outline:3px solid #eab35b;outline-offset:3px;
+}
+@media(max-width:700px){
+ .ogp-page.ogp-stage2 .ogp-shell{padding:21px 15px calc(60px + env(safe-area-inset-bottom))}
+ .ogp-stage2 .ogp-compact-header{padding-bottom:12px;gap:9px}
+ .ogp-stage2 .ogp-compact-heading h1{font-size:1.07rem}
+ .ogp-stage2 .ogp-mini-caption{margin-bottom:5px}
+ .ogp-page.ogp-stage2 .ogp-stage:not([data-workspace]){padding-top:22px}
+ .ogp-page.ogp-stage2 .ogp-stage>h1{font-size:clamp(1.7rem,6.6vw,2.5rem)}
+ .ogp-stage2 .og2-chapter-guide{padding:15px 14px;border-radius:12px}
+ .ogp-stage2 .og2-guide-chapters button{padding:10px 7px}
+ .ogp-stage2 .og2-writing-desk{padding:17px 14px;border-radius:12px}
+ .ogp-stage2 .ogp-evidence-close{padding:16px}
+ .ogp-stage2 .ogp-compare-columns section{padding:19px}
+ .ogp-page.ogp-stage2 .ogp-action{width:100%;min-height:48px}
+ .ogp-stage2 .ogp-doctrine-summary>header h2,.ogp-stage2 .og1-identity-hero h2,
+ .ogp-stage2 .og1-synthesis-head h2,.ogp-stage2 .og1-return-heading h2{font-size:clamp(1.65rem,6.5vw,2.6rem)}
+}
+@media(prefers-reduced-motion:reduce){.ogp-page.ogp-stage2 .ogp-action{transition:none}}

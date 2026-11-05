@@ -1,0 +1,110 @@
+/* Jeremiah-branded Classroom. Only the room/catalogue surface changes:
+   OG.1 teaching content and its controls remain owned by the lesson player. */
+.brand-surface .ce-page,
+.ce-page {
+ --ce-ink:#172e50;
+ --ce-muted:#526783;
+ --ce-border:#dae5f2;
+ --ce-blue:#003da5;
+ background:#f7f9fc;
+ color:var(--ce-ink);
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.ce-page .ld-content{max-width:1080px}
+.ce-page .ld-header{border-bottom:1px solid #dee8f4;margin-bottom:12px;padding-bottom:18px}
+.ce-page .ld-hero{max-width:790px;padding:24px 0 30px}
+.ce-page .ld-eyebrow{color:#37619b;letter-spacing:.09em;font-size:.68rem;font-weight:800}
+.ce-page .ld-hero h1{
+ margin:11px 0 14px;
+ font:780 clamp(2.15rem,4.3vw,3.65rem)/1.1 system-ui,-apple-system,"Segoe UI",sans-serif;
+ letter-spacing:-.047em;color:var(--ce-ink);
+}
+.ce-page .ld-hero>p:last-child{color:var(--ce-muted);line-height:1.65;font-size:1rem;max-width:650px}
+.ce-page .ce-doors{gap:15px}
+.ce-page .ce-door,.ce-page .ce-door.ce-door-active{
+ background:#fff;
+ color:var(--ce-ink);
+ border:1px solid var(--ce-border);
+ border-radius:16px;
+ box-shadow:0 6px 22px #14366009;
+ padding:24px;
+ min-height:265px;
+}
+.ce-page .ce-door.ce-door-active{border-top:3px solid var(--ce-blue)}
+.ce-page .ce-door-number{
+ display:inline-grid;place-items:center;
+ width:39px;height:39px;
+ margin:0 0 20px;
+ border-radius:11px;
+ background:#eef3fc;
+ color:#315f9e;
+ font:800 .84rem/1 system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.ce-page .ce-door h2{
+ margin:9px 0 9px;
+ font:750 clamp(1.25rem,1.9vw,1.66rem)/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;
+ letter-spacing:-.033em;
+}
+.ce-page .ce-door p{color:var(--ce-muted);line-height:1.55;font-size:.88rem;margin-bottom:22px}
+.ce-page .ce-door-status{font-size:.76rem;line-height:1.55;color:#526a87}
+.ce-page .ce-door-action{margin-top:14px;color:var(--ce-blue);font-size:.82rem;font-weight:750}
+.ce-page button.ce-door:hover{background:#fafdff;transform:translateY(-2px);box-shadow:0 11px 22px #12366212}
+.ce-page .ce-feature{
+ background:#fff;border:1px solid var(--ce-border);
+ border-left:4px solid var(--ce-blue);border-radius:16px;
+ box-shadow:0 5px 18px #12365a0b;padding:27px 30px;
+}
+.ce-page .ce-feature h2{
+ font:750 clamp(1.45rem,2.8vw,2rem)/1.23 system-ui,-apple-system,"Segoe UI",sans-serif;
+ letter-spacing:-.035em;color:var(--ce-ink);margin:12px 0;
+}
+.ce-page .ce-feature .ld-muted{color:var(--ce-muted);line-height:1.55}
+.ce-page .ld-primary{
+ background:var(--ce-blue);border-radius:11px;
+ box-shadow:none;color:#fff;
+ min-height:48px;padding:13px 18px;
+ font-size:.89rem;font-weight:760;
+}
+.ce-page .ld-primary:hover{background:#002b7b}
+.ce-page .ce-catalog{margin-top:34px}
+.ce-page .ce-catalog-heading h2{font:750 1.45rem/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.025em}
+.ce-page .ce-catalog-heading input{background:#fff;border:1px solid var(--ce-border);border-radius:11px}
+.ce-page .ce-domain{border-bottom:1px solid #dfe7f1}
+.ce-page .ce-domain>summary{padding:18px 0;min-height:64px}
+.ce-page .ce-domain summary>span{color:var(--ce-blue);font:800 .83rem system-ui,-apple-system,"Segoe UI",sans-serif}
+.ce-page .ce-domain summary strong{font-size:.98rem;color:var(--ce-ink)}
+.ce-page .ce-domain summary small{color:var(--ce-muted)}
+.ce-page .ce-domain-lessons button{background:#eef3fa;border-radius:10px;color:var(--ce-ink)}
+.ce-page .ce-domain-lessons button:hover{background:#e5eefb}
+.ce-page .ce-domain-lessons strong{font-size:.92rem;font-weight:720}
+.ce-page .ce-domain-lessons em{font-style:normal;color:var(--ce-blue)}
+.ce-page button:focus-visible,.ce-page summary:focus-visible,.ce-page input:focus-visible{outline:3px solid #e3a63c;outline-offset:3px}
+@media(max-width:700px){
+ .brand-surface .ce-page,.ce-page{background:#f7f9fc;padding:14px 16px calc(90px + env(safe-area-inset-bottom))}
+ .ce-page .ld-header{padding-bottom:13px;margin-bottom:0}
+ .ce-page .ld-hero{padding:17px 0 19px}
+ .ce-page .ld-hero h1{font-size:1.83rem;line-height:1.14;margin:7px 0 8px}
+ .ce-page .ld-hero>p:last-child{display:none}
+ .ce-page .ce-doors{gap:10px}
+ .ce-page .ce-door,.ce-page .ce-door.ce-door-active{
+  display:grid;grid-template-columns:42px minmax(0,1fr) 22px;
+  grid-template-rows:auto auto;align-items:center;
+  min-height:87px;padding:13px 14px;gap:2px 12px;
+  border-radius:14px;box-shadow:none;
+ }
+ .ce-page .ce-door.ce-door-active{border-top:1px solid var(--ce-border);border-left:3px solid var(--ce-blue)}
+ .ce-page .ce-door-number{grid-column:1;grid-row:1/3;width:39px;height:39px;margin:0;font-size:.8rem;border-radius:10px}
+ .ce-page .ce-door h2{grid-column:2;grid-row:1;font-size:1.05rem;line-height:1.25;margin:0}
+ .ce-page .ce-door-status{grid-column:2;grid-row:2;font-size:.69rem;line-height:1.35;margin:0}
+ .ce-page .ce-door-action{grid-column:3;grid-row:1/3;margin:0;justify-self:end;font-size:0}
+ .ce-page .ce-door-action:after{font-size:1.45rem;color:var(--ce-blue)}
+ .ce-page button.ce-door:hover{transform:none;box-shadow:none}
+ .ce-page .ce-feature{padding:18px 18px;border-left-width:3px;border-radius:14px}
+ .ce-page .ce-feature h2{font-size:1.22rem;margin:6px 0}
+ .ce-page .ce-catalog{margin-top:22px}
+ .ce-page .ce-catalog-heading h2{font-size:1.2rem}
+ .ce-page .ce-domain{margin-top:9px;border:1px solid var(--ce-border);border-radius:12px;padding:0 12px;background:#fff}
+ .ce-page .ce-domain>summary{padding:11px 0}
+ .ce-page .ce-domain-lessons button{padding:13px}
+}
+@media(prefers-reduced-motion:reduce){.ce-page button.ce-door{transition:none}}
