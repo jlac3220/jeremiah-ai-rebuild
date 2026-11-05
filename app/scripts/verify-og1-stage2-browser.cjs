@@ -1,0 +1,53 @@
+// Requires a built local server, Playwright and Chromium. Uses synthetic data only.
+const assert=require('node:assert/strict'),fs=require('node:fs'),{chromium}=require('playwright');
+const base=process.env.JEREMIAH_REVIEW_URL||'http://127.0.0.1:4184',out=process.env.JEREMIAH_SCREENSHOT_DIR;
+const key='jeremiah-learning-state:OG.1.LESSON.18:direct';
+(async()=>{
+ const {default:content}=await import('../src/core/classroom/content/OG_1_LESSON.js');
+ const {createLearningState}=await import('../src/core/classroom/learningEngine.js');
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
+ const page=await browser.newPage({viewport:{width:390,height:844}});const errors=[];let voiceRequests=0,assessment='unavailable';
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/api/jeremiah/narration?**',r=>{voiceRequests++;return r.fulfill({status:503,contentType:'application/json',body:'{"error":"Test voice unavailable"}'})});
+ await page.route('**/api/bible/chapter?**',r=>r.fulfill({status:503,contentType:'application/json',body:'{"error":"Test Bible unavailable"}'}));
+ await page.route('**/api/jeremiah/teach',r=>{const move=content.instructionalMoves.find(m=>m.id===r.request().postDataJSON().moveId);return r.fulfill(assessment==='unavailable'?{status:503,contentType:'application/json',body:'{"error":"Test assessment unavailable"}'}:{status:200,contentType:'application/json',body:JSON.stringify({verdict:'strong',source:'openai',strategy:'affirm_and_deepen',teacherMessage:'Synthetic assessment response for the browser test.',evidenceObserved:move.evidenceIds,misconceptionIds:[]})})});
+ await page.goto(base+'/#pilot');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Start the lesson'}).click();
+ async function seed(id){const state=createLearningState(content,'direct');state.currentMoveId=id;await page.evaluate(({key,state})=>{localStorage.setItem(key,JSON.stringify(state));localStorage.setItem('jeremiah.lesson.narration.enabled','false')},{key,state});await page.reload();await page.locator('.ogp-toolbar').waitFor();return state}
+ const stored=()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)),key);
+ const next=()=>page.locator('nav.ogp-controls button.ogp-action').click();
+ async function shot(name){if(out){fs.mkdirSync(out,{recursive:true});await page.screenshot({path:out+'/'+name+'.png',fullPage:true})}}
+ for(const move of content.instructionalMoves.filter(m=>['free_response','mastery_response'].includes(m.type))){await seed(move.id);assert.equal(await page.locator('.og2-task-brief>p').textContent(),move.prompt);const text='Synthetic learner draft for '+move.id;await page.getByRole('textbox').fill(text);await page.reload();assert.equal(await page.getByRole('textbox').inputValue(),text);assert.equal((await stored()).experience.drafts[move.id].responseText,text)}
+ console.log('PASS every written task: unchanged full prompt, accessible input, autosave and reload.');
+ await seed('shema-recite');assert.equal(await page.getByRole('button',{name:'Open teaching support',exact:true}).count(),0);assert.equal(await page.getByText('Hear, O Israel:',{exact:false}).count(),0);
+ await page.getByRole('textbox').fill('A saved incomplete recall attempt');await next();assert.equal((await stored()).experience.teachingDecision.decision.verdict,'weak');assert.match(await page.locator('.og2-teacher').textContent(),/KJV recall check/);
+ await page.getByRole('button',{name:'Review the KJV verse in context'}).click();await page.getByRole('dialog').waitFor();await page.keyboard.press('Escape');
+ await seed('shema-try');await page.getByRole('button',{name:'Open teaching support',exact:true}).click();assert.equal((await stored()).experience.drafts['shema-try'].usedSupport,true);await shot('390-support');
+ await page.getByRole('button',{name:'Close teaching support',exact:true}).click();await page.reload();assert.match(await page.locator('.og2-writing-meta').textContent(),/Supported attempt/);
+ await page.getByRole('textbox').fill('Synthetic supported explanation');assessment='strong';await next();await page.locator('.og2-teacher').waitFor();let saved=await stored();assert.equal(saved.experience.teachingDecision.decision.verdict,'partial');assert.equal(saved.experience.teachingDecision.decision.supportedPass,true);assert.deepEqual(saved.experience.teachingDecision.decision.evidenceObserved,[]);assert.match(await page.locator('.og2-teacher').textContent(),/Supported practice/);await shot('390-supported-feedback');
+ await seed('isaiah-try');assessment='unavailable';await page.getByRole('textbox').fill('Synthetic unscored explanation');await next();await page.locator('.og2-teacher[data-status=unscored]').waitFor();saved=await stored();assert.equal(saved.experience.teachingDecision.decision.verdict,'unscored');assert.deepEqual(saved.experience.teachingDecision.decision.evidenceObserved,[]);assert.match(await page.locator('.og2-teacher').textContent(),/Saved · not assessed/);await next();assert.equal((await stored()).currentMoveId,'continuity-show');
+ await seed('shema-show');const before=await stored(),map=page.getByRole('button',{name:'View chapter map',exact:true});await map.click();assert.equal(await page.locator('#og2-guide-title').evaluate(el=>el===document.activeElement),true);await page.locator('.og2-guide-chapters button').nth(4).click();assert.deepEqual(await stored(),before);await shot('390-chapter-map');await page.getByRole('button',{name:'Return to my lesson'}).click();assert.equal(await map.evaluate(el=>el===document.activeElement),true);
+ await next();const phrases=page.locator('.shema-phrase-track>button');assert.equal(await phrases.nth(2).isDisabled(),true);await next();await next();await phrases.first().click();assert.equal(await phrases.first().evaluate(el=>el===document.activeElement),true);assert.equal(await phrases.nth(2).isDisabled(),false);await phrases.nth(2).click();assert.equal(await phrases.nth(2).getAttribute('aria-current'),'step');
+ await seed('shema-show');const count=voiceRequests;await page.reload();await page.waitForTimeout(150);assert.equal(voiceRequests,count);await page.getByRole('button',{name:'Hear the Scripture',exact:true}).click();await page.locator('.ogp-voice-error').waitFor();assert.ok(voiceRequests>count);await page.getByRole('button',{name:'Turn narration on',exact:true}).click();await page.getByRole('button',{name:'Turn narration off',exact:true}).click();assert.equal(await page.locator('.ogp-voice-error').count(),0);
+ await seed('isaiah-show');await next();assert.equal(await page.locator('.og2-evidence-board li').count(),1);await next();await next();assert.equal(await page.locator('.og2-evidence-board li').count(),3);await page.locator('.ogp-witness-timeline button').first().click();assert.equal(await page.locator('.og2-evidence-board li').count(),3);assert.equal(await page.locator('.ogp-witness-timeline button').nth(2).isDisabled(),false);await page.locator('.ogp-witness-timeline button').nth(2).click();await shot('390-isaiah-complete');
+ await seed('continuity-show');await next();await next();await next();assert.equal(await page.locator('.og2-retained-trail li').count(),2);assert.match(await page.locator('.ogp-trail').textContent(),/Moses gives Israel.*Jesus repeats.*Paul applies/s);await shot('390-continuity-complete');
+ await seed('distinction-show');await next();await next();await next();await next();const styles=await page.locator('.ogp-compare-columns section').evaluateAll(els=>els.map(el=>{const s=getComputedStyle(el),h=getComputedStyle(el.querySelector('h2'));return [s.backgroundColor,s.borderTopColor,s.padding,h.fontFamily,h.fontSize,h.color]}));assert.deepEqual(styles[0],styles[1],'Equal visual dignity for both positions');
+ for(const width of [320,390,768,1440]){await page.setViewportSize({width,height:width>=768?1000:844});await seed('shema-try');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);const input=page.getByRole('textbox');await input.focus();assert.notEqual(await input.evaluate(el=>getComputedStyle(el).outlineStyle),'none')}
+ await page.setViewportSize({width:320,height:440});await page.getByRole('textbox').fill('Short viewport with focused input');assert.ok(!['sticky','fixed'].includes(await page.locator('.og2-workspace-actions').evaluate(el=>getComputedStyle(el).position)));await shot('320-short-writing');await page.emulateMedia({reducedMotion:'reduce'});await seed('shema-show');await next();assert.equal(await page.locator('.shema-phrase-feature').evaluate(el=>getComputedStyle(el).animationName),'none');await shot('320-reduced-motion');
+ // Audio support can be absent; reading and optional video retain their exits.
+ const silent=await browser.newPage({viewport:{width:390,height:844}});
+ await silent.addInitScript(()=>{window.Audio=undefined;localStorage.setItem('jeremiah.lesson.narration.enabled','false')});
+ await silent.goto(base+'/#pilot');await silent.getByRole('checkbox').check();await silent.getByRole('button',{name:'Start the lesson'}).click();
+ const noAudioState=createLearningState(content,'direct');noAudioState.currentMoveId='shema-show';
+ await silent.evaluate(({key,state})=>localStorage.setItem(key,JSON.stringify(state)),{key,state:noAudioState});await silent.reload();
+ await silent.getByRole('button',{name:'Hear the Scripture',exact:true}).click();
+ assert.equal(await silent.locator('.shema-world blockquote').count(),1);
+ await silent.close();
+ await page.setViewportSize({width:390,height:844});await page.emulateMedia({reducedMotion:'no-preference'});
+ await page.route('**/images/**',r=>r.abort());await seed('isaiah-show');await next();
+ await page.locator('.og2-evidence-art .ogj-fallback').waitFor();await shot('390-image-fallback');await page.unroute('**/images/**');
+ await seed('shema-show');for(let i=0;i<4;i++)await next();
+ assert.equal(await page.locator('.shema-cinema-frame iframe').count(),0);
+ await page.route('**/*youtube*',r=>r.abort());await page.getByRole('button',{name:'Load optional video'}).click();await page.getByRole('button',{name:'Continue without video'}).click();
+ assert.equal(await page.locator('.shema-cinema-frame iframe').count(),0);await shot('390-video-fallback');
+ assert.deepEqual(errors,[]);await browser.close();console.log('PASS Stage 2: support provenance, independent recall, unscored continuation, map, reversible reveals, retained evidence/trail, audio preference, fair comparison, responsive writing, focus, reduced motion.');
+})().catch(e=>{console.error(e);process.exit(1)});

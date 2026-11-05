@@ -1,0 +1,218 @@
+[
+  {
+    "width": 320,
+    "name": "encounter",
+    "height": 1128,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "phrases",
+    "height": 1209,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "recall",
+    "height": 893,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "explanation",
+    "height": 1815,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "unscored",
+    "height": 2072,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "isaiah",
+    "height": 1235,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "continuity",
+    "height": 1201,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "comparison",
+    "height": 1692,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "name": "devotion",
+    "height": 1875,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "encounter",
+    "height": 1073,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "phrases",
+    "height": 1112,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "recall",
+    "height": 868,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "explanation",
+    "height": 1681,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "unscored",
+    "height": 1911,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "isaiah",
+    "height": 1157,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "continuity",
+    "height": 1123,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "comparison",
+    "height": 1520,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "devotion",
+    "height": 1660,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "encounter",
+    "height": 1000,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "phrases",
+    "height": 1000,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "recall",
+    "height": 1000,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "explanation",
+    "height": 1241,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "unscored",
+    "height": 1416,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "isaiah",
+    "height": 1120,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "continuity",
+    "height": 1155,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "comparison",
+    "height": 1194,
+    "overflow": false
+  },
+  {
+    "width": 768,
+    "name": "devotion",
+    "height": 1335,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "encounter",
+    "height": 1104,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "phrases",
+    "height": 1000,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "recall",
+    "height": 1000,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "explanation",
+    "height": 1176,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "unscored",
+    "height": 1352,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "isaiah",
+    "height": 1221,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "continuity",
+    "height": 1198,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "comparison",
+    "height": 1228,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "devotion",
+    "height": 1323,
+    "overflow": false
+  }
+]

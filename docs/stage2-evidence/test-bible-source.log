@@ -1,0 +1,16 @@
+
+> app@0.0.0 test:bible-source
+> node scripts/smoke-ebible-source.mjs
+
+
+file:///workspace/jeremiah-ai-rebuild/app/scripts/smoke-ebible-source.mjs:18
+            reject(new Error(payload?.error || `Bible API returned ${this.statusCode}`));
+                   ^
+
+Error: fetch failed
+    at Object.end (file:///workspace/jeremiah-ai-rebuild/app/scripts/smoke-ebible-source.mjs:18:20)
+    at sendJson (file:///workspace/jeremiah-ai-rebuild/app/server/bibleHandler.mjs:33:7)
+    at handleBibleApi (file:///workspace/jeremiah-ai-rebuild/app/server/bibleHandler.mjs:178:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.22.1
