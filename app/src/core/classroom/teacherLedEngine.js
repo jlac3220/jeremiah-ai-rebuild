@@ -81,10 +81,36 @@ export function continueTeaching(state, content) {
 
 export function restartTeaching(content, state) {
  const fresh=createLearningState(content,'review');
- const archived={currentMoveId:state.currentMoveId,drafts:state.experience?.drafts || {},milestones:state.milestones || {},standardEvidence:state.experience?.standardEvidence || {}};
- return {...fresh,
-  milestones:{...fresh.milestones,mastery:state.presetId==='review' && Boolean(state.milestones?.complete || state.milestones?.mastery)},
-  experience:{...fresh.experience,restartAt:Date.now(),earlierLesson:archived,previousRuns:[...(state.experience?.previousRuns || []),...(state.experience?.earlierLesson?[state.experience.earlierLesson]:[])]}};
+ // Keep a versioned snapshot of the *entire previous run*, not just its draft
+ // answers. The lesson promises that restart will preserve earlier evidence.
+ // Avoid recursively nesting prior runs inside every new archive record.
+ const {previousRuns:oldRuns,earlierLesson,...runExperience}=state.experience || {};
+ const archived={
+  archiveVersion:1,archivedAt:Date.now(),standardId:state.standardId,
+  curriculumVersion:state.curriculumVersion,sourceRevision:state.sourceRevision,
+  presetId:state.presetId,currentMoveId:state.currentMoveId,
+  completedMoveIds:state.completedMoveIds || [],
+  attemptsByMove:state.attemptsByMove || {},
+  evidenceIds:state.evidenceIds || [],
+  misconceptions:state.misconceptions || [],
+  teacherHistory:state.teacherHistory || [],
+  milestones:state.milestones || {},
+  encounterData:state.encounterData || null,
+  // Retain the full exit exam (answers, attempts, results, and best score),
+  // standard evidence, teacher feedback, drafts, and scene progress.
+  experience:runExperience,
+  // Preserve earlierLesson's documented shortcuts for old consumers.
+  drafts:runExperience.drafts || {},
+  standardEvidence:runExperience.standardEvidence || {},
+  exitExam:runExperience.exitExam || null,
+ };
+ const previousRuns=[
+  ...(Array.isArray(oldRuns)?oldRuns:[]),
+  ...(earlierLesson?[earlierLesson]:[]),
+ ];
+ // A new run starts unmastered. Any mastery earned before restart remains
+ // visible in earlierLesson/previousRuns, never assigned to the new attempt.
+ return {...fresh,experience:{...fresh.experience,restartAt:Date.now(),earlierLesson:archived,previousRuns}};
 }
 
 // Preview navigation: advance beyond discussion checks without awarding evidence or mastery.

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import content from '../src/core/classroom/content/NB_1_1_18.js';
 import { createLearningState, loadLearningState, saveLearningState, getInstructionalMove, getStandardProgress, updateLearningExperience } from '../src/core/classroom/learningEngine.js';
-import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching } from '../src/core/classroom/teacherLedEngine.js';
+import { evaluateTeachingChoice, saveTeachingDecision, continueTeaching, restartTeaching } from '../src/core/classroom/teacherLedEngine.js';
 import { teachWithJeremiah } from '../server/teacherCore.mjs';
 const storage=new Map();
 globalThis.window={localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value),removeItem:key=>storage.delete(key)}};
@@ -80,4 +80,40 @@ try {
  const writing=await teachWithJeremiah({standardId:content.standardId,moveId:'defend',learnerResponse:{text:'God is one. One God. Deuteronomy.'}});
  assert.equal(writing.verdict,'partial');assert.equal(writing.evidenceObserved.length,0);
 } finally {if(apiKey)process.env.OPENAI_API_KEY=apiKey;}
+
+// Starting a new run must not erase the saved written work or the complete exam.
+const oldExam={latest:{answers:{'shema-confession':'a'},results:[{id:'shema-confession',correct:true}],score:100},
+ attempts:[{score:80},{score:100}],bestScore:100};
+const beforeRestart={...createLearningState(content,'review'),currentMoveId:'complete',
+ teacherHistory:[{moveId:'explain',verdict:'strong',source:'openai',at:111}],
+ attemptsByMove:{explain:2},completedMoveIds:['learn','explain'],
+ evidenceIds:['evidence-1'],misconceptions:['confused-unity'],
+ milestones:{started:true,mastery:true,complete:true},
+ experience:{drafts:{explain:{responseText:'Earlier learner explanation'}},
+  standardEvidence:{'OG.1.1.18':{evidenceIds:['evidence-1']}},
+  exitExam:oldExam,
+  previousRuns:[{archiveVersion:0,currentMoveId:'earliest'}],
+  earlierLesson:{archiveVersion:0,currentMoveId:'older'},
+  teachingDecision:{moveId:'explain',decision:{verdict:'strong'}}}};
+const afterRestart=restartTeaching(content,beforeRestart);
+assert.equal(afterRestart.currentMoveId,createLearningState(content,'review').currentMoveId);
+assert.equal(afterRestart.milestones.mastery,false,'A fresh run must not automatically inherit old mastery');
+assert.equal(afterRestart.teacherHistory.length,0,'A new attempt starts with empty current history');
+assert.equal(afterRestart.experience.earlierLesson.archiveVersion,1);
+assert.deepEqual(afterRestart.experience.earlierLesson.teacherHistory,beforeRestart.teacherHistory);
+assert.deepEqual(afterRestart.experience.earlierLesson.attemptsByMove,beforeRestart.attemptsByMove);
+assert.deepEqual(afterRestart.experience.earlierLesson.completedMoveIds,beforeRestart.completedMoveIds);
+assert.deepEqual(afterRestart.experience.earlierLesson.evidenceIds,beforeRestart.evidenceIds);
+assert.deepEqual(afterRestart.experience.earlierLesson.experience.exitExam,oldExam);
+assert.deepEqual(afterRestart.experience.earlierLesson.exitExam,oldExam);
+assert.equal(afterRestart.experience.earlierLesson.drafts.explain.responseText,'Earlier learner explanation');
+assert.deepEqual(afterRestart.experience.previousRuns.map(r=>r.currentMoveId),['earliest','older']);
+saveLearningState(afterRestart);
+const restored=loadLearningState(content,'review');
+assert.deepEqual(restored.experience.earlierLesson.experience.exitExam,oldExam,'Previous exam must survive localStorage reload');
+const twice=restartTeaching(content,restored);
+assert.equal(twice.experience.previousRuns.length,3,'Restarting twice retains the earlier runs exactly once');
+assert.deepEqual(twice.experience.previousRuns.at(-1).experience.exitExam,oldExam,'Second restart retains first exam history');
+assert.ok(!Object.hasOwn(twice.experience.earlierLesson.experience,'previousRuns'),'Archives must not nest prior-run lists recursively');
+
 console.log('Teacher-led lesson: all answer paths, alternate examples, no skip/double submit, written rubric gates, saved feedback, and migration passed.');
