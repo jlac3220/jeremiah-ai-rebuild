@@ -38,10 +38,21 @@ Use [TEMPLATE.md](TEMPLATE.md). Each blueprint must specify:
 
 For a composite lesson such as **OG.1**, preserve a separate blueprint for each of its standards (OG.1.1.18 through OG.1.5.18). Then create a **lesson composition map** showing sequence, transitions, coverage, shared assets, and domain-level assessment. A domain-level ten-question exit test cannot, by itself, demonstrate four distinct levels of understanding for every standard.
 
-## Current pilot
+## OG.1 pilot — full draft set (not yet approved)
 
-- [OG.1.1.18 — The Shema as Doctrinal Foundation](OG.1.1.18.md) — **DRAFT**, available for owner review.
-- OG.1.2.18, OG.1.3.18, OG.1.4.18, and OG.1.5.18 — **NOT YET BLUEPRINTED**.
-- Do not interpret this index as a claim that all standards have completed blueprints.
+| File | Standard | Status |
+|---|---|---|
+| [OG.1.1.18.md](OG.1.1.18.md) | The Shema as Doctrinal Foundation | **DRAFT** |
+| [OG.1.2.18.md](OG.1.2.18.md) | Isaiah’s Monotheistic Declarations | **DRAFT** |
+| [OG.1.3.18.md](OG.1.3.18.md) | New Testament Continuity | **DRAFT** |
+| [OG.1.4.18.md](OG.1.4.18.md) | Oneness vs. Trinitarianism | **DRAFT** |
+| [OG.1.5.18.md](OG.1.5.18.md) | Unity of God and Undivided Devotion | **DRAFT** |
+| [OG.1.MASTER-LESSON.md](OG.1.MASTER-LESSON.md) | Five-standard composition, teaching flow and assessment architecture | **DRAFT** |
+
+These are **five distinct standard-level instructional blueprints**, not five separate apps. The composition map describes how to teach them as one flowing OG.1 experience without teaching redundancy.
+
+**Review gate:** Draft content, questions and source interpretations must be reviewed and explicitly approved by the project owner. Codex may inspect the drafts to understand direction, but may **not** modify instructional functionality based on these drafts until their exact revisions are approved. The existing app, assessments, survey, deployment and preserved historical branches remain untouched by this documentation work.
+
+Next, review the complete set as an instructional unit, prioritize needed edits, then agree on the minimal implementation gap matrix before Codex changes any lesson.
 
 This framework creates *documentation only*. It does not change the running application.
