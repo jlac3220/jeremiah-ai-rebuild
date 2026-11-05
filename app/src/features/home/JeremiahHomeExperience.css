@@ -73,3 +73,49 @@
  .jx-daily { padding:22px 18px; }
 }
 @media(prefers-reduced-motion:reduce) { .jx-path { transition:none; } .jx-path:hover { transform:none; } }
+
+/* Mobile is a distinct experience, not a desktop landing page stacked
+   vertically. The desktop visual storytelling remains untouched. */
+.jx-head-mobile,.jx-hero-mobile-intro{display:none}
+@media(max-width:700px){
+ .jx-home{padding:12px 16px calc(92px + env(safe-area-inset-bottom,0px));background:#f7f9fc}
+ .jx-home .jx-header{padding:0 0 13px}
+ .jx-home .jx-shell{width:100%}
+ .jx-hero{display:block;min-height:0;border-radius:18px;background:linear-gradient(125deg,#09214b,#003d95);box-shadow:none}
+ .jx-hero-copy{padding:25px 23px 21px;display:flex;align-items:stretch}
+ .jx-overline{font-size:.57rem;letter-spacing:.075em;line-height:1.5;margin:0 0 13px;color:#ffdfaa}
+ .jx-hero h1{font:700 clamp(1.82rem,7vw,2.3rem)/1.15 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.035em;margin:0;max-width:390px}
+ .jx-head-desktop,.jx-hero-intro{display:none}
+ .jx-head-mobile,.jx-hero-mobile-intro{display:block}
+ .jx-head-mobile em{display:block;font-weight:600;font-style:normal;color:#ffe0af}
+ .jx-hero-mobile-intro{font-size:.84rem;line-height:1.45;color:#dbe7fb;margin:10px 0 17px}
+ .jx-main-action{width:100%;min-height:48px;gap:14px;padding:12px 15px;border-radius:12px;box-shadow:none;font-size:.88rem}
+ .jx-current{margin-top:0;padding-top:14px;gap:9px}
+ .jx-current-mark{width:31px;height:31px;border-radius:8px;font-size:.67rem}
+ .jx-current strong{font-size:.77rem;line-height:1.32}
+ .jx-current small{font-size:.68rem;line-height:1.35}
+ .jx-scripture-stage{display:none}
+ .jx-paths{padding-top:24px}
+ .jx-section-heading .jx-eyebrow,.jx-section-heading p{display:none}
+ .jx-section-heading h2{font:750 1.13rem/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.02em;margin:0}
+ .jx-path-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+ .jx-path{min-height:94px;padding:16px 14px 12px;border-radius:14px;gap:7px;box-shadow:none;border:1px solid #dae5f3;border-top-width:1px}
+ .jx-path-index,.jx-path>span:not(.jx-path-index):not(.jx-arrow){display:none}
+ .jx-path strong{font:720 .94rem/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;color:#19355a}
+ .jx-path .jx-arrow{font-size:1rem;line-height:1;color:#1d53a3}
+ .jx-daily{display:block;margin-top:18px;padding:17px 18px;border-radius:15px;border:1px solid #dce6f5;box-shadow:none}
+ .jx-daily-lead .jx-eyebrow,.jx-daily-lead p{display:none}
+ .jx-daily-lead h2{font:760 1.05rem/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0 0 11px}
+ .jx-daily-passage{border-left:0;border-top:1px solid #cad9ed;padding:11px 0 0}
+ .jx-daily-passage>span{font-size:.65rem}
+ .jx-daily-passage blockquote{font:500 .94rem/1.48 Georgia,serif;margin:6px 0 7px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+ .jx-daily-passage button{min-height:44px;padding:7px 0;font-size:.78rem}
+ .jx-path:hover{transform:none;box-shadow:none}
+}
+@media(max-width:360px){
+ .jx-home{padding-inline:12px}
+ .jx-hero-copy{padding:22px 18px 18px}
+ .jx-hero h1{font-size:1.74rem}
+ .jx-path{padding:13px 12px;min-height:90px}
+ .jx-path strong{font-size:.88rem}
+}
