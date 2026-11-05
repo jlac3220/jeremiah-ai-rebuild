@@ -1,0 +1,44 @@
+[
+  {
+    "width": 390,
+    "background": "linear-gradient(115deg, rgb(9, 30, 67), rgb(18, 63, 135))",
+    "colors": [
+      {
+        "selector": "span",
+        "color": "rgb(198, 209, 255)",
+        "minimumContrast": 6.692944330208796
+      },
+      {
+        "selector": "h2",
+        "color": "rgb(23, 43, 69)",
+        "minimumContrast": 1.148268376346781
+      },
+      {
+        "selector": "p",
+        "color": "rgb(82, 100, 122)",
+        "minimumContrast": 1.6594956924259725
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "background": "linear-gradient(115deg, rgb(9, 30, 67), rgb(18, 63, 135))",
+    "colors": [
+      {
+        "selector": "span",
+        "color": "rgb(198, 209, 255)",
+        "minimumContrast": 6.692944330208796
+      },
+      {
+        "selector": "h2",
+        "color": "rgb(23, 43, 69)",
+        "minimumContrast": 1.148268376346781
+      },
+      {
+        "selector": "p",
+        "color": "rgb(82, 100, 122)",
+        "minimumContrast": 1.6594956924259725
+      }
+    ]
+  }
+]

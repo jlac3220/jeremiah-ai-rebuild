@@ -104,6 +104,9 @@
  font-weight:740;letter-spacing:-.045em;
 }
 .ogp-stage2 .og1-return-heading{border-radius:15px}
+/* This dark panel must override the Stage 2 light-surface text colors. */
+.ogp-page.ogp-stage2 .og1-return-heading h2{color:#fff}
+.ogp-page.ogp-stage2 .og1-return-heading p{color:#e2e8fb}
 .ogp-stage2 .og1-return-verses section,.ogp-stage2 .ogp-doctrine-summary-grid article{
  border-color:#dce7f4;background:#fff;border-radius:10px;
 }
@@ -115,7 +118,18 @@
 }
 .ogp-stage2 .og1-synthesis-verdict{background:#eef4fc;border-color:#d9e5f3}
 .ogp-stage2 .ogp-depth-report{background:#fff;border-color:#d7e4f3;box-shadow:none}
-.ogp-stage2 .ogp-finish-survey-invite{background:#edf4fc;border-color:#d5e5f5;box-shadow:none}
+/* A distinct feedback notice, rather than another blue lesson surface. */
+.ogp-page.ogp-stage2 .ogp-finish-survey-invite{background:#b51f38;border:1px solid #99152c;border-left:7px solid #f87c8e;box-shadow:none;border-radius:14px}
+.ogp-feedback-notice-label{display:flex;align-items:center;gap:12px;color:#fff0f3}
+.ogp-feedback-notice-label svg{flex-shrink:0;width:40px;height:40px;padding:7px;border-radius:50%;background:#fff;color:#b51f38}
+.ogp-feedback-notice-label span{font:800 .7rem/1.6 var(--font-body);letter-spacing:.08em}
+.ogp-page.ogp-stage2 .ogp-finish-survey-invite h2{color:#fff;margin-top:18px}
+.ogp-page.ogp-stage2 .ogp-finish-survey-invite p{color:#fff0f3}
+.ogp-page.ogp-stage2 .ogp-finish-survey-invite .ogp-finish-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.ogp-page.ogp-stage2 .ogp-finish-survey-invite .ogp-action{background:#fff;border:1px solid #fff;color:#99152c;min-height:48px}
+.ogp-page.ogp-stage2 .ogp-finish-survey-invite .ogp-back{color:#fff;min-height:44px;padding:10px 0;text-decoration:underline;text-underline-offset:4px}
+.ogp-page.ogp-stage2 .ogp-finish-survey-invite button:focus-visible{outline:3px solid #fff;outline-offset:4px}
+@media(max-width:600px){.ogp-feedback-notice-label{align-items:flex-start}.ogp-feedback-notice-label span{padding-top:8px}.ogp-page.ogp-stage2 .ogp-finish-survey-invite .ogp-finish-actions{align-items:stretch;gap:10px}.ogp-page.ogp-stage2 .ogp-finish-survey-invite .ogp-back{text-align:center}}
 .ogp-stage2 .ogp-finish-survey-invite h2,
 .ogp-stage2 .ogp-finish--understanding .ogp-depth-report h1{
  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:750;letter-spacing:-.04em;
