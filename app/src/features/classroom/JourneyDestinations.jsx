@@ -15,7 +15,7 @@ const STOPS = [
 
 // A named teaching placement is evaluated using the same engine as all other
 // classroom images. Unknown/unsupported placements intentionally show no art.
-export function DestinationArt({tone,content,move,placement}) {
+export function DestinationArt({tone,content,move,placement,loading='lazy',fallbackLabel}) {
  const target=placement||WITNESS_PLACEMENTS[tone];
  const brief=target?createVisualBrief({content,move,placement:target}):null;
  const approved=brief?chooseLessonVisual(brief,VISUAL_ASSETS).asset:null;
@@ -25,9 +25,9 @@ export function DestinationArt({tone,content,move,placement}) {
  return <span className={'ogj-art ogj-art--'+String(tone||'context').replace(/[^a-z0-9-]/gi,'')}
    role="img" aria-label={art?.alt||label}>
   {art&&<img key={art.id} className="ogj-photo" src={art.src} alt=""
-   loading="lazy" decoding="async" style={{objectPosition:art.focal||'50% 38%'}}
+   loading={loading} decoding="async" style={{objectPosition:art.focal||'50% 38%'}}
    onError={onError}/>}
-  <span aria-hidden="true" className="ogj-fallback">{label}</span>
+  <span aria-hidden="true" className="ogj-fallback">{fallbackLabel??label}</span>
  </span>;
 }
 

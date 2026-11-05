@@ -4,14 +4,14 @@ export function getOG1ChapterNumber(content, move) {
   (move?.standardIds || []).includes(chapter.standardId)) + 1;
 }
 
-export function getOG1LessonLocation(content, move, screen = 'exam', examSubmitted = false) {
+export function getOG1LessonLocation(content, move, screen = 'exam', examSubmitted = false, standalone = false) {
  const chapterNumber = getOG1ChapterNumber(content, move);
  if (move?.type === 'complete') {
   const states = {
    exam: {title:examSubmitted?'Exit exam results':'Exit exam · in progress',next:'Your Understanding'},
    understanding: {title:'Your Understanding',next:'Final lesson summary'},
    summary: {title:'Final lesson summary',next:'Optional pilot survey'},
-   survey: {title:'Pilot feedback · optional',next:'Return to Jeremiah'},
+   survey: {title:'Pilot feedback · optional',next:standalone?'Return to welcome':'Return to Jeremiah'},
   };
   return {...(states[screen] || states.exam),chapterNumber:0,phase:screen};
  }

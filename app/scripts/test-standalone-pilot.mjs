@@ -7,12 +7,14 @@ import {handleJeremiahApi} from '../server/apiHandler.mjs';
 import {handleBibleApi} from '../server/bibleHandler.mjs';
 import {issueSession} from '../server/pilotSecurity.mjs';
 import {isStandalonePilot,pilotRoute} from '../src/features/pilot/standalonePilot.js';
+import {getOG1LessonLocation} from '../src/core/classroom/og1LessonLocation.js';
 import content from '../src/core/classroom/content/OG_1_LESSON.js';
 import {parseBibleReference} from '../src/core/bible/bibleReaderIntent.js';
 import {findBibleBook} from '../src/core/bible/bibleCatalog.js';
 const env={...process.env},fetcher=globalThis.fetch;
 const response=()=>({headers:{},setHeader(k,v){this.headers[k]=v},end(s){this.body=s}});
 try{
+ const complete=content.instructionalMoves.find(m=>m.type==='complete');assert.equal(getOG1LessonLocation(content,complete,'survey',true,true).next,'Return to welcome');assert.equal(getOG1LessonLocation(content,complete,'survey',true).next,'Return to Jeremiah');
  process.env.PILOT_SESSION_SECRET='unit-test-only-standalone-signing-secret-32';delete process.env.VERCEL;delete process.env.PILOT_ACCESS_ENFORCED;
  assert.equal(isStandalonePilot('pilot.jeremiah.app'),true);assert.equal(isStandalonePilot('PILOT.JEREMIAH.APP.'),true);assert.equal(isStandalonePilot('jeremiah.app'),false);assert.equal(isStandalonePilot('creator.vercel.app'),false);
  for(const hash of ['','#home','#askJeremiah','#classroom','#progress','#profile','#bibleSupport','#study','#unknown','#login'])assert.equal(pilotRoute(hash),'pilot');

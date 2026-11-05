@@ -192,7 +192,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const examSubmitted=Boolean(state.experience?.exitExam?.version===OG1_EXIT_EXAM_VERSION && state.experience?.exitExam?.latest);
  const finalRating=finish?rateOG1Lesson(content,state):null;
  const displayProgress=finish?100:percent;
- const location=getOG1LessonLocation(content,move,completionScreen,examSubmitted);
+ const location=getOG1LessonLocation(content,move,completionScreen,examSubmitted,standalone);
  const chapterNumber=location.chapterNumber;
  const chapter=finish?'complete':CHAPTER_SLUGS[chapterNumber-1]||'opening';
  const sceneClass=current?.kind||'complete';

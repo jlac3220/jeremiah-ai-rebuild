@@ -24,7 +24,12 @@
 .ogpilot-consent{display:flex;align-items:flex-start;gap:13px;margin:22px 0;padding:16px;border:1px solid #dce5f0;border-radius:11px;background:#f8fafd;font-size:.88rem;line-height:1.55;color:#465d76}
 .ogpilot-consent input{width:20px;height:20px;flex-shrink:0;accent-color:#4b61bc;margin-top:2px}
 .ogpilot-actions{display:flex;gap:12px;flex-wrap:wrap}
-.ogpilot-actions button,.ogpilot-confirm button{min-height:49px;padding:12px 20px;border-radius:11px;font-weight:800;cursor:pointer}
+.ogpilot-actions button,.ogpilot-confirm button,.ogpilot-invite button{min-height:49px;padding:12px 20px;border-radius:11px;font-weight:800;cursor:pointer}
+.ogpilot-invite{margin-bottom:12px}
+.ogpilot-invite input{display:block;box-sizing:border-box;width:100%;max-width:360px;min-height:49px;padding:12px;border:1px solid #9cacc5;border-radius:11px;background:#fff;color:#19314a;font:inherit;font-size:1rem;margin:8px 0 12px}
+.ogpilot-invite button{max-width:100%;font:inherit;font-weight:800}
+.ogpilot-invite button:disabled{opacity:.45;cursor:not-allowed}
+.ogpilot-invite input:focus-visible,.ogpilot-invite button:focus-visible,.ogpilot-actions button:focus-visible{outline:3px solid #174c9e;outline-offset:3px}
 .ogpilot-primary{background:#4b61bc;color:#fff;border:1px solid #4b61bc}
 .ogpilot-primary:disabled,.ogpilot-confirm button:disabled{opacity:.45;cursor:not-allowed}
 .ogpilot-secondary,.ogpilot-confirm button{background:#fff;color:#344b74;border:1px solid #ced7e9}

@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-11-05T23:30:42.897806+00:00",
+  "host": "pilot.jeremiah.app",
+  "authenticated": false,
+  "paidRequests": 0,
+  "configurationChanged": false,
+  "observations": [
+    {
+      "path": "/api/pilot/access",
+      "status": 200,
+      "access": {
+        "mode": "closed",
+        "authenticated": false,
+        "version": "d78f23fa"
+      }
+    },
+    {
+      "path": "/api/pilot/report",
+      "status": 401
+    },
+    {
+      "path": "/api/pilot/report?format=csv",
+      "status": 401
+    },
+    {
+      "path": "/api/pilot/report?setup=1",
+      "status": 401
+    }
+  ]
+}

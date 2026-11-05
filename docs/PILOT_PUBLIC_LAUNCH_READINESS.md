@@ -2,6 +2,8 @@
 
 **NOT READY FOR INVITATIONS. No public pilot has been opened by this work.**
 
+**Current coordination update (PR #66):** the domain/SSL blocker was subsequently resolved in Issue #63; `pilot.jeremiah.app` still serves closed PR #64 (`d78f23fa`). PR #66 prepares the standalone OG.1-only shell and its three review corrections. Follow [the current closed-deployment handoff](CLOSED_OG1_DEPLOYMENT_HANDOFF.md) for the next milestone: one genuine hosted lesson, survey, and matching private report receipt. The older environment/deployment observations below are historical, not proof of current live service success. Public invitations remain closed. General Ask is intentionally absent from the pilot; the owner-only verifier checks its backend internally for Issue #63.
+
 Source: latest PR #62, commit `c750ae36aab70d1a0f0ded434ba6474e1dde1ad7`. New branch: `codex/pilot-service-release-gates`. Keep `jeremiah.app` and its legacy Vercel project unchanged. No production merge, domain reassignment, DNS change or production deployment has been performed here.
 
 ## Confirmed failures and corrections

@@ -1,3 +1,5 @@
+> **Historical instructions — superseded.** Do not replace or reassign `jeremiah.app`, use stale production branches, or open invitations using this older handoff. For the current closed OG.1-only pilot, follow [PR #66 deployment and live milestone handoff](../docs/CLOSED_OG1_DEPLOYMENT_HANDOFF.md) and Issue #63. The apex domain stays unchanged.
+
 # Jeremiah.app on Vercel — production pilot handoff
 
 The domain owner has confirmed that **jeremiah.app** is already managed on Vercel and that its old unused app can be replaced. The intended public pilot link is:
