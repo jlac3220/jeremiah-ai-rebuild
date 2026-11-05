@@ -36,9 +36,20 @@ export function evaluateTeachingChoice(move, learnerResponse) {
 export function saveTeachingDecision(state, content, move, decision) {
  if (state.currentMoveId!==move.id || state.experience?.teachingDecision?.moveId===move.id) return state;
  // A reported strong answer without rubric evidence cannot mark a written task mastered.
+ const isOG1=content.standardId==='OG.1.LESSON.18';
+ const isWritten=['free_response','mastery_response'].includes(move.type);
  let checked=decision;
- if (!(['strong','partial','weak'].includes(decision?.verdict) || (content.standardId==='OG.1.LESSON.18' && decision?.verdict==='unscored')) || typeof decision?.teacherMessage!=='string' || !decision.teacherMessage.trim()) {
-  checked={verdict:'partial',strategy:'encourage_retry',source:'fallback',teacherMessage:'Your explanation is saved, but the assessment response was incomplete. Please try again.',evidenceObserved:[],misconceptionIds:[]};
+ // Guard the state boundary too: an old server or malformed response must
+ // never convert an unavailable OG.1 evaluation into measured understanding.
+ if(isOG1 && isWritten && ['fallback','service-unavailable'].includes(checked?.source)){
+  checked={...checked,verdict:'unscored',strategy:'continue_without_grade',
+   teacherMessage:'Your explanation is saved, but Jeremiah could not assess it right now. This answer will not count toward your score; you may continue learning.',
+   evidenceObserved:[],misconceptionIds:[]};
+ }
+ if (!(['strong','partial','weak'].includes(checked?.verdict) || (isOG1 && checked?.verdict==='unscored')) || typeof checked?.teacherMessage!=='string' || !checked.teacherMessage.trim()) {
+  checked=isOG1 && isWritten
+   ? {verdict:'unscored',strategy:'continue_without_grade',source:'service-unavailable',teacherMessage:'Your answer was saved but could not be assessed. It will not count toward your score.',evidenceObserved:[],misconceptionIds:[]}
+   : {verdict:'partial',strategy:'encourage_retry',source:'fallback',teacherMessage:'Your explanation is saved, but the assessment response was incomplete. Please try again.',evidenceObserved:[],misconceptionIds:[]};
  }
 
  if (['free_response','mastery_response'].includes(move.type) && checked.verdict==='strong' && !(move.evidenceIds || []).every(id=>checked.evidenceObserved?.includes(id))) {

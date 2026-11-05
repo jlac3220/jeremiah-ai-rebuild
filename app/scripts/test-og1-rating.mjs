@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {rateOG1Lesson} from '../src/core/classroom/og1LessonRating.js';
 import {continueTeaching,saveTeachingDecision} from '../src/core/classroom/teacherLedEngine.js';
+import {teachWithJeremiah} from '../server/teacherCore.mjs';
 const content={standardId:'OG.1.LESSON.18',coveredStandards:[{id:'OG.1.1.18'},{id:'OG.1.2.18'}],instructionalMoves:[
  {id:'shema-guide',type:'scenario',standardIds:['OG.1.1.18'],next:{strong:'shema-try',weak:'shema-guide',partial:'shema-guide'}},
  {id:'shema-try',type:'free_response',standardIds:['OG.1.1.18'],next:{strong:'isaiah-guide',weak:'shema-try',partial:'shema-try'}},
@@ -53,4 +54,31 @@ assert.ok(player.includes('Continue to final summary'),'Learner controls reveal-
 assert.ok(player.includes('Understanding report'),'Learner can revisit ratings from the final summary');
 assert.ok(!exam.includes('Finish lesson without taking the exam'));
 assert.ok(exam.includes('View my learning-level report'));
+
+// Outages and older persisted fallback records must never imply understanding.
+const legacyPartial=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict:'partial'}],experience:{}});
+assert.equal(legacyPartial.standards[0].score,null,'Older ambiguous partial written evidence needs reassessment');
+assert.ok(legacyPartial.standards[0].coverage>0,'Legacy attempt is retained in coverage');
+const verifiedPartial=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict:'partial',source:'openai'}],experience:{}});
+assert.equal(verifiedPartial.standards[0].score,55,'Verified partial semantic assessment is scoreable');
+const offlinePartial=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict:'partial',source:'fallback'}],experience:{}});
+assert.equal(offlinePartial.standards[0].score,null,'Offline fallback may not count as partial understanding');
+const supportedPartial=rateOG1Lesson(content,{teacherHistory:[{moveId:'shema-try',verdict:'partial',source:'openai',usedSupport:true}],experience:{}});
+assert.equal(supportedPartial.standards[0].score,null,'Assisted writing may not count as independent written evidence');
+const oldStyleFallback=saveTeachingDecision({currentMoveId:'shema-try',teacherHistory:[],attemptsByMove:{},completedMoveIds:[],evidenceIds:[],misconceptions:[],experience:{}},content,fallbackMove,{verdict:'partial',strategy:'encourage_retry',source:'fallback',teacherMessage:'Offline',evidenceObserved:[],misconceptionIds:[]});
+assert.equal(oldStyleFallback.teacherHistory.at(-1).verdict,'unscored','State boundary also rejects outdated offline partial verdicts');
+assert.equal(oldStyleFallback.teacherHistory.at(-1).source,'fallback','Assessor provenance is saved for future reloads');
+assert.equal(rateOG1Lesson(content,oldStyleFallback).standards[0].score,null);
+assert.equal(continueTeaching(oldStyleFallback,content).currentMoveId,'isaiah-guide');
+const missingModelKey=process.env.OPENAI_API_KEY;
+delete process.env.OPENAI_API_KEY;
+try{
+ const decision=await teachWithJeremiah({standardId:'OG.1.LESSON.18',moveId:'shema-try',learnerResponse:{text:'Deuteronomy 6:4 affirms one LORD and no other God.'}});
+ assert.equal(decision.verdict,'unscored','Live teacher handler must not award offline writing credit');
+ assert.equal(decision.source,'service-unavailable');
+ assert.deepEqual(decision.evidenceObserved,[]);
+}finally{
+ if(missingModelKey!==undefined)process.env.OPENAI_API_KEY=missingModelKey;
+}
+
 console.log('PASS OG.1 open progression + per-standard evidence ratings 1–4.');

@@ -31,7 +31,17 @@ export function rateOG1Lesson(content,state){
  const rows=standards.map(standardId=>{
   const related=moves.filter(m=>(m.standardIds||[]).includes(standardId)&&m.type!=='teach');
   const responses=related.map(move=>({move,record:history.filter(h=>h.moveId===move.id).at(-1)})).filter(x=>x.record);
-  const scoredResponses=responses.filter(x=>x.record.verdict!=='unscored');
+  const scoredResponses=responses.filter(({move,record})=>{
+   if(record.verdict==='unscored')return false;
+   if(!['free_response','mastery_response'].includes(move.type))return true;
+   // On the original app, a fallback returned "partial" and teacherHistory did
+   // not save the assessor. Historic partial responses are ambiguous and must
+   // be excluded until reassessed. Historic strong/weak results are safe to
+   // retain: the OG.1 offline written fallback never returned either verdict.
+   if(record.usedSupport || ['fallback','service-unavailable'].includes(record.source))return false;
+   if(record.source==='openai')return true;
+   return !record.source && ['strong','weak'].includes(record.verdict);
+  });
   const written=scoredResponses.filter(x=>['free_response','mastery_response'].includes(x.move.type));
   const guided=scoredResponses.filter(x=>x.move.type==='scenario');
   const examResults=(exam?.results||[]).filter(x=>x.standardId===standardId);
@@ -62,7 +72,8 @@ export function rateOG1Lesson(content,state){
   return {standardId,level,label:OG1_RATING_LABELS[level],meaning:OG1_RATING_MEANINGS[level],
    nextStep:level===4?'Continue applying and defending this understanding with Scripture.':OG1_NEXT_STEPS[standardId]||'Explain the standard with supporting Scripture.',
    score,coverage,components:Object.fromEntries(components.map(x=>[x.key,x.values.length?rounded(mean(x.values)):null])),
-   attempted:responses.length,possible:related.length,examCorrect:correctExam,examQuestions:examResults.length,evidence};
+   attempted:responses.length,unscored:responses.length-scoredResponses.length,possible:related.length,
+   examCorrect:correctExam,examQuestions:examResults.length,evidence};
  });
  // Aggregate observed evidence by standard, not by individual question count.
  // An unassessed standard is visible but cannot artificially drop the overall
@@ -76,5 +87,5 @@ export function rateOG1Lesson(content,state){
  const preliminary=allExtensive&&score>=85?4:hasAdvanced&&score>=70?Math.min(3,averageLevel):Math.min(2,averageLevel);
  const level=coverage<50?Math.min(2,preliminary):preliminary;
  return {level,score,coverage,standards:rows,label:OG1_RATING_LABELS[level],meaning:OG1_RATING_MEANINGS[level],
-  note:'Weighted evidence: 50% independent explanation, 25% guided work, 25% exam when all three are available. Missing or unscored work is not counted as incorrect; completed attempts still count toward evidence coverage. A high score alone cannot establish Level 3 or 4.'};
+  note:'Weighted evidence: 50% independently assessed explanation, 25% guided work, 25% exam when all three are available. Unassessed work (including offline fallbacks and legacy ambiguous partial responses) is not counted as incorrect or as demonstrated understanding; attempts still count toward evidence coverage. A high score alone cannot establish Level 3 or 4.'};
 }

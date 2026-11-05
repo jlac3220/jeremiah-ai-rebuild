@@ -81,7 +81,8 @@ try {
   standardId:'OG.1.LESSON.18', moveId:'shema-try',
   learnerResponse:{text:'One Lord. God is one. No other God. Isaiah. Deuteronomy 6:4.'}
  });
- assert.equal(fallback.verdict, 'partial', 'Offline keyword matching must not award grouped-standard mastery');
+ assert.equal(fallback.verdict, 'unscored', 'Offline service must not assign any understanding level without assessment');
+ assert.equal(fallback.source, 'service-unavailable', 'Fallback must disclose unavailable evaluation');
  assert.deepEqual(fallback.evidenceObserved, []);
 } finally {
  if(previousKey) process.env.OPENAI_API_KEY=previousKey;

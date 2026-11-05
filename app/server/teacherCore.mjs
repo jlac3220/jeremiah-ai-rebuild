@@ -97,8 +97,17 @@ function deterministicVerdict(move, learnerResponse) {
 }
 
 function fallbackDecision(move, learnerResponse, reason = "", content = null) {
-  // Never award new mastery through keyword heuristics when rubric assessment is offline.
-  if ((content?.sourceStandard || content?.coveredStandards?.length) && ["free_response", "mastery_response"].includes(move.type)) {
+  // A missing semantic assessment is NOT partial understanding. OG.1 lets
+  // learners continue, but never fabricates a written score during an outage.
+  if (content?.coveredStandards?.length && ["free_response", "mastery_response"].includes(move.type)) {
+    return {
+      verdict: "unscored", strategy: "continue_without_grade", source: "service-unavailable", diagnostic: reason,
+      teacherMessage: "Your explanation is saved. Jeremiah could not assess it right now, so this response will not count toward your score. You can continue learning.",
+      followUpPrompt: move.prompt, misconceptionIds: [], evidenceObserved: [],
+    };
+  }
+  // Older standard-by-standard routes retain their existing retry flow.
+  if (content?.sourceStandard && ["free_response", "mastery_response"].includes(move.type)) {
     return {
       verdict: "partial", strategy: "encourage_retry", source: "fallback", diagnostic: reason,
       teacherMessage: "Your explanation is saved. Meaning-based assessment is unavailable right now, so this answer has not been marked as mastered. Review the lesson’s Scripture and try again when assessment is available.",
