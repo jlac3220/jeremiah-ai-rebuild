@@ -28,6 +28,9 @@ import {OG1_EXIT_EXAM_VERSION} from '../../data/curriculum/og1ExitExam';
 import './OG1LessonPlayer.css';
 import './OG1ThemeConsistency.css';
 import './OG1StageOne.css';
+import OG1ResponseWorkspace from './OG1ResponseWorkspace';
+import OG1ChapterGuide from './OG1ChapterGuide';
+import './OG1InteractiveExperience.css';
 
 // These are instructional purposes, not image IDs or keyword searches.
 // Broad worship may use broad imagery; specific evidence must match the
@@ -163,6 +166,8 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const [confirmRestart,setConfirmRestart]=useState(false);
  const [inlineBibleReference,setInlineBibleReference]=useState(null);
  const [completionScreen,setCompletionScreen]=useState('exam');
+ const [chapterMapOpen,setChapterMapOpen]=useState(false);
+ const [revealed,setRevealed]=useState({});
  const abort=useRef(null);
  const stageRef=useRef(null);
  const priorMove=useRef(move.id);
@@ -186,6 +191,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const chapterNumber=location.chapterNumber;
  const chapter=finish?'complete':CHAPTER_SLUGS[chapterNumber-1]||'opening';
  const sceneClass=current?.kind||'complete';
+ const writingWorkspace=written&&chapterNumber===1;
+ const revealKey=move.id+':'+moment;
+ const revealLimit=Math.max(evidenceIndex,revealed[revealKey]||0);
  // Spoken moments are editorial choices, not narration of every button and quiz.
  // Reveals inside the Shema scene are voiced only when the student chooses them.
  const narrationText =
@@ -211,7 +219,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const narration=useLessonNarration({text:narrationText,key:move.id+':'+moment+':'+evidenceIndex});
  useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setEvidenceIndex(0);setPracticeStep(0);setError('');setInlineBibleReference(null);}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
- useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment,evidenceIndex]);
+ useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
  function change(patch) {
   if(thinking||feedback)return;
   setDraft(old=>({...old,...patch}));
@@ -225,14 +233,18 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
   if(current?.kind==='videoCheck'&&!mediaChoice){setError('Choose an answer before continuing. It does not need to be correct.');return;}
   const next=navigateScene(moments,moment,evidenceIndex,'next');
   if(next.atEnd){if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));return;}
-  setError('');setMoment(next.moment);setEvidenceIndex(next.reveal);
+  setError('');setRevealed(old=>({...old,[move.id+':'+next.moment]:Math.max(old[move.id+':'+next.moment]||0,next.reveal)}));setMoment(next.moment);setEvidenceIndex(next.reveal);
   if(next.moment!==moment)setMediaChoice('');
+ }
+ function inspectReveal(index){
+  if(index<0||index>revealLimit)return;
+  setEvidenceIndex(index);
  }
  function back(){
   const previous=navigateScene(moments,moment,evidenceIndex,'back');
   setError('');setMoment(previous.moment);setEvidenceIndex(previous.reveal);
  }
- function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setEvidenceIndex(0);setPracticeStep(0);setConfirmRestart(false);setCompletionScreen('exam');onStateChange(old=>restartTeaching(content,old));}
+ function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setEvidenceIndex(0);setPracticeStep(0);setConfirmRestart(false);setCompletionScreen('exam');setRevealed({});setChapterMapOpen(false);onStateChange(old=>restartTeaching(content,old));}
  async function check(){
   if(thinking||feedback)return;
   const anyAnswer=ready;
@@ -249,9 +261,11 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
   }
   onStateChange(old=>saveTeachingDecision(old,content,move,decision));
  }
+ const writingAction=feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':move.assessmentRole==='memory_recall'?'Check my recitation':'Discuss my explanation'} →</button>;
+ const writingProps={move,value:form.responseText||'',disabled:Boolean(feedback)||thinking,onChange:value=>change({responseText:value}),feedback,onReadBible:readVerse,actions:writingAction,usedSupport:Boolean(form.usedSupport),onUseSupport:()=>change({usedSupport:true})};
  const buttonText=current?.kind==='roadmap'?'Meet the four witnesses':current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Meet the witnesses':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
- return <div className={`ogp-page ogp-stage1 ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
-  <OG1LessonToolbar narration={narration} narrationText={narrationText} onNavigate={onNavigate} onRestart={()=>setConfirmRestart(true)} chapters={content.lessonChapters} chapterNumber={chapterNumber} finish={finish}/>
+ return <div className={`ogp-page ogp-stage1 ogp-stage2 ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
+  <OG1LessonToolbar narration={narration} narrationText={narrationText} onNavigate={onNavigate} onRestart={()=>setConfirmRestart(true)} chapters={content.lessonChapters} chapterNumber={chapterNumber} finish={finish} onOpenMap={()=>setChapterMapOpen(true)}/>
   <div className="ogp-progress" role="progressbar" aria-label="OG.1 teaching coverage" aria-valuemin={0} aria-valuemax={100} aria-valuenow={displayProgress}><span style={{width:displayProgress+'%'}}/></div>
   {narration.error&&<div className="ogp-voice-error" role="status"><span>{narration.error} You can continue reading.</span></div>}
   {confirmRestart && <OG1RestartDialog onCancel={()=>setConfirmRestart(false)} onRestart={restart}/>}
@@ -262,20 +276,22 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
     </div>
     <nav className="ogp-mini-timeline" aria-label="Five lesson chapters">
      <div className="ogp-mini-caption"><span>{finish?'CHAPTERS COVERED':'YOUR JOURNEY'}</span><strong>Up next: {location.next}</strong></div>
+     <button className="og2-map-toggle" type="button" aria-expanded={chapterMapOpen} aria-controls="og2-chapter-guide" onClick={()=>setChapterMapOpen(open=>!open)}><LessonIcon name="context"/>{chapterMapOpen?'Close map':'View chapter map'}</button>
      <ol>{CHAPTER_NAMES.map((name,i)=><li key={name} className={finish||chapterNumber>i+1?'is-complete':chapterNumber===i+1?'is-current':'is-ahead'} aria-current={!finish&&chapterNumber===i+1?'step':undefined} title={`Chapter ${i+1}: ${name}`}>
       <span className="ogp-mini-node" aria-hidden="true">{finish||chapterNumber>i+1?'✓':i+1}</span>
       <span className="ogp-visually-hidden">{name}{finish||chapterNumber>i+1?' — covered':chapterNumber===i+1?' — current':' — ahead'}</span>
      </li>)}</ol>
     </nav>
    </div>
+   <OG1ChapterGuide expanded={chapterMapOpen} onClose={()=>setChapterMapOpen(false)} chapterNumber={chapterNumber} finish={finish} taskTitle={finish?location.title:move.title} next={location.next}/>
    {finish?(completionScreen==='survey'?<OG1PilotSurvey completed onDone={()=>onNavigate(window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}/>:completionScreen==='understanding'?<section className="ogp-finish ogp-finish--understanding" aria-labelledby="ogp-understanding-title">
  <div className="ogp-depth-report"><span className="ogp-understanding-eyebrow">YOUR LEARNING · OG.1</span><h1 id="ogp-understanding-title">Your Understanding</h1><p className="ogp-understanding-level">Level {finalRating.level} · {finalRating.label}</p><p>Weighted performance: {finalRating.score===null?'Not assessed':finalRating.score+'%'} · Evidence coverage: {finalRating.coverage}%</p><p>{finalRating.meaning}</p><p>{finalRating.note}</p><div className="ogp-depth-report-list">{finalRating.standards.map(item=><div key={item.standardId}><strong>{item.standardId}</strong><span>Level {item.level} · {item.label}</span><small>Weighted performance: {item.score===null?'Not assessed':item.score+'%'} · Evidence coverage: {item.coverage}%</small>{item.recitationVerified!==null&&<small>Deuteronomy 6:4 KJV recitation: {item.recitationVerified?'Verified in the recall check':item.recitationAttempted?'Attempted; not yet verified':'Not yet attempted'}</small>}<p>{item.meaning}</p><small><strong>What you demonstrated:</strong> {item.evidence}</small><small><strong>What to work on next:</strong> {item.nextStep}</small></div>)}</div></div>
  <div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('summary');window.scrollTo({top:0,behavior:'auto'})}}>Continue to final summary →</button><button type="button" className="ogp-back" onClick={()=>setCompletionScreen('exam')}>Review assessment <LessonIcon name="context"/></button></div>
  </section>:completionScreen==='summary'?<section className="ogp-finish ogp-finish--synthesis" aria-label="Final lesson summary"><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-survey-invite"><span>ONE MORE THING · YOUR VOICE MATTERS</span><h2>Help shape the next Jeremiah lesson.</h2><p>Rate the teaching, imagery, interface, narrator, pacing, and more. Tell us exactly what to keep—and what needs to change. The survey is optional, anonymous, and separate from your answers.</p><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('survey');window.scrollTo({top:0,behavior:'auto'})}}>Evaluate the experience →</button><button type="button" className="ogp-back" onClick={()=>onNavigate(window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}>Finish without survey</button><button type="button" className="ogp-back" onClick={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}>← Understanding report</button></div></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onContinue={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}/>):<>
-    <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'}>
-     {(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap','doctrine-summary'].includes(current.kind)&&!current.kind?.startsWith('shema-')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
+    <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'} data-workspace={writingWorkspace||undefined}>
+     {!writingWorkspace&&(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap','doctrine-summary'].includes(current.kind)&&!current.kind?.startsWith('shema-')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind==='roadmap'&&null}
-     {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} sequenceIndex={evidenceIndex} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak}/>}
+     {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} sequenceIndex={evidenceIndex} revealedThrough={revealLimit} onInspect={inspectReveal} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
       <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></div>
       <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
@@ -361,20 +377,20 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       :<div className="ogp-discovery"><p className="ogp-prompt">Follow each piece of the larger picture.</p><div className="ogp-discovery-choices">{current.discovery.options.map(([label],i)=><span className={evidenceIndex===i?'is-active':''} key={label}>{label}</span>)}</div>{<div className="ogp-discovery-answer" aria-live="polite"><strong>{current.discovery.options[evidenceIndex][0]}</strong><p>{current.discovery.options[evidenceIndex][1]}</p><small>{current.discovery.closer}</small></div>}</div>)}
      {current.kind==='watch'&&<><p className="ogp-prompt">Watch for the meaning of <em>shema</em>. This is historical and language context; Jeremiah will connect it to Apostolic teaching.</p><div className="ogp-video"><OptionalLessonVideo video={current.video}/></div><small>Optional · {current.video.provider} · {current.video.duration}</small></>}
      {current.kind==='videoCheck'&&<><p className="ogp-prompt">{current.check.prompt}</p><div className="ogp-options">{current.check.choices.map(c=><button type="button" key={c.id} aria-pressed={mediaChoice===c.id} onClick={()=>setMediaChoice(c.id)}>{c.label}</button>)}</div>{mediaChoice&&<p className="ogp-feedback">{mediaChoice===current.check.answerId?current.check.correctFeedback:current.check.incorrectFeedback}</p>}</>}
-     {current.kind==='task'&&<>{move.id!=='shema-try'&&<p className="ogp-prompt">{move.prompt}</p>}
+     {current.kind==='task'&&<>{!writingWorkspace&&move.id!=='shema-try'&&<p className="ogp-prompt">{move.prompt}</p>}
       {move.id==='shema-guide'?<ShemaPhrasePractice key={move.id} move={move} draft={form} feedback={feedback} onChange={change} onStepChange={setPracticeStep}/>:((matching||reasoning)&&<LessonActivity key={move.id} move={move} draft={form} feedback={feedback} onChange={change}/>)}
       {!written&&!matching&&!reasoning&&<div className="ogp-options">{(move.choices||[]).map(c=><button key={c.id} type="button" disabled={Boolean(feedback)} aria-pressed={form.selectedChoiceId===c.id} onClick={()=>change({selectedChoiceId:c.id})}>{c.label}</button>)}</div>}
-      {written&&(move.id==='shema-try'?<ShemaTeachBack move={move} value={form.responseText||''} disabled={Boolean(feedback)||thinking} onChange={value=>change({responseText:value})}/>:<><textarea aria-label={move.assessmentRole==='memory_recall'?'Your recitation of Deuteronomy 6:4':'Your explanation'} rows={move.assessmentRole==='memory_recall'?3:5} placeholder={move.assessmentRole==='memory_recall'?'Write the entire verse from memory…':'Explain what the Scripture teaches in your own words.'} value={form.responseText||''} disabled={Boolean(feedback)||thinking} onChange={e=>change({responseText:e.target.value})}/></>)}
-      {feedback&&<div className="ogp-feedback" role="status"><strong>Jeremiah responds</strong><p>{feedback.teacherMessage}</p>{move.assessmentRole==='memory_recall'&&<button type="button" className="ogp-link" onClick={()=>readVerse('Deuteronomy 6:4')}>Review the KJV verse in context <LessonIcon name="context"/></button>}</div>}
+      {written&&(writingWorkspace?(move.id==='shema-try'?<ShemaTeachBack {...writingProps}/>:<OG1ResponseWorkspace {...writingProps}/>):<textarea aria-label="Your explanation" rows={5} placeholder="Explain what the Scripture teaches in your own words." value={form.responseText||''} disabled={Boolean(feedback)||thinking} onChange={e=>change({responseText:e.target.value})}/>)}
+      {feedback&&!writingWorkspace&&<div className="ogp-feedback" role="status"><strong>Jeremiah responds</strong><p>{feedback.teacherMessage}</p>{move.assessmentRole==='memory_recall'&&<button type="button" className="ogp-link" onClick={()=>readVerse('Deuteronomy 6:4')}>Review the KJV verse in context <LessonIcon name="context"/></button>}</div>}
       {error&&<p role="alert" className="ogp-error">{error}</p>}
      </>} 
     </section>
-    <nav className="ogp-controls" aria-label="Lesson moment navigation">
+    {!writingWorkspace&&<nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':move.assessmentRole==='memory_recall'?'Check my recitation':written?'Discuss my explanation':'Check my connection'} →</button>))
      :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'&&move.id==='learn'?(hasMoreReveals?`Meet ${['Isaiah','Jesus','Paul'][evidenceIndex]}`:'Begin Chapter 1 · The Shema'):current?.kind==='discovery'?(hasMoreReveals?'Reveal the next part':'Continue the lesson'):current?.kind==='shema-connection'?'Examine the meaning of one':current?.kind==='shema-echad'?'Test your understanding':current?.kind==='doctrine-summary'?'Apply what you learned':buttonText} →</button>}
      {!assessment&&(moment>0||evidenceIndex>0)&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      
-    </nav>
+    </nav>}
    </>}
   </main>
   {inlineBibleReference&&<OG1InlineBible reference={inlineBibleReference} onClose={()=>setInlineBibleReference(null)}/>}

@@ -5,6 +5,7 @@ import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 import './ShemaExperience.css';
 import OptionalLessonVideo from './OptionalLessonVideo';
 import LessonIcon from '../../shared/lesson/LessonIcon';
+import OG1ResponseWorkspace from './OG1ResponseWorkspace';
 
 const PHRASES = [
  {id:'hear',text:'Hear, O Israel',spoken:'Hear, O Israel.',hebrew:'שְׁמַע',roman:'SHEMA · HEAR',title:'More than hearing a sound.',meaning:'The confession opens with a summons to listen and respond. The people are being addressed, not merely given information.'},
@@ -12,7 +13,7 @@ const PHRASES = [
  {id:'one',text:'is one LORD',spoken:'Is one Lord.',hebrew:'יְהוָה אֶחָד',roman:'ONE LORD',title:'The heart of the confession.',meaning:'The LORD is confessed as one. Read that claim beside Isaiah’s declarations and Jesus’ repetition, rather than building everything on a dictionary definition.'}
 ];
 
-export default function ShemaExperience({kind,sequenceIndex=0,video,onOpenBible,onSpeak,content,move}) {
+export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=sequenceIndex,onInspect,video,onOpenBible,onSpeak,content,move}) {
  const openingBrief=createVisualBrief({content,move,placement:{intent:'historical',subject:'Moses',reference:'Deuteronomy 6:4',learningGoal:'Israel receives the confession in Deuteronomy 6:4'}});
  const knownOpening=chooseLessonVisual(openingBrief,VISUAL_ASSETS).asset;
  const {asset:openingImage,onError:openingImageError}=useDiscoveredLessonVisual(openingBrief,knownOpening);
@@ -39,12 +40,12 @@ export default function ShemaExperience({kind,sequenceIndex=0,video,onOpenBible,
  if(kind==='shema-manuscript')return <div className="shema-phrase-story">
   <div className="shema-phrase-overline"><span>THE WORDS OF THE CONFESSION</span><span>DEUTERONOMY 6:4</span></div>
   <div className="shema-phrase-track" aria-label="Three parts of the confession">
-   {PHRASES.map((part,i)=><div key={part.id} className={i===sequenceIndex?'is-active':i<sequenceIndex?'is-complete':'is-upcoming'} aria-current={i===sequenceIndex?'step':undefined}>
+   {PHRASES.map((part,i)=><button type="button" key={part.id} disabled={!onInspect||i>revealedThrough} onClick={()=>onInspect(i)} className={i===sequenceIndex?'is-active':i<sequenceIndex?'is-complete':'is-upcoming'} aria-current={i===sequenceIndex?'step':undefined} aria-controls="og2-phrase-meaning">
     <span>{i<sequenceIndex?'✓':String(i+1).padStart(2,'0')}</span>
     <strong>{part.text}</strong>
-   </div>)}
+   </button>)}
   </div>
-  <div className="shema-phrase-feature" key={currentPhrase.id} aria-live="polite">
+  <div id="og2-phrase-meaning" className="shema-phrase-feature" key={currentPhrase.id} aria-live="polite">
    <div className="shema-phrase-language">
     <span>IN HEBREW</span>
     <strong lang="he" dir="rtl">{currentPhrase.hebrew}</strong>
@@ -133,14 +134,8 @@ export function ShemaPhrasePractice({move,draft,feedback,onChange,onStepChange})
  </div>;
 }
 
-export function ShemaTeachBack({move,value,onChange,disabled}) {
- return <div className="shema-teachback">
-  <div className="shema-teachback-intro">
-   <span className="shema-eyebrow">FINAL CHALLENGE / CHAPTER ONE</span>
-   <h2>Can you teach the confession?</h2>
-   <p>{move.prompt}</p>
-  </div>
-  <div className="shema-teachback-layout">
+export function ShemaTeachBack(props) {
+ return <OG1ResponseWorkspace {...props} title="Can you teach the confession?" guidance={
    <aside className="shema-teachback-brief" aria-label="Your evidence trail">
     <span className="shema-kicker">YOUR EVIDENCE TRAIL</span>
     <ol>
@@ -150,11 +145,5 @@ export function ShemaTeachBack({move,value,onChange,disabled}) {
      <li><strong>Connect</strong><span>Bring in Isaiah 44:6 and Mark 12:29.</span></li>
     </ol>
    </aside>
-   <div className="shema-teachback-response">
-    <label htmlFor="shema-written-response">Your explanation</label>
-    <textarea id="shema-written-response" value={value||''} disabled={disabled} onChange={e=>onChange(e.target.value)} rows={10} placeholder="Explain the meaning of the confession, then support your reasoning from Scripture…"/>
-    <div className="shema-response-footer"><span>{(value||'').trim()?value.trim().split(/\s+/).length+' words':'Your words. Your reasoning.'}</span><span>Autosaved as you write</span></div>
-   </div>
-  </div>
- </div>;
+ }/>;
 }

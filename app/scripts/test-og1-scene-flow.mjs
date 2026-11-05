@@ -37,7 +37,8 @@ assert.ok(!shema.includes('<details'),'Required teaching or assessment instructi
 assert.ok(!player.includes('<details'),'Required assessment help is not hidden behind extra controls');
 assert.ok(player.includes("navigateScene(moments,moment,evidenceIndex,'next')"));
 assert.ok(player.includes("navigateScene(moments,moment,evidenceIndex,'back')"));
-assert.ok(player.includes("[move.id,moment,evidenceIndex]"),'Focus follows substeps and not only slide changes');
+assert.ok(player.includes("[move.id,moment]"),'New scenes receive focus; in-scene exploration preserves control focus and reading position');
+assert.ok(shema.includes('aria-live="polite"'),'Phrase reveals announce their updated teaching without moving focus');
 assert.ok(!player.includes("moments.push({kind:'insight'"),'No redundant reading-only recaps');
 assert.ok(witnesses.includes('ogj-guided-scene'),'Active witness has a single full scene');
 assert.ok(witnesses.includes('ogj-guided-track'),'All witnesses are oriented visually without fake buttons');

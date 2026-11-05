@@ -1,0 +1,50 @@
+.og2-workspace{--desk-line:#dce4ef;--desk-paper:#fff;color:var(--og-ink);margin:8px 0 24px}
+.og2-workspace-heading{margin-bottom:26px;max-width:850px}
+.og2-workspace-heading>span{font:750 .72rem/1.5 var(--font-body);letter-spacing:.12em;color:#4357b5}
+.og2-workspace-heading h2{font:700 clamp(1.8rem,3.6vw,3rem)/1.15 var(--font-body);letter-spacing:-.04em;color:var(--og-ink);margin:10px 0 0}
+.og2-workspace-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(24px,4vw,48px);align-items:start}
+.og2-task-brief{padding:8px 0 20px;border-top:2px solid #5265c1}
+.og2-task-label{font:750 .72rem/1.5 var(--font-body);letter-spacing:.08em;color:#52647a;text-transform:uppercase}
+.og2-task-brief>p{margin:14px 0 20px;font:450 1.04rem/1.75 var(--font-body);color:#324c66}
+.og2-recall-note{display:flex;gap:12px;padding-top:18px;border-top:1px solid var(--desk-line);font:450 .85rem/1.65 var(--font-body);color:#52647a}
+.og2-recall-note .lesson-icon{margin-top:3px}
+.og2-writing-desk{background:var(--desk-paper);border:1px solid var(--desk-line);border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:0 12px 34px #19314a0a;min-width:0}
+.og2-writing-meta{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.og2-writing-meta label{font:700 1rem/1.4 var(--font-body);color:var(--og-ink)}
+.og2-writing-meta>span{font:500 .72rem/1.4 var(--font-body);color:#52647a}
+.ogp-page .og2-writing-desk textarea{display:block;resize:vertical;width:100%;min-height:230px;margin:0;padding:17px 18px;border:1px solid #cbd7e5;border-radius:10px;background:#fcfdff;color:#172b45;font:400 1rem/1.8 var(--font-body);box-shadow:none}
+.ogp-page .og2-writing-desk textarea:focus-visible{outline:3px solid #5265c1;outline-offset:3px}
+.ogp-page .og2-writing-desk textarea:disabled{background:#f5f7fb;color:#52647a;opacity:1}
+.og2-save-state{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;font:450 .74rem/1.4 var(--font-body);color:#52647a;margin:12px 0 0}
+.ogp-page .og2-workspace-actions{position:static;border:0;padding:0;margin:24px 0 0;display:flex;gap:10px}
+.ogp-page .og2-workspace-actions .ogp-action{width:100%;min-height:48px;margin:0}
+.og2-support{margin-top:22px;padding-top:16px;border-top:1px solid var(--desk-line)}
+.og2-support>button{display:flex;align-items:center;gap:10px;justify-content:start;width:100%;min-height:44px;background:transparent;border:0;padding:6px 0;color:#3449a8;font:650 .85rem/1.5 var(--font-body);cursor:pointer;text-align:left}
+.og2-support>button>span{margin-left:auto}
+.og2-support>small{display:block;color:#52647a;font-size:.75rem;margin:5px 0}
+.og2-support aside{margin-top:12px;color:#324c66;font:450 .9rem/1.7 var(--font-body)}
+.og2-support-note{font-size:.82rem;color:#52647a;border-left:2px solid #6577d9;padding-left:12px}
+.og2-support ol{padding-left:22px}.og2-support li{margin:10px 0}
+.og2-support .shema-teachback-brief{box-shadow:none;border-radius:0;background:none;color:var(--og-ink);padding:0;margin-top:18px}
+.og2-support .shema-teachback-brief li span,.og2-support .shema-teachback-brief li strong{color:#324c66}
+.og2-teacher{margin-top:24px;border-top:2px solid #5265c1;padding:20px 0 0;color:#263e59;font:450 .95rem/1.7 var(--font-body)}
+.og2-teacher header{display:flex;align-items:center;gap:10px}
+.og2-teacher-mark{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#1c344d;color:#fff;font:600 1rem Georgia,serif}
+.og2-teacher header strong{display:block;font-size:.85rem}.og2-teacher header small{font-size:.73rem;color:#52647a}
+.og2-teacher h3{font:700 1.06rem/1.4 var(--font-body);margin:18px 0 8px;color:#233d59}
+.og2-teacher p{margin:8px 0;font:450 .95rem/1.75 var(--font-body);color:#324c66}
+.og2-teacher ul{list-style:none;padding:0;margin:18px 0}.og2-teacher li{border-top:1px solid var(--desk-line);padding:12px 0;display:grid;gap:5px}
+.og2-teacher li strong{font-size:.82rem}.og2-teacher li span{font-size:.87rem}
+.og2-teacher-next strong{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.07em}
+.og2-teacher button{display:inline-flex;align-items:center;gap:8px;min-height:44px;background:none;border:0;padding:8px 0;color:#3449a8;font:650 .85rem/1.5 var(--font-body);cursor:pointer}
+.og2-teacher[data-status=unscored]{border-top-color:#8494a8}
+@media(max-width:760px){
+ .og2-workspace-heading{margin-bottom:22px}.og2-workspace-heading h2{font-size:clamp(1.7rem,7vw,2.2rem)}
+ .og2-workspace-grid{grid-template-columns:1fr;gap:16px}
+ .og2-task-brief{padding-bottom:0}.og2-task-brief>p{font-size:1rem;line-height:1.7;margin:10px 0 12px}
+ .og2-recall-note{font-size:.8rem;padding-top:12px}
+ .og2-writing-desk{padding:20px 16px;border-radius:14px}
+ .og2-writing-meta{gap:6px;margin-bottom:14px}.og2-writing-meta label{font-size:.94rem}
+ .ogp-page .og2-writing-desk textarea{min-height:210px;padding:14px;font-size:1rem}
+ .og2-workspace[data-mode=recall] .og2-writing-desk textarea{min-height:165px}
+}

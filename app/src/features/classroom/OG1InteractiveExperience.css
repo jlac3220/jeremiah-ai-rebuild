@@ -1,0 +1,71 @@
+/* Stage 2 composition, scoped to the flagship player. Legacy lessons retain
+   their styles. Workspaces own their own CSS; this connects the existing scenes. */
+.ogp-page.ogp-stage2{--og-ink:#172b45;--og-muted:#52647a;--og-accent:#4357b5}
+.ogp-stage2 .ogp-stage[data-workspace]{padding-top:20px;min-height:0;animation:none}
+.ogp-stage2 .ogp-mini-caption{flex-wrap:wrap}
+.ogp-stage2 .og2-map-toggle{display:inline-flex;align-items:center;gap:6px;min-height:44px;border:0;background:transparent;color:#3449a8;padding:6px 0;font:650 .78rem/1.4 var(--font-body);cursor:pointer}
+.ogp-stage2 .ogp-mini-timeline{position:relative}
+.og2-chapter-guide{margin:4px 0 28px;padding:24px 0;border-block:1px solid #dce4ef;color:var(--og-ink)}
+.og2-chapter-guide header{display:flex;justify-content:space-between;align-items:start;gap:20px}
+.og2-chapter-guide header span{font:700 .68rem/1.5 var(--font-body);letter-spacing:.12em;color:#52647a}
+.og2-chapter-guide h2{font:600 clamp(1.4rem,3vw,2rem)/1.25 Georgia,serif;letter-spacing:-.025em;margin:8px 0 0}
+.og2-chapter-guide button{min-height:44px;border:0;background:transparent;color:#3449a8;font:600 .8rem/1.5 var(--font-body);cursor:pointer}
+.og2-guide-place{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:#52647a;margin:22px 0}
+.og2-guide-chapters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-block:1px solid #dce4ef}
+.og2-guide-chapters button{display:flex;flex-direction:column;align-items:start;text-align:left;gap:10px;padding:18px 14px;border-bottom:3px solid transparent;color:#243d59}
+.og2-guide-chapters button[aria-pressed=true]{background:#eaf0fc;border-bottom-color:#4357b5}
+.og2-guide-chapters button>span{font:500 1.4rem/1 Georgia,serif;color:#52647a}
+.og2-guide-chapters small{font-size:.7rem;color:#52647a;margin-top:auto}
+.og2-guide-focus{max-width:760px;padding:24px 0;min-height:160px}
+.og2-guide-focus>span{font:700 .7rem/1.5 var(--font-body);color:#4357b5;letter-spacing:.07em}
+.og2-guide-focus h3{font:600 1.3rem/1.4 Georgia,serif;margin:10px 0;color:#172b45}
+.og2-guide-focus p{font:450 .95rem/1.65 var(--font-body);color:#52647a;margin:0}
+.og2-chapter-guide footer{display:flex;align-items:center;gap:20px;justify-content:space-between;border-top:1px solid #dce4ef;padding-top:14px}
+.og2-chapter-guide footer>span{font-size:.75rem;color:#52647a;max-width:600px}
+.ogp-page.ogp-stage2 .ogp-stage:not([data-workspace]){padding-top:30px}
+/* Same Moses scene, a different focal purpose. Scripture leads the prologue;
+   the encounter opens the landscape. No new images or script are introduced. */
+.ogp-page.ogp-stage2 .ogp-encounter{border-radius:16px;text-align:left;min-height:430px;box-shadow:none}
+.ogp-stage2 .ogp-encounter-inner{padding:42px;max-width:750px;margin:0}
+.ogp-stage2 .ogp-encounter blockquote{text-align:left;margin:20px 0;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.3;max-width:680px}
+.ogp-stage2 .ogp-encounter-symbol{font-size:1.8rem;text-align:left;margin:12px 0}
+.ogp-stage2 .ogp-encounter-art .ogj-art{opacity:.28}
+.ogp-stage2 .ogp-encounter-reveal{margin:24px 0 0;max-width:580px;text-align:left}
+.ogp-stage2 .ogp-encounter-reveal p{text-align:left}
+.ogp-page.ogp-stage2 .shema-world{border-radius:16px;box-shadow:none;min-height:520px}
+.ogp-stage2 .shema-world-copy{padding:42px;max-width:690px}
+.ogp-stage2 .shema-world-copy h2{font-size:clamp(2.1rem,4.8vw,3.8rem);letter-spacing:-.04em;line-height:1.12}
+.ogp-stage2 .shema-world-copy>p{font-size:1rem;line-height:1.7;margin:22px 0}
+.ogp-stage2 .shema-world .shema-eyebrow{color:#c5d1f5}
+.ogp-stage2 .shema-world blockquote{font:450 clamp(1.25rem,2.4vw,1.8rem)/1.6 Georgia,serif;color:#fff}
+.ogp-stage2 .shema-world-photo{object-position:60% 38%}
+.ogp-stage2 .shema-world .shema-artifact-link{color:#e6ecf7}
+.ogp-stage2 .shema-phrase-story{border-radius:12px;box-shadow:none}
+.ogp-stage2 .shema-phrase-track>button{flex:1;display:flex;gap:10px;align-items:center;min-width:0;min-height:64px;text-align:left;border:0;border-bottom:3px solid transparent;background:transparent;padding:16px;color:#52647a;cursor:pointer;font:600 .82rem/1.45 var(--font-body)}
+.ogp-stage2 .shema-phrase-track>button[aria-current=step]{color:#172b45;border-bottom-color:#4357b5;background:#edf2fc}
+.ogp-stage2 .shema-phrase-track>button:disabled{opacity:1;color:#66778a;background:#f8fafe;cursor:not-allowed}
+.ogp-stage2 .shema-phrase-track>button>span{font:500 1.1rem/1 Georgia,serif}
+.ogp-stage2 .shema-phrase-feature{min-height:310px;border:0}
+.ogp-stage2 .shema-phrase-language{border-radius:0;background:#1c344d}
+.ogp-stage2 .shema-phrase-language strong{color:#fff}
+.ogp-stage2 .shema-phrase-teaching h2{font-family:Georgia,serif;font-weight:550}
+@media(max-width:760px){
+ .ogp-stage2 .ogp-compact-header{margin-bottom:20px}
+ .og2-chapter-guide{padding:18px 0}.og2-chapter-guide header{flex-direction:column;gap:8px}
+ .og2-guide-chapters{grid-template-columns:1fr}.og2-guide-chapters button{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:12px 8px;border-bottom-width:1px}
+ .og2-guide-chapters button>span{font-size:1.05rem}.og2-guide-chapters small{margin:0;font-size:.7rem}
+ .og2-chapter-guide footer{align-items:start;flex-direction:column;gap:8px}.og2-guide-focus{min-height:0}
+ .ogp-stage2 .ogp-encounter-inner{padding:28px 24px}.ogp-page.ogp-stage2 .ogp-encounter{min-height:0}
+ .ogp-stage2 .ogp-encounter blockquote{font-size:1.9rem;line-height:1.4}
+ .ogp-page.ogp-stage2 .shema-world{min-height:0}
+ .ogp-stage2 .shema-world-copy{padding:30px 24px;background:transparent}
+ .ogp-stage2 .shema-world-copy h2{font-size:2.2rem;max-width:300px}
+ .ogp-stage2 .shema-world-art{inset:0}.ogp-stage2 .shema-world-photo{object-position:64% 40%}
+ .ogp-stage2 .shema-world-footer{padding:14px 24px}
+ .ogp-stage2 .shema-phrase-track>button{flex-direction:column;gap:6px;text-align:center;padding:14px 6px;font-size:.72rem}
+ .ogp-stage2 .shema-phrase-feature{min-height:0}.ogp-stage2 .shema-phrase-language{min-height:140px;padding:20px}
+ .ogp-stage2 .shema-phrase-teaching{padding:24px 20px;min-height:0}
+}
+@media(prefers-reduced-motion:reduce){.ogp-stage2 .shema-phrase-feature{animation:none}}
+
+@media(max-width:760px){.ogp-stage2 .shema-world-art:after{background:linear-gradient(180deg,#0c1c2ac9 0%,#132438b8 70%,#0b1a2ce8 100%)}}

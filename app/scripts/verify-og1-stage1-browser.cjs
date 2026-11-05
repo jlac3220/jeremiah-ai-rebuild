@@ -48,6 +48,8 @@ const key='jeremiah-learning-state:OG.1.LESSON.18:direct';
 
  // Audio Off clears stale errors and leaves a complete, usable text experience.
  await seed('shema-show');
+ const enableNarration=page.getByRole('button',{name:'Turn narration on',exact:true});
+ if(await enableNarration.count())await enableNarration.click();
  await page.locator('.ogp-voice-error').waitFor();
  await quiet();
  assert.equal(await page.locator('.ogp-voice-error').count(),0);
