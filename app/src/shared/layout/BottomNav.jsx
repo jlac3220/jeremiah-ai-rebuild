@@ -1,6 +1,7 @@
-import {useState} from 'react';
-import {BrandFlame} from '../brand/BrandLogo';
 import { ROUTES } from '../../app/routes';
+
+// One visual vocabulary for every destination. The flame belongs in the
+// Jeremiah wordmark and teaching identity, not as a mismatched nav icon.
 const NAV_ITEMS = [
   { id: ROUTES.HOME, label: 'Home', path: 'M3 10 12 3l9 7v10h-6v-6H9v6H3Z' },
   { id: ROUTES.CLASSROOM, label: 'Classroom', path: 'm2 8 10-5 10 5-10 5Zm4 3v6c4 3 8 3 12 0v-6M22 8v9' },
@@ -9,12 +10,9 @@ const NAV_ITEMS = [
   { id: ROUTES.BIBLE_SUPPORT, label: 'Bible', path: 'M12 5v16M3 4c3-1 6-1 9 1 3-2 6-2 9-1v16c-3-1-6-1-9 1-3-2-6-2-9-1Z' },
   { id: ROUTES.ASK_JEREMIAH, label: 'Ask', path: 'M21 11.5c0 4.7-4 8.5-9 8.5-1.3 0-2.7-.3-3.8-.8L3 21l1.7-4.7A8.2 8.2 0 0 1 3 11.5C3 6.8 7 3 12 3s9 3.8 9 8.5ZM9.3 9.4c.1-1.4 1.3-2.3 2.7-2.3 1.5 0 2.7 1 2.7 2.4 0 1.8-2.7 2-2.7 3.9M12 16.6h.01' },
 ];
-function NavigationIcon({item}) {
- const [failed,setFailed]=useState(false);
- if(item.id===ROUTES.CLASSROOM)return <BrandFlame />;
- if(item.id===ROUTES.HOME&&!failed)return <img className="brand-home-icon" src="/brand/home.png" width="26" height="26" alt="" onError={()=>setFailed(true)}/>;
- return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={item.path}/></svg>;
-}
 export default function BottomNav({ currentRoute, onNavigate }) {
-  return <nav className="app-nav" aria-label="Main navigation"><div className="app-nav-rail">{NAV_ITEMS.map((item) => <button key={item.id} type="button" onClick={() => onNavigate(item.id)} aria-current={currentRoute === item.id ? 'page' : undefined}><NavigationIcon item={item} /><span>{item.label}</span></button>)}</div></nav>;
+ return <nav className="app-nav" aria-label="Main navigation"><div className="app-nav-rail">{NAV_ITEMS.map(item=><button key={item.id} type="button" onClick={()=>onNavigate(item.id)} aria-current={currentRoute===item.id?'page':undefined}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={item.path}/></svg>
+  <span>{item.label}</span>
+ </button>)}</div></nav>;
 }
