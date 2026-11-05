@@ -85,5 +85,7 @@ assert.equal(restarted.experience.earlierLesson.drafts['shema-try'].responseText
 const restartedAgain=restartTeaching(content,{...restarted,experience:{...restarted.experience,drafts:{'isaiah-try':{responseText:'Second saved answer'}}}});
 assert.equal(restartedAgain.experience.previousRuns[0].drafts['shema-try'].responseText,'Keep this answer');
 assert.equal(restartedAgain.experience.earlierLesson.drafts['isaiah-try'].responseText,'Second saved answer');
-assert.equal(restartTeaching(content,{...state,presetId:'review',milestones:{...state.milestones,complete:true}}).milestones.mastery,true);
+ const reviewRestart=restartTeaching(content,{...state,presetId:'review',milestones:{...state.milestones,complete:true}});
+ assert.equal(reviewRestart.milestones.mastery,false,'New review run should earn its own mastery');
+ assert.equal(reviewRestart.experience.earlierLesson.milestones.mastery,true,'Previously earned mastery is preserved in the archive');
 console.log('Grouped OG.1: five standards, all three teaching phases, twenty rubric criteria, wrong answers, supported attempts, per-standard evidence, resume and dashboard deduplication passed. AI grading used fixtures, not a live model.');
