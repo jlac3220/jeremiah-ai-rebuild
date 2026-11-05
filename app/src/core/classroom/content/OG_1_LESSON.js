@@ -24,6 +24,19 @@ const incarnation=[verse('John 1:1','In the beginning was the Word, and the Word
 const show=(id,title,teaching,scripture,next,visual,extra={})=>({id,type:'teach',stageId:'truth',phase:'Show me',title,teaching,scripture,next:{continue:next},visual,...extra});
 const match=(id,title,prompt,items,options,next,standardId,extra={})=>({id,type:'scenario',stageId:'checkpoint',phase:'Guide me',title,prompt,teaching:['Make the connections yourself. After you check, we will look at the reasoning behind each connection. You can revise the ones that need another look.'],interaction:{type:'match',items,options},next:{strong:next,partial:id,weak:id},standardIds:[standardId],evidenceIds:[],...extra});
 const attempt=(id,title,prompt,standard,next,scripture)=>({id,type:'free_response',stageId:'checkpoint',phase:'Let me try',title,prompt,teaching:['Use your own explanation. The support drawer is available if you need it; opening it makes this a supported attempt. A fresh attempt without support is needed to establish independent understanding.'],standardIds:[standard.id],assessmentCriteria:standard.evidence.map(e=>e.text),evidenceIds:standard.evidence.map(e=>`${standard.id}:evidence-${e.level}`),scripture,next:{strong:next,partial:id,weak:id}});
+// Blueprint OG.1.1.18 — independent, non-AI KJV recall before exegesis.
+// The verse is deliberately omitted from this move's scripture payload so it
+// cannot appear on the screen while the learner is recalling it.
+const shemaRecall={
+ id:'shema-recite',type:'free_response',assessmentRole:'memory_recall',
+ stageId:'checkpoint',phase:'Let me try',title:'Remember the confession',
+ prompt:'Without looking at the verse, write Deuteronomy 6:4 from memory. Capitalization and punctuation do not count against you. You can review the KJV passage after checking your attempt.',
+ teaching:['First recall the words of the confession. Understanding and defending its meaning is the next, separate activity.'],
+ standardIds:[standards[0].id],assessmentCriteria:[standards[0].evidence[0].text],
+ evidenceIds:[standards[0].id+':evidence-1'],
+ interaction:{type:'scripture_recall',reference:'Deuteronomy 6:4',expectedText:shema.text},
+ scripture:[],next:{strong:'shema-try',partial:'shema-try',weak:'shema-try'}
+};
 const moves=[
  show('learn','One confession. One unfolding story.',[
   'Imagine hearing “God is one” in four different settings: Israel gathered to listen, Isaiah challenging rival claims, Jesus answering a question, and the apostles teaching the church. Does the confession change as the story unfolds?',
@@ -40,7 +53,8 @@ const moves=[
   {id:'our',label:'The LORD our God',answer:'identity',explanation:'This identifies Israel’s God and the covenant relationship.'},
   {id:'one',label:'is one LORD',answer:'confession',explanation:'The confession concerns who God is, not just agreement within a group.'}
  ],[{id:'confession',label:'Confesses God’s oneness'},{id:'summons',label:'Calls Israel to listen'},{id:'identity',label:'Identifies the covenant God'}],'shema-try',standards[0].id),
- attempt('shema-try','Explain the anchor', 'Recite Deuteronomy 6:4 and explain the meaning of shema and echad in its context. How does verse 5 relate to verse 4? A friend points to “one flesh” in Genesis 2:24: explain why a word’s other uses do not decide this passage. Use Isaiah 44:6 and Jesus’ repetition in Mark 12:29 to show why the Shema remains foundational.',standards[0],'isaiah-show',[shema,mark,...isaiah.slice(0,2),...nt.slice(0,2)]),
+ shemaRecall,
+ ({...attempt('shema-try','Explain the anchor', 'Explain what the one LORD confession means in its covenant setting, including shema, echad, and why verse 5 follows verse 4. A friend suggests that “one flesh” in Genesis 2:24 proves that Deuteronomy 6:4 means multiple divine persons. Evaluate that reasoning using context, Isaiah 44:6, and Jesus’ words in Mark 12:29.',standards[0],'isaiah-show',[shema,mark,...isaiah.slice(0,2),...nt.slice(0,2)]),assessmentCriteria:standards[0].evidence.slice(1).map(e=>e.text),evidenceIds:standards[0].evidence.slice(1).map(e=>standards[0].id+':evidence-'+e.level)}),
  show('isaiah-show','The witness stand',[
   'Isaiah 43 calls for witnesses. The issue is not which rival deity deserves first place. The LORD declares that no God was formed before him and none will follow. The later declarations add “beside me” and “none else.” Together they exclude rivals across time and alongside God.',
   'Watch the three directions in the visual: before, beside, after. These are a way to organize the words, not a picture of God. Isaiah 45 also connects the one God to salvation for all the earth.',
@@ -97,7 +111,8 @@ for(const [index,prefix] of ['shema','isaiah','continuity','distinction','devoti
 // This order is easier to learn from, resume, and review on a phone.
 const guidedRoute={
  'shema-guide':'context-challenge',
- 'context-challenge':'shema-try',
+ 'context-challenge':'shema-recite',
+ 'shema-recite':'shema-try',
  'shema-try':'isaiah-show',
  'isaiah-guide':'isaiah-try',
  'isaiah-try':'continuity-show',

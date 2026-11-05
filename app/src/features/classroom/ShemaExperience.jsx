@@ -142,7 +142,7 @@ export function ShemaTeachBack({move,value,onChange,disabled}) {
    <aside className="shema-teachback-brief" aria-label="Your evidence trail">
     <span className="shema-kicker">YOUR EVIDENCE TRAIL</span>
     <ol>
-     <li><strong>Recall</strong><span>Write Deuteronomy 6:4 from memory.</span></li>
+     <li><strong>Remember</strong><span>You completed a separate Deuteronomy 6:4 memory check. Now explain its meaning.</span></li>
      <li><strong>Explain</strong><span>Describe <em>shema</em>, <em>echad</em>, and wholehearted love in verse 5.</span></li>
      <li><strong>Reason</strong><span>Address “one flesh” in Genesis 2:24 using context.</span></li>
      <li><strong>Connect</strong><span>Bring in Isaiah 44:6 and Mark 12:29.</span></li>
@@ -150,7 +150,7 @@ export function ShemaTeachBack({move,value,onChange,disabled}) {
    </aside>
    <div className="shema-teachback-response">
     <label htmlFor="shema-written-response">Your explanation</label>
-    <textarea id="shema-written-response" value={value||''} disabled={disabled} onChange={e=>onChange(e.target.value)} rows={10} placeholder="Begin with the words of Deuteronomy 6:4, then build your answer…"/>
+    <textarea id="shema-written-response" value={value||''} disabled={disabled} onChange={e=>onChange(e.target.value)} rows={10} placeholder="Explain the meaning of the confession, then support your reasoning from Scripture…"/>
     <div className="shema-response-footer"><span>{(value||'').trim()?value.trim().split(/\s+/).length+' words':'Your words. Your reasoning.'}</span><span>Autosaved as you write</span></div>
    </div>
   </div>

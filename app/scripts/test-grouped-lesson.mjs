@@ -34,7 +34,21 @@ let state=createLearningState(content);
 while(state.currentMoveId!=='complete'){
  const move=content.instructionalMoves.find(m=>m.id===state.currentMoveId);
  if(move.type==='teach'){state=continueTeaching(state,content);continue;}
- if(move.interaction?.type==='reasoning'){
+ if(move.interaction?.type==='scripture_recall'){
+  const expected=move.interaction.expectedText;
+  const error=evaluateTeachingChoice(move,{text:'The LORD is one'});
+  assert.equal(error.verdict,'weak','Incomplete memory recall is not verified');
+  assert.deepEqual(error.evidenceObserved,[]);
+  const spoken=evaluateTeachingChoice(move,{text:'HEAR O ISRAEL the lord our God is one LORD'});
+  assert.equal(spoken.verdict,'strong','Case and punctuation do not affect KJV recall scoring');
+  assert.deepEqual(spoken.evidenceObserved,['OG.1.1.18:evidence-1']);
+  const api=await teachWithJeremiah({standardId:content.standardId,moveId:move.id,learnerResponse:{text:expected}});
+  assert.equal(api.source,'lesson','Scripture recall uses deterministic authored evaluation');
+  state=saveTeachingDecision(state,content,move,api);
+  assert.equal(state.experience.standardEvidence['OG.1.1.18'].evidenceIds.length,1);
+  saveLearningState(state);
+  state=loadLearningState(content);
+ }else if(move.interaction?.type==='reasoning'){
   const task=move.interaction;
   for(const claim of task.claims)for(const reason of task.reasons){
    const response=evaluateTeachingChoice(move,{claimId:claim.id,reasonId:reason.id});
@@ -73,6 +87,7 @@ while(state.currentMoveId!=='complete'){
  state=continueTeaching(state,content);
 }
 assert.equal(Object.keys(state.experience.standardEvidence).length,5);
+assert.deepEqual(state.experience.standardEvidence['OG.1.1.18'].evidenceIds.slice().sort(),['OG.1.1.18:evidence-1','OG.1.1.18:evidence-2','OG.1.1.18:evidence-3','OG.1.1.18:evidence-4'].sort(),'Separate recitation and independent explanation keep all standard evidence');
 assert.equal(state.evidenceIds.length,20);assert.ok(state.milestones.complete);
 saveLearningState(state);assert.equal(loadLearningState(content).currentMoveId,'complete');
 const dashboard=getLearningDashboard();assert.equal(dashboard.standards.filter(s=>s.content.domainId==='OG.1').length,1);

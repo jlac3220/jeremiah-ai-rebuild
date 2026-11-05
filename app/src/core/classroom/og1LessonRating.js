@@ -33,6 +33,11 @@ export function rateOG1Lesson(content,state){
   const responses=related.map(move=>({move,record:history.filter(h=>h.moveId===move.id).at(-1)})).filter(x=>x.record);
   const scoredResponses=responses.filter(({move,record})=>{
    if(record.verdict==='unscored')return false;
+   // The Scripture recall item is a locally keyed KJV check, not an AI
+   // assessment of theological explanation. Keep it separate from written
+   // reasoning so correct memorization never inflates Level 3 or 4.
+   if(move.assessmentRole==='memory_recall')
+    return record.source==='lesson' && ['strong','weak'].includes(record.verdict);
    if(!['free_response','mastery_response'].includes(move.type))return true;
    // On the original app, a fallback returned "partial" and teacherHistory did
    // not save the assessor. Historic partial responses are ambiguous and must
@@ -42,7 +47,10 @@ export function rateOG1Lesson(content,state){
    if(record.source==='openai')return true;
    return !record.source && ['strong','weak'].includes(record.verdict);
   });
-  const written=scoredResponses.filter(x=>['free_response','mastery_response'].includes(x.move.type));
+  const written=scoredResponses.filter(x=>['free_response','mastery_response'].includes(x.move.type)&&x.move.assessmentRole!=='memory_recall');
+  const recitations=scoredResponses.filter(x=>x.move.assessmentRole==='memory_recall');
+  const recitationRequired=standardId==='OG.1.1.18' && related.some(m=>m.assessmentRole==='memory_recall');
+  const recitationVerified=recitations.some(x=>x.record.verdict==='strong');
   const guided=scoredResponses.filter(x=>x.move.type==='scenario');
   const examResults=(exam?.results||[]).filter(x=>x.standardId===standardId);
   const correctExam=examResults.filter(x=>x.correct).length;
@@ -66,14 +74,21 @@ export function rateOG1Lesson(content,state){
   if(score!==null&&score>=55&&(strongGuided||partialWritten||strongWritten||correctExam===2))level=2;
   if(score!==null&&score>=70&&strongWritten)level=3;
   if(score!==null&&score>=85&&strongWritten&&completeRubric)level=4;
+  // Memory of the anchor verse is an explicit OG.1.1.18 requirement;
+  // explanation alone cannot finish the full standard. Old attempts are
+  // retained, but newly missing recall is reported rather than fabricated.
+  if(recitationRequired&&!recitationVerified)level=Math.min(level,2);
   const evidence=level===4?'Extensive written reasoning verified against the standard rubric':
    strongWritten?'Independent written explanation':partialWritten?'Developing written explanation':
    strongGuided?'Correct guided connection':correctExam?'Scripture recognition':'Limited evidence collected';
   return {standardId,level,label:OG1_RATING_LABELS[level],meaning:OG1_RATING_MEANINGS[level],
-   nextStep:level===4?'Continue applying and defending this understanding with Scripture.':OG1_NEXT_STEPS[standardId]||'Explain the standard with supporting Scripture.',
+   nextStep:recitationRequired&&!recitationVerified?'Recite Deuteronomy 6:4 from memory, then demonstrate the meaning in Scripture.':level===4?'Continue applying and defending this understanding with Scripture.':OG1_NEXT_STEPS[standardId]||'Explain the standard with supporting Scripture.',
    score,coverage,components:Object.fromEntries(components.map(x=>[x.key,x.values.length?rounded(mean(x.values)):null])),
    attempted:responses.length,unscored:responses.length-scoredResponses.length,possible:related.length,
-   examCorrect:correctExam,examQuestions:examResults.length,evidence};
+   recitationVerified:recitationRequired?recitationVerified:null,
+   recitationAttempted:recitationRequired?responses.some(x=>x.move.assessmentRole==='memory_recall'):null,
+   examCorrect:correctExam,examQuestions:examResults.length,
+   evidence:recitationRequired&&!recitationVerified?evidence+'; KJV recitation not yet verified':evidence};
  });
  // Aggregate observed evidence by standard, not by individual question count.
  // An unassessed standard is visible but cannot artificially drop the overall
