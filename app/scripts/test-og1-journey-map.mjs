@@ -1,15 +1,20 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import content from '../src/core/classroom/content/OG_1_LESSON.js';
+import {OG1_SCENE_NARRATION} from '../src/core/classroom/og1NarrationManifest.js';
+import {isAllowedNarrationText} from '../server/narrationHandler.mjs';
 const read=p=>readFileSync(new URL(p,import.meta.url),'utf8');
 const journey=read('../src/features/classroom/OG1JourneyMap.jsx');
 const player=read('../src/features/classroom/OG1LessonPlayer.jsx');
 const destinations=read('../src/features/classroom/JourneyDestinations.jsx');
 const narrator=read('../server/narrationHandler.mjs');
+assert.ok(narrator.includes('OG1_AUTHORED_NARRATION_TEXTS'),'Speech endpoint must use the shared authored manifest');
+assert.ok(player.includes('OG1_SCENE_NARRATION.witnessCards'),'Automatic narrator must use the shared witness texts');
 for(const phrase of ['Moses calls Israel to hear','The LORD declares that no other God','Jesus reaffirms the confession','Paul carries the confession']){
  assert.ok(destinations.includes(phrase),'Spoken witness lacks commentary: '+phrase);
- assert.ok(narrator.includes(phrase),'Speech endpoint must authorize narrated commentary: '+phrase);
- assert.ok(player.includes(phrase),'Automatic narrator must match the authored witness: '+phrase);
+ const lines=OG1_SCENE_NARRATION.witnessCards.filter(line=>line.includes(phrase));
+ assert.equal(lines.length,1,'Every witness must have exactly one matching spoken script: '+phrase);
+ assert.ok(isAllowedNarrationText(lines[0]),'Speech endpoint must authorize narrated commentary: '+phrase);
 }
 
 assert.equal((destinations.match(/commentary:'/g)||[]).length,4,'Every witness needs authored commentary');
