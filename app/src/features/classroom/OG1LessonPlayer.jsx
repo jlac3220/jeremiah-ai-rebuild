@@ -12,6 +12,7 @@ import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 import LessonActivity from './LessonActivity';
 import ShemaExperience, { ShemaPhrasePractice, ShemaTeachBack } from './ShemaExperience';
 import useLessonNarration from './useLessonNarration';
+import {OG1_SCENE_NARRATION} from '../../core/classroom/og1NarrationManifest';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1ExitExam from './OG1ExitExam';
@@ -183,21 +184,21 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  // Reveals inside the Shema scene are voiced only when the student chooses them.
  const narrationText =
   current?.kind==='shema-encounter'||(move.id==='learn'&&current?.kind==='read')
-   ? 'Hear, O Israel: The LORD our God is one LORD.'
+   ? OG1_SCENE_NARRATION.opening
   : current?.kind==='witness'
-   ? ['Before me there was no God formed, neither shall there be after me.','Beside me there is no God.','Neither shall there be after me.'][evidenceIndex]
+   ? OG1_SCENE_NARRATION.isaiahWitness[evidenceIndex]
   : current?.kind==='timeline'
-   ? ['The LORD our God is one LORD.','The Lord our God is one Lord.','There is none other God but one.'][evidenceIndex]
+   ? OG1_SCENE_NARRATION.continuity[evidenceIndex]
   : current?.kind==='discovery'&&move.id==='learn'
-   ? ['Hear, O Israel: The LORD our God is one LORD. Deuteronomy chapter six, verse four. Moses calls Israel to hear and respond to the one LORD.','I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six. The LORD declares that no other God exists beside him.','Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine. Jesus reaffirms the confession when asked about the first commandment.','There is none other God but one. First Corinthians chapter eight, verse four. Paul carries the confession into his teaching about idols and the one God.' ][evidenceIndex]
-  : current?.kind==='identity'&&moment===0
-   ? 'Jesus Christ stands at the center of this question. We will examine how the Scriptures speak about the one God and the incarnation.'
+   ? OG1_SCENE_NARRATION.witnessCards[evidenceIndex]
+  : current?.kind==='identity'
+   ? OG1_SCENE_NARRATION.identity
   : current?.kind==='comparison'&&evidenceIndex===0
-   ? 'Two explanations now come into view. Listen closely to what each actually teaches before considering their differences.'
+   ? OG1_SCENE_NARRATION.comparison
   : current?.kind==='mission'&&evidenceIndex===0
-   ? 'The confession of one God is more than a statement to remember. It calls us to wholehearted devotion.'
-  : current?.kind==='return'&&moment===0
-   ? 'We return to the words of Moses. Hear, O Israel: the LORD our God is one LORD.'
+   ? OG1_SCENE_NARRATION.mission
+  : current?.kind==='return'
+   ? OG1_SCENE_NARRATION.return
   : current?.kind==='read'&&move.id==='learn'&&current?.verse?.text
    ? current.verse.text
   : null;
