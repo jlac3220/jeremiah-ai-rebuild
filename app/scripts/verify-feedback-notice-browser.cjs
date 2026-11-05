@@ -16,6 +16,12 @@ const phase=process.argv[2]||'after',out=path.resolve(__dirname,'../../docs/feed
   await p.evaluate(({key,state})=>localStorage.setItem(key,JSON.stringify(state)),{key,state});await p.reload();
   const off=p.getByRole('button',{name:'Turn narration off',exact:true});if(await off.count())await off.click();
   await p.getByRole('button',{name:'View my learning-level report'}).click();await p.getByRole('button',{name:'Continue to final summary'}).click();
+  if(phase==='after'){
+   await p.evaluate(()=>scrollTo(0,0));
+   const floating=p.getByRole('button',{name:'Feedback · optional',exact:true});await floating.waitFor();
+   const box=await floating.boundingBox();assert.ok(box.height>=44&&box.y>=0&&box.y+box.height<=(width===390?844:1000));
+   await p.screenshot({path:`${out}/${width}-floating-top.png`});
+  }
   const notice=p.locator('.ogp-finish-survey-invite');await notice.scrollIntoViewIfNeeded();await p.screenshot({path:`${out}/${width}-feedback.png`});await notice.screenshot({path:`${out}/${width}-feedback-detail.png`});
   assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth),width);
   if(phase==='after'){
@@ -29,7 +35,8 @@ const phase=process.argv[2]||'after',out=path.resolve(__dirname,'../../docs/feed
    assert.equal(await notice.count(),0);assert.deepEqual(await readSaved(),saved);
    await p.getByRole('checkbox').check();await p.getByRole('button',{name:/Continue my lesson|Revisit the lesson|Start the lesson/}).click();
    await p.getByRole('button',{name:'View my learning-level report'}).click();await p.getByRole('button',{name:'Continue to final summary'}).click();
-   await p.getByRole('button',{name:'Evaluate the experience'}).click();assert.equal(await p.locator('.ogp-compact-heading h1').innerText(),'Pilot feedback · optional');
+   await p.evaluate(()=>scrollTo(0,0));
+   await p.getByRole('button',{name:'Feedback · optional',exact:true}).click();assert.equal(await p.locator('.ogp-floating-feedback').count(),0);assert.equal(await p.locator('.ogp-compact-heading h1').innerText(),'Pilot feedback · optional');
    assert.deepEqual(await readSaved(),saved);
   }
   await p.close();

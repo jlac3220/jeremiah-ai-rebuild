@@ -25,6 +25,10 @@ Replaced the pale blue surface with deep red, a bright accent edge, a prominent 
 
 The original optional/anonymous/separate-from-answers wording and all three existing action handlers are retained. No survey schema, submission/backend or scoring changes.
 
+A red **Feedback · optional** floating button is visible immediately on the final summary, before the learner reaches this invitation. It opens the optional survey directly and disappears on the survey or any lesson screen. Safe-area spacing and extra summary bottom padding keep the final content scrollable above it.
+
+Floating shortcut at the top of the summary: [Phone](feedback-notice-evidence/after/390-floating-top.png), [Desktop](feedback-notice-evidence/after/1440-floating-top.png).
+
 | Viewport | Before | After |
 | --- | --- | --- |
 | Phone | ![Before phone](feedback-notice-evidence/before/390-feedback-detail.png) | ![After phone](feedback-notice-evidence/after/390-feedback-detail.png) |
@@ -36,7 +40,7 @@ These are actual Chromium screenshots with targeted Chapter 5/completed-exam sta
 
 - Production build: pass.
 - Chapter 5 contrast browser check: pass on phone and desktop, contrast >=4.5:1 for all heading-panel text and no horizontal overflow. Actual values are in `return-contrast-evidence/{before,after}/contrast.json`.
-- Feedback browser check: pass on phone/desktop, labelled notice, 44px actions, no horizontal overflow, report navigation, explicit finish-without-survey, returning to the completed lesson and opening the optional survey. Existing exam/history/evidence/mastery remain unchanged. The existing completion flag can update normally upon reentry.
+- Feedback browser check: pass on phone/desktop, labelled notice, 44px actions, no horizontal overflow, report navigation, floating shortcut visible at initial scroll with a >=44px target, direct survey entry and shortcut removal, explicit finish-without-survey, returning to the completed lesson and opening the optional survey. Existing exam/history/evidence/mastery remain unchanged. The existing completion flag can update normally upon reentry.
 - Existing Stage 1 browser suite: pass, including full exam/report/summary/survey and restart archives.
 - Existing climax, theme consistency and pilot-feedback tests: pass.
 

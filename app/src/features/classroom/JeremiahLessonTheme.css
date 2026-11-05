@@ -154,3 +154,10 @@
  .ogp-stage2 .og1-synthesis-head h2,.ogp-stage2 .og1-return-heading h2{font-size:clamp(1.65rem,6.5vw,2.6rem)}
 }
 @media(prefers-reduced-motion:reduce){.ogp-page.ogp-stage2 .ogp-action{transition:none}}
+
+/* Summary-only shortcut: visible before the end-of-page invitation is reached. */
+.ogp-page.ogp-stage2 .ogp-finish--synthesis{padding-bottom:100px}
+.ogp-page.ogp-stage2 .ogp-floating-feedback{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:calc(20px + env(safe-area-inset-bottom));z-index:40;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:13px 18px;border:2px solid #fff;border-radius:999px;background:#b51f38;color:#fff;font:750 .85rem/1.4 var(--font-body);box-shadow:0 6px 22px #31132138;cursor:pointer}
+.ogp-page.ogp-stage2 .ogp-floating-feedback:hover{background:#99152c}
+.ogp-page.ogp-stage2 .ogp-floating-feedback:focus-visible{outline:3px solid #172f43;outline-offset:3px}
+@media(max-width:600px){.ogp-page.ogp-stage2 .ogp-floating-feedback{right:max(15px,env(safe-area-inset-right));bottom:calc(15px + env(safe-area-inset-bottom));gap:8px;padding:12px 15px}}
