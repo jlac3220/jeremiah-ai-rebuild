@@ -55,8 +55,8 @@ export default function HomePage({onNavigate}) {
    <section className="jx-hero" aria-labelledby="jx-hero-title">
     <div className="jx-hero-copy">
      <p className="jx-overline">APOSTLES’ DOCTRINE <span aria-hidden="true">·</span> PENTECOSTAL EXPERIENCE</p>
-     <h1 id="jx-hero-title">Scripture is more than words. <em>Understand the story.</em></h1>
-     <p className="jx-hero-intro">Discover what the Bible says, why it matters, and how each passage connects. Jeremiah guides you from reading to understanding.</p>
+     <h1 id="jx-hero-title"><span className="jx-head-desktop">Scripture is more than words. <em>Understand the story.</em></span><span className="jx-head-mobile">Know the Word.<em>Understand why.</em></span></h1>
+     <p className="jx-hero-intro">Discover what the Bible says, why it matters, and how each passage connects. Jeremiah guides you from reading to understanding.</p><p className="jx-hero-mobile-intro">Read. Connect. Understand.</p>
      <button type="button" className="jx-main-action" onClick={openLesson}>{primary} <ExperienceArrow/></button>
      {active&&<div className="jx-current" aria-label="Your current learning place">
       <span className="jx-current-mark" aria-hidden="true">01</span>
