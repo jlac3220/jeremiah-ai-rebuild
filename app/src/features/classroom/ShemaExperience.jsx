@@ -55,7 +55,6 @@ export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=se
     <span>PART {sequenceIndex+1} OF THREE</span>
     <h2>{currentPhrase.title}</h2>
     <p>{currentPhrase.meaning}</p>
-    <button type="button" onClick={()=>onSpeak?.(currentPhrase.spoken)}><LessonIcon name="play"/> Hear this phrase</button>
    </div>
   </div>
   <p className="shema-phrase-footer">Each phrase builds the same confession. Continue to reveal the next one.</p>
