@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
 import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
 import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
@@ -21,9 +21,14 @@ const ESTABLISHES = {
  one: 'The confession identifies the LORD as one, read in the wider witness of Scripture.'
 };
 
-function ShemaPhraseStudy({sequenceIndex,revealedThrough,onInspect,image,onImageError}) {
+function ShemaPhraseStudy({sequenceIndex,revealedThrough,onInspect,image,onImageError,onOpenBible}) {
  const index=Math.max(0,Math.min(sequenceIndex,PHRASES.length-1));
  const phrase=PHRASES[index];
+ const [connection,setConnection]=useState(null);
+ useEffect(()=>{setConnection(null)},[index]);
+ const continuity=connection==='Isaiah'
+  ? {reference:'Isaiah 44:6',quote:'I am the first, and I am the last; and beside me there is no God.',meaning:'Isaiah says the LORD has no rival. His declaration helps explain the confession without relying on a single word alone.'}
+  : {reference:'Mark 12:29',quote:'Hear, O Israel; The Lord our God is one Lord:',meaning:'Jesus reaffirms the same confession when asked for the first commandment. The New Testament does not set it aside.'};
  function exploreWithKeyboard(event) {
   const positions={ArrowLeft:index-1,ArrowRight:index+1,Home:0,End:Math.min(revealedThrough,PHRASES.length-1)};
   if(!(event.key in positions))return;
@@ -51,7 +56,20 @@ function ShemaPhraseStudy({sequenceIndex,revealedThrough,onInspect,image,onImage
   <section id="og2-phrase-meaning" className="shema-phrase-feature shema-signature-teaching" key={phrase.id} aria-live="polite" aria-atomic="true">
    <div className="shema-signature-language"><span>THE HEBREW</span><strong className="shema-signature-hebrew" lang="he" dir="rtl">{phrase.hebrew}</strong><small>{phrase.roman}</small></div>
    <div className="shema-signature-meaning"><span className="shema-signature-kicker">THE WORDS → THE MEANING</span><h2>{phrase.title}</h2><p>{phrase.meaning}</p>
-    <div className="shema-signature-establishes"><span>What this establishes</span><p>{ESTABLISHES[phrase.id]}</p></div>
+    <div className="shema-signature-establishes">
+      <div className="shema-signature-establishes-head"><span>What this establishes</span>
+       {index===2&&<button type="button" aria-expanded={Boolean(connection)} aria-controls="shema-continuity" onClick={()=>setConnection(old=>old?null:'Isaiah')}>Follow the evidence <span aria-hidden="true">{connection?'−':'+'}</span></button>}
+      </div>
+      <p>{ESTABLISHES[phrase.id]}</p>
+      {index===2&&connection&&<div id="shema-continuity" className="shema-signature-continuity">
+       <div role="group" aria-label="Compare biblical witnesses">{['Isaiah','Jesus'].map(name=><button key={name} type="button" aria-pressed={connection===name} onClick={()=>setConnection(name)}>{name}</button>)}</div>
+       <blockquote>“{continuity.quote}”</blockquote>
+       <span>{continuity.reference} · KJV</span>
+       <p>{continuity.meaning}</p>
+       <button type="button" className="shema-signature-source" onClick={()=>onOpenBible?.(continuity.reference)}>Read the passage in context ↗</button>
+       <small>Explore freely. This is not part of your assessment.</small>
+      </div>}
+     </div>
    </div>
   </section>
  </article>;
@@ -80,7 +98,7 @@ export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=se
   <div className="shema-world-footer"><span>THE ONE LORD · DEUTERONOMY 6</span><span aria-hidden="true">✦</span></div>
  </div>;
 
- if(kind==='shema-manuscript')return <ShemaPhraseStudy sequenceIndex={sequenceIndex} revealedThrough={revealedThrough} onInspect={onInspect} image={openingImage} onImageError={openingImageError}/>;
+ if(kind==='shema-manuscript')return <ShemaPhraseStudy sequenceIndex={sequenceIndex} revealedThrough={revealedThrough} onInspect={onInspect} image={openingImage} onImageError={openingImageError} onOpenBible={onOpenBible}/>;
 
  if(kind==='shema-cinema')return <div className="shema-cinema">
   <div className="shema-cinema-top"><span className="shema-eyebrow">A SHORT FILM · LISTENING IN CONTEXT</span><span className="shema-film-time">{video?.duration||'SHORT FILM'}</span></div>
