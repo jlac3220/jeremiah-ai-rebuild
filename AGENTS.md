@@ -43,3 +43,12 @@
 
 ## Immediate next task
 Conduct a non-destructive technical audit. Explain why the GitHub default `main` branch and Vercel production branch differ; establish the correct ongoing development/preview workflow from this branch, and verify that OG.1, the narrator, assessment, and end-of-lesson feedback are intact. Do not rebuild from scratch.
+
+## Instructional blueprint approval gate (proposed)
+- **Every standard must have an owner-approved blueprint before a new lesson is implemented or its instructional content is materially revised.** See `docs/lesson-blueprints/README.md` and `docs/lesson-blueprints/TEMPLATE.md`.
+- Blueprint status **DRAFT** does not authorize implementation. The project owner must approve the exact revision before lesson development begins.
+- Preserve the authoritative standard wording in `app/src/data/curriculum/`. A blueprint specifies *how to teach and assess* the approved standard; it does not silently rewrite the standard.
+- For combined lessons (e.g., OG.1), create a separate blueprint for **each** contained standard and a composition map for the overall sequence and shared domain assessment.
+- ChatGPT and the owner lead learning goals, scriptural reasoning, instructional progression, valid questions, level-of-understanding evidence, and correction paths; Codex leads accessible implementation, tests, and preview. Raise instructional ambiguities instead of independently inventing answers.
+- DOK and standard-defined evidence of learning are distinct; do not inflate mastery ratings based on simple multiple-choice recognition.
+- This blueprint rule is awaiting owner review in the curriculum PR; do not change running app functionality as part of the documentation proposal.
