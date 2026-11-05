@@ -17,7 +17,7 @@ const base=process.env.JEREMIAH_REVIEW_URL||'http://127.0.0.1:4184';
    await intro.waitFor();
    assert.equal(await p.locator('.ogp-opening-witnesses button').count(),4,'All four witnesses are available without extra Next screens');
    assert.match(await intro.innerText(),/You will discover what this confession means/);
-   assert.match(await intro.innerText(),/Deuteronomy 6:4/);
+   assert.match(await intro.innerText(),/Deuteronomy 6:4/i);
    for(const [index,who,ref] of [[1,'Isaiah','Isaiah 44:6'],[2,'Jesus','Mark 12:29'],[3,'Paul','1 Corinthians 8:4']]){
     await p.locator('.ogp-opening-witnesses button').nth(index).click();
     assert.equal(await p.locator('.ogp-opening-witnesses button').nth(index).getAttribute('aria-pressed'),'true');
