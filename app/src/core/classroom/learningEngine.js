@@ -224,6 +224,10 @@ export function recordAttempt(state, move, teacherDecision) {
         moveId: move.id,
         verdict: teacherDecision.verdict,
         strategy: teacherDecision.strategy,
+        // Persist the assessor and whether this was independent work. Later
+        // reports must not interpret an offline fallback as evaluated writing.
+        source: teacherDecision.source || 'unknown',
+        usedSupport: Boolean(state.experience?.drafts?.[move.id]?.usedSupport || teacherDecision.supportedPass),
         at: Date.now(),
       },
     ].slice(-20),
