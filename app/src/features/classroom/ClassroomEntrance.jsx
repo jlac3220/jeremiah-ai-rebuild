@@ -7,6 +7,7 @@ import { getActiveClassroomStandardId, getActiveClassroomStudyId, setActiveClass
 import { setClassroomEntryIntent, CLASSROOM_ENTRY_INTENTS } from '../../core/classroom/classroomEntryIntent';
 import '../home/LearningDashboard.css';
 import './ClassroomEntrance.css';
+import './JeremiahClassroomTheme.css';
 
 export function ClassroomStudyRoom({ onNavigate }) {
   const data = getLearningDashboard();
