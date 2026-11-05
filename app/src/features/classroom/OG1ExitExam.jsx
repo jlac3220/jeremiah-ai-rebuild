@@ -43,14 +43,14 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
  }
  function retry(){patchExam({answers:{},latest:null});setIndex(0);}
  return <section className="og1-exam" aria-labelledby="og1-exam-title">
-  <div className="og1-exam-intro">
+  <header className="og1-exam-intro">
    <span>OG.1 · THE ONE TRUE GOD</span>
    <h1 id="og1-exam-title">{latest?'Your Exit Exam Results':'The Exit Exam'}</h1>
    <p>{latest?'Review the passages behind your answers. The goal is understanding, not guessing.':'Ten questions. Five standards. One connected understanding of the one LORD.'}</p>
    <div className="og1-exam-intro-meta">
     <span>10 QUESTIONS</span><span>2 PER STANDARD</span><span>EVERY ANSWER COUNTS</span>
    </div>
-  </div>
+  </header>
   {latest?<div className="og1-exam-results">
     <div className="og1-exam-score">
      <div className="og1-exam-score-dial" aria-label={'Score: '+latest.score+' percent'}><strong>{latest.correct}<small> / 10</small></strong><span>{latest.score}%</span></div>

@@ -20,12 +20,12 @@ export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=se
  const currentPhrase=PHRASES[Math.max(0,Math.min(sequenceIndex,PHRASES.length-1))];
 
  if(kind==='shema-encounter')return <div className="shema-world">
-  <div className="shema-world-art">
+  <figure className="shema-world-art">
    {openingImage&&<img key={openingImage.id} className="shema-world-photo"
      src={openingImage.src} alt="Moses addresses the gathered people of Israel"
      style={{objectPosition:openingImage.focal||'50% 38%'}}
      onError={openingImageError} loading="eager" decoding="async"/>}
-  </div>
+  </figure>
   <div className="shema-world-copy">
    <span className="shema-eyebrow">A CONFESSION THAT SHAPES EVERYTHING</span>
    <h2>Before you explain it, <em>hear it.</em></h2>

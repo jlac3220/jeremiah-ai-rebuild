@@ -1,0 +1,94 @@
+[
+  {
+    "test": "brain",
+    "exit_code": 0
+  },
+  {
+    "test": "bible",
+    "exit_code": 0
+  },
+  {
+    "test": "dashboard",
+    "exit_code": 0
+  },
+  {
+    "test": "curriculum",
+    "exit_code": 0
+  },
+  {
+    "test": "teacher-led",
+    "exit_code": 0
+  },
+  {
+    "test": "grouped",
+    "exit_code": 0
+  },
+  {
+    "test": "media",
+    "exit_code": 0
+  },
+  {
+    "test": "crawler",
+    "exit_code": 0
+  },
+  {
+    "test": "content-scan",
+    "exit_code": 0
+  },
+  {
+    "test": "pilot",
+    "exit_code": 0
+  },
+  {
+    "test": "vercel",
+    "exit_code": 0
+  },
+  {
+    "test": "visual-discovery",
+    "exit_code": 0
+  },
+  {
+    "test": "visual-framework",
+    "exit_code": 0
+  },
+  {
+    "test": "biblical-visuals",
+    "exit_code": 0
+  },
+  {
+    "test": "narration",
+    "exit_code": 0
+  },
+  {
+    "test": "og1-evidence",
+    "exit_code": 0
+  },
+  {
+    "test": "og1-climax",
+    "exit_code": 0
+  },
+  {
+    "test": "og1-exam",
+    "exit_code": 0
+  },
+  {
+    "test": "og1-rating",
+    "exit_code": 0
+  },
+  {
+    "test": "og1-theme",
+    "exit_code": 0
+  },
+  {
+    "test": "og1-journey",
+    "exit_code": 0
+  },
+  {
+    "test": "og1-inline-bible",
+    "exit_code": 0
+  },
+  {
+    "test": "ask-jeremiah",
+    "exit_code": 0
+  }
+]

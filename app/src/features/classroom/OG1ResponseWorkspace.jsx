@@ -36,10 +36,10 @@ export default function OG1ResponseWorkspace({move,value,onChange,disabled,feedb
  return <section className="og2-workspace" data-mode={recall?'recall':'explanation'} aria-label={recall?'Independent Scripture recall':'Scripture explanation workspace'}>
   <header className="og2-workspace-heading"><span>{recall?'RECALL THE WORDS':usedSupport?'SUPPORTED EXPLANATION':'EXPLAIN THE CONNECTION'}</span><h2>{title||move.title}</h2></header>
   <div className="og2-workspace-grid">
-   <div className="og2-task-brief"><span className="og2-task-label">Your task</span><p id={id+'-prompt'}>{move.prompt}</p>
+   <section className="og2-task-brief" aria-label="Read the task"><span className="og2-task-label">Your task</span><p id={id+'-prompt'}>{move.prompt}</p>
     {recall&&<div className="og2-recall-note"><LessonIcon name="context"/><span>Memory recall and explanation are separate. Review the KJV after checking your attempt.</span></div>}
-   </div>
-   <div className="og2-writing-desk">
+   </section>
+   <section className="og2-writing-desk" aria-label="Write and review your response">
     <div className="og2-writing-meta"><label htmlFor={id+'-response'}>{label}</label><span>{recall?'Independent recall':usedSupport?'Supported attempt':'In your own words'}</span></div>
     <textarea id={id+'-response'} aria-describedby={id+'-prompt'} value={value||''} disabled={disabled} onChange={event=>onChange(event.target.value)} rows={recall?5:8} placeholder={recall?'Write the entire verse from memory…':'Develop your explanation here, using the task and Scripture to guide your reasoning…'}/>
     <div className="og2-save-state"><span>{(value||'').trim()?value.trim().split(/\s+/).length+' words':'Your words. Your reasoning.'}</span><span>Autosaved as you write</span></div>
@@ -50,7 +50,7 @@ export default function OG1ResponseWorkspace({move,value,onChange,disabled,feedb
      {usedSupport&&<small>Support used · this remains a supported attempt after closing.</small>}
      {supportOpen&&<aside id={id+'-support'} aria-label="Teaching support"><p className="og2-support-note">Use this guidance to develop your reasoning. Supported work is kept distinct from independent evidence.</p>{guidance}{move.supportSteps?.length>0&&<ol>{move.supportSteps.map(step=><li key={step}>{step}</li>)}</ol>}</aside>}
     </div>}
-   </div>
+   </section>
   </div>
  </section>;
 }

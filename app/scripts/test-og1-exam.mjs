@@ -68,7 +68,9 @@ for(const required of ['gradeOG1ExitExam(answers)','patchExam','latest','attempt
    'onReadBible','aria-pressed','disabled={!allAnswered}','Practice another attempt','Your selections save automatically']){
  assert.ok(component.includes(required),'Exam component missing '+required);
 }
-assert.ok(theme.includes('.oge-panel')&&theme.includes('.og1-identity-hero')&&theme.includes('.ogp-page .ogp-header'),'Theme should cover history, doctrine, and lesson shell');
-assert.match(css,/@media\(max-width:640px\)/,'Exam must work on phones');
-assert.match(theme,/prefers-reduced-motion/,'Motion accessibility required');
+assert.ok(theme.includes('.oge-panel'),'Artifact viewer keeps its scoped styling');
+assert.ok(read('../src/features/classroom/OG1LessonPlayer.css').includes('.ogp-header'),'Player owns lesson shell');
+assert.ok(read('../src/features/classroom/OG1StoryClimax.css').includes('.og1-identity-hero'),'Doctrine owns its composition');
+assert.match(css,/@media\(max-width:700px\)/,'Exam has an intentional single-task phone layout');
+assert.match(read('../src/features/classroom/OG1LessonPlayer.css'),/prefers-reduced-motion/,'Motion accessibility remains in the player');
 console.log('PASS OG.1 exit: ten answered items, informative score bands, optional practice, and nonblocking completion.');

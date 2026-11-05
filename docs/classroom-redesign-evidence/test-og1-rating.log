@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:og1-rating
+> node scripts/test-og1-rating.mjs
+
+PASS OG.1 open progression + per-standard evidence ratings 1–4.

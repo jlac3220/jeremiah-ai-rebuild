@@ -1,50 +1,4 @@
-/* OG.1 visual audit: one shared design language across the Shema, witnesses,
-   doctrinal inquiry, historic artifacts, final synthesis and exit exam.
-   Keep scene images/Scripture typography distinctive; make UI chrome consistent. */
-.ogp-page{
- --og-ink:#182f46;--og-muted:#5c7086;--og-brass:#b88b59;
- --og-deep:#132943;--og-paper:#f6f8fc;--og-line:#dce4ee;
- --og-tint:#ecf0f9;--og-accent:#5061d5;
- background:radial-gradient(ellipse 900px 460px at 12% 15%,#e4ebf9b5,transparent),
-   radial-gradient(ellipse 670px 530px at 96% 82%,#e3e7fa72,transparent),#f6f8fc;
- color:var(--og-ink);
-}
-.ogp-page.ogp-theme-isaiah,.ogp-page.ogp-theme-continuity,
-.ogp-page.ogp-theme-distinction,.ogp-page.ogp-theme-devotion{
- --og-paper:#f6f8fc;--og-line:#dce4ee;--og-accent:#5061d5;--og-brass:#b88b59;
-}
-.ogp-page .ogp-header{background:#132840;border-bottom:1px solid #4a5e82;min-height:76px}
-.ogp-page .ogp-progress{height:5px;background:#dbe3f0}
-.ogp-page .ogp-progress span{background:linear-gradient(90deg,#4c61da,#8998f0)}
-.ogp-page .ogp-context{border-bottom:1px solid #dbe3ef;align-items:center}
-.ogp-page .ogp-context-meta{color:#5a6881;letter-spacing:.1em}
-.ogp-page .ogp-context-name{color:#18324a;font-family:Inter,system-ui,sans-serif;font-weight:750}
-.ogp-page .ogp-chapter-track span{background:#d5ddec}
-.ogp-page .ogp-chapter-track .is-reached{background:#5668da}
-.ogp-page .ogp-stage .ogp-verb{color:#4b5fd0;letter-spacing:.11em}
-.ogp-page .ogp-stage h1{color:#172b45;letter-spacing:-.047em}
-.ogp-page .ogp-prompt{color:#455e76;line-height:1.72}
-.ogp-page .ogp-insight .ogp-thought{color:#1d3852}
-.ogp-page .ogp-action,.ogp-page .ogp-exam-cta{background:#4b5cd6;color:#fff;border:1px solid #4b5cd6;border-radius:12px;min-height:48px}
-.ogp-page .ogp-action:not(:disabled):hover{background:#3448bf}
-.ogp-page .ogp-back{color:#516681}
-.ogp-page button:focus-visible,.ogp-page a:focus-visible,.ogp-page summary:focus-visible,
-.ogp-page .ogp-verse-photo:focus-visible{outline:3px solid #7a89f0;outline-offset:3px}
-.ogp-page .ogp-discovery-choices button,.ogp-page .ogp-compare-columns section,
-.ogp-page .ogp-mission-options button{border-radius:16px;border-color:#d6dfe9}
-.ogp-page .ogp-discovery-choices button[aria-pressed=true]{background:#263f70;border-color:#6576dc}
-.ogp-page .ogp-discovery-answer,.ogp-page .ogp-compare-conclusion{border-left:4px solid #5e70d7;background:#f0f3ff}
-.ogp-page .ogp-compare-ring{background:linear-gradient(125deg,#30456d,#18283f);border-color:#9cadf0}
-.ogp-page .ogp-compare-columns h2{color:#1d3952}
-.ogp-page .ogj-eyebrow,.ogp-page .shema-eyebrow{color:#5265c1}
-.ogp-page .ogj-destination:focus-visible,.ogp-page .ogj-destination.is-selected{outline-offset:3px}
-.ogp-page .og1-identity-hero,.ogp-page .og1-synthesis-head{background:linear-gradient(123deg,#172b49,#323f77);box-shadow:0 17px 38px #19314a22}
-.ogp-page .og1-identity-deck button,.ogp-page .og1-synthesis-witnesses button{border-color:#d7e0eb}
-.ogp-page .og1-identity-question,.ogp-page .og1-consequence-stage{box-shadow:0 14px 34px #19314a1e}
-.ogp-page .og1-return-connection,.ogp-page .og1-consequence-revealed{background:#edf1ff;border-left-color:#6577d9}
-.ogp-page .og1-consequence-copy{background:transparent}
-.ogp-page .og1-exam-intro{background:linear-gradient(119deg,#172d48,#2a426a)}
-.ogp-page .og1-exam-content{padding-top:23px}
+/* Artifact viewer only. Player and scene compositions belong to their components. */
 /* Treat museum evidence as a scholarly collection, but give its controls the
    same legibility, borders and focus styling as the rest of Jeremiah. */
 .oge-panel{background:#f7f9ff;border:1px solid #ccd6ed}
@@ -59,37 +13,3 @@
 .oge-launch{background:#eef1ff;border-color:#c6cff3;color:#364cb9}
 .oge-launch:hover{background:#e4e9ff}
 .oge-panel button:focus-visible,.oge-panel a:focus-visible{outline:3px solid #7a89f0;outline-offset:3px}
-@media(max-width:750px){
- .ogp-page .ogp-shell{padding:22px 18px 72px}
- .ogp-page .ogp-context{gap:11px}
- .ogp-page .ogp-context-name{font-size:1rem}
- .ogp-page .ogp-stage h1{font-size:clamp(1.9rem,8vw,3rem)}
- .ogp-page .ogp-prompt{font-size:.95rem}
- .ogp-page .ogp-action{width:100%;justify-content:center}
- .ogp-page .ogp-controls{gap:8px}
- .ogp-page .ogp-back{min-height:42px}
-}
-@media(prefers-reduced-motion:reduce){
- .ogp-page .ogp-stage,.ogp-page .ogp-discovery-answer,.ogp-page .ogp-witness-scroll,
- .ogp-page .og1-consequence-revealed{animation:none}
- .ogp-page .ogp-progress span,.ogp-page .ogp-action{transition:none}
-}
-
-/* Quiet supporting resources: lesson content remains the focal point. */
-.ogp-page .ogp-study-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;margin:7px 0 3px}
-.ogp-page .ogp-study-link{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:5px 0;background:none;border:0;border-radius:4px;color:#687b9b;font:650 .77rem/1.35 Inter,system-ui,sans-serif;cursor:pointer;text-decoration:underline;text-decoration-color:#c3cce1;text-underline-offset:4px}
-.ogp-page .ogp-study-link:hover{color:#4056b3;text-decoration-color:#5369c9}
-.ogp-page .ogp-study-link[aria-expanded=true]{color:#4056b3}
-.ogp-page .ogp-study-link span{font-size:.8rem}
-.ogp-page .ogp-context{padding-bottom:12px}
-.ogp-page .ogp-chapter-track{margin-top:7px}
-.ogp-page .og1-journey-map-recap{margin:8px 0 10px}
-.ogp-page .og1-journey-map-recap[hidden]{display:none}
-@media(max-width:680px){.ogp-page .ogp-study-tools{gap:7px 20px;margin:4px 0 0}.ogp-page .ogp-study-link{font-size:.74rem;min-height:34px}.ogp-page .ogp-context{padding-bottom:10px}}
-
-/* Manuscript study is a secondary resource, never part of the chapter heading. */
-.ogp-page .ogp-study-footnote{display:flex;align-items:center;flex-wrap:wrap;gap:5px 12px;margin:21px 0 30px;padding:15px 0 0;border-top:1px solid #dce3ef;color:#77849b}
-.ogp-page .ogp-study-footnote>span{font:800 .62rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;color:#7c89a2}
-.ogp-page .ogp-study-footnote button{display:inline-flex;gap:8px;align-items:center;border:0;background:transparent;padding:4px 0;color:#5368b1;font:650 .78rem/1.5 Inter,system-ui,sans-serif;text-decoration:underline;text-decoration-color:#c4ccea;text-underline-offset:3px;cursor:pointer}
-.ogp-page .ogp-study-footnote button:hover{color:#3049b5}
-@media(max-width:680px){.ogp-page .ogp-study-footnote{margin:17px 0 25px;padding-top:12px;gap:4px 9px}.ogp-page .ogp-study-footnote>span{font-size:.58rem}}
