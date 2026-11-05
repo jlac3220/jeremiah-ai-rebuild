@@ -48,7 +48,10 @@ const exam=readFileSync(new URL('../src/features/classroom/OG1ExitExam.jsx',impo
 assert.ok(!player.includes('Continue without an answer'));
 assert.ok(player.includes('Please answer this question before continuing'));
 assert.ok(player.includes('const anyAnswer=ready;'),'Every required assessment response must be complete before submission');
-assert.ok(player.includes('finalRating.standards.map'));
+const report=readFileSync(new URL('../src/features/classroom/OG1UnderstandingReport.jsx',import.meta.url),'utf8');
+assert.ok(player.includes('<OG1UnderstandingReport rating={finalRating}'),'Player passes the unchanged engine rating to its report');
+assert.ok(report.includes('rating.standards.map'),'Every standard remains represented in the report');
+for(const field of ['item.score','item.coverage','item.meaning','item.nextStep','item.evidence','item.recitationVerified'])assert.ok(report.includes(field),'Report preserves '+field);
 assert.ok(player.includes("completionScreen==='understanding'"),'Understanding has its own screen');
 assert.ok(player.includes("completionScreen==='summary'"),'Final summary is a subsequent screen');
 assert.ok(player.includes('Continue to final summary'),'Learner controls reveal-to-summary transition');

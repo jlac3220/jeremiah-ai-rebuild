@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:og1-exam
+> node scripts/test-og1-exam.mjs
+
+PASS OG.1 exit: ten answered items, informative score bands, optional practice, and nonblocking completion.

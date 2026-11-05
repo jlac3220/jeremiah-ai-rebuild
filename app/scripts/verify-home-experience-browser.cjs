@@ -27,7 +27,7 @@ const base=process.env.JEREMIAH_REVIEW_URL||'http://127.0.0.1:4184';
    assert.ok(p.url().endsWith('#progress'),'Progress opens independently');
    await p.goto(base+'/#home');
    await p.getByRole('button',{name:/Read in context/}).click();
-   assert.ok(p.url().endsWith('#bibleSupport'),'Today's passage opens the Bible');
+   assert.ok(p.url().endsWith('#bibleSupport'),"Today's passage opens the Bible");
    assert.deepEqual(errors,[],'No runtime errors');
    await p.close();
   }

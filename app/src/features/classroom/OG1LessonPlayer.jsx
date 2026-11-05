@@ -16,6 +16,7 @@ import {OG1_SCENE_NARRATION} from '../../core/classroom/og1NarrationManifest';
 import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1ExitExam from './OG1ExitExam';
+import OG1UnderstandingReport from './OG1UnderstandingReport';
 import OG1PilotSurvey from '../pilot/OG1PilotSurvey';
 import {rateOG1Lesson} from '../../core/classroom/og1LessonRating';
 import {OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
@@ -31,7 +32,7 @@ import './OG1StageOne.css';
 import OG1ResponseWorkspace, {OG1TeacherFeedback} from './OG1ResponseWorkspace';
 import OG1ChapterGuide from './OG1ChapterGuide';
 import './OG1InteractiveExperience.css';
-import './JeremiahLessonTheme.css';
+
 
 // These are instructional purposes, not image IDs or keyword searches.
 // Broad worship may use broad imagery; specific evidence must match the
@@ -285,8 +286,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
     </nav>
    </div>
    <OG1ChapterGuide expanded={chapterMapOpen} onClose={()=>setChapterMapOpen(false)} chapterNumber={chapterNumber} finish={finish} taskTitle={finish?location.title:move.title} next={location.next}/>
+   <div hidden={chapterMapOpen}>
    {finish?(completionScreen==='survey'?<OG1PilotSurvey completed onDone={()=>onNavigate(window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}/>:completionScreen==='understanding'?<section className="ogp-finish ogp-finish--understanding" aria-labelledby="ogp-understanding-title">
- <div className="ogp-depth-report"><span className="ogp-understanding-eyebrow">YOUR LEARNING · OG.1</span><h1 id="ogp-understanding-title">Your Understanding</h1><p className="ogp-understanding-level">Level {finalRating.level} · {finalRating.label}</p><p>Weighted performance: {finalRating.score===null?'Not assessed':finalRating.score+'%'} · Evidence coverage: {finalRating.coverage}%</p><p>{finalRating.meaning}</p><p>{finalRating.note}</p><div className="ogp-depth-report-list">{finalRating.standards.map(item=><div key={item.standardId}><strong>{item.standardId}</strong><span>Level {item.level} · {item.label}</span><small>Weighted performance: {item.score===null?'Not assessed':item.score+'%'} · Evidence coverage: {item.coverage}%</small>{item.recitationVerified!==null&&<small>Deuteronomy 6:4 KJV recitation: {item.recitationVerified?'Verified in the recall check':item.recitationAttempted?'Attempted; not yet verified':'Not yet attempted'}</small>}<p>{item.meaning}</p><small><strong>What you demonstrated:</strong> {item.evidence}</small><small><strong>What to work on next:</strong> {item.nextStep}</small></div>)}</div></div>
+ <OG1UnderstandingReport rating={finalRating}/>
  <div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('summary');window.scrollTo({top:0,behavior:'auto'})}}>Continue to final summary →</button><button type="button" className="ogp-back" onClick={()=>setCompletionScreen('exam')}>Review assessment <LessonIcon name="context"/></button></div>
  </section>:completionScreen==='summary'?<section className="ogp-finish ogp-finish--synthesis" aria-label="Final lesson summary"><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-survey-invite"><span>ONE MORE THING · YOUR VOICE MATTERS</span><h2>Help shape the next Jeremiah lesson.</h2><p>Rate the teaching, imagery, interface, narrator, pacing, and more. Tell us exactly what to keep—and what needs to change. The survey is optional, anonymous, and separate from your answers.</p><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('survey');window.scrollTo({top:0,behavior:'auto'})}}>Evaluate the experience →</button><button type="button" className="ogp-back" onClick={()=>onNavigate(window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}>Finish without survey</button><button type="button" className="ogp-back" onClick={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}>← Understanding report</button></div></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onContinue={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}/>):<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'} data-workspace={writingWorkspace||undefined}>
@@ -294,16 +296,17 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
      {current.kind==='roadmap'&&null}
      {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} sequenceIndex={evidenceIndex} revealedThrough={revealLimit} onInspect={inspectReveal} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak}/>}
      {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
-      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></div>
-      <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
+      <figure className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></figure>
+
       <div className="ogp-encounter-inner">
        <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
-       <div className="ogp-encounter-symbol" aria-hidden="true">אחד</div>
+       <div className="ogp-encounter-symbol" lang="he" dir="rtl" aria-hidden="true">אחד</div>
        <blockquote>“Hear, O Israel:<br/>The LORD our God is <strong className="ogp-encounter-word">one LORD.</strong>”</blockquote>
        <span className="ogp-encounter-reference">A declaration carried across generations.</span>
-       
-       {<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
+
+
       </div>
+       {<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
      </div>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
       <div className="ogp-scripture-ornament" aria-hidden="true"><ScriptureArt content={content} move={move} verse={current.verse}/></div>
@@ -315,7 +318,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       </div>
      </div>}
      {current.kind==='intro'&&<p className="ogp-thought">Let's follow the confession from Moses through the prophets and into the apostolic witness.</p>}
-     
+
      {current.kind==='witness'&&<div className="ogp-witness">
       <p className="ogp-prompt">Isaiah makes three connected claims. Reveal each one and see how the evidence fits together.</p>
       <div className="ogp-witness-timeline" role="group" aria-label="Isaiah's three declarations">
@@ -325,9 +328,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
        </button>)}
       </div>
       <div className="og2-evidence-board">
-       <div className="og2-evidence-art" aria-hidden="true"><DestinationArt tone="isaiah-manuscript"
+       <figure className="og2-evidence-art" aria-hidden="true"><DestinationArt tone="isaiah-manuscript"
           content={content} move={move} placement={{intent:'artifact',reference:evidenceIndex===1?'Isaiah 44:6':'Isaiah 43:10',
-           learningGoal:'Inspect the later ancient manuscript witness to Isaiah’s declarations'}}/></div>
+           learningGoal:'Inspect the later ancient manuscript witness to Isaiah’s declarations'}}/><figcaption>ISAIAH’S TESTIMONY</figcaption></figure>
        <ol aria-label="The evidence collected so far" aria-live="polite">
         {['BEFORE','BESIDE','AFTER'].slice(0,revealLimit+1).map((label,index)=><li key={label} data-active={index===evidenceIndex}>
          <span>ISAIAH'S TESTIMONY · {String(index+1).padStart(2,'0')} / 03 · {label}</span>
@@ -345,10 +348,12 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
        <span className="ogp-trail-thumb"><DestinationArt tone={tone} content={content} move={move}/><span className="ogp-trail-order">0{i+1}</span></span>
        <strong>{name}</strong><small>{ref}</small>
       </button>)}</div>
+
       {evidenceIndex>0&&<ol className="og2-retained-trail" aria-label="The confession carried forward">
        {['MOSES','JESUS','PAUL'].slice(0,evidenceIndex).map((name,index)=><li key={name}><span>{name} · {['Deuteronomy 6:4','Mark 12:29','1 Corinthians 8:4'][index]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][index]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][index]}</p></li>)}
       </ol>}
       <div className="ogp-trail-quote" key={evidenceIndex} aria-live="polite"><div className="ogp-trail-scene" aria-hidden="true"><DestinationArt tone={evidenceIndex===0?'moses-trail':evidenceIndex===1?'jesus-trail':'apostles-trail'} content={content} move={move}/></div><span>{['THE FOUNDATION','THE REAFFIRMATION','THE APOSTOLIC APPLICATION'][evidenceIndex]}</span><blockquote>{['“The LORD our God is one LORD”','“The Lord our God is one Lord”','“there is none other God but one”'][evidenceIndex]}</blockquote><p>{['Moses gives Israel the confession.','Jesus repeats the confession when asked about the first commandment.','Paul applies the confession while confronting idols.'][evidenceIndex]}</p></div>
+
       {evidenceIndex===2&&<div className="ogp-evidence-close"><strong>PAUL'S ARGUMENT HAS A CONTEXT.</strong><p>In 1 Corinthians 8:4–6, Paul contrasts so-called gods with one God and one Lord Jesus Christ. The Apostolic reading understands this in continuity with the Shema, not as a second deity.</p><div className="ogp-evidence-links">
        <button type="button" onClick={()=>readVerse('1 Corinthians 8:4-6')}>Read 1 Corinthians 8:4–6 <LessonIcon name="context"/></button>
        <button type="button" onClick={()=>readVerse('1 Timothy 2:5')}>One God · One mediator <LessonIcon name="context"/></button>
@@ -359,7 +364,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
      {current.kind==='return'&&<OG1ReturnToShema onOpenBible={readVerse}/>}
      {current.kind==='comparison'&&<div className="ogp-compare">
       <p className="ogp-prompt">A distinct doctrinal investigation: both explanations confess one God. Explore how they understand Father, Son, and Holy Spirit without misrepresenting either view.</p>
-      <div className="ogp-compare-ring"><span>ONE GOD</span><small>Shared confession</small></div>
+      <header className="ogp-compare-ring"><span>ONE GOD</span><small>Shared confession</small></header>
       {evidenceIndex>0&&<div className="ogp-compare-columns" aria-live="polite">
        {evidenceIndex>=1&&<section className="is-revealed"><span>TRINITARIAN TEACHING</span><h2>Three eternal persons</h2><p>One divine essence in three coequal, coeternal persons. This view does not claim there are three gods.</p></section>}
        {evidenceIndex>=2&&<section className="is-revealed"><span>APOSTOLIC ONENESS</span><h2>One undivided God</h2><p>The Father, Son through true incarnation, and Holy Spirit are understood without eternal distinctions of divine persons.</p></section>}
@@ -389,15 +394,16 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
       {written&&(writingWorkspace?(move.id==='shema-try'?<ShemaTeachBack {...writingProps}/>:<OG1ResponseWorkspace {...writingProps}/>):<textarea aria-label="Your explanation" rows={5} placeholder="Explain what the Scripture teaches in your own words." value={form.responseText||''} disabled={Boolean(feedback)||thinking} onChange={e=>change({responseText:e.target.value})}/>)}
       {feedback&&!writingWorkspace&&<OG1TeacherFeedback feedback={feedback} move={move} onReadBible={readVerse}/>}
       {error&&<p role="alert" className="ogp-error">{error}</p>}
-     </>} 
+     </>}
     </section>
     {!writingWorkspace&&<nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':move.assessmentRole==='memory_recall'?'Check my recitation':written?'Discuss my explanation':'Check my connection'} →</button>))
      :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'&&move.id==='learn'?(hasMoreReveals?`Meet ${['Isaiah','Jesus','Paul'][evidenceIndex]}`:'Begin Chapter 1 · The Shema'):current?.kind==='discovery'?(hasMoreReveals?'Reveal the next part':'Continue the lesson'):current?.kind==='shema-connection'?'Examine the meaning of one':current?.kind==='shema-echad'?'Test your understanding':current?.kind==='doctrine-summary'?'Apply what you learned':buttonText} →</button>}
      {!assessment&&(moment>0||evidenceIndex>0)&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
-     
+
     </nav>}
    </>}
+   </div>
   </main>
   {inlineBibleReference&&<OG1InlineBible reference={inlineBibleReference} onClose={()=>setInlineBibleReference(null)}/>}
  </div>;

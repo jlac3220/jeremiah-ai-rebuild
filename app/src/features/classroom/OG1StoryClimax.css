@@ -1,98 +1,31 @@
-
-/* OG.1 doctrinal bridge: source-first and visually unlike the previous three-witness cards. */
-.og1-identity,.og1-consequence,.og1-synthesis{width:100%;max-width:1040px;margin:12px auto 22px;color:#253950}
-.og1-identity-hero{border-radius:22px;background:linear-gradient(118deg,#172a46,#303f76);color:#f8fbff;padding:clamp(24px,4.4vw,54px);box-shadow:0 24px 45px #102c4033}
-.og1-identity-hero>span,.og1-synthesis-head>span{font:800 .68rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.17em;color:#c3cdff}
-.og1-identity-hero h2{font:650 clamp(2rem,4vw,3.35rem)/1.15 Georgia,serif;max-width:750px;letter-spacing:-.03em;margin:20px 0;color:#fff}
-.og1-identity-hero p{max-width:760px;font:500 clamp(.93rem,1.5vw,1.05rem)/1.68 Inter,system-ui,sans-serif;color:#e2e9fc;margin:14px 0 0}
-.og1-identity-deck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
-.og1-identity-deck button{display:flex;flex-direction:column;justify-content:space-between;gap:11px;border:1px solid #d7dfeb;border-radius:14px;min-height:108px;padding:20px;text-align:left;background:#fff;color:#253f56;cursor:pointer}
-.og1-identity-deck button[aria-pressed="true"]{background:#ecf0ff;border-color:#5866d8;box-shadow:0 0 0 2px #5866d83b}
-.og1-identity-deck button span{font:800 .64rem/1.35 Inter,system-ui,sans-serif;color:#5065a2;letter-spacing:.14em}
-.og1-identity-deck button strong{font:750 1rem/1.38 Inter,system-ui,sans-serif}
-.og1-identity-question{display:grid;grid-template-columns:1.28fr 1fr;gap:0;border:1px solid #d6e0e6;border-radius:20px;overflow:hidden;background:#fff}
-.og1-identity-question>div:first-child{padding:clamp(25px,4vw,42px)}
-.og1-identity-question>div:first-child>span,.og1-identity-implication>span{font:850 .63rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#5263af}
-.og1-identity-question h3{font:650 clamp(1.3rem,2.25vw,1.85rem)/1.35 Georgia,serif;color:#183a50;margin:20px 0}
-.og1-identity-question blockquote{font:550 clamp(1.15rem,1.9vw,1.55rem)/1.55 Georgia,serif;margin:22px 0 8px;border-left:3px solid #7887e2;padding-left:22px;color:#3b5076}
-.og1-identity-question small{color:#677b89;font:700 .72rem/1.5 Inter,system-ui,sans-serif}
-.og1-identity-implication{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,36px);background:#f2f5f8}
-.og1-identity-implication p{font:500 .94rem/1.75 Inter,system-ui,sans-serif;color:#3a5065}
-.og1-identity-implication button{align-self:flex-start;border:0;background:#4c5ed1;color:#fff;padding:12px 17px;border-radius:9px;font:750 .78rem Inter,system-ui,sans-serif;cursor:pointer}
-.og1-identity-transition{border-left:3px solid #7887e2;margin:22px 0 0;padding:10px 18px;color:#536373;font:550 1rem/1.65 Inter,system-ui,sans-serif}
-
-.og1-consequence-lead{max-width:790px;font:550 clamp(1.05rem,2vw,1.26rem)/1.65 Inter,system-ui,sans-serif;color:#495d79;margin:0 0 19px}
-.og1-consequence-progress{display:flex;gap:5px;margin:0 0 17px}
-.og1-consequence-progress span{height:4px;flex:1;overflow:hidden;color:transparent;background:#d6dfea;border-radius:5px}
-.og1-consequence-progress span.is-current{background:#6473db}
-.og1-consequence-stage{display:grid;grid-template-columns:.83fr 1.17fr;min-height:455px;border-radius:22px;overflow:hidden;background:#192e4d;box-shadow:0 20px 45px #1b285230}
-.og1-consequence-art{position:relative;min-height:280px;background:#283e68}
-.og1-consequence-art>.ogp-mission-photo{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;border-radius:0}
-.og1-consequence-art .ogp-mission-photo:after{display:none}
-.og1-consequence-art .ogp-mission-photo>span{display:none}
-.og1-consequence-art .ogp-mission-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.og1-consequence-copy{padding:clamp(26px,4vw,50px);color:#f4f8ff;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
-.og1-consequence-copy>span{font:800 .68rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.14em;color:#bdc9ff}
-.og1-consequence-copy h2{font:650 clamp(1.6rem,3vw,2.65rem)/1.17 Georgia,serif;letter-spacing:-.03em;margin:18px 0;color:#fff}
-.og1-consequence-copy blockquote{font:500 clamp(1.15rem,1.9vw,1.5rem)/1.5 Georgia,serif;margin:8px 0 8px;border-left:3px solid #9ba9ff;padding-left:18px;color:#fff}
-.og1-consequence-copy small{font:750 .7rem/1.35 Inter,system-ui,sans-serif;letter-spacing:.07em;color:#c6d4e6}
-.og1-consequence-copy p{font:500 .91rem/1.72 Inter,system-ui,sans-serif;color:#dbe5ee;margin:24px 0 15px}
-.og1-consequence-copy button{border:1px solid #b5c0d0;border-radius:8px;padding:10px 15px;color:#fff;background:transparent;cursor:pointer;font:750 .78rem Inter,system-ui,sans-serif}
-.og1-consequence-reveal{margin-top:18px;width:100%;padding:22px 24px;background:#fff;color:#253e63;border:1px solid #cbd5e7;border-radius:14px;display:flex;justify-content:space-between;font:750 1rem Inter,system-ui,sans-serif;cursor:pointer;text-align:left}
-.og1-consequence-reveal:hover{border-color:#6974c1;background:#f2f5ff}
-.og1-consequence-revealed{animation:ogp-arrive .3s ease;border-left:4px solid #5769cb;background:#f0f3ff;border-radius:0 14px 14px 0;padding:21px 25px;margin-top:18px}
-.og1-consequence-revealed span{font:850 .65rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#5665bb}
-.og1-consequence-revealed p{font:550 1.07rem/1.72 Inter,system-ui,sans-serif;color:#2d405a;margin:9px 0 0}
-
-.og1-synthesis-head{background:linear-gradient(130deg,#172b49,#313f73);color:#fff;border-radius:20px 20px 0 0;padding:clamp(26px,4vw,48px)}
-.og1-synthesis-head h2{font:580 clamp(2rem,4vw,3.2rem)/1.17 Georgia,serif;letter-spacing:-.03em;margin:16px 0;color:#fff}
-.og1-synthesis-head p{font:500 1.02rem/1.7 Inter,system-ui,sans-serif;max-width:750px;color:#dfe5fa}
-.og1-synthesis-witnesses{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#d6dfeb;border:1px solid #d6dfeb}
-.og1-synthesis-witnesses button{padding:clamp(16px,2.5vw,30px);border:0;text-align:left;display:flex;flex-direction:column;gap:17px;min-height:195px;background:#fff;cursor:pointer}
-.og1-synthesis-witnesses button:hover{background:#f2f5ff}
-.og1-synthesis-witnesses span{font:800 .65rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.08em;color:#536ac1}
-.og1-synthesis-witnesses strong{font:550 clamp(1rem,1.5vw,1.25rem)/1.45 Georgia,serif;color:#263c53;flex:1}
-.og1-synthesis-witnesses small{font:750 .72rem/1.4 Inter,system-ui,sans-serif;color:#5f7190}
-.og1-synthesis-verdict{padding:clamp(27px,5vw,52px);background:#f1f4fe;border:1px solid #d6dfeb;border-radius:0 0 20px 20px}
-.og1-synthesis-verdict>span{font:850 .68rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.16em;color:#5366c2}
-.og1-synthesis-verdict blockquote{font:550 clamp(1.6rem,3vw,2.4rem)/1.4 Georgia,serif;letter-spacing:-.02em;color:#263d53;margin:16px 0}
-.og1-synthesis-verdict small{font:750 .71rem Inter,system-ui,sans-serif;letter-spacing:.1em;color:#5b6f91}
-.og1-synthesis-verdict p{font:550 1.01rem/1.75 Inter,system-ui,sans-serif;margin:28px 0 0;max-width:750px;color:#4d6072}
-.og1-identity button:focus-visible,.og1-consequence button:focus-visible,.og1-synthesis button:focus-visible{outline:3px solid #5667cc;outline-offset:2px}
-@media(max-width:760px){
- .og1-identity-deck{grid-template-columns:1fr;gap:8px}
- .og1-identity-deck button{min-height:65px;padding:13px 17px;gap:3px}
- .og1-identity-question{grid-template-columns:1fr}
- .og1-identity-hero{padding:24px}
- .og1-consequence-stage{grid-template-columns:1fr}
- .og1-consequence-art{min-height:240px}
- .og1-consequence-copy{padding:26px}
- .og1-synthesis-witnesses{grid-template-columns:repeat(2,minmax(0,1fr))}
- .og1-synthesis-witnesses button{min-height:180px}
-}
-@media(prefers-reduced-motion:reduce){.og1-consequence-revealed{animation:none}}
-
-/* The true narrative bridge: Deuteronomy 6:4 straight into 6:5. */
-.og1-return{max-width:1040px;margin:10px auto 24px}
-.og1-return-heading{border-radius:22px 22px 0 0;padding:clamp(28px,4.5vw,56px);background:linear-gradient(125deg,#172b49,#364580);color:#fff}
-.og1-return-heading span{font:850 .69rem/1.4 Inter,system-ui,sans-serif;color:#c6d1ff;letter-spacing:.16em}
-.og1-return-heading h2{font:550 clamp(2.05rem,4.5vw,3.6rem)/1.16 Georgia,serif;color:#fff;letter-spacing:-.04em;margin:16px 0}
-.og1-return-heading p{max-width:710px;color:#e2e8fb;line-height:1.7;font-size:1rem}
-.og1-return-verses{display:grid;grid-template-columns:minmax(0,1fr) 46px minmax(0,1fr);align-items:stretch;gap:0;background:#fff;border:1px solid #d8e0e5;border-top:0}
-.og1-return-verses section{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,38px);min-height:275px}
-.og1-return-verses section:first-child{background:#eef1fc}
-.og1-return-verses section:last-child{background:#f7f9ff}
-.og1-return-verses span,.og1-return-verses small{font:800 .66rem/1.5 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#66758a}
-.og1-return-verses blockquote{margin:18px 0 20px;font:550 clamp(1.22rem,2vw,1.7rem)/1.42 Georgia,serif;color:#213b50}
-.og1-return-arrow{align-self:center;justify-self:center;color:#7181c3;font:700 2.2rem Georgia,serif}
-.og1-return-connection{border-left:4px solid #8594d5;background:#eff2ff;color:#344c6b;padding:20px 24px;margin:0;font:560 clamp(1rem,2vw,1.18rem)/1.7 Inter,system-ui,sans-serif}
-.og1-return>button{padding:13px 19px;margin-top:18px;background:#4c5ed1;border:1px solid #4c5ed1;color:#fff;border-radius:9px;font:750 .83rem Inter,system-ui,sans-serif;cursor:pointer}
-.og1-return button:focus-visible{outline:3px solid #7989de;outline-offset:3px}
-.ogp-finish--synthesis{max-width:1040px;padding-top:26px}
-.ogp-finish--synthesis:before{display:none}
-.ogp-finish--synthesis>.ogp-action{margin:25px 0 25px}
-@media(max-width:660px){
- .og1-return-verses{grid-template-columns:1fr}
- .og1-return-verses section{min-height:0;padding:27px}
- .og1-return-arrow{transform:rotate(90deg);padding:3px 0}
-}
+/* Inquiry, devotion and synthesis. Distinct reading compositions, shared type. */
+.og1-identity,.og1-consequence,.og1-synthesis,.og1-return{width:100%;margin:0;color:#142c44}
+.og1-identity-hero{max-width:880px;padding:12px 0 32px;background:transparent}
+.og1-identity-hero>span,.og1-return-heading>span,.og1-synthesis-head>span{font:700 .65rem/1.6 var(--font-body);letter-spacing:.12em;color:#526b83}
+.og1-identity-hero h2,.og1-return-heading h2{font:730 clamp(1.9rem,3.6vw,3rem)/1.16 var(--font-body);letter-spacing:-.04em;margin:20px 0}
+.og1-identity-hero p,.og1-return-heading p{font:400 1rem/1.85 var(--font-body);color:#405b74;margin:16px 0}
+.og1-identity-deck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1px solid #c7d5e4}
+.og1-identity-deck button{min-height:84px;display:flex;flex-direction:column;justify-content:center;align-items:start;gap:8px;border:0;border-bottom:2px solid transparent;padding:18px 16px;background:none;color:#233f5a;text-align:left}
+.og1-identity-deck button[aria-pressed=true]{border-bottom-color:#174c9e;background:#eaf1fc}.og1-identity-deck button span{font:700 .65rem/1.4 var(--font-body);letter-spacing:.08em;color:#526b83}.og1-identity-deck button strong{font:650 .85rem/1.4 var(--font-body)}
+.og1-identity-question{display:grid;grid-template-columns:1.25fr 1fr;gap:64px;padding:36px 0;border-bottom:1px solid #dce3e9}
+.og1-identity-question>div>span{font:700 .65rem/1.6 var(--font-body);color:#526b83;letter-spacing:.08em}.og1-identity-question h3{font:700 clamp(1.4rem,2vw,1.8rem)/1.45 var(--font-body);letter-spacing:-.025em;margin:20px 0}.og1-identity-question blockquote{font:400 1.5rem/1.6 Georgia,serif;margin:24px 0;color:#1d405e}.og1-identity-question small{font-size:.7rem;color:#526b83}
+.og1-identity-implication{align-self:center;padding-left:28px;border-left:2px solid #9cb4cc}.og1-identity-implication p{font:400 .98rem/1.85 var(--font-body);color:#405b74}.og1-identity-implication button,.og1-return>button,.og1-consequence-read{border:0;background:none;color:#174c9e;min-height:44px;padding:10px 0;font:650 .82rem/1.6 var(--font-body)}
+.og1-identity-transition{font:400 .95rem/1.85 var(--font-body);color:#405b74;max-width:900px;padding:20px 0}
+.og1-return-heading{max-width:850px;padding:0 0 28px;background:none}
+.og1-return-verses{display:grid;grid-template-columns:1fr 36px 1fr;gap:32px;align-items:center;border-block:1px solid #c7d5e4}
+.og1-return-verses section{padding:32px 0}.og1-return-verses section>span,.og1-return-verses small{font:700 .65rem/1.5 var(--font-body);letter-spacing:.08em;color:#7e5e37}.og1-return-verses blockquote{font:400 clamp(1.4rem,2.5vw,2rem)/1.65 Georgia,serif;margin:20px 0;color:#173953}.og1-return-arrow{text-align:center;color:#9a794d}
+.og1-return-connection{max-width:900px;font:400 1rem/1.85 var(--font-body);color:#405b74;margin:26px 0 14px}
+.og1-consequence-lead{font:400 1rem/1.8 var(--font-body);color:#405b74;max-width:800px}.og1-consequence-progress{display:flex;gap:28px;margin:24px 0}.og1-consequence-progress span{font:700 .65rem/1.5 var(--font-body);color:#526b83;letter-spacing:.08em}.og1-consequence-progress .is-active{color:#174c9e}
+.og1-consequence-stage{display:grid;grid-template-columns:1fr 1fr;background:#112a43;color:white}
+.og1-consequence-art{position:relative;min-height:450px;overflow:hidden}.og1-consequence-art>*,.og1-consequence-art .ogj-art{position:absolute;inset:0;width:100%;height:100%;border-radius:0;object-fit:cover}
+.og1-consequence-copy{padding:40px;align-self:center}.og1-consequence-copy>span{font:700 .65rem/1.6 var(--font-body);letter-spacing:.1em;color:#f1c88c}.og1-consequence-copy h2{font:700 clamp(1.7rem,2.8vw,2.5rem)/1.2 var(--font-body);letter-spacing:-.035em;margin:20px 0;color:white}.og1-consequence-copy blockquote{font:400 1.5rem/1.65 Georgia,serif;margin:20px 0;color:#fff}.og1-consequence-copy small{font-size:.65rem;color:#d9c39f}.og1-consequence-copy p{font:400 .95rem/1.8 var(--font-body);color:#d9e4f3}.og1-consequence-copy .og1-consequence-read{color:#e3edff}
+.og1-consequence-revealed{border-left:2px solid #ac7844;padding:4px 0 4px 24px;margin:30px 0;max-width:850px}.og1-consequence-revealed>span{font:700 .7rem/1.5 var(--font-body);color:#785a34;letter-spacing:.06em}.og1-consequence-revealed p{font:400 1rem/1.85 var(--font-body);color:#405b74}.og1-consequence-reveal{min-height:44px;background:none;border:0;color:#174c9e;padding:14px 0}
+/* A concluding argument: one lead, linked witnesses, one full-width passage. */
+.og1-synthesis-head{padding:36px 40px;background:linear-gradient(125deg,#172b49,#313f73);color:#fff}
+.og1-synthesis-head>span{color:#e7c695}.og1-synthesis-head h2{font:730 clamp(1.9rem,3.5vw,3rem)/1.15 var(--font-body);letter-spacing:-.04em;color:#fff;max-width:780px;margin:20px 0}.og1-synthesis-head p{font:400 1.02rem/1.8 var(--font-body);color:#dfe5fa;max-width:900px;margin:0}
+.og1-synthesis-witnesses{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:32px 0;border-block:1px solid #c7d5e4}
+.og1-synthesis-witnesses button{display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-height:215px;padding:24px 20px;text-align:left;background:none;border:0;color:#173953}
+.og1-synthesis-witnesses button+button{border-left:1px solid #c7d5e4}.og1-synthesis-witnesses button>span{font:700 .65rem/1.6 var(--font-body);letter-spacing:.1em;color:#526b83}.og1-synthesis-witnesses strong{font:400 1.25rem/1.6 Georgia,serif}.og1-synthesis-witnesses small{font:650 .72rem/1.5 var(--font-body);color:#174c9e}
+.og1-synthesis-verdict{max-width:900px;margin:36px 0;padding:12px 0}.og1-synthesis-verdict>span{font:700 .65rem/1.5 var(--font-body);color:#785a34;letter-spacing:.1em}.og1-synthesis-verdict blockquote{font:400 clamp(1.6rem,3vw,2.4rem)/1.55 Georgia,serif;letter-spacing:-.015em;margin:24px 0;color:#173953}.og1-synthesis-verdict small{font:650 .7rem/1.5 var(--font-body);color:#785a34}.og1-synthesis-verdict p{font:400 1rem/1.85 var(--font-body);color:#405b74;margin-top:24px}
+@media(max-width:760px){.og1-identity-question{gap:32px}.og1-consequence-copy{padding:28px}.og1-synthesis-witnesses{grid-template-columns:repeat(2,1fr)}.og1-synthesis-witnesses button{min-height:185px}.og1-synthesis-witnesses button:nth-child(3){border-left:0;border-top:1px solid #c7d5e4}.og1-synthesis-witnesses button:nth-child(4){border-top:1px solid #c7d5e4}}
+@media(max-width:660px){.og1-identity-question{grid-template-columns:1fr;gap:28px}.og1-identity-implication{padding-left:20px}.og1-identity-deck button{padding:14px 8px}.og1-identity-deck button strong{font-size:.7rem}.og1-return-verses{grid-template-columns:1fr;gap:0}.og1-return-arrow{text-align:left}.og1-return-verses section{padding:24px 0}.og1-consequence-stage{grid-template-columns:1fr}.og1-consequence-art{min-height:230px}.og1-consequence-copy{padding:28px 24px}.og1-consequence-progress{gap:12px;flex-wrap:wrap}.og1-synthesis-head{padding:28px 24px}.og1-synthesis-witnesses{grid-template-columns:1fr}.og1-synthesis-witnesses button,.og1-synthesis-witnesses button+button{display:grid;grid-template-columns:70px 1fr;min-height:0;gap:8px 16px;padding:22px 0;border-left:0;border-top:1px solid #c7d5e4}.og1-synthesis-witnesses button:first-child{border-top:0}.og1-synthesis-witnesses button>span{grid-row:1 / 3}.og1-synthesis-witnesses small{grid-column:2}.og1-synthesis-witnesses strong{font-size:1.15rem}}

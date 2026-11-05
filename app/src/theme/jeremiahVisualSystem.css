@@ -266,34 +266,6 @@ html, body, .app-shell { background: var(--j-canvas); }
 .lp-kicker, .lp-phases .is-active { color: var(--j-blue); }
 .lp-chapter-track span.is-current, .lp-phases .is-active i { background: var(--j-blue); }
 
-/* The OG.1 lesson is the visual reference: align its chrome, not its content. */
-.ogp-page {
-  --og-paper: #f4f7fc;
-  --og-line: #dfe6f1;
-  --og-tint: #e9edfb;
-  --og-accent: #4f5fe5;
-  --og-brass: #4f5fe5;
-  --og-ink: #152235;
-  background: var(--j-canvas);
-  color: var(--j-ink);
-}
-.ogp-theme-isaiah, .ogp-theme-continuity,
-.ogp-theme-distinction, .ogp-theme-devotion {
-  --og-paper: #f4f7fc; --og-tint: #e9edfb;
-  --og-accent: #4f5fe5; --og-brass: #4f5fe5;
-}
-.ogp-header { background: #142841; border-bottom-color: #394965; }
-.ogp-brand { font-family: var(--font-display); letter-spacing: -.035em; }
-.ogp-brand small { color: #b8c7ff; }
-.ogp-monogram { color: #cdd5ff; border-color: #8496ca; font-family: var(--font-display); }
-.ogp-progress span { background: var(--j-blue); }
-.ogp-stage h1, .ogp-finish h1 { font-family: var(--font-display); font-weight: 870; letter-spacing: -.055em; }
-.ogp-context-name { font-family: var(--font-display); font-weight: 770; }
-.ogp-context-meta, .ogp-verb, .ogp-link { color: var(--j-blue); }
-.ogp-action { background: var(--j-blue); border-color: var(--j-blue); }
-.ogp-action:not(:disabled):hover { background: #3d4dce; }
-.ogp-page button:focus-visible { outline-color: #8995ff; }
-
 /* Narrow screens keep legible touch targets and the photo-first rhythm. */
 @media(max-width: 760px) {
   .ld-page:not(.jh-page) { padding: 17px 16px 100px; }

@@ -1,0 +1,14 @@
+/* A readable evidence ledger. Meaning and next steps always remain visible;
+   optional evidence detail never gates continuing to the summary or survey. */
+.ogp-depth-report{max-width:100%;padding:0;margin:0;background:none;border:0;box-shadow:none}
+.ogp-report-overview{max-width:850px;padding-bottom:32px}
+.ogp-understanding-eyebrow{font:700 .65rem/1.5 var(--font-body);letter-spacing:.12em;color:#526b83}
+.ogp-report-overview>p{font:400 1rem/1.8 var(--font-body);color:#405b74;margin:12px 0}
+.ogp-report-overview .ogp-understanding-level{font:700 1.3rem/1.5 var(--font-body);color:#174c9e}
+.ogp-depth-report-list{list-style:none;padding:0;margin:0;border-top:2px solid #173c60}
+.ogp-standard-report{display:grid;grid-template-columns:minmax(200px,.75fr) minmax(0,1.25fr);gap:48px;padding:28px 0;border-bottom:1px solid #c9d7e5}
+.ogp-standard-result{display:flex;flex-direction:column;align-items:start;gap:12px}
+.ogp-standard-result>strong{font:650 .7rem/1.5 var(--font-body);color:#526b83;letter-spacing:.06em}.ogp-standard-result>span{font:700 1.2rem/1.4 var(--font-body);color:#173b60}.ogp-standard-result>small{font:400 .75rem/1.7 var(--font-body);color:#526b83}
+.ogp-standard-explanation>p{font:400 .95rem/1.8 var(--font-body);color:#405b74;margin:0 0 16px}.ogp-standard-explanation>p strong{font-weight:700;color:#294964}.ogp-standard-explanation>small{display:block;font:400 .75rem/1.7 var(--font-body);color:#526b83;margin:12px 0}
+.ogp-standard-explanation details{border-top:1px solid #dce3e9;margin-top:12px}.ogp-standard-explanation summary{min-height:44px;padding:12px 0;color:#174c9e;font:650 .8rem/1.5 var(--font-body);cursor:pointer}.ogp-standard-explanation details p{font:400 .9rem/1.8 var(--font-body);color:#405b74;margin:10px 0}
+@media(max-width:700px){.ogp-standard-report{grid-template-columns:1fr;gap:18px;padding:24px 0}.ogp-standard-result{gap:8px}.ogp-report-overview>p{font-size:.95rem}}

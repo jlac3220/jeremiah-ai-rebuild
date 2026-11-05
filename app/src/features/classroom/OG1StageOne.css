@@ -21,10 +21,6 @@
 .ogp-options-panel p{font-size:.78rem;line-height:1.5;color:#52647a}
 .ogp-stage1 .ogp-options-panel button{color:#52647a;padding-left:0;font-size:.85rem}
 .ogp-stage1 .ogp-options-panel button:hover{background:#f4f7fc}
-.ogp-page.ogp-stage1 .ogp-compact-header{padding-top:0;align-items:start}
-.ogp-stage1 .ogp-mini-caption{gap:8px}
-.ogp-stage1 .ogp-mini-caption strong{font-size:.75rem;line-height:1.5;max-width:270px}
-.ogp-page.ogp-stage1 .ogp-voice-error{padding:10px 20px;background:#f4f7fc;border-bottom:1px solid #dce4ef;color:#52647a;font-size:.85rem;line-height:1.5}
 /* Explicit on-dark foreground wins over generic finish-page paragraphs. */
 .ogp-page.ogp-stage1 .og1-synthesis-head p{color:#dfe5fa;font:500 1.02rem/1.7 var(--font-body)}
 .ogp-page.ogp-stage1 .ogp-finish--synthesis{padding-top:16px}
@@ -54,10 +50,10 @@
 .ogp-stage1 .og1-exam-next-step{margin:18px 0 24px;display:flex;align-items:stretch;gap:12px}
 .ogp-stage1 .og1-exam-next-step button{min-height:48px}
 .ogp-stage1 .og1-exam-review-title{scroll-margin-top:24px}
-.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results){padding:24px 28px}
-.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results) .og1-exam-intro-meta{display:none}
-.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results) p{margin-bottom:0}
-.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results) h1{font-size:clamp(1.9rem,4vw,3rem)}
+
+
+
+
 @media(max-width:680px){
  .ogp-page.ogp-stage1 .ogp-toolbar{min-height:64px;padding:calc(8px + env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));gap:6px}
  .ogp-stage1 .ogp-toolbar-back>span,.ogp-toolbar-brand small,.ogp-stage1 .ogp-audio-setting>span{display:none}
@@ -65,14 +61,14 @@
  .ogp-toolbar-brand strong{font-size:.66rem;letter-spacing:.06em}
  .ogp-toolbar-brand>span{width:26px;height:26px}
  .ogp-toolbar-actions{gap:0}
- .ogp-page.ogp-stage1 .ogp-shell{padding-top:24px;padding-bottom:calc(48px + env(safe-area-inset-bottom))}
- .ogp-stage1 .ogp-compact-heading h1{font-size:1.08rem;line-height:1.4}
- .ogp-stage1 .ogp-mini-caption strong{max-width:240px;font-size:.73rem;text-align:left}
- .ogp-stage1 .ogp-mini-caption{align-items:baseline;justify-content:space-between}
+
+
+
+
  .ogp-stage1 .og1-exam-next-step{flex-direction:column}
  .ogp-stage1 .ogp-modal{padding:24px}
  .ogp-stage1 .ogp-modal .ogp-restart-actions{flex-direction:column}
- .ogp-stage1 .og1-exam-score{padding:22px;gap:18px}
- .ogp-stage1 .og1-exam-score-dial{width:100px;height:100px;flex:0 0 100px}
+
+
 }
 @media(prefers-reduced-motion:reduce){.ogp-stage1 *{scroll-behavior:auto!important}}
