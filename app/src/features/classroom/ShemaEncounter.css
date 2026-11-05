@@ -1,0 +1,23 @@
+/* Chapter 1 arrival shares PR #57's image-led card language. The phrase card's
+   approved markup/styles remain unchanged; this replaces only its old lead-in. */
+.ogp-page.ogp-stage2 .shema-world.shema-arrival{display:grid;grid-template-columns:1.05fr 1fr;isolation:isolate;position:relative;overflow:hidden;min-height:0;background:white;color:#172f43;border:0;border-radius:22px;box-shadow:0 20px 55px #10283c18}
+.shema-arrival-scene{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:470px;padding:32px;background:#10283c;color:#fff;overflow:hidden}
+.shema-arrival-photo,.shema-arrival-shade{position:absolute;inset:0;width:100%;height:100%;z-index:-2}.shema-arrival-photo{object-fit:cover}.shema-arrival-shade{z-index:-1;background:linear-gradient(180deg,#0a1c2c99,#071a2822 28%,#081b2cf5 100%)}
+.shema-arrival-source{position:absolute;top:28px;left:32px;right:32px;font:750 .65rem/1.5 var(--font-body);letter-spacing:.1em;color:#fff}
+.ogp-page.ogp-stage2 .shema-arrival blockquote{font:730 clamp(1.7rem,2.8vw,2.5rem)/1.28 var(--font-body);letter-spacing:-.035em;color:#fff;border:0;padding:0;margin:0;text-align:left}
+.shema-arrival-copy{padding:36px;align-self:center}.shema-arrival-language{display:flex;align-items:center;gap:14px;padding-bottom:22px;border-bottom:1px solid #e1e7ed;margin-bottom:24px;color:#163a55}.shema-arrival-language strong{font:400 3.6rem/1.35 Georgia,serif}.shema-arrival-language small{font:700 .6rem/1.5 var(--font-body);letter-spacing:.1em;color:#526b80}
+.shema-arrival-copy>span{font:750 .6rem/1.5 var(--font-body);letter-spacing:.08em;color:#526b80}.shema-arrival-copy h2{font:760 clamp(1.4rem,2.4vw,2rem)/1.18 var(--font-body);letter-spacing:-.04em;color:#172f43;margin:12px 0 18px}.ogp-page.ogp-stage2 .shema-arrival .shema-arrival-copy h2 em{font-style:normal;color:#172f43}.shema-arrival-copy>p{font:400 1rem/1.75 var(--font-body);color:#40586e;margin:0 0 24px}
+.shema-arrival-actions{display:flex;gap:8px 20px;flex-wrap:wrap}.shema-arrival-actions button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 0;border:0;border-bottom:1px solid #cbd8e8;background:none;color:#174c9e;font:650 .8rem/1.5 var(--font-body)!important}
+@media(max-width:700px){
+ .ogp-page.ogp-stage2 .shema-world.shema-arrival{grid-template-columns:1fr;border-radius:17px}
+ .shema-arrival-scene{min-height:225px;padding:50px 22px 24px}.shema-arrival-source{top:18px;left:22px;right:22px;font-size:.55rem}
+ .ogp-page.ogp-stage2 .shema-arrival blockquote{font-size:1.5rem;line-height:1.27}
+ .shema-arrival-copy{padding:22px}.shema-arrival-language{gap:10px;padding-bottom:12px;margin-bottom:16px}.shema-arrival-language strong{font-size:2rem}.shema-arrival-language small{font-size:.5rem}.shema-arrival-copy>span{font-size:.55rem}.shema-arrival-copy h2{font-size:1.3rem;margin:10px 0 14px}.shema-arrival-copy>p{font-size:.92rem;line-height:1.65;margin-bottom:16px}.shema-arrival-actions button{font-size:.75rem!important}
+ .ogp-page.ogp-stage2:has(.shema-arrival) .ogp-shell{padding-top:14px;padding-bottom:24px}
+ .ogp-page.ogp-stage2:has(.shema-arrival) .ogp-stage{padding-top:14px;padding-bottom:0}
+ .ogp-page.ogp-stage2:has(.shema-arrival) .ogp-compact-header{margin-bottom:0}
+ .ogp-page.ogp-stage2:has(.shema-arrival) .ogp-mini-timeline{display:grid;grid-template-columns:1fr auto;gap:4px 16px;max-width:none;flex-basis:auto;width:100%}
+ .ogp-page.ogp-stage2:has(.shema-arrival) .ogp-mini-caption{grid-column:1 / -1;margin:0}
+ .ogp-page.ogp-stage2:has(.shema-arrival) .og2-map-toggle{grid-column:2;grid-row:2;padding:0;font-size:.7rem}
+ .ogp-page.ogp-stage2:has(.shema-arrival) .ogp-mini-timeline ol{grid-column:1;grid-row:2;width:100%;max-width:180px;margin:0}
+}

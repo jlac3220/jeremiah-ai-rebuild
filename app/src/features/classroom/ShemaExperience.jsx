@@ -3,6 +3,7 @@ import {VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
 import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
 import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 import './ShemaExperience.css';
+import './ShemaEncounter.css';
 import OptionalLessonVideo from './OptionalLessonVideo';
 import LessonIcon from '../../shared/lesson/LessonIcon';
 import OG1ResponseWorkspace from './OG1ResponseWorkspace';
@@ -62,22 +63,20 @@ export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=se
  const knownOpening=chooseLessonVisual(openingBrief,VISUAL_ASSETS).asset;
  const {asset:openingImage,onError:openingImageError}=useDiscoveredLessonVisual(openingBrief,knownOpening);
 
- if(kind==='shema-encounter')return <div className="shema-world">
-  <div className="shema-world-art">
-   {openingImage&&<img key={openingImage.id} className="shema-world-photo"
-     src={openingImage.src} alt="Moses addresses the gathered people of Israel"
-     style={{objectPosition:openingImage.focal||'50% 38%'}}
-     onError={openingImageError} loading="eager" decoding="async"/>}
-  </div>
-  <div className="shema-world-copy">
-   <span className="shema-eyebrow">A CONFESSION THAT SHAPES EVERYTHING</span>
-   <h2>Before you explain it, <em>hear it.</em></h2>
+ if(kind==='shema-encounter')return <div className="shema-world shema-arrival">
+  <div className="shema-arrival-scene">
+   {openingImage&&<img key={openingImage.id} className="shema-arrival-photo" src={openingImage.src} alt="Moses addresses the gathered people of Israel" style={{objectPosition:openingImage.focal||'50% 38%'}} onError={openingImageError} decoding="async"/>}
+   <div className="shema-arrival-shade" aria-hidden="true"/>
+   <span className="shema-arrival-source">DEUTERONOMY 6:4 · KJV</span>
    <blockquote>“Hear, O Israel: The LORD our God is one LORD:”</blockquote>
-   <span className="shema-source">DEUTERONOMY 6:4 · KJV</span>
-   <p>The words Moses gave to Israel will be heard again from the lips of Jesus. Begin with the confession itself.</p>
-   <div className="shema-opening-actions"><button type="button" className="shema-opening-listen" onClick={()=>onSpeak?.('Hear, O Israel: The LORD our God is one LORD.')}><LessonIcon name="play"/> Hear the Scripture</button><button type="button" className="shema-artifact-link" onClick={()=>onOpenBible?.('Deuteronomy 6:4')}>Read in context <LessonIcon name="context"/></button></div>
   </div>
-  <div className="shema-world-footer"><span>THE ONE LORD · DEUTERONOMY 6</span><span aria-hidden="true">✦</span></div>
+  <section className="shema-arrival-copy">
+   <div className="shema-arrival-language"><strong lang="he" dir="rtl">{PHRASES[0].hebrew}</strong><small>{PHRASES[0].roman}</small></div>
+   <span>A CONFESSION THAT SHAPES EVERYTHING</span>
+   <h2>Before you explain it, <em>hear it.</em></h2>
+   <p>The words Moses gave to Israel will be heard again from the lips of Jesus. Begin with the confession itself.</p>
+   <div className="shema-arrival-actions"><button type="button" onClick={()=>onSpeak?.('Hear, O Israel: The LORD our God is one LORD.')}><LessonIcon name="play"/> Hear the Scripture</button><button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:4')}>Read in context <LessonIcon name="context"/></button></div>
+  </section>
  </div>;
 
  if(kind==='shema-manuscript')return <ShemaPhraseStudy sequenceIndex={sequenceIndex} revealedThrough={revealedThrough} onInspect={onInspect} image={openingImage} onImageError={openingImageError}/>;
