@@ -5,7 +5,7 @@ import './OG1InlineBible.css';
 
 // Uses the very same KJV chapter provider as Jeremiah's full Bible.
 // No excerpt is invented or copied into this component.
-export default function OG1InlineBible({reference,onClose}){
+export default function OG1InlineBible({reference,onClose,standalone=false}){
  const parsed=parseBibleReference(reference||'');
  const book=parsed?.book?findBibleBook(parsed.book):null;
  const [chapter,setChapter]=useState(parsed?.chapter||1);
@@ -69,9 +69,9 @@ export default function OG1InlineBible({reference,onClose}){
      </article>}
    </div>
    <footer className="og1-bible-footer">
-    <button type="button" disabled={chapter<=1} onClick={()=>setChapter(c=>c-1)}>← Previous chapter</button>
+    {!standalone&&<button type="button" disabled={chapter<=1} onClick={()=>setChapter(c=>c-1)}>← Previous chapter</button>}
     <button type="button" onClick={onClose} className="og1-bible-return">Return to lesson →</button>
-    <button type="button" disabled={chapter>=book.chapters} onClick={()=>setChapter(c=>c+1)}>Next chapter →</button>
+    {!standalone&&<button type="button" disabled={chapter>=book.chapters} onClick={()=>setChapter(c=>c+1)}>Next chapter →</button>}
    </footer>
   </section>
  </div>;

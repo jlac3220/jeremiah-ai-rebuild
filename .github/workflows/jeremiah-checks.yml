@@ -66,5 +66,8 @@ jobs:
       - name: Verify private pilot service gates
         run: npm run test:pilot-services
 
+      - name: Verify standalone OG.1 scope
+        run: npm run test:standalone-pilot
+
       - name: Build app
         run: npm run build

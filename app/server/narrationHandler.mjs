@@ -1,3 +1,4 @@
+import {og1Only} from './pilotCapabilities.mjs';
 import {withPilotService,pilotEnforced} from './pilotSecurity.mjs';
 import {openAIRequest} from './openaiService.mjs';
 import { createHash } from "node:crypto";
@@ -184,7 +185,7 @@ async function handleNarrationApiUnchecked(req, res) {
   const url = new URL(req.url || "/", "http://" + (req.headers.host || "localhost"));
   const text = url.searchParams.get("text") || "";
   const auditionVoice = url.searchParams.get("audition");
-  if(pilotEnforced()&&auditionVoice!==null&&auditionVoice!==NARRATOR.voice){replyJson(res,400,"The pilot uses Jeremiah’s approved narrator.");return;}
+  if((pilotEnforced()||og1Only(req))&&auditionVoice!==null&&auditionVoice!==NARRATOR.voice){replyJson(res,400,"The pilot uses Jeremiah’s approved narrator.");return;}
   // Protect the voice selection: non-default voices are available ONLY for
   // this single public-domain audition sentence, never arbitrary input.
   if (auditionVoice !== null && (!AUDITION_VOICES.has(auditionVoice) || text !== AUDITION_TEXT)) {

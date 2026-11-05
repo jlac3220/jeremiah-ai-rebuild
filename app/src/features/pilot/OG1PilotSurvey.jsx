@@ -35,7 +35,7 @@ function Field({name,label,value,onChange,placeholder,maxLength=1100}){
  return <label className="ogsurvey-field"><span>{label}</span><textarea name={name} value={value} onChange={e=>onChange(e.target.value)} maxLength={maxLength} placeholder={placeholder} rows={3}/><small>{value?.length||0} / {maxLength}</small></label>;
 }
 
-export default function OG1PilotSurvey({onDone,completed=true}){
+export default function OG1PilotSurvey({onDone,completed=true,standalone=false}){
  const [draft,setDraft]=useState(readDraft);
  const [step,setStep]=useState(0);
  const [sending,setSending]=useState(false);
@@ -80,7 +80,7 @@ export default function OG1PilotSurvey({onDone,completed=true}){
   <div className="ogsurvey-thanks-mark" aria-hidden="true">✓</div>
   <span>YOUR FEEDBACK WAS SAVED</span><h1>Thank you for helping shape Jeremiah.</h1>
   <p>Your answers are part of the pilot feedback we're using to improve the experience. Your lesson answers and score were not included with the survey.</p>
-  <div className="ogsurvey-actions"><button type="button" className="ogsurvey-primary" onClick={onDone}>Return to Jeremiah →</button><button type="button" className="ogsurvey-secondary" onClick={startAgain}>Share additional feedback</button></div>
+  <div className="ogsurvey-actions"><button type="button" className="ogsurvey-primary" onClick={onDone}>{standalone?'Return to welcome':'Return to Jeremiah'} →</button><button type="button" className="ogsurvey-secondary" onClick={startAgain}>Share additional feedback</button></div>
  </section></div>;
  return <div className="ogsurvey-page"><div className="ogsurvey-shell">
   <header className="ogsurvey-heading"><span>JEREMIAH · PILOT EVALUATION</span><h1>Help us build a better lesson.</h1><p>You've experienced Jeremiah. Now evaluate it as a learner—not as an examiner. Tell us what felt excellent, what slowed you down, and what we should improve. Positive and critical feedback are equally valuable.</p><div className="ogsurvey-privacy">Anonymous by default · No name or email required · Your lesson responses and score are not sent</div></header>

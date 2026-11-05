@@ -1,3 +1,5 @@
+import {og1Only,og1Chapter} from './pilotCapabilities.mjs';
+import {withPilotService} from './pilotSecurity.mjs';
 import { BIBLE_BOOKS } from "../src/core/bible/bibleCatalog.js";
 
 const TRANSLATIONS = {
@@ -164,7 +166,7 @@ async function fetchChapter(translationId, osis, chapter) {
   return value;
 }
 
-export async function handleBibleApi(req, res) {
+async function handleBibleApiUnchecked(req, res) {
   try {
     const host = req.headers?.host || "localhost";
     const url = new URL(req.url || "/", `http://${host}`);
@@ -172,6 +174,7 @@ export async function handleBibleApi(req, res) {
     const book = String(url.searchParams.get("book") || "");
     const chapter = Number(url.searchParams.get("chapter"));
 
+    if(og1Only(req)&&!og1Chapter(book,chapter,translation)){sendJson(res,403,{error:'Use the Scripture references inside the OG.1 lesson.'});return;}
     const payload = await fetchChapter(translation, book, chapter);
     sendJson(res, 200, payload);
   } catch (error) {
@@ -180,3 +183,5 @@ export async function handleBibleApi(req, res) {
     });
   }
 }
+
+export async function handleBibleApi(req,res){return og1Only(req)?withPilotService(req,res,'bible',()=>handleBibleApiUnchecked(req,res)):handleBibleApiUnchecked(req,res);}

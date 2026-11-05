@@ -1,0 +1,27 @@
+{
+  "upstreamFixtures": true,
+  "liveOpenAI": false,
+  "liveBlob": false,
+  "records": [
+    {
+      "width": 390,
+      "freshLesson": true,
+      "questions": 10,
+      "score": 100,
+      "fullAndEarlyFeedback": true,
+      "duplicateRetry": true,
+      "savedFailureRetained": true,
+      "creatorSelectorsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "freshLesson": true,
+      "questions": 10,
+      "score": 100,
+      "fullAndEarlyFeedback": true,
+      "duplicateRetry": true,
+      "savedFailureRetained": true,
+      "creatorSelectorsUnchanged": true
+    }
+  ]
+}

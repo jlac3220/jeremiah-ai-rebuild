@@ -25,7 +25,7 @@ export function session(req){
 }
 export function issueSession(res,scope){
  if(!signingReady())throw new Error('Session signing unavailable');
- const value=Buffer.from(JSON.stringify({id:randomUUID(),scope,exp:Date.now()+3_600_000})).toString('base64url');
+ const value=Buffer.from(JSON.stringify({id:randomUUID(),scope,...(scope==='invite'?{capability:'og1-evaluation'}:{}),exp:Date.now()+3_600_000})).toString('base64url');
  res.setHeader('Set-Cookie',`${COOKIE}=${value}.${signature(value)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`);
 }
 export async function redisEval(script,keys,args){
@@ -69,6 +69,8 @@ export function providerReservation(body){
 export function remainingProviderTime(){return Math.max(0,Math.min(20_000,(context.getStore()?.deadline||Date.now()+20_000)-Date.now()));}
 export async function reserveProviderCall({body}={}){const current=context.getStore();if(current)await reserveLimits(current.service,current.req,current.s,true,providerReservation(body));}
 export async function withPilotService(req,res,service,work){
+ const {og1Only}=await import('./pilotCapabilities.mjs');
+ if(og1Only(req)&&['ask','visuals'].includes(service)){sendJson(res,403,{error:'This evaluation provides OG.1 and its survey only.'});return;}
  if(!pilotEnforced())return work();
  if(req.headers?.['sec-fetch-site']==='cross-site'){sendJson(res,403,{error:'Same-origin access required.'});return;}
  const origin=req.headers?.origin;if(origin){try{if(new URL(origin).host!==req.headers.host){sendJson(res,403,{error:'Same-origin access required.'});return;}}catch{sendJson(res,403,{error:'Same-origin access required.'});return;}}
