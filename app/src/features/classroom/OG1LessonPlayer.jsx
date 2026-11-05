@@ -30,6 +30,7 @@ import './OG1ThemeConsistency.css';
 import './OG1StageOne.css';
 import OG1ResponseWorkspace, {OG1TeacherFeedback} from './OG1ResponseWorkspace';
 import OG1ChapterGuide from './OG1ChapterGuide';
+import OG1OpeningExperience from './OG1OpeningExperience';
 import './OG1InteractiveExperience.css';
 import './JeremiahLessonTheme.css';
 
@@ -122,6 +123,9 @@ const DISCOVERIES={
 function createMoments(move,video) {
  if(move.type==='complete')return [];
  if(move.type!=='teach')return [{kind:'task',verb:move.assessmentRole==='memory_recall'?'RECALL':move.type==='free_response'?'EXPLAIN':move.interaction?.type==='match'?'CONNECT':'ANSWER',title:move.title}];
+ // The early four-witness preview is explorable on the first screen.
+ // Full Isaiah, Jesus and Paul lessons remain in the authored course.
+ if(move.id==='learn')return [{kind:'read',verb:'BEGIN',title:'One confession. One story.',verse:move.scripture?.[0]}];
  if(move.id==='shema-show')return [
   {kind:'shema-encounter',verb:'ENCOUNTER',title:'Before you explain it, hear it.'},
   {kind:'shema-manuscript',verb:'EXPLORE',title:'Three phrases. One confession.'},
@@ -264,7 +268,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  }
  const writingAction=feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':move.assessmentRole==='memory_recall'?'Check my recitation':'Discuss my explanation'} →</button>;
  const writingProps={move,value:form.responseText||'',disabled:Boolean(feedback)||thinking,onChange:value=>change({responseText:value}),feedback,onReadBible:readVerse,actions:writingAction,usedSupport:Boolean(form.usedSupport),onUseSupport:()=>change({usedSupport:true})};
- const buttonText=current?.kind==='roadmap'?'Meet the four witnesses':current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Meet the witnesses':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
+ const buttonText=current?.kind==='roadmap'?'Meet the four witnesses':current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Begin Chapter 1 · The Shema':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className={`ogp-page ogp-stage1 ogp-stage2 ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
   <OG1LessonToolbar narration={narration} narrationText={narrationText} onNavigate={onNavigate} onRestart={()=>setConfirmRestart(true)} chapters={content.lessonChapters} chapterNumber={chapterNumber} finish={finish} onOpenMap={()=>setChapterMapOpen(true)}/>
   <div className="ogp-progress" role="progressbar" aria-label="OG.1 teaching coverage" aria-valuemin={0} aria-valuemax={100} aria-valuenow={displayProgress}><span style={{width:displayProgress+'%'}}/></div>
@@ -293,18 +297,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
      {!writingWorkspace&&(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap','doctrine-summary'].includes(current.kind)&&!current.kind?.startsWith('shema-')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind==='roadmap'&&null}
      {current.kind?.startsWith('shema-')&&<ShemaExperience content={content} move={move} kind={current.kind} sequenceIndex={evidenceIndex} revealedThrough={revealLimit} onInspect={inspectReveal} video={current.video} onOpenBible={readVerse} onSpeak={narration.speak}/>}
-     {current.kind==='read'&&move.id==='learn'&&<div className="ogp-encounter">
-      <div className="ogp-encounter-art" aria-hidden="true"><DestinationArt tone="shema-encounter" content={content} move={move}/></div>
-      <div className="ogp-encounter-light" aria-hidden="true"><span/><span/><span/></div>
-      <div className="ogp-encounter-inner">
-       <span className="ogp-encounter-tag">DEUTERONOMY 6:4 · THE CONFESSION</span>
-       <div className="ogp-encounter-symbol" aria-hidden="true">אחד</div>
-       <blockquote>“Hear, O Israel:<br/>The LORD our God is <strong className="ogp-encounter-word">one LORD.</strong>”</blockquote>
-       <span className="ogp-encounter-reference">A declaration carried across generations.</span>
-       
-       {<div className="ogp-encounter-reveal" aria-live="polite"><strong>THE DISCOVERY</strong><p>Jesus repeats this same confession in Mark 12:29. The question is not whether the story continues—it is whether the confession changes.</p></div>}
-      </div>
-     </div>}
+     {current.kind==='read'&&move.id==='learn'&&<OG1OpeningExperience content={content} move={move} options={DISCOVERIES.learn.options} onOpenBible={readVerse}/>}
      {current.kind==='read'&&move.id!=='learn'&&<div className="ogp-scripture-scene">
       <div className="ogp-scripture-ornament" aria-hidden="true"><ScriptureArt content={content} move={move} verse={current.verse}/></div>
       <div className="ogp-scripture-content">

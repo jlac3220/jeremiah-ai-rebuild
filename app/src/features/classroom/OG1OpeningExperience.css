@@ -1,0 +1,63 @@
+/* First-two-minute overture: one cinematic teaching card, four accessible
+   witness choices, one transition to the actual Shema. No mastery changes. */
+.ogp-opening{max-width:1050px;margin:0 auto 12px;border-radius:22px;overflow:hidden;background:#fff;color:#18344d;box-shadow:0 20px 50px #09264019}
+.ogp-opening-hero{position:relative;display:grid;grid-template-columns:.44fr .56fr;min-height:340px;background:#0e2944}
+.ogp-opening-scene{position:relative;min-height:340px;isolation:isolate;overflow:hidden}
+.ogp-opening-scene .ogj-art{position:absolute;inset:0;z-index:0}
+.ogp-opening-scene .ogj-photo{object-fit:cover;object-position:40% 40%;filter:saturate(.9)}
+.ogp-opening-scene-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,transparent 30%,#09243e77 100%)}
+.ogp-opening-hero-copy{position:relative;display:flex;flex-direction:column;justify-content:center;padding:37px clamp(25px,4vw,52px);color:#fff;background:linear-gradient(115deg,#0c2b4a,#082443)}
+.ogp-opening-eyebrow,.ogp-opening-verse{font:750 .67rem/1.5 var(--font-body);letter-spacing:.1em;color:#f6d29b}
+.ogp-opening-hero-copy h2{font:770 clamp(2rem,3.8vw,3.25rem)/1.09 var(--font-body);letter-spacing:-.055em;margin:14px 0 17px;color:#fff}
+.ogp-opening-hero-copy h2 em{font-style:normal;color:#f5d397}
+.ogp-opening-hero-copy blockquote{font:500 clamp(1.13rem,1.9vw,1.45rem)/1.43 Georgia,serif;border:0;padding:0;margin:0 0 14px;color:#f7faff}
+.ogp-opening-hero-copy blockquote strong{color:#fbd492}
+.ogp-opening-hero-copy p{margin:15px 0 0;max-width:440px;color:#d8e6f4;font:.9rem/1.6 var(--font-body)}
+.ogp-opening-explore{padding:21px 28px 23px}
+.ogp-opening-explore header{display:flex;align-items:baseline;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:13px}
+.ogp-opening-explore header>span{font:780 .65rem var(--font-body);letter-spacing:.09em;color:#245593}
+.ogp-opening-explore h3{font:740 1.15rem/1.3 var(--font-body);letter-spacing:-.025em;color:#173852;margin:0}
+.ogp-opening-witnesses{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0}
+.ogp-opening-witnesses button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 12px;border:1px solid #d7e2ee;border-radius:11px;background:#f4f7fb;color:#284d6d;cursor:pointer;font:690 .89rem var(--font-body);transition:background .18s,border-color .18s}
+.ogp-opening-witness-count{color:#67849e;font-size:.65rem;font-weight:740}
+.ogp-opening-witnesses button[aria-pressed=true]{background:#113f7e;color:#fff;border-color:#113f7e}
+.ogp-opening-witnesses button[aria-pressed=true] .ogp-opening-witness-count{color:#f4d49c}
+.ogp-opening-answer{display:grid;grid-template-columns:170px 1fr;gap:0;min-height:145px;overflow:hidden;border:1px solid #d9e4f0;border-radius:13px;background:#f7fafd}
+.ogp-opening-answer-art{position:relative;overflow:hidden;background:#173c58;min-height:145px}
+.ogp-opening-answer-art .ogj-art{position:absolute;inset:0}
+.ogp-opening-answer-art .ogj-photo{object-fit:cover}
+.ogp-opening-answer-copy{padding:17px 22px 16px;min-width:0}
+.ogp-opening-answer-copy>span{font:770 .6rem/1.4 var(--font-body);letter-spacing:.095em;color:#3d6998}
+.ogp-opening-answer-copy blockquote{margin:7px 0 8px;padding:0;border:0;font:500 1.16rem/1.4 Georgia,serif;color:#1c3851}
+.ogp-opening-answer-copy p{color:#435d74;font:.85rem/1.53 var(--font-body);margin:0}
+.ogp-opening-answer-copy button{display:inline-flex;align-items:center;gap:8px;margin:8px 0 0;padding:5px 0;min-height:38px;background:transparent;border:0;color:#19549b;font:720 .75rem var(--font-body);cursor:pointer}
+.ogp-opening-next{margin:11px 2px 0;color:#60748a;font:.73rem/1.5 var(--font-body)}
+.ogp-opening button:focus-visible{outline:3px solid #e9ad55;outline-offset:2px}
+@media(max-width:700px){
+ .ogp-opening{border-radius:17px;box-shadow:0 10px 31px #10283c20}
+ .ogp-opening-hero{display:block;min-height:300px}
+ .ogp-opening-scene{position:absolute;inset:0;min-height:0;z-index:0}
+ .ogp-opening-scene-shade{background:linear-gradient(180deg,#061a2a75,#061d34df 73%,#081f39f4)}
+ .ogp-opening-hero-copy{position:relative;z-index:1;min-height:300px;padding:27px 20px 22px;background:transparent;justify-content:end}
+ .ogp-opening-eyebrow,.ogp-opening-verse{font-size:.59rem}
+ .ogp-opening-hero-copy h2{font-size:2.02rem;margin:9px 0 12px}
+ .ogp-opening-hero-copy blockquote{font-size:1.16rem;line-height:1.38;margin-bottom:8px}
+ .ogp-opening-hero-copy p{font-size:.79rem;line-height:1.45;margin-top:12px}
+ .ogp-opening-explore{padding:18px 16px 17px}
+ .ogp-opening-explore header{gap:3px;margin-bottom:8px}
+ .ogp-opening-explore header>span{font-size:.58rem}
+ .ogp-opening-explore h3{font-size:.98rem;width:100%}
+ .ogp-opening-witnesses{gap:5px;margin:9px 0}
+ .ogp-opening-witnesses button{min-height:44px;padding:6px 2px;gap:3px;flex-direction:column;border-radius:9px;font-size:.78rem}
+ .ogp-opening-witness-count{font-size:.54rem}
+ .ogp-opening-answer{grid-template-columns:83px minmax(0,1fr);min-height:126px}
+ .ogp-opening-answer-art{min-height:126px}
+ .ogp-opening-answer-copy{padding:11px 12px}
+ .ogp-opening-answer-copy>span{font-size:.53rem}
+ .ogp-opening-answer-copy blockquote{font-size:.96rem;margin:5px 0}
+ .ogp-opening-answer-copy p{font-size:.75rem;line-height:1.4}
+ .ogp-opening-answer-copy button{min-height:39px;font-size:.72rem}
+ .ogp-opening-next{font-size:.65rem;margin-top:10px}
+}
+@media(max-width:360px){.ogp-opening-hero-copy{padding:24px 16px 19px}.ogp-opening-hero-copy h2{font-size:1.85rem}.ogp-opening-explore{padding-inline:12px}.ogp-opening-answer{grid-template-columns:70px 1fr}.ogp-opening-answer-copy{padding-inline:9px}}
+@media(prefers-reduced-motion:reduce){.ogp-opening-witnesses button{transition:none}}
