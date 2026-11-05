@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ogLesson from "../src/core/classroom/content/OG_1_LESSON.js";
+import { OG1_AUTHORED_NARRATION_TEXTS } from "../src/core/classroom/og1NarrationManifest.js";
 
 // One narrator for every phone and computer. Never use the device's TTS voices.
 // This Speech API model is a temporary generation backend; generated MP3s are
@@ -43,20 +44,18 @@ const AUTHORED_LINES = [
   "There is none other God but one. First Corinthians, chapter eight, verse four.",
 ];
 
-// Authored spoken witness cards: Scripture, reference, brief interpretation.
-const WITNESS_AUDIO_LINES = [
-  "Hear, O Israel: The LORD our God is one LORD. Deuteronomy chapter six, verse four. Moses calls Israel to hear and respond to the one LORD.",
-  "I am the first, and I am the last; and beside me there is no God. Isaiah chapter forty four, verse six. The LORD declares that no other God exists beside him.",
-  "Hear, O Israel; The Lord our God is one Lord. Mark chapter twelve, verse twenty-nine. Jesus reaffirms the confession when asked about the first commandment.",
-  "There is none other God but one. First Corinthians chapter eight, verse four. Paul carries the confession into his teaching about idols and the one God."
-];
 const allowedText = new Set([
   ...AUTHORED_LINES,
-  ...WITNESS_AUDIO_LINES,
+  // The player and allowlist import exactly the same authored scene manifest.
+  ...OG1_AUTHORED_NARRATION_TEXTS,
   ...ogLesson.instructionalMoves.flatMap(move =>
     (move.scripture || []).map(verse => verse.text).filter(Boolean)
   ),
 ]);
+
+export function isAllowedNarrationText(text) {
+  return typeof text === "string" && text.length <= 1200 && allowedText.has(text);
+}
 
 // Auditions use the very same KJV verse and reading directions for fair comparison.
 // The installed voice on the listener's device never affects the result.
@@ -187,7 +186,7 @@ export async function handleNarrationApi(req, res) {
     replyJson(res, 400, "That narration audition is not available.");
     return;
   }
-  if (text.length > 1200 || !allowedText.has(text)) {
+  if (!isAllowedNarrationText(text)) {
     replyJson(res, 400, "This audio is not in the authored Jeremiah lesson.");
     return;
   }
