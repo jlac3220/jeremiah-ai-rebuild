@@ -1,7 +1,7 @@
 # Lesson Blueprint — OG.1.1.18: The Shema as Doctrinal Foundation
 
 **Status:** DRAFT — owner review required; **NOT approved for coding**  
-**Revision:** 0.1  
+**Revision:** 0.2  
 **Source:** `app/src/data/curriculum/og.json` → `standards[]` → `OG.1.1.18` (source page 5)  
 **Existing implementation:** `app/src/core/classroom/content/OG_1_1_18.js`; OG.1 experience and assessment in `app/src/features/classroom/` and `app/src/data/curriculum/og1ExitExam.js`  
 **Related standards:** OG.1.2.18 (Isaiah), OG.1.3.18 (New Testament continuity), OG.1.4.18 (Oneness/Trinity distinction), OG.1.5.18 (devotion). These are **separate** learning contracts.
@@ -92,10 +92,12 @@ The amount of motion, imagery, and audio is determined by the teaching task. Nev
 
 | ID | Prompt | Standard level | Suggested DOK | What counts as evidence |
 |---|---|---:|---:|---|
-| S1 | “State the central confession in Deuteronomy 6:4 and identify who is being addressed.” | 1 | 1 | Accurate claim of one LORD and Israel as addressee |
+| S1 | “Without looking at the passage, recite or write Deuteronomy 6:4 from memory, then identify who is being addressed.” | 1 | 1 | Faithful recall of the KJV confession (allowing inconsequential punctuation or speech-transcription variation), including one LORD and Israel as addressee |
 | S2 | “What does `echad` contribute to Deuteronomy 6:4? Explain why the meaning of a word must be read within the sentence and surrounding passage.” | 2 | 2 | “One”; identifies the referent, covenant context, and interprets without ungrounded Hebrew absolutes |
 | S3 | “Explain how Mark 12:29 connects to Deuteronomy 6:4, then use one apostolic text to show continuity in the confession of God.” | 3 | 3 | Correct Jesus / OT link, accurate text support, defensible interpretation rather than citation alone |
 | S4 | “A reader argues that because Genesis 2:24 says two people become ‘one flesh,’ Deuteronomy 6:4 may also describe several divine persons. Evaluate the comparison and explain your conclusion with Scripture.” | 4 | 3 | Fairly describes analogy, distinguishes referents/contexts, uses Deut. 6:4 and Isaiah to build coherent Apostolic response |
+
+**Recitation contract:** The standard explicitly requires recitation, translation, and exposition. Collect an independent memory recall in addition to the `echad` explanation. Either typed recall or consented, reviewed oral transcription can supply evidence; do not confuse audio-availability or minor transcription errors with doctrinal understanding. The app must make the original KJV text available for instruction and practice, but not reveal it during independent memory recall.
 
 **Proposed scoring guidance:** Track correct Scripture use, explanatory accuracy, contextual reasoning, and independence separately. Evidence levels describe **demonstrated** work, not a percent score, number of taps, or how confidently the narrator sounds. Recognition-only evidence must never be reported as level 4. Provide corrective feedback and alternate practice if the learner does not reach the target; keep their progress and permit retry.
 
