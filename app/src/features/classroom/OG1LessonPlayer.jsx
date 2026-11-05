@@ -164,6 +164,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const [draft,setDraft]=useState({});
  const [mediaChoice,setMediaChoice]=useState('');
  const [evidenceIndex,setEvidenceIndex]=useState(0);
+ const guidedNavigationRef=useRef(false);
  const [practiceStep,setPracticeStep]=useState(0);
  const [thinking,setThinking]=useState(false);
  const [error,setError]=useState('');
@@ -211,7 +212,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
    ? OG1_SCENE_NARRATION.continuity[evidenceIndex]
   : current?.kind==='discovery'&&move.id==='learn'
    ? OG1_SCENE_NARRATION.witnessCards[evidenceIndex]
-  : current?.kind==='identity'
+  : current?.kind==='identity'&&evidenceIndex===0
    ? OG1_SCENE_NARRATION.identity
   : current?.kind==='comparison'&&evidenceIndex===0
    ? OG1_SCENE_NARRATION.comparison
@@ -226,6 +227,9 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  useEffect(()=>{if(priorMove.current!==move.id){priorMove.current=move.id;setMoment(0);setDraft({});setMediaChoice('');setEvidenceIndex(0);setPracticeStep(0);setError('');setInlineBibleReference(null);}},[move.id]);
  useEffect(()=>()=>abort.current?.abort(),[]);
  useEffect(()=>{stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[move.id,moment]);
+ // A primary-action reveal starts at its beginning; optional keyboard review
+ // retains control focus, just as it does on the approved phrase card.
+ useEffect(()=>{if(!guidedNavigationRef.current)return;guidedNavigationRef.current=false;stageRef.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});},[evidenceIndex]);
  function change(patch) {
   if(thinking||feedback)return;
   setDraft(old=>({...old,...patch}));
@@ -239,6 +243,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
   if(current?.kind==='videoCheck'&&!mediaChoice){setError('Choose an answer before continuing. It does not need to be correct.');return;}
   const next=navigateScene(moments,moment,evidenceIndex,'next');
   if(next.atEnd){if(move.type==='teach')onStateChange(old=>continueTeaching(old,content));return;}
+  guidedNavigationRef.current=next.moment===moment&&['shema-echad','identity'].includes(current?.kind);
   setError('');setRevealed(old=>({...old,[move.id+':'+next.moment]:Math.max(old[move.id+':'+next.moment]||0,next.reveal)}));setMoment(next.moment);setEvidenceIndex(next.reveal);
   if(next.moment!==moment)setMediaChoice('');
  }
@@ -248,6 +253,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  }
  function back(){
   const previous=navigateScene(moments,moment,evidenceIndex,'back');
+  guidedNavigationRef.current=previous.moment===moment&&['shema-echad','identity'].includes(current?.kind);
   setError('');setMoment(previous.moment);setEvidenceIndex(previous.reveal);
  }
  function restart(){narration.stop();abort.current?.abort();setThinking(false);setError('');setMoment(0);setDraft({});setMediaChoice('');setEvidenceIndex(0);setPracticeStep(0);setConfirmRestart(false);setCompletionScreen('exam');setRevealed({});setChapterMapOpen(false);onStateChange(old=>restartTeaching(content,old));}
@@ -349,26 +355,27 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
        <button type="button" onClick={()=>readVerse('James 2:19')}>Belief and response <LessonIcon name="context"/></button>
       </div></div>}
      </div>}
-     {current.kind==='identity'&&<OG1IdentityInvestigation onOpenBible={readVerse}/>}
+     {current.kind==='identity'&&<OG1IdentityInvestigation sequenceIndex={evidenceIndex} revealedThrough={revealLimit} onInspect={inspectReveal} onOpenBible={readVerse}/>}
      {current.kind==='return'&&<OG1ReturnToShema onOpenBible={readVerse}/>}
      {current.kind==='comparison'&&<div className="ogp-compare">
-      <p className="ogp-prompt">A distinct doctrinal investigation: both explanations confess one God. Explore how they understand Father, Son, and Holy Spirit without misrepresenting either view.</p>
-      <div className="ogp-compare-ring"><span>ONE GOD</span><small>Shared confession</small></div>
+      <p className="ogp-prompt">Return to the question raised by “one LORD.” We have now read the Word, baptism and prayer passages: how do these two interpretations account for them?</p>
+      <div className="ogp-compare-ring"><span>ONE GOD</span><small>Shared confession · Jesus is fully divine and truly human</small></div>
       {evidenceIndex>0&&<div className="ogp-compare-columns" aria-live="polite">
-       {evidenceIndex>=1&&<section className="is-revealed"><span>TRINITARIAN TEACHING</span><h2>Three eternal persons</h2><p>One divine essence in three coequal, coeternal persons. This view does not claim there are three gods.</p></section>}
-       {evidenceIndex>=2&&<section className="is-revealed"><span>APOSTOLIC ONENESS</span><h2>One undivided God</h2><p>The Father, Son through true incarnation, and Holy Spirit are understood without eternal distinctions of divine persons.</p></section>}
+       {evidenceIndex>=1&&<section className="is-revealed"><span>TRINITARIAN TEACHING</span><h2>Three eternal persons</h2><p>One divine essence in three distinct, coequal, coeternal persons: Father, Son and Holy Spirit. Each is fully divine; they are not three gods or parts of God.</p><p><strong>Essence</strong> means the one divine being; <strong>person</strong> names eternal distinctions. <strong>Proceeding</strong> describes the Spirit’s eternal relation of origin, not a later creation.</p></section>}
+       {evidenceIndex>=2&&<section className="is-revealed"><span>APOSTOLIC ONENESS</span><h2>One undivided God</h2><p>One indivisible God, without three eternal divine persons. The Son is God’s genuine incarnation: fully divine and truly human. Jesus’ prayers are real human prayer to the Father; God is not confined to his human body.</p></section>}
       </div>}
       {evidenceIndex===2&&<p className="ogp-compare-conclusion">The difference is not whether God is one. The difference concerns eternal personal distinctions and the understanding of Jesus Christ.</p>}
      </div>}
      {current.kind==='doctrine-summary'&&<section className="ogp-doctrine-summary">
-      <header><span>SCRIPTURE AND THE CLAIMS WE MAKE</span><h2>What is shared. <em>Where we differ.</em></h2><p>Make the distinction precisely, then test the interpretation in Scripture.</p></header>
+      <header><span>SCRIPTURE AND THE CLAIMS WE MAKE</span><h2>What is shared. <em>Where we differ.</em></h2><p>We asked whether “one” could settle God’s identity. The word begins the inquiry; the wider Scripture provides the reasoning.</p></header>
       <div className="ogp-doctrine-summary-grid">
        <article><span>SHARED</span><h3>One God</h3><p>Neither view teaches three separate gods. Both begin by affirming monotheism.</p></article>
        <article><span>TRINITARIAN</span><h3>Three eternal persons</h3><p>One divine essence, with Father, Son, and Holy Spirit understood as eternally distinct persons.</p></article>
        <article><span>APOSTOLIC ONENESS</span><h3>One undivided God</h3><p>The Father, the Holy Spirit, and the Son as God's genuine incarnation are understood without three eternal divine persons. Jesus is truly human as well as fully divine.</p></article>
       </div>
+      <div className="og1-inquiry-payoff"><strong>THE QUESTION ANSWERED · THE APOSTOLIC REASONS</strong><p>The Shema and Isaiah frame the one God; John 1:1, 14 supplies genuine incarnation. The Apostolic reading connects Matthew 28:19 with baptism in Jesus’ name in Acts 2:38, and Jesus’ real prayer in Luke 22:42 with his human mediation in 1 Timothy 2:5. Together these support its conclusion: one God genuinely incarnate, without three eternal divine persons.</p><p>This is a cumulative interpretation, not a dictionary proof. We can now explain the disagreement fairly—and return to the wholehearted love Deuteronomy 6:5 commands.</p></div>
       <div className="ogp-doctrine-sources"><span>READ THE TEXTS BEHIND THE QUESTION</span><div>
-       {['John 1:1','1 Timothy 2:5','Acts 2:38'].map(ref=><button type="button" key={ref} onClick={()=>readVerse(ref)}>{ref} <LessonIcon name="context"/></button>)}
+       {['Deuteronomy 6:4-5','Isaiah 44:6','John 1:1','John 1:14','Matthew 28:19','Acts 2:38','Luke 22:42','1 Timothy 2:5'].map(ref=><button type="button" key={ref} onClick={()=>readVerse(ref)}>{ref} <LessonIcon name="context"/></button>)}
       </div></div>
      </section>}
      {current.kind==='mission'&&<><p className="ogp-prompt">The one LORD is not one option among several objects of worship. Knowing who He is shapes the devotion He calls for.</p><OG1ConsequenceJourney index={evidenceIndex} expanded={true} onReveal={()=>{}} art={<BiblicalApplicationArt index={evidenceIndex} content={content} move={move}/>} onOpenBible={readVerse}/></>}
@@ -387,7 +394,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
     </section>
     {!writingWorkspace&&move.id!=='learn'&&<nav className="ogp-controls" aria-label="Lesson moment navigation">
      {assessment ? (feedback?<button type="button" className="ogp-action" onClick={()=>onStateChange(old=>continueTeaching(old,content))}>Continue →</button>:(move.id==='shema-guide'&&practiceStep<2?null:<button type="button" className="ogp-action" onClick={check} disabled={thinking}>{thinking?'Checking…':move.assessmentRole==='memory_recall'?'Check my recitation':written?'Discuss my explanation':'Check my connection'} →</button>))
-     :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?'Examine the two explanations':current?.kind==='comparison'&&evidenceIndex<2?'Reveal the next perspective':current?.kind==='comparison'?'Bring the views together':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Bring the confession together':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'&&move.id==='learn'?(hasMoreReveals?`Meet ${['Isaiah','Jesus','Paul'][evidenceIndex]}`:'Begin Chapter 1 · The Shema'):current?.kind==='discovery'?(hasMoreReveals?'Reveal the next part':'Continue the lesson'):current?.kind==='shema-connection'?'Examine the meaning of one':current?.kind==='shema-echad'?'Test your understanding':current?.kind==='doctrine-summary'?'Apply what you learned':buttonText} →</button>}
+     :<button type="button" className="ogp-action" onClick={advance} disabled={false}>{current?.kind==='witness'&&evidenceIndex<2?'Reveal the next declaration':current?.kind==='witness'?'Follow the conclusion':current?.kind==='mission'&&evidenceIndex<2?'Follow the next consequence':current?.kind==='mission'?'Bring the confession together':current?.kind==='return'?'See what the confession requires':current?.kind==='identity'?(evidenceIndex<2?['Follow the baptism passages','Follow Jesus’ prayer'][evidenceIndex]:'Now compare the interpretations'):current?.kind==='comparison'&&evidenceIndex<2?['Examine the Trinitarian reading','Examine the Apostolic reading'][evidenceIndex]:current?.kind==='comparison'?'Gather the answer to our question':current?.kind==='timeline'&&evidenceIndex<2?['Hear Jesus reaffirm it','See how Paul applies it'][evidenceIndex]:current?.kind==='timeline'?'Bring the witnesses together':current?.kind==='shema-encounter'?'Examine the words':current?.kind==='shema-manuscript'&&evidenceIndex<2?'Reveal the next phrase':current?.kind==='shema-manuscript'?'Continue':current?.kind==='shema-cinema'?'Discover what follows':current?.kind==='shema-connection'?'Why examine the word one?':current?.kind==='shema-resolution'?'Build the confession':current?.kind==='discovery'&&move.id==='learn'?(hasMoreReveals?`Meet ${['Isaiah','Jesus','Paul'][evidenceIndex]}`:'Begin Chapter 1 · The Shema'):current?.kind==='discovery'?(hasMoreReveals?'Reveal the next part':'Continue the lesson'):current?.kind==='shema-connection'?'Examine the meaning of one':current?.kind==='shema-echad'?(evidenceIndex<4?['Follow the word in Scripture','Add Isaiah’s witness','Hear Jesus repeat it','Gather what the texts establish'][evidenceIndex]:'Practice what the confession means'):current?.kind==='doctrine-summary'?'Apply what you learned':buttonText} →</button>}
      {!assessment&&(moment>0||evidenceIndex>0)&&<button type="button" className="ogp-back" onClick={back}>← Previous</button>}
      
     </nav>}

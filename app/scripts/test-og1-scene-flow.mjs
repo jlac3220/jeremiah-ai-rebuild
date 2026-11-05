@@ -9,6 +9,14 @@ const sample=[
  {kind:'discovery',discovery:{options:[['Moses'],['Isaiah'],['Jesus'],['Paul']]}},
  {kind:'doctrine-summary'}
 ];
+assert.equal(sceneRevealCount({kind:'shema-echad'}),5);
+assert.equal(sceneRevealCount({kind:'identity'}),3);
+for(const [kind,count] of [['shema-echad',5],['identity',3]]){
+ const route=[{kind},{kind:'task'}];
+ for(let i=0;i<count-1;i++)assert.deepEqual(navigateScene(route,0,i,'next'),{moment:0,reveal:i+1,atEnd:false});
+ assert.deepEqual(navigateScene(route,0,count-1,'next'),{moment:1,reveal:0,atEnd:false});
+ assert.deepEqual(navigateScene(route,1,0,'back'),{moment:0,reveal:count-1,atEnd:false});
+}
 assert.equal(sceneRevealCount(sample[0]),1);
 assert.equal(sceneRevealCount(sample[1]),3);
 assert.equal(sceneRevealCount(sample[3]),4);

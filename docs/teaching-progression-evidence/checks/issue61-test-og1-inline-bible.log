@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:og1-inline-bible
+> node scripts/test-og1-inline-bible.mjs
+
+PASS OG.1 inline KJV: valid source references, context modal, no route change, chapter navigation and responsive reader.

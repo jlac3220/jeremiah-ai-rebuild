@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:dashboard
+> node scripts/test-learning-dashboard.mjs
+
+Learning dashboard: fresh, resume, review, and completion passed

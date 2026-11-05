@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:teacher-led
+> node scripts/test-teacher-led.mjs
+
+Teacher-led lesson: all answer paths, alternate examples, no skip/double submit, written rubric gates, saved feedback, and migration passed.

@@ -4,6 +4,7 @@ import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualI
 import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 import './ShemaExperience.css';
 import './ShemaEncounter.css';
+import OG1EchadInquiry from './OG1EchadInquiry';
 import OptionalLessonVideo from './OptionalLessonVideo';
 import LessonIcon from '../../shared/lesson/LessonIcon';
 import OG1ResponseWorkspace from './OG1ResponseWorkspace';
@@ -104,26 +105,10 @@ export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=se
     <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:5')}>Deuteronomy 6:5 · Read in context <LessonIcon name="context"/></button>
    </article>
   </div>
-  <p className="shema-bridge-takeaway"><strong>Notice the movement:</strong> who the LORD is gives direction to the love he commands. The two verses belong together.</p>
+  <p className="shema-bridge-takeaway"><strong>Notice the movement:</strong> who the LORD is gives direction to the love he commands. Before we go further, what does “one” tell us—and what still needs explaining about Father, Son and Spirit?</p>
  </div>;
 
- if(kind==='shema-echad')return <div className="shema-echad-scene">
-  <div className="shema-echad-hero">
-   <span>ONE WORD · READ IN CONTEXT</span>
-   <strong lang="he" dir="rtl">אֶחָד</strong>
-   <h2>Echad <em>means “one.”</em></h2>
-   <p>But one word cannot settle every question about who God is. Its meaning must be read in the sentence and in the wider Scripture.</p>
-  </div>
-  <div className="shema-echad-evidence">
-   <div className="shema-echad-evidence-intro"><span>THREE SCRIPTURAL LENSES</span><p>The passage provides the argument, not a detached dictionary definition.</p></div>
-   <div className="shema-echad-evidence-grid">
-    <article><span>GENESIS 2:24</span><h3>“One flesh”</h3><p>The same Hebrew word can describe a union. That use alone does not establish multiple divine persons.</p></article>
-    <article><span>ISAIAH 44:6</span><h3>“Beside me there is no God”</h3><p>The LORD speaks without a rival. This clarifies the exclusivity of Israel’s confession.</p></article>
-    <article><span>MARK 12:29</span><h3>Jesus reaffirms it</h3><p>Asked for the first commandment, Jesus begins with the Shema itself.</p></article>
-   </div>
-   <p className="shema-echad-conclusion">The Apostolic reading begins with this testimony to the one LORD—and follows it through the prophets and the New Testament.</p>
-  </div>
- </div>;
+ if(kind==='shema-echad')return <OG1EchadInquiry className="shema-echad-scene" index={sequenceIndex} image={openingImage} onImageError={openingImageError} onOpenBible={onOpenBible}/>;
  return null;
 }
 

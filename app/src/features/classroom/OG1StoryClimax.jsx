@@ -1,52 +1,53 @@
 import LessonIcon from '../../shared/lesson/LessonIcon';
-import {useState} from 'react';
 import './OG1StoryClimax.css';
 
 const QUESTIONS=[
  {id:'word',number:'01',reference:'John 1:1, 14',label:'THE WORD',
-  question:'If the Word was with God—and was God—what does it mean that the Word became flesh?',
-  quotation:'“And the Word was made flesh, and dwelt among us”',
-  from:'John 1:14 · KJV excerpt',
-  connection:'Both readings take John seriously. The question is how the Word, the one God, and the incarnation relate—not whether John has introduced a second god.'},
+  question:'How is the Word with God, God, and made flesh?',
+  passages:[['John 1:1','In the beginning was the Word, and the Word was with God, and the Word was God.'],['John 1:14','And the Word was made flesh, and dwelt among us']],
+  trinitarian:'The Word is the eternal Son, personally distinct from the Father yet sharing the one divine being, who becomes truly human.',
+  oneness:'The Word is God’s own self-expression, made flesh in Jesus: the one God genuinely incarnate, rather than a second eternal divine person.',
+  limit:'Both affirm Jesus’ deity and genuine humanity. The disagreement concerns eternal personal distinction; the word echad alone did not answer it.'},
  {id:'name',number:'02',reference:'Matthew 28:19 · Acts 2:38',label:'THE NAME',
-  question:'Jesus commands baptism in the name of Father, Son, and Holy Ghost. Why does Peter name Jesus Christ?',
-  quotation:'“be baptized every one of you in the name of Jesus Christ”',
-  from:'Acts 2:38 · KJV excerpt',
-  connection:'Read the commission and apostolic practice together. The readings differ in how they understand the name and the relationship of Father, Son, and Spirit.'},
+  question:'How do the baptismal command and Peter’s instruction fit together?',
+  passages:[['Matthew 28:19','baptizing them in the name of the Father, and of the Son, and of the Holy Ghost:'],['Acts 2:38','be baptized every one of you in the name of Jesus Christ for the remission of sins,']],
+  trinitarian:'The commission names Father, Son and Holy Spirit as distinct persons. Baptism in Jesus’ name expresses his authority; Acts does not cancel the commission.',
+  oneness:'The singular name in the commission is understood through Peter’s instruction to baptize in Jesus Christ’s name: the one God revealed in Jesus.',
+  limit:'Both texts must be read together. A singular “name” alone does not settle the entire doctrine of God.'},
  {id:'prayer',number:'03',reference:'Luke 22:42 · 1 Timothy 2:5',label:'THE PRAYER',
-  question:'When Jesus prays to the Father, how should we understand both his deity and his genuine humanity?',
-  quotation:'“nevertheless not my will, but thine, be done.”',
-  from:'Luke 22:42 · KJV excerpt',
-  connection:'The prayer is real. The Apostolic account must explain real human willing and mediation without pretending Jesus was acting; Trinitarian teaching explains it with personal distinctions and the incarnate Son.'}
+  question:'If Jesus is God, who is he praying to?',
+  passages:[['Luke 22:42','Father, if thou be willing, remove this cup from me: nevertheless not my will, but thine, be done.'],['1 Timothy 2:5','For there is one God, and one mediator between God and men, the man Christ Jesus;']],
+  trinitarian:'The incarnate Son prays to the Father. His real human will is distinguished from the divine will; Father and Son are eternally distinct persons.',
+  oneness:'Jesus prays as a genuine human being to the Father, the one God. His human will and mediation are real; the prayer is not acting, and God is not confined to his body.',
+  limit:'The prayer must be explained, not denied. The Apostolic account appeals to genuine incarnation, not a conversation acted out for an audience.'}
 ];
-export function OG1IdentityInvestigation({onOpenBible}) {
- const [active,setActive]=useState(0);
- const item=QUESTIONS[active];
- return <div className="og1-identity">
+export function OG1IdentityInvestigation({sequenceIndex=0,revealedThrough=sequenceIndex,onInspect,onOpenBible}) {
+ const active=Math.max(0,Math.min(sequenceIndex,2)),item=QUESTIONS[active];
+ function keydown(event){const targets={ArrowLeft:active-1,ArrowRight:active+1,Home:0,End:revealedThrough};if(!(event.key in targets))return;event.preventDefault();const next=targets[event.key];if(next<0||next>revealedThrough||next>2)return;event.currentTarget.parentElement.querySelectorAll('button')[next].focus();onInspect?.(next);}
+ return <div className="og1-identity" data-question={item.id}>
    <div className="og1-identity-hero">
-    <span>A DISTINCT DOCTRINAL INVESTIGATION</span>
-    <p>Israel confessed one LORD. Isaiah excluded every rival. Jesus repeated the confession. Paul carried it into the church.</p>
-    <h2>Who is the God we confess?</h2>
-    <p>Knowing who God is matters to worship. Scripture must shape our understanding of the One we love, not the other way around. This focused investigation compares how Trinitarian and Apostolic Oneness teaching explain Father, Son, and Holy Spirit. Both confess one God; the interpretations differ.</p>
+    <span>RETURN TO OUR QUESTION · ONE LORD</span>
+    <h2>One God. How do we understand Jesus?</h2>
+    <p>{active===0?'Echad gave us “one,” not a complete account of Father, Son and Spirit. Isaiah excluded rivals; Jesus and Paul carried the confession forward. These next passages raise the question we promised to return to.':'Keep the one-God confession in view. Follow how each reading explains this next pair of passages.'}</p>
    </div>
    <div className="og1-identity-deck" role="group" aria-label="Three Scripture questions about Jesus">
-    {QUESTIONS.map((q,i)=><button type="button" key={q.id} onClick={()=>setActive(i)} aria-pressed={active===i}>
+    {QUESTIONS.map((q,i)=><button type="button" key={q.id} disabled={i>revealedThrough} onClick={()=>onInspect?.(i)} onKeyDown={keydown} aria-pressed={active===i} aria-controls="og1-identity-reasoning">
      <span>{q.number} · {q.label}</span><strong>{q.reference}</strong>
     </button>)}
    </div>
-   <section className="og1-identity-question" aria-live="polite">
-    <div><span>EXAMINE THE PASSAGES · {item.number} / 03</span>
+   <section id="og1-identity-reasoning" className="og1-identity-question" key={item.id} aria-live="polite" aria-atomic="true">
+    <div><span>READ THE PASSAGE PAIR · {item.number} / 03</span>
      <h3>{item.question}</h3>
-     <blockquote>{item.quotation}</blockquote>
-     <small>{item.from}</small>
+     {item.passages.map(([ref,text])=><div className="og1-identity-passage" key={ref}><blockquote>“{text}”</blockquote><button type="button" className="og1-inquiry-read" onClick={()=>onOpenBible?.(ref)}>{ref} · KJV <LessonIcon name="context"/></button><small>KJV excerpt · Read in context.</small></div>)}
     </div>
     <div className="og1-identity-implication">
-     <span>WHY IT MATTERS</span>
-     <p>{item.connection}</p>
-     <button type="button" onClick={()=>onOpenBible?.(item.reference.split(' · ')[0].split(',')[0])}>Read in Jeremiah’s Bible <LessonIcon name="context"/></button>
+     <span>TWO READINGS · THE SAME PASSAGES</span>
+     <div><strong>Trinitarian</strong><p>{item.trinitarian}</p></div>
+     <div><strong>Apostolic Oneness</strong><p>{item.oneness}</p></div>
+     <div className="og1-identity-limit"><strong>What this clarifies</strong><p>{item.limit}</p></div>
     </div>
    </section>
-   <p className="og1-identity-transition"><strong>Why study this?</strong> What we believe about God affects what we mean when we confess Jesus as Lord and how we understand the Father, Son, and Holy Spirit. But an accurate explanation is not, by itself, wholehearted devotion.</p>
+   <p className="og1-identity-transition"><strong>{active===2?'Now we can compare fairly.':'Follow the question, not just a label.'}</strong> {active===2?'We have examined Word, name and prayer. Both readings confess one God and genuine incarnation; the difference concerns eternal persons. Gather the interpretations before explaining the Apostolic conclusion.':'The blue action takes you through each passage pair. Then we will name the shared confession, the actual disagreement and the Apostolic reasons.'}</p>
  </div>;
 }
 
@@ -56,7 +57,7 @@ export function OG1ReturnToShema({onOpenBible}) {
   <div className="og1-return-heading">
    <span>RETURN TO THE BEGINNING</span>
    <h2>Knowing who He is changes how we respond.</h2>
-   <p>The doctrinal investigation matters because we must know whom we worship. But this final chapter does not depend on winning a comparison. We return to Moses: the confession of who the LORD is, followed by the command to love Him.</p>
+   <p>The doctrinal investigation matters because we must know whom we worship. But this final chapter does not depend on winning a comparison. We have now explained why the Apostolic reading understands one God genuinely incarnate in Jesus. We return to Moses: the confession of who the LORD is, followed by the command to love Him.</p>
   </div>
   <div className="og1-return-verses">
    <section>

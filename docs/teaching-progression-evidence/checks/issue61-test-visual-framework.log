@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:visual-framework
+> node scripts/test-visual-framework.mjs
+
+PASS: shared visual framework keeps named historical images and neutral Bible imagery distinct across approved subjects.

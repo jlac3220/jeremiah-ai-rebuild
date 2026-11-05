@@ -1,0 +1,36 @@
+
+> app@0.0.0 test:media
+> node --test scripts/test-media-research.mjs scripts/test-media-discovery.mjs scripts/test-youtube-extraction.mjs scripts/test-authorized-sermon.mjs
+
+✔ chunks whole sermons into bounded 10-minute segments (2.209366ms)
+✔ converts segment-relative Whisper timestamps into absolute caption times (1.032679ms)
+✔ authorized originals can be converted and transcribed without external video access (14.027175ms)
+✔ parses a public YouTube Atom feed without downloading videos (3.136737ms)
+✔ ranks standard-specific metadata matches without pretending to validate teaching (1.281132ms)
+✔ discovers approved-feed candidates alongside existing classroom sources (14.826308ms)
+✔ feed failure does not hide existing curated resources and unapproved feeds are refused (6.097529ms)
+✔ filters off-topic feed titles despite generic words shared with the standard (1.401407ms)
+✔ finds older official publisher archive videos absent from recent-upload feed (3.141285ms)
+✔ reads actual curriculum objectives rather than guessing standard requirements (1.799751ms)
+✔ reads subtitle cues without inventing timestamps (0.659992ms)
+✔ only keeps transcript-grounded evidence; never publishes to lessons (4.533356ms)
+✔ requires declared rights and an AI key for analysis (0.527856ms)
+✔ rejects generic activities invented from the standard without source evidence (0.614327ms)
+✔ derives playback times from captions, including evidence crossing cue boundaries (0.576446ms)
+✔ untimed publisher text has source references but never invented playback times (1.359428ms)
+✔ accepts source-exact words across PDF punctuation and line wrapping, not paraphrases (1.459465ms)
+✔ reports model interest separately when every suggested quote fails verification (0.589521ms)
+✔ approved OG.1.1.18 media microactivities preserve Scripture, doctrine and lesson routing (0.826714ms)
+✔ accepts the intended YouTube handle videos page, never offsite or playlists (1.803739ms)
+✔ accepts a video ID or canonical YouTube video URL (0.375551ms)
+✔ imports metadata and removes invalid or duplicate entries, without authorizing content (1.254614ms)
+✔ channel extraction uses a bounded flat listing without downloading media (1.742053ms)
+✔ caption collection requests only subtitle files with no video download (6.095703ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.395496

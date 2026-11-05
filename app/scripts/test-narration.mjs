@@ -54,7 +54,7 @@ for(const key of ['opening','isaiahWitness','continuity','witnessCards','identit
 }
 assert.ok(!player.includes("current?.kind==='identity'&&moment===0"),
  'Identity narration should not be suppressed by its actual scene index');
-assert.match(player,/current\?\.kind==='identity'\s*\? OG1_SCENE_NARRATION\.identity/,
- 'Identity scene must be reachable regardless of its scene index');
+assert.match(player,/current\?\.kind==='identity'&&evidenceIndex===0\s*\? OG1_SCENE_NARRATION\.identity/,
+ 'Identity narration plays on its first reveal regardless of its scene index, without repeating for each passage pair');
 
 console.log("PASS: Jeremiah narrator is fixed and narration accepts only authored lesson text.");

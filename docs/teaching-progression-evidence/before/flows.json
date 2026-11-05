@@ -1,0 +1,106 @@
+[
+  {
+    "width": 390,
+    "flow": [
+      {
+        "name": "phrase-3",
+        "primary": "Continue →",
+        "primaryBottom": 833.8125
+      },
+      {
+        "name": "connection",
+        "primary": "Bring the confession together →",
+        "primaryBottom": 1232.046875
+      },
+      {
+        "name": "echad-intro",
+        "primary": "Test your understanding →",
+        "primaryBottom": 1381.46875
+      },
+      {
+        "name": "identity-word",
+        "primary": "Examine the two explanations →",
+        "primaryBottom": 1857.96875
+      },
+      {
+        "name": "comparison-0",
+        "primary": "Reveal the next perspective →",
+        "primaryBottom": 777.171875
+      },
+      {
+        "name": "comparison-1",
+        "primary": "Reveal the next perspective →",
+        "primaryBottom": 1014.890625
+      },
+      {
+        "name": "comparison-2",
+        "primary": "Bring the views together →",
+        "primaryBottom": 1425.609375
+      },
+      {
+        "name": "doctrinal-synthesis",
+        "primary": "Apply what you learned →",
+        "primaryBottom": 1344.484375
+      },
+      {
+        "name": "return-devotion",
+        "primary": "See what the confession requires →",
+        "primaryBottom": 1769.640625
+      }
+    ],
+    "steps": 48,
+    "seeded": false
+  },
+  {
+    "width": 1440,
+    "flow": [
+      {
+        "name": "phrase-3",
+        "primary": "Continue →",
+        "primaryBottom": 900.3125
+      },
+      {
+        "name": "connection",
+        "primary": "Bring the confession together →",
+        "primaryBottom": 1018.46875
+      },
+      {
+        "name": "echad-intro",
+        "primary": "Test your understanding →",
+        "primaryBottom": 961.109375
+      },
+      {
+        "name": "identity-word",
+        "primary": "Examine the two explanations →",
+        "primaryBottom": 1488.640625
+      },
+      {
+        "name": "comparison-0",
+        "primary": "Reveal the next perspective →",
+        "primaryBottom": 783.46875
+      },
+      {
+        "name": "comparison-1",
+        "primary": "Reveal the next perspective →",
+        "primaryBottom": 1021.578125
+      },
+      {
+        "name": "comparison-2",
+        "primary": "Bring the views together →",
+        "primaryBottom": 1160.578125
+      },
+      {
+        "name": "doctrinal-synthesis",
+        "primary": "Apply what you learned →",
+        "primaryBottom": 989.0625
+      },
+      {
+        "name": "return-devotion",
+        "primary": "See what the confession requires →",
+        "primaryBottom": 1391.53125
+      }
+    ],
+    "steps": 48,
+    "seeded": false
+  }
+]
