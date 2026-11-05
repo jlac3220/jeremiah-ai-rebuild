@@ -67,3 +67,7 @@ JEREMIAH_REVIEW_URL=http://127.0.0.1:4184 node scripts/verify-brand-stage2-brows
 ```
 
 The browser runner uses the review environment’s Playwright, not a new application dependency. Preview deployment and GitHub checks are reported on the draft PR; a local build/screenshot is not evidence of a hosted URL. No merge or production deployment is authorized.
+
+## Hosted review
+
+Draft PR: [#50](https://github.com/jlac3220/jeremiah-ai-rebuild/pull/50), targeting Stage 2. [Branch preview](https://jeremiah-ai-rebuild-git-codex-j-8c43dd-jlace3320-3949s-projects.vercel.app/#pilot), or [Home](https://jeremiah-ai-rebuild-git-codex-j-8c43dd-jlace3320-3949s-projects.vercel.app/#home). Both Vercel integrations and both GitHub CI workflows passed for the initial integration commit. The preview requires owner Vercel sign-in; anonymous requests redirect to the Vercel login screen. Local production-build browser checks are verified; protected hosted app behavior is not claimed. No production, access-protection, or hosting settings changed.
