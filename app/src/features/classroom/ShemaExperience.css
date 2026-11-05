@@ -421,27 +421,7 @@
 /* OG.1 flagship experience · visual narrative, not hidden panels or reading slides. */
 .ogp-page .ogp-stage--shema-echad>.ogp-verb,.ogp-page .ogp-stage--shema-echad>h1{display:none}
 .ogp-page .ogp-stage--shema-echad{min-height:0;padding-top:18px}
-.shema-phrase-story{overflow:hidden;border:1px solid #dbe1e9;border-radius:22px;background:#fff;box-shadow:0 20px 50px #21354813;color:#183247}
-.shema-phrase-overline{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:17px 27px;background:#f5f7fb;border-bottom:1px solid #e1e6f0;font:800 .67rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.09em;color:#5c6c86}
-.shema-phrase-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:18px 22px;border-bottom:1px solid #e4e9f0}
-.shema-phrase-track>div{min-width:0;display:flex;align-items:center;gap:9px;padding:4px 8px;opacity:.48}
-.shema-phrase-track>div:not(:last-child){border-right:1px solid #e1e5ef}
-.shema-phrase-track>div.is-active,.shema-phrase-track>div.is-complete{opacity:1}
-.shema-phrase-track>div>span{display:grid;place-items:center;flex:0 0 30px;height:30px;border:1px solid #c9d3e4;border-radius:50%;background:#f2f4f9;color:#52637f;font:800 .67rem Inter,system-ui,sans-serif}
-.shema-phrase-track>div.is-active>span{background:#f5d89b;color:#1f334d;border-color:#b28d4a}
-.shema-phrase-track>div.is-complete>span{background:#5065ac;color:#fff;border-color:#5065ac}
-.shema-phrase-track strong{font:700 .84rem/1.4 Inter,system-ui,sans-serif;color:#283d54}
-.shema-phrase-feature{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);min-height:335px;animation:shema-enter .35s ease both}
-.shema-phrase-language{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:radial-gradient(circle at 50% 40%,#334961,#122c43 75%);color:#fff;padding:36px 22px;text-align:center}
-.shema-phrase-language:after{content:'';position:absolute;inset:17px;border:1px solid #b9c9d339;border-radius:10px;pointer-events:none}
-.shema-phrase-language>span,.shema-phrase-language>small{font:750 .65rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;color:#e4c992}
-.shema-phrase-language strong{font:500 clamp(2.65rem,5.5vw,4.9rem)/1.25 Georgia,serif;color:#fff;overflow-wrap:anywhere}
-.shema-phrase-teaching{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(25px,4vw,45px);gap:15px}
-.shema-phrase-teaching>span{color:#5c6db6;font:800 .7rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.1em}
-.shema-phrase-teaching h2{font:650 clamp(1.75rem,3.3vw,2.7rem)/1.14 Georgia,serif;letter-spacing:-.03em;margin:0;color:#1b3247}
-.shema-phrase-teaching p{margin:0;color:#52677b;font:400 1rem/1.7 Inter,system-ui,sans-serif;max-width:410px}
 
-.shema-phrase-footer{padding:13px 26px;margin:0;background:#f8f9fc;border-top:1px solid #e8ebf1;color:#62738a;font-size:.75rem}
 .shema-verse-bridge{padding:clamp(23px,4vw,44px);background:linear-gradient(140deg,#f5f7fc,#eef3f9);border-radius:22px;border:1px solid #dce4ef;color:#20344b}
 .shema-bridge-heading>span{font:800 .7rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;color:#566bb1}
 .shema-bridge-heading h2{font:600 clamp(2.15rem,4.5vw,3.45rem)/1.15 Georgia,serif;margin:10px 0 9px;letter-spacing:-.035em}
@@ -475,17 +455,17 @@
 .shema-echad-evidence-grid p{font:.79rem/1.48 Inter,system-ui,sans-serif;color:#5a6b7f;margin:0}
 .shema-echad-conclusion{padding:14px 16px;background:#eff2ff;border-radius:11px;color:#344b7b;font:.87rem/1.6 Inter,system-ui,sans-serif;margin:0}
 @media(max-width:760px){
- .shema-phrase-overline{padding:13px 16px;font-size:.61rem}
- .shema-phrase-track{padding:10px 6px}
- .shema-phrase-track>div{gap:5px;padding:4px 5px;flex-direction:column}
- .shema-phrase-track>div>span{flex:0 0 27px;width:27px;height:27px}
- .shema-phrase-track strong{font-size:.64rem;text-align:center;line-height:1.25}
- .shema-phrase-feature{grid-template-columns:1fr}
- .shema-phrase-language{min-height:176px;padding:23px 18px}
- .shema-phrase-language strong{font-size:3.25rem}
- .shema-phrase-teaching{padding:25px 20px;min-height:210px}
- .shema-phrase-teaching h2{font-size:1.95rem}
- .shema-phrase-footer{padding:12px 16px}
+
+
+
+
+
+
+
+
+
+
+
  .shema-bridge-panels{grid-template-columns:1fr;gap:8px}
  .shema-bridge-panel{min-height:0;padding:24px 19px}
  .shema-bridge-arrow{font-size:1.7rem;transform:rotate(90deg);height:32px}
@@ -496,3 +476,77 @@
  .shema-echad-evidence{padding:24px 17px}
 }
 @media(prefers-reduced-motion:reduce){.shema-phrase-feature{animation:none}}
+
+
+/* Issue #56 — one signature phrase-study card. All other Shema scenes unchanged.
+   Existing track/feature hooks preserve Stage 2 reveal and accessibility contracts. */
+.ogp-page.ogp-stage2 .shema-signature {
+ --study-night:#10283c; --study-gold:#ffd28d; --study-ink:#172f43;
+ position:relative; isolation:isolate; display:grid; grid-template-columns:1.05fr 1fr;
+ border:0; border-radius:22px; overflow:hidden; background:#fff;
+ color:var(--study-ink); box-shadow:0 20px 55px #10283c18;
+}
+.shema-signature-scene { position:relative; isolation:isolate; min-height:510px; background:var(--study-night); display:flex; flex-direction:column; justify-content:flex-end; padding:32px; }
+.shema-signature-photo,.shema-signature-scene-shade,.shema-signature-fallback { position:absolute; inset:0; width:100%; height:100%; }
+.shema-signature-photo { object-fit:cover; z-index:-3; }
+.shema-signature-scene-shade { z-index:-1; pointer-events:none; background:linear-gradient(180deg,#0a1c2c99 0%,#071a28a6 40%,#081b2cf5 100%); }
+.shema-signature-fallback { z-index:-2; background:#10283c; }
+.shema-signature-caption { position:absolute; left:32px; right:32px; top:28px; display:flex; justify-content:space-between; gap:14px; font:750 .65rem/1.5 var(--font-body); letter-spacing:.12em; color:#fff; text-shadow:0 1px 12px #001525; }
+.shema-signature-confession { margin:0; padding:0; border:0; }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track { display:flex; flex-direction:column; padding:0; margin:0; border:0; gap:2px; }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button {
+ position:relative; display:flex; flex-direction:row; flex:0 0 auto; align-items:center;
+ min-height:58px; gap:13px; width:100%; padding:8px 0; border:0; border-radius:0;
+ text-align:left; color:#f5f8ff; background:transparent; opacity:1; cursor:pointer;
+}
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>strong { position:relative; color:inherit; font:730 clamp(1.35rem,2.5vw,2rem)/1.25 var(--font-body); letter-spacing:-.035em; text-align:left; }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>strong:after { content:''; position:absolute; left:0; right:0; bottom:-5px; height:2px; background:var(--study-gold); transform:scaleX(0); transform-origin:left; transition:transform 220ms ease; }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button[aria-current=step] { color:var(--study-gold); background:transparent; }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button[aria-current=step]>strong:after { transform:scaleX(1); }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button:disabled { color:#e9f0fa; background:none; cursor:not-allowed; }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button:focus-visible { outline:2px solid #ffe1af; outline-offset:4px; border-radius:3px; }
+.ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>.shema-signature-step { display:grid; place-items:center; min-width:22px; width:22px; font:600 .65rem/1 var(--font-body); color:inherit; background:none; border:0; }
+.shema-signature-step svg { width:14px; height:14px; }
+.shema-signature-invitation { font:450 .7rem/1.6 var(--font-body); color:#c4d3e3; margin:25px 0 0 35px; }
+.ogp-page.ogp-stage2 .shema-signature .shema-signature-teaching { display:flex; flex-direction:column; justify-content:center; min-height:0; gap:28px; padding:36px; border:0; animation:shema-study-reveal 240ms ease both; }
+.shema-signature-language { display:flex; flex-direction:column; align-items:flex-start; gap:6px; padding-bottom:22px; border-bottom:1px solid #e1e7ed; }
+.shema-signature-language>span,.shema-signature-language>small { font:700 .58rem/1.6 var(--font-body); letter-spacing:.12em; color:#54677c; }
+.shema-signature-language .shema-signature-hebrew { font:400 clamp(2.8rem,5vw,4.5rem)/1.35 Georgia,serif; color:#163a55; text-align:right; max-width:100%; }
+.shema-signature-kicker { font:750 .58rem/1.5 var(--font-body); letter-spacing:.1em; color:#526b80; }
+.shema-signature-meaning h2 { font:760 clamp(1.3rem,2.4vw,1.9rem)/1.18 var(--font-body); letter-spacing:-.04em; margin:10px 0 16px; color:var(--study-ink); }
+.shema-signature-meaning>p { font:400 1rem/1.75 var(--font-body); color:#40586e; margin:0; }
+.shema-signature-establishes { border-left:2px solid #c28f4c; padding-left:15px; margin-top:22px; }
+.shema-signature-establishes>span { display:block; font:750 .65rem/1.5 var(--font-body); color:#675031; }
+.shema-signature-establishes p { font:500 .92rem/1.65 var(--font-body); color:#243f56; margin:6px 0 0; }
+@keyframes shema-study-reveal { from { opacity:1; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+/* Bounded to this single card: fit the phone task, not the rest of Classroom. */
+@media(max-width:700px) {
+ .ogp-page.ogp-stage2 .shema-signature { grid-template-columns:1fr; border-radius:17px; }
+ .shema-signature-scene { min-height:224px; padding:46px 20px 16px; }
+ .shema-signature-caption { left:20px; right:20px; top:17px; font-size:.55rem; }
+ .ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button { min-height:44px; gap:9px; padding:7px 0; }
+ .ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>strong { font-size:1.5rem; }
+ .ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>.shema-signature-step { min-width:17px; width:17px; }
+ .shema-signature-invitation { margin:12px 0 0 26px; font-size:.6rem; }
+ .ogp-page.ogp-stage2 .shema-signature .shema-signature-teaching { padding:20px; gap:0; animation:shema-study-reveal 180ms ease both; }
+ .shema-signature-language { flex-direction:row; align-items:center; gap:10px; padding:0 0 12px; margin-bottom:14px; flex-wrap:wrap; }
+ .shema-signature-language>span { display:none; }
+ .shema-signature-language .shema-signature-hebrew { font-size:1.9rem; line-height:1.35; }
+ .shema-signature-language>small { font-size:.5rem; letter-spacing:.07em; }
+ .shema-signature-kicker { display:none; }
+ .shema-signature-meaning h2 { font-size:1.3rem; margin:0 0 10px; }
+ .shema-signature-meaning>p { font-size:.91rem; line-height:1.65; }
+ .shema-signature-establishes { margin-top:15px; padding-left:12px; }
+ .shema-signature-establishes>span { font-size:.6rem; }
+ .shema-signature-establishes p { font-size:.86rem; line-height:1.55; margin-top:4px; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .ogp-shell { padding-top:14px; padding-bottom:24px; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .ogp-stage { padding-top:14px; padding-bottom:0; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .ogp-compact-header { margin-bottom:0; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .ogp-mini-timeline { display:grid; grid-template-columns:1fr auto; gap:4px 16px; max-width:none; flex-basis:auto; width:100%; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .ogp-mini-caption { grid-column:1 / -1; margin:0; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .og2-map-toggle { grid-column:2; grid-row:2; padding:0; font-size:.7rem; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .ogp-mini-timeline ol { grid-column:1; grid-row:2; width:100%; max-width:180px; margin:0; }
+ .ogp-page.ogp-stage2:has(.shema-signature) .ogp-controls { margin-top:16px; padding-top:14px; }
+}
+@media(max-width:360px) { .shema-signature-scene{padding-inline:16px;min-height:220px} .ogp-page.ogp-stage2 .shema-signature .shema-signature-teaching{padding:18px 16px} .ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>strong{font-size:1.28rem} }
+@media(prefers-reduced-motion:reduce) { .ogp-page.ogp-stage2 .shema-signature .shema-phrase-feature{animation:none} .ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>strong:after{transition:none} }

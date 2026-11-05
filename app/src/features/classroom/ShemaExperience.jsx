@@ -13,11 +13,54 @@ const PHRASES = [
  {id:'one',text:'is one LORD',spoken:'Is one Lord.',hebrew:'יְהוָה אֶחָד',roman:'ONE LORD',title:'The heart of the confession.',meaning:'The LORD is confessed as one. Read that claim beside Isaiah’s declarations and Jesus’ repetition, rather than building everything on a dictionary definition.'}
 ];
 
+
+// A discovery surface, not a new assessment. The parent still owns reveal order.
+const ESTABLISHES = {
+ hear: 'Israel is called to listen and respond to the LORD.',
+ belong: '“Our God” identifies the LORD as Israel’s covenant God.',
+ one: 'The confession identifies the LORD as one, read in the wider witness of Scripture.'
+};
+
+function ShemaPhraseStudy({sequenceIndex,revealedThrough,onInspect,image,onImageError}) {
+ const index=Math.max(0,Math.min(sequenceIndex,PHRASES.length-1));
+ const phrase=PHRASES[index];
+ function exploreWithKeyboard(event) {
+  const positions={ArrowLeft:index-1,ArrowRight:index+1,Home:0,End:Math.min(revealedThrough,PHRASES.length-1)};
+  if(!(event.key in positions))return;
+  event.preventDefault();
+  const next=positions[event.key];
+  if(!onInspect||next<0||next>revealedThrough||next>=PHRASES.length)return;
+  event.currentTarget.parentElement.querySelectorAll('button')[next]?.focus();
+  onInspect(next);
+ }
+ return <article className="shema-phrase-story shema-signature" aria-label="Discover the words of the Shema">
+  <div className="shema-signature-scene">
+   {image?<img className="shema-signature-photo" src={image.src} alt="Moses addresses the gathered people of Israel" style={{objectPosition:image.focal||'50% 38%'}} onError={onImageError} decoding="async"/>:<div className="shema-signature-fallback" aria-hidden="true"/>}
+   <div className="shema-signature-scene-shade" aria-hidden="true"/>
+   <header className="shema-signature-caption"><span>DEUTERONOMY 6:4 · KJV</span><span>{String(index+1).padStart(2,'0')} / 03</span></header>
+   <blockquote className="shema-signature-confession">
+    <div className="shema-phrase-track" role="group" aria-label="Three parts of the confession">
+     {PHRASES.map((part,i)=><button type="button" key={part.id} disabled={!onInspect||i>revealedThrough} onClick={()=>onInspect(i)} onKeyDown={exploreWithKeyboard} className={i===index?'is-active':i<index?'is-complete':'is-upcoming'} aria-current={i===index?'step':undefined} aria-controls="og2-phrase-meaning">
+      <span className="shema-signature-step" aria-hidden="true">{i>revealedThrough?<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="9" width="10" height="8" rx="2"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>:i===index?<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m5 15 10-10M5 5h10v10"/></svg>:String(i+1).padStart(2,'0')}</span>
+      <strong>{part.text}{i===0||i===2?':':''}</strong>
+     </button>)}
+    </div>
+   </blockquote>
+   <p className="shema-signature-invitation" role={!image?'status':undefined}>{image?'Explore the phrases as they are revealed.':'Scene unavailable. Keep exploring the words.'}</p>
+  </div>
+  <section id="og2-phrase-meaning" className="shema-phrase-feature shema-signature-teaching" key={phrase.id} aria-live="polite" aria-atomic="true">
+   <div className="shema-signature-language"><span>THE HEBREW</span><strong className="shema-signature-hebrew" lang="he" dir="rtl">{phrase.hebrew}</strong><small>{phrase.roman}</small></div>
+   <div className="shema-signature-meaning"><span className="shema-signature-kicker">THE WORDS → THE MEANING</span><h2>{phrase.title}</h2><p>{phrase.meaning}</p>
+    <div className="shema-signature-establishes"><span>What this establishes</span><p>{ESTABLISHES[phrase.id]}</p></div>
+   </div>
+  </section>
+ </article>;
+}
+
 export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=sequenceIndex,onInspect,video,onOpenBible,onSpeak,content,move}) {
  const openingBrief=createVisualBrief({content,move,placement:{intent:'historical',subject:'Moses',reference:'Deuteronomy 6:4',learningGoal:'Israel receives the confession in Deuteronomy 6:4'}});
  const knownOpening=chooseLessonVisual(openingBrief,VISUAL_ASSETS).asset;
  const {asset:openingImage,onError:openingImageError}=useDiscoveredLessonVisual(openingBrief,knownOpening);
- const currentPhrase=PHRASES[Math.max(0,Math.min(sequenceIndex,PHRASES.length-1))];
 
  if(kind==='shema-encounter')return <div className="shema-world">
   <div className="shema-world-art">
@@ -37,28 +80,7 @@ export default function ShemaExperience({kind,sequenceIndex=0,revealedThrough=se
   <div className="shema-world-footer"><span>THE ONE LORD · DEUTERONOMY 6</span><span aria-hidden="true">✦</span></div>
  </div>;
 
- if(kind==='shema-manuscript')return <div className="shema-phrase-story">
-  <div className="shema-phrase-overline"><span>THE WORDS OF THE CONFESSION</span><span>DEUTERONOMY 6:4</span></div>
-  <div className="shema-phrase-track" aria-label="Three parts of the confession">
-   {PHRASES.map((part,i)=><button type="button" key={part.id} disabled={!onInspect||i>revealedThrough} onClick={()=>onInspect(i)} className={i===sequenceIndex?'is-active':i<sequenceIndex?'is-complete':'is-upcoming'} aria-current={i===sequenceIndex?'step':undefined} aria-controls="og2-phrase-meaning">
-    <span>{i<sequenceIndex?'✓':String(i+1).padStart(2,'0')}</span>
-    <strong>{part.text}</strong>
-   </button>)}
-  </div>
-  <div id="og2-phrase-meaning" className="shema-phrase-feature" key={currentPhrase.id} aria-live="polite">
-   <div className="shema-phrase-language">
-    <span>IN HEBREW</span>
-    <strong lang="he" dir="rtl">{currentPhrase.hebrew}</strong>
-    <small>{currentPhrase.roman}</small>
-   </div>
-   <div className="shema-phrase-teaching">
-    <span>PART {sequenceIndex+1} OF THREE</span>
-    <h2>{currentPhrase.title}</h2>
-    <p>{currentPhrase.meaning}</p>
-   </div>
-  </div>
-  <p className="shema-phrase-footer">Each phrase builds the same confession. Continue to reveal the next one.</p>
- </div>;
+ if(kind==='shema-manuscript')return <ShemaPhraseStudy sequenceIndex={sequenceIndex} revealedThrough={revealedThrough} onInspect={onInspect} image={openingImage} onImageError={openingImageError}/>;
 
  if(kind==='shema-cinema')return <div className="shema-cinema">
   <div className="shema-cinema-top"><span className="shema-eyebrow">A SHORT FILM · LISTENING IN CONTEXT</span><span className="shema-film-time">{video?.duration||'SHORT FILM'}</span></div>
