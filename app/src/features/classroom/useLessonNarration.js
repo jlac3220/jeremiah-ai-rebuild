@@ -50,7 +50,7 @@ export default function useLessonNarration({ text, key: sceneKey }) {
     audioRef.current = null;
     setSpeaking(false);
     setLoading(false);
-    setError('Jeremiah narration is unavailable. Check the server voice service.');
+    setError('Audio is unavailable right now.');
    }
   };
   // A direct user tap can start playback on iPhone; autoplay on scene
@@ -65,7 +65,7 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   return true;
  }, [stop]);
 
- const toggle=useCallback(()=>setEnabled(previous=>!previous),[]);
+ const toggle=useCallback(()=>{stop();setError('');lastSceneRef.current=null;setEnabled(previous=>!previous)},[stop]);
 
  useEffect(() => {
   if (!enabled || !text) {
@@ -95,5 +95,5 @@ export default function useLessonNarration({ text, key: sceneKey }) {
   };
  }, [stop]);
 
- return { enabled, supported, speaking, loading, error, toggle, speak, stop };
+ return { enabled, supported, speaking, loading, error:enabled&&text?error:'', toggle, speak, stop };
 }

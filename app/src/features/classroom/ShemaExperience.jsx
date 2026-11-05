@@ -3,6 +3,8 @@ import {VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
 import {createVisualBrief,chooseLessonVisual} from '../../core/classroom/visualIntelligence';
 import useDiscoveredLessonVisual from './useDiscoveredLessonVisual';
 import './ShemaExperience.css';
+import OptionalLessonVideo from './OptionalLessonVideo';
+import LessonIcon from '../../shared/lesson/LessonIcon';
 
 const PHRASES = [
  {id:'hear',text:'Hear, O Israel',spoken:'Hear, O Israel.',hebrew:'שְׁמַע',roman:'SHEMA · HEAR',title:'More than hearing a sound.',meaning:'The confession opens with a summons to listen and respond. The people are being addressed, not merely given information.'},
@@ -29,7 +31,7 @@ export default function ShemaExperience({kind,sequenceIndex=0,video,onOpenBible,
    <blockquote>“Hear, O Israel: The LORD our God is one LORD:”</blockquote>
    <span className="shema-source">DEUTERONOMY 6:4 · KJV</span>
    <p>The words Moses gave to Israel will be heard again from the lips of Jesus. Begin with the confession itself.</p>
-   <div className="shema-opening-actions"><button type="button" className="shema-opening-listen" onClick={()=>onSpeak?.('Hear, O Israel: The LORD our God is one LORD.')}>▶ Hear the Scripture</button><button type="button" className="shema-artifact-link" onClick={()=>onOpenBible?.('Deuteronomy 6:4')}>Read in context ↗</button></div>
+   <div className="shema-opening-actions"><button type="button" className="shema-opening-listen" onClick={()=>onSpeak?.('Hear, O Israel: The LORD our God is one LORD.')}><LessonIcon name="play"/> Hear the Scripture</button><button type="button" className="shema-artifact-link" onClick={()=>onOpenBible?.('Deuteronomy 6:4')}>Read in context <LessonIcon name="context"/></button></div>
   </div>
   <div className="shema-world-footer"><span>THE ONE LORD · DEUTERONOMY 6</span><span aria-hidden="true">✦</span></div>
  </div>;
@@ -52,7 +54,7 @@ export default function ShemaExperience({kind,sequenceIndex=0,video,onOpenBible,
     <span>PART {sequenceIndex+1} OF THREE</span>
     <h2>{currentPhrase.title}</h2>
     <p>{currentPhrase.meaning}</p>
-    <button type="button" onClick={()=>onSpeak?.(currentPhrase.spoken)}>▶ Hear this phrase</button>
+    <button type="button" onClick={()=>onSpeak?.(currentPhrase.spoken)}><LessonIcon name="play"/> Hear this phrase</button>
    </div>
   </div>
   <p className="shema-phrase-footer">Each phrase builds the same confession. Continue to reveal the next one.</p>
@@ -62,7 +64,7 @@ export default function ShemaExperience({kind,sequenceIndex=0,video,onOpenBible,
   <div className="shema-cinema-top"><span className="shema-eyebrow">A SHORT FILM · LISTENING IN CONTEXT</span><span className="shema-film-time">{video?.duration||'SHORT FILM'}</span></div>
   <h2>What does it mean to <em>hear?</em></h2>
   <p>Notice how Scripture connects listening with responding. Jeremiah will return to the text afterward.</p>
-  <div className="shema-cinema-frame">{video?<iframe src={video.embedUrl} title={video.videoTitle||video.title} loading="lazy" allow="encrypted-media; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/>:<div className="shema-no-film">Video unavailable. Continue with the Scripture.</div>}</div>
+  <div className="shema-cinema-frame"><OptionalLessonVideo video={video}/></div>
   <div className="shema-film-footer"><span>{video?.provider||'Optional educational context'}</span><span>Optional viewing · Continue when ready</span></div>
  </div>;
 
@@ -72,13 +74,13 @@ export default function ShemaExperience({kind,sequenceIndex=0,video,onOpenBible,
    <article className="shema-bridge-panel shema-bridge-panel--confession">
     <span>01 · THE CONFESSION</span>
     <blockquote>“Hear, O Israel: The LORD our God is one LORD:”</blockquote>
-    <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:4')}>Deuteronomy 6:4 · Read in context ↗</button>
+    <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:4')}>Deuteronomy 6:4 · Read in context <LessonIcon name="context"/></button>
    </article>
    <div className="shema-bridge-arrow" aria-hidden="true">→</div>
    <article className="shema-bridge-panel shema-bridge-panel--response">
     <span>02 · THE RESPONSE</span>
     <blockquote>“And thou shalt love the LORD thy God with all thine heart, and with all thy soul, and with all thy might.”</blockquote>
-    <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:5')}>Deuteronomy 6:5 · Read in context ↗</button>
+    <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:5')}>Deuteronomy 6:5 · Read in context <LessonIcon name="context"/></button>
    </article>
   </div>
   <p className="shema-bridge-takeaway"><strong>Notice the movement:</strong> who the LORD is gives direction to the love he commands. The two verses belong together.</p>

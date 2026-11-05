@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import content from '../src/core/classroom/content/OG_1_LESSON.js';
+import {getOG1LessonLocation} from '../src/core/classroom/og1LessonLocation.js';
 import {OG1_SCENE_NARRATION} from '../src/core/classroom/og1NarrationManifest.js';
 import {isAllowedNarrationText} from '../server/narrationHandler.mjs';
 const read=p=>readFileSync(new URL(p,import.meta.url),'utf8');
@@ -45,8 +46,8 @@ const discovery=player.indexOf("const discovery=DISCOVERIES[move.id]");
 assert.ok(encounter>0&&encounter<discovery,'Intro → witness sequence');
 assert.ok(player.includes('ogp-mini-timeline'),'Slim five-stop timeline is rendered');
 assert.ok(player.includes('YOUR JOURNEY'),'The numbers have a visible meaning');
-assert.ok(player.includes('Up next: Chapter 1'),'Opening directs to first chapter');
-assert.ok(player.includes('Up next: Chapter ${chapterNumber+1}'),'Next chapter and name update automatically');
+assert.match(getOG1LessonLocation(content,content.instructionalMoves.find(m=>m.id==='learn')).next,/Chapter 1.*Shema/,'Opening directs to first chapter');
+assert.match(getOG1LessonLocation(content,content.instructionalMoves.find(m=>m.id==='shema-try')).next,/Chapter 2.*Isaiah/,'Next chapter derives from the authored graph');
 assert.ok(player.includes('Chapter ${chapterNumber} · ${CHAPTER_NAMES[chapterNumber-1]}'),'Current chapter is named in title');
 assert.ok(player.includes('aria-current={!finish&&chapterNumber===i+1'), 'Current chapter is accessible');
 assert.ok(player.includes("!['identity','return','mission','roadmap','doctrine-summary'].includes(current.kind)&&!current.kind?.startsWith('shema-')"),'Special scenes own their headings; avoid duplicate chapter/scene titles');

@@ -1,0 +1,33 @@
+import {useEffect,useRef,useState} from 'react';
+import {ROUTES} from '../../app/routes';
+import LessonIcon from '../../shared/lesson/LessonIcon';
+
+export default function OG1LessonToolbar({narration,narrationText,onNavigate,onRestart,chapters,chapterNumber,finish}) {
+ const [open,setOpen]=useState(false);
+ const root=useRef(null);
+ const trigger=useRef(null);
+ useEffect(()=>{
+  if(!open)return;
+  function closeOutside(event){if(!root.current?.contains(event.target))setOpen(false)}
+  document.addEventListener('pointerdown',closeOutside);
+  return ()=>document.removeEventListener('pointerdown',closeOutside);
+ },[open]);
+ function keydown(event){
+  if(event.key==='Escape'&&open){event.preventDefault();setOpen(false);trigger.current?.focus()}
+ }
+ return <header className="ogp-header ogp-toolbar" ref={root} onKeyDown={keydown}>
+  <button type="button" className="ogp-toolbar-back" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}><LessonIcon name="back"/><span>Classroom</span></button>
+  <div className="ogp-toolbar-brand"><span aria-hidden="true">J</span><strong>JEREMIAH<small>THE ONE TRUE GOD</small></strong></div>
+  <div className="ogp-toolbar-actions">
+   <button type="button" className="ogp-audio-setting" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn narration off':'Turn narration on'} onClick={narration.toggle}><LessonIcon name={narration.enabled?'sound':'muted'}/><span>Audio {narration.enabled?'on':'off'}</span></button>
+   {narration.enabled&&narrationText&&<button type="button" className="ogp-audio-replay" aria-label={narration.loading?'Preparing narration':narration.speaking?'Stop narration':'Replay narration'} disabled={narration.loading} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}><LessonIcon name={narration.speaking?'stop':'replay'}/></button>}
+   <button type="button" ref={trigger} className="ogp-options-trigger" aria-label="Lesson options" aria-expanded={open} aria-controls="ogp-lesson-options" onClick={()=>setOpen(value=>!value)}><LessonIcon name="more"/></button>
+  </div>
+  {open&&<section id="ogp-lesson-options" className="ogp-options-panel" aria-label="Lesson contents and options">
+   <h2>In this lesson</h2>
+   <ol>{chapters.map((chapter,i)=><li key={chapter.standardId} aria-current={!finish&&chapterNumber===i+1?'step':undefined}><span>{i+1}</span><strong>{chapter.title}</strong><small>{finish||chapterNumber>i+1?'Covered':chapterNumber===i+1?'Current':'Ahead'}</small></li>)}</ol>
+   <p>Chapter coverage records your place, not mastery.</p>
+   <button type="button" onClick={()=>{setOpen(false);trigger.current?.focus();onRestart()}}><LessonIcon name="replay"/>Start over</button>
+  </section>}
+ </header>;
+}

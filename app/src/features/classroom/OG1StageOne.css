@@ -1,0 +1,78 @@
+/* Bounded Stage 1 repairs. Reading surfaces and chapter artwork stay intact. */
+.lesson-icon{display:inline-block;vertical-align:middle;flex-shrink:0}
+.ogp-page.ogp-stage1 .ogp-toolbar{height:auto;min-height:68px;padding:10px max(16px,calc((100% - 1120px)/2));grid-template-columns:auto 1fr auto;gap:16px;border-bottom:1px solid #ffffff1f}
+.ogp-stage1 .ogp-toolbar button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:8px;border:1px solid transparent;border-radius:10px;letter-spacing:0;color:#e7edf7;font:600 .82rem/1.3 var(--font-body);background:transparent}
+.ogp-stage1 .ogp-toolbar button:hover,.ogp-stage1 .ogp-toolbar button[aria-expanded=true]{background:#ffffff12}
+.ogp-stage1 .ogp-toolbar button:focus-visible{outline:3px solid #b8c7ff;outline-offset:2px}
+.ogp-stage1 .ogp-toolbar-back{justify-self:start}
+.ogp-toolbar-brand{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.ogp-toolbar-brand>span{width:30px;height:30px;border:1px solid #aebde37a;border-radius:50%;display:grid;place-items:center;color:#d5dfff;font:600 1rem Georgia,serif}
+.ogp-toolbar-brand strong{font:750 .75rem/1.2 var(--font-body);letter-spacing:.1em;color:#fff}
+.ogp-toolbar-brand small{display:block;margin-top:4px;font:500 .55rem/1.3 var(--font-body);letter-spacing:.12em;color:#bfcee8}
+.ogp-toolbar-actions{display:flex;align-items:center;gap:4px;justify-self:end}
+.ogp-stage1 .ogp-toolbar .ogp-audio-setting{color:#cbd7ea}
+.ogp-options-panel{position:absolute;right:max(16px,calc((100% - 1120px)/2));top:calc(100% - 2px);width:min(340px,calc(100vw - 32px));max-height:calc(100dvh - 90px);overflow:auto;background:#fff;border:1px solid #dce4ef;border-radius:16px;padding:20px;box-shadow:0 18px 42px #10233b26;color:#172b45;z-index:40}
+.ogp-options-panel h2{font:750 1rem/1.4 var(--font-body);margin:0 0 12px}
+.ogp-options-panel ol{padding:0;list-style:none;margin:0}
+.ogp-options-panel li{display:grid;grid-template-columns:24px 1fr auto;gap:8px;align-items:baseline;padding:10px 0;border-bottom:1px solid #e6ebf2}
+.ogp-options-panel li>span,.ogp-options-panel small{font-size:.72rem;color:#58677c}
+.ogp-options-panel strong{font:600 .85rem/1.45 var(--font-body)}
+.ogp-options-panel [aria-current]{color:#3449a8}
+.ogp-options-panel p{font-size:.78rem;line-height:1.5;color:#52647a}
+.ogp-stage1 .ogp-options-panel button{color:#52647a;padding-left:0;font-size:.85rem}
+.ogp-stage1 .ogp-options-panel button:hover{background:#f4f7fc}
+.ogp-page.ogp-stage1 .ogp-compact-header{padding-top:0;align-items:start}
+.ogp-stage1 .ogp-mini-caption{gap:8px}
+.ogp-stage1 .ogp-mini-caption strong{font-size:.75rem;line-height:1.5;max-width:270px}
+.ogp-page.ogp-stage1 .ogp-voice-error{padding:10px 20px;background:#f4f7fc;border-bottom:1px solid #dce4ef;color:#52647a;font-size:.85rem;line-height:1.5}
+/* Explicit on-dark foreground wins over generic finish-page paragraphs. */
+.ogp-page.ogp-stage1 .og1-synthesis-head p{color:#dfe5fa;font:500 1.02rem/1.7 var(--font-body)}
+.ogp-page.ogp-stage1 .ogp-finish--synthesis{padding-top:16px}
+.ogp-page.ogp-stage1 .ogp-finish--synthesis:before{display:none}
+/* Native modal owns focus containment, inert background, and Escape handling. */
+.ogp-stage1 .ogp-modal{position:fixed;inset:0;margin:auto;width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:28px;border:1px solid #dce4ef;border-radius:20px;background:#fff;color:#172b45;box-shadow:0 24px 80px #0d203a3d}
+.ogp-stage1 .ogp-modal::backdrop{background:#0f203b99}
+.ogp-stage1 .ogp-modal h2{margin:0 0 16px;font:600 1.8rem/1.2 Georgia,serif;letter-spacing:-.025em}
+.ogp-stage1 .ogp-modal p{color:#52647a;font:400 1rem/1.65 var(--font-body)}
+.ogp-stage1 .ogp-modal .ogp-restart-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.ogp-stage1 .ogp-modal button{min-height:48px}
+/* The fallback is real, readable passage metadata, not a simulated manuscript. */
+.ogp-stage1 .ogp-witness-art .ogj-art:not(:has(img)) .ogj-fallback{color:#f7faff;background:#1c344d;letter-spacing:0;font:500 clamp(1.6rem,4vw,2.3rem)/1.3 Georgia,serif;opacity:1;padding:24px;text-align:center}
+.ogp-stage1 .ogp-witness-art:not(:has(img)){height:auto;min-height:150px;align-self:stretch}
+.ogp-stage1 .ogp-witness-art:not(:has(img)):after{display:none}
+.ogp-stage1 .ogp-witness-art .ogj-art:not(:has(img)){filter:none}
+.ogp-optional-video{width:100%;min-width:0}
+.ogp-page.ogp-stage1 .shema-cinema-frame{aspect-ratio:auto;overflow:visible}
+.ogp-stage1 .ogp-optional-video iframe{display:block;width:100%;height:auto;aspect-ratio:16/9;border:0;border-radius:14px;background:#132840}
+.ogp-video-poster{display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:12px;padding:32px 24px;border:1px solid #ffffff38;border-radius:14px;background:#172c46;color:#e7edf7;min-height:230px}
+.ogp-video-poster>.lesson-icon{width:32px;height:32px;color:#bfcef4}
+.ogp-video-poster strong{font:650 1.15rem/1.4 var(--font-body)}
+.ogp-video-poster span{font-size:.8rem;color:#c2cde3}
+.ogp-stage1 .ogp-video-poster p{color:#dfe5fa;font:400 .95rem/1.6 var(--font-body);margin:0}
+.ogp-stage1 .ogp-video-poster button,.ogp-stage1 .ogp-video-help button{min-height:44px;border:1px solid #a1b5e5;border-radius:10px;background:transparent;color:#edf2ff;padding:10px 14px;font:600 .85rem/1.4 var(--font-body);cursor:pointer}
+.ogp-video-help{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:12px;color:#dfe5fa;font-size:.85rem}
+.ogp-stage1 .og1-exam-next-step{margin:18px 0 24px;display:flex;align-items:stretch;gap:12px}
+.ogp-stage1 .og1-exam-next-step button{min-height:48px}
+.ogp-stage1 .og1-exam-review-title{scroll-margin-top:24px}
+.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results){padding:24px 28px}
+.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results) .og1-exam-intro-meta{display:none}
+.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results) p{margin-bottom:0}
+.ogp-stage1 .og1-exam-intro:has(+.og1-exam-results) h1{font-size:clamp(1.9rem,4vw,3rem)}
+@media(max-width:680px){
+ .ogp-page.ogp-stage1 .ogp-toolbar{min-height:64px;padding:calc(8px + env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));gap:6px}
+ .ogp-stage1 .ogp-toolbar-back>span,.ogp-toolbar-brand small,.ogp-stage1 .ogp-audio-setting>span{display:none}
+ .ogp-toolbar-brand{justify-content:start;gap:7px}
+ .ogp-toolbar-brand strong{font-size:.66rem;letter-spacing:.06em}
+ .ogp-toolbar-brand>span{width:26px;height:26px}
+ .ogp-toolbar-actions{gap:0}
+ .ogp-page.ogp-stage1 .ogp-shell{padding-top:24px;padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+ .ogp-stage1 .ogp-compact-heading h1{font-size:1.08rem;line-height:1.4}
+ .ogp-stage1 .ogp-mini-caption strong{max-width:240px;font-size:.73rem;text-align:left}
+ .ogp-stage1 .ogp-mini-caption{align-items:baseline;justify-content:space-between}
+ .ogp-stage1 .og1-exam-next-step{flex-direction:column}
+ .ogp-stage1 .ogp-modal{padding:24px}
+ .ogp-stage1 .ogp-modal .ogp-restart-actions{flex-direction:column}
+ .ogp-stage1 .og1-exam-score{padding:22px;gap:18px}
+ .ogp-stage1 .og1-exam-score-dial{width:100px;height:100px;flex:0 0 100px}
+}
+@media(prefers-reduced-motion:reduce){.ogp-stage1 *{scroll-behavior:auto!important}}

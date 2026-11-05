@@ -55,14 +55,14 @@ const answers70={...answers80,[OG1_EXIT_QUESTIONS[2].id]:wrongAnswers[OG1_EXIT_Q
 assert.deepEqual([gradeOG1ExitExam(answers70).correct,gradeOG1ExitExam(answers70).passed],[7,false]);
 assert.throws(()=>gradeOG1ExitExam({}),/Complete all ten/);
 assert.throws(()=>gradeOG1ExitExam({...correct,[OG1_EXIT_QUESTIONS[0].id]:'bad'}),/Complete all ten/);
-for(const required of ['<OG1ExitExam','examPassed','examReviewOpen','onSubmitted','displayProgress','OG1ThemeConsistency.css']){
+for(const required of ['<OG1ExitExam','examSubmitted','getOG1LessonLocation','displayProgress','OG1ThemeConsistency.css']){
  assert.ok(player.includes(required),'Missing OG.1 exit integration: '+required);
 }
 assert.ok(player.includes('finish?100:percent'),'Lesson completion should not depend on exam score');
 assert.ok(player.includes('rateOG1Lesson(content,state)'),'Final rating must reflect collected evidence');
 assert.ok(!component.includes('Finish lesson without taking the exam'),'Exam requires participation but not a passing grade');
 assert.ok(component.includes('View my learning-level report'),'Final report accessible despite a failed exam');
-assert.ok(player.includes("finish?'The One True God'"),'Completion header should be explicit');
+assert.ok(player.includes('finish?location.title'),'Completion header explicitly reflects exam/report/summary state');
 assert.ok(player.includes("finish||chapterNumber>i+1"),'All five chapter markers should be filled at exit');
 for(const required of ['gradeOG1ExitExam(answers)','patchExam','latest','attempts','bestScore','onContinue',
    'onReadBible','aria-pressed','disabled={!allAnswered}','Practice another attempt','Your selections save automatically']){

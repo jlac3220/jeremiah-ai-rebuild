@@ -1,0 +1,142 @@
+[
+  {
+    "name": "test:brain",
+    "exit": 0,
+    "seconds": 0.67
+  },
+  {
+    "name": "test:narration",
+    "exit": 0,
+    "seconds": 0.28
+  },
+  {
+    "name": "test:everyday-photos",
+    "exit": 0,
+    "seconds": 0.22
+  },
+  {
+    "name": "test:biblical-visuals",
+    "exit": 0,
+    "seconds": 0.27
+  },
+  {
+    "name": "test:bible-source",
+    "exit": 1,
+    "seconds": 0.3
+  },
+  {
+    "name": "test:bible",
+    "exit": 0,
+    "seconds": 0.27
+  },
+  {
+    "name": "test:dashboard",
+    "exit": 0,
+    "seconds": 0.29
+  },
+  {
+    "name": "test:curriculum",
+    "exit": 0,
+    "seconds": 0.53
+  },
+  {
+    "name": "test:teacher-led",
+    "exit": 0,
+    "seconds": 0.27
+  },
+  {
+    "name": "test:grouped",
+    "exit": 0,
+    "seconds": 0.3
+  },
+  {
+    "name": "test:standards-driven",
+    "exit": 0,
+    "seconds": 0.25
+  },
+  {
+    "name": "test:media",
+    "exit": 0,
+    "seconds": 0.6
+  },
+  {
+    "name": "test:crawler",
+    "exit": 0,
+    "seconds": 0.36
+  },
+  {
+    "name": "test:content-scan",
+    "exit": 0,
+    "seconds": 0.27
+  },
+  {
+    "name": "test:visual-framework",
+    "exit": 0,
+    "seconds": 0.26
+  },
+  {
+    "name": "test:ask-jeremiah",
+    "exit": 0,
+    "seconds": 1.02
+  },
+  {
+    "name": "test:visual-discovery",
+    "exit": 0,
+    "seconds": 0.23
+  },
+  {
+    "name": "test:og1-evidence",
+    "exit": 0,
+    "seconds": 0.24
+  },
+  {
+    "name": "test:og1-climax",
+    "exit": 0,
+    "seconds": 0.22
+  },
+  {
+    "name": "test:og1-exam",
+    "exit": 0,
+    "seconds": 0.29
+  },
+  {
+    "name": "test:og1-theme",
+    "exit": 0,
+    "seconds": 0.26
+  },
+  {
+    "name": "test:og1-journey",
+    "exit": 0,
+    "seconds": 0.45
+  },
+  {
+    "name": "test:og1-inline-bible",
+    "exit": 0,
+    "seconds": 0.25
+  },
+  {
+    "name": "test:og1-rating",
+    "exit": 0,
+    "seconds": 0.27
+  },
+  {
+    "name": "test:pilot",
+    "exit": 0,
+    "seconds": 0.24
+  },
+  {
+    "name": "test:vercel",
+    "exit": 0,
+    "seconds": 0.24
+  },
+  {
+    "name": "lint",
+    "exit": 1,
+    "seconds": 7.5
+  },
+  {
+    "name": "build",
+    "exit": 0,
+    "seconds": 1.18
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "width": 320,
+    "name": "chapter",
+    "scrollWidth": 320,
+    "height": 1883
+  },
+  {
+    "width": 320,
+    "name": "recitation",
+    "scrollWidth": 320,
+    "height": 959
+  },
+  {
+    "width": 320,
+    "name": "isaiah",
+    "scrollWidth": 320,
+    "height": 1384
+  },
+  {
+    "width": 320,
+    "name": "results",
+    "scrollWidth": 320,
+    "height": 5296
+  },
+  {
+    "width": 320,
+    "name": "summary",
+    "scrollWidth": 320,
+    "height": 2876
+  },
+  {
+    "width": 320,
+    "name": "restart",
+    "scrollWidth": 320,
+    "height": 959
+  },
+  {
+    "width": 320,
+    "name": "recitation-reduced-motion",
+    "scrollWidth": 320,
+    "height": 959
+  },
+  {
+    "width": 390,
+    "name": "chapter",
+    "scrollWidth": 390,
+    "height": 1634
+  },
+  {
+    "width": 390,
+    "name": "recitation",
+    "scrollWidth": 390,
+    "height": 935
+  },
+  {
+    "width": 390,
+    "name": "isaiah",
+    "scrollWidth": 390,
+    "height": 1303
+  },
+  {
+    "width": 390,
+    "name": "results",
+    "scrollWidth": 390,
+    "height": 4834
+  },
+  {
+    "width": 390,
+    "name": "summary",
+    "scrollWidth": 390,
+    "height": 2566
+  },
+  {
+    "width": 390,
+    "name": "restart",
+    "scrollWidth": 390,
+    "height": 935
+  },
+  {
+    "width": 390,
+    "name": "recitation-reduced-motion",
+    "scrollWidth": 390,
+    "height": 935
+  },
+  {
+    "width": 1440,
+    "name": "chapter",
+    "scrollWidth": 1440,
+    "height": 1408
+  },
+  {
+    "width": 1440,
+    "name": "recitation",
+    "scrollWidth": 1440,
+    "height": 1000
+  },
+  {
+    "width": 1440,
+    "name": "isaiah",
+    "scrollWidth": 1440,
+    "height": 1233
+  },
+  {
+    "width": 1440,
+    "name": "results",
+    "scrollWidth": 1440,
+    "height": 2661
+  },
+  {
+    "width": 1440,
+    "name": "summary",
+    "scrollWidth": 1440,
+    "height": 2067
+  },
+  {
+    "width": 1440,
+    "name": "restart",
+    "scrollWidth": 1440,
+    "height": 1000
+  },
+  {
+    "width": 1440,
+    "name": "recitation-reduced-motion",
+    "scrollWidth": 1440,
+    "height": 1000
+  }
+]
