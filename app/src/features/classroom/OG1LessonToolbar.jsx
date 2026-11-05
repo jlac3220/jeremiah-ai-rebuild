@@ -1,3 +1,4 @@
+import {BrandFlame} from '../../shared/brand/BrandLogo';
 import {useEffect,useRef,useState} from 'react';
 import {ROUTES} from '../../app/routes';
 import LessonIcon from '../../shared/lesson/LessonIcon';
@@ -17,7 +18,7 @@ export default function OG1LessonToolbar({narration,narrationText,onNavigate,onR
  }
  return <header className="ogp-header ogp-toolbar" ref={root} onKeyDown={keydown}>
   <button type="button" className="ogp-toolbar-back" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}><LessonIcon name="back"/><span>Classroom</span></button>
-  <div className="ogp-toolbar-brand"><span aria-hidden="true">J</span><strong>JEREMIAH<small>THE ONE TRUE GOD</small></strong></div>
+  <div className="ogp-toolbar-brand"><BrandFlame /><strong>JEREMIAH<small>THE ONE TRUE GOD</small></strong></div>
   <div className="ogp-toolbar-actions">
    <button type="button" className="ogp-audio-setting" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn narration off':'Turn narration on'} onClick={narration.toggle}><LessonIcon name={narration.enabled?'sound':'muted'}/><span>Audio {narration.enabled?'on':'off'}</span></button>
    {narration.enabled&&narrationText&&<button type="button" className="ogp-audio-replay" aria-label={narration.loading?'Preparing narration':narration.speaking?'Stop narration':'Replay narration'} disabled={narration.loading} onClick={()=>narration.speaking?narration.stop():narration.speak(narrationText)}><LessonIcon name={narration.speaking?'stop':'replay'}/></button>}

@@ -1,3 +1,4 @@
+import {BrandFlame} from '../../shared/brand/BrandLogo';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ROUTES } from "../../app/routes";
 import {
@@ -240,7 +241,7 @@ export default function BibleSupportPage({ onNavigate }) {
           onClick={() => setShowTranslationPicker(true)}
           aria-label="Choose Bible translation"
         >
-          <strong>Bible</strong>
+          <strong className="br-brand-title"><BrandFlame />Bible</strong>
           <small>
             {activeTranslation.shortName}
             <span> · {activeTranslation.name}</span>

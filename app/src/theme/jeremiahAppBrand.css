@@ -1,0 +1,48 @@
+/* Issue #49: selectively port jeremiah.app branding onto Stage 2.
+   App palette is scoped to navigation screens. Lesson scenes retain their own
+   contrast, narration/assessment states, layouts and single existing toolbar. */
+.brand-surface {
+  --color-blue: #003da5;
+  --color-blue-dark: #002366;
+  --color-accent: #003da5;
+  --color-accent-dark: #002366;
+  --j-blue: #003da5;
+  --j-ink: #142b50;
+  --j-line: #dfe7f2;
+  --brand-gradient: linear-gradient(125deg, #002366, #003da5 72%, #2155b5);
+  --brand-flame-gradient: linear-gradient(100deg, #ffb400, #ff6a00 55%, #e02121);
+  --brand-page-gradient: linear-gradient(180deg, #f8fafc, #f1f5f9 65%, #e9eef4);
+}
+.brand-logo { display: inline-flex; align-items: center; gap: 9px; color: #142b50; flex-shrink: 0; }
+.brand-wordmark { font: 800 1.3rem/1.2 var(--font-body); letter-spacing: -.04em; }
+.brand-flame { display: inline-grid; place-items: center; width: 32px; height: 32px; flex-shrink: 0; vertical-align: middle; }
+.brand-flame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.brand-flame-fallback { display: grid; place-items: center; width: 100%; height: 100%; font: 800 1.1rem/1 var(--font-body); color: currentColor; }
+.brand-skip { position: fixed; top: 12px; left: 12px; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; padding: 0; border-radius: 12px; color: #002366; background: white; z-index: 1000; }
+.brand-skip:focus { clip-path: none; width: auto; height: auto; overflow: visible; padding: 12px 18px; }
+#main-content:focus { outline: none; }
+.brand-surface .ld-page, .brand-surface .br-page { background: var(--brand-page-gradient); }
+.brand-surface .ld-header { border-bottom: 1px solid var(--j-line); padding-bottom: 20px; }
+.brand-surface .ld-hero h1 { color: var(--j-ink); }
+.brand-surface .jh-ignite-hero { background: var(--brand-gradient); }
+.brand-surface .jh-ignite-tag { text-transform: uppercase; }
+.brand-surface .jh-ignite-tag > span { color: #ffca70; }
+.brand-surface .jh-ignite-hero h1 em { color: #ffe0ad; }
+.brand-surface .jh-ignite-start { background: #fff; color: #002366; }
+.brand-surface .jh-ignite-start:hover { background: #fff1da; }
+.brand-surface .jh-ignite-bar > i { background: var(--brand-flame-gradient); }
+.brand-surface .ld-feature { border: 1px solid var(--j-line); box-shadow: 0 12px 34px #142b500a; }
+.brand-surface .ld-progress > span { background: var(--brand-flame-gradient); }
+.brand-surface .app-nav { border-top-color: var(--j-line); }
+.brand-surface .app-nav button { position: relative; min-height: 56px; }
+.brand-surface .app-nav button[aria-current] { color: #003da5; background: #edf3ff; }
+.brand-surface .app-nav button[aria-current]::before { content: ''; position: absolute; top: 0; width: 22px; height: 3px; border-radius: 4px; background: var(--brand-flame-gradient); }
+.brand-surface .app-nav .brand-flame { width: 26px; height: 26px; }
+.brand-home-icon { display: block; width: 26px; height: 26px; object-fit: contain; }
+.br-brand-title { display: flex; align-items: center; gap: 5px; }
+.br-brand-title .brand-flame { width: 24px; height: 24px; }
+/* Replace only the existing lesson monogram; no new header or scene palette. */
+.ogp-toolbar-brand > .brand-flame { background: transparent; border: 0; border-radius: 0; color: #fff; }
+.ogpilot-top > .brand-logo { color: #fff; font-size: inherit; }
+.ogpilot-top .brand-wordmark { color: inherit; font: 800 1.1rem/1.2 var(--font-body); letter-spacing: -.03em; }
+@media(max-width:380px) { .brand-surface .app-nav-rail { padding-inline: 2px; } }

@@ -1,3 +1,4 @@
+import BrandLogo from '../../shared/brand/BrandLogo';
 import {useState} from 'react';
 import {ROUTES} from '../../app/routes';
 import {getClassroomContentByStandardId} from '../../core/classroom/content/classroomContentRegistry';
@@ -31,7 +32,7 @@ export default function OG1PilotLanding({onNavigate}){
   onNavigate(ROUTES.CLASSROOM_LESSON);
  }
  return <div className="ogpilot-page">
-  <header className="ogpilot-top"><strong><span>J</span> JEREMIAH</strong><span>LESSON EXPERIENCE PILOT</span></header>
+  <header className="ogpilot-top"><BrandLogo /><span>LESSON EXPERIENCE PILOT</span></header>
   <main className="ogpilot-shell">
    <section className="ogpilot-hero">
     <div><span className="ogpilot-eyebrow">INVITATION · HELP SHAPE THE EXPERIENCE</span>

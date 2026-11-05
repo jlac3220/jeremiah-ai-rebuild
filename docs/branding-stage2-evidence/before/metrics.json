@@ -1,0 +1,122 @@
+[
+  {
+    "width": 390,
+    "name": "home",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "classroom",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "progress",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "profile",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "bible-support",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "pilot",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "lesson",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "chapter",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "map",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "name": "exam",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "home",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "classroom",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "progress",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "profile",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "bible-support",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "pilot",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "lesson",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "chapter",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "map",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  },
+  {
+    "width": 1440,
+    "name": "exam",
+    "deviceScaleFactor": 2,
+    "overflow": false
+  }
+]
