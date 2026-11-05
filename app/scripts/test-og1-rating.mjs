@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {rateOG1Lesson} from '../src/core/classroom/og1LessonRating.js';
-import {continueTeaching,saveTeachingDecision} from '../src/core/classroom/teacherLedEngine.js';
+import {continueTeaching,saveTeachingDecision,evaluateTeachingChoice} from '../src/core/classroom/teacherLedEngine.js';
+import og1 from '../src/core/classroom/content/OG_1_LESSON.js';
 import {teachWithJeremiah} from '../server/teacherCore.mjs';
 const content={standardId:'OG.1.LESSON.18',coveredStandards:[{id:'OG.1.1.18'},{id:'OG.1.2.18'}],instructionalMoves:[
  {id:'shema-guide',type:'scenario',standardIds:['OG.1.1.18'],next:{strong:'shema-try',weak:'shema-guide',partial:'shema-guide'}},
@@ -80,5 +81,37 @@ try{
 }finally{
  if(missingModelKey!==undefined)process.env.OPENAI_API_KEY=missingModelKey;
 }
+
+
+const memoryMove=og1.instructionalMoves.find(m=>m.id==='shema-recite');
+assert.ok(memoryMove,'OG.1.1 has a separate recitation moment');
+assert.equal(memoryMove.phase,'Let me try');
+assert.equal(memoryMove.assessmentRole,'memory_recall');
+assert.equal(memoryMove.scripture.length,0,'KJV answer cannot display inside independent recall activity');
+assert.ok(!memoryMove.prompt.includes('Hear, O Israel'),'Memory prompt must not contain its own answer');
+assert.equal(og1.instructionalMoves.find(m=>m.id==='context-challenge').next.strong,'shema-recite');
+assert.equal(og1.instructionalMoves.find(m=>m.id==='shema-recite').next.strong,'shema-try');
+const exactRecall=evaluateTeachingChoice(memoryMove,{text:'HEAR O ISRAEL, the lord our God is ONE Lord!'});
+assert.equal(exactRecall.verdict,'strong','Capitals and punctuation are not recitation errors');
+assert.deepEqual(exactRecall.evidenceObserved,['OG.1.1.18:evidence-1']);
+assert.equal(evaluateTeachingChoice(memoryMove,{text:'The LORD is one'}).verdict,'weak','A paraphrase is not full KJV recall');
+assert.equal(evaluateTeachingChoice(memoryMove,{text:''}).verdict,'weak','Blank recall never earns evidence');
+const actualRow=attempts=>{
+ const row=rateOG1Lesson(og1,{teacherHistory:attempts,experience:{standardEvidence:{'OG.1.1.18':{evidenceIds:['OG.1.1.18:evidence-4']}}}}).standards.find(s=>s.standardId==='OG.1.1.18');
+ return row;
+};
+const recallOnly=actualRow([{moveId:'shema-recite',verdict:'strong',source:'lesson'}]);
+assert.equal(recallOnly.score,null,'Memorization alone cannot become the independent explanation score');
+assert.equal(recallOnly.recitationVerified,true);
+assert.equal(recallOnly.level,1,'Accurate recitation without reasoning does not prove level 3');
+const noRecall=actualRow([{moveId:'shema-try',verdict:'strong',source:'openai'}]);
+assert.equal(noRecall.recitationVerified,false);
+assert.equal(noRecall.level,2,'OG.1.1 cannot earn advanced levels without required recitation');
+const both=actualRow([{moveId:'shema-recite',verdict:'strong',source:'lesson'},{moveId:'shema-try',verdict:'strong',source:'openai'}]);
+assert.equal(both.recitationVerified,true);
+assert.equal(both.level,4,'Both independent reasoning and recitation support the full rubric');
+const incorrectRecall=actualRow([{moveId:'shema-recite',verdict:'weak',source:'lesson'},{moveId:'shema-try',verdict:'strong',source:'openai'}]);
+assert.equal(incorrectRecall.recitationVerified,false);
+assert.equal(incorrectRecall.level,2);
 
 console.log('PASS OG.1 open progression + per-standard evidence ratings 1–4.');
