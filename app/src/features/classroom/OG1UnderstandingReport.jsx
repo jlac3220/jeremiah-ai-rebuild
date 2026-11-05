@@ -1,7 +1,7 @@
 import './OG1UnderstandingReport.css';
 
 // Presentation only: the rating and evidence are supplied by the unchanged engine.
-export default function OG1UnderstandingReport({rating}) {
+export default function OG1UnderstandingReport({rating,actions}) {
  return <div className="ogp-depth-report">
   <header className="ogp-report-overview">
    <span className="ogp-understanding-eyebrow">YOUR LEARNING · OG.1</span>
@@ -10,6 +10,7 @@ export default function OG1UnderstandingReport({rating}) {
    <p>Weighted performance: {rating.score===null?'Not assessed':rating.score+'%'} · Evidence coverage: {rating.coverage}%</p>
    <p>{rating.meaning}</p><p>{rating.note}</p>
   </header>
+  {actions}
   <ol className="ogp-depth-report-list">
    {rating.standards.map(item=><li className="ogp-standard-report" key={item.standardId}>
     <div className="ogp-standard-result"><strong>{item.standardId}</strong><span>Level {item.level} · {item.label}</span><small>Weighted performance: {item.score===null?'Not assessed':item.score+'%'} · Evidence coverage: {item.coverage}%</small></div>
