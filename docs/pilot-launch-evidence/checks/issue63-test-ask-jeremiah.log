@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:ask-jeremiah
+> node scripts/test-ask-jeremiah.mjs
+
+PASS: Ask Jeremiah uses the approved curriculum dynamically, keeps refusals generic, rejects unrelated topics, and constrains sources.

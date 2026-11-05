@@ -63,5 +63,8 @@ jobs:
       - name: Verify Vercel serverless pilot contract
         run: npm run test:vercel
 
+      - name: Verify private pilot service gates
+        run: npm run test:pilot-services
+
       - name: Build app
         run: npm run build

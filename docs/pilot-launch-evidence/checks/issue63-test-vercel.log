@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:vercel
+> node scripts/test-vercel-pilot.mjs
+
+PASS Vercel: serverless endpoints, parsed request bodies, private Blob persistence, duplicate-safe feedback.

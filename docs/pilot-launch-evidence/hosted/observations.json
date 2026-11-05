@@ -1,0 +1,38 @@
+{
+  "base": "https://jeremiah-ai-rebuild.vercel.app",
+  "simulatedServices": false,
+  "seeded": false,
+  "physicalPhone": false,
+  "observations": [
+    {
+      "width": 390,
+      "api": [
+        {
+          "path": "/api/jeremiah/narration",
+          "status": 502
+        },
+        {
+          "path": "/api/jeremiah/ask",
+          "status": 503
+        }
+      ],
+      "verifiedFullPilot": false,
+      "reason": "live_service_failure"
+    },
+    {
+      "width": 1440,
+      "api": [
+        {
+          "path": "/api/jeremiah/narration",
+          "status": 502
+        },
+        {
+          "path": "/api/jeremiah/ask",
+          "status": 503
+        }
+      ],
+      "verifiedFullPilot": false,
+      "reason": "live_service_failure"
+    }
+  ]
+}

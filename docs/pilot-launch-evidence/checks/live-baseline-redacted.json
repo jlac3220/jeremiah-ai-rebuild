@@ -1,0 +1,19 @@
+{
+  "host": "https://jeremiah-ai-rebuild.vercel.app",
+  "liveFeedbackStatus": 503,
+  "askStatus": 503,
+  "semanticTeaching": {
+    "httpStatus": 200,
+    "source": "service-unavailable",
+    "verdict": "unscored"
+  },
+  "narrationStatus": 502,
+  "safeDiagnosis": {
+    "upstreamStatus": 401,
+    "classification": "incorrect_api_key"
+  },
+  "keyUpdateReportedByOwner": true,
+  "exactRedeploymentWebsiteNotYetIdentified": true,
+  "publicPilotReady": false,
+  "credentialsOrProviderBodiesRetainedInEvidence": false
+}

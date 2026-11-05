@@ -1,3 +1,4 @@
+import {configuredModel,openAIRequest,OpenAIServiceError,logResponseUsage} from './openaiService.mjs';
 import { classroomContentRegistry } from "../src/core/classroom/content/classroomContentRegistry.js";
 
 import { evaluateTeachingChoice } from "../src/core/classroom/teacherLedEngine.js";
@@ -180,7 +181,7 @@ export async function teachWithJeremiah({
   moveId,
   learnerResponse,
   learnerState = {},
-}) {
+}, {fetcher=fetch}={}) {
   const content = standards[standardId];
   if (!content) throw new Error("Unknown Jeremiah standard.");
 
@@ -205,10 +206,11 @@ export async function teachWithJeremiah({
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return fallbackDecision(move, learnerResponse, "OPENAI_API_KEY missing", content);
 
+  try {
   const isDeepMove = ["free_response", "mastery_response"].includes(move.type);
   const model = isDeepMove
-    ? process.env.JEREMIAH_OPENAI_MODEL_DEEP || "gpt-5.6-sol"
-    : process.env.JEREMIAH_OPENAI_MODEL_FAST || "gpt-5.6-luna";
+    ? configuredModel('deep')
+    : configuredModel('fast');
 
   const developerPrompt = [
     "You are Jeremiah, the adaptive teacher inside Jeremiah.app.",
@@ -260,7 +262,7 @@ export async function teachWithJeremiah({
     },
   };
 
-  const apiResponse = await fetch("https://api.openai.com/v1/responses", {
+  const apiResponse = await openAIRequest("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -291,19 +293,10 @@ export async function teachWithJeremiah({
         },
       },
     }),
-  });
-
-  if (!apiResponse.ok) {
-    const details = await apiResponse.text();
-    return fallbackDecision(
-      move,
-      learnerResponse,
-      `OpenAI ${apiResponse.status}: ${details.slice(0, 240)}`,
-      content
-    );
-  }
+  },{service:'teach',fetcher});
 
   const responseJson = await apiResponse.json();
+  logResponseUsage('teach',responseJson);
   const outputText = extractOutputText(responseJson);
 
   try {
@@ -325,4 +318,5 @@ export async function teachWithJeremiah({
   } catch {
     return fallbackDecision(move, learnerResponse, "Structured output parse failed", content);
   }
+  } catch(error) { return fallbackDecision(move,learnerResponse,error instanceof OpenAIServiceError||error?.code==='pricing_not_configured'?error.code:'assessment_unavailable',content); }
 }

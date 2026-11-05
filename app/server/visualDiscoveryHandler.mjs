@@ -1,8 +1,9 @@
+import {withPilotService} from './pilotSecurity.mjs';
 import {readJsonBody,sendJson} from './httpUtils.mjs';
 import {discoverLessonVisuals} from './visualDiscovery.mjs';
 
 // Only lesson metadata reaches external search. User chats and identities do not.
-export async function handleVisualDiscovery(req,res) {
+async function handleVisualDiscoveryUnchecked(req,res) {
  if(req.method!=='POST'){sendJson(res,405,{error:'Method not allowed'});return;}
  try{
   const body=await readJsonBody(req,4000);
@@ -18,3 +19,5 @@ export async function handleVisualDiscovery(req,res) {
   sendJson(res,error?.status||503,{error:'Visual discovery temporarily unavailable'});
  }
 }
+
+export async function handleVisualDiscovery(req,res){return withPilotService(req,res,'visuals',()=>handleVisualDiscoveryUnchecked(req,res));}

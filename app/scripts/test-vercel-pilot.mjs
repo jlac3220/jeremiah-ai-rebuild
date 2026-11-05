@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {BlobNotFoundError,BlobAccessError} from '@vercel/blob';
 import {readFileSync} from 'node:fs';
 import {readJsonBody} from '../server/httpUtils.mjs';
 import {recordPrivateBlobFeedback} from '../server/pilotFeedbackHandler.mjs';
@@ -24,6 +25,7 @@ for(const [file,fn] of endpoints){
  assert.ok(entry.includes('export default async function handler'),file+' must deploy as a Vercel Node Function');
  assert.ok(entry.includes(fn+'(req, res)'),file+' must dispatch the existing API handler');
 }
+assert.equal(await readJsonBody({body:null},200),null,'Preparsed JSON null must not wait on an already-consumed serverless stream');
 const parsed=await readJsonBody({body:{hello:'Vercel',numbers:[1,2]}},200);
 assert.equal(parsed.hello,'Vercel');
 await assert.rejects(readJsonBody({body:{large:'x'.repeat(200)}},50),/too large/i);
@@ -36,7 +38,7 @@ const stored=new Map();
 const sdk={
  async head(name){
   if(stored.has(name))return {pathname:name};
-  const error=new Error('Not found');error.name='BlobNotFoundError';throw error;
+  throw new BlobNotFoundError();
  },
  async put(name,data,options){
   assert.equal(options.access,'private');
@@ -46,11 +48,15 @@ const sdk={
   stored.set(name,JSON.parse(data));
  }
 };
+assert.equal(new BlobNotFoundError().name,'Error','Use the real installed SDK error contract, not a fake name');
 const first=await recordPrivateBlobFeedback(sample,sdk);
 const again=await recordPrivateBlobFeedback(sample,sdk);
 assert.equal(first.duplicate,false);
 assert.equal(again.duplicate,true);
 assert.equal(stored.size,1);
+await assert.rejects(recordPrivateBlobFeedback(sample,{async head(){throw new BlobAccessError();}}),BlobAccessError,'Authorization failure must not be mistaken for a missing record');
+const concurrent=await Promise.all(Array.from({length:12},()=>recordPrivateBlobFeedback({...sample,submissionId:'concurrentpilot000000000001'},sdk)));
+assert.equal(concurrent.filter(x=>!x.duplicate).length,1);assert.equal(stored.size,2);
 const value=[...stored.values()][0];
 assert.equal(value.overall,4);
 assert.equal(value.lesson,'OG.1.LESSON.18');

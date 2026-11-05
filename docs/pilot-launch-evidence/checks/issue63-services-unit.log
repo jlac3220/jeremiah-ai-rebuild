@@ -1,0 +1,5 @@
+
+> app@0.0.0 test:pilot-services
+> node scripts/test-pilot-service-gates.mjs
+
+PASS pilot gates: owner/server authentication, signed sessions, closed/fail-closed access, private reporting, conservative pricing, safe provider retries/errors and explicitly unscored outages.

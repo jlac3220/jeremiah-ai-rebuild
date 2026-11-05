@@ -42,7 +42,8 @@
     "test:pilot": "node scripts/test-pilot-feedback.mjs",
     "pilot:report": "node scripts/report-pilot-feedback.mjs",
     "pilot:report:vercel": "node scripts/report-vercel-pilot-feedback.mjs",
-    "test:vercel": "node scripts/test-vercel-pilot.mjs"
+    "test:vercel": "node scripts/test-vercel-pilot.mjs",
+    "test:pilot-services": "node scripts/test-pilot-service-gates.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

@@ -1,5 +1,5 @@
 import BrandLogo from '../../shared/brand/BrandLogo';
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import {ROUTES} from '../../app/routes';
 import {getClassroomContentByStandardId} from '../../core/classroom/content/classroomContentRegistry';
 import {loadLearningState,clearLearningState} from '../../core/classroom/learningEngine';
@@ -11,6 +11,13 @@ const PILOT_STANDARD='OG.1.LESSON.18';
 
 export default function OG1PilotLanding({onNavigate}){
  const [consent,setConsent]=useState(false);
+ const [access,setAccess]=useState(null),[accessUnavailable,setAccessUnavailable]=useState(false),[invite,setInvite]=useState(''),[accessError,setAccessError]=useState(''),[unlocking,setUnlocking]=useState(false);
+ useEffect(()=>{const controller=new AbortController();fetch('/api/pilot/access',{signal:controller.signal}).then(r=>r.ok?r.json():null).then(value=>{if(value&&['closed','invite','verify','local'].includes(value.mode)&&typeof value.authenticated==='boolean')setAccess(value);else setAccessUnavailable(true)}).catch(()=>{if(!controller.signal.aborted)setAccessUnavailable(true)});return()=>controller.abort();},[]);
+ const needsInvite=access?.mode==='invite'&&!access.authenticated;
+ const localPreview=['localhost','127.0.0.1'].includes(window.location.hostname);
+ const closed=(!access&&!localPreview)||access?.mode==='closed'||(access?.mode==='verify'&&!access.authenticated);
+ async function unlock(event){event.preventDefault();if(!consent||unlocking)return;setUnlocking(true);setAccessError('');try{const r=await fetch('/api/pilot/access',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:invite,adultConsent:consent})});const data=await r.json();if(!r.ok||!data.accepted)throw new Error(data.error||'Invitation unavailable.');setInvite('');setAccess(old=>({...old,authenticated:true}));}catch(e){setAccessError(e.message||'Please retry your invitation.');}finally{setUnlocking(false);}}
+
  const [progress,setProgress]=useState(()=>{
   const content=getClassroomContentByStandardId(PILOT_STANDARD);
   return content?loadLearningState(content,'direct'):null;
@@ -19,7 +26,7 @@ export default function OG1PilotLanding({onNavigate}){
  const started=Boolean(progress?.completedMoveIds?.length||Object.keys(progress?.attemptsByMove||{}).length);
  const finished=Boolean(progress?.milestones?.complete||progress?.currentMoveId==='complete');
  function begin(fresh=false){
-  if(!consent)return;
+  if(!consent||closed||needsInvite)return;
   const content=getClassroomContentByStandardId(PILOT_STANDARD);
   if(!content)return;
   if(fresh){clearLearningState(content,'direct');setProgress(loadLearningState(content,'direct'));}
@@ -45,15 +52,17 @@ export default function OG1PilotLanding({onNavigate}){
    <section className="ogpilot-start" aria-labelledby="ogpilot-start-title">
     <div><span className="ogpilot-eyebrow">HOW IT WORKS</span><h2 id="ogpilot-start-title">Your experience matters.</h2><p>No account is required. Your lesson progress stays in this browser; if you return using the same browser, you can continue. The survey never sends your answers or exam score with your feedback.</p>
      <label className="ogpilot-consent"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>I am 18 or older and understand this is a pilot lesson. My written lesson answers will be processed by Jeremiah's teaching service; submitting feedback is optional.</span></label>
+     {closed&&<p role="status">{!access?(accessUnavailable?'Pilot access is temporarily unavailable. Please retry later.':'Checking private pilot access…'):'The pilot is closed while we verify its services. Please wait for your invitation.'}</p>}
+     {needsInvite&&<form onSubmit={unlock}><label>Private invitation code<input type="password" aria-label="Private invitation code" autoComplete="off" value={invite} onChange={e=>setInvite(e.target.value)} style={{display:'block',width:'100%',maxWidth:360,minHeight:44,fontSize:16,margin:'8px 0'}}/></label><button className="ogpilot-secondary" disabled={!consent||!invite||unlocking}>{unlocking?'Checking invitation…':'Unlock my invitation'}</button>{accessError&&<p role="alert">{accessError}</p>}</form>}
      <div className="ogpilot-actions">
-      <button type="button" className="ogpilot-primary" disabled={!consent} onClick={()=>begin(false)}>{finished?'Revisit the lesson':started?'Continue my lesson':'Start the lesson'} <span aria-hidden="true">→</span></button>
+      <button type="button" className="ogpilot-primary" disabled={!consent||closed||needsInvite} onClick={()=>begin(false)}>{finished?'Revisit the lesson':started?'Continue my lesson':'Start the lesson'} <span aria-hidden="true">→</span></button>
       {started&&<button type="button" className="ogpilot-secondary" onClick={()=>setShowReset(true)}>Start fresh</button>}
      </div>
      {showReset&&<div className="ogpilot-confirm" role="group" aria-label="Confirm restart"><p>Start from the beginning on this browser? Your existing local progress for this lesson will be cleared.</p><button type="button" disabled={!consent} onClick={()=>{setShowReset(false);begin(true)}}>Yes, start fresh</button><button type="button" onClick={()=>setShowReset(false)}>Cancel</button></div>}
     </div>
     <aside className="ogpilot-feedback-invite"><span className="ogpilot-eyebrow">YOUR VOICE SHAPES THE NEXT VERSION</span><h3>What should Jeremiah do better?</h3><p>After the lesson, evaluate teaching clarity, pacing, visual design, navigation, narrator, activities, and more. If you cannot finish, you can still tell us why.</p><button type="button" onClick={()=>onNavigate(ROUTES.PILOT_FEEDBACK)}>Share feedback without finishing ↗</button></aside>
    </section>
-   <footer className="ogpilot-footnote">Pilot access is intended for invited adult testers. Please avoid including names or other identifying information in free-text feedback.</footer>
+   <footer className="ogpilot-footnote">{access?.version&&access.version!=='development'?'Pilot edition '+access.version+' · ':''}Pilot access is intended for invited adult testers. Please avoid including names or other identifying information in free-text feedback.</footer>
   </main>
  </div>;
 }

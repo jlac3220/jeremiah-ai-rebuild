@@ -1,0 +1,3 @@
+PASS: classroom visuals, learning screens and teaching progression, curriculum, assessments/scoring/progress/history, narration manifest, survey schema/UI, imagery and Vercel config match PR #62.
+New source UI changes only the landing access/edition controls.
+PASS: lint-reported files match PR #62 byte-for-byte (11 baseline errors, 6 warnings).

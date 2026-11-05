@@ -23,10 +23,12 @@ try{raw=await readFile(file,'utf8');}catch(e){
  if(e.code==='ENOENT'){console.log('No pilot feedback yet. Expected file:',file);process.exit(0);}
  throw e;
 }
-const entries=raw.split('\n').filter(Boolean).flatMap((line,index)=>{
+const parsedEntries=raw.split('\n').filter(Boolean).flatMap((line,index)=>{
  try{return [JSON.parse(line)];}
  catch{console.error('Skipped malformed feedback record at line',index+1);return [];}
 });
+const entries=parsedEntries.filter(entry=>!String(entry.submissionId||'').startsWith('issue63_test_')&&!Object.keys(PILOT_TEXT_FIELDS).some(f=>String(entry[f]||'').startsWith('[ISSUE63 TEST]')));
+console.log('Excluded marked service-verification records:',parsedEntries.length-entries.length);
 console.log('\nJEREMIAH · OG.1 PILOT REPORT');
 console.log('Responses:',entries.length);
 console.log('Completed lesson:',entries.filter(e=>e.completed).length,'· Partial experience:',entries.filter(e=>!e.completed).length);

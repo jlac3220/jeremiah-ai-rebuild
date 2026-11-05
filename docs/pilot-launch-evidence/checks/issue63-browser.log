@@ -1,0 +1,1 @@
+PASS independent Chromium contexts 390/1440: closed-gate enforcement, real local survey receipt/retry, private owner report/CSV, no raw grades/answers, no overflow. Hosted private Blob and real OpenAI remain separate required gates.

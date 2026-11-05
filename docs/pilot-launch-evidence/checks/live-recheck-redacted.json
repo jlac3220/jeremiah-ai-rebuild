@@ -1,0 +1,28 @@
+[
+  {
+    "service": "ask",
+    "status": 503,
+    "contentType": "application/json; charset=utf-8",
+    "requestId": "sfo1::iad1::c8cc8-1793908747941-ac0f141452fa",
+    "bytes": 134,
+    "authenticationFailure": false
+  },
+  {
+    "service": "teach",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "requestId": "sfo1::iad1::mn5ll-1793908747762-ac66af856345",
+    "bytes": 929,
+    "source": "service-unavailable",
+    "verdict": "unscored",
+    "authenticationFailure": true
+  },
+  {
+    "service": "narration",
+    "status": 502,
+    "contentType": "application/json; charset=utf-8",
+    "requestId": "cle1::iad1::9nqr2-1793908747619-8c20515db84d",
+    "bytes": 76,
+    "authenticationFailure": false
+  }
+]

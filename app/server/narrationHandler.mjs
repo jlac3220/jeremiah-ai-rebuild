@@ -1,3 +1,5 @@
+import {withPilotService,pilotEnforced} from './pilotSecurity.mjs';
+import {openAIRequest} from './openaiService.mjs';
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -68,6 +70,7 @@ const maxMemoryEntries = 100;
 const memory = new Map();
 
 function replyJson(res, status, error) {
+  if(status===503||status===429)res.setHeader("Retry-After","60");
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
@@ -75,6 +78,8 @@ function replyJson(res, status, error) {
   });
   res.end(JSON.stringify({ error }));
 }
+
+const isMp3=bytes=>bytes.length>1000&&((bytes[0]===73&&bytes[1]===68&&bytes[2]===51)||(bytes[0]===255&&(bytes[1]&224)===224));
 
 async function getAudio(text, voice = NARRATOR.voice) {
   const key = createHash("sha256").update(
@@ -87,8 +92,7 @@ async function getAudio(text, voice = NARRATOR.voice) {
       const filename = path.join(cacheDir, key + ".mp3");
       try {
         const saved = await readFile(filename);
-        memory.set(key, saved);
-        return saved;
+        if(isMp3(saved)){memory.set(key,saved);return saved;}
       } catch (error) {
         if (error.code !== "ENOENT") throw error;
       }
@@ -100,16 +104,16 @@ async function getAudio(text, voice = NARRATOR.voice) {
       if(process.env.VERCEL==='1' && (process.env.BLOB_READ_WRITE_TOKEN||process.env.VERCEL_OIDC_TOKEN)){
         try {
           privateBlob=await import('@vercel/blob');
-          const saved=await privateBlob.get(audioPath,{access:'private'});
+          const saved=await privateBlob.get(audioPath,{access:'private',abortSignal:AbortSignal.timeout(4000)});
           if(saved?.stream) {
             const bytes=Buffer.from(await new Response(saved.stream).arrayBuffer());
-            if(bytes.length) {
+            if(isMp3(bytes)) {
               memory.set(key,bytes);
               return bytes;
             }
           }
         } catch(error) {
-          console.warn('Jeremiah narration cache read skipped:',error?.message||error);
+          console.warn(JSON.stringify({event:'narration_cache_unavailable'}));
         }
       }
 
@@ -120,7 +124,7 @@ async function getAudio(text, voice = NARRATOR.voice) {
         throw error;
       }
 
-      const upstream = await fetch("https://api.openai.com/v1/audio/speech", {
+      const upstream = await openAIRequest("https://api.openai.com/v1/audio/speech", {
         method: "POST",
         headers: {
           Authorization: "Bearer " + apiKey,
@@ -135,7 +139,7 @@ async function getAudio(text, voice = NARRATOR.voice) {
           response_format: "mp3",
         }),
         signal: AbortSignal.timeout(45000),
-      });
+      },{service:'narration'});
 
       if (!upstream.ok) {
         const error = new Error("Voice service unavailable. Check the OpenAI API key and account.");
@@ -143,7 +147,7 @@ async function getAudio(text, voice = NARRATOR.voice) {
         throw error;
       }
       const bytes = Buffer.from(await upstream.arrayBuffer());
-      if (!bytes.length || bytes.length > 10_000_000) {
+      if (!isMp3(bytes) || bytes.length > 10_000_000 || !upstream.headers.get("content-type")?.includes("audio/mpeg")) {
         const error = new Error("Voice service returned invalid audio.");
         error.statusCode = 502;
         throw error;
@@ -172,7 +176,7 @@ async function getAudio(text, voice = NARRATOR.voice) {
   return { bytes: await pending.get(key), key };
 }
 
-export async function handleNarrationApi(req, res) {
+async function handleNarrationApiUnchecked(req, res) {
   if (req.method !== "GET") {
     replyJson(res, 405, "Method not allowed");
     return;
@@ -180,6 +184,7 @@ export async function handleNarrationApi(req, res) {
   const url = new URL(req.url || "/", "http://" + (req.headers.host || "localhost"));
   const text = url.searchParams.get("text") || "";
   const auditionVoice = url.searchParams.get("audition");
+  if(pilotEnforced()&&auditionVoice!==null&&auditionVoice!==NARRATOR.voice){replyJson(res,400,"The pilot uses Jeremiah’s approved narrator.");return;}
   // Protect the voice selection: non-default voices are available ONLY for
   // this single public-domain audition sentence, never arbitrary input.
   if (auditionVoice !== null && (!AUDITION_VOICES.has(auditionVoice) || text !== AUDITION_TEXT)) {
@@ -195,14 +200,17 @@ export async function handleNarrationApi(req, res) {
     // A single cached MP3 is sent to every device. Browsers do not synthesize it.
     res.writeHead(200, {
       "Content-Type": "audio/mpeg",
+      "X-Jeremiah-Narrator": NARRATOR.voice,
       "Content-Length": bytes.length,
-      "Cache-Control": "public, max-age=86400",
+      "Cache-Control": "private, max-age=86400",
       ETag: '"' + key + '"',
       "X-Content-Type-Options": "nosniff",
     });
     res.end(bytes);
   } catch (error) {
-    console.error("Jeremiah narration:", error?.message || error);
-    replyJson(res, error?.statusCode || 502, error?.message || "Narration unavailable.");
+    console.error(JSON.stringify({event:"narration_unavailable",category:error?.code||"service_unavailable"}));
+    replyJson(res, error?.statusCode || 503, "Narration is temporarily unavailable. You can keep reading and retry shortly.");
   }
 }
+
+export async function handleNarrationApi(req,res){return withPilotService(req,res,'narration',()=>handleNarrationApiUnchecked(req,res));}
