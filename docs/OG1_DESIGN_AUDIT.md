@@ -8,6 +8,10 @@
 
 **Status:** Recommendations for review only. No redesign implemented.
 
+**Tracking:** [GitHub issue #41](https://github.com/jlac3220/jeremiah-ai-rebuild/issues/41).
+This report addresses its audit-only assignment. The feature branch was rechecked
+against GitHub for that issue and still points to the revision above.
+
 ## Executive assessment
 
 Jeremiah already has the ingredients of an exceptional Bible-learning product:
@@ -89,6 +93,13 @@ rendered a broken-frame state, and the full-context Bible request returned
 local failure experience, not that the production services are broken. No Vercel
 preview URL, live production screen, screen reader, physical mobile keyboard,
 or physical iOS/Android audio behavior was inspected.
+
+The issue's supplied Vercel preview was attempted with a read-only HTTPS request;
+the environment proxy denied the connection (CONNECT 403), so the running local
+build remained the visual-review source. Browser: **Chromium 155.0.8059.79**,
+headless, device scale factor 1, installed Playwright, local production Node
+server, Node 24.22.1 / npm 11.9.0. Light reading and dark narrative surfaces were
+both inspected; these are not claims about a user-selectable dark-mode theme.
 
 ## What is already excellent—and should survive
 
@@ -207,6 +218,19 @@ conditions; do not substitute invented passage text.
 | Devotion | Returning to 6:4–5 gives the lesson purpose beyond a debate. The observed application scene is predominantly text/panel graphics. | A later approved transfer design could use credible modern care/worship/community imagery. Do not add scenarios, personal disclosures or judgments about sincerity without instructional approval. |
 | Exam → report → synthesis | Evidence/recognition distinctions are valuable; the flow feels like several separate endings, with dense review between destinations. | Give each state one job: concise result and next step; expandable evidence report; readable closing; then optional survey. Preserve all records, scoring and review. |
 | Home / Ask | Home has a clear learning invitation; Ask's quiet conversational canvas is suitably different from the cinematic lesson. | Share wordmark, action color, icons and type roles. Do not force chat to look like a biblical scene or keep Home's multicolored tile palette as the default lesson language. |
+
+## Gap matrix against the five Blueprint learning tasks
+
+This compares the inspected UI with the draft direction, not with newly approved
+teaching requirements. It does not change instruction or scoring.
+
+| Standard / Blueprint task | Existing UI and strength | Experiential gap | Minimal design recommendation / boundary |
+| --- | --- | --- | --- |
+| OG.1.1.18 · Explain the confession | Specific Moses encounter, phrase/Hebrew inspector, contextual reasoning, separate KJV recall, teach-back workspace | Repeated opening/Shema framing; reasoning task mislocated; support competes with input | Correct location and hierarchy; retain independent recall and all questions. Reordering teaching beats needs instructional approval. |
+| OG.1.2.18 · Construct the evidence | Before/beside/after sequence and guided matching | Fixed manuscript fallback conflicts with active reference; statements feel sequential rather than cumulative | Bind fallback to the active passage and make existing evidence relationships visible. Additional draft memory tasks are not authorized by this audit. |
+| OG.1.3.18 · Trace the argument | Moses→Jesus→Paul thumbnails, quotation and context links | Repeated art and next/reveal rhythm; context is dispersed | Retain a stable passage trail and intentional scene focus. Do not add/remove epistles or alter the transfer prompt. |
+| OG.1.4.18 · Represent and evaluate fairly | Shared monotheistic premise, equal comparison cards, actual passage questions | Investigation, comparison and summary repeat framing; prayer-challenge naming also lacks chapter metadata | Preserve parity and context in an organized comparison workspace. New claims, rewritten questions or altered progression require approval. |
+| OG.1.5.18 · Apply with integrity | Return to 6:4–5 and devotion consequences gives the lesson purpose | Primarily text/graphic panels; ending repeats earlier relationships and has weak contrast | Repair contrast and compose the ending deliberately. Modern scenarios require instructional approval; never add moral cases or grade sincerity as design cleanup. |
 
 ## Proposed design system — for review, not implementation
 
@@ -341,6 +365,16 @@ layouts, large principal actions, text-based no-audio progress, inline reader
 focus entry/Escape dismissal, and reduced-motion disabling of the tested phrase
 animation. The 390px return target width and summary contrast need correction.
 
+Issue #41 follow-up checks: Previous returned from the witness scene to the
+opening; Next returned to the same witness; restart Cancel preserved that scene;
+confirmed restart returned to the opening, all in an isolated browser profile.
+Opening the restart dialog **did not move focus inside it**. Add explicit dialog
+focus entry, containment, Escape/cancel and focus return while preserving archives.
+A sampled Tab sequence reached restart, narration, replay and the next action
+with solid visible focus outlines after keyboard navigation. This does not
+establish full keyboard accessibility or a working restart focus trap. The inline
+Bible dialog's focus entry/Escape result is a separate, passing probe.
+
 **Required future checks, not claimed passes:** keyboard-only end-to-end use;
 screen-reader headings, reveals, questions and saved-state announcements; focus
 return and trapping for every modal, including restart; 200% text resizing and
@@ -357,13 +391,11 @@ understanding from attendance, sound playback, confidence or tap count.
 
 ## Improvement plan and approval boundaries
 
-| Phase | Bounded work proposed | Impact / cost | Review and exit criteria |
+| Stage | Bounded work proposed | Complexity / risk | Impact and review criteria |
 | --- | --- | --- | --- |
-| 1. Restore trust and readability | D01 contrast, D02 location/completion labels, D06 active-reference fallback, D08 icon consistency | Very high value; mostly S–M | Before/after actual captures of every affected state; no content/scoring/storage changes. Review first, then a narrow implementation PR. |
-| 2. Establish a premium Shema baseline | D03 quiet mobile chrome, D04 action discoverability, D05 audio state, typography/spacing tokens, portrait crop | Highest broad visual impact; M | Phone/desktop/keyboard review of opener → phrase → guided → recall → explanation; preserve questions, independent recall, progress and all prior history. |
-| 3. Improve narrative rhythm | D07/D09/D10 task-first presentation, non-redundant overview and safe chapter review; purposeful transitions | Highest engagement potential; M–L | Storyboard and code-to-approved-Blueprint gap matrix before coding. Any removal/reordering of teaching, support or assessment requires exact instructional approval. |
-| 4. Carry quality through the ending and companion routes | Compact result/report access, progressive review, clear synthesis/survey boundary; shared Home/Ask/pilot identity | High completion/consistency impact; M | Existing ten-item exam, weights, evidence status, draft/receipt behavior and survey schema remain intact; test end flow and error recovery. |
-| 5. Add selective immersion | Verified scene/crop upgrades, evidence continuity motion, optional chapter audio/media polish | Moderate additional value after foundations; M | Compare a small prototype against the existing version with invited learners; reduced-motion/no-audio equivalents and asset rights verified before any approved release. |
+| 1. Small, high-impact refinements | D01 contrast, D02 truthful location, D06 reference-safe fallback, D08 icons, restart dialog focus; quieter controls and nearby report action | S–M; low instructional risk, medium CSS/focus regression risk | Highest immediate quality gain. Narrow PRs with actual before/after captures; unchanged content, scoring, archives and survey. Review mobile/desktop/keyboard states before expanding. |
+| 2. Interaction and scene diversity | D03–D05 shared chrome/audio/actions; D07/D09/D10 task-first workspaces, contents and evidence continuity; coherent typography and progressive result review | M–L; medium interaction/persistence risk, high instructional risk if sequence/support changes | Highest engagement potential. Use gap matrix and storyboard first. Preserve recall, questions, weights and evidence provenance; exact approval for reordered/combined teaching. Establish Shema quality before other chapters and shared Home/Ask/pilot styling. |
+| 3. High-effort immersive polish | Portrait/desktop scene variants, verified modern/historical media, retained-scene motion and narration synchronization, cross-device performance/accessibility polish | L; medium-high asset/license, playback, performance and accessibility risk | Add after the usable baseline is approved. Compare a small prototype with invited learners; verify actual audio, rights, reduced-motion/no-audio equivalence, and exam/report/survey regression. No automatic deployment. |
 
 **Greatest impact per unit of work:** contrast + accurate status first; then a
 quieter header and nearby actions; then task-first composition and continuity.
@@ -433,3 +465,11 @@ include the unavailable-audio banner from this environment. End-flow values are
 synthetic browser-fixture results and must not be interpreted as real learner
 performance. After recommendations are reviewed, any interactive design prototype
 should be separately authorized and kept away from production.
+
+
+Annotated examples for issue #41 (the original screenshot remains unmodified;
+red bounds and explanatory notes are added beside it):
+
+- [Shema controls, audio failure and scene strength](design-audit-evidence/annotated-shema-controls.png)
+- [Reasoning task with incorrect chapter context](design-audit-evidence/annotated-chapter-context.png)
+- [Final-summary contrast and connected ending](design-audit-evidence/annotated-summary-contrast.png)
