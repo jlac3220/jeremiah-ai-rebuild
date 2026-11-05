@@ -11,7 +11,7 @@ const base=process.env.JEREMIAH_REVIEW_URL||'http://127.0.0.1:4184';
    const errors=[];p.on('pageerror',error=>errors.push(error.message));
    await p.route('**/api/**',r=>r.fulfill({status:503,contentType:'application/json',body:'{"error":"Offline review"}'}));
    await p.goto(base+'/#home');
-   await p.getByRole('heading',{name:'Scripture is more than words. Understand the story.'}).waitFor();
+   await p.getByRole('heading',{name:width<=700?'Know the Word.Understand why.':'Scripture is more than words. Understand the story.'}).waitFor();
    assert.equal(await p.getByRole('button',{name:/Begin your lesson|Continue your lesson|Review your lesson/}).count(),1,'Only one direct lesson CTA');
    assert.equal(await p.getByRole('navigation',{name:'Main navigation'}).getByRole('button').count(),6,'Six distinct nav destinations');
    const labels=await p.getByRole('navigation',{name:'Main navigation'}).locator('button svg').count();
