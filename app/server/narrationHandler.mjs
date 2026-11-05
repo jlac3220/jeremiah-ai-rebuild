@@ -139,6 +139,22 @@ async function getAudio(text, voice = NARRATOR.voice) {
       });
 
       if (!upstream.ok) {
+        // Record only the upstream status and standardized error category.
+        // Never log API credentials, request headers, or learner text.
+        let upstreamCode = "";
+        let upstreamType = "";
+        try {
+          const failure = await upstream.json();
+          upstreamCode = typeof failure?.error?.code === "string" ? failure.error.code : "";
+          upstreamType = typeof failure?.error?.type === "string" ? failure.error.type : "";
+        } catch {
+          // Some provider errors are not JSON; the HTTP status is sufficient.
+        }
+        console.error("Jeremiah narration provider failure", {
+          status: upstream.status,
+          code: upstreamCode.slice(0, 100),
+          type: upstreamType.slice(0, 100),
+        });
         const error = new Error("Voice service unavailable. Check the OpenAI API key and account.");
         error.statusCode = 502;
         throw error;
