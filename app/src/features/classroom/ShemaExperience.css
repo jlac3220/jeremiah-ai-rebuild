@@ -550,3 +550,28 @@
 }
 @media(max-width:360px) { .shema-signature-scene{padding-inline:16px;min-height:220px} .ogp-page.ogp-stage2 .shema-signature .shema-signature-teaching{padding:18px 16px} .ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>strong{font-size:1.28rem} }
 @media(prefers-reduced-motion:reduce) { .ogp-page.ogp-stage2 .shema-signature .shema-phrase-feature{animation:none} .ogp-page.ogp-stage2 .shema-signature .shema-phrase-track>button>strong:after{transition:none} }
+
+
+/* A voluntary post-discovery choice: inspect the prophet or Jesus without
+   inventing an extra exam or pushing the default mobile card below its CTA. */
+.shema-signature-establishes-head{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}
+.shema-signature-establishes-head>span{display:block;font:750 .65rem/1.5 var(--font-body);color:#675031}
+.shema-signature-establishes-head>button{padding:5px 0;min-height:30px;border:0;background:transparent;color:#17589c;font:720 .67rem/1.4 var(--font-body);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.shema-signature-establishes-head>button span{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1px solid #a8bfdc;font-size:.84rem;line-height:1}
+.shema-signature-establishes-head>button:focus-visible,.shema-signature-continuity button:focus-visible{outline:2px solid #c18c43;outline-offset:3px}
+.shema-signature-continuity{margin-top:15px;border-top:1px solid #dfe7f0;padding-top:15px;display:grid;gap:8px}
+.shema-signature-continuity [role=group]{display:flex;gap:6px}
+.shema-signature-continuity [role=group] button{border:1px solid #cad9e9;background:#f2f6fb;border-radius:9px;min-height:40px;padding:8px 15px;color:#244c72;font:730 .8rem var(--font-body);cursor:pointer}
+.shema-signature-continuity [role=group] button[aria-pressed=true]{background:#163f74;border-color:#163f74;color:#fff}
+.shema-signature-continuity blockquote{padding:0;border:0;margin:3px 0;font:500 1.08rem/1.43 Georgia,serif;color:#203e59}
+.shema-signature-continuity>span{font:750 .65rem var(--font-body);color:#37669a}
+.shema-signature-continuity>p{font:.85rem/1.5 var(--font-body);color:#3c556d;margin:0}
+.shema-signature-continuity>.shema-signature-source{justify-self:start;border:0;background:none;color:#13519b;font:740 .78rem var(--font-body);cursor:pointer;min-height:38px;padding:8px 0}
+.shema-signature-continuity>small{font:.67rem/1.4 var(--font-body);color:#617990}
+@media(max-width:700px){
+ .shema-signature-establishes-head{flex-wrap:nowrap;align-items:baseline}
+ .shema-signature-establishes-head>span{font-size:.59rem}
+ .shema-signature-establishes-head>button{font-size:.61rem;white-space:nowrap;min-height:25px;padding:2px 0}
+ .shema-signature-establishes-head>button span{width:15px;height:15px}
+ .shema-signature-continuity{gap:7px;margin-top:11px;padding-top:11px}
+}
