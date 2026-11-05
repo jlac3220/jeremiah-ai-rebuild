@@ -1,3 +1,4 @@
+import LessonIcon from '../../shared/lesson/LessonIcon';
 import {useState} from 'react';
 import './OG1StoryClimax.css';
 
@@ -42,7 +43,7 @@ export function OG1IdentityInvestigation({onOpenBible}) {
     <div className="og1-identity-implication">
      <span>WHY IT MATTERS</span>
      <p>{item.connection}</p>
-     <button type="button" onClick={()=>onOpenBible?.(item.reference.split(' · ')[0].split(',')[0])}>Read in Jeremiah’s Bible ↗</button>
+     <button type="button" onClick={()=>onOpenBible?.(item.reference.split(' · ')[0].split(',')[0])}>Read in Jeremiah’s Bible <LessonIcon name="context"/></button>
     </div>
    </section>
    <p className="og1-identity-transition"><strong>Why study this?</strong> What we believe about God affects what we mean when we confess Jesus as Lord and how we understand the Father, Son, and Holy Spirit. But an accurate explanation is not, by itself, wholehearted devotion.</p>
@@ -71,7 +72,7 @@ export function OG1ReturnToShema({onOpenBible}) {
    </section>
   </div>
   <p className="og1-return-connection"><strong>Knowing Him gives direction to devotion.</strong> Verse 4 identifies the LORD to whom Israel belongs. Verse 5 commands love directed to that very LORD—with the whole heart, soul, and might. Accurate understanding is necessary; knowledge alone is not the response.</p>
-  <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:4-5')}>Read both verses together in the Bible ↗</button>
+  <button type="button" onClick={()=>onOpenBible?.('Deuteronomy 6:4-5')}>Read both verses together in the Bible <LessonIcon name="context"/></button>
  </div>;
 }
 
@@ -110,7 +111,7 @@ export function OG1ConsequenceJourney({index,expanded,onReveal,art,onOpenBible})
      <blockquote>{item.quote}</blockquote>
      <small>{item.displayReference} · KJV</small>
      <p>{item.setup}</p>
-     <button type="button" className="og1-consequence-read" onClick={()=>onOpenBible?.(item.displayReference)}>Read in context ↗</button>
+     <button type="button" className="og1-consequence-read" onClick={()=>onOpenBible?.(item.displayReference)}>Read in context <LessonIcon name="context"/></button>
     </div>
    </section>
    {!expanded?<button className="og1-consequence-reveal" type="button" onClick={onReveal}>{item.btn} <span>↗</span></button>
@@ -135,7 +136,7 @@ export function OG1FinalSynthesis({onOpenBible}) {
    {WITNESSES.map((w,i)=><button type="button" onClick={()=>onOpenBible?.(w.reference)} key={w.who}>
     <span>0{i+1} / {w.who}</span>
     <strong>“{w.what}”</strong>
-    <small>{w.reference} ↗</small>
+    <small>{w.reference} <LessonIcon name="context"/></small>
    </button>)}
   </div>
   <div className="og1-synthesis-verdict">

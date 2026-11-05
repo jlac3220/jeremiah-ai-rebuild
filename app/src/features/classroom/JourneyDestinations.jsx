@@ -1,3 +1,4 @@
+import LessonIcon from '../../shared/lesson/LessonIcon';
 import React from 'react';
 import './JourneyDestinations.css';
 import {BIBLICAL_ART,WITNESS_PLACEMENTS,VISUAL_ASSETS} from '../../data/curriculum/visualCatalog';
@@ -43,8 +44,8 @@ export default function JourneyDestinations({options,selected,onSelect,onSpeak,o
     <span className="ogj-guided-reference">{art.reference.toUpperCase()} · KJV</span>
     <p>{stop.commentary}</p>
     <div className="ogj-guided-actions">
-     <button type="button" onClick={()=>onSpeak?.(stop.narration)}>▶ Hear the witness</button>
-     {onOpenBible&&<button type="button" className="ogj-guided-read" onClick={()=>onOpenBible(art.reference)}>Read in Bible ↗</button>}
+     <button type="button" onClick={()=>onSpeak?.(stop.narration)}><LessonIcon name="play"/> Hear the witness</button>
+     {onOpenBible&&<button type="button" className="ogj-guided-read" onClick={()=>onOpenBible(art.reference)}>Read in Bible <LessonIcon name="context"/></button>}
     </div>
    </div>
   </div>
@@ -75,8 +76,8 @@ export default function JourneyDestinations({options,selected,onSelect,onSpeak,o
 
     </div>
     <div className="ogj-reveal-actions">
-     <button type="button" onClick={()=>onSpeak?.(stop.narration)}>▶ Hear Scripture</button>
-     {onOpenBible&&<button type="button" className="ogj-read-link" onClick={()=>onOpenBible(art.reference)}>Read in Bible ↗</button>}
+     <button type="button" onClick={()=>onSpeak?.(stop.narration)}><LessonIcon name="play"/> Hear Scripture</button>
+     {onOpenBible&&<button type="button" className="ogj-read-link" onClick={()=>onOpenBible(art.reference)}>Read in Bible <LessonIcon name="context"/></button>}
     </div>
    </div>}
  </div>;

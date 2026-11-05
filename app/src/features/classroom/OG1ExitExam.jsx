@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import LessonIcon from '../../shared/lesson/LessonIcon';
+import {useRef,useState} from 'react';
 import {updateLearningExperience} from '../../core/classroom/learningEngine';
 import {OG1_EXIT_EXAM_VERSION,OG1_EXIT_QUESTIONS,gradeOG1ExitExam} from '../../data/curriculum/og1ExitExam';
 import './OG1ExitExam.css';
@@ -8,6 +9,7 @@ const letters=['A','B','C','D'];
 
 export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,onSubmitted}) {
  const [index,setIndex]=useState(0);
+ const reviewTitle=useRef(null);
  const currentExam=state.experience?.exitExam?.version===OG1_EXIT_EXAM_VERSION?state.experience.exitExam:{};
  const answers=currentExam.answers||{};
  const latest=currentExam.latest||null;
@@ -59,6 +61,10 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
       <small>BEST SCORE: {currentExam.bestScore??latest.score}% · ATTEMPTS: {currentExam.attempts?.length||1}</small>
      </div>
     </div>
+    <div className="og1-exam-result-actions og1-exam-next-step">
+     <button className="og1-exam-primary" type="button" onClick={onContinue}>View my learning-level report →</button>
+     <button className="og1-exam-secondary" type="button" onClick={()=>{reviewTitle.current?.focus();reviewTitle.current?.scrollIntoView({block:'start'})}}>Review all 10 answers</button>
+    </div>
     <div className="og1-exam-standard-breakdown" aria-label="Results by standard">
      {STANDARD_LABELS.map((label,i)=>{
       const id='OG.1.'+(i+1)+'.18';
@@ -66,7 +72,7 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
       return <div key={id}><span>{String(i+1).padStart(2,'0')} · {label}</span><strong>{correct}/2</strong></div>;
      })}
     </div>
-    <h3 className="og1-exam-review-title">Answer review</h3>
+    <h3 ref={reviewTitle} tabIndex={-1} className="og1-exam-review-title">Answer review</h3>
     <div className="og1-exam-review">
      {OG1_EXIT_QUESTIONS.map((q,i)=>{
       const response=latest.results.find(row=>row.id===q.id);
@@ -78,13 +84,12 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
        <p><span>Your answer:</span> {chosen?.label||'Not answered'}</p>
        {!response?.correct&&<p><span>Correct answer:</span> {correct?.label}</p>}
        <div className="og1-exam-explanation">{q.explanation}</div>
-       <button type="button" onClick={()=>onReadBible?.(q.reference)}>Read in the Bible ↗</button>
+       <button type="button" onClick={()=>onReadBible?.(q.reference)}>Read in the Bible <LessonIcon name="context"/></button>
       </article>;
      })}
     </div>
     <div className="og1-exam-result-actions">
-     <button className="og1-exam-primary" type="button" onClick={onContinue}>View my learning-level report →</button>
-     <button type="button" className="og1-exam-secondary" onClick={retry}>Practice another attempt ↻</button>
+     <button type="button" className="og1-exam-secondary" onClick={retry}><LessonIcon name="replay"/>Practice another attempt</button>
     </div>
    </div>:<div className="og1-exam-content">
     <div className="og1-exam-progress" aria-label={answered+' of ten answers saved'}>
@@ -106,7 +111,7 @@ export default function OG1ExitExam({state,onStateChange,onReadBible,onContinue,
       {question.choices.map((choice,i)=><button type="button" key={choice.id} aria-pressed={answers[question.id]===choice.id}
        onClick={()=>selectAnswer(choice.id)}><span>{letters[i]}</span><strong>{choice.label}</strong><span className="og1-exam-choice-check" aria-hidden="true">{answers[question.id]===choice.id?'✓':'○'}</span></button>)}
      </div>
-     <div className="og1-exam-question-bottom"><button type="button" onClick={()=>onReadBible?.(question.reference)}>Read {question.reference} ↗</button><span>Your selections save automatically.</span></div>
+     <div className="og1-exam-question-bottom"><button type="button" onClick={()=>onReadBible?.(question.reference)}>Read {question.reference} <LessonIcon name="context"/></button><span>Your selections save automatically.</span></div>
     </div>
     <div className="og1-exam-nav">
      <button type="button" className="og1-exam-secondary" disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← Previous</button>
