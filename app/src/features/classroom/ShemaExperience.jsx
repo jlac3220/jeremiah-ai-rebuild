@@ -38,7 +38,7 @@ function ShemaPhraseStudy({sequenceIndex,revealedThrough,onInspect,image,onImage
   event.currentTarget.parentElement.querySelectorAll('button')[next]?.focus();
   onInspect(next);
  }
- return <article className="shema-phrase-story shema-signature" aria-label="Discover the words of the Shema">
+ return <article className="shema-phrase-story shema-signature" data-phrase={index+1} aria-label="Discover the words of the Shema">
   <div className="shema-signature-scene">
    {image?<img className="shema-signature-photo" src={image.src} alt="Moses addresses the gathered people of Israel" style={{objectPosition:image.focal||'50% 38%'}} onError={onImageError} decoding="async"/>:<div className="shema-signature-fallback" aria-hidden="true"/>}
    <div className="shema-signature-scene-shade" aria-hidden="true"/>
