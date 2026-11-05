@@ -440,7 +440,7 @@
 .shema-phrase-teaching>span{color:#5c6db6;font:800 .7rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.1em}
 .shema-phrase-teaching h2{font:650 clamp(1.75rem,3.3vw,2.7rem)/1.14 Georgia,serif;letter-spacing:-.03em;margin:0;color:#1b3247}
 .shema-phrase-teaching p{margin:0;color:#52677b;font:400 1rem/1.7 Inter,system-ui,sans-serif;max-width:410px}
-.shema-phrase-teaching button{min-height:44px;margin-top:10px;padding:10px 17px;border:1px solid #d7dfea;border-radius:11px;color:#344da0;background:#f0f3ff;font:750 .82rem Inter,system-ui,sans-serif;cursor:pointer}
+
 .shema-phrase-footer{padding:13px 26px;margin:0;background:#f8f9fc;border-top:1px solid #e8ebf1;color:#62738a;font-size:.75rem}
 .shema-verse-bridge{padding:clamp(23px,4vw,44px);background:linear-gradient(140deg,#f5f7fc,#eef3f9);border-radius:22px;border:1px solid #dce4ef;color:#20344b}
 .shema-bridge-heading>span{font:800 .7rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;color:#566bb1}
