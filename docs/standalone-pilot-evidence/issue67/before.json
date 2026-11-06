@@ -1,0 +1,50 @@
+{
+  "phase": "before",
+  "realBrowser": true,
+  "providerCredentials": false,
+  "paidRequests": 0,
+  "liveServiceVerification": false,
+  "publicPilotOpened": false,
+  "results": [
+    {
+      "width": 390,
+      "button": "accountOnly=1",
+      "origin": "null",
+      "fetchSite": "same-origin",
+      "reachedCheck": false,
+      "result": {
+        "error": "Same-origin access required."
+      }
+    },
+    {
+      "width": 390,
+      "button": "feedbackOnly=1",
+      "origin": "null",
+      "fetchSite": "same-origin",
+      "reachedCheck": false,
+      "result": {
+        "error": "Same-origin access required."
+      }
+    },
+    {
+      "width": 1440,
+      "button": "accountOnly=1",
+      "origin": "null",
+      "fetchSite": "same-origin",
+      "reachedCheck": false,
+      "result": {
+        "error": "Same-origin access required."
+      }
+    },
+    {
+      "width": 1440,
+      "button": "feedbackOnly=1",
+      "origin": "null",
+      "fetchSite": "same-origin",
+      "reachedCheck": false,
+      "result": {
+        "error": "Same-origin access required."
+      }
+    }
+  ]
+}

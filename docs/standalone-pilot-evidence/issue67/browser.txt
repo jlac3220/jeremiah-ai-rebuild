@@ -1,0 +1,1 @@
+PASS both real setup buttons reach their checks at 390/1440; anonymous and cross-site/null-origin requests remain denied; public access closed. Provider credentials deliberately absent; not live-service proof.

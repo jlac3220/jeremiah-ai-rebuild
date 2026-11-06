@@ -28,7 +28,10 @@ async function readRecords(){
  try{return (await readFile(pilotFeedbackFile(),'utf8')).split('\n').filter(Boolean).map(s=>JSON.parse(s));}catch(e){if(e.code==='ENOENT')return [];throw e;}
 }
 export async function handlePilotReport(req,res){
- res.setHeader('Cache-Control','private, no-store, max-age=0');res.setHeader('X-Robots-Tag','noindex, nofollow');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
+ // no-referrer makes native form POSTs serialize Origin as "null", even
+ // to this same host. Retain the origin for these authenticated actions;
+ // same-origin still suppresses referrers to every external destination.
+ res.setHeader('Cache-Control','private, no-store, max-age=0');res.setHeader('X-Robots-Tag','noindex, nofollow');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');
  res.setHeader('Content-Security-Policy',"default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
  if(!requireOwner(req,res))return;
  if(req.method!=='GET'){sendJson(res,405,{error:'Method not allowed'});return;}
