@@ -6,6 +6,8 @@ import {
 import './OG1PilotSurvey.css';
 
 const DRAFT_KEY='jeremiah-og1-pilot-survey-draft';
+const PROFILE_KEY='jeremiah-og1-participant-profile';
+function readParticipantProfile(){try{return JSON.parse(window.localStorage.getItem(PROFILE_KEY)||'{}');}catch{return {};}}
 const RECEIPT_KEY='jeremiah-og1-pilot-survey-receipt';
 const LABELS=['Very poor','Poor','Okay','Good','Excellent'];
 function makeSubmissionId(){
@@ -59,7 +61,7 @@ export default function OG1PilotSurvey({onDone,completed=true,standalone=false})
   if(!draft.overall){setStep(0);setError('Please rate the overall experience before submitting.');return;}
   setSending(true);setError('');
   try{
-   const response=await fetch('/api/pilot/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...draft,version:OG1_PILOT_SURVEY_VERSION,completed:Boolean(completed)})});
+   const response=await fetch('/api/pilot/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...draft,participantProfile:readParticipantProfile(),version:OG1_PILOT_SURVEY_VERSION,completed:Boolean(completed)})});
    const result=await response.json();
    if(!response.ok||!result.accepted)throw new Error(result.error||'Submission could not be saved');
    const saved={submittedAt:new Date().toISOString(),version:OG1_PILOT_SURVEY_VERSION};
