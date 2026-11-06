@@ -203,7 +203,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  // Reveals inside the Shema scene are voiced only when the student chooses them.
  const narrationText =
   move.id==='learn'&&current?.kind==='read'
-   ? (evidenceIndex===0?OG1_SCENE_NARRATION.opening:OG1_SCENE_NARRATION.witnessCards[evidenceIndex])
+   ? OG1_SCENE_NARRATION.witnessCards[evidenceIndex]
   : current?.kind==='shema-encounter'
    ? OG1_SCENE_NARRATION.opening
   : current?.kind==='witness'
