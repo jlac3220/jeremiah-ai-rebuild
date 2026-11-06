@@ -14,18 +14,20 @@ export function ownerAuthorized(req){
 }
 export function requireOwner(req,res){if(ownerAuthorized(req))return true;res.setHeader('WWW-Authenticate','Basic realm="Jeremiah private pilot report", charset="UTF-8"');sendJson(res,401,{error:'Owner authentication required.'});return false;}
 const signingReady=()=>Boolean(process.env.PILOT_SESSION_SECRET?.length>=32);
-const mode=()=>process.env.PILOT_ACCESS_MODE==='verify'?'verify':process.env.PILOT_ACCESS_MODE==='invite'&&process.env.PILOT_RELEASE_APPROVED==='true'?'invite':'closed';
-const authorized=(req,m,s)=>m!=='closed'&&(ownerAuthorized(req)||(m==='verify'?s?.scope==='verify':s?.scope==='invite'));
+// Link-only access is scoped to the dedicated pilot hostname and requires an explicit release switch.
+const linkMode=(req)=>process.env.PILOT_ACCESS_MODE==='link'&&process.env.PILOT_RELEASE_APPROVED==='true'&&String(req.headers?.host||'').split(':')[0].toLowerCase()==='pilot.jeremiah.app';
+const mode=(req)=>linkMode(req)?'link':process.env.PILOT_ACCESS_MODE==='verify'?'verify':process.env.PILOT_ACCESS_MODE==='invite'&&process.env.PILOT_RELEASE_APPROVED==='true'?'invite':'closed';
+const authorized=(req,m,s)=>m!=='closed'&&(m==='link'?s?.scope==='link':ownerAuthorized(req)||(m==='verify'?s?.scope==='verify':s?.scope==='invite'));
 function signature(value){return createHmac('sha256',process.env.PILOT_SESSION_SECRET).update(value).digest('base64url');}
 export function session(req){
  if(!signingReady())return null;
  const raw=(req.headers?.cookie||'').split(';').map(s=>s.trim()).find(s=>s.startsWith(COOKIE+'='))?.slice(COOKIE.length+1)||'';
  const [value,sig]=raw.split('.');if(!value||!sig||!equal(sig,signature(value)))return null;
- try{const s=JSON.parse(Buffer.from(value,'base64url'));return s.exp>Date.now()&&/^[a-f0-9-]{36}$/.test(s.id)&&['verify','invite'].includes(s.scope)?s:null;}catch{return null;}
+ try{const s=JSON.parse(Buffer.from(value,'base64url'));return s.exp>Date.now()&&/^[a-f0-9-]{36}$/.test(s.id)&&['verify','invite','link'].includes(s.scope)?s:null;}catch{return null;}
 }
 export function issueSession(res,scope){
  if(!signingReady())throw new Error('Session signing unavailable');
- const maxAge=scope==='verify'?7*24*3600:3600;
+ const maxAge=scope==='verify'?7*24*3600:scope==='link'?24*3600:3600;
  const value=Buffer.from(JSON.stringify({id:randomUUID(),scope,...(scope==='invite'?{capability:'og1-evaluation'}:{}),exp:Date.now()+maxAge*1000})).toString('base64url');
  res.setHeader('Set-Cookie',`${COOKIE}=${value}.${signature(value)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${maxAge}`);
 }
@@ -75,7 +77,7 @@ export async function withPilotService(req,res,service,work){
  if(!pilotEnforced())return work();
  if(req.headers?.['sec-fetch-site']==='cross-site'){sendJson(res,403,{error:'Same-origin access required.'});return;}
  const origin=req.headers?.origin;if(origin){try{if(new URL(origin).host!==req.headers.host){sendJson(res,403,{error:'Same-origin access required.'});return;}}catch{sendJson(res,403,{error:'Same-origin access required.'});return;}}
- const m=mode(),s=session(req);
+ const m=mode(req),s=session(req);
  if(!signingReady()||m==='closed'){sendJson(res,503,{error:'The pilot is closed while services are verified.'});return;}
  const allowed=authorized(req,m,s);
  if(!allowed){sendJson(res,401,{error:'An active private pilot invitation is required.'});return;}
@@ -84,13 +86,25 @@ export async function withPilotService(req,res,service,work){
  catch(error){res.setHeader('Retry-After',error.status===429?'600':'60');sendJson(res,error.status===429?429:503,{error:error.status===429?error.message:'Pilot services are temporarily unavailable. Please retry shortly.'});}
 }
 export async function handlePilotAccess(req,res){
- if(req.method==='GET'){sendJson(res,200,{mode:pilotEnforced()?mode():'local',authenticated:!pilotEnforced()||(signingReady()&&Boolean(authorized(req,mode(),session(req)))),version:process.env.VERCEL_GIT_COMMIT_SHA?.slice(0,8)||'development'});return;}
+ if(req.method==='GET'){
+  const m=mode(req);
+  // The pilot-only link issues a signed, anonymous, short-lived browser session.
+  // No admin credentials or invite code are exposed to participants.
+  let s=session(req);
+  if(pilotEnforced()&&m==='link'&&signingReady()&&s?.scope!=='link'){
+    issueSession(res,'link');
+    s=session({headers:{cookie:res.getHeader('Set-Cookie')}});
+  }
+  sendJson(res,200,{mode:pilotEnforced()?m:'local',authenticated:!pilotEnforced()||(signingReady()&&Boolean(authorized(req,m,s))),version:process.env.VERCEL_GIT_COMMIT_SHA?.slice(0,8)||'development'});
+  return;
+ }
  if(req.method!=='POST'){sendJson(res,405,{error:'Method not allowed'});return;}
  const origin=req.headers?.origin;if(req.headers?.['sec-fetch-site']==='cross-site'||(origin&&origin!=='https://'+req.headers?.host&&origin!=='http://'+req.headers?.host)){sendJson(res,403,{error:'Same-origin access required.'});return;}
- if(!signingReady()||mode()==='closed'){sendJson(res,503,{error:'The pilot is not open. Please wait for your invitation.'});return;}
+ if(!signingReady()||mode(req)==='closed'){sendJson(res,503,{error:'The pilot is not open. Please wait for your invitation.'});return;}
  try{
   const body=await readJsonBody(req,2000);await reserveLimits('access',req,{id:'access:'+identity(req)});
-  if(mode()==='verify'){if(!ownerAuthorized(req)){sendJson(res,401,{error:'Private verification access required.'});return;}issueSession(res,'verify');}
+  if(mode(req)==='link'){issueSession(res,'link');}
+  else if(mode(req)==='verify'){if(!ownerAuthorized(req)){sendJson(res,401,{error:'Private verification access required.'});return;}issueSession(res,'verify');}
   else{const code=process.env.PILOT_INVITE_CODE;if(!code||code.length<24||body.adultConsent!==true||typeof body.code!=='string'||!equal(body.code,code)){sendJson(res,401,{error:'Check your invitation and adult consent.'});return;}issueSession(res,'invite');}
   sendJson(res,200,{accepted:true});
  }catch(error){sendJson(res,error.status===429?429:503,{error:'Access is temporarily unavailable. Please retry later.'});}
