@@ -1,4 +1,5 @@
 import BrandLogo from '../../shared/brand/BrandLogo';
+import ogStudy from '../../data/curriculum/og.json';
 import {useEffect,useState} from 'react';
 import {ROUTES} from '../../app/routes';
 import {getClassroomContentByStandardId} from '../../core/classroom/content/classroomContentRegistry';
@@ -8,6 +9,7 @@ import {setClassroomEntryIntent,CLASSROOM_ENTRY_INTENTS} from '../../core/classr
 import './OG1PilotLanding.css';
 
 const PILOT_STANDARD='OG.1.LESSON.18';
+const OG1_DOMAIN=ogStudy.domains.find(domain=>domain.id==='OG.1');
 const PROFILE_KEY='jeremiah-og1-participant-profile';
 const PROFILE_FIELDS=[
  ['age','Age range',[['','Select an answer'],['18-29','18–29'],['30-44','30–44'],['45-59','45–59'],['60-74','60–74'],['75plus','75+'],['prefer_not','Prefer not to answer']]],
@@ -73,11 +75,12 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
   onNavigate(ROUTES.CLASSROOM_LESSON);
  }
  return <div className="ogpilot-page">
-  <header className="ogpilot-top"><BrandLogo /><span>{standalone?'THE ONE TRUE GOD · LESSON PREVIEW':'LESSON EXPERIENCE PILOT'}</span></header>
+  <header className="ogpilot-top"><BrandLogo /><span>{standalone?ogStudy.title.toUpperCase():'LESSON EXPERIENCE PILOT'}</span></header>
   <main className="ogpilot-shell">
    <section className="ogpilot-hero">
     <div>{!standalone&&<span className="ogpilot-eyebrow">INVITATION · HELP SHAPE THE EXPERIENCE</span>}
-     <h1>{standalone?'The One True God.':'Explore the lesson.'}<br/><em>{standalone?'Learn. Reflect. Evaluate.':'Help make it remarkable.'}</em></h1>
+     <h1>{standalone?ogStudy.title:'Explore the lesson.'}{!standalone&&<><br/><em>Help make it remarkable.</em></>}</h1>
+     {standalone&&<p className="ogpilot-domain-subtitle"><strong>OG.1</strong> · {OG1_DOMAIN.title}</p>}
      <p>{standalone?'Discover what Scripture teaches about the one God. First, tell us a little about yourself; then preview the five chapters before entering the lesson.':'Follow the confession of one God from Moses through Isaiah, Jesus, and the apostles. Experience the Scripture, imagery, narration, activities, and assessments—then tell us what worked and what needs to change.'}</p>
      {!standalone&&<div className="ogpilot-meta"><span>One complete lesson</span><span>Five connected chapters</span><span>Optional anonymous feedback</span></div>}
     </div>
