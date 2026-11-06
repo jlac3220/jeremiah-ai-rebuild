@@ -31,7 +31,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
  const needsInvite=access?.mode==='invite'&&!access.authenticated;
  const needsOwner=access?.mode==='verify'&&!access.authenticated;
  const localPreview=['localhost','127.0.0.1'].includes(window.location.hostname);
- const closed=(!access&&!localPreview)||access?.mode==='closed'||(access?.mode==='verify'&&!access.authenticated);
+ const closed=(!access&&!localPreview)||access?.mode==='closed'||needsOwner;
  async function unlock(event){event.preventDefault();if(!consent||unlocking)return;setUnlocking(true);setAccessError('');try{const r=await fetch('/api/pilot/access',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:invite,adultConsent:consent})});const data=await r.json();if(!r.ok||!data.accepted)throw new Error(data.error||'Invitation unavailable.');setInvite('');setAccess(old=>({...old,authenticated:true}));}catch(e){setAccessError(e.message||'Please retry your invitation.');}finally{setUnlocking(false);}}
 
  async function unlockOwner(event){
@@ -87,7 +87,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
     <div>{!standalone&&<><span className="ogpilot-eyebrow">HOW IT WORKS</span><h2 id="ogpilot-start-title">Your experience matters.</h2></>}<p>{standalone?'Your progress stays in this browser. The optional survey never includes your lesson answers or score.':'No account is required. Your lesson progress stays in this browser; if you return using the same browser, you can continue. The survey never sends your answers or exam score with your feedback.'}</p>
      <p className="ogpilot-privacy-note">This pilot uses AI to process written lesson responses. Feedback is optional. Please do not include personal identifying information.</p>
      {needsInvite&&<label className="ogpilot-consent"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>I am 18 or older and agree to participate in this private pilot.</span></label>}
-     {closed&&<p role="status">{!access?(accessUnavailable?'Pilot access is temporarily unavailable. Please retry later.':'Checking private pilot access…'):'The pilot is closed while we verify its services. Please wait for your invitation.'}</p>}
+     {closed&&<p role="status">{!access?(accessUnavailable?'Pilot access is temporarily unavailable. Please retry later.':'Checking private pilot access…'):needsOwner?'Owner sign-in required. Your private verification session has ended. Sign in to continue.':'The pilot is not open for participants yet.'}</p>}
      {needsOwner&&<form className="ogpilot-invite" onSubmit={unlockOwner}>
       <p>Owner verification required to enter this private pilot.</p>
       <label>Owner username<input type="text" autoComplete="username" value={ownerName} onChange={e=>setOwnerName(e.target.value)}/></label>
