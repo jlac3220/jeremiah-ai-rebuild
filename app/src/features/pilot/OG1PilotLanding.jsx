@@ -8,9 +8,20 @@ import {setClassroomEntryIntent,CLASSROOM_ENTRY_INTENTS} from '../../core/classr
 import './OG1PilotLanding.css';
 
 const PILOT_STANDARD='OG.1.LESSON.18';
+const PROFILE_KEY='jeremiah-og1-participant-profile';
+const PROFILE_FIELDS=[
+ ['age','Age range',[['','Select (optional)'],['18-29','18–29'],['30-44','30–44'],['45-59','45–59'],['60-74','60–74'],['75plus','75+'],['prefer_not','Prefer not to answer']]],
+ ['sex','Sex',[['','Select (optional)'],['female','Female'],['male','Male'],['other','Other / self-describe privately'],['prefer_not','Prefer not to answer']]],
+ ['bibleFamiliarity','Bible familiarity',[['','Select (optional)'],['very','Very familiar'],['somewhat','Somewhat familiar'],['little','A little familiar'],['none','Not familiar']]],
+ ['pentecostalExperience','Pentecostal / Apostolic teaching experience',[['','Select (optional)'],['current','Currently attend'],['previous','Previously attended'],['familiar','Familiar, never attended'],['none','Little or no experience']]],
+ ['techComfort','Comfort with technology',[['','Select (optional)'],['very','Very comfortable'],['somewhat','Somewhat comfortable'],['not_very','Not very comfortable']]]
+];
+function savedProfile(){try{const p=JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}');return p&&typeof p==='object'&&!Array.isArray(p)?Object.fromEntries(PROFILE_FIELDS.map(([key,,options])=>[key,options.some(([v])=>v===p[key])?p[key]:''])):{};}catch{return {};}}
+
 
 export default function OG1PilotLanding({onNavigate,standalone=false,lessonState,onStart,onEarlyFeedback}){
  const [consent,setConsent]=useState(false);
+ const [profile,setProfile]=useState(savedProfile);
  const [ownerName,setOwnerName]=useState('owner'),[ownerPassword,setOwnerPassword]=useState('');
  const [access,setAccess]=useState(null),[accessUnavailable,setAccessUnavailable]=useState(false),[invite,setInvite]=useState(''),[accessError,setAccessError]=useState(''),[unlocking,setUnlocking]=useState(false);
  useEffect(()=>{const controller=new AbortController();fetch('/api/pilot/access',{signal:controller.signal}).then(r=>r.ok?r.json():null).then(value=>{if(value&&['closed','invite','verify','local'].includes(value.mode)&&typeof value.authenticated==='boolean')setAccess(value);else setAccessUnavailable(true)}).catch(()=>{if(!controller.signal.aborted)setAccessUnavailable(true)});return()=>controller.abort();},[]);
@@ -22,7 +33,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
 
  async function unlockOwner(event){
   event.preventDefault();
-  if(!consent||unlocking||!ownerName||!ownerPassword)return;
+  if(unlocking||!ownerName||!ownerPassword)return;
   setUnlocking(true);setAccessError('');
   try{
    const auth=btoa(ownerName+':'+ownerPassword);
@@ -44,7 +55,8 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
  const started=Boolean(progress?.completedMoveIds?.length||Object.keys(progress?.attemptsByMove||{}).length);
  const finished=Boolean(progress?.milestones?.complete||progress?.currentMoveId==='complete');
  function begin(fresh=false){
-  if(!consent||closed||needsInvite||needsOwner)return;
+  if(closed||needsInvite||needsOwner||(access?.mode==='invite'&&!consent))return;
+  try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));}catch{/* browser storage may be disabled */}
   if(standalone){onStart?.(fresh);return;}
   const content=getClassroomContentByStandardId(PILOT_STANDARD);
   if(!content)return;
@@ -70,23 +82,35 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
    </section>
    <section className="ogpilot-start" aria-labelledby={standalone?undefined:'ogpilot-start-title'} aria-label={standalone?'Begin OG.1 evaluation':undefined}>
     <div>{!standalone&&<><span className="ogpilot-eyebrow">HOW IT WORKS</span><h2 id="ogpilot-start-title">Your experience matters.</h2></>}<p>{standalone?'Your progress stays in this browser. The optional survey never includes your lesson answers or score.':'No account is required. Your lesson progress stays in this browser; if you return using the same browser, you can continue. The survey never sends your answers or exam score with your feedback.'}</p>
-     <label className="ogpilot-consent"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>I am 18 or older and understand this is a pilot lesson. My written lesson answers will be processed by Jeremiah's teaching service; submitting feedback is optional.</span></label>
+     <p className="ogpilot-privacy-note">This pilot uses AI to process written lesson responses. Feedback is optional. Please do not include personal identifying information.</p>
+     {needsInvite&&<label className="ogpilot-consent"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>I am 18 or older and agree to participate in this private pilot.</span></label>}
      {closed&&<p role="status">{!access?(accessUnavailable?'Pilot access is temporarily unavailable. Please retry later.':'Checking private pilot access…'):'The pilot is closed while we verify its services. Please wait for your invitation.'}</p>}
      {needsOwner&&<form className="ogpilot-invite" onSubmit={unlockOwner}>
       <p>Owner verification required to enter this private pilot.</p>
       <label>Owner username<input type="text" autoComplete="username" value={ownerName} onChange={e=>setOwnerName(e.target.value)}/></label>
       <label>Owner password<input type="password" autoComplete="current-password" value={ownerPassword} onChange={e=>setOwnerPassword(e.target.value)}/></label>
-      <button className="ogpilot-secondary" disabled={!consent||!ownerName||!ownerPassword||unlocking}>{unlocking?'Verifying owner…':'Unlock owner access'}</button>
+      <button className="ogpilot-secondary" disabled={!ownerName||!ownerPassword||unlocking}>{unlocking?'Verifying owner…':'Unlock owner access'}</button>
       {accessError&&<p role="alert">{accessError}</p>}
      </form>}
      {needsInvite&&<form className="ogpilot-invite" onSubmit={unlock}><label>Private invitation code<input type="password" aria-label="Private invitation code" autoComplete="off" value={invite} onChange={e=>setInvite(e.target.value)}/></label><button className="ogpilot-secondary" disabled={!consent||!invite||unlocking}>{unlocking?'Checking invitation…':'Unlock my invitation'}</button>{accessError&&<p role="alert">{accessError}</p>}</form>}
+     <div className="ogpilot-profile" style={{margin:'22px 0',padding:'20px',border:'1px solid #cbd5e1',borderRadius:16}}>
+      <h2 style={{marginTop:0,fontSize:'1.2rem'}}>Tell us a little about yourself</h2>
+      <p style={{fontSize:'.9rem'}}>Five optional questions before you begin. No name or email. Your responses help us understand feedback across different groups.</p>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(210px,1fr))',gap:14}}>
+       {PROFILE_FIELDS.map(([key,label,options])=><label key={key} style={{display:'flex',flexDirection:'column',gap:6,fontWeight:600}}>{label}
+        <select aria-label={label} value={profile[key]||''} onChange={e=>setProfile(old=>({...old,[key]:e.target.value}))} style={{minHeight:44,padding:8,borderRadius:8,border:'1px solid #94a3b8',background:'#fff',color:'#172b4d',fontSize:'.95rem'}}>
+         {options.map(([value,text])=><option key={value} value={value}>{text}</option>)}
+        </select>
+       </label>)}
+      </div>
+     </div>
      <div className="ogpilot-actions">
-      <button type="button" className="ogpilot-primary" disabled={!consent||closed||needsInvite||needsOwner} onClick={()=>begin(false)}>{standalone?(finished?'Revisit OG.1':started?'Continue OG.1':'Start OG.1'):(finished?'Revisit the lesson':started?'Continue my lesson':'Start the lesson')} <span aria-hidden="true">→</span></button>
+      <button type="button" className="ogpilot-primary" disabled={closed||needsInvite||needsOwner||(access?.mode==='invite'&&!consent)} onClick={()=>begin(false)}>{standalone?(finished?'Revisit OG.1':started?'Continue OG.1':'Start OG.1'):(finished?'Revisit the lesson':started?'Continue my lesson':'Start the lesson')} <span aria-hidden="true">→</span></button>
       {started&&<button type="button" className="ogpilot-secondary" onClick={()=>setShowReset(true)}>Start fresh</button>}
      </div>
-     {showReset&&<div className="ogpilot-confirm" role="group" aria-label="Confirm restart"><p>Start from the beginning on this browser? {standalone?'Your previous run and results will be kept in history.':'Your existing local progress for this lesson will be cleared.'}</p><button type="button" disabled={!consent} onClick={()=>{setShowReset(false);begin(true)}}>Yes, start fresh</button><button type="button" onClick={()=>setShowReset(false)}>Cancel</button></div>}
+     {showReset&&<div className="ogpilot-confirm" role="group" aria-label="Confirm restart"><p>Start from the beginning on this browser? {standalone?'Your previous run and results will be kept in history.':'Your existing local progress for this lesson will be cleared.'}</p><button type="button" disabled={access?.mode==='invite'&&!consent} onClick={()=>{setShowReset(false);begin(true)}}>Yes, start fresh</button><button type="button" onClick={()=>setShowReset(false)}>Cancel</button></div>}
     </div>
-    <aside className="ogpilot-feedback-invite">{!standalone&&<span className="ogpilot-eyebrow">YOUR VOICE SHAPES THE NEXT VERSION</span>}<h3>{standalone?'Leaving early?':'What should Jeremiah do better?'}</h3><p>{standalone?'Tell us why you couldn’t finish. You can return to your saved lesson later.':'After the lesson, evaluate teaching clarity, pacing, visual design, navigation, narrator, activities, and more. If you cannot finish, you can still tell us why.'}</p><button type="button" disabled={standalone&&(!consent||closed||needsInvite||needsOwner)} onClick={()=>standalone?onEarlyFeedback?.():onNavigate(ROUTES.PILOT_FEEDBACK)}>{standalone?"I couldn’t finish · Give feedback ↗":'Share feedback without finishing ↗'}</button></aside>
+    <aside className="ogpilot-feedback-invite">{!standalone&&<span className="ogpilot-eyebrow">YOUR VOICE SHAPES THE NEXT VERSION</span>}<h3>{standalone?'Leaving early?':'What should Jeremiah do better?'}</h3><p>{standalone?'Tell us why you couldn’t finish. You can return to your saved lesson later.':'After the lesson, evaluate teaching clarity, pacing, visual design, navigation, narrator, activities, and more. If you cannot finish, you can still tell us why.'}</p><button type="button" disabled={standalone&&(closed||needsInvite||needsOwner||(access?.mode==='invite'&&!consent))} onClick={()=>standalone?onEarlyFeedback?.():onNavigate(ROUTES.PILOT_FEEDBACK)}>{standalone?"I couldn’t finish · Give feedback ↗":'Share feedback without finishing ↗'}</button></aside>
    </section>
    <footer className="ogpilot-footnote">{access?.version&&access.version!=='development'?'Pilot edition '+access.version+' · ':''}Pilot access is intended for invited adult testers. Please avoid including names or other identifying information in free-text feedback.</footer>
   </main>
