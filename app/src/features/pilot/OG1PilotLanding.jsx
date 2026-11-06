@@ -103,7 +103,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
       <h2 style={{marginTop:0,fontSize:'1.2rem'}}>Tell us a little about yourself <span style={{fontSize:'.7rem',fontWeight:700,color:'#a34822',verticalAlign:'middle'}}>REQUIRED</span></h2>
       <p style={{fontSize:'.9rem'}}>All five answers are required to begin the lesson. No name or email. Your responses help us understand feedback across different groups.</p>
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(210px,1fr))',gap:14}}>
-       {PROFILE_FIELDS.map(([key,label,options])=><label key={key} style={{display:'flex',flexDirection:'column',gap:6,fontWeight:600}}>{label} <span style={{fontSize:'.72rem',fontWeight:600,color:'#a34822'}}>Required</span>
+       {PROFILE_FIELDS.map(([key,label,options])=><label key={key} style={{display:'flex',flexDirection:'column',gap:6,fontWeight:600}}>{label} {!profile[key]&&<span style={{fontSize:'.72rem',fontWeight:600,color:'#a34822'}}>Required</span>}
         <select required aria-label={label} value={profile[key]||''} onChange={e=>setProfile(old=>({...old,[key]:e.target.value}))} style={{minHeight:44,padding:8,borderRadius:8,border:'1px solid #94a3b8',background:'#fff',color:'#172b4d',fontSize:'.95rem'}}>
          {options.map(([value,text])=><option key={value} value={value}>{text}</option>)}
         </select>
