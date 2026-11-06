@@ -73,17 +73,17 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
   onNavigate(ROUTES.CLASSROOM_LESSON);
  }
  return <div className="ogpilot-page">
-  <header className="ogpilot-top"><BrandLogo /><span>{standalone?'OG.1 · LESSON EVALUATION':'LESSON EXPERIENCE PILOT'}</span></header>
+  <header className="ogpilot-top"><BrandLogo /><span>{standalone?'THE ONE TRUE GOD · LESSON PREVIEW':'LESSON EXPERIENCE PILOT'}</span></header>
   <main className="ogpilot-shell">
    <section className="ogpilot-hero">
     <div>{!standalone&&<span className="ogpilot-eyebrow">INVITATION · HELP SHAPE THE EXPERIENCE</span>}
-     <h1>{standalone?'Welcome to OG.1.':'Explore the lesson.'}<br/><em>{standalone?'Learn. Reflect. Evaluate.':'Help make it remarkable.'}</em></h1>
-     <p>{standalone?'Experience the complete OG.1 lesson, check your understanding, and tell us what should improve.':'Follow the confession of one God from Moses through Isaiah, Jesus, and the apostles. Experience the Scripture, imagery, narration, activities, and assessments—then tell us what worked and what needs to change.'}</p>
+     <h1>{standalone?'The One True God.':'Explore the lesson.'}<br/><em>{standalone?'Learn. Reflect. Evaluate.':'Help make it remarkable.'}</em></h1>
+     <p>{standalone?'Discover what Scripture teaches about the one God. First, tell us a little about yourself; then preview the five chapters before entering the lesson.':'Follow the confession of one God from Moses through Isaiah, Jesus, and the apostles. Experience the Scripture, imagery, narration, activities, and assessments—then tell us what worked and what needs to change.'}</p>
      {!standalone&&<div className="ogpilot-meta"><span>One complete lesson</span><span>Five connected chapters</span><span>Optional anonymous feedback</span></div>}
     </div>
     {!standalone&&<aside className="ogpilot-verse"><span>THE ONE TRUE GOD</span><blockquote>“Hear, O Israel: The LORD our God is one LORD:”</blockquote><small>DEUTERONOMY 6:4 · KJV</small><div aria-hidden="true">אֶחָד</div></aside>}
    </section>
-   <section className="ogpilot-start" aria-labelledby={standalone?undefined:'ogpilot-start-title'} aria-label={standalone?'Begin OG.1 evaluation':undefined}>
+   <section className="ogpilot-start" aria-labelledby={standalone?undefined:'ogpilot-start-title'} aria-label={standalone?'Get ready for The One True God lesson':undefined}>
     <div>{!standalone&&<><span className="ogpilot-eyebrow">HOW IT WORKS</span><h2 id="ogpilot-start-title">Your experience matters.</h2></>}<p>{standalone?'Your progress stays in this browser. The optional survey never includes your lesson answers or score.':'No account is required. Your lesson progress stays in this browser; if you return using the same browser, you can continue. The survey never sends your answers or exam score with your feedback.'}</p>
      <p className="ogpilot-privacy-note">This pilot uses AI to process written lesson responses. Feedback is optional. Please do not include personal identifying information.</p>
      {needsInvite&&<label className="ogpilot-consent"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>I am 18 or older and agree to participate in this private pilot.</span></label>}
@@ -109,7 +109,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
      </div>
      {!profileComplete&&<p role="status" aria-live="polite" style={{margin:'4px 0 12px',fontSize:'.93rem',fontWeight:600,color:'#a34822'}}>Complete all five required questions to unlock the lesson. {remainingProfileQuestions} {remainingProfileQuestions===1?'answer':'answers'} remaining.</p>}
      <div className="ogpilot-actions">
-      <button type="button" className="ogpilot-primary" disabled={!profileComplete||closed||needsInvite||needsOwner||(access?.mode==='invite'&&!consent)} onClick={()=>begin(false)}>{standalone?(finished?'Revisit OG.1':started?'Continue OG.1':'Start OG.1'):(finished?'Revisit the lesson':started?'Continue my lesson':'Start the lesson')} <span aria-hidden="true">→</span></button>
+      <button type="button" className="ogpilot-primary" disabled={!profileComplete||closed||needsInvite||needsOwner||(access?.mode==='invite'&&!consent)} onClick={()=>begin(false)}>{standalone?(finished?'Review the lesson outline':started?'Continue to the lesson outline':'View lesson outline'):(finished?'Revisit the lesson':started?'Continue my lesson':'Start the lesson')} <span aria-hidden="true">→</span></button>
       {started&&<button type="button" className="ogpilot-secondary" onClick={()=>setShowReset(true)}>Start fresh</button>}
      </div>
      {showReset&&<div className="ogpilot-confirm" role="group" aria-label="Confirm restart"><p>Start from the beginning on this browser? {standalone?'Your previous run and results will be kept in history.':'Your existing local progress for this lesson will be cleared.'}</p><button type="button" disabled={!profileComplete||(access?.mode==='invite'&&!consent)} onClick={()=>{setShowReset(false);begin(true)}}>Yes, start fresh</button><button type="button" onClick={()=>setShowReset(false)}>Cancel</button></div>}
