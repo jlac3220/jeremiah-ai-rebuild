@@ -24,6 +24,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
  const [consent,setConsent]=useState(false);
  const [profile,setProfile]=useState(savedProfile);
  const profileComplete=hasCompletePilotProfile(profile);
+ const remainingProfileQuestions=PROFILE_FIELDS.filter(([key])=>!profile[key]).length;
  const [ownerName,setOwnerName]=useState('owner'),[ownerPassword,setOwnerPassword]=useState('');
  const [access,setAccess]=useState(null),[accessUnavailable,setAccessUnavailable]=useState(false),[invite,setInvite]=useState(''),[accessError,setAccessError]=useState(''),[unlocking,setUnlocking]=useState(false);
  useEffect(()=>{const controller=new AbortController();fetch('/api/pilot/access',{signal:controller.signal}).then(r=>r.ok?r.json():null).then(value=>{if(value&&['closed','invite','verify','local'].includes(value.mode)&&typeof value.authenticated==='boolean')setAccess(value);else setAccessUnavailable(true)}).catch(()=>{if(!controller.signal.aborted)setAccessUnavailable(true)});return()=>controller.abort();},[]);
@@ -96,16 +97,17 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
      </form>}
      {needsInvite&&<form className="ogpilot-invite" onSubmit={unlock}><label>Private invitation code<input type="password" aria-label="Private invitation code" autoComplete="off" value={invite} onChange={e=>setInvite(e.target.value)}/></label><button className="ogpilot-secondary" disabled={!consent||!invite||unlocking}>{unlocking?'Checking invitation…':'Unlock my invitation'}</button>{accessError&&<p role="alert">{accessError}</p>}</form>}
      <div className="ogpilot-profile" style={{margin:'22px 0',padding:'20px',border:'1px solid #cbd5e1',borderRadius:16}}>
-      <h2 style={{marginTop:0,fontSize:'1.2rem'}}>Tell us a little about yourself</h2>
-      <p style={{fontSize:'.9rem'}}>Please answer all five questions before you begin. No name or email. Your responses help us understand feedback across different groups.</p>
+      <h2 style={{marginTop:0,fontSize:'1.2rem'}}>Tell us a little about yourself <span style={{fontSize:'.7rem',fontWeight:700,color:'#a34822',verticalAlign:'middle'}}>REQUIRED</span></h2>
+      <p style={{fontSize:'.9rem'}}>All five answers are required to begin the lesson. No name or email. Your responses help us understand feedback across different groups.</p>
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(210px,1fr))',gap:14}}>
-       {PROFILE_FIELDS.map(([key,label,options])=><label key={key} style={{display:'flex',flexDirection:'column',gap:6,fontWeight:600}}>{label}
+       {PROFILE_FIELDS.map(([key,label,options])=><label key={key} style={{display:'flex',flexDirection:'column',gap:6,fontWeight:600}}>{label} <span style={{fontSize:'.72rem',fontWeight:600,color:'#a34822'}}>Required</span>
         <select required aria-label={label} value={profile[key]||''} onChange={e=>setProfile(old=>({...old,[key]:e.target.value}))} style={{minHeight:44,padding:8,borderRadius:8,border:'1px solid #94a3b8',background:'#fff',color:'#172b4d',fontSize:'.95rem'}}>
          {options.map(([value,text])=><option key={value} value={value}>{text}</option>)}
         </select>
        </label>)}
       </div>
      </div>
+     {!profileComplete&&<p role="status" aria-live="polite" style={{margin:'4px 0 12px',fontSize:'.93rem',fontWeight:600,color:'#a34822'}}>Complete all five required questions to unlock the lesson. {remainingProfileQuestions} {remainingProfileQuestions===1?'answer':'answers'} remaining.</p>}
      <div className="ogpilot-actions">
       <button type="button" className="ogpilot-primary" disabled={!profileComplete||closed||needsInvite||needsOwner||(access?.mode==='invite'&&!consent)} onClick={()=>begin(false)}>{standalone?(finished?'Revisit OG.1':started?'Continue OG.1':'Start OG.1'):(finished?'Revisit the lesson':started?'Continue my lesson':'Start the lesson')} <span aria-hidden="true">→</span></button>
       {started&&<button type="button" className="ogpilot-secondary" onClick={()=>setShowReset(true)}>Start fresh</button>}
