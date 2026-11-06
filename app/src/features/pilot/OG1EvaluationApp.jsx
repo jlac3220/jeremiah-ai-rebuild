@@ -20,7 +20,7 @@ export default function OG1EvaluationApp(){
  const changeState=useCallback(update=>setState(old=>{const next=typeof update==='function'?update(old):update;const fixed={...next,standardId:content.standardId,presetId:'direct'};return fixed.currentMoveId==='complete'?markLearningMilestones(fixed,['complete']):fixed;}),[]);
  const [accessFor,setAccessFor]=useState(null);
  const [consented,setConsented]=useState(()=>window.sessionStorage.getItem(CONSENT)==='1');
- const refreshAccess=useCallback(async()=>{try{const r=await fetch('/api/pilot/access');const a=r.ok?await r.json():null;const allowed=Boolean(a?.authenticated&&['local','invite','verify'].includes(a.mode));return allowed;}catch{return false;}},[]);
+ const refreshAccess=useCallback(async()=>{try{const r=await fetch('/api/pilot/access');const a=r.ok?await r.json():null;const allowed=Boolean(a?.authenticated&&['local','invite','verify','link'].includes(a.mode));return allowed;}catch{return false;}},[]);
  useEffect(()=>{saveLearningState(state);},[state]);
  useEffect(()=>{let active=true;refreshAccess().then(allowed=>{if(active)setAccessFor(allowed?route:null)});return()=>{active=false};},[refreshAccess,route]);
  const navigate=useCallback(requested=>{const next=pilotRoute(requested);if(window.location.hash!=='#'+next)window.location.hash=next;setRoute(next);window.scrollTo({top:0,behavior:'auto'});},[]);
