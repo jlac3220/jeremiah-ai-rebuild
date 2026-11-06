@@ -17,6 +17,7 @@ import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1ExitExam from './OG1ExitExam';
 import OG1PilotSurvey from '../pilot/OG1PilotSurvey';
+import {recordPilotMilestone} from '../pilot/pilotProgress';
 import {rateOG1Lesson} from '../../core/classroom/og1LessonRating';
 import {OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import OG1LessonToolbar from './OG1LessonToolbar';
@@ -194,6 +195,16 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,
  const displayProgress=finish?100:percent;
  const location=getOG1LessonLocation(content,move,completionScreen,examSubmitted,standalone);
  const chapterNumber=location.chapterNumber;
+ // Only track anonymous chapter visits and completion in the standalone pilot.
+ // Local learning responses and exam scores never leave the browser through this endpoint.
+ useEffect(()=>{
+  if(!standalone)return;
+  recordPilotMilestone('started',0);
+  if(chapterNumber>=1&&chapterNumber<=5)recordPilotMilestone('chapter',chapterNumber);
+  if(finish&&examSubmitted)recordPilotMilestone('completed',5);
+  else if(finish)recordPilotMilestone('assessment',5);
+ },[standalone,chapterNumber,finish,examSubmitted]);
+
  const chapter=finish?'complete':CHAPTER_SLUGS[chapterNumber-1]||'opening';
  const sceneClass=current?.kind||'complete';
  const writingWorkspace=written;
