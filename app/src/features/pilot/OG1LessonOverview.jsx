@@ -1,7 +1,9 @@
 import BrandLogo from '../../shared/brand/BrandLogo';
+import ogStudy from '../../data/curriculum/og.json';
 import './OG1LessonOverview.css';
 
 // Learner-facing outline. Internal standards remain in the curriculum and scoring engine.
+const OG1_DOMAIN=ogStudy.domains.find(domain=>domain.id==='OG.1');
 const CHAPTERS=[
  {title:'The Shema',reference:'Deuteronomy 6:4–5',description:'Hear Israel’s confession and discover why it matters.'},
  {title:'Isaiah’s Witness',reference:'Isaiah 43–46',description:'Examine God’s declarations that there is no other God.'},
@@ -11,9 +13,9 @@ const CHAPTERS=[
 ];
 export default function OG1LessonOverview({onEnter,onBack,resuming=false}){
  return <div className="ogpilot-page og1-overview">
-  <header className="ogpilot-top"><BrandLogo/><span>THE ONE TRUE GOD · LESSON PREVIEW</span></header>
+  <header className="ogpilot-top"><BrandLogo/><span>{ogStudy.title.toUpperCase()}</span></header>
   <main className="og1-overview-shell" id="og1-lesson-overview">
-   <div className="og1-overview-intro"><span className="ogpilot-eyebrow">BEFORE YOU BEGIN · YOUR GUIDE</span><h1>The One True God</h1><p className="og1-overview-lede">One confession. Five chapters. A journey through the Scriptures from Moses to the apostles—and what those words mean for us today.</p></div>
+   <div className="og1-overview-intro"><span className="ogpilot-eyebrow">BEFORE YOU BEGIN · YOUR GUIDE</span><h1>{ogStudy.title}</h1><p className="og1-overview-domain"><strong>OG.1</strong> · {OG1_DOMAIN.title}</p><p className="og1-overview-lede">One confession. Five chapters. A journey through the Scriptures from Moses to the apostles—and what those words mean for us today.</p></div>
    <section className="og1-overview-list" aria-labelledby="overview-contents-title">
     <div className="og1-overview-heading"><span>YOUR JOURNEY</span><h2 id="overview-contents-title">Table of Contents</h2><p>You’ll explore Scripture, view scenes, hear narration, and respond to questions along the way. The short video is optional: press Next to continue without watching.</p></div>
     <ol>{CHAPTERS.map((chapter,index)=><li key={chapter.title}><span className="og1-overview-number">{String(index+1).padStart(2,'0')}</span><div><h3>{chapter.title}</h3><p>{chapter.description}</p><small>{chapter.reference}</small></div></li>)}</ol>
