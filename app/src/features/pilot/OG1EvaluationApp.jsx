@@ -3,7 +3,7 @@ import content from '../../core/classroom/content/OG_1_LESSON';
 import {loadLearningState,saveLearningState,markLearningMilestones} from '../../core/classroom/learningEngine';
 import {restartTeaching} from '../../core/classroom/teacherLedEngine';
 import OG1LessonPlayer from '../classroom/OG1LessonPlayer';
-import OG1PilotLanding from './OG1PilotLanding';
+import OG1PilotLanding,{hasCompletePilotProfile} from './OG1PilotLanding';
 import OG1LessonOverview from './OG1LessonOverview';
 import OG1PilotSurvey from './OG1PilotSurvey';
 import {pilotRoute} from './standalonePilot';
@@ -29,9 +29,9 @@ export default function OG1EvaluationApp(){
   function sync(){const next=pilotRoute(window.location.hash);if(window.location.hash!=='#'+next)window.history.replaceState(null,'','#'+next);setRoute(next);window.scrollTo({top:0,behavior:'auto'});}
   const initial=pilotRoute(window.location.hash);if(window.location.hash!=='#'+initial)window.history.replaceState(null,'','#'+initial);window.addEventListener('hashchange',sync);window.addEventListener('popstate',sync);return()=>{window.removeEventListener('hashchange',sync);window.removeEventListener('popstate',sync)};
  },[]);
- const entered=accessFor===route&&consented;
- async function start(fresh){if(!await refreshAccess())return;if(fresh)setState(old=>({...restartTeaching(content,old),presetId:'direct'}));window.sessionStorage.setItem(CONSENT,'1');setConsented(true);setAccessFor('overview');navigate('overview');}
- async function enterLesson(){if(!await refreshAccess())return;setAccessFor('lesson');navigate('lesson');}
+ const entered=accessFor===route&&consented&&(!['lesson','overview'].includes(route)||hasCompletePilotProfile());
+ async function start(fresh){if(!hasCompletePilotProfile()||!await refreshAccess())return;if(fresh)setState(old=>({...restartTeaching(content,old),presetId:'direct'}));window.sessionStorage.setItem(CONSENT,'1');setConsented(true);setAccessFor('overview');navigate('overview');}
+ async function enterLesson(){if(!hasCompletePilotProfile()||!await refreshAccess())return;setAccessFor('lesson');navigate('lesson');}
  async function earlyFeedback(){if(!await refreshAccess())return;window.sessionStorage.setItem(CONSENT,'1');setConsented(true);setAccessFor('pilot-feedback');navigate('pilot-feedback');}
  // General-app routes and global classroom selectors never enter this shell.
  const onNavigate=destination=>navigate(destination==='pilot-feedback'?'pilot-feedback':'pilot');
