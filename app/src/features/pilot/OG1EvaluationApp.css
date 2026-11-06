@@ -8,3 +8,6 @@
 
 [data-standalone-og1] .ogpilot-hero .ogpilot-domain-subtitle{font:600 clamp(1rem,2vw,1.22rem)/1.5 Georgia,serif;color:#3e558b;margin:-5px 0 19px;max-width:720px}
 [data-standalone-og1] .ogpilot-domain-subtitle strong{font-family:Inter,system-ui,sans-serif;font-size:.88em;letter-spacing:.04em}
+
+/* The standalone welcome collects participant information; feedback comes after entering the lesson. */
+[data-standalone-og1] .ogpilot-start{grid-template-columns:minmax(0,1fr);max-width:850px}
