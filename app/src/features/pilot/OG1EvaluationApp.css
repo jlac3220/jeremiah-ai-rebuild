@@ -5,3 +5,6 @@
 [data-standalone-og1] .ogpilot-feedback-invite{background:transparent;border:0;box-shadow:none}
 [data-standalone-og1] .ogpilot-start>div>p:first-child{margin-top:0}
 @media(max-width:760px){[data-standalone-og1] .ogpilot-hero{padding:12px 0 24px}[data-standalone-og1] .ogpilot-feedback-invite{padding:8px 4px}[data-standalone-og1] .ogpilot-top{gap:8px}}
+
+[data-standalone-og1] .ogpilot-hero .ogpilot-domain-subtitle{font:600 clamp(1rem,2vw,1.22rem)/1.5 Georgia,serif;color:#3e558b;margin:-5px 0 19px;max-width:720px}
+[data-standalone-og1] .ogpilot-domain-subtitle strong{font-family:Inter,system-ui,sans-serif;font-size:.88em;letter-spacing:.04em}
