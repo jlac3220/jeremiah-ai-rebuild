@@ -27,7 +27,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
  const remainingProfileQuestions=PROFILE_FIELDS.filter(([key])=>!profile[key]).length;
  const [ownerName,setOwnerName]=useState('owner'),[ownerPassword,setOwnerPassword]=useState('');
  const [access,setAccess]=useState(null),[accessUnavailable,setAccessUnavailable]=useState(false),[invite,setInvite]=useState(''),[accessError,setAccessError]=useState(''),[unlocking,setUnlocking]=useState(false);
- useEffect(()=>{const controller=new AbortController();fetch('/api/pilot/access',{signal:controller.signal}).then(r=>r.ok?r.json():null).then(value=>{if(value&&['closed','invite','verify','local'].includes(value.mode)&&typeof value.authenticated==='boolean')setAccess(value);else setAccessUnavailable(true)}).catch(()=>{if(!controller.signal.aborted)setAccessUnavailable(true)});return()=>controller.abort();},[]);
+ useEffect(()=>{const controller=new AbortController();fetch('/api/pilot/access',{signal:controller.signal}).then(r=>r.ok?r.json():null).then(value=>{if(value&&['closed','invite','verify','local','link'].includes(value.mode)&&typeof value.authenticated==='boolean')setAccess(value);else setAccessUnavailable(true)}).catch(()=>{if(!controller.signal.aborted)setAccessUnavailable(true)});return()=>controller.abort();},[]);
  const needsInvite=access?.mode==='invite'&&!access.authenticated;
  const needsOwner=access?.mode==='verify'&&!access.authenticated;
  const localPreview=['localhost','127.0.0.1'].includes(window.location.hostname);
@@ -116,7 +116,7 @@ export default function OG1PilotLanding({onNavigate,standalone=false,lessonState
     </div>
     <aside className="ogpilot-feedback-invite">{!standalone&&<span className="ogpilot-eyebrow">YOUR VOICE SHAPES THE NEXT VERSION</span>}<h3>{standalone?'Leaving early?':'What should Jeremiah do better?'}</h3><p>{standalone?'Tell us why you couldn’t finish. You can return to your saved lesson later.':'After the lesson, evaluate teaching clarity, pacing, visual design, navigation, narrator, activities, and more. If you cannot finish, you can still tell us why.'}</p><button type="button" disabled={standalone&&(closed||needsInvite||needsOwner||(access?.mode==='invite'&&!consent))} onClick={()=>standalone?onEarlyFeedback?.():onNavigate(ROUTES.PILOT_FEEDBACK)}>{standalone?"I couldn’t finish · Give feedback ↗":'Share feedback without finishing ↗'}</button></aside>
    </section>
-   <footer className="ogpilot-footnote">{access?.version&&access.version!=='development'?'Pilot edition '+access.version+' · ':''}Pilot access is intended for invited adult testers. Please avoid including names or other identifying information in free-text feedback.</footer>
+   <footer className="ogpilot-footnote">{access?.version&&access.version!=='development'?'Pilot edition '+access.version+' · ':''}Pilot evaluation · Please avoid including names or other identifying information in free-text feedback.</footer>
   </main>
  </div>;
 }
