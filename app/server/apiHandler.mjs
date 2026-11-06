@@ -1,3 +1,4 @@
+import {og1Only,OG1_STANDARD} from './pilotCapabilities.mjs';
 import {withPilotService} from './pilotSecurity.mjs';
 import { readJsonBody, sendJson } from "./httpUtils.mjs";
 import { teachWithJeremiah } from "./teacherCore.mjs";
@@ -10,6 +11,7 @@ async function handleJeremiahApiUnchecked(req, res) {
 
   try {
     const payload = await readJsonBody(req);
+    if(og1Only(req)&&payload?.standardId!==OG1_STANDARD){sendJson(res,403,{error:'Only the OG.1 lesson is available in this evaluation.'});return;}
     const result = await teachWithJeremiah(payload);
     sendJson(res, 200, result);
   } catch (error) {

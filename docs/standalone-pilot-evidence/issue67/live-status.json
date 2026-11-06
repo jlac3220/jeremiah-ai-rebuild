@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-11-06T00:21:27.360281+00:00",
+  "host": "pilot.jeremiah.app",
+  "authenticated": false,
+  "paidRequests": 0,
+  "observations": [
+    {
+      "path": "/api/pilot/access",
+      "status": 200,
+      "access": {
+        "mode": "closed",
+        "authenticated": false,
+        "version": "d026b2ca"
+      }
+    },
+    {
+      "path": "/api/pilot/report?setup=1",
+      "status": 401,
+      "referrerPolicy": "no-referrer"
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import {
 import './OG1PilotSurvey.css';
 
 const DRAFT_KEY='jeremiah-og1-pilot-survey-draft';
+const PROFILE_KEY='jeremiah-og1-participant-profile';
+function readParticipantProfile(){try{return JSON.parse(window.localStorage.getItem(PROFILE_KEY)||'{}');}catch{return {};}}
 const RECEIPT_KEY='jeremiah-og1-pilot-survey-receipt';
 const LABELS=['Very poor','Poor','Okay','Good','Excellent'];
 function makeSubmissionId(){
@@ -35,7 +37,7 @@ function Field({name,label,value,onChange,placeholder,maxLength=1100}){
  return <label className="ogsurvey-field"><span>{label}</span><textarea name={name} value={value} onChange={e=>onChange(e.target.value)} maxLength={maxLength} placeholder={placeholder} rows={3}/><small>{value?.length||0} / {maxLength}</small></label>;
 }
 
-export default function OG1PilotSurvey({onDone,completed=true}){
+export default function OG1PilotSurvey({onDone,completed=true,standalone=false}){
  const [draft,setDraft]=useState(readDraft);
  const [step,setStep]=useState(0);
  const [sending,setSending]=useState(false);
@@ -59,7 +61,7 @@ export default function OG1PilotSurvey({onDone,completed=true}){
   if(!draft.overall){setStep(0);setError('Please rate the overall experience before submitting.');return;}
   setSending(true);setError('');
   try{
-   const response=await fetch('/api/pilot/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...draft,version:OG1_PILOT_SURVEY_VERSION,completed:Boolean(completed)})});
+   const response=await fetch('/api/pilot/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...draft,participantProfile:readParticipantProfile(),version:OG1_PILOT_SURVEY_VERSION,completed:Boolean(completed)})});
    const result=await response.json();
    if(!response.ok||!result.accepted)throw new Error(result.error||'Submission could not be saved');
    const saved={submittedAt:new Date().toISOString(),version:OG1_PILOT_SURVEY_VERSION};
@@ -80,7 +82,7 @@ export default function OG1PilotSurvey({onDone,completed=true}){
   <div className="ogsurvey-thanks-mark" aria-hidden="true">✓</div>
   <span>YOUR FEEDBACK WAS SAVED</span><h1>Thank you for helping shape Jeremiah.</h1>
   <p>Your answers are part of the pilot feedback we're using to improve the experience. Your lesson answers and score were not included with the survey.</p>
-  <div className="ogsurvey-actions"><button type="button" className="ogsurvey-primary" onClick={onDone}>Return to Jeremiah →</button><button type="button" className="ogsurvey-secondary" onClick={startAgain}>Share additional feedback</button></div>
+  <div className="ogsurvey-actions"><button type="button" className="ogsurvey-primary" onClick={onDone}>{standalone?'Return to welcome':'Return to Jeremiah'} →</button><button type="button" className="ogsurvey-secondary" onClick={startAgain}>Share additional feedback</button></div>
  </section></div>;
  return <div className="ogsurvey-page"><div className="ogsurvey-shell">
   <header className="ogsurvey-heading"><span>JEREMIAH · PILOT EVALUATION</span><h1>Help us build a better lesson.</h1><p>You've experienced Jeremiah. Now evaluate it as a learner—not as an examiner. Tell us what felt excellent, what slowed you down, and what we should improve. Positive and critical feedback are equally valuable.</p><div className="ogsurvey-privacy">Anonymous by default · No name or email required · Your lesson responses and score are not sent</div></header>

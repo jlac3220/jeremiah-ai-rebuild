@@ -27,7 +27,7 @@ export default function OG1OpeningExperience({content,move,onOpenBible,onContinu
  }
  return <article className="ogp-encounter og1-opening" data-witness={witness.name} aria-label="One confession across four witnesses">
   <div className="og1-opening-scene">
-   <div className="og1-opening-art" aria-hidden="true"><DestinationArt key={witness.tone} tone={witness.tone} content={content} move={move}/></div>
+   <div className="og1-opening-art" aria-hidden="true"><DestinationArt key={witness.tone} tone={witness.tone} content={content} move={move} loading="eager" fallbackLabel=""/></div>
    <div className="og1-opening-shade" aria-hidden="true"/>
    <button type="button" className="og1-opening-reference" onClick={()=>onOpenBible(art.reference)} aria-label={'Read '+art.reference+' in context'}>{art.reference.toUpperCase()} · KJV <LessonIcon name="context"/></button>
    <div className="og1-opening-scripture" key={witness.name}><span>THE WITNESS · {witness.name.toUpperCase()}</span><blockquote>{art.quote}</blockquote></div>
@@ -36,7 +36,7 @@ export default function OG1OpeningExperience({content,move,onOpenBible,onContinu
    <header><h2>One confession. Four witnesses.</h2><p>Tap a witness—or follow with the blue button.</p></header>
    <div className="og1-opening-choices" role="group" aria-label="Choose a biblical witness">
     {WITNESSES.map((item,i)=><button type="button" key={item.name} className={viewed.length===1&&i===nextUnseen?'is-suggested':''} aria-pressed={selected===i} aria-controls="og1-opening-explanation" onClick={()=>choose(i)} onKeyDown={keydown}>
-     <span className="og1-opening-portrait" aria-hidden="true"><DestinationArt tone={item.tone} content={content} move={move}/></span>
+     <span className="og1-opening-portrait" aria-hidden="true"><DestinationArt tone={item.tone} content={content} move={move} loading="eager" fallbackLabel={String(i+1).padStart(2,'0')}/></span>
      <strong>{item.name}</strong><small>{selected===i?'On screen':viewed.includes(i)?'Viewed':i===nextUnseen?'Up next':'Explore'}</small>
     </button>)}
    </div>

@@ -1,0 +1,58 @@
+{
+  "phase": "after",
+  "realBrowser": true,
+  "providerCredentials": false,
+  "paidRequests": 0,
+  "liveServiceVerification": false,
+  "publicPilotOpened": false,
+  "results": [
+    {
+      "width": 390,
+      "button": "accountOnly=1",
+      "origin": "http://localhost:4192",
+      "fetchSite": "same-origin",
+      "reachedCheck": true,
+      "status": 200,
+      "result": {
+        "passed": false,
+        "category": "key_not_configured"
+      }
+    },
+    {
+      "width": 390,
+      "button": "feedbackOnly=1",
+      "origin": "http://localhost:4192",
+      "fetchSite": "same-origin",
+      "reachedCheck": true,
+      "status": 503,
+      "result": {
+        "passed": false,
+        "category": "private_storage_unavailable"
+      }
+    },
+    {
+      "width": 1440,
+      "button": "accountOnly=1",
+      "origin": "http://localhost:4192",
+      "fetchSite": "same-origin",
+      "reachedCheck": true,
+      "status": 200,
+      "result": {
+        "passed": false,
+        "category": "key_not_configured"
+      }
+    },
+    {
+      "width": 1440,
+      "button": "feedbackOnly=1",
+      "origin": "http://localhost:4192",
+      "fetchSite": "same-origin",
+      "reachedCheck": true,
+      "status": 503,
+      "result": {
+        "passed": false,
+        "category": "private_storage_unavailable"
+      }
+    }
+  ]
+}

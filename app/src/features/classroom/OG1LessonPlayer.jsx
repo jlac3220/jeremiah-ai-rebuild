@@ -17,6 +17,7 @@ import JourneyDestinations, { DestinationArt } from './JourneyDestinations';
 import {OG1IdentityInvestigation,OG1ReturnToShema,OG1ConsequenceJourney,OG1FinalSynthesis} from './OG1StoryClimax';
 import OG1ExitExam from './OG1ExitExam';
 import OG1PilotSurvey from '../pilot/OG1PilotSurvey';
+import {recordPilotMilestone} from '../pilot/pilotProgress';
 import {rateOG1Lesson} from '../../core/classroom/og1LessonRating';
 import {OG1_JOURNEY_CHAPTERS} from './OG1JourneyMap';
 import OG1LessonToolbar from './OG1LessonToolbar';
@@ -156,7 +157,7 @@ function createMoments(move,video) {
  return moments;
 }
 
-export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}) {
+export default function OG1LessonPlayer({content,state,onStateChange,onNavigate,standalone=false}) {
  const move=getInstructionalMove(content,state.currentMoveId);
  const video=getLessonMedia(content).find(item=>item.id==='unpacked-shema');
  const moments=createMoments(move,video);
@@ -192,8 +193,18 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const examSubmitted=Boolean(state.experience?.exitExam?.version===OG1_EXIT_EXAM_VERSION && state.experience?.exitExam?.latest);
  const finalRating=finish?rateOG1Lesson(content,state):null;
  const displayProgress=finish?100:percent;
- const location=getOG1LessonLocation(content,move,completionScreen,examSubmitted);
+ const location=getOG1LessonLocation(content,move,completionScreen,examSubmitted,standalone);
  const chapterNumber=location.chapterNumber;
+ // Only track anonymous chapter visits and completion in the standalone pilot.
+ // Local learning responses and exam scores never leave the browser through this endpoint.
+ useEffect(()=>{
+  if(!standalone)return;
+  recordPilotMilestone('started',0);
+  if(chapterNumber>=1&&chapterNumber<=5)recordPilotMilestone('chapter',chapterNumber);
+  if(finish&&examSubmitted)recordPilotMilestone('completed',5);
+  else if(finish)recordPilotMilestone('assessment',5);
+ },[standalone,chapterNumber,finish,examSubmitted]);
+
  const chapter=finish?'complete':CHAPTER_SLUGS[chapterNumber-1]||'opening';
  const sceneClass=current?.kind||'complete';
  const writingWorkspace=written;
@@ -203,7 +214,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  // Reveals inside the Shema scene are voiced only when the student chooses them.
  const narrationText =
   move.id==='learn'&&current?.kind==='read'
-   ? (evidenceIndex===0?OG1_SCENE_NARRATION.opening:OG1_SCENE_NARRATION.witnessCards[evidenceIndex])
+   ? OG1_SCENE_NARRATION.witnessCards[evidenceIndex]
   : current?.kind==='shema-encounter'
    ? OG1_SCENE_NARRATION.opening
   : current?.kind==='witness'
@@ -277,7 +288,7 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
  const writingProps={move,value:form.responseText||'',disabled:Boolean(feedback)||thinking,onChange:value=>change({responseText:value}),feedback,onReadBible:readVerse,actions:writingAction,usedSupport:Boolean(form.usedSupport),onUseSupport:()=>change({usedSupport:true})};
  const buttonText=current?.kind==='roadmap'?'Meet the four witnesses':current?.kind==='insight'?(move.id==='distinction-show'?'Finish the doctrinal investigation':move.id==='devotion-show'?'Bring the whole lesson together':'Carry this understanding forward'):current?.kind==='watch'?'Reflect on what you saw':current?.kind==='videoCheck'?'Continue to the activity':moment===total-1?'Continue to the next activity':current?.kind==='read'&&move.id==='learn'?'Meet the witnesses':current?.kind==='read'?'Investigate this passage':current?.kind==='teach'?'Uncover the next connection':'Continue the journey';
  return <div className={`ogp-page ogp-stage1 ogp-stage2 ogp-theme-${chapter} ogp-scene-${sceneClass}`}>
-  <OG1LessonToolbar narration={narration} narrationText={narrationText} onNavigate={onNavigate} onRestart={()=>setConfirmRestart(true)} chapters={content.lessonChapters} chapterNumber={chapterNumber} finish={finish} onOpenMap={()=>setChapterMapOpen(true)}/>
+  <OG1LessonToolbar standalone={standalone} narration={narration} narrationText={narrationText} onNavigate={onNavigate} onRestart={()=>setConfirmRestart(true)} chapters={content.lessonChapters} chapterNumber={chapterNumber} finish={finish} onOpenMap={()=>setChapterMapOpen(true)}/>
   <div className="ogp-progress" role="progressbar" aria-label="OG.1 teaching coverage" aria-valuemin={0} aria-valuemax={100} aria-valuenow={displayProgress}><span style={{width:displayProgress+'%'}}/></div>
   {narration.error&&<div className="ogp-voice-error" role="status"><span>{narration.error} You can continue reading.</span></div>}
   {confirmRestart && <OG1RestartDialog onCancel={()=>setConfirmRestart(false)} onRestart={restart}/>}
@@ -296,10 +307,10 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
     </nav>
    </div>
    <OG1ChapterGuide expanded={chapterMapOpen} onClose={()=>setChapterMapOpen(false)} chapterNumber={chapterNumber} finish={finish} taskTitle={finish?location.title:move.title} next={location.next}/>
-   {finish?(completionScreen==='survey'?<OG1PilotSurvey completed onDone={()=>onNavigate(window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}/>:completionScreen==='understanding'?<section className="ogp-finish ogp-finish--understanding" aria-labelledby="ogp-understanding-title">
+   {finish?(completionScreen==='survey'?<OG1PilotSurvey completed standalone={standalone} onDone={()=>onNavigate(standalone||window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}/>:completionScreen==='understanding'?<section className="ogp-finish ogp-finish--understanding" aria-labelledby="ogp-understanding-title">
  <div className="ogp-depth-report"><span className="ogp-understanding-eyebrow">YOUR LEARNING · OG.1</span><h1 id="ogp-understanding-title">Your Understanding</h1><p className="ogp-understanding-level">Level {finalRating.level} · {finalRating.label}</p><p>Weighted performance: {finalRating.score===null?'Not assessed':finalRating.score+'%'} · Evidence coverage: {finalRating.coverage}%</p><p>{finalRating.meaning}</p><p>{finalRating.note}</p><div className="ogp-depth-report-list">{finalRating.standards.map(item=><div key={item.standardId}><strong>{item.standardId}</strong><span>Level {item.level} · {item.label}</span><small>Weighted performance: {item.score===null?'Not assessed':item.score+'%'} · Evidence coverage: {item.coverage}%</small>{item.recitationVerified!==null&&<small>Deuteronomy 6:4 KJV recitation: {item.recitationVerified?'Verified in the recall check':item.recitationAttempted?'Attempted; not yet verified':'Not yet attempted'}</small>}<p>{item.meaning}</p><small><strong>What you demonstrated:</strong> {item.evidence}</small><small><strong>What to work on next:</strong> {item.nextStep}</small></div>)}</div></div>
  <div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('summary');window.scrollTo({top:0,behavior:'auto'})}}>Continue to final summary →</button><button type="button" className="ogp-back" onClick={()=>setCompletionScreen('exam')}>Review assessment <LessonIcon name="context"/></button></div>
- </section>:completionScreen==='summary'?<section className="ogp-finish ogp-finish--synthesis" aria-label="Final lesson summary"><button type="button" className="ogp-floating-feedback" onClick={()=>{setCompletionScreen('survey');window.scrollTo({top:0,behavior:'auto'})}}><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true"><path d="M20 15a3 3 0 0 1-3 3H9l-5 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3z"/><path d="M8 8h8M8 12h5"/></svg>Feedback · optional <span aria-hidden="true">→</span></button><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-survey-invite" role="region" aria-labelledby="ogp-feedback-notice-title"><div className="ogp-feedback-notice-label"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></svg><span>BEFORE YOU GO · YOUR FEEDBACK MATTERS</span></div><h2 id="ogp-feedback-notice-title">Help shape the next Jeremiah lesson.</h2><p>Rate the teaching, imagery, interface, narrator, pacing, and more. Tell us exactly what to keep—and what needs to change. The survey is optional, anonymous, and separate from your answers.</p><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('survey');window.scrollTo({top:0,behavior:'auto'})}}>Evaluate the experience →</button><button type="button" className="ogp-back" onClick={()=>onNavigate(window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}>Finish without survey</button><button type="button" className="ogp-back" onClick={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}>← Understanding report</button></div></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onContinue={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}/>):<>
+ </section>:completionScreen==='summary'?<section className="ogp-finish ogp-finish--synthesis" aria-label="Final lesson summary"><button type="button" className="ogp-floating-feedback" onClick={()=>{setCompletionScreen('survey');window.scrollTo({top:0,behavior:'auto'})}}><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true"><path d="M20 15a3 3 0 0 1-3 3H9l-5 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3z"/><path d="M8 8h8M8 12h5"/></svg>Feedback · optional <span aria-hidden="true">→</span></button><OG1FinalSynthesis onOpenBible={readVerse}/><div className="ogp-finish-survey-invite" role="region" aria-labelledby="ogp-feedback-notice-title"><div className="ogp-feedback-notice-label"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></svg><span>BEFORE YOU GO · YOUR FEEDBACK MATTERS</span></div><h2 id="ogp-feedback-notice-title">Help shape the next Jeremiah lesson.</h2><p>Rate the teaching, imagery, interface, narrator, pacing, and more. Tell us exactly what to keep—and what needs to change. The survey is optional, anonymous, and separate from your answers.</p><div className="ogp-finish-actions"><button type="button" className="ogp-action" onClick={()=>{setCompletionScreen('survey');window.scrollTo({top:0,behavior:'auto'})}}>{standalone?'Take the survey':'Evaluate the experience'} →</button><button type="button" className="ogp-back" onClick={()=>onNavigate(standalone||window.sessionStorage.getItem('jeremiah-pilot-active')==='1'?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}>Finish without survey</button><button type="button" className="ogp-back" onClick={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}>← Understanding report</button></div></div></section>:<OG1ExitExam state={state} onStateChange={onStateChange} onReadBible={readVerse} onContinue={()=>{setCompletionScreen('understanding');window.scrollTo({top:0,behavior:'auto'})}}/>):<>
     <section key={move.id+':'+moment} ref={stageRef} tabIndex={-1} className={`ogp-stage ogp-stage--${sceneClass}`} aria-label={current.verb+' learning moment'} data-workspace={writingWorkspace||undefined}>
      {!writingWorkspace&&(move.id!=='learn'||current.kind!=='read')&&!['identity','return','mission','roadmap','doctrine-summary'].includes(current.kind)&&!current.kind?.startsWith('shema-')&&<><span className="ogp-verb"><span className="ogp-verb-dash"/> {current.verb}</span><h1>{current.title}</h1></>}
      {current.kind==='roadmap'&&null}
@@ -400,6 +411,6 @@ export default function OG1LessonPlayer({content,state,onStateChange,onNavigate}
     </nav>}
    </>}
   </main>
-  {inlineBibleReference&&<OG1InlineBible reference={inlineBibleReference} onClose={()=>setInlineBibleReference(null)}/>}
+  {inlineBibleReference&&<OG1InlineBible reference={inlineBibleReference} standalone={standalone} onClose={()=>setInlineBibleReference(null)}/>}
  </div>;
 }

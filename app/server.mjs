@@ -1,3 +1,4 @@
+import {og1Only} from './server/pilotCapabilities.mjs';
 import {handlePilotVerification} from './server/pilotVerificationHandler.mjs';
 import {handlePilotAccess} from './server/pilotSecurity.mjs';
 import {handlePilotReport} from './server/pilotReportHandler.mjs';
@@ -62,6 +63,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if(url.pathname==='/voice-audition.html'&&og1Only(req)){res.writeHead(303,{Location:'/#pilot','Cache-Control':'no-store'});res.end();return;}
   if(url.pathname==="/api/pilot/verify"){await handlePilotVerification(req,res);return;}
   if(url.pathname==="/api/pilot/access"){await handlePilotAccess(req,res);return;}
   if(url.pathname==="/api/pilot/report"){await handlePilotReport(req,res);return;}

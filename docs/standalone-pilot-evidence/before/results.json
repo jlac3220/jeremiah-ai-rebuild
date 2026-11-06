@@ -1,0 +1,20 @@
+[
+  {
+    "width": 390,
+    "access": {
+      "mode": "closed",
+      "authenticated": false,
+      "version": "d78f23fa"
+    },
+    "nav": 1
+  },
+  {
+    "width": 1440,
+    "access": {
+      "mode": "closed",
+      "authenticated": false,
+      "version": "d78f23fa"
+    },
+    "nav": 1
+  }
+]

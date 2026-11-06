@@ -3,7 +3,7 @@ import {useEffect,useRef,useState} from 'react';
 import {ROUTES} from '../../app/routes';
 import LessonIcon from '../../shared/lesson/LessonIcon';
 
-export default function OG1LessonToolbar({narration,narrationText,onNavigate,onRestart,onOpenMap}) {
+export default function OG1LessonToolbar({narration,narrationText,onNavigate,onRestart,onOpenMap,standalone=false}) {
  const [open,setOpen]=useState(false);
  const root=useRef(null);
  const trigger=useRef(null);
@@ -17,7 +17,7 @@ export default function OG1LessonToolbar({narration,narrationText,onNavigate,onR
   if(event.key==='Escape'&&open){event.preventDefault();setOpen(false);trigger.current?.focus()}
  }
  return <header className="ogp-header ogp-toolbar" ref={root} onKeyDown={keydown}>
-  <button type="button" className="ogp-toolbar-back" aria-label="Return to classroom" onClick={()=>{narration.stop();onNavigate(ROUTES.CLASSROOM_STUDY)}}><LessonIcon name="back"/><span>Classroom</span></button>
+  <button type="button" className="ogp-toolbar-back" aria-label={standalone?'Pause OG.1 and return to welcome':'Return to classroom'} onClick={()=>{narration.stop();onNavigate(standalone?ROUTES.PILOT:ROUTES.CLASSROOM_STUDY)}}><LessonIcon name="back"/><span>{standalone?'Pause OG.1':'Classroom'}</span></button>
   <div className="ogp-toolbar-brand"><BrandFlame /><strong>JEREMIAH<small>THE ONE TRUE GOD</small></strong></div>
   <div className="ogp-toolbar-actions">
    <button type="button" className="ogp-audio-setting" aria-pressed={narration.enabled} aria-label={narration.enabled?'Turn narration off':'Turn narration on'} onClick={narration.toggle}><LessonIcon name={narration.enabled?'sound':'muted'}/><span>Audio {narration.enabled?'on':'off'}</span></button>
@@ -28,6 +28,7 @@ export default function OG1LessonToolbar({narration,narrationText,onNavigate,onR
    <h2>In this lesson</h2>
    <button type="button" onClick={()=>{setOpen(false);trigger.current?.focus();onOpenMap?.()}}><LessonIcon name="context"/>Open chapter map</button>
    <p>Chapter coverage records your place, not mastery.</p>
+   {standalone&&<button type="button" onClick={()=>{setOpen(false);narration.stop();onNavigate(ROUTES.PILOT_FEEDBACK)}}>I couldn’t finish · Give feedback</button>}
    <button type="button" onClick={()=>{setOpen(false);trigger.current?.focus();onRestart()}}><LessonIcon name="replay"/>Start over</button>
   </section>}
  </header>;
