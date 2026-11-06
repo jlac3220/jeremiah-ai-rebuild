@@ -19,3 +19,6 @@
 .og1-overview-actions button{min-height:50px;padding:12px 20px;border-radius:11px;font-weight:800;cursor:pointer}
 .og1-overview-actions button:focus-visible{outline:3px solid #174c9e;outline-offset:3px}
 @media(max-width:540px){.og1-overview-list li{gap:12px}.og1-overview-number{flex-basis:36px;width:36px;height:36px}.og1-overview-actions button{width:100%}}
+
+.og1-overview-domain{font:600 clamp(1rem,2vw,1.22rem)/1.5 Georgia,serif;color:#3e558b;margin:-7px 0 18px}
+.og1-overview-domain strong{font-family:Inter,system-ui,sans-serif;font-size:.88em;letter-spacing:.04em}
