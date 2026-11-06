@@ -25,8 +25,9 @@ export function session(req){
 }
 export function issueSession(res,scope){
  if(!signingReady())throw new Error('Session signing unavailable');
- const value=Buffer.from(JSON.stringify({id:randomUUID(),scope,...(scope==='invite'?{capability:'og1-evaluation'}:{}),exp:Date.now()+3_600_000})).toString('base64url');
- res.setHeader('Set-Cookie',`${COOKIE}=${value}.${signature(value)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`);
+ const maxAge=scope==='verify'?7*24*3600:3600;
+ const value=Buffer.from(JSON.stringify({id:randomUUID(),scope,...(scope==='invite'?{capability:'og1-evaluation'}:{}),exp:Date.now()+maxAge*1000})).toString('base64url');
+ res.setHeader('Set-Cookie',`${COOKIE}=${value}.${signature(value)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${maxAge}`);
 }
 export async function redisEval(script,keys,args){
  const url=process.env.UPSTASH_REDIS_REST_URL||process.env.KV_REST_API_URL,token=process.env.UPSTASH_REDIS_REST_TOKEN||process.env.KV_REST_API_TOKEN;
