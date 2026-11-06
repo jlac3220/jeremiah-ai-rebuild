@@ -55,7 +55,7 @@ export function validatePilotFeedback(body){
  const profile=body.participantProfile;
  const permitted={
   age:['18-29','30-44','45-59','60-74','75plus','prefer_not'],
-  sex:['female','male','other','prefer_not'],
+  sex:['female','male','prefer_not'],
   bibleFamiliarity:['very','somewhat','little','none'],
   pentecostalExperience:['current','previous','familiar','none'],
   techComfort:['very','somewhat','not_very']
