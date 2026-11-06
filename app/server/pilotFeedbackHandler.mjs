@@ -52,7 +52,17 @@ export function validatePilotFeedback(body){
  if(Object.keys(incoming).some(id=>!ratingAreas.has(id)))throw new Error('Unknown rating category');
  const ratings=Object.fromEntries(PILOT_RATING_AREAS.map(area=>[area.id,rating(incoming[area.id])]));
  if(typeof body.completed!=='boolean')throw new Error('Invalid completion status');
- const result={version:OG1_PILOT_SURVEY_VERSION,submissionId:body.submissionId,lesson:'OG.1.LESSON.18',overall,ratings,completed:body.completed,
+ const profile=body.participantProfile;
+ const permitted={
+  age:['18-29','30-44','45-59','60-74','75plus','prefer_not'],
+  sex:['female','male','other','prefer_not'],
+  bibleFamiliarity:['very','somewhat','little','none'],
+  pentecostalExperience:['current','previous','familiar','none'],
+  techComfort:['very','somewhat','not_very']
+ };
+ if(profile!==undefined&&(profile===null||typeof profile!=='object'||Array.isArray(profile)))throw new Error('Invalid participant profile');
+ const participantProfile=Object.fromEntries(Object.entries(permitted).map(([key,options])=>[key,optionalEnum(profile?.[key],new Set(options),key)]));
+ const result={version:OG1_PILOT_SURVEY_VERSION,submissionId:body.submissionId,lesson:'OG.1.LESSON.18',overall,ratings,completed:body.completed,participantProfile,
   future:optionalEnum(body.future,futures,'future lesson interest'),
   priority:optionalEnum(body.priority,priorities,'improvement priority'),
   moment:optionalEnum(body.moment,moments,'favorite moment'),
